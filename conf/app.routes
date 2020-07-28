@@ -13,3 +13,8 @@ GET        /check-your-answers                          controllers.CheckYourAns
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
 GET        /accessibility-statement                     controllers.AccessibilityController.onPageLoad
+
+GET        /local-reference-number                        controllers.LocalReferenceNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /local-reference-number                        controllers.LocalReferenceNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-local-reference-number                  controllers.LocalReferenceNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-local-reference-number                  controllers.LocalReferenceNumberController.onSubmit(mode: Mode = CheckMode)
