@@ -17,29 +17,33 @@
 package controllers.actions
 
 import javax.inject.Inject
-import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.SessionRepository
-import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRetrievalActionImpl @Inject()(
+class DataRetrievalActionProviderImpl @Inject()(
                                          val sessionRepository: SessionRepository
-                                       )(implicit val executionContext: ExecutionContext) extends DataRetrievalAction {
-
-  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
-
-    implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
-
-    sessionRepository.get(request.identifier).map {
-      case None =>
-        OptionalDataRequest(request.request, request.identifier, None)
-      case Some(userAnswers) =>
-        OptionalDataRequest(request.request, request.identifier, Some(userAnswers))
-    }
-  }
+                                       )(implicit val ec: ExecutionContext) extends DataRetrievalActionProvider {
+  def apply(lrn: String): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
+    new DataRetrievalAction(lrn, ec, sessionRepository)
 }
 
-trait DataRetrievalAction extends ActionTransformer[IdentifierRequest, OptionalDataRequest]
+trait DataRetrievalActionProvider {
+
+  def apply(lrn: String): ActionTransformer[IdentifierRequest, OptionalDataRequest]
+}
+
+class DataRetrievalAction(
+                         lrn: String,
+                         implicit protected val executionContext: ExecutionContext,
+                         sessionRepository: SessionRepository
+                         ) extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
+
+  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
+    sessionRepository.get(lrn).map {
+      userAnswers =>
+        OptionalDataRequest(request.request, request.eoriNumber, userAnswers)
+    }
+}

@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package models.requests
+package models
 
-import play.api.mvc.{Request, WrappedRequest}
-import models.{EoriNumber, UserAnswers}
+import play.api.libs.json.{__, JsString, Reads, Writes}
 
-case class OptionalDataRequest[A] (request: Request[A], eoriNumber: EoriNumber, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+case class EoriNumber(value: String)
 
-case class DataRequest[A] (request: Request[A], eoriNumber: EoriNumber, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+object EoriNumber {
+  implicit def reads: Reads[EoriNumber]   = __.read[String] map EoriNumber.apply
+  implicit def writes: Writes[EoriNumber] = Writes(eori => JsString(eori.value))
+}
