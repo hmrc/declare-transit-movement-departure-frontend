@@ -20,7 +20,7 @@ import base.SpecBase
 import com.google.inject.Inject
 import controllers.routes
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
 import play.api.mvc.{BodyParsers, Results}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
@@ -36,7 +36,6 @@ class AuthActionSpec extends SpecBase {
   class Harness(authAction: IdentifierAction) {
     def onPageLoad() = authAction { _ => Results.Ok }
   }
-
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
   val enrolmentsWithoutEori: Enrolments = Enrolments(
@@ -226,7 +225,6 @@ class AuthActionSpec extends SpecBase {
         redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
       }
     }
-
     "AuthAction" - {
       "must redirect to unauthorised page when given enrolments without eori" in {
 
@@ -239,7 +237,7 @@ class AuthActionSpec extends SpecBase {
 
         val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers)
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
 
@@ -257,17 +255,21 @@ class AuthActionSpec extends SpecBase {
 
         val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers)
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
+        val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe OK
       }
     }
   }
+  override def beforeEach: Unit = {
+    super.beforeEach
+    reset(mockAuthConnector)
+  }
 }
 
-class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends AuthConnector {
-  val serviceUrl: String = ""
+    class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends AuthConnector {
+      val serviceUrl: String = ""
 
-  override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
-    Future.failed(exceptionToReturn)
-}
+      override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
+        Future.failed(exceptionToReturn)
+    }

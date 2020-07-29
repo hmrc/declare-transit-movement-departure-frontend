@@ -17,33 +17,29 @@
 package controllers.actions
 
 import javax.inject.Inject
+import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.SessionRepository
+import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRetrievalActionProviderImpl @Inject()(
+class DataRetrievalActionImpl @Inject()(
                                          val sessionRepository: SessionRepository
-                                       )(implicit val ec: ExecutionContext) extends DataRetrievalActionProvider {
-  def apply(lrn: String): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
-    new DataRetrievalAction(lrn, ec, sessionRepository)
-}
+                                       )(implicit val executionContext: ExecutionContext) extends DataRetrievalAction {
 
-trait DataRetrievalActionProvider {
+  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
 
-  def apply(lrn: String): ActionTransformer[IdentifierRequest, OptionalDataRequest]
-}
+    implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-class DataRetrievalAction(
-                         lrn: String,
-                         implicit protected val executionContext: ExecutionContext,
-                         sessionRepository: SessionRepository
-                         ) extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
-
-  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
-    sessionRepository.get(lrn).map {
-      userAnswers =>
-        OptionalDataRequest(request.request, request.eoriNumber, userAnswers)
+    sessionRepository.get(request.eoriNumber).map {
+      case None =>
+        OptionalDataRequest(request.request, request.eoriNumber, None)
+      case Some(userAnswers) =>
+        OptionalDataRequest(request.request, request.eoriNumber, Some(userAnswers))
     }
+  }
 }
+
+trait DataRetrievalAction extends ActionTransformer[IdentifierRequest, OptionalDataRequest]
