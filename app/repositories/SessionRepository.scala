@@ -24,10 +24,13 @@ import models.UserAnswers
 import play.api.Configuration
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoApi
-import reactivemongo.api.indexes.{Index, IndexType}
+import reactivemongo.api.bson.collection.BSONSerializationPack
+import reactivemongo.api.indexes.Index.Aux
+import reactivemongo.api.indexes.IndexType
 import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
 import reactivemongo.play.json.collection.JSONCollection
+import utils.IndexUtils
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,7 +47,7 @@ class DefaultSessionRepository @Inject()(
   private def collection: Future[JSONCollection] =
     mongo.database.map(_.collection[JSONCollection](collectionName))
 
-  private val lastUpdatedIndex = Index(
+  private val lastUpdatedIndex: Aux[BSONSerializationPack.type] = IndexUtils.index(
     key     = Seq("lastUpdated" -> IndexType.Ascending),
     name    = Some("user-answers-last-updated-index"),
     options = BSONDocument("expireAfterSeconds" -> cacheTtl)

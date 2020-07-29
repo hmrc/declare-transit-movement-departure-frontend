@@ -17,11 +17,12 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalacheck.Gen
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 import play.api.data.{Field, FormError}
 
-class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours with MustMatchers {
+class LocalReferenceNumberFormProviderSpec extends StringFieldBehaviours with ScalaCheckPropertyChecks with Matchers {
 
   val requiredKey = "localReferenceNumber.error.required"
   val lengthKey = "localReferenceNumber.error.length"
