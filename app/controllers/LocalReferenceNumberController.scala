@@ -67,7 +67,7 @@ class LocalReferenceNumberController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async {
     implicit request =>
 
-      val ua = request.userAnswers.getOrElse(UserAnswers(request.internalId))
+      val ua = request.userAnswers.getOrElse(UserAnswers(request.eoriNumber))
 
       form.bindFromRequest().fold(
         formWithErrors => {
