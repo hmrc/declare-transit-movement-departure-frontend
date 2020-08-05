@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.declarationPlaceController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.DeclarationPlaceController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('movementDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
@@ -35,8 +35,10 @@
         <h1 class="govuk-heading-xl">
           {{ messages("declarationPlace.heading") }}
         </h1>
-<p class = "govuk-body"> {{ messages('declarationPlace.paragraph') }} </p>
-<p class = "govuk-label" > {{ messages('postcode') }} </p>
+
+            <p class = "govuk-body"> {{ messages('declarationPlace.paragraph') }} </p>
+            <p class = "govuk-label" > {{ messages('postcode') }} </p>
+
         <span class="govuk-hint">{{messages('postcodeExample')}}</span>
 
           {{ govukInput({

@@ -16,17 +16,17 @@
 
 package pages
 
-import models.declarationPlace
+import models.DeclarationPlace
 import pages.behaviours.PageBehaviours
 
-class declarationPlacePageSpec extends PageBehaviours {
+class DeclarationPlacePageSpec extends PageBehaviours {
 
-  "declarationPlacePage" - {
+  "DeclarationPlacePage" - {
 
-    beRetrievable[declarationPlace](declarationPlacePage)
+    beRetrievable[DeclarationPlace](DeclarationPlacePage)
 
-    beSettable[declarationPlace](declarationPlacePage)
+    beSettable[DeclarationPlace](DeclarationPlacePage)
 
-    beRemovable[declarationPlace](declarationPlacePage)
+    beRemovable[DeclarationPlace](DeclarationPlacePage)
   }
 }

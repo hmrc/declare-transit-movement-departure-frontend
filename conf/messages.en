@@ -163,4 +163,5 @@ declarationPlace.checkYourAnswersLabel = What is the postcode for the place of d
 declarationPlace.error.field1.required = Enter postcode of the place of declaration
 declarationPlace.error.field1.length = Place of declaration postcode must be 9 characters or less
 declarationPlace.error.field1.valid = Place of declaration postcode must be a valid postcode
+declarationPlaceError.Invalid = Postcode must only include letters a to z and numbers 0 to 9
 declarationPlace.paragraph = This is where you are making the declaration.

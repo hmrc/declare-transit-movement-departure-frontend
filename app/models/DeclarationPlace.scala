@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.declarationPlace
-import play.api.libs.json.JsPath
+import play.api.libs.json._
 
-case object declarationPlacePage extends QuestionPage[declarationPlace] {
+case class DeclarationPlace(field1: String)
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "declarationPlace"
+object DeclarationPlace {
+  implicit val format = Json.format[DeclarationPlace]
 }
+

@@ -29,7 +29,7 @@ POST       /:lrn/declaration-type                        controllers.Declaration
 GET        /:lrn/change-declaration-type                  controllers.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/change-declaration-type                  controllers.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/declaration-place                        controllers.declarationPlaceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/declaration-place                        controllers.declarationPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/change-declaration-place                  controllers.declarationPlaceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/change-declaration-place                  controllers.declarationPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/declaration-place                        controllers.DeclarationPlaceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/declaration-place                        controllers.DeclarationPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-declaration-place                  controllers.DeclarationPlaceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-declaration-place                  controllers.DeclarationPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

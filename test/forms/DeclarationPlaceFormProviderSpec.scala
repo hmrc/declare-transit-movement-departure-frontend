@@ -19,15 +19,16 @@ package forms
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
-class declarationPlaceFormProviderSpec extends StringFieldBehaviours {
+class DeclarationPlaceFormProviderSpec extends StringFieldBehaviours {
 
-  val form = new declarationPlaceFormProvider()()
+  val form = new DeclarationPlaceFormProvider()()
 
   ".field1" - {
 
     val fieldName = "field1"
-    val requiredKey = "declarationPlace.error.field1.required"
-    val lengthKey = "declarationPlace.error.field1.length"
+    val requiredKey = "DeclarationPlace.error.field1.required"
+    val lengthKey = "DeclarationPlace.error.field1.length"
+    val characterKey = "DeclarationPlace.error.Invalid"
     val maxLength = 9
 
     behave like fieldThatBindsValidData(
@@ -46,34 +47,14 @@ class declarationPlaceFormProviderSpec extends StringFieldBehaviours {
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
 
-  ".field2" - {
+      if (fieldName.length > maxLength) {
+        FormError(fieldName, lengthKey)
+      }
+      else {
+        FormError(fieldName, requiredKey)
+      }
 
-    val fieldName = "field2"
-    val requiredKey = "declarationPlace.error.field2.required"
-    val lengthKey = "declarationPlace.error.field2.length"
-    val maxLength = 100
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
     )
   }
 }

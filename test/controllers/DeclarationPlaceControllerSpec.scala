@@ -17,15 +17,15 @@
 package controllers
 
 import base.SpecBase
-import forms.declarationPlaceFormProvider
+import forms.DeclarationPlaceFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, declarationPlace, UserAnswers}
+import models.{NormalMode, DeclarationPlace, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.declarationPlacePage
+import pages.DeclarationPlacePage
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
@@ -37,27 +37,26 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class declarationPlaceControllerSpec extends SpecBase with MockitoSugar with NunjucksSupport with JsonMatchers {
+class DeclarationPlaceControllerSpec extends SpecBase with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new declarationPlaceFormProvider()
+  val formProvider = new DeclarationPlaceFormProvider()
   val form = formProvider()
 
-  lazy val declarationPlaceRoute = routes.declarationPlaceController.onPageLoad(lrn, NormalMode).url
+  lazy val declarationPlaceRoute = routes.DeclarationPlaceController.onPageLoad(lrn, NormalMode).url
 
   val userAnswers = UserAnswers(
     lrn,
     eoriNumber,
     Json.obj(
-      declarationPlacePage.toString -> Json.obj(
-        "field1" -> "value 1",
-        "field2" -> "value 2"
+      DeclarationPlacePage.toString -> Json.obj(
+        "field1" -> "value 1"
       )
     )
   )
 
-  "declarationPlace Controller" - {
+  "DeclarationPlace Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -81,7 +80,7 @@ class declarationPlaceControllerSpec extends SpecBase with MockitoSugar with Nun
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "declarationPlace.njk"
+      templateCaptor.getValue mustEqual "DeclarationPlace.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
       application.stop()
@@ -116,7 +115,7 @@ class declarationPlaceControllerSpec extends SpecBase with MockitoSugar with Nun
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "declarationPlace.njk"
+      templateCaptor.getValue mustEqual "DeclarationPlace.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
       application.stop()
@@ -173,7 +172,7 @@ class declarationPlaceControllerSpec extends SpecBase with MockitoSugar with Nun
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "declarationPlace.njk"
+      templateCaptor.getValue mustEqual "DeclarationPlace.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
        application.stop()

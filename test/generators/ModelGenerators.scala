@@ -23,12 +23,11 @@ import org.scalacheck.{Arbitrary, Gen}
 trait ModelGenerators {
   self: Generators =>
 
-  implicit lazy val arbitrarydeclarationPlace: Arbitrary[declarationPlace] =
+  implicit lazy val arbitrarydeclarationPlace: Arbitrary[DeclarationPlace] =
       Arbitrary {
       for {
         field1 <- arbitrary[String]
-        field2 <- arbitrary[String]
-      } yield declarationPlace(field1, field2)
+      } yield DeclarationPlace(field1)
     }
 
   implicit lazy val arbitraryDeclarationType: Arbitrary[DeclarationType] =

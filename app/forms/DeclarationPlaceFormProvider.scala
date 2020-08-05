@@ -14,12 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json._
+import javax.inject.Inject
 
-case class declarationPlace (field1: String)
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.data.Forms._
+import models.DeclarationPlace
 
-object declarationPlace {
-  implicit val format = Json.format[declarationPlace]
+class DeclarationPlaceFormProvider @Inject() extends Mappings {
+
+
+  val postCodeRegex: String = "^[a-zA-Z0-9]*$"
+
+  def apply(): Form[DeclarationPlace] = Form(
+    mapping(
+      "field1" -> text("DeclarationPlace.error.field1.required")
+        .verifying(maxLength(9, "DeclarationPlace.error.field1.length"), regexp(postCodeRegex, errorKey = "declarationPlace.Error.Invalid"))
+    )(DeclarationPlace.apply)(DeclarationPlace.unapply)
+  )
+
+
 }

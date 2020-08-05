@@ -26,11 +26,11 @@ trait UserAnswersEntryGenerators extends PageGenerators {
 
 self: Generators =>
 
-  implicit lazy val arbitrarydeclarationPlaceUserAnswersEntry: Arbitrary[(declarationPlacePage.type, JsValue)] =
+  implicit lazy val arbitrarydeclarationPlaceUserAnswersEntry: Arbitrary[(DeclarationPlacePage.type, JsValue)] =
       Arbitrary {
       for {
-        page  <- arbitrary[declarationPlacePage.type]
-        value <- arbitrary[declarationPlace].map(Json.toJson(_))
+        page  <- arbitrary[DeclarationPlacePage.type]
+        value <- arbitrary[DeclarationPlace].map(Json.toJson(_))
       } yield (page, value)
     }
 
