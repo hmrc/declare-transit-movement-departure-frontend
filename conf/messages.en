@@ -37,9 +37,14 @@ phaseBanner.3 = will help us to improve it.
 checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
 
+postcode = Postcode
+postcodeExample = Like, AB1 1AB.
+
 index.title = common-transit-convention-departure
 index.heading = common-transit-convention-departure
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
+
+movementDetails.preHeading = Movement details
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
@@ -150,4 +155,12 @@ declarationType.option3 = T- (mixed consignment of T1 and T2 goods)
 declarationType.option4 = T2 (T2F between different fiscal territories)
 declarationType.checkYourAnswersLabel = What declaration do you want to create?
 declarationType.error.required = Select the declaration you want to create
-declarationType.preHeading = Movement details
+
+declarationPlace.title = What is the postcode for the place of declaration?
+declarationPlace.heading = What is the postcode for the place of declaration?
+declarationPlace.field1 = field1
+declarationPlace.checkYourAnswersLabel = What is the postcode for the place of declaration?
+declarationPlace.error.field1.required = Enter postcode of the place of declaration
+declarationPlace.error.field1.length = Place of declaration postcode must be 9 characters or less
+declarationPlace.error.field1.valid = Place of declaration postcode must be a valid postcode
+declarationPlace.paragraph = This is where you are making the declaration.

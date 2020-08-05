@@ -17,10 +17,19 @@
 package generators
 
 import models._
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
- self: Generators =>
+  self: Generators =>
+
+  implicit lazy val arbitrarydeclarationPlace: Arbitrary[declarationPlace] =
+      Arbitrary {
+      for {
+        field1 <- arbitrary[String]
+        field2 <- arbitrary[String]
+      } yield declarationPlace(field1, field2)
+    }
 
   implicit lazy val arbitraryDeclarationType: Arbitrary[DeclarationType] =
     Arbitrary {
