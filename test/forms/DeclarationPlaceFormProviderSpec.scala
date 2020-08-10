@@ -17,8 +17,6 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import models.LocalReferenceNumber
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import play.api.data.FormError
 

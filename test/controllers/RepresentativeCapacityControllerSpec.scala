@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import forms.RepresentativeCapacityFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, RepresentativeCapacity, UserAnswers}
+import models.{NormalMode, RepresentativeCapacity}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

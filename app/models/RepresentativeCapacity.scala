@@ -17,28 +17,26 @@
 package models
 
 import play.api.data.Form
-import play.api.i18n.Messages
-import play.api.libs.json._
 import uk.gov.hmrc.viewmodels._
 
 sealed trait RepresentativeCapacity
 
 object RepresentativeCapacity extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with RepresentativeCapacity
-  case object Option2 extends WithName("option2") with RepresentativeCapacity
+  case object Direct extends WithName("direct") with RepresentativeCapacity
+  case object Indirect extends WithName("indirect") with RepresentativeCapacity
 
   val values: Seq[RepresentativeCapacity] = Seq(
-    Option1,
-    Option2
+    Direct,
+    Indirect
   )
 
-  def radios(form: Form[_])(implicit messages: Messages): Seq[Radios.Item] = {
+  def radios(form: Form[_]): Seq[Radios.Item] = {
 
     val field = form("value")
     val items = Seq(
-      Radios.Radio(msg"representativeCapacity.option1", Option1.toString),
-      Radios.Radio(msg"representativeCapacity.option2", Option2.toString)
+      Radios.Radio(msg"representativeCapacity.direct", Direct.toString),
+      Radios.Radio(msg"representativeCapacity.indirect", Indirect.toString)
     )
 
     Radios(field, items)

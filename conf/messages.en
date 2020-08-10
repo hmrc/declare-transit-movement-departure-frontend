@@ -163,8 +163,8 @@ containersUsed.error.required = Select yes if you have used any containers
 
 procedureType.title = What type of procedure are you using?
 procedureType.heading = What type of procedure are you using?
-procedureType.option1 = Normal
-procedureType.option2 = Simplified
+procedureType.normal = Normal
+procedureType.simplified = Simplified
 procedureType.checkYourAnswersLabel = What type of procedure are you using?
 procedureType.error.required = Select the type of procedure are you using
 
@@ -190,7 +190,7 @@ representativeName.error.invalid = RepresentativeName must only include letters 
 
 representativeCapacity.title = What is your capacity?
 representativeCapacity.heading = What is your capacity?
-representativeCapacity.option1 = Direct (principal solely liable)
-representativeCapacity.option2 = Indirect (principal and agent jointly liable)
+representativeCapacity.direct = Direct (principal solely liable)
+representativeCapacity.indirect = Indirect (principal and agent jointly liable)
 representativeCapacity.checkYourAnswersLabel = What is your capacity?
 representativeCapacity.error.required = Select your capacity

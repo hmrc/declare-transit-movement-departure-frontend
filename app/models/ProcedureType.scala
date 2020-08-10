@@ -17,8 +17,6 @@
 package models
 
 import play.api.data.Form
-import play.api.i18n.Messages
-import play.api.libs.json._
 import uk.gov.hmrc.viewmodels._
 
 sealed trait ProcedureType
@@ -33,12 +31,12 @@ object ProcedureType extends Enumerable.Implicits {
     Simplified
   )
 
-  def radios(form: Form[_])(implicit messages: Messages): Seq[Radios.Item] = {
+  def radios(form: Form[_]): Seq[Radios.Item] = {
 
     val field = form("value")
     val items = Seq(
-      Radios.Radio(msg"procedureType.option1", Normal.toString),
-      Radios.Radio(msg"procedureType.option2", Simplified.toString)
+      Radios.Radio(msg"procedureType.normal", Normal.toString),
+      Radios.Radio(msg"procedureType.simplified", Simplified.toString)
     )
 
     Radios(field, items)

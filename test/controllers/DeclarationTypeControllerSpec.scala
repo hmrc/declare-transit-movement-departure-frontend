@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import forms.DeclarationTypeFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, DeclarationType, UserAnswers}
+import models.{NormalMode, DeclarationType}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
