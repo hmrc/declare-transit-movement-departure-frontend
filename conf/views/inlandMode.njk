@@ -28,6 +28,7 @@
         {% endif %}
 
         <form action="{{ routes.controllers.InlandModeController.onSubmit(lrn, mode).url }}" method="post">
+        <span class="govuk-caption-xl">{{messages('transportDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
 

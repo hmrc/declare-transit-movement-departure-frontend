@@ -55,6 +55,7 @@ index.guidance = Welcome to your new frontend. Please see the README file for a 
 movementDetails.preHeading = Movement details
 traderDetails.preHeading = Trader’s details
 routeDetails.preHeading = Route details
+transportDetails.preHeading = Transport details
 
 postcode = Postcode
 postcodeExample = Like, AB1 1AB.
@@ -370,8 +371,8 @@ consigneeAddress.error.line1.invalid= The first line of the consignee’s addres
 consigneeAddress.error.line2.invalid= The second line of the consignee’s address must only include letters a to z and numbers 0 to 9 or blank spaces
 consigneeAddress.error.line3.invalid= The third line of the consignee’s address must only include letters a to z and numbers 0 to 9 or blank spaces
 
-inlandMode.title = inlandMode
-inlandMode.heading = inlandMode
-inlandMode.checkYourAnswersLabel = inlandMode
-inlandMode.error.required = Enter inlandMode
+inlandMode.title = What is the inland mode?
+inlandMode.heading = What is the inland mode?
+inlandMode.checkYourAnswersLabel = Inland mode
+inlandMode.error.required = Enter the inland Mode
 inlandMode.error.length = InlandMode must be 35 characters or less
