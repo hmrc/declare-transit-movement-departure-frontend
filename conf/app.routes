@@ -145,3 +145,8 @@ GET        /:lrn/route/office-of-departure                         controllers.O
 POST       /:lrn/route/office-of-departure                         controllers.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/route/change-office-of-departure                  controllers.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/route/change-office-of-departure                  controllers.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/transport-details/inland-mode                        controllers.InlandModeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/transport-details/inland-mode                        controllers.InlandModeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/transport-details/change-inland-mode                  controllers.InlandModeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/change-inland-mode                  controllers.InlandModeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

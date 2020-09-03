@@ -369,3 +369,9 @@ consigneeAddress.error.Addressline3.length = Address line 3 must be 35 character
 consigneeAddress.error.line1.invalid= The first line of the consignee’s address must only include letters a to z and numbers 0 to 9 or blank spaces
 consigneeAddress.error.line2.invalid= The second line of the consignee’s address must only include letters a to z and numbers 0 to 9 or blank spaces
 consigneeAddress.error.line3.invalid= The third line of the consignee’s address must only include letters a to z and numbers 0 to 9 or blank spaces
+
+inlandMode.title = inlandMode
+inlandMode.heading = inlandMode
+inlandMode.checkYourAnswersLabel = inlandMode
+inlandMode.error.required = Enter inlandMode
+inlandMode.error.length = InlandMode must be 35 characters or less

@@ -27,6 +27,21 @@ import uk.gov.hmrc.viewmodels._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def inlandMode: Option[Row] = userAnswers.get(InlandModePage) map {
+    answer =>
+      Row(
+        key     = Key(msg"inlandMode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value   = Value(lit"$answer"),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = routes.InlandModeController.onPageLoad(lrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"inlandMode.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
   def consigneeAddress: Option[Row] = userAnswers.get(ConsigneeAddressPage) map {
     answer =>
       Row(
