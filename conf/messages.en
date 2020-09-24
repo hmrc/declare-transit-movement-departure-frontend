@@ -13,6 +13,7 @@ site.edit.hidden = Change {0}
 site.no = No
 site.yes = Yes
 site.add = Add
+site.edit = Edit
 site.continue = Save and continue
 site.notStarted = Not started
 site.inProgress = In Progress
