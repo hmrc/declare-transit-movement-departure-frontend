@@ -8,7 +8,6 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
 
-
 {% block pageTitle %}
   {{ title(messages("liabilityAmount.title"), form.errors) }}
 {% endblock %}
@@ -18,7 +17,6 @@
   {{ govukBackLink({
     text: messages("site.back")
   }) }}
-
 
   <div class="govuk-main-wrapper">
     <div class="govuk-grid-row">
@@ -31,14 +29,13 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.guaranteeDetails.LiabilityAmountController.onSubmit(lrn, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
-
+         <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn, mode).url }}" method="post">
+         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
 
-          <h1 class="govuk-heading-xl"> {{messages('liabilityAmount.heading')}}<h1>
 
+          <h1 class="govuk-heading-xl"> {{messages('liabilityAmount.heading')}}<h1>
           <p class="govuk-body"> {{messages('liabilityAmount.paragraph')}}<p>
 
                {{ hmrcInputCurrency({
@@ -50,6 +47,7 @@
                       type: "tel"
                     })
                   }}
+
 
           {{ govukButton({
             text: messages("site.continue"),

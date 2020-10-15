@@ -612,10 +612,10 @@ liabilityAmount.heading = How much is the liability amount?
 liabilityAmount.checkYourAnswersLabel = Liability amount
 liabilityAmount.error.required = Enter the liability amount
 liabilityAmount.error.length = Liability amount must be 100 characters or less
-liabilityAmount.error.characters = Liability amount must only include numbers 0 to 9 and a decimal place
+liabilityAmount.error.characters = The liability amount must only include numbers 0 to 9 and a decimal place
 liabilityAmount.paragraph = Amount can have up to 2 decimal places.
-liabilityAmount.error.invalidFormat = Enter an amount with 2 decimal places
-liabilityAmount.error.greaterThanOne = Enter amount must be greater than 1
+liabilityAmount.error.invalidFormat = Enter the liability amount in the right format, like 1234.95
+liabilityAmount.error.greaterThanOne = The liability amount must be 1 or more
 
 otherReference.title = What is the reference for the guarantee?
 otherReference.heading = What is the reference for the guarantee?
@@ -643,7 +643,7 @@ guaranteeType.error.required = Select which type of guarantee is being used
 defaultAmount.title = Do you want to use the default amount of EUR10,000?
 defaultAmount.heading = Do you want to use the default amount of EUR10,000?
 defaultAmount.error.required = Select yes if you want to use the default amount of EUR10,000
-
+defaultAmount.checkYourAnswersLabel =  Do you want to use the default amount of EUR10,000?
 
 accessCode.title = What is the access code?
 accessCode.heading = What is the access code?
@@ -655,3 +655,5 @@ accessCode.error.invalidCharacters = Access code must only include letters a to 
 guaranteeDetailsCheckYourAnswers.title = Check your answers
 guaranteeDetailsCheckYourAnswers.heading = Check your answers
 guaranteeDetailsCheckYourAnswers.defaultLiabilityAmount = EUR 10,000
+
+

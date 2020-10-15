@@ -23,6 +23,9 @@ import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryOtherReferenceLiabiityAmountPage: Arbitrary[OtherReferenceLiabilityAmountPage.type] =
+    Arbitrary(OtherReferenceLiabilityAmountPage)
+
   implicit lazy val arbitraryConfirmRemoveSealsPage: Arbitrary[ConfirmRemoveSealsPage.type] =
     Arbitrary(ConfirmRemoveSealsPage)
 

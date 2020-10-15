@@ -18,7 +18,7 @@ package pages.guaranteeDetails
 
 import models.GuaranteeType._
 import models.{GuaranteeType, UserAnswers}
-import pages.{AccessCodePage, LiabilityAmountPage, OtherReferencePage, QuestionPage}
+import pages._
 import play.api.libs.json.JsPath
 
 import scala.util.Try
@@ -44,13 +44,14 @@ case object GuaranteeTypePage extends QuestionPage[GuaranteeType] {
             None) =>
         userAnswers
           .remove(OtherReferencePage)
-          .flatMap(_.remove(LiabilityAmountPage))
+          .flatMap(_.remove(OtherReferenceLiabilityAmountPage))
 
       case (_, Some(_)) =>
         userAnswers
           .remove(GuaranteeReferencePage)
           .flatMap(_.remove(LiabilityAmountPage))
           .flatMap(_.remove(AccessCodePage))
+          .flatMap(_.remove(DefaultAmountPage))
 
       case (_, None) =>
         userAnswers.remove(GuaranteeReferencePage)

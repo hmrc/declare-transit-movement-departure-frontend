@@ -27,18 +27,22 @@ object GuaranteeDetailsCheckYourAnswersViewModel {
 
   def apply(userAnswers: UserAnswers): GuaranteeDetailsCheckYourAnswersViewModel = {
 
-    val checkYourAnswersHelper                      = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers)
-    val guaranteeType: Option[SummaryList.Row]      = checkYourAnswersHelper.guaranteeType
-    val guaranteeReference: Option[SummaryList.Row] = checkYourAnswersHelper.guaranteeReference
-    val otherReference: Option[SummaryList.Row]     = checkYourAnswersHelper.otherReference
-    val liabilityAmount: Option[SummaryList.Row]    = checkYourAnswersHelper.liabilityAmount
-    val accessCode: Option[SummaryList.Row]         = checkYourAnswersHelper.accessCode
+    val checkYourAnswersHelper                                 = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers)
+    val guaranteeType: Option[SummaryList.Row]                 = checkYourAnswersHelper.guaranteeType
+    val guaranteeReference: Option[SummaryList.Row]            = checkYourAnswersHelper.guaranteeReference
+    val otherReference: Option[SummaryList.Row]                = checkYourAnswersHelper.otherReference
+    val liabilityAmount: Option[SummaryList.Row]               = checkYourAnswersHelper.liabilityAmount
+    val otherReferenceLiabilityAmount: Option[SummaryList.Row] = checkYourAnswersHelper.otherReferenceliabilityAmount
+    val accessCode: Option[SummaryList.Row]                    = checkYourAnswersHelper.accessCode
+    val defaultAmount: Option[SummaryList.Row]                 = checkYourAnswersHelper.defaultAmount
 
     val checkYourAnswersData = Seq(
       guaranteeType,
       guaranteeReference,
       otherReference,
       liabilityAmount,
+      otherReferenceLiabilityAmount,
+      defaultAmount,
       accessCode
     ).flatten
 

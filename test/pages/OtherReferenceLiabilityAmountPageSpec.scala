@@ -16,20 +16,16 @@
 
 package pages
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-import scala.util.Try
+class OtherReferenceliabilityAmountPageSpec extends PageBehaviours {
 
-case object LiabilityAmountPage extends QuestionPage[String] {
+  "OtherReferenceliabilityAmountPage" - {
 
-  override def path: JsPath = JsPath \ toString
+    beRetrievable[String](OtherReferenceLiabilityAmountPage)
 
-  override def toString: String = "liabilityAmount"
+    beSettable[String](OtherReferenceLiabilityAmountPage)
 
-  override def cleanup(value: Option[String], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(x) if (x.trim.isEmpty) => userAnswers.remove(LiabilityAmountPage)
-      case _                           => super.cleanup(value, userAnswers)
-    }
+    beRemovable[String](OtherReferenceLiabilityAmountPage)
+  }
 }

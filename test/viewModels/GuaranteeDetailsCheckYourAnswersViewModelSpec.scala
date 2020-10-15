@@ -19,11 +19,9 @@ package viewModels
 import base.SpecBase
 import generators.Generators
 import models.GuaranteeType.GuaranteeWaiver
-import models.{GuaranteeType, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{AccessCodePage, LiabilityAmountPage, OtherReferencePage}
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.{AccessCodePage, DefaultAmountPage, LiabilityAmountPage, OtherReferencePage}
 import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
 
 class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -73,19 +71,41 @@ class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaC
         data.sections.head.rows.length mustEqual 1
         data.sections.head.rows.head.value.content mustEqual Literal("10.00")
       }
-
-      "and Default Liability Amount when selected" in {
-
-        val updatedAnswers = emptyUserAnswers.set(LiabilityAmountPage, "").success.value
-        val data           = GuaranteeDetailsCheckYourAnswersViewModel(updatedAnswers)
-
-        data.sections.head.sectionTitle must not be defined
-        data.sections.length mustEqual 1
-        data.sections.head.rows.length mustEqual 1
-        data.sections.head.rows.head.value.content mustEqual Message("guaranteeDetailsCheckYourAnswers.defaultLiabilityAmount")
-      }
     }
+    "display Default Liability Amount when selected" in {
 
+      val updatedAnswers = emptyUserAnswers
+        .remove(LiabilityAmountPage)
+        .success
+        .value
+        .set(DefaultAmountPage, true)
+        .success
+        .value
+      val data = GuaranteeDetailsCheckYourAnswersViewModel(updatedAnswers)
+
+      data.sections.head.sectionTitle must not be defined
+      data.sections.length mustEqual 1
+      data.sections.head.rows.length mustEqual 1
+      data.sections.head.rows.head.value.content mustEqual Literal("Yes")
+
+    }
+    "display Default Liability Amount when no is selected" in {
+
+      val updatedAnswers = emptyUserAnswers
+        .remove(LiabilityAmountPage)
+        .success
+        .value
+        .set(DefaultAmountPage, false)
+        .success
+        .value
+      val data = GuaranteeDetailsCheckYourAnswersViewModel(updatedAnswers)
+
+      data.sections.head.sectionTitle must not be defined
+      data.sections.length mustEqual 1
+      data.sections.head.rows.length mustEqual 1
+      data.sections.head.rows.head.value.content mustEqual Literal("No")
+
+    }
     "display Access Code when selected" in {
 
       val updatedAnswers = emptyUserAnswers.set(AccessCodePage, "a1b2").success.value
