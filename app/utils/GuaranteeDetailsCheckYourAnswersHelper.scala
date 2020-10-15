@@ -42,7 +42,8 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
               Action(
                 content            = msg"site.edit",
                 href               = routes.DefaultAmountController.onPageLoad(lrn, CheckMode).url,
-                visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"defaultAmount.checkYourAnswersLabel"))
+                visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"defaultAmount.checkYourAnswersLabel")),
+                attributes         = Map("id" -> "change-default-amount")
               )
             )
           )
@@ -76,7 +77,8 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           Action(
             content            = msg"site.edit",
             href               = routes.GuaranteeTypeController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeType.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeType.checkYourAnswersLabel")),
+            attributes         = Map("id" -> "change-guarantee-type")
           )
         )
       )
@@ -91,7 +93,8 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           Action(
             content            = msg"site.edit",
             href               = routes.AccessCodeController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"accessCode.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"accessCode.checkYourAnswersLabel")),
+            attributes         = Map("id" -> "change-access-code")
           )
         )
       )
