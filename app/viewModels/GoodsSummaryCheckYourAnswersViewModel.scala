@@ -17,7 +17,7 @@
 package viewModels
 
 import derivable.DeriveNumberOfSeals
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import uk.gov.hmrc.viewmodels.SummaryList
 import utils.{AddSealHelper, GoodsSummaryCheckYourAnswersHelper}
 import viewModels.sections.Section

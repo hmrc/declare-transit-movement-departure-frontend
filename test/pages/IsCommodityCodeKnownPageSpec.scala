@@ -16,12 +16,10 @@
 
 package pages
 
-import models.Index
+import base.SpecBase
 import pages.behaviours.PageBehaviours
 
-class IsCommodityCodeKnownPageSpec extends PageBehaviours {
-
-  private val index = Index(0)
+class IsCommodityCodeKnownPageSpec extends PageBehaviours with SpecBase {
 
   "IsCommodityCodeKnownPage" - {
 

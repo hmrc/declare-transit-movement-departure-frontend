@@ -16,12 +16,11 @@
 
 package pages
 
-import models.Index
 import pages.behaviours.PageBehaviours
 
 class ItemDescriptionPageSpec extends PageBehaviours {
 
-  private val index = Index(0)
+  private val index = models.Index(0)
 
   "ItemDescriptionPage" - {
 

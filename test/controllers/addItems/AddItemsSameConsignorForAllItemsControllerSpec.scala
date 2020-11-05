@@ -88,7 +88,7 @@ class AddItemsSameConsignorForAllItemsControllerSpec extends SpecBase with MockN
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddItemsSameConsignorForAllItemsPage, true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddItemsSameConsignorForAllItemsPage(itemIndex), true).success.value
       dataRetrievalWithData(userAnswers)
       val request        = FakeRequest(GET, addItemsSameConsignorForAllItemsRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])

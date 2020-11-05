@@ -19,7 +19,6 @@ package forms
 import javax.inject.Inject
 import forms.mappings.Mappings
 import models.Index
-import models.domain.GrossMass.Constants.lengthKeyGrossMass
 import play.api.data.Form
 import models.domain.NetMass.Constants._
 import uk.gov.hmrc.play.mappers.StopOnFirstFail

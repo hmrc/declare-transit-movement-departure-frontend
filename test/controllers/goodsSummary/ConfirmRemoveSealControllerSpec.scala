@@ -28,6 +28,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.SealIdDetailsPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -41,16 +42,13 @@ import scala.concurrent.Future
 
 class ConfirmRemoveSealControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new ConfirmRemoveSealFormProvider()
-  val form         = formProvider(sealDomain)
+  val formProvider        = new ConfirmRemoveSealFormProvider()
+  val form: Form[Boolean] = formProvider(sealDomain)
 
-  lazy val confirmRemoveSealRoute = routes.ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, NormalMode).url
-
-  private val removeSealRoute: String   = routes.ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, NormalMode).url
-  private val userAnswersWithSeal       = emptyUserAnswers.set(SealIdDetailsPage(sealIndex), sealDomain).success.value
-  private val confirmRemoveSealTemplate = "/confirmRemoveSeals.njk"
+  lazy val confirmRemoveSealRoute: String = routes.ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, NormalMode).url
+  private val userAnswersWithSeal         = emptyUserAnswers.set(SealIdDetailsPage(sealIndex), sealDomain).success.value
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

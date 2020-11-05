@@ -104,6 +104,8 @@ private[mappings] class LocalDateTimeFormatter(
     val missingAMPMFields = getMissingFields(fieldAmOrPmKeys, key, data)
 
     (missingDateFields.nonEmpty, missingTimeFields.nonEmpty, missingAMPMFields.nonEmpty) match {
+      case (_, _, true) =>
+        Left(List(FormError(key, amOrPmRequired, args)))
       case (false, false, _) =>
         formatDateTime(key, data).left.map {
           _.map(_.copy(key = key))
@@ -112,8 +114,6 @@ private[mappings] class LocalDateTimeFormatter(
         Left(List(FormError(key, dateRequiredKey, args)))
       case (false, _, _) =>
         Left(List(FormError(key, timeRequiredKey, args)))
-      case (_, _, true) =>
-        Left(List(FormError(key, amOrPmRequired, args)))
       case _ =>
         Left(List(FormError(key, allRequiredKey, args)))
     }

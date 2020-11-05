@@ -15,7 +15,7 @@
  */
 
 package controllers.addItems
-
+import models.Index
 import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.AddItemsSameConsigneeForAllItemsFormProvider
 import matchers.JsonMatchers
@@ -90,7 +90,7 @@ class AddItemsSameConsigneeForAllItemsControllerSpec extends SpecBase with MockN
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddItemsSameConsigneeForAllItemsPage, true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddItemsSameConsigneeForAllItemsPage(Index(0)), true).success.value
       dataRetrievalWithData(userAnswers)
       val request        = FakeRequest(GET, addItemsSameConsigneeForAllItemsRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])

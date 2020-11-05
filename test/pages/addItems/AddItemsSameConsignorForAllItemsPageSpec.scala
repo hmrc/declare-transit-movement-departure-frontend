@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package pages.addItems.traderDetails
+package pages.addItems
 
 import base.SpecBase
 import pages.behaviours.PageBehaviours
 
-class TraderDetailsConsignorEoriNumberPageSpec extends PageBehaviours with SpecBase {
+class AddItemsSameConsignorForAllItemsPageSpec extends PageBehaviours with SpecBase {
 
-  "TraderDetailsConsignorEoriNumberPage" - {
+  "AddItemsSameConsignorForAllItemsPage" - {
 
-    beRetrievable[String](TraderDetailsConsignorEoriNumberPage(index))
+    beRetrievable[Boolean](AddItemsSameConsignorForAllItemsPage(index))
 
-    beSettable[String](TraderDetailsConsignorEoriNumberPage(index))
+    beSettable[Boolean](AddItemsSameConsignorForAllItemsPage(index))
 
-    beRemovable[String](TraderDetailsConsignorEoriNumberPage(index))
+    beRemovable[Boolean](AddItemsSameConsignorForAllItemsPage(index))
   }
 }

@@ -28,7 +28,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.GuaranteeDetailsCheckYourAnswersViewModel
 import viewModels.sections.Section
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class GuaranteeDetailsCheckYourAnswersController @Inject()(
   override val messagesApi: MessagesApi,

@@ -53,7 +53,7 @@ class TraderDetailsConsignorNameController @Inject()(
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(TraderDetailsConsignorNamePage) match {
+      val preparedForm = request.userAnswers.get(TraderDetailsConsignorNamePage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -84,9 +84,9 @@ class TraderDetailsConsignorNameController @Inject()(
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderDetailsConsignorNamePage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderDetailsConsignorNamePage(index), value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TraderDetailsConsignorNamePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(TraderDetailsConsignorNamePage(index), mode, updatedAnswers))
         )
   }
 }

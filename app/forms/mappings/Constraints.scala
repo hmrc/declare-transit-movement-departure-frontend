@@ -20,7 +20,8 @@ import java.time.LocalDate
 
 import models.Index
 import play.api.data.validation.{Constraint, Invalid, Valid}
-import com.google.common.base.CharMatcher
+
+import scala.util.matching.Regex
 
 trait Constraints {
 
@@ -145,6 +146,22 @@ trait Constraints {
         Valid
       case _ =>
         Invalid(errorKey)
+    }
+
+  protected def regexp(regex: Regex, errorKey: String, args: Seq[Any]): Constraint[String] =
+    Constraint {
+      case str if str.matches(regex.pattern.pattern()) =>
+        Valid
+      case _ =>
+        Invalid(errorKey, args: _*)
+    }
+
+  protected def minLength(minimum: Int, errorKey: String, args: Seq[Any]): Constraint[String] =
+    Constraint {
+      case str if str.length >= minimum =>
+        Valid
+      case _ =>
+        Invalid(errorKey, args: _*)
     }
 
   protected def doesNotExistIn[A](values: Seq[A], index: Index, errorKey: String, args: Any*)(implicit ev: StringEquivalence[A]): Constraint[String] = {

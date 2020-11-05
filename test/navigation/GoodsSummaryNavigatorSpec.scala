@@ -484,7 +484,6 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
 
         "GoodsSummaryCheckYourAnswersController when 'true' is selected and they already have a seal" in {
-          val seal2 = Index(1)
           forAll(arbitrary[UserAnswers], arbitrary[SealDomain]) {
             (userAnswers, seal) =>
               val updatedUserAnswers = userAnswers

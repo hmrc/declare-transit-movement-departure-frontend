@@ -38,3 +38,4 @@ migrations
 .metals/
 .vscode/
 project/metals.sbt
+.hydra

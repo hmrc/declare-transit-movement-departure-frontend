@@ -17,7 +17,6 @@
 package models
 
 import play.api.mvc.PathBindable
-import scala.language.implicitConversions
 
 case class Index(position: Int) {
   val display: Int = position + 1

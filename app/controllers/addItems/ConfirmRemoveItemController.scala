@@ -19,17 +19,13 @@ package controllers.addItems
 import controllers.actions._
 import forms.addItems.ConfirmRemoveItemFormProvider
 import javax.inject.Inject
-import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.AddItems
-import pages.ItemDescriptionPage
 import pages.addItems.ConfirmRemoveItemPage
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import play.twirl.api.Html
 import queries.ItemsQuery
 import renderer.Renderer
 import repositories.SessionRepository

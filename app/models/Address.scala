@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-package pages.addItems.traderDetails
+package models
 
-import base.SpecBase
-import pages.behaviours.PageBehaviours
+import play.api.libs.json._
 
-class TraderDetailsConsignorEoriNumberPageSpec extends PageBehaviours with SpecBase {
+case class Address(buildingAndStreet: String, city: String, postcode: String)
 
-  "TraderDetailsConsignorEoriNumberPage" - {
+object Address {
 
-    beRetrievable[String](TraderDetailsConsignorEoriNumberPage(index))
+  object Constants {
+    val buildingAndStreetLength = 35
+    val cityLength              = 35
+    val postcodeLength          = 9
 
-    beSettable[String](TraderDetailsConsignorEoriNumberPage(index))
-
-    beRemovable[String](TraderDetailsConsignorEoriNumberPage(index))
+    object Fields {
+      val buildingAndStreetName = "building and street name"
+      val city                  = "city"
+      val postcode              = "postcode"
+    }
   }
+
+  implicit val format: OFormat[Address] = Json.format[Address]
 }

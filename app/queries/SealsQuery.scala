@@ -19,7 +19,6 @@ package queries
 import models.domain.SealDomain
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import queries.Constants
 
 final case class SealsQuery() extends QuestionPage[Seq[SealDomain]] {
 

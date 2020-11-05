@@ -16,7 +16,7 @@
 
 package pages
 
-import models.{Index, UserAnswers}
+import models.UserAnswers
 import play.api.libs.json.JsPath
 import queries.SealsQuery
 

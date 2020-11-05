@@ -53,7 +53,7 @@ class AddItemsSameConsignorForAllItemsController @Inject()(
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AddItemsSameConsignorForAllItemsPage) match {
+      val preparedForm = request.userAnswers.get(AddItemsSameConsignorForAllItemsPage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -86,9 +86,9 @@ class AddItemsSameConsignorForAllItemsController @Inject()(
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(AddItemsSameConsignorForAllItemsPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(AddItemsSameConsignorForAllItemsPage(index), value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(AddItemsSameConsignorForAllItemsPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(AddItemsSameConsignorForAllItemsPage(index), mode, updatedAnswers))
         )
   }
 }

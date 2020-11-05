@@ -19,13 +19,12 @@ package utils
 import java.time.format.DateTimeFormatter
 
 import controllers.goodsSummary.routes
-import models.{CheckMode, Index, LocalReferenceNumber, UserAnswers}
-import pages._
-import pages.{AddCustomsApprovedLocationPage, AuthorisedLocationCodePage, DeclarePackagesPage, TotalGrossMassPage, TotalPackagesPage}
-import utils.GoodsSummaryCheckYourAnswersHelper.dateFormatter
+import models.{CheckMode, LocalReferenceNumber, UserAnswers}
+import pages.{AddCustomsApprovedLocationPage, AuthorisedLocationCodePage, DeclarePackagesPage, TotalGrossMassPage, TotalPackagesPage, _}
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels._
+import utils.GoodsSummaryCheckYourAnswersHelper.dateFormatter
 
 class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) {
 

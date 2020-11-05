@@ -17,6 +17,7 @@
 package controllers
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import base.SpecBase
 import forms.ProcedureTypeFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, ProcedureType}

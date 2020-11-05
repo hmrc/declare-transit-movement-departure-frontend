@@ -33,7 +33,6 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import repositories.SessionRepository
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import navigation.annotations.TraderDetails
 import play.api.inject.guice.GuiceApplicationBuilder

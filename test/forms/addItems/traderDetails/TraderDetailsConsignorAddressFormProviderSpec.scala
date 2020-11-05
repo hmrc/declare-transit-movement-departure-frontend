@@ -17,37 +17,124 @@
 package forms.addItems.traderDetails
 
 import forms.behaviours.StringFieldBehaviours
+import models.Address
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class TraderDetailsConsignorAddressFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "traderDetailsConsignorAddress.error.required"
-  val lengthKey   = "traderDetailsConsignorAddress.error.length"
-  val maxLength   = 100
-
-  val form = new TraderDetailsConsignorAddressFormProvider()()
+  val consignorName = "TestConsignor"
+  val form          = new TraderDetailsConsignorAddressFormProvider()(consignorName)
 
   ".value" - {
 
-    val fieldName = "value"
+    ".buildingAndStreet" - {
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
+      val fieldName   = "buildingAndStreet"
+      val requiredKey = "traderDetailsConsignorAddress.error.required"
+      val lengthKey   = "traderDetailsConsignorAddress.error.max_length"
+      val maxLength   = 35
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+      val validAdressOverLength: Gen[String] = for {
+        num  <- Gen.chooseNum[Int](maxLength + 1, maxLength + 5)
+        list <- Gen.listOfN(num, Gen.alphaNumChar)
+      } yield list.mkString("")
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+      val args: Seq[Any] = Seq(Address.Constants.Fields.buildingAndStreetName, consignorName)
+
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        stringsWithMaxLength(maxLength)
+      )
+
+      val error = FormError(fieldName, lengthKey, Array(args))
+
+      behave like fieldWithMaxLength(
+        form,
+        fieldName,
+        maxLength   = maxLength,
+        lengthError = error,
+        validAdressOverLength
+      )
+
+      behave like mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey, args)
+      )
+    }
+
+    ".city" - {
+
+      val fieldName   = "city"
+      val requiredKey = "traderDetailsConsignorAddress.error.required"
+      val lengthKey   = "traderDetailsConsignorAddress.error.max_length"
+      val maxLength   = 35
+
+      val validAdressOverLength: Gen[String] = for {
+        num  <- Gen.chooseNum[Int](maxLength + 1, maxLength + 5)
+        list <- Gen.listOfN(num, Gen.alphaNumChar)
+      } yield list.mkString("")
+
+      val args = Seq(Address.Constants.Fields.city, consignorName)
+
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        stringsWithMaxLength(maxLength)
+      )
+
+      val error = FormError(fieldName, lengthKey, Array(args))
+
+      behave like fieldWithMaxLength(
+        form,
+        fieldName,
+        maxLength   = maxLength,
+        lengthError = error,
+        validAdressOverLength
+      )
+
+      behave like mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey, args)
+      )
+    }
+
+    ".postcode" - {
+
+      val fieldName   = "postcode"
+      val requiredKey = "traderDetailsConsignorAddress.error.postcode.required"
+      val lengthKey   = "traderDetailsConsignorAddress.error.postcode.length"
+      val maxLength   = 9
+
+      val validAdressOverLength: Gen[String] = for {
+        num  <- Gen.chooseNum[Int](maxLength + 1, maxLength + 5)
+        list <- Gen.listOfN(num, Gen.alphaNumChar)
+      } yield list.mkString("")
+
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        stringsWithMaxLength(maxLength)
+      )
+
+      val error = FormError(fieldName, lengthKey, Array(Seq(consignorName)))
+
+      behave like fieldWithMaxLength(
+        form,
+        fieldName,
+        maxLength   = maxLength,
+        lengthError = error,
+        validAdressOverLength
+      )
+
+      behave like mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
+      )
+    }
   }
 }

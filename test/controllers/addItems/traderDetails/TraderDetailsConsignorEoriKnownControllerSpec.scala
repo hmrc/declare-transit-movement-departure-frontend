@@ -85,7 +85,7 @@ class TraderDetailsConsignorEoriKnownControllerSpec extends SpecBase with MockNu
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(TraderDetailsConsignorEoriKnownPage, true).success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(TraderDetailsConsignorEoriKnownPage(itemIndex), true).success.value
       dataRetrievalWithData(userAnswers)
       val request        = FakeRequest(GET, traderDetailsConsignorEoriKnownRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])

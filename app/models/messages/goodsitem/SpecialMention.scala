@@ -21,8 +21,6 @@ import models.XMLWrites
 import play.api.libs.json._
 import utils.BinaryToBooleanXMLReader._
 
-import scala.xml.NodeSeq
-
 trait SpecialMention {
 
   def additionalInformationCoded: String

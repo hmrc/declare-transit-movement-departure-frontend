@@ -20,8 +20,7 @@ import controllers.actions._
 import forms.guaranteeDetails.GuaranteeReferenceFormProvider
 import javax.inject.Inject
 import models.GuaranteeType.FlatRateVoucher
-import models.messages.guarantee.{GuaranteeReferenceWithGrn, GuaranteeReferenceWithOther}
-import models.requests.DataRequest
+import models.messages.guarantee.GuaranteeReferenceWithGrn
 import models.{LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
@@ -29,7 +28,6 @@ import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import play.mvc.Controller.request
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController

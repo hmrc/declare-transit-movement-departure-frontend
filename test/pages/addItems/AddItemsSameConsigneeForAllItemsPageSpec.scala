@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package pages.addItems
 
-import pages.addItems.AddItemsSameConsigneeForAllItemsPage
+import base.SpecBase
 import pages.behaviours.PageBehaviours
 
-class AddItemsSameConsigneeForAllItemsPageSpec extends PageBehaviours {
+class AddItemsSameConsigneeForAllItemsPageSpec extends PageBehaviours with SpecBase {
 
   "AddItemsSameConsigneeForAllItemsPage" - {
 
-    beRetrievable[Boolean](AddItemsSameConsigneeForAllItemsPage)
+    beRetrievable[Boolean](AddItemsSameConsigneeForAllItemsPage(index))
 
-    beSettable[Boolean](AddItemsSameConsigneeForAllItemsPage)
+    beSettable[Boolean](AddItemsSameConsigneeForAllItemsPage(index))
 
-    beRemovable[Boolean](AddItemsSameConsigneeForAllItemsPage)
+    beRemovable[Boolean](AddItemsSameConsigneeForAllItemsPage(index))
   }
 }

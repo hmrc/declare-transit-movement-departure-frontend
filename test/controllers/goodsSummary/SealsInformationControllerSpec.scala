@@ -16,6 +16,8 @@
 
 package controllers.goodsSummary
 
+import base.SpecBase
+import controllers.{routes => mainRoutes}
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.SealsInformationFormProvider
@@ -27,6 +29,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.data.Form
 import pages.SealIdDetailsPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -41,12 +44,12 @@ import scala.concurrent.Future
 
 class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new SealsInformationFormProvider()
-  val form         = formProvider()
+  val formProvider        = new SealsInformationFormProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val sealsInformationRoute = routes.SealsInformationController.onPageLoad(lrn, NormalMode).url
+  lazy val sealsInformationRoute: String = routes.SealsInformationController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

@@ -17,12 +17,11 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
-import models.journeyDomain.TransportDetails._
-import models.journeyDomain.TransportDetails.InlandMode._
+import models.UserAnswers
 import models.journeyDomain.TransportDetails.DetailsAtBorder._
-import models.journeyDomain.TransportDetails.ModeCrossingBorder._
+import models.journeyDomain.TransportDetails.InlandMode._
+import models.journeyDomain.TransportDetails._
 import models.reference.CountryCode
-import models.{Index, LocalDateTimeWithAMPM, UserAnswers}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages._

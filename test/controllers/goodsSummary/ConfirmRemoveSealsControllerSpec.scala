@@ -27,6 +27,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -40,12 +41,12 @@ import scala.concurrent.Future
 
 class ConfirmRemoveSealsControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new ConfirmRemoveSealsFormProvider()
-  val form         = formProvider()
+  val formProvider        = new ConfirmRemoveSealsFormProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val confirmRemoveSealsRoute = routes.ConfirmRemoveSealsController.onPageLoad(lrn, NormalMode).url
+  lazy val confirmRemoveSealsRoute: String = routes.ConfirmRemoveSealsController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

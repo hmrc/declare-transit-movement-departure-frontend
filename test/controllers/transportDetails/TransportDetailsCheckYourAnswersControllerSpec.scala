@@ -41,12 +41,12 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with MockN
 
   def onwardRoute(lrn: LocalReferenceNumber) = Call("GET", s"/common-transit-convention-departure/$lrn/task-list")
 
-  lazy val transportDetailsRoute: String = routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url
-  val mockReferenceDataConnector         = mock[ReferenceDataConnector]
-  val transportMode                      = TransportMode("1", "Sea transport")
-  val transportModes                     = TransportModeList(Seq(transportMode))
-  private val country                    = Country(CountryCode("GB"), "United Kingdom")
-  val countries                          = CountryList(Seq(country))
+  lazy val transportDetailsRoute: String                 = routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url
+  val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  val transportMode: TransportMode                       = TransportMode("1", "Sea transport")
+  val transportModes: TransportModeList                  = TransportModeList(Seq(transportMode))
+  private val country                                    = Country(CountryCode("GB"), "United Kingdom")
+  val countries: CountryList                             = CountryList(Seq(country))
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

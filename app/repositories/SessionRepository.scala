@@ -20,16 +20,13 @@ import java.time.LocalDateTime
 
 import javax.inject.{Inject, Singleton}
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
-import play.api.Configuration
 import play.api.libs.json._
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 private[repositories] class DefaultSessionRepository @Inject()(
-  sessionCollection: SessionCollection,
-  config: Configuration
+  sessionCollection: SessionCollection
 )(implicit ec: ExecutionContext)
     extends SessionRepository {
 

@@ -20,8 +20,8 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.traderDetails.TraderDetailsConsigneeNameFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.{FakeNavigator, Navigator}
 import navigation.annotations.AddItems
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -40,7 +40,7 @@ import scala.concurrent.Future
 
 class TraderDetailsConsigneeNameControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   private val formProvider = new TraderDetailsConsigneeNameFormProvider()
   private val form         = formProvider()
@@ -83,7 +83,7 @@ class TraderDetailsConsigneeNameControllerSpec extends SpecBase with MockNunjuck
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage, "answer").success.value
+      val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(itemIndex), "answer").success.value
       dataRetrievalWithData(userAnswers)
       val request        = FakeRequest(GET, traderDetailsConsigneeNameRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])

@@ -242,4 +242,12 @@ trait ModelGenerators {
         )
     }
 
+  implicit lazy val arbitraryTraderAddress: Arbitrary[Address] =
+    Arbitrary {
+      for {
+        buildingAndStreet <- alphaStringsWithMaxLength(Address.Constants.buildingAndStreetLength)
+        city              <- alphaStringsWithMaxLength(Address.Constants.cityLength)
+        postcode          <- alphaStringsWithMaxLength(Address.Constants.postcodeLength)
+      } yield Address(buildingAndStreet, city, postcode)
+    }
 }

@@ -25,8 +25,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, SummaryList}
-import utils.CheckYourAnswersHelper
-
 import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject()(
@@ -43,9 +41,7 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
-
-      val answers: Seq[SummaryList.Row] = Seq()
+      val answers: Seq[SummaryList.Row] = Seq.empty
 
       renderer
         .render(

@@ -83,7 +83,7 @@ class TraderDetailsConsignorEoriNumberControllerSpec extends SpecBase with MockN
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(TraderDetailsConsignorEoriNumberPage, "answer").success.value
+      val userAnswers = emptyUserAnswers.set(TraderDetailsConsignorEoriNumberPage(itemIndex), "answer").success.value
       dataRetrievalWithData(userAnswers)
       val request        = FakeRequest(GET, traderDetailsConsignorEoriNumberRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])

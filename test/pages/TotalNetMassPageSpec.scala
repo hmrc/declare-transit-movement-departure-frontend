@@ -16,12 +16,11 @@
 
 package pages
 
-import models.Index
+import base.SpecBase
 import pages.behaviours.PageBehaviours
 
-class TotalNetMassPageSpec extends PageBehaviours {
+class TotalNetMassPageSpec extends PageBehaviours with SpecBase {
 
-  private val index = Index(0)
   "TotalNetMassPage" - {
 
     beRetrievable[String](TotalNetMassPage(index))

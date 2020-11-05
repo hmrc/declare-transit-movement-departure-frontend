@@ -16,13 +16,11 @@
 
 package pages.addItems
 
-import models.Index
+import base.SpecBase
 import pages.addItems
 import pages.behaviours.PageBehaviours
 
-class CommodityCodePageSpec extends PageBehaviours {
-
-  private val index = Index(0)
+class CommodityCodePageSpec extends PageBehaviours with SpecBase {
 
   "CommodityCodePage" - {
 

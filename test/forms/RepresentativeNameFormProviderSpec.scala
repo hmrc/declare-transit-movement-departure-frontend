@@ -17,7 +17,9 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import org.scalacheck.Gen.{choose, listOfN}
 import play.api.data.FormError
 
 class RepresentativeNameFormProviderSpec extends StringFieldBehaviours {

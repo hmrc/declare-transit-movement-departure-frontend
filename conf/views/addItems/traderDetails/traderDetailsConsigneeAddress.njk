@@ -30,17 +30,40 @@
         <form action="{{ routes.controllers.addItems.traderDetails.TraderDetailsConsigneeAddressController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
+          <h1 class="govuk-heading-xl">
+            {{ messages("traderDetailsConsigneeAddress.heading", consigneeName) }}
+          </h1>
+          {{ govukInput({
+            classes: "govuk-!-width-two-thirds",
+            label: {
+              text: messages('traderDetailsConsigneeAddress.buildingAndStreet')
+            },
+            id: "buildingAndStreet",
+            name: "buildingAndStreet",
+            value: form.buildingAndStreet.value,
+            errorMessage: form.buildingAndStreet.error
+          }) }}
 
           {{ govukInput({
+            classes: "govuk-!-width-two-thirds",
             label: {
-              text: messages('traderDetailsConsigneeAddress.heading'),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
+              text: messages('traderDetailsConsigneeAddress.city')
             },
-            id: "value",
-            name: "value",
-            value: form.value.value,
-            errorMessage: form.value.error
+            id: "city",
+            name: "city",
+            value: form.city.value,
+            errorMessage: form.city.error
+          }) }}
+
+          {{ govukInput({
+            classes: "govuk-input--width-10",
+            label: {
+              text: messages('traderDetailsConsigneeAddress.postcode')
+            },
+            id: "postcode",
+            name: "postcode",
+            value: form.postcode.value,
+            errorMessage: form.postcode.error
           }) }}
 
           {{ govukButton({
@@ -55,3 +78,4 @@
   </div>
 
 {% endblock %}
+

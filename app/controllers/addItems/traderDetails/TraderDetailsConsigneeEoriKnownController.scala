@@ -53,7 +53,7 @@ class TraderDetailsConsigneeEoriKnownController @Inject()(
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(TraderDetailsConsigneeEoriKnownPage) match {
+      val preparedForm = request.userAnswers.get(TraderDetailsConsigneeEoriKnownPage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -86,9 +86,9 @@ class TraderDetailsConsigneeEoriKnownController @Inject()(
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderDetailsConsigneeEoriKnownPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderDetailsConsigneeEoriKnownPage(index), value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TraderDetailsConsigneeEoriKnownPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(TraderDetailsConsigneeEoriKnownPage(index), mode, updatedAnswers))
         )
   }
 }

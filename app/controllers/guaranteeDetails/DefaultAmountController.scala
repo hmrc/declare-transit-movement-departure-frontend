@@ -21,7 +21,7 @@ import forms.DefaultAmountFormProvider
 import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.{GuaranteeDetails, RouteDetails}
+import navigation.annotations.GuaranteeDetails
 import pages.DefaultAmountPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json

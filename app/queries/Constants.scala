@@ -22,4 +22,5 @@ object Constants {
   val items                        = "items"
   val packages                     = "packages"
   val previousReferences           = "previousReferences"
+  val traderDetails                = "traderDetails"
 }

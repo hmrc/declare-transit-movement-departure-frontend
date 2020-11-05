@@ -17,7 +17,6 @@
 package models
 
 import play.api.data.Form
-import play.api.i18n.Messages
 import uk.gov.hmrc.viewmodels._
 
 sealed trait DeclarationType
