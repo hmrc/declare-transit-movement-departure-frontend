@@ -16,11 +16,8 @@
 
 package models.journeyDomain
 
-import java.io
-
-import cats.data._
 import cats.implicits._
-import models.{GuaranteeType, UserAnswers}
+import models.GuaranteeType
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
 

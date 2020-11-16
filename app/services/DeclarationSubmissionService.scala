@@ -20,21 +20,17 @@ import cats.implicits._
 import connectors.DepartureMovementConnector
 import javax.inject.Inject
 import models.UserAnswers
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationSubmissionService @Inject()(
   connector: DepartureMovementConnector,
   declarationRequestService: DeclarationRequestService
 )(implicit ec: ExecutionContext) {
 
-  def submit(userAnswers: UserAnswers)(implicit hc: HeaderCarrier) =
+  def submit(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[HttpResponse]] =
     declarationRequestService
       .convert(userAnswers)
-      .map(
-        declarationRequest => connector.submitDepartureMovement(declarationRequest)
-      )
-      .traverse(x => x)
-
+      .flatMap(_.traverse(connector.submitDepartureMovement))
 }

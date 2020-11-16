@@ -102,7 +102,8 @@ object AddItemsCheckYourAnswersViewModel {
     )
   }*/
 
-  private def documentsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index)(implicit userAnswers: UserAnswers) = {
+  private def documentsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index, documentIndex: Index)(
+    implicit userAnswers: UserAnswers) = {
     val documentRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfDocuments(index)).getOrElse(0)).flatMap {
         documentPosition =>
@@ -111,7 +112,7 @@ object AddItemsCheckYourAnswersViewModel {
 
     Section(
       msg"addItems.checkYourAnswersLabel.documents",
-      Seq(checkYourAnswersHelper.addDocuments(index).toSeq, checkYourAnswersHelper.documentReference(index).toSeq, documentRows).flatten,
+      Seq(checkYourAnswersHelper.addDocuments(index).toSeq, checkYourAnswersHelper.documentReference(index, documentIndex).toSeq, documentRows).flatten,
       checkYourAnswersHelper.addAnotherDocument(index, msg"addItems.checkYourAnswersLabel.documents.addRemove")
     )
   }

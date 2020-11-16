@@ -25,7 +25,7 @@ package object journeyDomain {
 
   type UserAnswersReader[A] = ReaderT[Option, UserAnswers, A]
 
-  private[models] object UserAnswersReader {
+  object UserAnswersReader {
     def apply[A: UserAnswersReader]: UserAnswersReader[A] = implicitly[UserAnswersReader[A]]
   }
 

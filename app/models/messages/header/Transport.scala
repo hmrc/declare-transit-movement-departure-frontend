@@ -25,7 +25,7 @@ import scala.xml.NodeSeq
 
 case class Transport(
   inlTraModHEA75: Option[Int],
-  traModAtBorHEA76: Option[Int],
+  traModAtBorHEA76: Option[String],
   ideOfMeaOfTraAtDHEA78: Option[String],
   natOfMeaOfTraAtDHEA80: Option[String],
   ideOfMeaOfTraCroHEA85: Option[String],
@@ -58,7 +58,7 @@ object Transport {
 
   implicit val reads: XmlReader[Transport] = (
     (__ \\ "InlTraModHEA75").read[Int].optional,
-    (__ \\ "TraModAtBorHEA76").read[Int].optional,
+    (__ \\ "TraModAtBorHEA76").read[String].optional,
     (__ \\ "IdeOfMeaOfTraAtDHEA78").read[String].optional,
     (__ \\ "NatOfMeaOfTraAtDHEA80").read[String].optional,
     (__ \\ "IdeOfMeaOfTraCroHEA85").read[String].optional,

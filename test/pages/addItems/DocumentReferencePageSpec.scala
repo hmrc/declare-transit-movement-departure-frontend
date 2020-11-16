@@ -24,10 +24,10 @@ class DocumentReferencePageSpec extends SpecBase with PageBehaviours {
 
   "DocumentReferencePage" - {
 
-    beRetrievable[String](DocumentReferencePage(index))
+    beRetrievable[String](DocumentReferencePage(index, documentIndex))
 
-    beSettable[String](DocumentReferencePage(index))
+    beSettable[String](DocumentReferencePage(index, documentIndex))
 
-    beRemovable[String](DocumentReferencePage(index))
+    beRemovable[String](DocumentReferencePage(index, documentIndex))
   }
 }

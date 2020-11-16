@@ -19,12 +19,7 @@ package viewModels
 import base.{GeneratorSpec, SpecBase}
 import config.{ManageTransitMovementsService, Service}
 import generators.JourneyModelGenerators
-import models.EoriNumber
-import models.journeyDomain.MovementDetailsSpec._
-import models.journeyDomain.RouteDetailsSpec._
-import models.journeyDomain.TraderDetailsSpec._
-import models.journeyDomain.TransportDetailsSpec._
-import models.journeyDomain.{MovementDetails, RouteDetails}
+import models.journeyDomain.{JourneyDomain, JourneyDomainSpec}
 import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -59,14 +54,9 @@ class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with J
     }
 
     "returns lrn, sections, movement link and indicator for complete declaration" in {
-      forAll(arb[MovementDetails], arb[RouteDetails], arb[EoriNumber]) {
-        case (movement, routeDetails, principalEori) =>
-          val userAnswers = (
-            ((setMovementDetails(movement)) _) andThen
-              (setRouteDetails(routeDetails) _) andThen
-              (setTraderDetailsPrincipalEoriOnly(principalEori) _) andThen
-              (setTransportDetailsRail(false) _)
-          )(emptyUserAnswers)
+      forAll(arb[JourneyDomain]) {
+        journeyDomain =>
+          val userAnswers = JourneyDomainSpec.setJourneyDomain(journeyDomain)(emptyUserAnswers)
 
           val sut = DeclarationSummaryViewModel(manageTransitMovementsService, userAnswers)
 
@@ -74,11 +64,11 @@ class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with J
 
           val expectedJson =
             Json.obj(
-              "lrn"                    -> lrn,
+              "lrn"                    -> journeyDomain.preTaskList.lrn,
               "sections"               -> new SectionsHelper(userAnswers).getSections,
               "backToTransitMovements" -> service.fullServiceUrl,
               "isDeclarationComplete"  -> true,
-              "onSubmitUrl"            -> DeclarationSummaryViewModel.nextPage(lrn).url
+              "onSubmitUrl"            -> DeclarationSummaryViewModel.nextPage(journeyDomain.preTaskList.lrn).url
             )
 
           result mustEqual expectedJson

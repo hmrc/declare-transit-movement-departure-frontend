@@ -18,6 +18,7 @@ package pages
 
 import models.UserAnswers
 import play.api.libs.json.JsPath
+import models.journeyDomain.TransportDetails.InlandMode.Constants
 
 case object ModeCrossingBorderPage extends QuestionPage[String] {
 
@@ -27,7 +28,7 @@ case object ModeCrossingBorderPage extends QuestionPage[String] {
 
   override def cleanup(value: Option[String], userAnswers: UserAnswers) =
     value match {
-      case Some(x) if x == "2" | x == "5" | x == "7" => userAnswers.remove(NationalityCrossingBorderPage)
-      case _                                         => super.cleanup(value, userAnswers)
+      case Some(x) if Constants.codesSingleDigit.contains(x) => userAnswers.remove(NationalityCrossingBorderPage)
+      case _                                                 => super.cleanup(value, userAnswers)
     }
 }

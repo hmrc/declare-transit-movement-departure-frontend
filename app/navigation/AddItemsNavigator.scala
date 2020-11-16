@@ -222,8 +222,7 @@ class AddItemsNavigator @Inject()() extends Navigator {
       case (Some(true),None,_,_,_,_,CheckMode)    => Some(addItemsRoutes.CommodityCodeController.onPageLoad(ua.id, index, mode))
       case (Some(true),_,_,_,_,_,CheckMode)    => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
       case (Some(false),_,_,_,_,_,CheckMode)    => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-      case (Some(false),_,
-      Some(false),Some(false),
+      case (Some(false),_, Some(false),Some(false),
       Some(false),Some(false),
       NormalMode)      => Some(traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.id, index, mode))
       case (_,_,

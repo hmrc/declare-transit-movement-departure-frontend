@@ -21,9 +21,12 @@ import javax.inject.{Inject, Singleton}
 import models._
 import pages._
 import play.api.mvc.Call
+import models.journeyDomain.TransportDetails.InlandMode._
+import models.journeyDomain.TransportDetails.InlandMode
 
 @Singleton
 class TransportDetailsNavigator @Inject()() extends Navigator {
+
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case AddIdAtDepartureLaterPage =>
       ua =>
@@ -113,6 +116,7 @@ class TransportDetailsNavigator @Inject()() extends Navigator {
       case None => routes.IdCrossingBorderController.onPageLoad(ua.id, CheckMode)
       case _    => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
     }
+
   private def idCrossingBorderRoute(ua: UserAnswers, mode: Mode): Call =
     ua.get(ModeCrossingBorderPage) match {
       case None => routes.ModeCrossingBorderController.onPageLoad(ua.id, CheckMode)
@@ -121,9 +125,11 @@ class TransportDetailsNavigator @Inject()() extends Navigator {
 
   private def modeCrossingBorderRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(ModeCrossingBorderPage), ua.get(NationalityCrossingBorderPage), mode) match {
-      case (Some(x), _, NormalMode) if (x != "2" && x != "5" && x != "7")   => routes.NationalityCrossingBorderController.onPageLoad(ua.id, mode)
-      case (Some(x), None, CheckMode) if (x != "2" && x != "5" && x != "7") => routes.NationalityCrossingBorderController.onPageLoad(ua.id, CheckMode)
-      case _                                                                => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case (Some(x), _, NormalMode) if !InlandMode.Constants.codesSingleDigit.contains(x) =>
+        routes.NationalityCrossingBorderController.onPageLoad(ua.id, mode)
+      case (Some(x), None, CheckMode) if !InlandMode.Constants.codesSingleDigit.contains(x) =>
+        routes.NationalityCrossingBorderController.onPageLoad(ua.id, CheckMode)
+      case _ => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
     }
 
   private def addItAtDepartureLaterRoute(ua: UserAnswers, mode: Mode): Call =
@@ -134,10 +140,10 @@ class TransportDetailsNavigator @Inject()() extends Navigator {
 
   private def inlandModeRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(InlandModePage), ua.get(AddIdAtDeparturePage), mode) match {
-      case (Some(x), _, _) if (x == "2" || x == "20")                          => routes.ChangeAtBorderController.onPageLoad(ua.id, mode)
-      case (Some(x), _, _) if (x == "5" || x == "50" || x == "7" || x == "70") => routes.NationalityAtDepartureController.onPageLoad(ua.id, mode)
-      case (_, Some(false), CheckMode)                                         => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
-      case (_, Some(true), CheckMode)                                          => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
-      case (_, _, _)                                                           => routes.AddIdAtDepartureController.onPageLoad(ua.id, mode)
+      case (Some(x), _, _) if Rail.Constants.codes.contains(x)     => routes.ChangeAtBorderController.onPageLoad(ua.id, mode)
+      case (Some(x), _, _) if Mode5or7.Constants.codes.contains(x) => routes.NationalityAtDepartureController.onPageLoad(ua.id, mode)
+      case (_, Some(false), CheckMode)                             => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case (_, Some(true), CheckMode)                              => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case (_, _, _)                                               => routes.AddIdAtDepartureController.onPageLoad(ua.id, mode)
     }
 }

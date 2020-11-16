@@ -22,7 +22,11 @@ import models.{DeclarationType, RepresentativeCapacity}
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
-sealed trait MovementDetails
+sealed trait MovementDetails {
+  val declarationType: DeclarationType
+  val containersUsed: Boolean
+  val declarationPlacePage: String
+}
 
 object MovementDetails {
 

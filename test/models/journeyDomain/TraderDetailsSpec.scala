@@ -16,7 +16,7 @@
 
 package models.journeyDomain
 
-import base.{GeneratorSpec, SpecBase}
+import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
 import models.domain.Address
 import models.journeyDomain.TraderDetails.{PersonalInformation, TraderEori}
 import models.{ConsigneeAddress, ConsignorAddress, EoriNumber, PrincipalAddress, UserAnswers}
@@ -201,7 +201,50 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues {
   }
 }
 
-object TraderDetailsSpec {
+object TraderDetailsSpec extends UserAnswersSpecHelper {
+
+  def setTraderDetails(traderDetails: TraderDetails)(startUserAnswers: UserAnswers): UserAnswers =
+    startUserAnswers
+      .unsafeSetVal(IsPrincipalEoriKnownPage)(traderDetails.principalTraderDetails.isInstanceOf[TraderEori])
+      .unsafeSetPFn(WhatIsPrincipalEoriPage)(traderDetails.principalTraderDetails)({
+        case TraderEori(eori) => eori.value
+      })
+      .unsafeSetPFn(PrincipalNamePage)(traderDetails.principalTraderDetails)({
+        case PersonalInformation(name, _) => name
+      })
+      .unsafeSetPFn(PrincipalAddressPage)(traderDetails.principalTraderDetails)({
+        case PersonalInformation(_, address) => Address.prismAddressToPrincipalAddress.getOption(address).get
+      })
+      // Set Consignor
+      .unsafeSetVal(AddConsignorPage)(traderDetails.consignor.isDefined)
+      .unsafeSetPFn(IsConsignorEoriKnownPage)(traderDetails.consignor)({
+        case Some(TraderEori(_)) => true
+        case Some(_)             => false
+      })
+      .unsafeSetPFn(ConsignorEoriPage)(traderDetails.consignor)({
+        case Some(TraderEori(eori)) => eori.value
+      })
+      .unsafeSetPFn(ConsignorNamePage)(traderDetails.consignor)({
+        case Some(PersonalInformation(name, _)) => name
+      })
+      .unsafeSetPFn(ConsignorAddressPage)(traderDetails.consignor)({
+        case Some(PersonalInformation(_, address)) => Address.prismAddressToConsignorAddress.getOption(address).get
+      })
+      // Set Consignee
+      .unsafeSetVal(AddConsigneePage)(traderDetails.consignee.isDefined)
+      .unsafeSetPFn(IsConsigneeEoriKnownPage)(traderDetails.consignee)({
+        case Some(TraderEori(_)) => true
+        case Some(_)             => false
+      })
+      .unsafeSetPFn(WhatIsConsigneeEoriPage)(traderDetails.consignee)({
+        case Some(TraderEori(eori)) => eori.value
+      })
+      .unsafeSetPFn(ConsigneeNamePage)(traderDetails.consignee)({
+        case Some(PersonalInformation(name, _)) => name
+      })
+      .unsafeSetPFn(ConsigneeAddressPage)(traderDetails.consignee)({
+        case Some(PersonalInformation(_, address)) => Address.prismAddressToConsigneeAddress.getOption(address).get
+      })
 
   def setTraderDetailsPrincipalEoriOnly(eoriNumber: EoriNumber)(startUserAnswers: UserAnswers): UserAnswers =
     startUserAnswers

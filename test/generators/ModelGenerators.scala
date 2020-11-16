@@ -186,3 +186,5 @@ trait ModelGenerators {
       } yield Address(buildingAndStreet, city, postcode)
     }
 }
+
+object ModelGenerators extends ModelGenerators with Generators
