@@ -19,14 +19,14 @@ package models
 import play.api.data.Form
 import uk.gov.hmrc.viewmodels._
 
-sealed trait DeclarationType
+sealed abstract class DeclarationType(val code: String, asString: String) extends WithName(asString)
 
 object DeclarationType extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with DeclarationType
-  case object Option2 extends WithName("option2") with DeclarationType
-  case object Option3 extends WithName("option3") with DeclarationType
-  case object Option4 extends WithName("option4") with DeclarationType
+  case object Option1 extends DeclarationType("T1", "option1")
+  case object Option2 extends DeclarationType("T2", "option2")
+  case object Option3 extends DeclarationType("T-", "option3")
+  case object Option4 extends DeclarationType("T2", "option4")
 
   val values: Seq[DeclarationType] = Seq(
     Option1,

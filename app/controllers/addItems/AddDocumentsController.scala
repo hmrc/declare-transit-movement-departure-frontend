@@ -21,7 +21,7 @@ import forms.addItems.AddDocumentsFormProvider
 import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.{AddItems, Document}
 import pages.addItems.AddDocumentsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddDocumentsController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @Document navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
@@ -52,7 +52,7 @@ class AddDocumentsController @Inject()(
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(AddDocumentsPage) match {
+      val preparedForm = request.userAnswers.get(AddDocumentsPage(itemIndex)) match {
         case None        => formProvider(itemIndex)
         case Some(value) => formProvider(itemIndex).fill(value)
       }
@@ -87,9 +87,9 @@ class AddDocumentsController @Inject()(
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(AddDocumentsPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(AddDocumentsPage(itemIndex), value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(AddDocumentsPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(AddDocumentsPage(itemIndex), mode, updatedAnswers))
         )
   }
 }

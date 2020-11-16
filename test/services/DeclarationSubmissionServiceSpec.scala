@@ -56,7 +56,7 @@ class DeclarationSubmissionServiceSpec extends SpecBase with MockServiceApp with
       val request: DeclarationRequest = arbitrary[DeclarationRequest].sample.value
 
       when(mockDepartureMovementConnector.submitDepartureMovement(any())(any())).thenReturn(Future.successful(HttpResponse(ACCEPTED)))
-      when(mockDeclarationRequestService.convert(any())).thenReturn(Some(request))
+      when(mockDeclarationRequestService.convert(any())).thenReturn(Future.successful(Some(request)))
 
       declarationService.submit(emptyUserAnswers).futureValue.value.status mustBe ACCEPTED
     }
@@ -66,13 +66,13 @@ class DeclarationSubmissionServiceSpec extends SpecBase with MockServiceApp with
       val request: DeclarationRequest = arbitrary[DeclarationRequest].sample.value
 
       when(mockDepartureMovementConnector.submitDepartureMovement(any())(any())).thenReturn(Future.successful(HttpResponse(errorCode)))
-      when(mockDeclarationRequestService.convert(any())).thenReturn(Some(request))
+      when(mockDeclarationRequestService.convert(any())).thenReturn(Future.successful(Some(request)))
 
       declarationService.submit(emptyUserAnswers).futureValue.value.status mustBe errorCode
     }
 
     "must return None on failing to create departure declaration" in {
-      when(mockDeclarationRequestService.convert(any())).thenReturn(None)
+      when(mockDeclarationRequestService.convert(any())).thenReturn(Future.successful(None))
 
       declarationService.submit(emptyUserAnswers).futureValue mustBe None
     }

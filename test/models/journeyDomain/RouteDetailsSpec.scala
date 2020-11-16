@@ -16,10 +16,13 @@
 
 package models.journeyDomain
 
-import base.{GeneratorSpec, SpecBase}
+import java.time.LocalDateTime
+
+import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
 import generators.JourneyModelGenerators
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.{Index, LocalDateTimeWithAMPM, UserAnswers}
+import org.scalacheck.Arbitrary
 import pages._
 
 class RouteDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
@@ -27,24 +30,28 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
   "RouteDetails" - {
     "can be constructed when all the answers have been answered" in {
-      forAll(arb[RouteDetails], arb[UserAnswers]) {
-        (expected, baseUserAnswers) =>
-          val userAnswers = setRouteDetails(expected)(baseUserAnswers)
+      forAll(arb[Option[LocalDateTime]]) {
+        dateTime =>
+          implicit val constTransitInformation =
+            Arbitrary(arb[TransitInformation].map(_.copy(arrivalTime = dateTime)))
 
-          val result = UserAnswersParser[Option, RouteDetails].run(userAnswers).value
+          forAll(arbitraryRouteDetails(constTransitInformation).arbitrary, arb[UserAnswers]) {
+            (expected, baseUserAnswers) =>
+              val userAnswers = setRouteDetails(expected, None)(baseUserAnswers)
 
-          result mustEqual expected
+              val result = UserAnswersParser[Option, RouteDetails].run(userAnswers).value
 
+              result mustEqual expected
+          }
       }
-
     }
   }
 
 }
 
-object RouteDetailsSpec {
+object RouteDetailsSpec extends UserAnswersSpecHelper {
 
-  def setRouteDetails(routeDetails: RouteDetails)(startUserAnswers: UserAnswers): UserAnswers = {
+  def setRouteDetails(routeDetails: RouteDetails, addSecurityDetails: Option[Boolean])(startUserAnswers: UserAnswers): UserAnswers = {
     val interstitialUserAnswers =
       startUserAnswers
         .set(CountryOfDispatchPage, routeDetails.countryOfDispatch)
@@ -62,12 +69,10 @@ object RouteDetailsSpec {
 
     val userAnswers = routeDetails.transitInformation.zipWithIndex.foldLeft(interstitialUserAnswers) {
       case (ua, (TransitInformation(transitOffice, arrivalTime), index)) =>
-        ua.set(AddAnotherTransitOfficePage(Index(index)), transitOffice)
-          .toOption
-          .get
-          .set(ArrivalTimesAtOfficePage(Index(index)), LocalDateTimeWithAMPM(arrivalTime, "PM"))
-          .toOption
-          .get
+        ua.unsafeSetVal(AddAnotherTransitOfficePage(Index(index)))(transitOffice)
+          .unsafeSetVal(AddSecurityDetailsPage)(addSecurityDetails.getOrElse(arrivalTime.isDefined))
+          .unsafeSetOpt(ArrivalTimesAtOfficePage(Index(index)))(arrivalTime.map(LocalDateTimeWithAMPM(_, "PM")))
+
     }
 
     userAnswers

@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package pages.addItems
+package navigation.annotations;
 
-import models.Index
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import queries.Constants.{documents, items}
+import com.google.inject.BindingAnnotation;
 
-case class DocumentReferencePage(itemIndex: Index, documentIndex: Index) extends QuestionPage[String] {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  override def path: JsPath = JsPath \ items \ itemIndex.position \ documents \ documentIndex.position \ toString
-
-  override def toString: String = "documentReference"
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface Document {
 }

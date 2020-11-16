@@ -31,6 +31,8 @@ trait Generators extends UserAnswersGenerator with ModelGenerators {
 
   implicit val dontShrink: Shrink[String] = Shrink.shrinkAny
 
+  def genNumberString: Gen[String] = arbitrary[Int].map(_.toString)
+
   def genIntersperseString(gen: Gen[String], value: String, frequencyV: Int = 1, frequencyN: Int = 10): Gen[String] = {
 
     val genValue: Gen[Option[String]] = Gen.frequency(frequencyN -> None, frequencyV -> Gen.const(Some(value)))

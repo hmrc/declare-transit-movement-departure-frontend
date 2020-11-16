@@ -113,7 +113,7 @@ trait MessagesModelGenerators extends Generators {
     Arbitrary {
       for {
         inlTraModHEA75        <- Gen.option(choose(min = 1: Int, 99: Int))
-        traModAtBorHEA76      <- Gen.option(choose(min = 1: Int, 99: Int))
+        traModAtBorHEA76      <- Gen.option(nonEmptyString)
         ideOfMeaOfTraAtDHEA78 <- Gen.option(stringsWithMaxLength(Transport.Constants.identityMeansOfTransport, alphaNumChar))
         natOfMeaOfTraAtDHEA80 <- Gen.option(stringsWithMaxLength(Header.Constants.countryLength, alphaNumChar))
         ideOfMeaOfTraCroHEA85 <- Gen.option(stringsWithMaxLength(Transport.Constants.identityMeansOfTransport, alphaNumChar))

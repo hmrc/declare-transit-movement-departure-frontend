@@ -22,27 +22,27 @@ import derivable.DeriveNumberOfDocuments
 import forms.addItems.AddAnotherDocumentFormProvider
 import javax.inject.Inject
 import models.requests.DataRequest
-import play.twirl.api.Html
-import utils.AddItemsCheckYourAnswersHelper
 import models.{Index, LocalReferenceNumber, Mode, NormalMode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.Document
 import pages.addItems.AddAnotherDocumentPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import utils.AddItemsCheckYourAnswersHelper
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherDocumentController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @Document navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

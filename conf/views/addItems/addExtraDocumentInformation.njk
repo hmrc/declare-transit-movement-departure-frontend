@@ -7,7 +7,7 @@
 {% from "macros/title.njk"                         import title %}
 
 {% block pageTitle %}
-  {{ title(messages("addExtraDocumentInformation.title"), form.errors) }}
+  {{ title(messages("addExtraDocumentInformation.title", documentIndex), form.errors) }}
 {% endblock %}
 
 {% block mainContent %}
@@ -36,7 +36,7 @@
             name: 'value',
             fieldset: {
               legend: {
-                text: messages('addExtraDocumentInformation.heading', index),
+                text: messages('addExtraDocumentInformation.heading', documentIndex),
                 isPageHeading: true,
                 classes: "govuk-fieldset__legend--xl"
               }

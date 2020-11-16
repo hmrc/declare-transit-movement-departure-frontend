@@ -34,7 +34,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua)
+          val userAnswers = setGoodsSummary(goodsSummary, Some(false))(ua)
 
           UserAnswersOptionalParser[GoodsSummary].run(userAnswers).value mustEqual goodsSummary
 
@@ -47,7 +47,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua)
+          val userAnswers = setGoodsSummary(goodsSummary, Some(false))(ua)
 
           UserAnswersOptionalParser[GoodsSummary].run(userAnswers).value mustEqual goodsSummary
 
@@ -59,7 +59,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
       forAll(arb[GoodsSummary], arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua)
+          val userAnswers = setGoodsSummary(goodsSummary, Some(false))(ua)
 
           UserAnswersOptionalParser[GoodsSummary].run(userAnswers).value mustEqual goodsSummary
 
@@ -78,7 +78,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
         forAll(genGoodsSummary.arbitrary, arb[UserAnswers]) {
           (goodsSummary, ua) =>
-            val userAnswers = setGoodsSummary(goodsSummary)(ua)
+            val userAnswers = setGoodsSummary(goodsSummary, Some(false))(ua)
 
             UserAnswersOptionalParser[GoodsSummary].run(userAnswers).value mustEqual goodsSummary
 
@@ -97,7 +97,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
         forAll(genGoodsSummary.arbitrary, arb[UserAnswers]) {
           (goodsSummary, ua) =>
-            val userAnswers = setGoodsSummary(goodsSummary)(ua)
+            val userAnswers = setGoodsSummary(goodsSummary, Some(false))(ua)
 
             UserAnswersOptionalParser[GoodsSummary].run(userAnswers).value mustEqual goodsSummary
 
@@ -115,7 +115,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
       forAll(genGoodsSummary.arbitrary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua)
+          val userAnswers = setGoodsSummary(goodsSummary, Some(false))(ua)
 
           UserAnswersOptionalParser[GoodsSummary].run(userAnswers).value mustEqual goodsSummary
 
@@ -128,7 +128,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua)
+          val userAnswers = setGoodsSummary(goodsSummary, Some(false))(ua)
 
           UserAnswersOptionalParser[GoodsSummary].run(userAnswers).value mustEqual goodsSummary
 
@@ -141,7 +141,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua)
+          val userAnswers = setGoodsSummary(goodsSummary, Some(false))(ua)
 
           UserAnswersOptionalParser[GoodsSummary].run(userAnswers).value mustEqual goodsSummary
 
@@ -163,14 +163,14 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
     }
 
   // Note: overrides procedure type
-  def setGoodsSummary(goodsSummary: GoodsSummary, addSecurityDetails: Boolean = false)(userAnswers: UserAnswers): UserAnswers =
+  def setGoodsSummary(goodsSummary: GoodsSummary, addSecurityDetails: Option[Boolean])(userAnswers: UserAnswers): UserAnswers =
     userAnswers
       .unsafeSetVal(ProcedureTypePage)(procedureType(goodsSummary.goodSummaryDetails))
       .unsafeSetVal(DeclarePackagesPage)(goodsSummary.numberOfPackages.isDefined)
       .unsafeSetOpt(TotalPackagesPage)(goodsSummary.numberOfPackages)
       .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
-      .unsafeSetVal(AddSecurityDetailsPage)(addSecurityDetails /* goodsSummary.loadingPlace.isDefined */ ) // TODO: when loading place is implemented
-      //      .unsafeSetVal(LoadingPlacePage)(goodsSummary.loadingPlace)
+      .unsafeSetVal(AddSecurityDetailsPage)(addSecurityDetails.getOrElse(goodsSummary.loadingPlace.isDefined))
+//      .unsafeSetVal(LoadingPlacePage)(goodsSummary.loadingPlace)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
         case GoodSummaryNormalDetails(customsApprovedLocation) => customsApprovedLocation.isDefined

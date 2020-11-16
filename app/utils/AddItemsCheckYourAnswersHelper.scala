@@ -104,7 +104,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         )
     }
 
-  def addDocuments(itemIndex: Index): Option[Row] = userAnswers.get(AddDocumentsPage) map {
+  def addDocuments(itemIndex: Index): Option[Row] = userAnswers.get(AddDocumentsPage(itemIndex)) map {
     answer =>
       Row(
         key   = Key(msg"addDocuments.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
@@ -119,7 +119,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def documentReference(itemIndex: Index): Option[Row] = userAnswers.get(DocumentReferencePage(itemIndex: Index)) map {
+  def documentReference(itemIndex: Index, documentIndex: Index): Option[Row] = userAnswers.get(DocumentReferencePage(itemIndex, documentIndex)) map {
     answer =>
       Row(
         key   = Key(msg"documentReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
@@ -127,7 +127,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content            = msg"site.edit",
-            href               = routes.DocumentReferenceController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            href               = routes.DocumentReferenceController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"documentReference.checkYourAnswersLabel"))
           )
         )

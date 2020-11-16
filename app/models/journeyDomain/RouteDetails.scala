@@ -26,6 +26,7 @@ import pages._
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import RouteDetails.TransitInformation
+import models.{Index, UserAnswers}
 
 final case class RouteDetails(
   countryOfDispatch: CountryCode,
@@ -39,26 +40,41 @@ object RouteDetails {
 
   final case class TransitInformation(
     transitOffice: String,
-    arrivalTime: LocalDateTime
+    arrivalTime: Option[LocalDateTime]
   )
 
   object TransitInformation {
 
-    implicit val reads: Reads[TransitInformation] =
-      ((__ \ AddAnotherTransitOfficePage.key).read[String] and
-        (__ \ ArrivalTimesAtOfficePage.key \ "dateTime").read[LocalDateTime])(TransitInformation(_, _))
+    implicit val readSeqTransitInformation: UserAnswersReader[NonEmptyList[TransitInformation]] =
+      AddSecurityDetailsPage.reader
+        .flatMap {
+          addSecurityDetailsFlag =>
+            if (addSecurityDetailsFlag) {
+              DeriveNumberOfOfficeOfTransits.reader.flatMap {
+                offices =>
+                  offices.zipWithIndex.traverse({
+                    case (_, index) =>
+                      (
+                        AddAnotherTransitOfficePage(Index(index)).reader,
+                        ArrivalTimesAtOfficePage(Index(index)).reader
+                      ).tupled.map {
+                        case (office, time) => TransitInformation(office, Some(time.dateTime))
+                      }
+                  })
+              }
+            } else {
+              DeriveNumberOfOfficeOfTransits.reader.flatMap {
+                offices =>
+                  offices.zipWithIndex.traverse({
+                    case (_, index) =>
+                      AddAnotherTransitOfficePage(Index(index)).reader.map(TransitInformation(_, None))
+                  })
 
-    implicit val readSeqTransitInformation: UserAnswersReader[NonEmptyList[TransitInformation]] = {
-      val readArrayOfTransitOffices: UserAnswersReader[List[JsObject]] =
-        DeriveNumberOfOfficeOfTransits.reader
+              }
 
-      val readTransitOffices =
-        ReaderT[Option, List[JsObject], List[TransitInformation]] {
-          _.traverse(_.validate[TransitInformation].asOpt)
-        }.flatMapF(NonEmptyList.fromList)
-
-      readArrayOfTransitOffices andThen readTransitOffices
-    }
+            }
+        }
+        .flatMapF(NonEmptyList.fromList)
   }
 
   implicit val makeSimplifiedMovementDetails: UserAnswersParser[Option, RouteDetails] =

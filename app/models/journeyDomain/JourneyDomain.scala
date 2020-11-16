@@ -16,16 +16,56 @@
 
 package models.journeyDomain
 
+import java.time.LocalDateTime
+
+import cats.data._
+import cats.implicits._
 import models.UserAnswers
+import models.reference.CountryCode
+
+case class JourneyDomain(
+  preTaskList: PreTaskListDetails,
+  movementDetails: MovementDetails,
+  routeDetails: RouteDetails,
+  transportDetails: TransportDetails,
+  traderDetails: TraderDetails,
+  itemDetails: NonEmptyList[ItemSection],
+  goodsSummary: GoodsSummary,
+  guarantee: GuaranteeDetails
+)
 
 object JourneyDomain {
 
-  def parse(userAnswers: UserAnswers): Option[(MovementDetails, RouteDetails, TraderDetails, TransportDetails)] =
-    for {
-      movementDetails  <- UserAnswersOptionalParser[MovementDetails].run(userAnswers)
-      routeDetails     <- UserAnswersOptionalParser[RouteDetails].run(userAnswers)
-      traderDetails    <- UserAnswersOptionalParser[TraderDetails].run(userAnswers)
-      transportDetails <- UserAnswersOptionalParser[TransportDetails].run(userAnswers)
-    } yield (movementDetails, routeDetails, traderDetails, transportDetails)
+  object Constants {
 
+    val principalTraderCountryCode: CountryCode = CountryCode("GB")
+
+  }
+
+  implicit def userAnswersReader: UserAnswersReader[JourneyDomain] = {
+    // TOOD: This is a workaround till we remove UserAnswersParser
+    implicit def fromUserAnswersParser[A](implicit parser: UserAnswersParser[Option, A]): UserAnswersReader[A] =
+      ReaderT[Option, UserAnswers, A](parser.run _)
+
+    for {
+      preTaskList      <- UserAnswersReader[PreTaskListDetails]
+      movementDetails  <- UserAnswersReader[MovementDetails]
+      routeDetails     <- UserAnswersReader[RouteDetails]
+      transportDetails <- UserAnswersReader[TransportDetails]
+      traderDetails    <- UserAnswersReader[TraderDetails]
+      itemDetails      <- UserAnswersReader[NonEmptyList[ItemSection]]
+      goodsSummary     <- UserAnswersReader[GoodsSummary]
+      guarantee        <- UserAnswersReader[GuaranteeDetails]
+    } yield
+      JourneyDomain(
+        preTaskList,
+        movementDetails,
+        routeDetails,
+        transportDetails,
+        traderDetails,
+        itemDetails,
+        goodsSummary,
+        guarantee
+      )
+  }
 }

@@ -18,21 +18,205 @@ package generators
 
 import java.time.{LocalDate, LocalDateTime}
 
-import models.domain.SealDomain
+import models.domain.{Address, SealDomain}
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
-import models.journeyDomain.GuaranteeDetails._
-import models.journeyDomain.MovementDetails._
+import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference}
+import models.journeyDomain.MovementDetails.{DeclarationForSelf, DeclarationForSomeoneElse, DeclarationForSomeoneElseAnswer, NormalMovementDetails, SimplifiedMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
-import models.journeyDomain._
 import models.journeyDomain.RouteDetails.TransitInformation
-import models.reference._
-import models.journeyDomain.{GoodsSummary, GuaranteeDetails, ItemDetails, MovementDetails, RouteDetails}
-import models.{DeclarationType, GuaranteeType, RepresentativeCapacity}
+import models.journeyDomain.TraderDetails.{PersonalInformation, RequiredDetails, TraderEori}
+import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
+import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, NonSpecialMode, Rail}
+import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
+import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
+import models.journeyDomain.{GoodsSummary, GuaranteeDetails, ItemDetails, ItemSection, JourneyDomain, MovementDetails, Packages, PreTaskListDetails, RouteDetails, TraderDetails, TransportDetails}
+import models.reference.{CountryCode, PackageType}
+import models.{ConsigneeAddress, ConsignorAddress, DeclarationType, EoriNumber, GuaranteeType, LocalReferenceNumber, PrincipalAddress, ProcedureType, RepresentativeCapacity}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait JourneyModelGenerators {
   self: Generators =>
+
+  implicit def arbitraryJourneyDomain: Arbitrary[JourneyDomain] =
+    Arbitrary {
+      for {
+        preTaskList <- arbitrary[PreTaskListDetails]
+        isNormalMovement = preTaskList.procedureType == ProcedureType.Normal
+        movementDetails <- if (isNormalMovement) {
+          arbitrary[NormalMovementDetails]
+        } else {
+          arbitrary[SimplifiedMovementDetails]
+        }
+
+        isSecurityDetailsRequired = preTaskList.addSecurityDetails
+        transitInformation = if (isSecurityDetailsRequired) {
+          Arbitrary(genTransitInformationWithArrivalTime)
+        } else {
+          Arbitrary(genTransitInformationWithoutArrivalTime)
+        }
+        routeDetails     <- arbitraryRouteDetails(transitInformation).arbitrary
+        transportDetails <- arbitrary[TransportDetails]
+        traderDetails    <- arbitrary[TraderDetails]
+        itemDetails      <- nonEmptyListOf[ItemSection](3)
+        goodsummarydetaislType = if (isNormalMovement) {
+          arbitrary[GoodSummaryNormalDetails]
+        } else {
+          arbitrary[GoodSummarySimplifiedDetails]
+        }
+        goodsSummary <- arbitraryGoodsSummary(Arbitrary(goodsummarydetaislType)).arbitrary
+        guarantee    <- arbitrary[GuaranteeDetails]
+      } yield
+        JourneyDomain(
+          preTaskList,
+          movementDetails,
+          routeDetails,
+          transportDetails,
+          traderDetails,
+          itemDetails,
+          goodsSummary,
+          guarantee
+        )
+    }
+
+  implicit lazy val arbitraryModeCrossingBorder: Arbitrary[ModeCrossingBorder] =
+    Arbitrary(
+      Gen.oneOf(
+        arbitrary[ModeExemptNationality.type],
+        arbitrary[ModeWithNationality]
+      )
+    )
+
+  implicit lazy val arbitraryModeExemptNationality: Arbitrary[ModeExemptNationality.type] =
+    Arbitrary(Gen.const(ModeExemptNationality))
+
+  implicit lazy val arbitraryModeWithNationality: Arbitrary[ModeWithNationality] =
+    Arbitrary {
+      for {
+        cc <- arbitrary[CountryCode]
+
+      } yield ModeWithNationality(cc)
+    }
+
+  implicit lazy val arbitraryDetailsAtBorder: Arbitrary[DetailsAtBorder] =
+    Arbitrary(
+      Gen.oneOf(
+        arbitrary[SameDetailsAtBorder.type],
+        arbitrary[NewDetailsAtBorder]
+      )
+    )
+
+  implicit lazy val arbitrarySameDetailsAtBorder: Arbitrary[SameDetailsAtBorder.type] =
+    Arbitrary(Gen.const(SameDetailsAtBorder))
+
+  implicit lazy val arbitraryNewDetailsAtBorder: Arbitrary[NewDetailsAtBorder] =
+    Arbitrary {
+      for {
+        mode               <- genNumberString
+        idCrossing         <- stringsWithMaxLength(stringMaxLength)
+        modeCrossingBorder <- arbitrary[ModeCrossingBorder]
+      } yield
+        NewDetailsAtBorder(
+          mode,
+          idCrossing,
+          modeCrossingBorder
+        )
+    }
+
+  implicit lazy val arbitraryInlandMode: Arbitrary[InlandMode] =
+    Arbitrary(
+      Gen.oneOf(
+        arbitrary[Rail],
+        arbitrary[Mode5or7],
+        arbitrary[NonSpecialMode]
+      )
+    )
+
+  implicit lazy val arbitraryRail: Arbitrary[Rail] =
+    Arbitrary {
+      for {
+        code <- Gen.oneOf(Rail.Constants.codes).map(_.toInt)
+      } yield Rail(code)
+    }
+
+  implicit lazy val arbitraryMode5or7: Arbitrary[Mode5or7] =
+    Arbitrary {
+      for {
+        code        <- Gen.oneOf(Mode5or7.Constants.codes).map(_.toInt)
+        countryCode <- arbitrary[CountryCode]
+      } yield Mode5or7(code, countryCode)
+    }
+
+  implicit lazy val arbitraryNonSpecialMode: Arbitrary[NonSpecialMode] =
+    Arbitrary {
+      for {
+        code                   <- Gen.const(42)
+        nationalityAtDeparture <- arbitrary[CountryCode]
+        departureId            <- Gen.option(stringsWithMaxLength(stringMaxLength))
+      } yield
+        NonSpecialMode(
+          code,
+          nationalityAtDeparture,
+          departureId
+        )
+    }
+
+  implicit lazy val arbitraryTransportDetails: Arbitrary[TransportDetails] =
+    Arbitrary {
+      for {
+        inlandMode      <- arbitrary[InlandMode]
+        detailsAtBorder <- arbitrary[DetailsAtBorder]
+      } yield
+        TransportDetails(
+          inlandMode,
+          detailsAtBorder
+        )
+    }
+
+  implicit val arbitraryTraderDetails: Arbitrary[TraderDetails] = {
+    val pricipalAddress  = Arbitrary(arbitrary[PrincipalAddress].map(Address.prismAddressToPrincipalAddress.reverseGet))
+    val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
+    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToConsigneeAddress.reverseGet))
+
+    Arbitrary {
+      for {
+        principalTraderDetails <- arbitraryRequiredDetails(pricipalAddress).arbitrary
+        consignor              <- Gen.option(arbitraryRequiredDetails(consignorAddress).arbitrary)
+        consignee              <- Gen.option(arbitraryRequiredDetails(consigneeAddress).arbitrary)
+      } yield TraderDetails(principalTraderDetails, consignor, consignee)
+    }
+  }
+
+  implicit def arbitraryRequiredDetails(implicit arbAddress: Arbitrary[Address]): Arbitrary[RequiredDetails] =
+    Arbitrary(Gen.oneOf(Arbitrary.arbitrary[PersonalInformation], Arbitrary.arbitrary[TraderEori]))
+
+  implicit lazy val arbitraryTraderEori: Arbitrary[TraderEori] =
+    Arbitrary(Arbitrary.arbitrary[EoriNumber].map(TraderEori(_)))
+
+  implicit def arbitraryPersonalInformation(implicit arbAddress: Arbitrary[Address]): Arbitrary[PersonalInformation] =
+    Arbitrary {
+      for {
+        name    <- stringsWithMaxLength(stringMaxLength)
+        address <- arbAddress.arbitrary
+      } yield PersonalInformation(name, address)
+    }
+
+  implicit lazy val arbitraryItemSection: Arbitrary[ItemSection] =
+    Arbitrary {
+      for {
+        itemDetail <- arbitrary[ItemDetails]
+        packages   <- nonEmptyListOf[Packages](10)
+      } yield ItemSection(itemDetail, packages)
+    }
+
+  implicit lazy val arbitraryPreTaskListDetails: Arbitrary[PreTaskListDetails] =
+    Arbitrary {
+      for {
+        lrn                <- arbitrary[LocalReferenceNumber]
+        procedureType      <- arbitrary[ProcedureType]
+        addSecurityDetails <- arbitrary[Boolean]
+      } yield PreTaskListDetails(lrn, procedureType, addSecurityDetails)
+    }
 
   implicit lazy val arbitraryGuaranteeDetails: Arbitrary[GuaranteeDetails] =
     Arbitrary(Gen.oneOf(arbitrary[GuaranteeReference], arbitrary[GuaranteeOther]))
@@ -92,8 +276,8 @@ trait JourneyModelGenerators {
     Arbitrary {
       for {
         itemDescription <- nonEmptyString
-        totalGrossMass  <- nonEmptyString
-        totalNetMass    <- Gen.option(arbitrary[String])
+        totalGrossMass  <- genNumberString
+        totalNetMass    <- Gen.option(genNumberString)
         commodityCode   <- Gen.option(arbitrary[String])
       } yield ItemDetails(itemDescription, totalGrossMass, totalNetMass, commodityCode)
     }
@@ -149,26 +333,36 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryMovementDetails: Arbitrary[MovementDetails] =
     Arbitrary(Gen.oneOf(arbitrary[NormalMovementDetails], arbitrary[SimplifiedMovementDetails]))
 
-  implicit lazy val arbitraryTransitInformation: Arbitrary[TransitInformation] =
-    Arbitrary {
-      for {
-        transitOffice <- stringsWithMaxLength(stringMaxLength)
-        arrivalTime   <- arbitrary[LocalDateTime]
-      } yield
-        TransitInformation(
-          transitOffice,
-          arrivalTime
-        )
-    }
+  val genTransitInformationWithoutArrivalTime =
+    for {
+      transitOffice <- stringsWithMaxLength(stringMaxLength)
+    } yield
+      TransitInformation(
+        transitOffice,
+        None
+      )
 
-  implicit lazy val arbitraryRouteDetails: Arbitrary[RouteDetails] =
+  val genTransitInformationWithArrivalTime =
+    for {
+      transitOffice <- stringsWithMaxLength(stringMaxLength)
+      arrivalTime   <- arbitrary[LocalDateTime]
+    } yield
+      TransitInformation(
+        transitOffice,
+        Some(arrivalTime)
+      )
+
+  implicit lazy val arbitraryTransitInformation: Arbitrary[TransitInformation] =
+    Arbitrary(Gen.oneOf(genTransitInformationWithoutArrivalTime, genTransitInformationWithArrivalTime))
+
+  implicit def arbitraryRouteDetails(implicit arbTransitInformation: Arbitrary[TransitInformation]): Arbitrary[RouteDetails] =
     Arbitrary {
       for {
         countryOfDispatch  <- arbitrary[CountryCode]
         officeOfDeparture  <- stringsWithMaxLength(stringMaxLength)
         destinationCountry <- arbitrary[CountryCode]
         destinationOffice  <- stringsWithMaxLength(stringMaxLength)
-        transitInformation <- nonEmptyListOf[TransitInformation](10)
+        transitInformation <- nonEmptyListOf[TransitInformation](10)(arbTransitInformation)
       } yield
         RouteDetails(
           countryOfDispatch,
