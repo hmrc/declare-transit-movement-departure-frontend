@@ -21,7 +21,7 @@ import forms.addItems.traderSecurityDetails.UseTradersDetailsFormProvider
 import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.TradersSecurityDetails
 import pages.addItems.traderSecurityDetails.UseTradersDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UseTradersDetailsController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @TradersSecurityDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
@@ -48,14 +48,13 @@ class UseTradersDetailsController @Inject()(
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
   private val template = "addItems/traderSecurityDetails/useTradersDetails.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       val preparedForm = request.userAnswers.get(UseTradersDetailsPage(itemIndex)) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+        case None        => formProvider()
+        case Some(value) => formProvider().fill(value)
       }
 
       val json = Json.obj(
@@ -70,7 +69,7 @@ class UseTradersDetailsController @Inject()(
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      form
+      formProvider()
         .bindFromRequest()
         .fold(
           formWithErrors => {
@@ -81,7 +80,6 @@ class UseTradersDetailsController @Inject()(
               "lrn"    -> lrn,
               "radios" -> Radios.yesNo(formWithErrors("value"))
             )
-
             renderer.render(template, json).map(BadRequest(_))
           },
           value =>

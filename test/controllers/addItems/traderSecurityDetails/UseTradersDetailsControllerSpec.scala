@@ -17,11 +17,11 @@
 package controllers.addItems.traderSecurityDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import controllers.routes
+import controllers.{routes => mainRoutes}
 import forms.addItems.traderSecurityDetails.UseTradersDetailsFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.TradersSecurityDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -36,7 +36,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-import controllers.{routes => mainRoutes}
 
 import scala.concurrent.Future
 
@@ -53,7 +52,7 @@ class UseTradersDetailsControllerSpec extends SpecBase with MockNunjucksRenderer
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TradersSecurityDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "UseTradersDetails Controller" - {
 
