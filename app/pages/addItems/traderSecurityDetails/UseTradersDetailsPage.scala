@@ -16,14 +16,28 @@
 
 package pages.addItems.traderSecurityDetails
 
-import models.Index
-import pages.QuestionPage
+import models.{Index, UserAnswers}
+import pages.{ConsigneeAddressPage, ConsigneeNamePage, IsConsigneeEoriKnownPage, QuestionPage, WhatIsConsigneeEoriPage}
 import play.api.libs.json.JsPath
 import queries.Constants.items
+
+import scala.util.Try
 
 case class UseTradersDetailsPage(index: Index) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ items \ index.position \ toString
 
   override def toString: String = "useTradersDetails"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(true) =>
+        userAnswers
+          .remove(ConsigneeNamePage)
+          .flatMap(_.remove(AddSecurityConsignorsEoriPage(index)))
+          .flatMap(_.remove(SecurityConsignorEoriPage(index)))
+          .flatMap(_.remove(SecurityConsignorAddressPage(index)))
+          .flatMap(_.remove(SecurityConsignorNamePage(index)))
+          case _ => super.cleanup(value, userAnswers)
+    }
 }
