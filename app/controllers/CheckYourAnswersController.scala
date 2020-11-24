@@ -43,6 +43,8 @@ class CheckYourAnswersController @Inject()(
     implicit request =>
       val answers: Seq[SummaryList.Row] = Seq.empty
 
+      // TEST 2
+
       renderer
         .render(
           "check-your-answers.njk",
