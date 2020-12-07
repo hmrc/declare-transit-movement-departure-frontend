@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.mappers.StopOnFirstFail
 class CommercialReferenceNumberAllItemsFormProvider @Inject() extends Mappings {
 
   val maxLength = 70
-  val regex     = "^[a-zA-Z0-9&'@\\/.\\-%?<>]{1,70}$"
+  val refRegex  = "^[a-zA-Z0-9&'@\\/.\\-%?<>]{1,70}$"
 
   def apply(): Form[String] =
     Form(
@@ -32,7 +32,7 @@ class CommercialReferenceNumberAllItemsFormProvider @Inject() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxLength, "commercialReferenceNumberAllItems.error.length"),
-            regexp(regex, "commercialReferenceNumberAllItems.error.invalid")
+            regexp(refRegex, "commercialReferenceNumberAllItems.error.invalid")
           )
         )
     )

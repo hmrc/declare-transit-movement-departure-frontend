@@ -1,0 +1,38 @@
+{% extends "includes/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk"        import govukBackLink %}
+{% from "macros/title.njk"                         import title %}
+
+{% from "govuk/components/summary-list/macro.njk"  import govukSummaryList %}
+
+{% block pageTitle %}
+  {{ title(messages("cancellationDecisionUpdate.title")) }}
+{% endblock %}
+
+{% block mainContent %}
+
+{{ govukBackLink({
+    text: messages("site.back")
+  }) }}
+
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-xl">
+          {{ messages("cancellationDecisionUpdate.heading") }}
+        </h1>
+        {{ govukSummaryList({
+          rows: cancellationDecisionUpdateMessage
+        }) }}
+
+        {% if(decision==0) %}
+         <p class="govuk-body">
+                         You must <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries" target="_blank">contact the New Computerised Transit System helpdesk to get this fixed (opens in a new tab)</a>.
+                         </p>
+         {% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

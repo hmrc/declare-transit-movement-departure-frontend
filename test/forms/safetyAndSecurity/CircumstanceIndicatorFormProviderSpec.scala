@@ -17,15 +17,23 @@
 package forms.safetyAndSecurity
 
 import forms.behaviours.StringFieldBehaviours
+import models.CircumstanceIndicatorList
+import models.reference.CircumstanceIndicator
 import play.api.data.FormError
 
 class CircumstanceIndicatorFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "circumstanceIndicator.error.required"
-  val lengthKey   = "circumstanceIndicator.error.length"
-  val maxLength   = 2
+  private val requiredKey = "circumstanceIndicator.error.required"
+  private val lengthKey   = "circumstanceIndicator.error.length"
+  private val maxLength   = 2
+  private val circumstanceIndicatorList: CircumstanceIndicatorList = CircumstanceIndicatorList(
+    Seq(
+      CircumstanceIndicator("A", "Data1"),
+      CircumstanceIndicator("B", "Data2")
+    )
+  )
 
-  val form = new CircumstanceIndicatorFormProvider()()
+  val form = new CircumstanceIndicatorFormProvider()(circumstanceIndicatorList)
 
   ".value" - {
 
@@ -37,17 +45,24 @@ class CircumstanceIndicatorFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "not bind if CircumstanceIndicator does not exist in the CircumstanceIndicatorList" in {
+
+      val boundForm = form.bind(Map("value" -> "X"))
+      val field     = boundForm("value")
+      field.errors mustNot be(empty)
+    }
+
+    "bind Circumstance Indicator if it exist in the list" in {
+
+      val boundForm = form.bind(Map("value" -> "A"))
+      val field     = boundForm("value")
+      field.errors must be(empty)
+    }
   }
 }

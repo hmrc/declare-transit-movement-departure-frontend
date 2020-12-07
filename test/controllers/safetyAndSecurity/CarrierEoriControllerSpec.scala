@@ -17,10 +17,11 @@
 package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CarrierEoriFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.SafetyAndSecurity
+import navigation.annotations.SafetyAndSecurityTraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -35,7 +36,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import controllers.{routes => mainRoute}
 
 import scala.concurrent.Future
 
@@ -52,7 +52,7 @@ class CarrierEoriControllerSpec extends SpecBase with MockNunjucksRendererApp wi
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurityTraderDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "CarrierEori Controller" - {
 

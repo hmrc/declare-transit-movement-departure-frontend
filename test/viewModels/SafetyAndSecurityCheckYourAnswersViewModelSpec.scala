@@ -19,6 +19,7 @@ package viewModels
 import base.SpecBase
 import generators.Generators
 import models.ConsignorAddress
+import models.reference.CountryCode
 import org.scalacheck.Arbitrary.arbitrary
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.MessageInterpolators
@@ -63,7 +64,7 @@ class SafetyAndSecurityCheckYourAnswersViewModelSpec extends SpecBase with Gener
     .value
 
   private val setSafetyAndSecurityCountriesOfRouting = setSafetyAndSecuritySummary
-    .set(CountryOfRoutingPage(index), "GB")
+    .set(CountryOfRoutingPage(index), CountryCode("GB"))
     .success
     .value
 

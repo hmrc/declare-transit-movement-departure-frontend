@@ -560,10 +560,10 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
             MethodOfPayment("B", "Payment by credit card")
           )
         )
-        connector.getMethodOfPayment().futureValue mustEqual expectResult
+        connector.getMethodOfPaymentList().futureValue mustEqual expectResult
       }
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/method-of-payment", connector.getMethodOfPayment())
+        checkErrorResponse(s"/$startUrl/method-of-payment", connector.getMethodOfPaymentList())
       }
     }
 

@@ -16,6 +16,8 @@
 
 package pages.safetyAndSecurity
 
+import models.UserAnswers
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddCommercialReferenceNumberPageSpec extends PageBehaviours {
@@ -27,5 +29,28 @@ class AddCommercialReferenceNumberPageSpec extends PageBehaviours {
     beSettable[Boolean](AddCommercialReferenceNumberPage)
 
     beRemovable[Boolean](AddCommercialReferenceNumberPage)
+  }
+
+  "cleanup" - {
+
+    "must remove AddCommercialReferenceNumberAllItemsPage and CommercialReferenceNumberAllItemsPage when AddCommercialReferenceNumberPage is false" in {
+
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val result = userAnswers
+            .set(AddCommercialReferenceNumberAllItemsPage, true)
+            .success
+            .value
+            .set(CommercialReferenceNumberAllItemsPage, "value")
+            .success
+            .value
+            .set(AddCommercialReferenceNumberPage, false)
+            .success
+            .value
+
+          result.get(AddCommercialReferenceNumberAllItemsPage) must not be defined
+          result.get(CommercialReferenceNumberAllItemsPage) must not be defined
+      }
+    }
   }
 }

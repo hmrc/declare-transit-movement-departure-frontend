@@ -17,15 +17,23 @@
 package forms.safetyAndSecurity
 
 import forms.behaviours.StringFieldBehaviours
+import models.MethodOfPaymentList
+import models.reference.MethodOfPayment
 import play.api.data.FormError
 
 class TransportChargesPaymentMethodFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "transportChargesPaymentMethod.error.required"
-  val lengthKey   = "transportChargesPaymentMethod.error.length"
-  val maxLength   = 2
+  private val requiredKey = "transportChargesPaymentMethod.error.required"
+  private val lengthKey   = "transportChargesPaymentMethod.error.length"
+  private val maxLength   = 2
+  private val methodOfPaymentList = MethodOfPaymentList(
+    Seq(
+      MethodOfPayment("A", "Payment in cash"),
+      MethodOfPayment("B", "Payment by credit card")
+    )
+  )
 
-  val form = new TransportChargesPaymentMethodFormProvider()()
+  val form = new TransportChargesPaymentMethodFormProvider()(methodOfPaymentList)
 
   ".value" - {
 
@@ -37,17 +45,24 @@ class TransportChargesPaymentMethodFormProviderSpec extends StringFieldBehaviour
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "not bind if previous method of payment that does not exist in the list" in {
+
+      val boundForm = form.bind(Map("value" -> "foobar"))
+      val field     = boundForm("value")
+      field.errors mustNot be(empty)
+    }
+
+    "bind a method of payment code which is in the list" in {
+
+      val boundForm = form.bind(Map("value" -> "A"))
+      val field     = boundForm("value")
+      field.errors must be(empty)
+    }
   }
 }

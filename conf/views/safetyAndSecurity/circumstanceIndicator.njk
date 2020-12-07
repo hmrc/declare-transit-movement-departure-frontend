@@ -1,13 +1,19 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "govuk/components/input/macro.njk"         import govukInput %}
+{% from "govuk/components/select/macro.njk"        import govukSelect %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
 
 {% block pageTitle %}
   {{ title(messages("circumstanceIndicator.title"), form.errors) }}
+{% endblock %}
+
+{% block pageHead %}
+  <!--[if gt IE 8]><!-->
+  <link href="{{ routes.controllers.Assets.versioned("stylesheets/accessible-autocomplete.min.css").url }}" media="screen" rel="stylesheet" type="text/css" />
+  <!--<![endif]-->
 {% endblock %}
 
 {% block mainContent %}
@@ -30,18 +36,19 @@
         <form action="{{ routes.controllers.safetyAndSecurity.CircumstanceIndicatorController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('safetyAndSecurity.preHeading')}}</span>
 
+            <h1 class="govuk-heading-xl">
+              {{ messages("circumstanceIndicator.heading") }}
+            </h1>
+
           {{ csrf() | safe }}
 
-          {{ govukInput({
-            label: {
-              text: messages('circumstanceIndicator.heading'),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
+          {{ govukSelect({
+            classes: "govuk-input--width-20 autocomplete",
             id: "value",
             name: "value",
             value: form.value.value,
-            errorMessage: form.value.error
+            errorMessage: form.value.error,
+            items: circumstanceIndicators
           }) }}
 
           {{ govukButton({
@@ -54,5 +61,8 @@
       </div>
     </div>
   </div>
+{% endblock %}
 
+{% block pageScripts %}
+  <script src="{{ routes.controllers.Assets.versioned("javascripts/accessible-autocomplete.js").url }}"></script>
 {% endblock %}

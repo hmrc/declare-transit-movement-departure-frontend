@@ -16,12 +16,23 @@
 
 package pages.safetyAndSecurity
 
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object AddCircumstanceIndicatorPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "addCircumstanceIndicator"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) =>
+        userAnswers
+          .remove(CircumstanceIndicatorPage)
+      case _ => super.cleanup(value, userAnswers)
+    }
 }

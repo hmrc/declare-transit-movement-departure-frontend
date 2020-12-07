@@ -18,13 +18,16 @@ package forms.safetyAndSecurity
 
 import forms.mappings.Mappings
 import javax.inject.Inject
+import models.MethodOfPaymentList
+import models.reference.MethodOfPayment
 import play.api.data.Form
 
 class TransportChargesPaymentMethodFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def apply(methodOfPaymentList: MethodOfPaymentList): Form[MethodOfPayment] =
     Form(
       "value" -> text("transportChargesPaymentMethod.error.required")
-        .verifying(maxLength(2, "transportChargesPaymentMethod.error.length"))
+        .verifying("transportChargesPaymentMethod.error.required", value => methodOfPaymentList.methodsOfPayment.exists(_.code == value))
+        .transform[MethodOfPayment](value => methodOfPaymentList.getMethodOfPayment(value).get, _.code)
     )
 }

@@ -17,15 +17,18 @@
 package forms.safetyAndSecurity
 
 import forms.behaviours.StringFieldBehaviours
+import models.CountryList
+import models.reference.{Country, CountryCode}
 import play.api.data.FormError
 
 class CountryOfRoutingFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "countryOfRouting.error.required"
-  val lengthKey   = "countryOfRouting.error.length"
-  val maxLength   = 2
+  val requiredKey            = "countryOfRouting.error.required"
+  val lengthKey              = "countryOfRouting.error.length"
+  val maxLength              = 2
+  val countries: CountryList = CountryList(Seq(Country(CountryCode("AD"), "Andorra")))
 
-  val form = new CountryOfRoutingFormProvider()()
+  val form = new CountryOfRoutingFormProvider()(countries)
 
   ".value" - {
 
@@ -37,17 +40,24 @@ class CountryOfRoutingFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "not bind if country code does not exist in the country list" in {
+
+      val boundForm = form.bind(Map("value" -> "foobar"))
+      val field     = boundForm("value")
+      field.errors mustNot be(empty)
+    }
+
+    "bind a country code which is in the list" in {
+
+      val boundForm = form.bind(Map("value" -> "AD"))
+      val field     = boundForm("value")
+      field.errors must be(empty)
+    }
   }
 }

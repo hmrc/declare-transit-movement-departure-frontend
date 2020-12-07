@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package pages.safetyAndSecurity
+package navigation.annotations;
 
-import models.Index
-import models.reference.CountryCode
-import pages.behaviours.PageBehaviours
+import com.google.inject.BindingAnnotation;
 
-class CountryOfRoutingPageSpec extends PageBehaviours {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  "CountryOfRoutingPage" - {
-
-    beRetrievable[CountryCode](CountryOfRoutingPage(Index(0)))
-
-    beSettable[CountryCode](CountryOfRoutingPage(Index(0)))
-
-    beRemovable[CountryCode](CountryOfRoutingPage(Index(0)))
-  }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface SafetyAndSecurityTraderDetails {
 }

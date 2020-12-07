@@ -18,13 +18,13 @@ package controllers.safetyAndSecurity
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import controllers.{routes => mainRoutes}
 import forms.safetyAndSecurity.CarrierAddressFormProvider
 import javax.inject.Inject
 import models.reference.{Country, CountryCode}
-import controllers.{routes => mainRoutes}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.SafetyAndSecurity
+import navigation.annotations.SafetyAndSecurityTraderDetails
 import pages.safetyAndSecurity.{CarrierAddressPage, CarrierNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -40,7 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CarrierAddressController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @SafetyAndSecurity navigator: Navigator,
+  @SafetyAndSecurityTraderDetails navigator: Navigator,
   identify: IdentifierAction,
   referenceDataConnector: ReferenceDataConnector,
   getData: DataRetrievalActionProvider,

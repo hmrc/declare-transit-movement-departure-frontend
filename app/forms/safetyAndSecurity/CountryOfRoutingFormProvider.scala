@@ -18,13 +18,16 @@ package forms.safetyAndSecurity
 
 import forms.mappings.Mappings
 import javax.inject.Inject
+import models.CountryList
+import models.reference.Country
 import play.api.data.Form
 
 class CountryOfRoutingFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def apply(countryList: CountryList): Form[Country] =
     Form(
       "value" -> text("countryOfRouting.error.required")
-        .verifying(maxLength(2, "countryOfRouting.error.length"))
+        .verifying("countryOfRouting.error.required", value => countryList.fullList.exists(_.code.code == value))
+        .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )
 }

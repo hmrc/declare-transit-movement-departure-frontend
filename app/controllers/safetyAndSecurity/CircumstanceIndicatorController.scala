@@ -16,20 +16,25 @@
 
 package controllers.safetyAndSecurity
 
+import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.safetyAndSecurity.CircumstanceIndicatorFormProvider
 import javax.inject.Inject
-import models.{LocalReferenceNumber, Mode}
+import models.reference.CircumstanceIndicator
+import models.{CircumstanceIndicatorList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
 import pages.safetyAndSecurity.CircumstanceIndicatorPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
+import utils.getCircumstanceIndicatorsAsJson
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,6 +46,7 @@ class CircumstanceIndicatorController @Inject()(
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: CircumstanceIndicatorFormProvider,
+  referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -48,45 +54,50 @@ class CircumstanceIndicatorController @Inject()(
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
   private val template = "safetyAndSecurity/circumstanceIndicator.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(CircumstanceIndicatorPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+      referenceDataConnector.getCircumstanceIndicatorList() flatMap {
+        indicators =>
+          val form = formProvider(indicators)
+
+          val preparedForm = request.userAnswers
+            .get(CircumstanceIndicatorPage)
+            .flatMap(indicators.getCircumstanceIndicator)
+            .map(form.fill)
+            .getOrElse(form)
+
+          renderPage(lrn, mode, preparedForm, indicators).map(Ok(_))
       }
-
-      val json = Json.obj(
-        "form" -> preparedForm,
-        "lrn"  -> lrn,
-        "mode" -> mode
-      )
-
-      renderer.render(template, json).map(Ok(_))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form" -> formWithErrors,
-              "lrn"  -> lrn,
-              "mode" -> mode
+      referenceDataConnector.getCircumstanceIndicatorList() flatMap {
+        indicatorList =>
+          formProvider(indicatorList)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => renderPage(lrn, mode, formWithErrors, indicatorList).map(BadRequest(_)),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(CircumstanceIndicatorPage, value.code))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, updatedAnswers))
             )
+      }
+  }
 
-            renderer.render(template, json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CircumstanceIndicatorPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, updatedAnswers))
-        )
+  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[CircumstanceIndicator], circumstanceIndicatorList: CircumstanceIndicatorList)(
+    implicit request: Request[AnyContent]): Future[Html] = {
+    val json = Json.obj(
+      "form"                   -> form,
+      "lrn"                    -> lrn,
+      "mode"                   -> mode,
+      "circumstanceIndicators" -> getCircumstanceIndicatorsAsJson(form.value, circumstanceIndicatorList.circumstanceIndicators)
+    )
+
+    renderer.render(template, json)
   }
 }

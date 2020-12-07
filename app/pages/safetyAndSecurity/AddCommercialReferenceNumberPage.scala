@@ -16,12 +16,24 @@
 
 package pages.safetyAndSecurity
 
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object AddCommercialReferenceNumberPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "addCommercialReferenceNumber"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) =>
+        userAnswers
+          .remove(AddCommercialReferenceNumberAllItemsPage)
+          .flatMap(_.remove(CommercialReferenceNumberAllItemsPage))
+      case _ => super.cleanup(value, userAnswers)
+    }
 }

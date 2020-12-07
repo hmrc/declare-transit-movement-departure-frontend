@@ -18,13 +18,16 @@ package forms.safetyAndSecurity
 
 import forms.mappings.Mappings
 import javax.inject.Inject
+import models.CircumstanceIndicatorList
+import models.reference.CircumstanceIndicator
 import play.api.data.Form
 
 class CircumstanceIndicatorFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def apply(indicatorList: CircumstanceIndicatorList): Form[CircumstanceIndicator] =
     Form(
       "value" -> text("circumstanceIndicator.error.required")
-        .verifying(maxLength(2, "circumstanceIndicator.error.length"))
+        .verifying("circumstanceIndicator.error.required", value => indicatorList.circumstanceIndicators.exists(_.code == value))
+        .transform[CircumstanceIndicator](value => indicatorList.circumstanceIndicators.find(_.code == value).get, _.code)
     )
 }

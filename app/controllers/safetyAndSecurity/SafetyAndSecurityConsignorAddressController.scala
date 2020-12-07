@@ -24,7 +24,7 @@ import javax.inject.Inject
 import models.reference.{Country, CountryCode}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.SafetyAndSecurity
+import navigation.annotations.SafetyAndSecurityTraderDetails
 import pages.safetyAndSecurity.{SafetyAndSecurityConsignorAddressPage, SafetyAndSecurityConsignorNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -40,7 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SafetyAndSecurityConsignorAddressController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @SafetyAndSecurity navigator: Navigator,
+  @SafetyAndSecurityTraderDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

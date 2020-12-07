@@ -16,19 +16,12 @@
 
 package pages
 
-import java.time.LocalDateTime
-
 import models.{Index, LocalDateTimeWithAMPM}
-import org.scalacheck.Arbitrary
 import pages.behaviours.PageBehaviours
 
 class ArrivalTimesAtOfficePageSpec extends PageBehaviours {
 
   "ArrivalTimesAtOfficePage" - {
-
-    implicit lazy val arbitraryLocalDateTime: Arbitrary[LocalDateTime] = Arbitrary {
-      LocalDateTime.of(1900, 1, 1, 12, 0, 0)
-    }
 
     val index = Index(0)
 

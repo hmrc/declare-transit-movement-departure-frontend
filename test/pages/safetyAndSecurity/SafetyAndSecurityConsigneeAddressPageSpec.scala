@@ -28,5 +28,6 @@ class SafetyAndSecurityConsigneeAddressPageSpec extends PageBehaviours {
     beSettable[ConsigneeAddress](SafetyAndSecurityConsigneeAddressPage)
 
     beRemovable[ConsigneeAddress](SafetyAndSecurityConsigneeAddressPage)
+
   }
 }

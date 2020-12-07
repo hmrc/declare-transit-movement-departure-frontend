@@ -16,6 +16,8 @@
 
 package pages.safetyAndSecurity
 
+import models.{CarrierAddress, UserAnswers}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddCarrierPageSpec extends PageBehaviours {
@@ -27,5 +29,38 @@ class AddCarrierPageSpec extends PageBehaviours {
     beSettable[Boolean](AddCarrierPage)
 
     beRemovable[Boolean](AddCarrierPage)
+  }
+
+  "cleanup" - {
+
+    "must remove Carrier details when they exist in userAnswers" in {
+      val carrierAddress = arbitrary[CarrierAddress].sample.value
+
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val result = userAnswers
+            .set(AddCarrierEoriPage, true)
+            .success
+            .value
+            .set(CarrierEoriPage, "GB123456")
+            .success
+            .value
+            .set(CarrierNamePage, "test name")
+            .success
+            .value
+            .set(CarrierAddressPage, carrierAddress)
+            .success
+            .value
+            .set(AddCarrierPage, false)
+            .success
+            .value
+
+          result.get(AddCarrierEoriPage) must not be defined
+          result.get(CarrierEoriPage) must not be defined
+          result.get(CarrierNamePage) must not be defined
+          result.get(CarrierAddressPage) must not be defined
+
+      }
+    }
   }
 }

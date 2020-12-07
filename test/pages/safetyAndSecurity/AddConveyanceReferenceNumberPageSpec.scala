@@ -16,6 +16,8 @@
 
 package pages.safetyAndSecurity
 
+import models.UserAnswers
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddConveyanceReferenceNumberPageSpec extends PageBehaviours {
@@ -27,5 +29,24 @@ class AddConveyanceReferenceNumberPageSpec extends PageBehaviours {
     beSettable[Boolean](AddConveyanceReferenceNumberPage)
 
     beRemovable[Boolean](AddConveyanceReferenceNumberPage)
+  }
+
+  "cleanup" - {
+
+    "must remove ConveyanceReferenceNumberPage when AddConveyanceReferenceNumberPage is false" in {
+
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val result = userAnswers
+            .set(ConveyanceReferenceNumberPage, "value")
+            .success
+            .value
+            .set(AddConveyanceReferenceNumberPage, false)
+            .success
+            .value
+
+          result.get(ConveyanceReferenceNumberPage) must not be defined
+      }
+    }
   }
 }

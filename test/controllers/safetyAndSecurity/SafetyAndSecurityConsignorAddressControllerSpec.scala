@@ -24,6 +24,8 @@ import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{ConsignorAddress, CountryList, NormalMode}
 import navigation.annotations.SafetyAndSecurity
+import models.NormalMode
+import navigation.annotations.SafetyAndSecurityTraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -63,6 +65,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurityTraderDetails]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector))
 

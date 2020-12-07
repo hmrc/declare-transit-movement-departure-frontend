@@ -55,9 +55,13 @@ class DepartureMessageServiceSpec extends SpecBase with MockServiceApp with Befo
         val messagesSummary =
           MessagesSummary(
             departureId,
-            MessagesLocation(s"/movements/departures/${departureId.value}/messages/3",
-                             Some("/movements/departures/1234/messages/5"),
-                             Some("/movements/departures/1234/messages/7"))
+            MessagesLocation(
+              s"/movements/departures/${departureId.value}/messages/3",
+              Some("/movements/departures/1234/messages/5"),
+              Some("/movements/departures/1234/messages/7"),
+              Some("/movements/departures/1234/messages/9"),
+              Some("/movements/departures/1234/messages/11")
+            )
           )
 
         when(mockDepartureConnector.getSummary(any())(any())).thenReturn(Future.successful(Some(messagesSummary)))
@@ -69,7 +73,7 @@ class DepartureMessageServiceSpec extends SpecBase with MockServiceApp with Befo
 
       "must return None when getSummary fails to get guaranteeNotValid message" in {
         val messagesSummary =
-          MessagesSummary(departureId, MessagesLocation(s"/movements/departures/${departureId.value}/messages/3", None, None))
+          MessagesSummary(departureId, MessagesLocation(s"/movements/departures/${departureId.value}/messages/3", None, None, None, None))
         when(mockDepartureConnector.getSummary(any())(any())).thenReturn(Future.successful(Some(messagesSummary)))
 
         messageService.guaranteeNotValidMessage(departureId).futureValue mustBe None
@@ -88,9 +92,13 @@ class DepartureMessageServiceSpec extends SpecBase with MockServiceApp with Befo
         val messagesSummary =
           MessagesSummary(
             departureId,
-            MessagesLocation(s"/movements/departures/${departureId.value}/messages/3",
-                             Some("/movements/departures/1234/messages/5"),
-                             Some("/movements/departures/1234/messages/7"))
+            MessagesLocation(
+              s"/movements/departures/${departureId.value}/messages/3",
+              Some("/movements/departures/1234/messages/5"),
+              Some("/movements/departures/1234/messages/7"),
+              Some("/movements/departures/1234/messages/9"),
+              Some("/movements/departures/1234/messages/11")
+            )
           )
 
         when(mockDepartureConnector.getSummary(any())(any())).thenReturn(Future.successful(Some(messagesSummary)))
@@ -102,7 +110,7 @@ class DepartureMessageServiceSpec extends SpecBase with MockServiceApp with Befo
 
       "must return None when getSummary fails to get DeclarationRejectionMessage message" in {
         val messagesSummary =
-          MessagesSummary(departureId, MessagesLocation(s"/movements/departures/${departureId.value}/messages/3", None, None))
+          MessagesSummary(departureId, MessagesLocation(s"/movements/departures/${departureId.value}/messages/3", None, None, None, None))
         when(mockDepartureConnector.getSummary(any())(any())).thenReturn(Future.successful(Some(messagesSummary)))
 
         messageService.declarationRejectionMessage(departureId).futureValue mustBe None

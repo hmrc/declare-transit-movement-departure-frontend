@@ -16,6 +16,8 @@
 
 package pages.safetyAndSecurity
 
+import models.{ConsigneeAddress, UserAnswers}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddSafetyAndSecurityConsigneePageSpec extends PageBehaviours {
@@ -27,5 +29,36 @@ class AddSafetyAndSecurityConsigneePageSpec extends PageBehaviours {
     beSettable[Boolean](AddSafetyAndSecurityConsigneePage)
 
     beRemovable[Boolean](AddSafetyAndSecurityConsigneePage)
+
+    "cleanup" - {
+      "must clean up the consignee details on selecting option 'No' " in {
+        val consigneeAddress = arbitrary[ConsigneeAddress].sample.value
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneeEoriPage, false)
+              .success
+              .value
+              .set(SafetyAndSecurityConsigneeEoriPage, "GB000000")
+              .success
+              .value
+              .set(SafetyAndSecurityConsigneeNamePage, "test name")
+              .success
+              .value
+              .set(SafetyAndSecurityConsigneeAddressPage, consigneeAddress)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+
+            updatedAnswers.get(AddSafetyAndSecurityConsigneeEoriPage) must not be defined
+            updatedAnswers.get(SafetyAndSecurityConsigneeEoriPage) must not be defined
+            updatedAnswers.get(SafetyAndSecurityConsigneeNamePage) must not be defined
+            updatedAnswers.get(SafetyAndSecurityConsigneeAddressPage) must not be defined
+        }
+      }
+    }
   }
 }

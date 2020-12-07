@@ -149,11 +149,37 @@ package object utils {
     defaultOption +: paymentObjects
   }
 
+  def getCircumstanceIndicatorsAsJson(value: Option[CircumstanceIndicator], circumstanceIndicators: Seq[CircumstanceIndicator]): Seq[JsObject] = {
+    val paymentObjects = circumstanceIndicators.map {
+      circumstanceIndicator =>
+        Json.obj(
+          "value"    -> circumstanceIndicator.code,
+          "text"     -> s"(${circumstanceIndicator.code}) ${circumstanceIndicator.description}",
+          "selected" -> value.contains(circumstanceIndicator)
+        )
+    }
+    defaultOption +: paymentObjects
+  }
+
   def yesOrNo(answer: Boolean): Content =
     if (answer) {
       msg"site.yes"
     } else {
       msg"site.no"
+    }
+
+  def yesOrNo(answer: Int): Content =
+    if (answer == 1) {
+      msg"site.yes"
+    } else {
+      msg"site.no"
+    }
+
+  def acceptedOrRejected(answer: Int): Content =
+    if (answer == 1) {
+      msg"site.accepted"
+    } else {
+      msg"site.rejected"
     }
 
 }

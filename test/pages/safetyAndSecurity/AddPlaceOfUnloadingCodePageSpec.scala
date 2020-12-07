@@ -16,6 +16,8 @@
 
 package pages.safetyAndSecurity
 
+import models.UserAnswers
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddPlaceOfUnloadingCodePageSpec extends PageBehaviours {
@@ -27,5 +29,24 @@ class AddPlaceOfUnloadingCodePageSpec extends PageBehaviours {
     beSettable[Boolean](AddPlaceOfUnloadingCodePage)
 
     beRemovable[Boolean](AddPlaceOfUnloadingCodePage)
+  }
+
+  "cleanup" - {
+
+    "must remove PlaceOfUnloadingCodePage when AddPlaceOfUnloadingCodePage is false" in {
+
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val result = userAnswers
+            .set(PlaceOfUnloadingCodePage, "value")
+            .success
+            .value
+            .set(AddPlaceOfUnloadingCodePage, false)
+            .success
+            .value
+
+          result.get(PlaceOfUnloadingCodePage) must not be defined
+      }
+    }
   }
 }

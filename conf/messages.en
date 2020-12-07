@@ -13,6 +13,8 @@ site.delete.hidden = Change {0}
 site.edit.hidden = Change {0}
 site.no = No
 site.yes = Yes
+site.accepted = Accepted
+site.rejected = Rejected
 site.taskList.add = Add
 site.taskList.edit = Edit
 site.edit = Change
@@ -293,8 +295,8 @@ principalAddress.error.town.required = Enter the town of {0}’s address
 principalAddress.error.postcode.required = Enter the postcode of {0}’s address
 principalAddress.error.numberAndStreet.length = Number and street must be 35 characters or less
 principalAddress.error.town.length = Town must be 35 characters or less
-principalAddress.error.numberAndStreet.invalidCharacters = The  number and street of {0}'s address must only include letters a to z, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-principalAddress.error.town.invalidCharacters = The town of {0}'s address must only include letters a to z, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+principalAddress.error.numberAndStreet.invalidCharacters = The  number and street of {0}’s address must only include letters a to z, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+principalAddress.error.town.invalidCharacters = The town of {0}’s address must only include letters a to z, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 principalAddress.error.postcode.length = Postcode must be 9 characters or less
 principalAddress.error.postcode.invalidFormat = Enter the postcode of {0}’s address in the right format, like AB1 1AB
 principalAddress.error.postcode.invalidCharacters = The postcode of {0}’s address must only include letters a to z and numbers 0 to 9
@@ -319,8 +321,8 @@ consignorName.error.invalid = Consignor’s name must only include letters a to 
 consignorEori.title = What is the consignor’s EORI number?
 consignorEori.heading = What is the consignor’s EORI number?
 consignorEori.checkYourAnswersLabel = What is the consignor’s EORI number?
-consignorEori.error.required = Enter the consignor's EORI umber
-consignorEori.error.length = Consignor's Eori number must be 17 characters or less
+consignorEori.error.required = Enter the consignor’s EORI umber
+consignorEori.error.length = Consignor’s Eori number must be 17 characters or less
 consignorEori.error.invalidCharacters = The consignor’s EORI number must only include letters a to z and numbers 0 to 9
 consignorEori.error.invalidFormat = Enter the consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
@@ -781,7 +783,7 @@ consigneeForAllItems.error.required = Select yes if you are the consignee for al
 
 traderDetailsConsigneeAddress.title = What is the consignee’s address for item {0}
 traderDetailsConsigneeAddress.heading = What is {0}’s address?
-traderDetailsConsigneeAddress.checkYourAnswersLabel = {0}'s address
+traderDetailsConsigneeAddress.checkYourAnswersLabel = {0}’s address
 traderDetailsConsigneeAddress.checkYourAnswersLabel.fallback = Consignee
 
 traderDetailsConsigneeAddress.error.line.required = Enter address line {0} of {1}’s address for item {2}
@@ -795,7 +797,7 @@ traderDetailsConsigneeAddress.checkYourAnswersLabel =  {0}’s address
 traderDetailsConsigneeAddress.error.required = Enter {0}’s Address
 traderDetailsConsigneeAddress.error.length = The address for {0} must be 100 characters or less
 
-traderDetailsConsigneeAddress.checkYourAnswersLabel.visuallyHidden = change [{0}'s address]
+traderDetailsConsigneeAddress.checkYourAnswersLabel.visuallyHidden = change [{0}’s address]
 
 traderDetailsConsigneeAddress.error.invalid = The {0} of {1}’s address must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, asterisks, forward slashes, full stops, hyphens, question marks, and greater than (>) and less than (<) signs
 traderDetailsConsigneeAddress.error.required = Enter the {0} of {1}’s address
@@ -841,9 +843,9 @@ traderDetailsConsigneeName.error.invalid = The consignee’s name for item {0} m
 
 traderDetailsConsignorAddress.title = What is the consignor’s address for item {0}
 traderDetailsConsignorAddress.heading = What is {0}’s address?
-traderDetailsConsignorAddress.checkYourAnswersLabel = {0}'s address
+traderDetailsConsignorAddress.checkYourAnswersLabel = {0}’s address
 traderDetailsConsignorAddress.checkYourAnswersLabel.fallback = Consignor
-traderDetailsConsignorAddress.checkYourAnswersLabel.visuallyHidden = change [{0}'s address]
+traderDetailsConsignorAddress.checkYourAnswersLabel.visuallyHidden = change [{0}’s address]
 traderDetailsConsignorAddress.error.line.required = Enter address line {0} of {1}’s address for item {2}
 traderDetailsConsignorAddress.error.line.invalid = Address line {0} of {1}’s address for item {2} must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, and less than and greater than signs
 traderDetailsConsignorAddress.error.line.length = Address line {0} of {1}’s address for item {2} must be 35 characters or less
@@ -852,7 +854,7 @@ traderDetailsConsignorAddress.heading =  What is {0}’s address?
 traderDetailsConsignorAddress.checkYourAnswersLabel =  {0}’s address
 traderDetailsConsignorAddress.error.required = Enter {0}’s Address
 traderDetailsConsignorAddress.error.length = The address for {0} must be 100 characters or less
-traderDetailsConsignorAddress.checkYourAnswersLabel.visuallyHidden = change [{0}'s address]
+traderDetailsConsignorAddress.checkYourAnswersLabel.visuallyHidden = change [{0}’s address]
 
 traderDetailsConsignorAddress.error.invalid = The {0} of {1}’s address must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, asterisks, forward slashes, full stops, hyphens, question marks, and greater than (>) and less than (<) signs
 traderDetailsConsignorAddress.error.required = Enter the {0} of {1}’s address
@@ -900,6 +902,7 @@ removeItem.title = Are you sure you want to remove this item?
 removeItem.heading = Are you sure you want to remove this item?
 removeItem.error.required = Select yes if you are sure you want to remove this item
 
+addItems.checkYourAnswersLabel.security = Safety and security
 addItemsSameConsigneeForAllItems.title = addItemsSameConsigneeForAllItems
 addItemsSameConsigneeForAllItems.heading = addItemsSameConsigneeForAllItems
 addItemsSameConsigneeForAllItems.checkYourAnswersLabel = addItemsSameConsigneeForAllItems
@@ -1128,12 +1131,12 @@ useTradersDetails.error.required = Select yes if you want to use this trader's d
 addSecurityConsignorsEori.title = Do you know the security consignor’s EORI number?
 addSecurityConsignorsEori.heading = Do you know the security consignor’s EORI number?
 addSecurityConsignorsEori.checkYourAnswersLabel = Know the security consignor’s EORI number?
-addSecurityConsignorsEori.error.required = Select yes if you know the security consignor’s EORI number?
+addSecurityConsignorsEori.error.required = Select yes if you know the security consignor’s EORI number
 
 addSecurityConsigneesEori.title = Do you know the security consignee’s EORI number?
 addSecurityConsigneesEori.heading = Do you know the security consignee’s EORI number?
 addSecurityConsigneesEori.checkYourAnswersLabel = Know the security consignee’s EORI number?
-addSecurityConsigneesEori.error.required = Select yes if you know the security consignee’s EORI number?
+addSecurityConsigneesEori.error.required = Select yes if you know the security consignee’s EORI number
 
 securityConsigneeAllItems.title = Is this the security consignee for all the items?
 securityConsigneeAllItems.heading = Is this the security consignee for all the items?
@@ -1144,7 +1147,7 @@ securityConsignorEori.title = What is the security consignor’s EORI number?
 securityConsignorEori.heading = What is the security consignor’s EORI number?
 securityConsignorEori.checkYourAnswersLabel = Security consignor’s EORI number
 securityConsignorEori.error.required = Enter the security consignor’s EORI number
-securityConsignorEori.error.length = The security consignor’s EORI number must 17 characters or less
+securityConsignorEori.error.length = The security consignor’s EORI number must be 17 characters or less
 securityConsignorEori.error.invalid = The security consignor’s EORI number must only include letters a to z and numbers 0 to 9
 securityConsignorEori.error.invalidFormat = Enter the security consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
@@ -1152,7 +1155,7 @@ securityConsigneeEori.title = What is the security consignee’s EORI number?
 securityConsigneeEori.heading = What is the security consignee’s EORI number?
 securityConsigneeEori.checkYourAnswersLabel = Security consignee’s EORI number
 securityConsigneeEori.error.required = Enter the security consignee’s EORI number
-securityConsigneeEori.error.length = The security consignee’s EORI number must 17 characters or less
+securityConsigneeEori.error.length = The security consignee’s EORI number must be 17 characters or less
 securityConsigneeEori.error.invalid = The security consignee’s EORI number must only include letters a to z and numbers 0 to 9
 securityConsigneeEori.error.invalidFormat = Enter the security consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
@@ -1194,9 +1197,14 @@ securityConsigneeAddress.error.line3.invalid= The third line of {0}’s address 
 
 declarationRejection.title = There is a problem with this departure declaration
 declarationRejection.heading = There is a problem with this departure declaration
+declarationRejection.date = Rejection date
+declarationRejection.localReferenceNumber = Local reference number
+declarationRejection.rejectionReason = Rejection reason
 declarationRejection.errorType =  Error type
 declarationRejection.pointer =  Error pointer
 declarationRejection.reason =  Reason
+declarationRejection.declarationDetails = Departure details
+declarationRejection.rejectionDetails = Rejection details
 
 addCircumstanceIndicator.title = Do you need to add a specific circumstance indicator?
 addCircumstanceIndicator.heading = Do you need to add a specific circumstance indicator?
@@ -1256,8 +1264,8 @@ conveyanceReferenceNumber.checkYourAnswersLabel = Conveyance Reference Number
 conveyanceReferenceNumber.checkYourAnswersLabel.visuallyHidden = change conveyance reference number
 conveyanceReferenceNumber.error.required = Enter the Conveyance Reference Number
 conveyanceReferenceNumber.error.invalid = The Conveyance Reference Number must only include letters a to z and numbers 0 to 9
-conveyanceReferenceNumber.error.minlength =  The Conveyance Reference Number must be 7 characters or more
-conveyanceReferenceNumber.error.maxlength = The Conveyance Reference Number must be 8 characters or less
+conveyanceReferenceNumber.error.minLength =  The Conveyance Reference Number must be 7 characters or more
+conveyanceReferenceNumber.error.maxLength = The Conveyance Reference Number must be 8 characters or less
 
 addPlaceOfUnloadingCode.title = Do you need to add a place of unloading code?
 addPlaceOfUnloadingCode.heading = Do you need to add a place of unloading code?
@@ -1317,8 +1325,8 @@ safetyAndSecurityConsignorEori.error.length = The security consignor’s EORI nu
 safetyAndSecurityConsignorEori.error.invalid = The security consignor’s EORI number must be 17 characters or less
 safetyAndSecurityConsignorEori.error.country.required = Enter the country of the security consignor’s address
 
-safetyAndSecurityConsignorName.title = What is the security consignor's name?
-safetyAndSecurityConsignorName.heading = What is the security consignor's name?
+safetyAndSecurityConsignorName.title = What is the security consignor’s name?
+safetyAndSecurityConsignorName.heading = What is the security consignor’s name?
 safetyAndSecurityConsignorName.checkYourAnswersLabel = Security consignor’s name
 safetyAndSecurityConsignorName.checkYourAnswersLabel.visuallyHidden = change security consignor’s name
 safetyAndSecurityConsignorName.error.required = Enter the security consignor’s name
@@ -1405,6 +1413,14 @@ carrierName.error.required =  Enter the carrier’s name
 carrierName.error.length = carrier’s name must be 35 characters or less
 carrierName.error.invalidCharacters = The carrier's name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, and less than and greater than signs
 
+cancellationDecisionUpdate.title = Cancellation decision
+cancellationDecisionUpdate.heading = Cancellation decision
+cancellationDecisionUpdate.mrn = Movement reference number
+cancellationDecisionUpdate.cancellationRequestDate = Date of request
+cancellationDecisionUpdate.initiatedByCustoms = Initiated by customs?
+cancellationDecisionUpdate.cancellationDecision = Status
+cancellationDecisionUpdate.cancellationDecisionDate = Date of decision
+cancellationDecisionUpdate.cancellationJustification = Reason
 
 safetyAndSecurityCheckYourAnswers.title = Check your answers
 safetyAndSecurityCheckYourAnswers.heading = Check your answers
@@ -1415,7 +1431,7 @@ securityConsignorName.title = What is the security consignor’s name?
 securityConsignorName.heading = What is the security consignor’s name?
 securityConsignorName.checkYourAnswersLabel = Security consignor’s name
 securityConsignorName.error.required = Enter the security consignor’s name
-securityConsignorName.error.length = The security consignor's name must be 35 characters or less
+securityConsignorName.error.length = The security consignor’s name must be 35 characters or less
 securityConsignorName.error.invalid = The security consignor’s name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, and less than and greater than signs
 
 securityConsigneeName.title = What is the security consignee’s name?
@@ -1424,3 +1440,4 @@ securityConsigneeName.checkYourAnswersLabel =  Security consignee’s name
 securityConsigneeName.error.required = Enter the security consignee’s name
 securityConsigneeName.error.length =  The security consignee’s name must be 35 characters or less
 securityConsigneeName.error.invalid = The security consignee’s name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, and less than and greater than signs
+

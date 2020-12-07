@@ -51,7 +51,7 @@ object AddItemsCheckYourAnswersViewModel {
   }
 
   private def traderSecuritySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, countryList: CountryList, index: Index) = Section(
-    msg"addItems.checkYourAnswersLabel.itemDetails",
+    msg"addItems.checkYourAnswersLabel.security",
     Seq(
       checkYourAnswersHelper.addSecurityConsignorsEori(index),
       checkYourAnswersHelper.securityConsignorEori(index),
@@ -65,7 +65,7 @@ object AddItemsCheckYourAnswersViewModel {
   )
 
   private def securitySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Section(
-    msg"addItems.checkYourAnswersLabel.itemDetails",
+    msg"addItems.checkYourAnswersLabel.safetyAndSecurity",
     Seq(
       checkYourAnswersHelper.transportCharges(index),
       checkYourAnswersHelper.commercialReferenceNumber(index),

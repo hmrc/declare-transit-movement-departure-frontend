@@ -16,6 +16,8 @@
 
 package pages.safetyAndSecurity
 
+import models.UserAnswers
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AddCircumstanceIndicatorPageSpec extends PageBehaviours {
@@ -27,5 +29,24 @@ class AddCircumstanceIndicatorPageSpec extends PageBehaviours {
     beSettable[Boolean](AddCircumstanceIndicatorPage)
 
     beRemovable[Boolean](AddCircumstanceIndicatorPage)
+  }
+
+  "cleanup" - {
+
+    "must remove PlaceOfUnloadingCodePage when AddCircumstanceIndicatorPage is false" in {
+
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val result = userAnswers
+            .set(PlaceOfUnloadingCodePage, "value")
+            .success
+            .value
+            .set(AddCircumstanceIndicatorPage, false)
+            .success
+            .value
+
+          result.get(CircumstanceIndicatorPage) must not be defined
+      }
+    }
   }
 }

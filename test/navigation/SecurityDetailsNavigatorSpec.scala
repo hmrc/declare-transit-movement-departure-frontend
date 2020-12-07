@@ -23,6 +23,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.securityDetails._
 import controllers.addItems.securityDetails._
+import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage}
 
 class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -30,12 +31,29 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
   "In Normal mode" - {
 
-    "Must go from TransportChargesPage to CommercialReferencePage" in { //todo update when Safety and security section done
+    "Must go from TransportChargesPage to CommercialReferencePage when AddCommercialReferenceNumberAllItemsPage answer is No" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
+          val updatedAnswers = answers
+            .set(AddCommercialReferenceNumberAllItemsPage, false)
+            .success
+            .value
           navigator
-            .nextPage(TransportChargesPage(index), NormalMode, answers)
-            .mustBe(routes.CommercialReferenceNumberController.onPageLoad(answers.id, index, NormalMode))
+            .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
+            .mustBe(routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.id, index, NormalMode))
+      }
+    }
+
+    "Must go from TransportChargesPage to AddsDangerousGoodsCodePage when AddCommercialReferenceNumberAllItemsPage answer is Yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        answers =>
+          val updatedAnswers = answers
+            .set(AddCommercialReferenceNumberAllItemsPage, true)
+            .success
+            .value
+          navigator
+            .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
+            .mustBe(routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.id, index, NormalMode))
       }
     }
 
@@ -49,11 +67,17 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
     }
 
     "Must go from AddDangerousGoodsCodePage" - {
-      "to AddItemsCheckYourAnswersPage when user selects 'No'" in { //todo -update when Security Trader Details section done
+      "to AddItemsCheckYourAnswersPage when user selects 'No'" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
               .set(AddDangerousGoodsCodePage(index), false)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsignorPage, true)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsigneePage, true)
               .success
               .value
             navigator
@@ -76,15 +100,21 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
     }
 
-    "Must go from DangerousGoodsCodePage to AddItemsCheckYourAnswersPage" in { //todo -update when Security Trader Details section done
+    "Must go from DangerousGoodsCodePage to AddItemsCheckYourAnswersPage" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
+          val updatedAnswers = answers
+            .set(AddSafetyAndSecurityConsignorPage, true)
+            .success
+            .value
+            .set(AddSafetyAndSecurityConsigneePage, true)
+            .success
+            .value
           navigator
-            .nextPage(DangerousGoodsCodePage(index), NormalMode, answers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+            .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
       }
     }
-
   }
   "In CheckMode" - {
 
@@ -96,7 +126,6 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
       }
     }
-
   }
 
   "Must go from CommercialReferenceNumberPage to AddItemsCheckYourAnswersPage" in {
@@ -156,5 +185,4 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
     }
   }
-
 }

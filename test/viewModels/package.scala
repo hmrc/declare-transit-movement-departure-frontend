@@ -15,7 +15,7 @@
  */
 
 import models.Status
-import play.api.libs.json.{JsArray, JsObject, Json, Reads}
+import play.api.libs.json.Reads
 
 package object viewModels {
 

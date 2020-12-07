@@ -17,15 +17,18 @@
 package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CircumstanceIndicatorFormProvider
 import matchers.JsonMatchers
-import models.NormalMode
+import models.{CircumstanceIndicatorList, NormalMode}
+import models.reference.CircumstanceIndicator
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.{reset, times, verify, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import pages.safetyAndSecurity.CircumstanceIndicatorPage
 import play.api.inject.bind
@@ -36,23 +39,43 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
+import utils.getCircumstanceIndicatorsAsJson
 
 import scala.concurrent.Future
 
-class CircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class CircumstanceIndicatorControllerSpec
+    extends SpecBase
+    with MockNunjucksRendererApp
+    with MockitoSugar
+    with NunjucksSupport
+    with JsonMatchers
+    with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new CircumstanceIndicatorFormProvider()
-  private val form         = formProvider()
-  private val template     = "safetyAndSecurity/circumstanceIndicator.njk"
+  private val formProvider               = new CircumstanceIndicatorFormProvider()
+  private val template                   = "safetyAndSecurity/circumstanceIndicator.njk"
+  private val mockReferenceDataConnector = mock[ReferenceDataConnector]
+  private val circumstanceIndicatorList: CircumstanceIndicatorList = CircumstanceIndicatorList(
+    Seq(
+      CircumstanceIndicator("A", "Data1"),
+      CircumstanceIndicator("B", "Data2")
+    )
+  )
+  private val form = formProvider(circumstanceIndicatorList)
 
-  lazy val circumstanceIndicatorRoute = routes.CircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url
+  private lazy val circumstanceIndicatorRoute = routes.CircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector))
+
+  override def beforeEach: Unit = {
+    reset(mockReferenceDataConnector)
+    super.beforeEach()
+  }
 
   "CircumstanceIndicator Controller" - {
 
@@ -60,6 +83,7 @@ class CircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksRend
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       dataRetrievalWithData(emptyUserAnswers)
 
@@ -74,9 +98,10 @@ class CircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksRend
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"                   -> form,
+        "mode"                   -> NormalMode,
+        "lrn"                    -> lrn,
+        "circumstanceIndicators" -> getCircumstanceIndicatorsAsJson(form.value, circumstanceIndicatorList.circumstanceIndicators)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -90,8 +115,9 @@ class CircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksRend
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
-      val userAnswers = emptyUserAnswers.set(CircumstanceIndicatorPage, "GB").success.value
+      val userAnswers = emptyUserAnswers.set(CircumstanceIndicatorPage, "A").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, circumstanceIndicatorRoute)
@@ -104,12 +130,13 @@ class CircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksRend
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "GB"))
+      val filledForm = form.bind(Map("value" -> "A"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"                   -> filledForm,
+        "lrn"                    -> lrn,
+        "mode"                   -> NormalMode,
+        "circumstanceIndicators" -> getCircumstanceIndicatorsAsJson(filledForm.value, circumstanceIndicatorList.circumstanceIndicators)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -122,12 +149,13 @@ class CircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksRend
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       dataRetrievalWithData(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, circumstanceIndicatorRoute)
-          .withFormUrlEncodedBody(("value", "GB"))
+          .withFormUrlEncodedBody(("value", "A"))
 
       val result = route(app, request).value
 
@@ -140,6 +168,7 @@ class CircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksRend
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       dataRetrievalWithData(emptyUserAnswers)
 
@@ -195,4 +224,5 @@ class CircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksRend
 
     }
   }
+
 }

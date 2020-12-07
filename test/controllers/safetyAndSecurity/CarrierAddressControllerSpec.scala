@@ -24,6 +24,8 @@ import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CarrierAddress, CountryList, NormalMode}
 import navigation.annotations.SafetyAndSecurity
+import models.NormalMode
+import navigation.annotations.SafetyAndSecurityTraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -61,6 +63,7 @@ class CarrierAddressControllerSpec extends SpecBase with MockNunjucksRendererApp
         bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(new FakeNavigator(onwardRoute)),
         bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector)
       )
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurityTraderDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "CarrierAddress Controller" - {
 

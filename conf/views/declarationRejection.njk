@@ -2,7 +2,7 @@
 
 {% from "govuk/components/back-link/macro.njk"        import govukBackLink %}
 {% from "macros/title.njk"                         import title %}
-
+{% from "macros/section.njk"                       import section as sectionMacro %}
 
 {% block pageTitle %}
   {{ title(messages("declarationRejection.title")) }}
@@ -22,44 +22,21 @@
           {{ messages("declarationRejection.heading") }}
         </h1>
 
+        {% for section in detailsSection %}
+            {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother) }}
+        {% endfor %}
+
+        <h2 class="govuk-heading-m">
+            {{ messages("declarationRejection.rejectionDetails") }}
+        </h2>
+
+        {% for section in errorsSection %}
+            {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother) }}
+        {% endfor %}
+
         <p class="govuk-body">
-            {{ declarationRejectionMessage.reason}}
+            You must <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries" target="_blank">contact the New Computerised Transit System helpdesk to get this fixed (opens in a new tab)</a>.
         </p>
-
-                {% for error in declarationRejectionMessage.errors %}
-                    <dl class="govuk-summary-list">
-                        <div class="govuk-summary-list__row">
-                              <dt class="govuk-summary-list__key">
-                             {{ messages("declarationRejection.errorType") }}
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                              {{ error.errorType }}
-                              </dd>
-                          </div>
-                          <div class="govuk-summary-list__row">
-                              <dt class="govuk-summary-list__key">
-                             {{ messages("declarationRejection.pointer") }}
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                                    {{ error.pointer }}
-                              </dd>
-                          </div>
-                          {% if error.reason  %}
-                              <div class="govuk-summary-list__row">
-                                  <dt class="govuk-summary-list__key">
-                                 {{ messages("declarationRejection.reason") }}
-                                  </dt>
-                                  <dd class="govuk-summary-list__value">
-                                      {{ error.reason }}
-                                  </dd>
-                               </div>
-                        {% endif %}
-                    </dl>
-                 {% endfor %}
-
-                 <p class="govuk-body">
-                 You must <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries">contact the New Computerised Transit System helpdesk to get this fixed (opens in a new window)</a>.
-                 </p>
 
       </div>
     </div>

@@ -17,10 +17,12 @@
 package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CountryOfRoutingFormProvider
 import matchers.JsonMatchers
-import models.NormalMode
+import models.{CountryList, NormalMode}
+import models.reference.{Country, CountryCode}
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -36,6 +38,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
+import utils.countryJsonList
 
 import scala.concurrent.Future
 
@@ -43,9 +46,12 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new CountryOfRoutingFormProvider()
-  private val form         = formProvider()
-  private val template     = "safetyAndSecurity/countryOfRouting.njk"
+  private val formProvider               = new CountryOfRoutingFormProvider()
+  private val mockReferenceDataConnector = mock[ReferenceDataConnector]
+
+  val countries        = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
+  val form             = formProvider(countries)
+  private val template = "safetyAndSecurity/countryOfRouting.njk"
 
   lazy val countryOfRoutingRoute = routes.CountryOfRoutingController.onPageLoad(lrn, index, NormalMode).url
 
@@ -53,6 +59,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
 
   "CountryOfRouting Controller" - {
 
@@ -60,6 +67,8 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
 
       dataRetrievalWithData(emptyUserAnswers)
 
@@ -74,9 +83,10 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"      -> form,
+        "mode"      -> NormalMode,
+        "lrn"       -> lrn,
+        "countries" -> countryJsonList(form.value, countries.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -91,7 +101,9 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(CountryOfRoutingPage(index), "GB").success.value
+      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+
+      val userAnswers = emptyUserAnswers.set(CountryOfRoutingPage(index), CountryCode("GB")).success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, countryOfRoutingRoute)
@@ -107,9 +119,10 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
       val filledForm = form.bind(Map("value" -> "GB"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"      -> filledForm,
+        "lrn"       -> lrn,
+        "mode"      -> NormalMode,
+        "countries" -> countryJsonList(filledForm.value, countries.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -122,6 +135,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
 
       dataRetrievalWithData(emptyUserAnswers)
 
@@ -140,6 +154,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
 
       dataRetrievalWithData(emptyUserAnswers)
 

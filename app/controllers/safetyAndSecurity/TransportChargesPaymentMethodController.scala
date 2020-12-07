@@ -16,13 +16,17 @@
 
 package controllers.safetyAndSecurity
 
+import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.safetyAndSecurity.TransportChargesPaymentMethodFormProvider
 import javax.inject.Inject
-import models.{LocalReferenceNumber, Mode}
+import models.reference.MethodOfPayment
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
+import pages.addItems.securityDetails.TransportChargesPage
 import pages.safetyAndSecurity.TransportChargesPaymentMethodPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,6 +34,7 @@ import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
+import utils.getPaymentsAsJson
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,6 +45,7 @@ class TransportChargesPaymentMethodController @Inject()(
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
+  referenceDataConnector: ReferenceDataConnector,
   formProvider: TransportChargesPaymentMethodFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -48,45 +54,57 @@ class TransportChargesPaymentMethodController @Inject()(
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
   private val template = "safetyAndSecurity/transportChargesPaymentMethod.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(TransportChargesPaymentMethodPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+      referenceDataConnector.getMethodOfPaymentList() flatMap {
+        payments =>
+          val form: Form[MethodOfPayment] = formProvider(payments)
+
+          val preparedForm = request.userAnswers
+            .get(TransportChargesPaymentMethodPage)
+            .flatMap(payments.getMethodOfPayment)
+            .map(form.fill)
+            .getOrElse(form)
+
+          val json = Json.obj(
+            "form"     -> preparedForm,
+            "payments" -> getPaymentsAsJson(preparedForm.value, payments.methodsOfPayment),
+            "lrn"      -> lrn,
+            "mode"     -> mode
+          )
+
+          renderer.render(template, json).map(Ok(_))
       }
-
-      val json = Json.obj(
-        "form" -> preparedForm,
-        "lrn"  -> lrn,
-        "mode" -> mode
-      )
-
-      renderer.render(template, json).map(Ok(_))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+      referenceDataConnector.getMethodOfPaymentList() flatMap {
+        payments =>
+          val form = formProvider(payments)
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => {
 
-            val json = Json.obj(
-              "form" -> formWithErrors,
-              "lrn"  -> lrn,
-              "mode" -> mode
+                val json = Json.obj(
+                  "form"     -> formWithErrors,
+                  "payments" -> getPaymentsAsJson(form.value, payments.methodsOfPayment),
+                  "lrn"      -> lrn,
+                  "mode"     -> mode
+                )
+
+                renderer.render(template, json).map(BadRequest(_))
+              },
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportChargesPaymentMethodPage, value.code))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(TransportChargesPaymentMethodPage, mode, updatedAnswers))
             )
-
-            renderer.render(template, json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportChargesPaymentMethodPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TransportChargesPaymentMethodPage, mode, updatedAnswers))
-        )
+      }
   }
+
 }

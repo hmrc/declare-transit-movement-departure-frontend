@@ -25,6 +25,7 @@ import generators.MessagesModelGenerators
 import helper.WireMockServerHandler
 import models.messages.DeclarationRequest
 import models.{
+  CancellationDecisionUpdateMessage,
   DeclarationRejectionMessage,
   DepartureId,
   GuaranteeNotValidMessage,
@@ -92,7 +93,9 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
           "messages" -> Json.obj(
             "IE015" -> s"/movements/departures/${departureId.value}/messages/3",
             "IE055" -> s"/movements/departures/${departureId.value}/messages/5",
-            "IE016" -> s"/movements/departures/${departureId.value}/messages/7"
+            "IE016" -> s"/movements/departures/${departureId.value}/messages/7",
+            "IE009" -> s"/movements/departures/${departureId.value}/messages/9",
+            "IE014" -> s"/movements/departures/${departureId.value}/messages/11"
           )
         )
 
@@ -102,7 +105,9 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
             MessagesLocation(
               s"/movements/departures/${departureId.value}/messages/3",
               Some(s"/movements/departures/${departureId.value}/messages/5"),
-              Some(s"/movements/departures/${departureId.value}/messages/7")
+              Some(s"/movements/departures/${departureId.value}/messages/7"),
+              Some(s"/movements/departures/${departureId.value}/messages/9"),
+              Some(s"/movements/departures/${departureId.value}/messages/11")
             )
           )
 
@@ -252,12 +257,79 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
         connector.getDeclarationRejectionMessage(location).futureValue mustBe None
       }
 
-      "must return None when an error response is returned from getGuaranteeNotValidMessage" in {
+      "must return None when an error response is returned from getDeclarationRejectionMessage" in {
         val location: String = "/transits-movements-trader-at-departure/movements/departures/1/messages/2"
         forAll(errorResponsesCodes) {
           errorResponseCode =>
             stubGetResponse(errorResponseCode, location)
             connector.getDeclarationRejectionMessage(location).futureValue mustBe None
+        }
+      }
+    }
+
+    "getCancellationDecisionUpdateMessage" - {
+      "must return valid 'cancellation decision update message'" in {
+        val location = s"/transits-movements-trader-at-departure/movements/departures/${departureId.value}/messages/2"
+
+        val xml: NodeSeq = <CC009A>
+          <HEAHEA>
+            <DocNumHEA5>19GB00006010021477</DocNumHEA5>
+            <CanDecHEA93>1</CanDecHEA93>
+            <DatOfCanReqHEA147>20190912</DatOfCanReqHEA147>
+            <CanIniByCusHEA94>0</CanIniByCusHEA94>
+            <DatOfCanDecHEA146>20190912</DatOfCanDecHEA146>
+            <CanJusHEA248>ok thats fine</CanJusHEA248>
+          </HEAHEA>
+        </CC009A>
+
+        val json = Json.obj("message" -> xml.toString())
+
+        server.stubFor(
+          get(urlEqualTo(location))
+            .willReturn(
+              okJson(json.toString)
+            )
+        )
+        val expectedResult =
+          Some(
+            CancellationDecisionUpdateMessage("19GB00006010021477",
+                                              Some(LocalDate.parse("2019-09-12")),
+                                              0,
+                                              Some(1),
+                                              LocalDate.parse("2019-09-12"),
+                                              Some("ok thats fine"))
+          )
+
+        connector.getCancellationDecisionUpdateMessage(location).futureValue mustBe expectedResult
+      }
+
+      "must return None for malformed input'" in {
+        val location              = s"/transits-movements-trader-at-departure/movements/departures/${departureId.value}/messages/2"
+        val rejectionXml: NodeSeq = <CC009A>
+          <FUNERRER1>
+            <ErrTypER11>15</ErrTypER11>
+            <ErrPoiER12>not valid</ErrPoiER12>
+            <ErrReaER13>malformed</ErrReaER13>
+          </FUNERRER1>
+        </CC009A>
+
+        val json = Json.obj("message" -> rejectionXml.toString())
+
+        server.stubFor(
+          get(urlEqualTo(location))
+            .willReturn(
+              okJson(json.toString)
+            )
+        )
+        connector.getCancellationDecisionUpdateMessage(location).futureValue mustBe None
+      }
+
+      "must return None when an error response is returned from getCancellationDecisionUpdateMessage" in {
+        val location: String = "/transits-movements-trader-at-departure/movements/departures/1/messages/2"
+        forAll(errorResponsesCodes) {
+          errorResponseCode =>
+            stubGetResponse(errorResponseCode, location)
+            connector.getCancellationDecisionUpdateMessage(location).futureValue mustBe None
         }
       }
     }

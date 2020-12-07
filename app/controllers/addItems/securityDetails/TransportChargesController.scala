@@ -57,7 +57,7 @@ class TransportChargesController @Inject()(
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getMethodOfPayment() flatMap {
+      referenceDataConnector.getMethodOfPaymentList() flatMap {
         payments =>
           val form: Form[MethodOfPayment] = formProvider(payments)
 
@@ -81,7 +81,7 @@ class TransportChargesController @Inject()(
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getMethodOfPayment() flatMap {
+      referenceDataConnector.getMethodOfPaymentList() flatMap {
         payments =>
           val form = formProvider(payments)
           form
