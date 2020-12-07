@@ -87,7 +87,37 @@ object ItemSection {
           } else none[NonEmptyList[SpecialMention]].pure[UserAnswersReader]
       }
 
-  def readerItemSection(index: Index): UserAnswersReader[ItemSection] =
+  private def readDocumentType(itemIndex: Index): ReaderT[Option, UserAnswers, Boolean] =
+    AddSecurityDetailsPage.reader
+      .flatMap {
+        case true =>
+          AddCircumstanceIndicatorPage.reader.flatMap {
+            case true =>
+              CircumstanceIndicatorPage.reader.map(x => CircumstanceIndicator.conditionalIndicators.contains(x))
+            case false => true.pure[UserAnswersReader]
+          }
+        case false => AddDocumentsPage(itemIndex).reader
+      }
+
+  private def deriveProducedDocuments(itemIndex: Index): ReaderT[Option, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    readDocumentType(itemIndex)
+      .flatMap {
+        isTrue =>
+          if (isTrue) {
+            DeriveNumberOfDocuments(itemIndex).reader
+              .filter(_.nonEmpty)
+              .flatMap {
+                _.zipWithIndex
+                  .traverse[UserAnswersReader, ProducedDocument]({
+                    case (_, index) =>
+                      ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+                  })
+                  .map(NonEmptyList.fromList)
+              }
+          } else none[NonEmptyList[ProducedDocument]].pure[UserAnswersReader]
+      }
+
+  implicit def readerItemSection(index: Index): UserAnswersReader[ItemSection] =
     (
       ItemDetails.itemDetailsReader(index),
       ItemTraderDetails.consignorDetails(index),
@@ -95,7 +125,7 @@ object ItemSection {
       derivePackage(index),
       deriveContainers(index),
       deriveSpecialMentions(index),
-      ProducedDocument.deriveProducedDocuments(index)
+      deriveProducedDocuments(index)
     ).tupled.map((ItemSection.apply _).tupled)
 
   implicit def readerItemSections: UserAnswersReader[NonEmptyList[ItemSection]] =

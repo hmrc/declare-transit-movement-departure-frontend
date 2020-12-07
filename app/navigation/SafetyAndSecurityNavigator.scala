@@ -91,10 +91,10 @@ class SafetyAndSecurityNavigator @Inject()() extends Navigator {
     }
 
   def commercialReferenceNumberAllItems(ua: UserAnswers): Option[Call] =
-    ua.get(ModeAtBorderPage) match {
-      case Some("4") | Some("40") => Some(routes.ConveyanceReferenceNumberController.onPageLoad(ua.id, NormalMode))
-      case Some(_)                => Some(routes.AddConveyanceReferenceNumberController.onPageLoad(ua.id, NormalMode))
-      case _                      => None
+    (ua.get(CommercialReferenceNumberAllItemsPage), ua.get(ModeAtBorderPage)) match {
+      case (Some(_), Some("4") | Some("40")) => Some(routes.ConveyanceReferenceNumberController.onPageLoad(ua.id, NormalMode))
+      case (Some(_), _)                      => Some(routes.AddConveyanceReferenceNumberController.onPageLoad(ua.id, NormalMode))
+      case _                                 => None
     }
 
   def addConveyancerReferenceNumber(ua: UserAnswers): Option[Call] =

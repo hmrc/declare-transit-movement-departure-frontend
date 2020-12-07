@@ -213,6 +213,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             val updatedAnswers = answers
               .set(ModeAtBorderPage, transportMode).success.value
+              .set(CommercialReferenceNumberAllItemsPage, "value").success.value
 
             navigator
               .nextPage(CommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
@@ -227,6 +228,23 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             val updatedAnswers = answers
               .set(ModeAtBorderPage, "1").success.value
+              .set(CommercialReferenceNumberAllItemsPage, "value").success.value
+
+
+            navigator
+              .nextPage(CommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
+              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+        }
+      }
+
+      "must go from commercialReferenceNumberAllItems to AddConveyanceReferenceNumber if transport mode is not answered" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+
+            val updatedAnswers = answers
+              .set(CommercialReferenceNumberAllItemsPage, "value").success.value
+
 
             navigator
               .nextPage(CommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
