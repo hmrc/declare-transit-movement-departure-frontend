@@ -27,23 +27,20 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.transportDetails.AddIdAtDepartureController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('transportDetails.preHeading')}}</span>
 
-          {{ csrf() | safe }}
+        <h1 class="govuk-heading-xl">
+          {{ messages("addIdAtDeparture.heading") }}
+        </h1>
+
+        <p class="govuk-body">{{messages('addIdAtDeparture.hint')}}</p>
+
+        <form action="{{ routes.controllers.transportDetails.AddIdAtDepartureController.onSubmit(lrn, mode).url }}" method="post">
+
+           {{ csrf() | safe }}
 
           {{ govukRadios({
             name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('addIdAtDeparture.heading'),
-                isPageHeading: true,
-                classes: "govuk-fieldset__legend--xl"
-              }
-            },
-            hint:{
-            text:messages('addIdAtDeparture.hint')
-            },
             items: radios,
             errorMessage: form.value.error
           }) }}

@@ -63,7 +63,12 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def inlandMode(transportModeList: TransportModeList): Option[Row] = userAnswers.get(InlandModePage) map {
     answer =>
-      val modeList = transportModeList.getTransportMode(answer).map(_.description).getOrElse(answer)
+      val modeList = transportModeList
+        .getTransportMode(answer)
+        .map(
+          transport => "(" + transport.code + ") " + transport.description
+        )
+        .getOrElse(answer)
       Row(
         key   = Key(msg"inlandMode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$modeList"),
@@ -97,8 +102,9 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     }
 
   def nationalityAtDeparture(codeList: CountryList, inlandModeCode: String): Option[Row] =
-    if (!Mode5or7.Constants.codes.contains(inlandModeCode)
-        && !Rail.Constants.codes.contains(inlandModeCode)) {
+    if (!Mode5or7.Constants.codes.map(_.toString).contains(inlandModeCode)
+        && !Rail.Constants.codes.map(_.toString).contains(inlandModeCode)) {
+
       userAnswers.get(NationalityAtDeparturePage) map {
         answer =>
           val countryName = codeList.getCountry(answer).map(_.description).getOrElse(answer.code)
@@ -137,7 +143,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def idAtDeparture(inlandModeCode: String): Option[Row] =
-    if (!Mode5or7.Constants.codes.contains(inlandModeCode)) {
+    if (!Mode5or7.Constants.codes.map(_.toString).contains(inlandModeCode)) {
       userAnswers.get(IdAtDeparturePage) map {
         answer =>
           Row(
@@ -172,7 +178,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def addIdAtDeparture(inlandModeCode: String): Option[Row] =
-    if (!Mode5or7.Constants.codes.contains(inlandModeCode)) {
+    if (!Mode5or7.Constants.codes.map(_.toString).contains(inlandModeCode)) {
       userAnswers.get(AddIdAtDeparturePage) map {
         answer =>
           Row(
@@ -191,8 +197,8 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     } else None
 
   def addNationalityAtDeparture(inlandModeCode: String): Option[Row] =
-    if (!Mode5or7.Constants.codes.contains(inlandModeCode)
-        && !Rail.Constants.codes.contains(inlandModeCode)) {
+    if (!Mode5or7.Constants.codes.map(_.toString).contains(inlandModeCode)
+        && !Rail.Constants.codes.map(_.toString).contains(inlandModeCode)) {
       userAnswers.get(AddNationalityAtDeparturePage) map {
         answer =>
           Row(
