@@ -24,8 +24,10 @@ import controllers.addItems.{routes => addAnotherPackageRoutes}
 import controllers.addItems.containers.{routes => containerRoutes}
 import controllers.{routes => mainRoutes}
 import derivable._
+import models.DeclarationType.{Option1, Option2}
+
 import javax.inject.{Inject, Singleton}
-import models._
+import models.{DeclarationType, _}
 import models.reference.CountryCode
 import models.reference.PackageType.{bulkAndUnpackedCodes, bulkCodes, unpackedCodes}
 import pages._
@@ -76,9 +78,9 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case AddExtraInformationPage(itemIndex, referenceIndex)   => ua => addExtraInformationPage(ua, itemIndex, referenceIndex, NormalMode)
     case ExtraInformationPage(itemIndex, _)                   => ua => Some(previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.id, itemIndex, NormalMode))
     case AddAnotherPreviousAdministrativeReferencePage(itemIndex)   => ua => addAnotherPreviousAdministrativeReferenceRoute(itemIndex, ua, NormalMode)
-    case ContainerNumberPage(itemIndex, containerIndex) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.id, itemIndex, NormalMode))
-    case AddAnotherContainerPage(itemIndex) => ua => Some(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(ua.id, itemIndex, NormalMode))
-    case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, NormalMode))
+    case ContainerNumberPage(itemIndex, containerIndex)       => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.id, itemIndex, NormalMode))
+    case AddAnotherContainerPage(itemIndex)                   => ua => addSpecialMentionRoute(ua, itemIndex, NormalMode)
+    case ConfirmRemoveContainerPage(index, _)                 => ua => Some(confirmRemoveContainerRoute(ua, index, NormalMode))
     case ContainerNumberPage(itemIndex, containerIndex)       => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.id, itemIndex, NormalMode))
     case AddAnotherContainerPage(itemIndex)                   => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex))
     case ConfirmRemoveContainerPage(index, _)                 => ua => Some(confirmRemoveContainerRoute(ua, index, NormalMode))
@@ -129,6 +131,14 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case ConfirmRemoveContainerPage(index, _)                 => ua => Some(confirmRemoveContainerRoute(ua, index, CheckMode))
     case AddAnotherPreviousAdministrativeReferencePage(itemIndex)   => ua => addAnotherPreviousAdministrativeReferenceRoute(itemIndex, ua, CheckMode)
   }
+
+
+
+  private def addSpecialMentionRoute(ua: UserAnswers, index: Index, NormalMode: Mode) =
+    ua.get(DeclarationTypePage) match {
+      case Some(Option2) =>  Some(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(ua.id, index, NormalMode))
+      case _ =>  Some(addItemsRoutes.AddDocumentsController.onPageLoad(ua.id, index, NormalMode))
+    }
 
   private def consigneeName(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(TraderDetailsConsigneeAddressPage(index)), mode) match {
@@ -357,7 +367,7 @@ class AddItemsNavigator @Inject()() extends Navigator {
         val nextPackageIndex: Int = ua.get(DeriveNumberOfPackages(itemIndex)).getOrElse(0)
         Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.id, itemIndex, Index(nextPackageIndex), mode))
       case (Some(false), Some(false), _) if mode == NormalMode =>
-        Some(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(ua.id, itemIndex, mode))
+        addSpecialMentionRoute(ua, itemIndex, NormalMode)
       case (Some(false), _, 0) =>
         Some(containerRoutes.ContainerNumberController.onPageLoad(ua.id, itemIndex, Index(0), mode))
       case (Some(false), _,  _) if mode == CheckMode =>

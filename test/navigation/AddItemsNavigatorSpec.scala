@@ -24,6 +24,7 @@ import controllers.addItems.specialMentions.{routes => specialMentionsRoutes}
 import controllers.addItems.traderDetails.{routes => traderRoutes}
 import controllers.{routes => mainRoutes}
 import generators.Generators
+import models.DeclarationType.{Option1, Option2}
 import models.reference.PackageType
 import models.{CheckMode, ConsigneeAddress, ConsignorAddress, Index, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
@@ -753,12 +754,27 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
           "when no is answered must go to" - {
 
-            "Add items CYA when no containers used selected" in {
+            "Add documents page when no containers used selected and declaration type in Option1" in {
               forAll(arbitrary[UserAnswers]) {
                 answers =>
                   val updatedAnswers = answers
                     .set(ContainersUsedPage, false).success.value
                     .set(AddAnotherPackagePage(itemIndex), false).success.value
+                    .set(DeclarationTypePage, Option1).success.value
+                    .remove(ContainersQuery(itemIndex, containerIndex)).success.value
+                  navigator
+                    .nextPage(AddAnotherPackagePage(itemIndex), NormalMode, updatedAnswers)
+                    .mustBe(routes.AddDocumentsController.onPageLoad(updatedAnswers.id, itemIndex, NormalMode))
+              }
+            }
+
+            "Add documents page when no containers used selected and declaration type in Option2" in {
+              forAll(arbitrary[UserAnswers]) {
+                answers =>
+                  val updatedAnswers = answers
+                    .set(ContainersUsedPage, false).success.value
+                    .set(AddAnotherPackagePage(itemIndex), false).success.value
+                    .set(DeclarationTypePage, Option2).success.value
                     .remove(ContainersQuery(itemIndex, containerIndex)).success.value
                   navigator
                     .nextPage(AddAnotherPackagePage(itemIndex), NormalMode, updatedAnswers)
@@ -1074,12 +1090,22 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             }
           }
 
-          "must go from AddAnotherContainerPage to AddSpecialMentionController" in {
+          "must go from AddAnotherContainerPage to AddSpecialMention page when declaration type is Option2" in {
             forAll(arbitrary[UserAnswers]) {
               answers =>
+              val updatedAnswers = answers.set(DeclarationTypePage, Option2).success.value
                 navigator
-                  .nextPage(AddAnotherContainerPage(index), NormalMode, answers)
-                  .mustBe(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(answers.id, index, NormalMode))
+                  .nextPage(AddAnotherContainerPage(index), NormalMode, updatedAnswers)
+                  .mustBe(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            }
+          }
+          "must go from AddAnotherContainerPage to AddAnotherDocument page when declaration type is Option1" in {
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers.set(DeclarationTypePage, Option1).success.value
+                navigator
+                  .nextPage(AddAnotherContainerPage(index), NormalMode, updatedAnswers)
+                  .mustBe(routes.AddDocumentsController.onPageLoad(updatedAnswers.id, index, NormalMode))
             }
           }
 

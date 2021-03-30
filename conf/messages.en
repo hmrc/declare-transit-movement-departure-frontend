@@ -980,10 +980,11 @@ confirmRemovePreviousAdministrativeReference.heading = Are you sure you want to 
 confirmRemovePreviousAdministrativeReference.checkYourAnswersLabel = confirmRemovePreviousAdministrativeReference
 confirmRemovePreviousAdministrativeReference.error.required = Select yes if you want to remove this previous administrative reference
 
-addSpecialMention.title = Do you need to add special mentions for item {0}?
-addSpecialMention.heading = Do you need to add special mentions for item {0}?
-addSpecialMention.checkYourAnswersLabel = Add special mentions?
-addSpecialMention.error.required = Select yes if you need to add special mentions for item {0}?
+addSpecialMention.title = Does the movement contain EU goods?
+addSpecialMention.heading = Does the movement contain EU goods?
+addSpecialMention.paragraph = This is when the goods have originated in the EU or the duty has been paid in the EU (T2). You will need to provide details of the Data Group 2 (DG2).
+addSpecialMention.checkYourAnswersLabel = Does the movement contain EU goods?
+addSpecialMention.error.required = Select yes if the movement contains EU goods
 
 specialMentionType.title = What type of special mention do you want to add for item {0}?
 specialMentionType.heading = What type of special mention do you want to add for item {0}?
