@@ -403,9 +403,13 @@ class DeclarationRequestService @Inject()(
         speCirIndHEA1      = safetyAndSecurity.flatMap(_.circumstanceIndicator),
         traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod),
         comRefNumHEA       = safetyAndSecurity.flatMap(_.commercialReferenceNumber),
-        secHEA358          = Some(safetyAndSecurityFlag(preTaskList.addSecurityDetails)),
-        conRefNumHEA       = safetyAndSecurity.flatMap(_.conveyanceReferenceNumber),
-        codPlUnHEA357      = safetyAndSecurity.flatMap(_.placeOfUnloading)
+        secHEA358 = if (preTaskList.addSecurityDetails) {
+          Some(safetyAndSecurityFlag(preTaskList.addSecurityDetails))
+        } else {
+          None
+        },
+        conRefNumHEA  = safetyAndSecurity.flatMap(_.conveyanceReferenceNumber),
+        codPlUnHEA357 = safetyAndSecurity.flatMap(_.placeOfUnloading)
       ),
       principalTrader(traderDetails),
       headerConsignor(traderDetails),
