@@ -433,4 +433,5 @@ class DeclarationRequestService @Inject()(
       safetyAndSecurity.flatMap(sas => safetyAndSecurityConsignee(sas.consignee))
     )
   }
+
 }
