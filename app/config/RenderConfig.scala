@@ -34,7 +34,7 @@ class RenderConfigImpl @Inject()(configuration: Configuration) extends RenderCon
 
   override val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated"
 
-  override val signOutUrl: String = configuration.get[String]("urls.logout")
+  override val signOutUrl: String = configuration.get[String]("urls.logoutContinue") + configuration.get[String]("urls.feedback")
 
   override def timeoutSeconds: String = configuration.get[String]("session.timeoutSeconds")
 
