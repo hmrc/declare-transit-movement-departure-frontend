@@ -17,12 +17,13 @@
 package navigation
 
 import controllers.addItems.traderSecurityDetails.routes
+
 import javax.inject.{Inject, Singleton}
 import models._
 import pages.Page
 import pages.addItems.traderSecurityDetails._
 import play.api.mvc.Call
-import pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage
+import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
 
 @Singleton
 class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
@@ -32,8 +33,8 @@ class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case AddSecurityConsignorsEoriPage(index) => ua => addSecurityConsignorsEoriRoute(ua, index, NormalMode)
     case SecurityConsignorNamePage(index) => ua => Some(routes.SecurityConsignorAddressController.onPageLoad(ua.id, index, NormalMode))
-    case SecurityConsignorEoriPage(index) => ua => securityConsignorEoriRoute(ua, index)
-    case SecurityConsignorAddressPage(index) => ua => securityConsignorEoriRoute(ua, index)
+    case SecurityConsignorEoriPage(index) => ua => securityConsignorEoriRoute(ua, index, NormalMode)
+    case SecurityConsignorAddressPage(index) => ua => securityConsignorEoriRoute(ua, index, NormalMode)
     case AddSecurityConsigneesEoriPage(index) => ua => addSecurityConsigneesEoriRoute(ua, index, NormalMode)
     case SecurityConsigneeNamePage(index) => ua => Some(routes.SecurityConsigneeAddressController.onPageLoad(ua.id, index, NormalMode))
     case SecurityConsigneeAddressPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
@@ -56,12 +57,11 @@ class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
       case None => Some(routes.SecurityConsignorAddressController.onPageLoad(ua.id, index, CheckMode))
     }
   
-  private def securityConsignorEoriRoute(ua: UserAnswers, index: Index) =
+  private def securityConsignorEoriRoute(ua: UserAnswers, index: Index, mode: Mode) =
     ua.get(AddSafetyAndSecurityConsigneePage) match {
       case Some(true) =>
         Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-      case Some(false) =>
-        Some(routes.AddSecurityConsigneesEoriController.onPageLoad(ua.id, index, NormalMode))
+      case Some(false) => Some(circumstanceIndicatorCheck(ua, index, mode))
     }
 
   private def addSecurityConsignorsEoriRoute(ua: UserAnswers, index: Index, mode: Mode) =
@@ -90,6 +90,12 @@ class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
       case (Some(false), CheckMode) if (ua.get(SecurityConsigneeNamePage(index)).isDefined)
       => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
       case (Some(false), CheckMode) => Some(routes.SecurityConsigneeNameController.onPageLoad(ua.id, index, CheckMode))
+    }
+
+  private def circumstanceIndicatorCheck(ua: UserAnswers, index: Index, mode: Mode) =
+    ua.get(CircumstanceIndicatorPage) match {
+      case Some("E") => controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(ua.id, index, mode)
+      case _ => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(ua.id, index, mode)
     }
 
   // format: on
