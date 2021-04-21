@@ -110,7 +110,7 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case DeclareMarkPage(itemIndex, packageIndex)             => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex))
     case AddAnotherPackagePage(itemIndex)                     => ua => addAnotherPackage(itemIndex, ua, CheckMode)
     case RemovePackagePage(itemIndex)                         => ua => Some(removePackage(itemIndex, CheckMode)(ua))
-    case RemovePackagePage(itemIndex)                         => ua => Some(addAnotherPackageRoutes.AddAnotherPackageController.onPageLoad(ua.id, itemIndex, CheckMode))
+   // case RemovePackagePage(itemIndex)                         => ua => Some(addAnotherPackageRoutes.AddAnotherPackageController.onPageLoad(ua.id, itemIndex, CheckMode))
     case AddAdministrativeReferencePage(itemIndex)            => ua =>  addAdministrativeReferencePage(itemIndex, ua, CheckMode)
     case ReferenceTypePage(itemIndex, referenceIndex)         => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.id, itemIndex, referenceIndex, CheckMode))
     case PreviousReferencePage(itemIndex, referenceIndex)     => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.id, itemIndex, referenceIndex, CheckMode))
