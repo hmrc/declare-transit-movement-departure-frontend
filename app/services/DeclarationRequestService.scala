@@ -18,6 +18,7 @@ package services
 
 import java.time.LocalDateTime
 
+import cats._
 import cats.data.NonEmptyList
 import cats.implicits._
 import javax.inject.Inject
@@ -45,6 +46,27 @@ import play.api.Logger
 import repositories.InterchangeControlReferenceIdRepository
 
 import scala.concurrent.{ExecutionContext, Future}
+
+trait ConvertDomainModelToSubmissionModel[F[_], G[_], A, B] {
+  def convert(a: F[A]): G[B]
+}
+
+private[services] object GuaranteeLiabilityAmountConversion
+    extends ConvertDomainModelToSubmissionModel[NonEmptyList, Option, GuaranteeDetails, SpecialMentionGuaranteeLiabilityAmount] {
+
+  override def convert(guaranteeDetails: NonEmptyList[GuaranteeDetails]): Option[SpecialMentionGuaranteeLiabilityAmount] =
+    guaranteeDetails collectFirst {
+      case GuaranteeDetails.GuaranteeReference(guaranteeType, guaranteeReferenceNumber, liabilityAmount, _)
+          if guaranteeReferenceRoute.contains(guaranteeType) =>
+        val additionalInformationFormat = if (liabilityAmount == GuaranteeReference.defaultLiability) {
+          s"${liabilityAmount}EUR$guaranteeReferenceNumber"
+        } else {
+          s"${liabilityAmount}GBP$guaranteeReferenceNumber"
+        }
+
+        SpecialMentionGuaranteeLiabilityAmount("CAL", additionalInformationFormat)
+    }
+}
 
 trait DeclarationRequestServiceInt {
   def convert(userAnswers: UserAnswers): Future[EitherType[DeclarationRequest]]
@@ -98,26 +120,6 @@ class DeclarationRequestService @Inject()(
           Guarantee(guaranteeType.toString, Seq(guaranteeReferenceOther))
       }
 
-    def additionalInformationLiabilityAmount(itemIndex: Int, guaranteeDetails: NonEmptyList[GuaranteeDetails]): Seq[SpecialMentionGuaranteeLiabilityAmount] =
-      if (itemIndex == 0) {
-        guaranteeDetails.toList collect {
-          case GuaranteeDetails.GuaranteeReference(guaranteeType, guaranteeReferenceNumber, liabilityAmount, _)
-              if guaranteeReferenceRoute.contains(guaranteeType) =>
-            specialMentionLiability(liabilityAmount, guaranteeReferenceNumber)
-        }
-      } else Seq.empty
-
-    def specialMentionLiability(liabilityAmount: String, guaranteeReferenceNumber: String): SpecialMentionGuaranteeLiabilityAmount =
-      liabilityAmount match {
-        case GuaranteeReference.defaultLiability =>
-          val defaultLiabilityAmount = s"${GuaranteeReference.defaultLiability}EUR$guaranteeReferenceNumber"
-          SpecialMentionGuaranteeLiabilityAmount("CAL", defaultLiabilityAmount)
-
-        case otherAmount =>
-          val notDefaultAmount = s"${otherAmount}GBP$guaranteeReferenceNumber"
-          SpecialMentionGuaranteeLiabilityAmount("CAL", notDefaultAmount)
-      }
-
     def packages(packages: NonEmptyList[Packages]): NonEmptyList[models.messages.goodsitem.Package] =
       packages.map {
         case Packages.UnpackedPackages(packageType, _, totalPieces, markOrNumber) =>
@@ -145,12 +147,18 @@ class DeclarationRequestService @Inject()(
             dangerousGoodsCode               = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
             producedDocuments                = producedDocuments(itemSection.producedDocuments),
-            specialMention                   = additionalInformationLiabilityAmount(index, guaranteeDetails),
-            traderConsignorGoodsItem         = traderConsignor(itemSection.consignor),
-            traderConsigneeGoodsItem         = traderConsignee(itemSection.consignee),
-            containers                       = containers(itemSection.containers),
-            packages                         = packages(itemSection.packages).toList,
-            sensitiveGoodsInformation        = Seq.empty, // Not required, defined at security level
+            specialMention = {
+              if (index == 0) {
+                GuaranteeLiabilityAmountConversion.convert(guaranteeDetails).fold(Seq.empty[SpecialMentionGuaranteeLiabilityAmount])(Seq(_))
+              } else {
+                Seq.empty // TODO add users special mentions here and above
+              }
+            },
+            traderConsignorGoodsItem  = traderConsignor(itemSection.consignor),
+            traderConsigneeGoodsItem  = traderConsignee(itemSection.consignee),
+            containers                = containers(itemSection.containers),
+            packages                  = packages(itemSection.packages).toList,
+            sensitiveGoodsInformation = Seq.empty, // Not required, defined at security level
             GoodsItemSafetyAndSecurityConsignor(itemSection.itemSecurityTraderDetails),
             GoodsItemSafetyAndSecurityConsignee(itemSection.itemSecurityTraderDetails)
           )
