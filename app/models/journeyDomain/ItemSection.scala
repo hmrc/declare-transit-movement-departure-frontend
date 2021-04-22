@@ -21,6 +21,7 @@ import cats.implicits._
 import derivable._
 import models.Index
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
+import models.journeyDomain.addItems.ItemsSecurityTraderDetails
 import pages.addItems.specialMentions.AddSpecialMentionPage
 import pages.{AddSecurityDetailsPage, ContainersUsedPage}
 

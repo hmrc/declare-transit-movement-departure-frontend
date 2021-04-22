@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package models.journeyDomain
+package models.journeyDomain.addItems
 
 import cats.implicits._
 import models.domain.Address
-import models.journeyDomain.ItemsSecurityTraderDetails.SecurityTraderDetails
+import models.journeyDomain.UserAnswersReader
 import models.{EoriNumber, Index}
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity._
+import models.journeyDomain._
 
 final case class ItemsSecurityTraderDetails(
   methodOfPayment: Option[String],
@@ -42,18 +43,6 @@ object ItemsSecurityTraderDetails {
       consignorDetails(index),
       consigneeDetails(index)
     ).tupled.map((ItemsSecurityTraderDetails.apply _).tupled)
-
-  sealed trait SecurityTraderDetails
-
-  object SecurityTraderDetails {
-    def apply(eori: EoriNumber): SecurityTraderDetails = SecurityTraderEori(eori)
-
-    def apply(name: String, address: Address): SecurityTraderDetails = SecurityPersonalInformation(name, address)
-  }
-
-  final case class SecurityPersonalInformation(name: String, address: Address) extends SecurityTraderDetails
-
-  final case class SecurityTraderEori(eori: EoriNumber) extends SecurityTraderDetails
 
   private def consignorDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
 
@@ -103,20 +92,15 @@ object ItemsSecurityTraderDetails {
             SecurityTraderDetails(name, address)
         }
 
-    val isIndicatorE = AddCircumstanceIndicatorPage.reader flatMap {
-      case true =>
-        CircumstanceIndicatorPage.optionalReader flatMap {
-          case Some("E") => useEori
-          case _         => useNameAndAddress
-        }
-      case _ => useNameAndAddress
-    }
+    val isEoriKnown = AddSecurityConsigneesEoriPage(index).reader.flatMap(
+      isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
+    )
 
     // TODO add matcher
     AddSafetyAndSecurityConsigneePage.reader
       .flatMap {
         _ =>
-          isIndicatorE.map(_.some)
+          isEoriKnown.map(_.some)
       }
   }
 

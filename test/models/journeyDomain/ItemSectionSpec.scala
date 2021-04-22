@@ -21,6 +21,7 @@ import cats.data.NonEmptyList
 import generators.JourneyModelGenerators
 import models.DeclarationType.{Option1, Option2}
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
+import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, ItemsSecurityTraderDetailsSpec}
 import models.reference.{CircumstanceIndicator, CountryCode}
 import models.{DeclarationType, Index, UserAnswers}
 import org.scalacheck.Gen

@@ -17,9 +17,9 @@
 package services
 
 import java.time.LocalDateTime
-
 import cats.data.NonEmptyList
 import cats.implicits._
+
 import javax.inject.Inject
 import models.GuaranteeType.guaranteeReferenceRoute
 import models.domain.{Address, SealDomain}
@@ -31,6 +31,7 @@ import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
+import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPersonalInformation, SecurityTraderEori}
 import models.journeyDomain.traderDetails._
 import models.journeyDomain.{GuaranteeDetails, ItemSection, Itinerary, JourneyDomain, Packages, UserAnswersReader, _}
 import models.messages._
@@ -181,9 +182,9 @@ class DeclarationRequestService @Inject()(
       itemSecurityTraderDetails.flatMap {
         x =>
           x.consignor.map {
-            case ItemsSecurityTraderDetails.SecurityPersonalInformation(name, Address(buildingAndStreet, city, postcode, _)) =>
+            case SecurityPersonalInformation(name, Address(buildingAndStreet, city, postcode, _)) =>
               ItemsSecurityConsignorWithoutEori(name, buildingAndStreet, postcode, city, "GB")
-            case ItemsSecurityTraderDetails.SecurityTraderEori(eori) =>
+            case SecurityTraderEori(eori) =>
               ItemsSecurityConsignorWithEori(eori.value)
           }
       }
@@ -192,9 +193,9 @@ class DeclarationRequestService @Inject()(
       itemSecurityTraderDetails.flatMap {
         x =>
           x.consignor.map {
-            case ItemsSecurityTraderDetails.SecurityPersonalInformation(name, Address(buildingAndStreet, city, postcode, _)) =>
+            case SecurityPersonalInformation(name, Address(buildingAndStreet, city, postcode, _)) =>
               ItemsSecurityConsigneeWithoutEori(name, buildingAndStreet, postcode, city, "GB")
-            case ItemsSecurityTraderDetails.SecurityTraderEori(eori) =>
+            case SecurityTraderEori(eori) =>
               ItemsSecurityConsigneeWithEori(eori.value)
           }
       }
