@@ -78,7 +78,7 @@ class GuaranteeLiabilityAmountConversionSpec extends SpecBase with GeneratorSpec
       GuaranteeLiabilityAmountConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult1, expectedResult2)
     }
 
-    "must return None when all GuaranteeReferences dont have a GuaranteeType of 0, 1, 2, 4 or 9" in {
+    "must return empty list when all GuaranteeReferences dont have a GuaranteeType of 0, 1, 2, 4 or 9" in {
 
       val genGuaranteeType = Gen.oneOf(nonGuaranteeReferenceRoute)
 
