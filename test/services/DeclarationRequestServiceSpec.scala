@@ -36,7 +36,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 
-import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute}
+import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute, GuaranteeWaiver}
 import org.scalacheck.Gen
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -74,73 +74,6 @@ class DeclarationRequestServiceSpec
 
   val journeyDomainNoConignorForAllItems =
     arb[JourneyDomain].map(removeConsignor)
-
-  "GuaranteeLiabilityAmountConversion" - {
-
-    "must return SpecialMentionGuaranteeLiabilityAmount with EUR formatting " +
-      "when given a GuaranteeReference " +
-      "with a GuaranteeType of 0, 1, 2, 4 or 9 " +
-      "and a default liability amount" in {
-
-      val genGuaranteeType = Gen.oneOf(guaranteeReferenceRoute)
-
-      forAll(nonEmptyListOf[GuaranteeReference](3), genGuaranteeType) {
-        (guaranteeDetails, guaranteeType) =>
-          val updatedGuaranteeReferenceHead: GuaranteeReference = guaranteeDetails.head
-            .copy(guaranteeType = guaranteeType, liabilityAmount = GuaranteeReference.defaultLiability)
-
-          val updatedGuaranteeReference: NonEmptyList[GuaranteeReference] = guaranteeDetails.copy(
-            head = updatedGuaranteeReferenceHead
-          )
-
-          val expectedAdditionalInformationFormat =
-            s"${GuaranteeReference.defaultLiability}EUR${updatedGuaranteeReferenceHead.guaranteeReferenceNumber}"
-
-          val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
-
-          GuaranteeLiabilityAmountConversion.convert(updatedGuaranteeReference).value mustBe expectedResult
-      }
-    }
-
-    "must return SpecialMentionGuaranteeLiabilityAmount with GBP formatting " +
-      "when given a GuaranteeReference " +
-      "with a GuaranteeType of 0, 1, 2, 4 or 9 " +
-      "and liability amount is not the default liability" in {
-
-      val genGuaranteeType = Gen.oneOf(guaranteeReferenceRoute)
-
-      forAll(nonEmptyListOf[GuaranteeReference](3).suchThat(_.forall(_.liabilityAmount != GuaranteeReference.defaultLiability)), genGuaranteeType) {
-        (guaranteeDetails, guaranteeType) =>
-          val updatedGuaranteeReferenceHead: GuaranteeReference = guaranteeDetails.head
-            .copy(guaranteeType = guaranteeType)
-
-          val updatedGuaranteeReference: NonEmptyList[GuaranteeReference] = guaranteeDetails.copy(
-            head = updatedGuaranteeReferenceHead
-          )
-
-          val expectedAdditionalInformationFormat =
-            s"${updatedGuaranteeReferenceHead.liabilityAmount}GBP${updatedGuaranteeReferenceHead.guaranteeReferenceNumber}"
-
-          val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
-
-          GuaranteeLiabilityAmountConversion.convert(updatedGuaranteeReference).value mustBe expectedResult
-      }
-    }
-
-    "must return None when all GuaranteeReferences dont have a GuaranteeType of 0, 1, 2, 4 or 9" in {
-
-      val genGuaranteeType = Gen.oneOf(nonGuaranteeReferenceRoute)
-
-      forAll(nonEmptyListOf[GuaranteeReference](2), genGuaranteeType) {
-        (guaranteeDetails, guaranteeType) =>
-          val updatedGuaranteeReferenceHead: NonEmptyList[GuaranteeReference] = guaranteeDetails.map {
-            _.copy(guaranteeType = guaranteeType)
-          }
-
-          GuaranteeLiabilityAmountConversion.convert(updatedGuaranteeReferenceHead) mustBe None
-      }
-    }
-  }
 
   "convert" - {
     "must return a DeclarationRequest model" - {

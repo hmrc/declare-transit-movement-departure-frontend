@@ -18,14 +18,11 @@ package services
 
 import java.time.LocalDateTime
 
-import cats._
 import cats.data.NonEmptyList
 import cats.implicits._
 import javax.inject.Inject
-import models.GuaranteeType.guaranteeReferenceRoute
 import models.domain.{Address, SealDomain}
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
-import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.JourneyDomain.Constants
 import models.journeyDomain.RouteDetails.TransitInformation
@@ -46,27 +43,6 @@ import play.api.Logger
 import repositories.InterchangeControlReferenceIdRepository
 
 import scala.concurrent.{ExecutionContext, Future}
-
-trait ConvertDomainModelToSubmissionModel[F[_], G[_], A, B] {
-  def convert(a: F[A]): G[B]
-}
-
-private[services] object GuaranteeLiabilityAmountConversion
-    extends ConvertDomainModelToSubmissionModel[NonEmptyList, Option, GuaranteeDetails, SpecialMentionGuaranteeLiabilityAmount] {
-
-  override def convert(guaranteeDetails: NonEmptyList[GuaranteeDetails]): Option[SpecialMentionGuaranteeLiabilityAmount] =
-    guaranteeDetails collectFirst {
-      case GuaranteeDetails.GuaranteeReference(guaranteeType, guaranteeReferenceNumber, liabilityAmount, _)
-          if guaranteeReferenceRoute.contains(guaranteeType) =>
-        val additionalInformationFormat = if (liabilityAmount == GuaranteeReference.defaultLiability) {
-          s"${liabilityAmount}EUR$guaranteeReferenceNumber"
-        } else {
-          s"${liabilityAmount}GBP$guaranteeReferenceNumber"
-        }
-
-        SpecialMentionGuaranteeLiabilityAmount("CAL", additionalInformationFormat)
-    }
-}
 
 trait DeclarationRequestServiceInt {
   def convert(userAnswers: UserAnswers): Future[EitherType[DeclarationRequest]]
@@ -149,7 +125,7 @@ class DeclarationRequestService @Inject()(
             producedDocuments                = producedDocuments(itemSection.producedDocuments),
             specialMention = {
               if (index == 0) {
-                GuaranteeLiabilityAmountConversion.convert(guaranteeDetails).fold(Seq.empty[SpecialMentionGuaranteeLiabilityAmount])(Seq(_))
+                GuaranteeLiabilityAmountConversion(guaranteeDetails)
               } else {
                 Seq.empty // TODO add users special mentions here and above
               }
