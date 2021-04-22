@@ -19,7 +19,7 @@ package services
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import generators.{JourneyModelGenerators, ModelGenerators}
-import models.GuaranteeType.{GuaranteeNotRequired, GuaranteeWaiver, nonGuaranteeReferenceRoute}
+import models.GuaranteeType.{nonGuaranteeReferenceRoute, GuaranteeNotRequired, GuaranteeWaiver}
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
 import org.scalacheck.Gen
@@ -33,33 +33,33 @@ class GuaranteeLiabilityAmountConversionSpec extends SpecBase with GeneratorSpec
       "with a GuaranteeType of 0, 1, 2, 4 or 9 " +
       "and a default liability amount" in {
 
-      val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiability, "****")
+        val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiability, "****")
 
-      val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
+        val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
 
-      val expectedAdditionalInformationFormat =
-        s"${GuaranteeReference.defaultLiability}EURAB123"
+        val expectedAdditionalInformationFormat =
+          s"${GuaranteeReference.defaultLiability}EURAB123"
 
-      val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
+        val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
 
-      GuaranteeLiabilityAmountConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
-    }
+        GuaranteeLiabilityAmountConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
+      }
 
     "must return SpecialMentionGuaranteeLiabilityAmount with GBP formatting " +
       "when given a GuaranteeReference " +
       "with a GuaranteeType of 0, 1, 2, 4 or 9 " +
       "and liability amount is not the default liability" in {
 
-      val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", "1234", "****")
+        val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", "1234", "****")
 
-      val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
+        val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
 
-      val expectedAdditionalInformationFormat = "1234GBPAB123"
+        val expectedAdditionalInformationFormat = "1234GBPAB123"
 
-      val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
+        val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
 
-      GuaranteeLiabilityAmountConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
-    }
+        GuaranteeLiabilityAmountConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
+      }
 
     "must return multiple SpecialMentionGuaranteeLiabilityAmount if there are multiple valid GuaranteeReference" in {
 
@@ -84,7 +84,6 @@ class GuaranteeLiabilityAmountConversionSpec extends SpecBase with GeneratorSpec
 
       forAll(nonEmptyListOf[GuaranteeReference](2), genGuaranteeType) {
         (guaranteeDetails, guaranteeType) =>
-
           val updatedGuaranteeReferenceHead: NonEmptyList[GuaranteeReference] = guaranteeDetails.map {
             _.copy(guaranteeType = guaranteeType)
           }
