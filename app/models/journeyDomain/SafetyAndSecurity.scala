@@ -90,8 +90,8 @@ object SafetyAndSecurity {
   private def placeOfUnloading: UserAnswersReader[Option[String]] =
     addCircumstanceIndicator.flatMap {
       case Some("E") =>
-        AddPlaceOfUnloadingCodePage.filterMandatoryDependent(identity) {
-          PlaceOfUnloadingCodePage.optionalReader
+        AddPlaceOfUnloadingCodePage.filterOptionalDependent(identity) {
+          PlaceOfUnloadingCodePage.reader
         }
       case _ =>
         PlaceOfUnloadingCodePage.reader.map(Some(_))

@@ -21,10 +21,8 @@ import java.time.LocalDateTime
 import cats.data.NonEmptyList
 import cats.implicits._
 import javax.inject.Inject
-import models.GuaranteeType.guaranteeReferenceRoute
 import models.domain.{Address, SealDomain}
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
-import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.JourneyDomain.Constants
 import models.journeyDomain.RouteDetails.TransitInformation
@@ -98,26 +96,6 @@ class DeclarationRequestService @Inject()(
           Guarantee(guaranteeType.toString, Seq(guaranteeReferenceOther))
       }
 
-    def additionalInformationLiabilityAmount(itemIndex: Int, guaranteeDetails: NonEmptyList[GuaranteeDetails]): Seq[SpecialMentionGuaranteeLiabilityAmount] =
-      if (itemIndex == 0) {
-        guaranteeDetails.toList collect {
-          case GuaranteeDetails.GuaranteeReference(guaranteeType, guaranteeReferenceNumber, liabilityAmount, _)
-              if guaranteeReferenceRoute.contains(guaranteeType) =>
-            specialMentionLiability(liabilityAmount, guaranteeReferenceNumber)
-        }
-      } else Seq.empty
-
-    def specialMentionLiability(liabilityAmount: String, guaranteeReferenceNumber: String): SpecialMentionGuaranteeLiabilityAmount =
-      liabilityAmount match {
-        case GuaranteeReference.defaultLiability =>
-          val defaultLiabilityAmount = s"${GuaranteeReference.defaultLiability}EUR$guaranteeReferenceNumber"
-          SpecialMentionGuaranteeLiabilityAmount("CAL", defaultLiabilityAmount)
-
-        case otherAmount =>
-          val notDefaultAmount = s"${otherAmount}GBP$guaranteeReferenceNumber"
-          SpecialMentionGuaranteeLiabilityAmount("CAL", notDefaultAmount)
-      }
-
     def packages(packages: NonEmptyList[Packages]): NonEmptyList[models.messages.goodsitem.Package] =
       packages.map {
         case Packages.UnpackedPackages(packageType, _, totalPieces, markOrNumber) =>
@@ -145,12 +123,18 @@ class DeclarationRequestService @Inject()(
             dangerousGoodsCode               = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
             producedDocuments                = producedDocuments(itemSection.producedDocuments),
-            specialMention                   = additionalInformationLiabilityAmount(index, guaranteeDetails),
-            traderConsignorGoodsItem         = traderConsignor(itemSection.consignor),
-            traderConsigneeGoodsItem         = traderConsignee(itemSection.consignee),
-            containers                       = containers(itemSection.containers),
-            packages                         = packages(itemSection.packages).toList,
-            sensitiveGoodsInformation        = Seq.empty, // Not required, defined at security level
+            specialMention = {
+              if (index == 0) {
+                GuaranteeLiabilityAmountConversion(guaranteeDetails)
+              } else {
+                Seq.empty // TODO add users special mentions here and above
+              }
+            },
+            traderConsignorGoodsItem  = traderConsignor(itemSection.consignor),
+            traderConsigneeGoodsItem  = traderConsignee(itemSection.consignee),
+            containers                = containers(itemSection.containers),
+            packages                  = packages(itemSection.packages).toList,
+            sensitiveGoodsInformation = Seq.empty, // Not required, defined at security level
             GoodsItemSafetyAndSecurityConsignor(itemSection.itemSecurityTraderDetails),
             GoodsItemSafetyAndSecurityConsignee(itemSection.itemSecurityTraderDetails)
           )
