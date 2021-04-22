@@ -37,32 +37,31 @@ object SpecialMention {
 
   implicit val xmlReader: XmlReader[SpecialMention] =
     SpecialMentionGuaranteeLiabilityAmount.xmlReader
-      .or(SpecialMentionEc.xmlReader)
-      .or(SpecialMentionNonEc.xmlReader)
+      .or(SpecialMentionExportFromGB.xmlReader)
+      .or(SpecialMentionExportFromNI.xmlReader)
       .or(SpecialMentionNoCountry.xmlReader)
-
 }
 
-final case class SpecialMentionEc(additionalInformationCoded: String, additionalInformation: String) extends SpecialMention
+final case class SpecialMentionExportFromGB(additionalInformationCoded: String, additionalInformation: String) extends SpecialMention
 
-object SpecialMentionEc {
+object SpecialMentionExportFromGB {
 
-  implicit val xmlReader: XmlReader[SpecialMentionEc] = {
+  implicit val xmlReader: XmlReader[SpecialMentionExportFromGB] = {
 
     import com.lucidchart.open.xtract.__
 
-    case class SpecialMentionEcParseFailure(message: String) extends ParseError
+    case class SpecialMentionExportFromGBParseFailure(message: String) extends ParseError
 
-    (__ \ "ExpFroECMT24")
-      .read[Boolean]
+    (__ \ "ExpFroCouMT25")
+      .read[String]
       .flatMap {
-        case true =>
+        case "GB" =>
           XmlReader(
             _ => ParseSuccess(true)
           )
-        case false =>
+        case _ =>
           XmlReader(
-            _ => ParseFailure(SpecialMentionEcParseFailure("Failed to parse to SpecialMentionEc: ExpFroECMT24 was false"))
+            _ => ParseFailure(SpecialMentionExportFromGBParseFailure("Failed to parse to SpecialMentionExportFromGB: ExpFroCouMT25 was not GB"))
           )
       }
       .flatMap {
@@ -74,75 +73,79 @@ object SpecialMentionEc {
             case (code, addInfo) =>
               if (SpecialMention.countrySpecificCodes.contains(code)) {
                 XmlReader(
-                  _ => ParseSuccess(SpecialMentionEc(code, addInfo))
+                  _ => ParseSuccess(SpecialMentionExportFromGB(code, addInfo))
                 )
               } else {
                 XmlReader(
-                  _ => ParseFailure(SpecialMentionEcParseFailure(s"Failed to parse to SpecialMentionEc: $code was not country specific"))
+                  _ => ParseFailure(SpecialMentionExportFromGBParseFailure(s"Failed to parse to SpecialMentionExportFromGB: $code was not DG0 or DG1"))
                 )
               }
           }
       }
   }
 
-  implicit def writesXml: XMLWrites[SpecialMentionEc] = XMLWrites[SpecialMentionEc] {
+  implicit def writesXml: XMLWrites[SpecialMentionExportFromGB] = XMLWrites[SpecialMentionExportFromGB] {
+    specialMention =>
+      <SPEMENMT2>
+        <AddInfMT21>{specialMention.additionalInformation}</AddInfMT21>
+        <AddInfCodMT23>{specialMention.additionalInformationCoded}</AddInfCodMT23>
+        <ExpFroCouMT25>GB</ExpFroCouMT25>
+      </SPEMENMT2>
+  }
+}
+
+final case class SpecialMentionExportFromNI(
+  additionalInformationCoded: String,
+  additionalInformation: String
+) extends SpecialMention
+
+object SpecialMentionExportFromNI {
+
+  implicit val xmlReader: XmlReader[SpecialMentionExportFromNI] = {
+
+    import com.lucidchart.open.xtract.__
+
+    case class SpecialMentionExportFromNIParseFailure(message: String) extends ParseError
+
+    (__ \ "ExpFroECMT24")
+      .read[String]
+      .flatMap {
+        case "1" =>
+          XmlReader(
+            _ => ParseSuccess(true)
+          )
+        case _ =>
+          XmlReader(
+            _ => ParseFailure(SpecialMentionExportFromNIParseFailure(s"Failed to parse to SpecialMentionExportFromNI: ExpFroECMT24 was not 1"))
+          )
+      }
+      .flatMap {
+        _ =>
+          (
+            (__ \ "AddInfCodMT23").read[String],
+            (__ \ "AddInfMT21").read[String]
+          ).tupled.flatMap {
+            case (code, addInfo) =>
+              if (SpecialMention.countrySpecificCodes.contains(code)) {
+                XmlReader(
+                  _ => ParseSuccess(SpecialMentionExportFromNI(code, addInfo))
+                )
+              } else {
+                XmlReader(
+                  _ =>
+                    ParseFailure(SpecialMentionExportFromNIParseFailure(s"Failed to parse to SpecialMentionExportFromNIParseFailure: $code was not DG0 or DG1"))
+                )
+              }
+          }
+      }
+  }
+
+  implicit def writesXml: XMLWrites[SpecialMentionExportFromNI] = XMLWrites[SpecialMentionExportFromNI] {
     specialMention =>
       <SPEMENMT2>
         <AddInfMT21>{specialMention.additionalInformation}</AddInfMT21>
         <AddInfCodMT23>{specialMention.additionalInformationCoded}</AddInfCodMT23>
         <ExpFroECMT24>1</ExpFroECMT24>
-      </SPEMENMT2>
-  }
-}
-
-final case class SpecialMentionNonEc(
-  additionalInformationCoded: String,
-  additionalInformation: String,
-  exportFromCountry: String
-) extends SpecialMention
-
-object SpecialMentionNonEc {
-
-  implicit val xmlReader: XmlReader[SpecialMentionNonEc] = {
-
-    import com.lucidchart.open.xtract.__
-
-    case class SpecialMentionNonEcParseFailure(message: String) extends ParseError
-
-    (__ \ "AddInfCodMT23")
-      .read[String]
-      .flatMap {
-        code =>
-          if (SpecialMention.countrySpecificCodes.contains(code)) {
-            XmlReader(
-              _ => ParseSuccess(code)
-            )
-          } else {
-            XmlReader(
-              _ => ParseFailure(SpecialMentionNonEcParseFailure(s"Failed to parse to SpecialMentionNonEc: $code was not country specific"))
-            )
-          }
-      }
-      .flatMap {
-        code =>
-          (
-            (__ \ "ExpFroCouMT25").read[String],
-            (__ \ "AddInfMT21").read[String]
-          ).tupled.flatMap {
-            case (exportFromCountry, addInfo) =>
-              XmlReader(
-                _ => ParseSuccess(SpecialMentionNonEc(code, addInfo, exportFromCountry))
-              )
-          }
-      }
-  }
-
-  implicit def writesXml: XMLWrites[SpecialMentionNonEc] = XMLWrites[SpecialMentionNonEc] {
-    specialMention =>
-      <SPEMENMT2>
-        <AddInfMT21>{specialMention.additionalInformation}</AddInfMT21>
-        <AddInfCodMT23>{specialMention.additionalInformationCoded}</AddInfCodMT23>
-        <ExpFroCouMT25>{specialMention.exportFromCountry}</ExpFroCouMT25>
       </SPEMENMT2>
   }
 }
@@ -163,7 +166,7 @@ object SpecialMentionNoCountry {
     ).tupled.flatMap {
       case (code, _) if SpecialMention.countrySpecificCodes.contains(code) =>
         XmlReader(
-          _ => ParseFailure(SpecialMentionNoCountryParseFailure(s"Failed to parse to SpecialMentionNoCountry: $code was country specific"))
+          _ => ParseFailure(SpecialMentionNoCountryParseFailure(s"Failed to parse to SpecialMentionNoCountry cannot be DG0 or DG1"))
         )
       case (code, info) =>
         XmlReader(

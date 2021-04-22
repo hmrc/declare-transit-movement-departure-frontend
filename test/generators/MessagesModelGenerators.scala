@@ -532,21 +532,20 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
       liabilityAmountGen.map(SpecialMentionGuaranteeLiabilityAmount("CAL", _))
     }
 
-  implicit lazy val arbitrarySpecialMentionEc: Arbitrary[SpecialMentionEc] =
+  implicit lazy val arbitrarySpecialMentionExportFromGB: Arbitrary[SpecialMentionExportFromGB] =
     Arbitrary {
       for {
         addInfoCoded <- countrySpecificCodeGen
         addInfo      <- stringsWithMaxLength(70)
-      } yield SpecialMentionEc(addInfoCoded, addInfo)
+      } yield SpecialMentionExportFromGB(addInfoCoded, addInfo)
     }
 
-  implicit lazy val arbitrarySpecialMentionNonEc: Arbitrary[SpecialMentionNonEc] =
+  implicit lazy val arbitrarySpecialMentionExportFromNI: Arbitrary[SpecialMentionExportFromNI] =
     Arbitrary {
       for {
         additionalInfoCoded <- countrySpecificCodeGen
-        exportCountry       <- stringsWithMaxLength(2)
         addInfo             <- stringsWithMaxLength(70)
-      } yield SpecialMentionNonEc(additionalInfoCoded, addInfo, exportCountry)
+      } yield SpecialMentionExportFromNI(additionalInfoCoded, addInfo)
     }
 
   implicit lazy val arbitrarySpecialMentionNoCountry: Arbitrary[SpecialMentionNoCountry] =
@@ -559,10 +558,12 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
 
   implicit lazy val arbitrarySpecialMention: Arbitrary[SpecialMention] =
     Arbitrary {
-      Gen.oneOf(arbitrary[SpecialMentionGuaranteeLiabilityAmount],
-                arbitrary[SpecialMentionEc],
-                arbitrary[SpecialMentionNonEc],
-                arbitrary[SpecialMentionNoCountry])
+      Gen.oneOf(
+        arbitrary[SpecialMentionGuaranteeLiabilityAmount],
+        arbitrary[SpecialMentionExportFromGB],
+        arbitrary[SpecialMentionExportFromNI],
+        arbitrary[SpecialMentionNoCountry]
+      )
     }
 
   implicit lazy val arbitraryBulkPackage: Arbitrary[BulkPackage] =

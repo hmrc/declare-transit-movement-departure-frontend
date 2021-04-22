@@ -88,50 +88,51 @@ class SpecialMentionSpec
       }
     }
 
-    "SpecialMentionEc" - {
+    "SpecialMentionExportFromGB" - {
 
-      "must serialise SpecialMentionEc to xml" in {
+      "must serialise SpecialMentionExportFromGB to xml" in {
 
-        forAll(arbitrary[SpecialMentionEc]) {
-          specialMentionEc =>
+        forAll(arbitrary[SpecialMentionExportFromGB]) {
+          specialMentionExportFromGB =>
             val expectedResult =
               <SPEMENMT2>
-                <AddInfMT21>{specialMentionEc.additionalInformation}</AddInfMT21>
-                <AddInfCodMT23>{specialMentionEc.additionalInformationCoded}</AddInfCodMT23>
-                <ExpFroECMT24>1</ExpFroECMT24>
+                <AddInfMT21>{specialMentionExportFromGB.additionalInformation}</AddInfMT21>
+                <AddInfCodMT23>{specialMentionExportFromGB.additionalInformationCoded}</AddInfCodMT23>
+                <ExpFroCouMT25>GB</ExpFroCouMT25>
               </SPEMENMT2>
 
-            specialMentionEc.toXml mustEqual expectedResult
+            specialMentionExportFromGB.toXml mustEqual expectedResult
         }
       }
 
-      "must deserialise when `export from EC` is true and code is country specific" in {
+      "must deserialise when ExpFroCouMT25 is GB and code is country specific" in {
 
-        forAll(arbitrary[SpecialMentionEc]) {
-          specialMentionEc =>
+        forAll(arbitrary[SpecialMentionExportFromGB]) {
+          specialMentionExportFromGB =>
             val xml =
               <SPEMENMT2>
-                <AddInfMT21>{specialMentionEc.additionalInformation}</AddInfMT21>
-                <AddInfCodMT23>{specialMentionEc.additionalInformationCoded}</AddInfCodMT23>
-                <ExpFroECMT24>1</ExpFroECMT24>
+                <AddInfMT21>{specialMentionExportFromGB.additionalInformation}</AddInfMT21>
+                <AddInfCodMT23>{specialMentionExportFromGB.additionalInformationCoded}</AddInfCodMT23>
+                <ExpFroCouMT25>GB</ExpFroCouMT25>
               </SPEMENMT2>
 
             val result = XmlReader.of[SpecialMention].read(xml).toOption.value
 
-            result mustBe specialMentionEc
+            result mustBe specialMentionExportFromGB
         }
       }
 
-      "must fail to deserialise when 'export from EC` is false" in {
-        forAll(arbitrary[SpecialMentionEc]) {
-          specialMentionEc =>
+      "must fail to deserialise when ExpFroCouMT25 is not GB" in {
+        forAll(arbitrary[SpecialMentionExportFromGB]) {
+          specialMentionExportFromGB =>
             val xml =
               <SPEMENMT2>
-                <AddInfMT21>{specialMentionEc.additionalInformation}</AddInfMT21>
-                <AddInfCodMT23>{specialMentionEc.additionalInformationCoded}</AddInfCodMT23>
+                <AddInfMT21>{specialMentionExportFromGB.additionalInformation}</AddInfMT21>
+                <AddInfCodMT23>{specialMentionExportFromGB.additionalInformationCoded}</AddInfCodMT23>
+                <ExpFroCouMT25>AB</ExpFroCouMT25>
               </SPEMENMT2>
 
-            val result = XmlReader.of[SpecialMentionEc].read(xml).toOption
+            val result = XmlReader.of[SpecialMentionExportFromGB].read(xml).toOption
 
             result mustBe None
         }
@@ -143,83 +144,84 @@ class SpecialMentionSpec
           <SPEMENMT2>
             <AddInfMT21>Some Info</AddInfMT21>
             <AddInfCodMT23>Invalid code</AddInfCodMT23>
-            <ExpFroECMT24>1</ExpFroECMT24>
+            <ExpFroCouMT25>GB</ExpFroCouMT25>
           </SPEMENMT2>
 
-        val result = XmlReader.of[SpecialMentionEc].read(xml).toOption
+        val result = XmlReader.of[SpecialMentionExportFromGB].read(xml).toOption
 
         result mustBe None
       }
     }
 
-    "SpecialMentionOutsideEc" - {
+    "SpecialMentionExportFromNI" - {
 
-      "must serialise SpecialMentionNonEc to xml" in {
+      "must serialise SpecialMentionExportFromNI to xml" in {
 
-        forAll(arbitrary[SpecialMentionNonEc]) {
-          specialMentionNonEc =>
+        forAll(arbitrary[SpecialMentionExportFromNI]) {
+          specialMentionExportFromNI =>
             val expectedResult =
               <SPEMENMT2>
-                <AddInfMT21>{specialMentionNonEc.additionalInformation}</AddInfMT21>
-                <AddInfCodMT23>{specialMentionNonEc.additionalInformationCoded}</AddInfCodMT23>
-                <ExpFroCouMT25>{specialMentionNonEc.exportFromCountry}</ExpFroCouMT25>
+                <AddInfMT21>{specialMentionExportFromNI.additionalInformation}</AddInfMT21>
+                <AddInfCodMT23>{specialMentionExportFromNI.additionalInformationCoded}</AddInfCodMT23>
+                <ExpFroECMT24>1</ExpFroECMT24>
               </SPEMENMT2>
 
-            specialMentionNonEc.toXml mustEqual expectedResult
+            specialMentionExportFromNI.toXml mustEqual expectedResult
         }
       }
 
-      "must deserialise when code is country specific" in {
+      "must deserialise when ExpFroECMT24 is 1 and code is country specific" in {
 
-        forAll(arbitrary[SpecialMentionNonEc]) {
-          specialMentionNonEc =>
+        forAll(arbitrary[SpecialMentionExportFromNI]) {
+          specialMentionExportFromNI =>
             val xml =
               <SPEMENMT2>
-                <AddInfMT21>{specialMentionNonEc.additionalInformation}</AddInfMT21>
-                <AddInfCodMT23>{specialMentionNonEc.additionalInformationCoded}</AddInfCodMT23>
-                <ExpFroCouMT25>{specialMentionNonEc.exportFromCountry}</ExpFroCouMT25>
+                <AddInfMT21>{specialMentionExportFromNI.additionalInformation}</AddInfMT21>
+                <AddInfCodMT23>{specialMentionExportFromNI.additionalInformationCoded}</AddInfCodMT23>
+                <ExpFroECMT24>1</ExpFroECMT24>
               </SPEMENMT2>
 
-            val result = XmlReader.of[SpecialMention].read(xml).toOption.value
+            val result = XmlReader.of[SpecialMentionExportFromNI].read(xml).toOption.value
 
-            result mustBe specialMentionNonEc
+            result mustBe specialMentionExportFromNI
         }
       }
 
-      "must fail to deserialise when 'exportFromCountry` is not defined" in {
-        forAll(arbitrary[SpecialMentionNoCountry]) {
-          specialMentionNonEc =>
+      "must fail to deserialise when ExpFroECMT24 is not defined" in {
+        forAll(arbitrary[SpecialMentionExportFromNI]) {
+          specialMentionExportFromNI =>
             val xml =
               <SPEMENMT2>
-                <AddInfMT21>{specialMentionNonEc.additionalInformation}</AddInfMT21>
-                <AddInfCodMT23>{specialMentionNonEc.additionalInformationCoded}</AddInfCodMT23>
+                <AddInfMT21>{specialMentionExportFromNI.additionalInformation}</AddInfMT21>
+                <AddInfCodMT23>{specialMentionExportFromNI.additionalInformationCoded}</AddInfCodMT23>
               </SPEMENMT2>
 
-            val result = XmlReader.of[SpecialMentionNonEc].read(xml).toOption
+            val result = XmlReader.of[SpecialMentionExportFromNI].read(xml).toOption
 
             result mustBe None
         }
       }
 
-      "must fail to deserialise when code is not country specific" in {
+      "must fail to deserialise when ExpFroECMT24 is not 1" in {
+        forAll(arbitrary[SpecialMentionExportFromNI]) {
+          specialMentionExportFromNI =>
+            val xml =
+              <SPEMENMT2>
+                <AddInfMT21>{specialMentionExportFromNI.additionalInformation}</AddInfMT21>
+                <AddInfCodMT23>{specialMentionExportFromNI.additionalInformationCoded}</AddInfCodMT23>
+                <ExpFroECMT24>2</ExpFroECMT24>
+              </SPEMENMT2>
 
-        val xml =
-          <SPEMENMT2>
-            <AddInfMT21>Something</AddInfMT21>
-            <AddInfCodMT23>Invalid code</AddInfCodMT23>
-            <ExpFroCouMT25>GB</ExpFroCouMT25>
-          </SPEMENMT2>
+            val result = XmlReader.of[SpecialMentionExportFromNI].read(xml).toOption
 
-        val result = XmlReader.of[SpecialMentionNonEc].read(xml).toOption
-
-        result mustBe None
+            result mustBe None
+        }
       }
-
     }
 
     "SpecialMentionNoCountry" - {
 
-      "must serialise SpecialMentionNonEc to xml" in {
+      "must serialise" in {
 
         forAll(arbitrary[SpecialMentionNoCountry]) {
           specialMentionNoCountry =>
@@ -233,7 +235,7 @@ class SpecialMentionSpec
         }
       }
 
-      "must deserialise when the code is not country specific" in {
+      "must deserialise" in {
         forAll(arbitrary[SpecialMentionNoCountry]) {
           specialMentionNoCountry =>
             val xml =
