@@ -454,7 +454,7 @@ trait JourneyModelGenerators {
       itemConsignee             <- Gen.some(arbitraryItemRequiredDetails(consigneeAddress).arbitrary)
       packages                  <- nonEmptyListOf[Packages](1)
       containers                <- if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) } else Gen.const(None)
-      specialMentions           <- Gen.some(nonEmptyListOf[SpecialMention](1))
+      specialMentions           <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
       producedDocuments         <- if (isDocumentTypeMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) } else Gen.const(None)
       methodOfPayment           <- arbitrary[String]
       commercialReferenceNumber <- arbitrary[String]
@@ -502,7 +502,7 @@ trait JourneyModelGenerators {
       itemConsignee             <- Gen.some(arbitraryItemRequiredDetails(consigneeAddress).arbitrary)
       packages                  <- nonEmptyListOf[Packages](1)
       containers                <- if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) } else Gen.const(None)
-      specialMentions           <- Gen.some(nonEmptyListOf[SpecialMention](1))
+      specialMentions           <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
       producedDocuments         <- if (documentTypeIsMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) } else Gen.const(None)
       previousReferences        <- Gen.some(nonEmptyListOf[PreviousReferences](1))
       itemSecurityTraderDetails <- if (documentTypeIsMandatory) { Gen.some(arbitrary[ItemsSecurityTraderDetails]) } else Gen.const(None)
@@ -591,12 +591,12 @@ trait JourneyModelGenerators {
       } yield ItemDetails(itemDescription, totalGrossMass, totalNetMass, commodityCode)
     }
 
-  implicit lazy val arbitrarySpecialMention: Arbitrary[SpecialMention] =
+  implicit lazy val arbitrarySpecialMention: Arbitrary[SpecialMentionDomain] =
     Arbitrary {
       for {
         specialMentionType <- nonEmptyString
         additionalInfo     <- nonEmptyString
-      } yield SpecialMention(specialMentionType, additionalInfo)
+      } yield SpecialMentionDomain(specialMentionType, additionalInfo)
     }
 
   implicit lazy val arbitraryProducedDocument: Arbitrary[ProducedDocument] =

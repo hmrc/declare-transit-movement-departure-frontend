@@ -20,13 +20,13 @@ import cats.implicits._
 import models.Index
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
 
-final case class SpecialMention(specialMention: String, additionalInfo: String)
+final case class SpecialMentionDomain(specialMentionType: String, additionalInfo: String)
 
-object SpecialMention {
+object SpecialMentionDomain {
 
-  def specialMentionsReader(index: Index, referenceIndex: Index): UserAnswersReader[SpecialMention] =
+  def specialMentionsReader(index: Index, referenceIndex: Index): UserAnswersReader[SpecialMentionDomain] =
     (
       SpecialMentionTypePage(index, referenceIndex).reader,
       SpecialMentionAdditionalInfoPage(index, referenceIndex).reader,
-    ).tupled.map((SpecialMention.apply _).tupled)
+    ).tupled.map((SpecialMentionDomain.apply _).tupled)
 }
