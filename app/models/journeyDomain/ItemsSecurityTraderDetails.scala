@@ -103,15 +103,20 @@ object ItemsSecurityTraderDetails {
             SecurityTraderDetails(name, address)
         }
 
-    val isEoriKnown = AddSecurityConsigneesEoriPage(index).reader.flatMap(
-      isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
-    )
+    val isIndicatorE = AddCircumstanceIndicatorPage.reader flatMap {
+      case true =>
+        CircumstanceIndicatorPage.optionalReader flatMap {
+          case Some("E") => useEori
+          case _         => useNameAndAddress
+        }
+      case _ => useNameAndAddress
+    }
 
     // TODO add matcher
     AddSafetyAndSecurityConsigneePage.reader
       .flatMap {
         _ =>
-          isEoriKnown.map(_.some)
+          isIndicatorE.map(_.some)
       }
   }
 
