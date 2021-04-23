@@ -69,7 +69,7 @@ object ProducedDocument {
     ).tupled.map((ProducedDocument.apply _).tupled)
 
   private def addExtraInformationAnswer(index: Index, referenceIndex: Index): UserAnswersReader[Option[String]] =
-    AddExtraInformationPage(index, referenceIndex).filterMandatoryDependent(identity) {
-      DocumentExtraInformationPage(index, referenceIndex).reader.map(Some(_))
+    AddExtraDocumentInformationPage(index, referenceIndex).filterOptionalDependent(identity) {
+      DocumentExtraInformationPage(index, referenceIndex).reader
     }
 }

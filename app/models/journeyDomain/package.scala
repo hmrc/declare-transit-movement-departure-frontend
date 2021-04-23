@@ -75,7 +75,7 @@ package object journeyDomain {
       */
 
     def filterOptionalDependent[B](predicate: A => Boolean)(next: UserAnswersReader[B]): UserAnswersReader[Option[B]] =
-      a.reader
+      a.reader(s"Reader for $a failed before reaching predicate")
         .flatMap {
           x =>
             if (predicate(x)) {
@@ -93,7 +93,7 @@ package object journeyDomain {
       */
 
     def filterMandatoryDependent[B](predicate: A => Boolean)(next: UserAnswersReader[B]): UserAnswersReader[B] =
-      a.reader
+      a.reader(s"Reader for $a failed before reaching predicate")
         .flatMap {
           x =>
             if (predicate(x)) {
@@ -106,17 +106,18 @@ package object journeyDomain {
         }
 
     def returnMandatoryDependent(predicate: A => Boolean): UserAnswersReader[A] =
-      a.reader.flatMap {
-        x =>
-          ReaderT[EitherType, UserAnswers, A](
-            _ =>
-              if (predicate(x)) {
-                Right(x)
-              } else {
-                Left(ReaderError(a))
-            }
-          )
-      }
+      a.reader(s"Reader for $a failed before reaching predicate")
+        .flatMap {
+          x =>
+            ReaderT[EitherType, UserAnswers, A](
+              _ =>
+                if (predicate(x)) {
+                  Right(x)
+                } else {
+                  Left(ReaderError(a))
+              }
+            )
+        }
   }
 
   implicit class GettableAsOptionalReaderOps[A](a: Gettable[A]) {
