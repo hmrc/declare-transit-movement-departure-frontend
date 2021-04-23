@@ -259,7 +259,7 @@ class DeclarationRequestService @Inject()(
 
     def nationalityAtDeparture(inlandMode: InlandMode): Option[String] =
       inlandMode match {
-        case InlandMode.NonSpecialMode(_, nationalityAtDeparture, _) => Some(nationalityAtDeparture.get.code)
+        case InlandMode.NonSpecialMode(_, nationalityAtDeparture, _) => nationalityAtDeparture.map(_.code)
         case _                                                       => None
       }
 
