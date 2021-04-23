@@ -35,82 +35,145 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
   "when the index in the request url" - {
 
-    "is invalid, and there is an incomplete loop, must redirect to the first page of that loop" in {
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(AddSecurityDetailsPage)(false)
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
+    "is more than the max number of loops" - {
 
-      val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(13), 0)
-      val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
-      val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+      "and there is an incomplete loop, must redirect to the first page of that loop" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(
-        controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, Index(index.position + 1), NormalMode).url)
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(9), 0)
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result) mustBe Some(
+          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, Index(1), NormalMode).url
+        )
+      }
+
+      "and all previous loop are complete, must redirect to Add Transit Office page" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(1)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(2)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(2)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(3)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(3)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(4)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(4)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(5)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(5)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(6)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(6)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(7)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(7)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(8)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(8)))("Test")
+
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(9), 0)
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result) mustBe Some(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(userAnswers.id, NormalMode).url)
+      }
+
     }
 
-    "is invalid, and all previous loop are complete, must redirect to Add Transit Office page" in {
+    "is less than the max number of loops" - {
 
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(AddSecurityDetailsPage)(false)
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(1)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(2)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(2)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(3)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(3)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(4)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(4)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(5)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(5)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(6)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(6)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(7)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(7)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(8)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(8)))("Test")
+      "for the first url index value of 1, and there is no previous data, must return OK" in {
+        val userAnswers = emptyUserAnswers
 
-      val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(13), 0)
-      val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
-      val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(0), 0)
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
 
-      status(result) mustBe SEE_OTHER
+        status(result) mustBe OK
+        contentAsString(result) mustBe "fake ok result value"
+      }
 
-      redirectLocation(result) mustBe Some(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(userAnswers.id, NormalMode).url)
-    }
+      "and for index value of 2, and there is no previous data, must redirect to the OfficeOfTransitCountryController for the first loop" in {
+        val userAnswers = emptyUserAnswers
 
-    "is valid, and the previous loops are all complete, must return OK" in {
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(AddSecurityDetailsPage)(false)
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(2), 0)
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
 
-      val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(1), 0)
-      val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
-      val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result) mustBe Some(
+          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, Index(0), NormalMode).url
+        )
+      }
 
-      status(result) mustBe OK
-      contentAsString(result) mustBe "fake ok result value"
-    }
+      "and the index is the next valid value, and the previous loops are all complete, must return OK" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
 
-    "is valid, and there is an incomplete loop, must redirect to the first page of that loop" in {
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(AddSecurityDetailsPage)(false)
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(1), 0)
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
 
-      val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(4), 0)
-      val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
-      val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+        status(result) mustBe OK
+        contentAsString(result) mustBe "fake ok result value"
+      }
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(
-        controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, Index(index.position + 1), NormalMode).url)
+      "and the index is not the next valid index, and the previous loops are all complete, must go to Add Transit Office page" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
+
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(4), 0)
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+
+        status(result) mustBe SEE_OTHER
+
+        redirectLocation(result) mustBe Some(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(userAnswers.id, NormalMode).url)
+      }
+
+      "and the previous loop is not complete, must redirect to the OfficeOfTransitCountryController for the incomplete loop" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
+
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(4), 0)
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result) mustBe Some(
+          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, Index(index.position + 1), NormalMode).url
+        )
+      }
+
+      "and the index is for the current incomplete loop, must return OK" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(false)
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AB"))
+
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(1), 0)
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+
+        status(result) mustBe OK
+        contentAsString(result) mustBe "fake ok result value"
+      }
+
     }
 
   }

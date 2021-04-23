@@ -35,39 +35,46 @@ class TraderDetailsOfficesOfTransitProvider @Inject()()(implicit ec: ExecutionCo
 class TraderDetailsOfficesOfTransitFilter(index: Index, pageId: Int)(implicit protected val executionContext: ExecutionContext)
     extends ActionFilter[DataRequest] {
 
+  // Maximumun number of offices of transit is 9, the value below is to account for zero ofset for indexes in Seq
+  private val MAX_NUMBER_OF_OFFICES_OF_TRANSIT = 8
+
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] = {
 
-    val numberOfOffices = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
-    Future(
-      if (index.position == 0) {
-        None
-      } else {
-        if (numberOfOffices > 0) {
-          request.userAnswers.get(AddAnotherTransitOfficePage(Index(numberOfOffices - 1))) match {
-            case Some(_) =>
-              (index.position == numberOfOffices, request.userAnswers.get(OfficeOfTransitCountryPage(Index(numberOfOffices - 1))), pageId == 0) match {
-                case (true, None, true) =>
-                  Option(Redirect(controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(request.userAnswers.id, index, NormalMode).url))
-                case (false, Some(_), true) =>
-                  Option(Redirect(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(request.userAnswers.id, NormalMode).url))
-                case (_) => None
-              }
-            case None =>
-              if (index.position == numberOfOffices - 1) {
-                None
-              } else {
-                Option(
-                  Redirect(
-                    controllers.routeDetails.routes.OfficeOfTransitCountryController
-                      .onPageLoad(request.userAnswers.id, Index(numberOfOffices - 1), NormalMode)
-                      .url))
-              }
-          }
-        } else {
-          Option(Redirect(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(request.userAnswers.id, NormalMode).url))
-        }
-      }
-    )
-  }
+    def redirectToAddTransitOfficeController =
+      Future.successful(
+        Option(Redirect(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(request.userAnswers.id, NormalMode).url))
+      )
 
+    def redirectToOfficeOfTransitCountryController(index: Index) =
+      Future.successful(
+        Option(
+          Redirect(
+            controllers.routeDetails.routes.OfficeOfTransitCountryController
+              .onPageLoad(request.userAnswers.id, index, NormalMode)
+              .url
+          )
+        )
+      )
+
+    val numberOfOffices = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
+
+    val lastloopComplete: Boolean = request.userAnswers.get(AddAnotherTransitOfficePage(Index(numberOfOffices - 1))).isDefined
+
+    if (index.position > MAX_NUMBER_OF_OFFICES_OF_TRANSIT) {
+      if (lastloopComplete) {
+        redirectToAddTransitOfficeController
+      } else {
+
+        redirectToOfficeOfTransitCountryController(Index(numberOfOffices - 1))
+      }
+    } else {
+      (lastloopComplete, index.position) match {
+        case (_, 0)                                 => Future.successful(None)
+        case (true, x) if x != numberOfOffices      => redirectToAddTransitOfficeController
+        case (_, _) if numberOfOffices == 0         => redirectToOfficeOfTransitCountryController(Index(0))
+        case (false, x) if x != numberOfOffices - 1 => redirectToOfficeOfTransitCountryController(Index(numberOfOffices - 1))
+        case _                                      => Future.successful(None)
+      }
+    }
+  }
 }
