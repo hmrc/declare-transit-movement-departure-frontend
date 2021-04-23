@@ -76,41 +76,31 @@ object SecurityTraderDetails {
       }
   }
 
-  def consigneeDetails2(index: Index): UserAnswersReader[SecurityTraderDetails] =
-    SecurityConsigneeEoriPage(index).reader
-      .map(EoriNumber(_))
-      .map(SecurityTraderDetails(_))
-
-  def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
-
-    val useEori = SecurityConsigneeEoriPage(index).reader.map(
-      eori => SecurityTraderDetails(EoriNumber(eori))
-    )
+  def consigneeDetails2(index: Index): UserAnswersReader[SecurityTraderDetails] = {
+    val useEori =
+      AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(identity) {
+        SecurityConsigneeEoriPage(index).reader
+          .map(EoriNumber(_))
+          .map(SecurityTraderDetails(_))
+      }
 
     val useNameAndAddress =
-      (
-        SecurityConsigneeNamePage(index).reader,
-        SecurityConsigneeAddressPage(index).reader
-      ).tupled
-        .map {
-          case (name, consigneeAddress) =>
-            val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
-            SecurityTraderDetails(name, address)
-        }
-
-    val isEoriKnown = AddSecurityConsigneesEoriPage(index).reader.flatMap(
-      isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
-    )
-
-    // TODO add matcher
-    AddSafetyAndSecurityConsigneePage.reader
-      .flatMap {
-        _ =>
-          isEoriKnown.map {
-            x =>
-              println(x.some)
-              x.some
+      AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(!_) {
+        (
+          SecurityConsigneeNamePage(index).reader,
+          SecurityConsigneeAddressPage(index).reader
+        ).tupled
+          .map {
+            case (name, consigneeAddress) =>
+              val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
+              SecurityTraderDetails(name, address)
           }
       }
+
+    useEori orElse useNameAndAddress
   }
+
+  def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] =
+    AddSafetyAndSecurityConsigneePage
+      .filterOptionalDependent(_ == true)(consigneeDetails2(index))
 }

@@ -19,14 +19,18 @@ package models.journeyDomain.addItems
 import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
 import generators.JourneyModelGenerators
 import models.EoriNumber
-import models.journeyDomain.EitherType
-import pages.addItems.traderSecurityDetails.{AddSecurityConsigneesEoriPage, SecurityConsigneeEoriPage}
+import models.domain.Address
+import models.ConsigneeAddress
+import models.reference._
+import models.journeyDomain.{EitherType, ReaderError}
+import pages.addItems.traderSecurityDetails._
 
 class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
 
   "Reading from User Answers" - {
 
     "Consignee" - {
+
       "when the eori number is known" in {
         val ua = emptyUserAnswers
           .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
@@ -38,6 +42,23 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
 
         result mustEqual expected
       }
+
+      "when the eori number is not known" in {
+        val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+
+        val ua = emptyUserAnswers
+          .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
+          .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
+          .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
+
+        val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+        val expected = SecurityPersonalInformation("testName", address)
+
+        val result = SecurityTraderDetails.consigneeDetails2(index).run(ua).right.value
+
+        result mustEqual expected
+      }
+
     }
   }
 
