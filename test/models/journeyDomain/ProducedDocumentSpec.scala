@@ -273,7 +273,7 @@ object ProducedDocumentSpec extends UserAnswersSpecHelper {
     val ua = statUserAnswers
       .unsafeSetVal(DocumentTypePage(index, referenceIndex))(document.documentType)
       .unsafeSetVal(DocumentReferencePage(index, referenceIndex))(document.documentReference)
-      .unsafeSetVal(AddExtraInformationPage(index, referenceIndex))(document.extraInformation.isDefined)
+      .unsafeSetVal(AddExtraDocumentInformationPage(index, referenceIndex))(document.extraInformation.isDefined)
 
     document.extraInformation.fold(ua) {
       info =>

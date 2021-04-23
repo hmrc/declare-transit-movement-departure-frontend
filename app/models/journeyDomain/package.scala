@@ -75,7 +75,7 @@ package object journeyDomain {
       */
 
     def filterOptionalDependent[B](predicate: A => Boolean)(next: UserAnswersReader[B]): UserAnswersReader[Option[B]] =
-      a.reader
+      a.reader(s"Reader for $a failed before reaching predicate")
         .flatMap {
           x =>
             if (predicate(x)) {
@@ -93,7 +93,7 @@ package object journeyDomain {
       */
 
     def filterMandatoryDependent[B](predicate: A => Boolean)(next: UserAnswersReader[B]): UserAnswersReader[B] =
-      a.reader
+      a.reader(s"Reader for $a failed before reaching predicate")
         .flatMap {
           x =>
             if (predicate(x)) {
