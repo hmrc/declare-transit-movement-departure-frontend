@@ -20,7 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.journeyDomain.UserAnswersReader
+import models.journeyDomain.{EitherType, UserAnswersReader}
 import models.{Index, UserAnswers}
 import org.scalatest.TryValues
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
@@ -41,8 +41,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
             .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(itemsSecurityTraderDetails.consignor.isDefined)
             .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(itemsSecurityTraderDetails.consignee.isDefined)
 
-          val result: ItemsSecurityTraderDetails =
-            UserAnswersReader[ItemsSecurityTraderDetails](ItemsSecurityTraderDetails.parser(index)).run(userAnswers).right.value
+          val result: ItemsSecurityTraderDetails = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
           result mustBe itemsSecurityTraderDetails
       }
@@ -59,8 +58,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
             .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(itemsSecurityTraderDetails.consignee.isDefined)
             .unsafeRemove(AddCommercialReferenceNumberAllItemsPage)
 
-          val result: ItemsSecurityTraderDetails =
-            UserAnswersReader[ItemsSecurityTraderDetails](ItemsSecurityTraderDetails.parser(index)).run(userAnswers).right.value
+          val result: ItemsSecurityTraderDetails = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
           result mustBe itemsSecurityTraderDetails
       }
@@ -79,8 +77,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
             .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(itemsSecurityTraderDetails.consignee.isDefined)
             .unsafeRemove(AddSafetyAndSecurityConsignorPage)
 
-          val result: ItemsSecurityTraderDetails =
-            UserAnswersReader[ItemsSecurityTraderDetails](ItemsSecurityTraderDetails.parser(index)).run(userAnswers).right.value
+          val result: ItemsSecurityTraderDetails = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
           result.consignor mustBe None
       }
@@ -97,8 +94,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
             .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(itemsSecurityTraderDetails.consignor.isDefined)
             .unsafeRemove(AddSafetyAndSecurityConsigneePage)
 
-          val result: ItemsSecurityTraderDetails =
-            UserAnswersReader[ItemsSecurityTraderDetails](ItemsSecurityTraderDetails.parser(index)).run(userAnswers).right.value
+          val result: ItemsSecurityTraderDetails = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
           result.consignee mustBe None
       }
@@ -138,7 +134,7 @@ object ItemsSecurityTraderDetailsSpec {
       })
 
 //     Set Consignee
-      .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+      .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false) //TODO: Move out to call site
       .unsafeSetPFn(AddSecurityConsigneesEoriPage(index))(itemsSecurityTraderDetails.consignee)({
         case Some(SecurityTraderEori(_)) => true
         case Some(_)                     => false

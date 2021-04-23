@@ -17,13 +17,11 @@
 package models.journeyDomain.addItems
 
 import cats.implicits._
-import models.domain.Address
-import models.journeyDomain.UserAnswersReader
-import models.{EoriNumber, Index}
+import models.Index
+import models.journeyDomain.addItems.SecurityTraderDetails._
+import models.journeyDomain.{UserAnswersReader, _}
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
-import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity._
-import models.journeyDomain._
 
 final case class ItemsSecurityTraderDetails(
   methodOfPayment: Option[String],
@@ -43,66 +41,6 @@ object ItemsSecurityTraderDetails {
       consignorDetails(index),
       consigneeDetails(index)
     ).tupled.map((ItemsSecurityTraderDetails.apply _).tupled)
-
-  private def consignorDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
-
-    val useEori =
-      SecurityConsignorEoriPage(index).reader.map(
-        eori => SecurityTraderDetails(EoriNumber(eori))
-      )
-
-    val useNameAndAddress =
-      (
-        SecurityConsignorNamePage(index).reader,
-        SecurityConsignorAddressPage(index).reader
-      ).tupled
-        .map {
-          case (name, consignorAddress) =>
-            val address = Address.prismAddressToConsignorAddress(consignorAddress)
-            SecurityTraderDetails(name, address)
-        }
-
-    val isEoriKnown =
-      AddSecurityConsignorsEoriPage(index).reader.flatMap(
-        isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
-      )
-
-    // TODO add matcher
-    AddSafetyAndSecurityConsignorPage.reader
-      .flatMap {
-        _ =>
-          isEoriKnown.map(_.some)
-      }
-  }
-
-  private def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
-
-    val useEori = SecurityConsigneeEoriPage(index).reader.map(
-      eori => SecurityTraderDetails(EoriNumber(eori))
-    )
-
-    val useNameAndAddress =
-      (
-        SecurityConsigneeNamePage(index).reader,
-        SecurityConsigneeAddressPage(index).reader
-      ).tupled
-        .map {
-          case (name, consigneeAddress) =>
-            val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
-            SecurityTraderDetails(name, address)
-        }
-
-    val isEoriKnown = AddSecurityConsigneesEoriPage(index).reader.flatMap(
-      isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
-    )
-
-    // TODO add matcher
-    AddSafetyAndSecurityConsigneePage.reader
-      .flatMap {
-        _ =>
-          isEoriKnown.map(_.some)
-      }
-  }
 
   private def methodOfPaymentPage(index: Index): UserAnswersReader[Option[String]] =
     AddTransportChargesPaymentMethodPage.filterOptionalDependent(_ == false) {

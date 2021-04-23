@@ -16,17 +16,101 @@
 
 package models.journeyDomain.addItems
 
-import models.EoriNumber
+import cats.data._
+import cats.implicits._
+import models.{EoriNumber, Index, UserAnswers}
 import models.domain.Address
+import models.journeyDomain._
+import pages.IsConsigneeEoriKnownPage
+import pages.addItems.traderSecurityDetails.{
+  AddSecurityConsigneesEoriPage,
+  AddSecurityConsignorsEoriPage,
+  SecurityConsigneeAddressPage,
+  SecurityConsigneeEoriPage,
+  SecurityConsigneeNamePage,
+  SecurityConsignorAddressPage,
+  SecurityConsignorEoriPage,
+  SecurityConsignorNamePage
+}
+import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
 sealed trait SecurityTraderDetails
+
+final case class SecurityPersonalInformation(name: String, address: Address) extends SecurityTraderDetails
+
+final case class SecurityTraderEori(eori: EoriNumber) extends SecurityTraderDetails
 
 object SecurityTraderDetails {
   def apply(eori: EoriNumber): SecurityTraderDetails = SecurityTraderEori(eori)
 
   def apply(name: String, address: Address): SecurityTraderDetails = SecurityPersonalInformation(name, address)
+
+  def consignorDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
+
+    val useEori =
+      SecurityConsignorEoriPage(index).reader.map(
+        eori => SecurityTraderDetails(EoriNumber(eori))
+      )
+
+    val useNameAndAddress =
+      (
+        SecurityConsignorNamePage(index).reader,
+        SecurityConsignorAddressPage(index).reader
+      ).tupled
+        .map {
+          case (name, consignorAddress) =>
+            val address = Address.prismAddressToConsignorAddress(consignorAddress)
+            SecurityTraderDetails(name, address)
+        }
+
+    val isEoriKnown: Kleisli[EitherType, UserAnswers, SecurityTraderDetails] =
+      AddSecurityConsignorsEoriPage(index).reader.flatMap(
+        isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
+      )
+
+    // TODO add matcher
+    AddSafetyAndSecurityConsignorPage.reader
+      .flatMap {
+        _ =>
+          isEoriKnown.map(_.some)
+      }
+  }
+
+  def consigneeDetails2(index: Index): UserAnswersReader[SecurityTraderDetails] =
+    SecurityConsigneeEoriPage(index).reader
+      .map(EoriNumber(_))
+      .map(SecurityTraderDetails(_))
+
+  def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
+
+    val useEori = SecurityConsigneeEoriPage(index).reader.map(
+      eori => SecurityTraderDetails(EoriNumber(eori))
+    )
+
+    val useNameAndAddress =
+      (
+        SecurityConsigneeNamePage(index).reader,
+        SecurityConsigneeAddressPage(index).reader
+      ).tupled
+        .map {
+          case (name, consigneeAddress) =>
+            val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
+            SecurityTraderDetails(name, address)
+        }
+
+    val isEoriKnown = AddSecurityConsigneesEoriPage(index).reader.flatMap(
+      isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
+    )
+
+    // TODO add matcher
+    AddSafetyAndSecurityConsigneePage.reader
+      .flatMap {
+        _ =>
+          isEoriKnown.map {
+            x =>
+              println(x.some)
+              x.some
+          }
+      }
+  }
 }
-
-final case class SecurityPersonalInformation(name: String, address: Address) extends SecurityTraderDetails
-
-final case class SecurityTraderEori(eori: EoriNumber) extends SecurityTraderDetails
