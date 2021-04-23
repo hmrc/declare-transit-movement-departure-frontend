@@ -19,7 +19,7 @@ package controllers.actions
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.requests.DataRequest
 import models.{Index, NormalMode}
-import pages.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
+import pages.AddAnotherTransitOfficePage
 import play.api.mvc.Results._
 import play.api.mvc.{ActionFilter, Result}
 
@@ -28,12 +28,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TraderDetailsOfficesOfTransitProvider @Inject()()(implicit ec: ExecutionContext) {
 
-  def apply(index: Index, pageId: Int): ActionFilter[DataRequest] = new TraderDetailsOfficesOfTransitFilter(index, pageId)
+  def apply(index: Index): ActionFilter[DataRequest] = new TraderDetailsOfficesOfTransitFilter(index)
 
 }
 
-class TraderDetailsOfficesOfTransitFilter(index: Index, pageId: Int)(implicit protected val executionContext: ExecutionContext)
-    extends ActionFilter[DataRequest] {
+class TraderDetailsOfficesOfTransitFilter(index: Index)(implicit protected val executionContext: ExecutionContext) extends ActionFilter[DataRequest] {
 
   // Maximumun number of offices of transit is 9, the value below is to account for zero ofset for indexes in Seq
   private val MAX_NUMBER_OF_OFFICES_OF_TRANSIT = 8
