@@ -202,7 +202,7 @@ object ItemSectionSpec extends UserAnswersSpecHelper {
     }
   }
 
-  private def setSpecialMentions(specialMentions: Option[NonEmptyList[SpecialMention]], itemIndex: Index)(startUserAnswers: UserAnswers): UserAnswers = {
+  private def setSpecialMentions(specialMentions: Option[NonEmptyList[SpecialMentionDomain]], itemIndex: Index)(startUserAnswers: UserAnswers): UserAnswers = {
     val smUserAnswers = startUserAnswers.unsafeSetVal(AddSpecialMentionPage(itemIndex))(specialMentions.isDefined)
     specialMentions.fold(smUserAnswers)(_.zipWithIndex.foldLeft(smUserAnswers) {
       case (userAnswers, (specialMention, index)) =>

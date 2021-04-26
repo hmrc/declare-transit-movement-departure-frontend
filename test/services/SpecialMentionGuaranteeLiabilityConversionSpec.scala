@@ -24,9 +24,9 @@ import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
 import org.scalacheck.Gen
 
-class GuaranteeLiabilityAmountConversionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with ModelGenerators {
+class SpecialMentionGuaranteeLiabilityConversionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with ModelGenerators {
 
-  "GuaranteeLiabilityAmountConversion" - {
+  "SpecialMentionGuaranteeLiabilityConversion" - {
 
     "must return SpecialMentionGuaranteeLiabilityAmount with EUR formatting " +
       "when given a GuaranteeReference " +
@@ -42,7 +42,7 @@ class GuaranteeLiabilityAmountConversionSpec extends SpecBase with GeneratorSpec
 
       val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
 
-      GuaranteeLiabilityAmountConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
+      SpecialMentionGuaranteeLiabilityConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
     }
 
     "must return SpecialMentionGuaranteeLiabilityAmount with GBP formatting " +
@@ -58,7 +58,7 @@ class GuaranteeLiabilityAmountConversionSpec extends SpecBase with GeneratorSpec
 
       val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
 
-      GuaranteeLiabilityAmountConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
+      SpecialMentionGuaranteeLiabilityConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
     }
 
     "must return multiple SpecialMentionGuaranteeLiabilityAmount if there are multiple valid GuaranteeReference" in {
@@ -75,7 +75,7 @@ class GuaranteeLiabilityAmountConversionSpec extends SpecBase with GeneratorSpec
       val expectedResult1 = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat1)
       val expectedResult2 = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat2)
 
-      GuaranteeLiabilityAmountConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult1, expectedResult2)
+      SpecialMentionGuaranteeLiabilityConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult1, expectedResult2)
     }
 
     "must return empty list when all GuaranteeReferences dont have a GuaranteeType of 0, 1, 2, 4 or 9" in {
@@ -88,7 +88,7 @@ class GuaranteeLiabilityAmountConversionSpec extends SpecBase with GeneratorSpec
             _.copy(guaranteeType = guaranteeType)
           }
 
-          GuaranteeLiabilityAmountConversion(updatedGuaranteeReferenceHead) mustBe Seq.empty
+          SpecialMentionGuaranteeLiabilityConversion(updatedGuaranteeReferenceHead) mustBe Seq.empty
       }
     }
   }

@@ -133,8 +133,8 @@ class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
 
   def specialMention(specialMention: SpecialMention): NodeSeq = specialMention match {
     case specialMention: SpecialMentionGuaranteeLiabilityAmount => specialMention.toXml
-    case specialMention: SpecialMentionEc                       => specialMention.toXml
-    case specialMention: SpecialMentionNonEc                    => specialMention.toXml
+    case specialMention: SpecialMentionExportFromGB             => specialMention.toXml
+    case specialMention: SpecialMentionExportFromNI             => specialMention.toXml
     case specialMention: SpecialMentionNoCountry                => specialMention.toXml
     case _                                                      => NodeSeq.Empty
   }

@@ -124,10 +124,12 @@ class DeclarationRequestService @Inject()(
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
             producedDocuments                = producedDocuments(itemSection.producedDocuments),
             specialMention = {
+              val specialMentions = itemSection.specialMentions.map(SpecialMentionConversion).getOrElse(Seq.empty)
+
               if (index == 0) {
-                GuaranteeLiabilityAmountConversion(guaranteeDetails)
+                SpecialMentionGuaranteeLiabilityConversion(guaranteeDetails) ++ specialMentions
               } else {
-                Seq.empty // TODO add users special mentions here and above
+                specialMentions
               }
             },
             traderConsignorGoodsItem  = traderConsignor(itemSection.consignor),
