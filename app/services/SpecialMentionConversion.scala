@@ -17,11 +17,12 @@
 package services
 
 import cats.data.NonEmptyList
-import models.Convert
-import models.journeyDomain.SpecialMentionDomain
+import models.{Convert, Index}
+import models.journeyDomain.{GuaranteeDetails, SpecialMentionDomain}
 import models.messages.goodsitem.{SpecialMention, SpecialMentionExportFromGB, SpecialMentionNoCountry}
 
-object SpecialMentionConversion extends Convert[NonEmptyList, Seq, SpecialMentionDomain, SpecialMention] {
+private[services] object SpecialMentionConversion extends Convert[NonEmptyList, Seq, SpecialMentionDomain, SpecialMention] {
+
   override def apply(specialMentionDomain: NonEmptyList[SpecialMentionDomain]): Seq[SpecialMention] =
     specialMentionDomain.map {
       case SpecialMentionDomain(specialMentionType, additionalInfo) =>
@@ -31,4 +32,19 @@ object SpecialMentionConversion extends Convert[NonEmptyList, Seq, SpecialMentio
           SpecialMentionNoCountry(specialMentionType, additionalInfo)
         }
     }.toList
+
+  def specialMentionWithGuaranteeLiability(
+    specialMentionDomain: Option[NonEmptyList[SpecialMentionDomain]],
+    guaranteeDetails: NonEmptyList[GuaranteeDetails],
+    index: Int
+  ): Seq[SpecialMention] = {
+
+    val specialMentions = specialMentionDomain.map(SpecialMentionConversion).getOrElse(Seq.empty)
+
+    if (index == 0) {
+      SpecialMentionGuaranteeLiabilityConversion(guaranteeDetails) ++ specialMentions
+    } else {
+      specialMentions
+    }
+  }
 }
