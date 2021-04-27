@@ -24,6 +24,7 @@ import models.ConsigneeAddress
 import models.reference._
 import models.journeyDomain.{EitherType, ReaderError}
 import pages.addItems.traderSecurityDetails._
+import pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage
 
 class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
 
@@ -33,20 +34,22 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
 
       "when the eori number is known" in {
         val ua = emptyUserAnswers
+          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
           .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
           .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
         val expected = SecurityTraderEori(EoriNumber("testEori"))
 
-        val result = SecurityTraderDetails.consigneeDetails2(index).run(ua).right.value
+        val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
-        result mustEqual expected
+        result.value mustEqual expected
       }
 
       "when the eori number is not known" in {
         val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
         val ua = emptyUserAnswers
+          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
           .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
           .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
           .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
@@ -54,9 +57,9 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
         val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
         val expected = SecurityPersonalInformation("testName", address)
 
-        val result = SecurityTraderDetails.consigneeDetails2(index).run(ua).right.value
+        val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
-        result mustEqual expected
+        result.value mustEqual expected
       }
 
     }

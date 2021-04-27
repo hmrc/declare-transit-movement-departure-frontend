@@ -18,21 +18,11 @@ package models.journeyDomain.addItems
 
 import cats.data._
 import cats.implicits._
-import models.{EoriNumber, Index, UserAnswers}
 import models.domain.Address
 import models.journeyDomain._
-import pages.IsConsigneeEoriKnownPage
-import pages.addItems.traderSecurityDetails.{
-  AddSecurityConsigneesEoriPage,
-  AddSecurityConsignorsEoriPage,
-  SecurityConsigneeAddressPage,
-  SecurityConsigneeEoriPage,
-  SecurityConsigneeNamePage,
-  SecurityConsignorAddressPage,
-  SecurityConsignorEoriPage,
-  SecurityConsignorNamePage
-}
-import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
+import models.{EoriNumber, Index, UserAnswers}
+import pages.addItems.traderSecurityDetails._
+import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage}
 
 sealed trait SecurityTraderDetails
 
@@ -76,7 +66,7 @@ object SecurityTraderDetails {
       }
   }
 
-  def consigneeDetails2(index: Index): UserAnswersReader[SecurityTraderDetails] = {
+  def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
     val useEori =
       AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(identity) {
         SecurityConsigneeEoriPage(index).reader
@@ -97,10 +87,8 @@ object SecurityTraderDetails {
           }
       }
 
-    useEori orElse useNameAndAddress
+    AddSafetyAndSecurityConsigneePage
+      .filterOptionalDependent(_ == true)(useEori orElse useNameAndAddress)
   }
 
-  def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] =
-    AddSafetyAndSecurityConsigneePage
-      .filterOptionalDependent(_ == true)(consigneeDetails2(index))
 }
