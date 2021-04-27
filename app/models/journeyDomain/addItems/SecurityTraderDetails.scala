@@ -23,7 +23,7 @@ import models.journeyDomain._
 import models.{EoriNumber, Index, UserAnswers}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
-import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage}
+import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
 sealed trait SecurityTraderDetails
 
@@ -68,14 +68,32 @@ object SecurityTraderDetails {
   }
 
   def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
-    val useEori =
-      AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(identity) {
+    val useEori: UserAnswersReader[SecurityTraderDetails] = {
+      val circumstanceIndicator: UserAnswersReader[SecurityTraderDetails] = AddCircumstanceIndicatorPage.filterMandatoryDependent(identity) {
+        CircumstanceIndicatorPage.reader flatMap {
+          case "E" =>
+            SecurityConsigneeEoriPage(index).reader
+              .map(EoriNumber(_))
+              .map(SecurityTraderDetails(_))
+
+          case _ =>
+            AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(identity) {
+              SecurityConsigneeEoriPage(index).reader
+                .map(EoriNumber(_))
+                .map(SecurityTraderDetails(_))
+            }
+        }
+      }
+
+      val emptyCircumstanceIndicator: UserAnswersReader[SecurityTraderDetails] = AddCircumstanceIndicatorPage.filterMandatoryDependent(!_) {
         SecurityConsigneeEoriPage(index).reader
           .map(EoriNumber(_))
           .map(SecurityTraderDetails(_))
       }
+      circumstanceIndicator orElse emptyCircumstanceIndicator
+    }
 
-    val useNameAndAddress =
+    val useNameAndAddress = {
       AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(!_) {
         (
           SecurityConsigneeNamePage(index).reader,
@@ -87,6 +105,7 @@ object SecurityTraderDetails {
               SecurityTraderDetails(name, address)
           }
       }
+    }
 
     AddSecurityDetailsPage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
@@ -96,5 +115,4 @@ object SecurityTraderDetails {
       }
       .map(_.flatten)
   }
-
 }

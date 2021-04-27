@@ -23,7 +23,7 @@ import models.domain.Address
 import models.reference._
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
-import pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage
+import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
 
 class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
 
@@ -54,41 +54,112 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
         }
 
         "when there is not a consignee for all items" - {
-          "when the eori is known then the security consignee is read" in {
-            val ua = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
-              .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
-              .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
+          "when the eori is known" - {
+            "and user has select 'Yes' for add circumstanceIndicator and did not select E for circumstanceIndicatorPage then the security consignee is read" in {
+              val ua = emptyUserAnswers
+                .unsafeSetVal(AddSecurityDetailsPage)(true)
+                .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+                .unsafeSetVal(CircumstanceIndicatorPage)("A")
+                .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+                .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
+                .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
-            val expected = SecurityTraderEori(EoriNumber("testEori"))
+              val expected = SecurityTraderEori(EoriNumber("testEori"))
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
-            val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              result.value mustEqual expected
+            }
 
-            result.value mustEqual expected
+            "and user has select 'Yes' for add circumstanceIndicator and did select E for circumstanceIndicatorPage then the security consignee is read" in {
+              val ua = emptyUserAnswers
+                .unsafeSetVal(AddSecurityDetailsPage)(true)
+                .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+                .unsafeSetVal(CircumstanceIndicatorPage)("E")
+                .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+                .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
+
+              val expected = SecurityTraderEori(EoriNumber("testEori"))
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+
+              result.value mustEqual expected
+            }
+
+            "and user has select 'No' for add circumstanceIndicator then the security consignee is read" in {
+              val ua = emptyUserAnswers
+                .unsafeSetVal(AddSecurityDetailsPage)(true)
+                .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+                .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+                .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
+                .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
+
+              val expected = SecurityTraderEori(EoriNumber("testEori"))
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+
+              result.value mustEqual expected
+            }
           }
 
-          "when the eori is not known then security consignee is read" in {
-            val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+          "when the eori is not known" - {
 
-            val ua = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
-              .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
-              .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
-              .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
+            "when the user selects 'No' for add circumstance indicator page then the consignee is read" in {
+              val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
-            val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
-            val expected = SecurityPersonalInformation("testName", address)
+              val ua = emptyUserAnswers
+                .unsafeSetVal(AddSecurityDetailsPage)(true)
+                .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+                .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+                .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
+                .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
+                .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
 
-            val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+              val expected = SecurityPersonalInformation("testName", address)
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
-            result.value mustEqual expected
+              result.value mustEqual expected
+            }
+
+            "when the user selects 'Yes' for add circumstance indicator page but does  not select 'E' for circumstance indicator then the consignee is read" in {
+
+              val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+
+              val ua = emptyUserAnswers
+                .unsafeSetVal(AddSecurityDetailsPage)(true)
+                .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+                .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+                .unsafeSetVal(CircumstanceIndicatorPage)("A")
+                .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
+                .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
+                .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
+
+              val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+              val expected = SecurityPersonalInformation("testName", address)
+
+              val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+
+              result.value mustEqual expected
+            }
+
+            "when the user selects 'Yes' for add circumstance indicator page and does select 'E' for circumstance indicator then the consignee is read" in {
+
+              val ua = emptyUserAnswers
+                .unsafeSetVal(AddSecurityDetailsPage)(true)
+                .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+                .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+                .unsafeSetVal(CircumstanceIndicatorPage)("E")
+                .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
+                .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
+
+              val expected = SecurityTraderEori(EoriNumber("testEori"))
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+
+              result.value mustEqual expected
+            }
+
           }
-
         }
-      }
 
+      }
     }
   }
 }
