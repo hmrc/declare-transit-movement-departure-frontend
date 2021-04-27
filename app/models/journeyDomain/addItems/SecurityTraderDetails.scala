@@ -21,6 +21,7 @@ import cats.implicits._
 import models.domain.Address
 import models.journeyDomain._
 import models.{EoriNumber, Index, UserAnswers}
+import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage}
 
@@ -87,8 +88,13 @@ object SecurityTraderDetails {
           }
       }
 
-    AddSafetyAndSecurityConsigneePage
-      .filterOptionalDependent(_ == true)(useEori orElse useNameAndAddress)
+    AddSecurityDetailsPage
+      .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
+
+        AddSafetyAndSecurityConsigneePage
+          .filterOptionalDependent(_ == true)(useEori orElse useNameAndAddress)
+      }
+      .map(_.flatten)
   }
 
 }

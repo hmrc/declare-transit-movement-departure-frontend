@@ -18,11 +18,10 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
 import generators.JourneyModelGenerators
-import models.EoriNumber
+import models.{ConsigneeAddress, EoriNumber}
 import models.domain.Address
-import models.ConsigneeAddress
 import models.reference._
-import models.journeyDomain.{EitherType, ReaderError}
+import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage
 
@@ -32,37 +31,64 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
 
     "Consignee" - {
 
-      "when the eori number is known" in {
-        val ua = emptyUserAnswers
-          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
-          .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
-          .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
+      "when add security details is 'No' then consignee should be None" in {
 
-        val expected = SecurityTraderEori(EoriNumber("testEori"))
+        val ua = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(false)
 
         val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
-        result.value mustEqual expected
+        result mustEqual None
       }
 
-      "when the eori number is not known" in {
-        val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+      "when add security details is 'Yes'" - {
+        "when the consignee for all items is 'Yes' should be None" in {
 
-        val ua = emptyUserAnswers
-          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
-          .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
-          .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
-          .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
+          val ua = emptyUserAnswers
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
 
-        val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
-        val expected = SecurityPersonalInformation("testName", address)
+          val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
-        val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+          result mustEqual None
+        }
 
-        result.value mustEqual expected
+        "when there is not a consignee for all items" - {
+          "when the eori is known then the security consignee is read" in {
+            val ua = emptyUserAnswers
+              .unsafeSetVal(AddSecurityDetailsPage)(true)
+              .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+              .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
+              .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
+
+            val expected = SecurityTraderEori(EoriNumber("testEori"))
+
+            val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+
+            result.value mustEqual expected
+          }
+
+          "when the eori is not known then security consignee is read" in {
+            val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+
+            val ua = emptyUserAnswers
+              .unsafeSetVal(AddSecurityDetailsPage)(true)
+              .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+              .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
+              .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
+              .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
+
+            val address = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+            val expected = SecurityPersonalInformation("testName", address)
+
+            val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+
+            result.value mustEqual expected
+          }
+
+        }
       }
 
     }
   }
-
 }
