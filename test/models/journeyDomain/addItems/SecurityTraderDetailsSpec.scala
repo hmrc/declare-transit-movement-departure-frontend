@@ -78,7 +78,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
               .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
               .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
 
-            val address = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+            val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
             val expected = SecurityPersonalInformation("testName", address)
 
             val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value

@@ -92,7 +92,7 @@ object SecurityTraderDetails {
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
 
         AddSafetyAndSecurityConsigneePage
-          .filterOptionalDependent(_ == true)(useEori orElse useNameAndAddress)
+          .filterOptionalDependent(_ == false)(useEori orElse useNameAndAddress)
       }
       .map(_.flatten)
   }
