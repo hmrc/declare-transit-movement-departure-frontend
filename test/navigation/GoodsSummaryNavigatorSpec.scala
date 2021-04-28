@@ -17,7 +17,6 @@
 package navigation
 
 import java.time.LocalDate
-
 import base.SpecBase
 import controllers.goodsSummary.{routes => goodsSummaryRoute}
 import generators.Generators
@@ -28,6 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
+import pages.movementDetails.PreLodgeDeclarationPage
 import queries.SealsQuery
 
 class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -82,14 +82,29 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from Loading Place page to AddCustomsApprovedLocationPage when on Normal journey" in {
+      "must go from Loading Place page to AddCustomsApprovedLocationPage when on Normal journey and selected No for PreLodgeDeclaration" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.set(ProcedureTypePage, Normal).toOption.value
+            val updatedAnswers = answers
+              .set(ProcedureTypePage, Normal).toOption.value
+              .set(PreLodgeDeclarationPage, false).toOption.value
 
             navigator
               .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
               .mustBe(goodsSummaryRoute.AddCustomsApprovedLocationController.onPageLoad(updatedAnswers.id, NormalMode))
+        }
+      }
+
+      "must go from Loading Place page to Add Seals Page when on Normal journey and selected Yes for PreLodgeDeclaration" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(ProcedureTypePage, Normal).toOption.value
+              .set(PreLodgeDeclarationPage, true).toOption.value
+
+            navigator
+              .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
+              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
         }
       }
 
@@ -126,16 +141,33 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from TotalGrossMassPage to AddCustomsApprovedLocation page when previously answered No to add Safety And Security Details on a Normal route" in {
+      "must go from TotalGrossMassPage to AddCustomsApprovedLocation page when previously " +
+        "answered No to add Safety And Security Details and answered No to PreLodgeDeclaration on a Normal route" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, false).toOption.value
+            .set(AddSecurityDetailsPage, false).toOption.value
+              .set(PreLodgeDeclarationPage, false).toOption.value
               .set(ProcedureTypePage, Normal).toOption.value
 
             navigator
               .nextPage(TotalGrossMassPage, NormalMode, updatedAnswers)
               .mustBe(goodsSummaryRoute.AddCustomsApprovedLocationController.onPageLoad(updatedAnswers.id, NormalMode))
+        }
+      }
+
+      "must go from TotalGrossMassPage to Add Seals page when previously" +
+        " answered No to add Safety And Security Details and answered Yes to PreLodgeDeclaration on a Normal route" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSecurityDetailsPage, false).toOption.value
+              .set(PreLodgeDeclarationPage, true).toOption.value
+              .set(ProcedureTypePage, Normal).toOption.value
+
+            navigator
+              .nextPage(TotalGrossMassPage, NormalMode, updatedAnswers)
+              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
         }
       }
 

@@ -18,12 +18,14 @@ package navigation
 
 import controllers.goodsSummary.routes
 import derivable.DeriveNumberOfSeals
+
 import javax.inject.{Inject, Singleton}
 import models.ProcedureType.{Normal, Simplified}
 import models._
 import pages._
 import play.api.mvc.Call
 import controllers.LoadingPlaceController
+import pages.movementDetails.PreLodgeDeclarationPage
 
 @Singleton
 class GoodsSummaryNavigator @Inject()() extends Navigator {
@@ -90,16 +92,18 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     }
 
   def totalGrossMassRoute(ua: UserAnswers): Call =
-    (ua.get(ProcedureTypePage), ua.get(AddSecurityDetailsPage)) match {
-      case (_, Some(true) )     => controllers.routes.LoadingPlaceController.onPageLoad(ua.id, NormalMode)
-      case (Some(Normal), _) =>  routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
-      case (Some(Simplified), _) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
+    (ua.get(ProcedureTypePage), ua.get(AddSecurityDetailsPage), ua.get(PreLodgeDeclarationPage)) match {
+      case (_, Some(true),_ )     => controllers.routes.LoadingPlaceController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), _, Some(false)) =>  routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), _, Some(true)) =>  routes.AddSealsController.onPageLoad(ua.id, NormalMode)
+      case (Some(Simplified), _, _) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
     }
 
   def loadingPlaceRoute(ua: UserAnswers): Call =
-    ua.get(ProcedureTypePage) match {
-      case Some(Normal)     => routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
-      case Some(Simplified) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
+    (ua.get(ProcedureTypePage), ua.get(PreLodgeDeclarationPage)) match {
+      case (Some(Normal), Some(false))     => routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), Some(true))     => routes.AddSealsController.onPageLoad(ua.id, NormalMode)
+      case (Some(Simplified),_) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
     }
 
   def addCustomsApprovedLocationRoute(ua: UserAnswers, mode: Mode): Call =
