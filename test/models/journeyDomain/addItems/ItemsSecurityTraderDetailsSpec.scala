@@ -31,7 +31,7 @@ import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndS
 class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
 
   "ItemsSecurityDetails" - {
-    "When user selects 'No' to add Safety and Security then all fields are empty" in {
+    "When user selects 'No' to add Safety and Security then item security trader details is not defined" in {
       val userAnswers = emptyUserAnswers
         .unsafeSetVal(AddSecurityDetailsPage)(false)
 
@@ -40,30 +40,26 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       result mustBe None
     }
 
-    "When user selects 'Yes' to Add Safety and Security" in {
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(AddSecurityDetailsPage)(true)
-        .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-        .unsafeSetVal(TransportChargesPage(index))("4.00")
-        .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
-        .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
-        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
-        .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(true)
-        .unsafeSetVal(SecurityConsignorEoriPage(index))("Test")
-        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
-        .unsafeSetVal(SecurityConsigneeEoriPage(index))("Test")
-        .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+    "When user selects 'Yes' to Add Safety and Security" - {
 
-      println("*************" + ItemsSecurityTraderDetails.parser(index).run(userAnswers))
+      "then item security details will be defined by user answers using no optional data" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
+          .unsafeSetVal(TransportChargesPage(index))("4.00")
+          .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
+          .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
+          .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
 
-      val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
+        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
-      val expected =
-        ItemsSecurityTraderDetails(Some("4.00"), Some("111111"), None, Some(SecurityTraderEori(EoriNumber("Test"))), None)
-      result.value mustBe expected
+        val expected =
+          ItemsSecurityTraderDetails(Some("4.00"), Some("111111"), None, None, None)
+        result.value mustBe expected
+      }
     }
   }
-
 }
 
 object ItemsSecurityTraderDetailsSpec {

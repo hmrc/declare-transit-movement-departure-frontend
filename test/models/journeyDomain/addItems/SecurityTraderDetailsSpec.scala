@@ -18,12 +18,16 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
 import generators.JourneyModelGenerators
-import models.{ConsigneeAddress, EoriNumber}
+import models.{ConsigneeAddress, ConsignorAddress, EoriNumber}
 import models.domain.Address
+import models.journeyDomain.EitherType
 import models.reference._
+import org.scalactic.source
+import org.scalatest.Resources
+import org.scalatest.exceptions.{StackDepthException, TestFailedException}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
-import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
+import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
 class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
 
@@ -161,5 +165,71 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
 
       }
     }
+
+    "Consignor" - {
+
+      "when add security details is 'No' then consignor should be None" in {
+
+        val ua = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(false)
+
+        val result = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
+
+        result mustBe None
+      }
+
+      "when add security details is 'Yes'" - {
+        "when the consignor for all items is 'Yes' should be None" in {
+
+          val ua = emptyUserAnswers
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+
+          val result = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
+
+          result mustBe None
+        }
+
+        "when there is not a consignor for all items" - {
+          "when the eori is known" in {
+
+            val ua = emptyUserAnswers
+              .unsafeSetVal(AddSecurityDetailsPage)(true)
+              .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(true)
+              .unsafeSetVal(SecurityConsignorEoriPage(index))("testEori")
+              .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
+
+            val expected = SecurityTraderEori(EoriNumber("testEori"))
+            val result   = SecurityTraderDetails.consignorDetails(index).run(ua).isSuccessful
+
+            result.value mustEqual expected
+          }
+
+        }
+
+        "when the eori is not known" - {
+
+          "when the user selects 'No' for add circumstance indicator page then the consignee is read" in {
+            val consigneeAddress = ConsignorAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+
+            val ua = emptyUserAnswers
+              .unsafeSetVal(AddSecurityDetailsPage)(true)
+              .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
+              .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
+              .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
+              .unsafeSetVal(SecurityConsignorAddressPage(index))(consigneeAddress)
+
+            val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+            val expected = SecurityPersonalInformation("testName", address)
+            val result   = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
+
+            result.value mustEqual expected
+          }
+
+        }
+      }
+
+    }
   }
+
 }

@@ -39,32 +39,41 @@ object SecurityTraderDetails {
   def consignorDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
 
     val useEori =
-      SecurityConsignorEoriPage(index).reader.map(
-        eori => SecurityTraderDetails(EoriNumber(eori))
-      )
-
-    val useNameAndAddress =
-      (
-        SecurityConsignorNamePage(index).reader,
-        SecurityConsignorAddressPage(index).reader
-      ).tupled
-        .map {
-          case (name, consignorAddress) =>
-            val address = Address.prismAddressToConsignorAddress(consignorAddress)
-            SecurityTraderDetails(name, address)
-        }
-
-    val isEoriKnown: Kleisli[EitherType, UserAnswers, SecurityTraderDetails] =
-      AddSecurityConsignorsEoriPage(index).reader.flatMap(
-        isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
-      )
-
-    // TODO add matcher
-    AddSafetyAndSecurityConsignorPage.reader
-      .flatMap {
-        _ =>
-          isEoriKnown.map(_.some)
+      AddSecurityConsignorsEoriPage(index).filterMandatoryDependent(identity) {
+        SecurityConsignorEoriPage(index).reader.map(
+          eori => SecurityTraderDetails(EoriNumber(eori))
+        )
       }
+    val useNameAndAddress =
+      AddSecurityConsignorsEoriPage(index).filterMandatoryDependent(!_) {
+
+        (
+          SecurityConsignorNamePage(index).reader,
+          SecurityConsignorAddressPage(index).reader
+        ).tupled
+          .map {
+            case (name, consignorAddress) =>
+              val address = Address.prismAddressToConsignorAddress(consignorAddress)
+              SecurityTraderDetails(name, address)
+          }
+      }
+//    val isEoriKnown: Kleisli[EitherType, UserAnswers, SecurityTraderDetails] =
+//      AddSecurityConsignorsEoriPage(index).reader.flatMap(
+//        isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
+//      )
+
+    AddSecurityDetailsPage
+      .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
+        AddSafetyAndSecurityConsignorPage
+          .filterOptionalDependent(_ == false)(useEori orElse useNameAndAddress)
+      }
+      .map(_.flatten)
+    // TODO add matcher
+//    AddSafetyAndSecurityConsignorPage.reader
+//      .flatMap {
+//        _ =>
+//          isEoriKnown.map(_.some)
+//      }
   }
 
   def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
@@ -109,7 +118,6 @@ object SecurityTraderDetails {
 
     AddSecurityDetailsPage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
-
         AddSafetyAndSecurityConsigneePage
           .filterOptionalDependent(_ == false)(useEori orElse useNameAndAddress)
       }
