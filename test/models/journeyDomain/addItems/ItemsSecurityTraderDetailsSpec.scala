@@ -21,85 +21,49 @@ import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.{EitherType, UserAnswersReader}
-import models.{Index, UserAnswers}
+import models.{EoriNumber, Index, UserAnswers}
 import org.scalatest.TryValues
+import pages.AddSecurityDetailsPage
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, _}
 
 class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
 
-  "ItemsSecurityTraderDetails can be parsed within user answers" - {
-    "when the minimal user answers has been answered" in {
+  "ItemsSecurityDetails" - {
+    "When user selects 'No' to add Safety and Security then all fields are empty" in {
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(AddSecurityDetailsPage)(false)
 
-      forAll(arb[UserAnswers], arb[ItemsSecurityTraderDetails]) {
-        (baseUserAnswers, itemsSecurityTraderDetails) =>
-          val userAnswers = ItemsSecurityTraderDetailsSpec
-            .setItemsSecurityTraderDetails(itemsSecurityTraderDetails, index)(baseUserAnswers)
-            .unsafeSetVal(AddTransportChargesPaymentMethodPage)(itemsSecurityTraderDetails.methodOfPayment.isEmpty)
-            .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(itemsSecurityTraderDetails.commercialReferenceNumber.isEmpty)
-            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(itemsSecurityTraderDetails.consignor.isDefined)
-            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(itemsSecurityTraderDetails.consignee.isDefined)
+      val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
-          val result: ItemsSecurityTraderDetails = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
-
-          result mustBe itemsSecurityTraderDetails
-      }
+      result mustBe None
     }
 
-    "when the minimal user answers has been answered and AddCommercialReferenceNumberAllItems is not answered" in {
+    "When user selects 'Yes' to Add Safety and Security" in {
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(AddSecurityDetailsPage)(true)
+        .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
+        .unsafeSetVal(TransportChargesPage(index))("4.00")
+        .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
+        .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
+        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+        .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(true)
+        .unsafeSetVal(SecurityConsignorEoriPage(index))("Test")
+        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+        .unsafeSetVal(SecurityConsigneeEoriPage(index))("Test")
+        .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
 
-      forAll(arb[UserAnswers], arb[ItemsSecurityTraderDetails]) {
-        (baseUserAnswers, itemsSecurityTraderDetails) =>
-          val userAnswers = ItemsSecurityTraderDetailsSpec
-            .setItemsSecurityTraderDetails(itemsSecurityTraderDetails, index)(baseUserAnswers)
-            .unsafeSetVal(AddTransportChargesPaymentMethodPage)(itemsSecurityTraderDetails.methodOfPayment.isEmpty)
-            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(itemsSecurityTraderDetails.consignor.isDefined)
-            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(itemsSecurityTraderDetails.consignee.isDefined)
-            .unsafeRemove(AddCommercialReferenceNumberAllItemsPage)
+      println("*************" + ItemsSecurityTraderDetails.parser(index).run(userAnswers))
 
-          val result: ItemsSecurityTraderDetails = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
+      val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
-          result mustBe itemsSecurityTraderDetails
-      }
+      val expected =
+        ItemsSecurityTraderDetails(Some("4.00"), Some("111111"), None, Some(SecurityTraderEori(EoriNumber("Test"))), None)
+      result.value mustBe expected
     }
   }
 
-  "ItemsSecurityDetails cannot be parsed within user answers" ignore {
-    "when the safety and security consignor page cannot be read" in {
-
-      forAll(arb[UserAnswers], arb[ItemsSecurityTraderDetails]) {
-        (baseUserAnswers, itemsSecurityTraderDetails) =>
-          val userAnswers = ItemsSecurityTraderDetailsSpec
-            .setItemsSecurityTraderDetails(itemsSecurityTraderDetails, index)(baseUserAnswers)
-            .unsafeSetVal(AddTransportChargesPaymentMethodPage)(itemsSecurityTraderDetails.methodOfPayment.isEmpty)
-            .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(itemsSecurityTraderDetails.commercialReferenceNumber.isEmpty)
-            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(itemsSecurityTraderDetails.consignee.isDefined)
-            .unsafeRemove(AddSafetyAndSecurityConsignorPage)
-
-          val result: ItemsSecurityTraderDetails = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
-
-          result.consignor mustBe None
-      }
-    }
-
-    "when the safety and security consignee page cannot be read" in {
-
-      forAll(arb[UserAnswers], arb[ItemsSecurityTraderDetails]) {
-        (baseUserAnswers, itemsSecurityTraderDetails) =>
-          val userAnswers = ItemsSecurityTraderDetailsSpec
-            .setItemsSecurityTraderDetails(itemsSecurityTraderDetails, index)(baseUserAnswers)
-            .unsafeSetVal(AddTransportChargesPaymentMethodPage)(itemsSecurityTraderDetails.methodOfPayment.isEmpty)
-            .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(itemsSecurityTraderDetails.commercialReferenceNumber.isEmpty)
-            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(itemsSecurityTraderDetails.consignor.isDefined)
-            .unsafeRemove(AddSafetyAndSecurityConsigneePage)
-
-          val result: ItemsSecurityTraderDetails = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
-
-          result.consignee mustBe None
-      }
-    }
-  }
 }
 
 object ItemsSecurityTraderDetailsSpec {
@@ -109,16 +73,14 @@ object ItemsSecurityTraderDetailsSpec {
     // Set method of payment
       .unsafeSetOpt(TransportChargesPage(index))(itemsSecurityTraderDetails.methodOfPayment)
 
-      // Set commerical reference number
+      // Set commercial reference number
       .unsafeSetOpt(CommercialReferenceNumberPage(index))(itemsSecurityTraderDetails.commercialReferenceNumber)
 
       // Set Dangerous goods
-      .unsafeSetVal(AddDangerousGoodsCodePage(index))(itemsSecurityTraderDetails.dangerousGoodsCode.isDefined)
+      .unsafeSetVal(AddDangerousGoodsCodePage(index))(itemsSecurityTraderDetails.dangerousGoodsCode.contains(true))
       .unsafeSetOpt(DangerousGoodsCodePage(index))(itemsSecurityTraderDetails.dangerousGoodsCode)
 
       // Set Consignor
-      .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
-      .unsafeSetOpt(TransportChargesPage(index))(itemsSecurityTraderDetails.methodOfPayment)
       .unsafeSetPFn(AddSecurityConsignorsEoriPage(index))(itemsSecurityTraderDetails.consignor)({
         case Some(SecurityTraderEori(_)) => true
         case Some(_)                     => false
@@ -133,8 +95,7 @@ object ItemsSecurityTraderDetailsSpec {
         case Some(SecurityPersonalInformation(_, address)) => Address.prismAddressToConsignorAddress.getOption(address).get
       })
 
-//     Set Consignee
-      .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false) //TODO: Move out to call site
+      //     Set Consignee
       .unsafeSetPFn(AddSecurityConsigneesEoriPage(index))(itemsSecurityTraderDetails.consignee)({
         case Some(SecurityTraderEori(_)) => true
         case Some(_)                     => false

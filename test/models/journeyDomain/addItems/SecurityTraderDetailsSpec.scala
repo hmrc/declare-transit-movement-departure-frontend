@@ -38,7 +38,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
 
         val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
-        result mustEqual None
+        result mustBe None
       }
 
       "when add security details is 'Yes'" - {
@@ -50,7 +50,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
 
           val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
-          result mustEqual None
+          result mustBe None
         }
 
         "when there is not a consignee for all items" - {

@@ -20,6 +20,7 @@ import cats.implicits._
 import models.Index
 import models.journeyDomain.addItems.SecurityTraderDetails._
 import models.journeyDomain.{UserAnswersReader, _}
+import pages.AddSecurityDetailsPage
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.safetyAndSecurity._
 
@@ -33,14 +34,16 @@ final case class ItemsSecurityTraderDetails(
 
 object ItemsSecurityTraderDetails {
 
-  def parser(index: Index): UserAnswersReader[ItemsSecurityTraderDetails] =
-    (
-      methodOfPaymentPage(index),
-      commercialReferenceNumberPage(index),
-      dangerousGoodsCodePage(index),
-      consignorDetails(index),
-      consigneeDetails(index)
-    ).tupled.map((ItemsSecurityTraderDetails.apply _).tupled)
+  def parser(index: Index): UserAnswersReader[Option[ItemsSecurityTraderDetails]] =
+    AddSecurityDetailsPage.filterOptionalDependent(identity) {
+      (
+        methodOfPaymentPage(index),
+        commercialReferenceNumberPage(index),
+        dangerousGoodsCodePage(index),
+        consignorDetails(index),
+        consigneeDetails(index)
+      ).tupled.map((ItemsSecurityTraderDetails.apply _).tupled)
+    }
 
   private def methodOfPaymentPage(index: Index): UserAnswersReader[Option[String]] =
     AddTransportChargesPaymentMethodPage.filterOptionalDependent(_ == false) {
