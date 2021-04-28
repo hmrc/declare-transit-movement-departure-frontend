@@ -20,8 +20,6 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
 import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
-
-import javax.inject.Inject
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode, NormalMode}
 import navigation.Navigator
@@ -38,6 +36,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.AddItemsCheckYourAnswersHelper
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherPreviousAdministrativeReferenceController @Inject()(

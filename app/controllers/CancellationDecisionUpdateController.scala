@@ -18,9 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions._
-
-import javax.inject.Inject
-import models.{CancellationDecisionUpdateMessage, DepartureId, LocalReferenceNumber}
+import models.{CancellationDecisionUpdateMessage, DepartureId}
 import pages.TechnicalDifficultiesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -34,7 +32,8 @@ import utils.{acceptedOrRejected, yesOrNo}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class CancellationDecisionUpdateController @Inject()(
   override val messagesApi: MessagesApi,

@@ -20,10 +20,10 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.ConsigneeAddressFormProvider
-import javax.inject.Inject
 import models.reference.{Country, CountryCode}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
+import navigation.annotations.TraderDetails
 import pages.{ConsigneeAddressPage, ConsigneeNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
@@ -32,8 +32,8 @@ import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import navigation.annotations.TraderDetails
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConsigneeAddressController @Inject()(

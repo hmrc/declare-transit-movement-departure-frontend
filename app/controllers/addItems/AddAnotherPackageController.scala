@@ -19,8 +19,6 @@ package controllers.addItems
 import controllers.actions._
 import derivable.DeriveNumberOfPackages
 import forms.addItems.AddAnotherPackageFormProvider
-
-import javax.inject.Inject
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.AddItems
@@ -33,6 +31,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import viewModels.PackageViewModel
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherPackageController @Inject()(

@@ -17,9 +17,9 @@
 package controllers.transportDetails
 
 import controllers.actions._
-import javax.inject.Inject
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
+import navigation.annotations.TransportDetails
 import pages.AddIdAtDepartureLaterPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -27,8 +27,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.nunjucks.NunjucksSupport
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import navigation.annotations.TransportDetails
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class AddIdAtDepartureLaterController @Inject()(

@@ -24,17 +24,7 @@ import models.messages.customsoffice.{CustomsOfficeDeparture, CustomsOfficeDesti
 import models.messages.goodsitem.GoodsItem
 import models.messages.guarantee.Guarantee
 import models.messages.header.Header
-import models.messages.safetyAndSecurity.{
-  SafetyAndSecurityCarrier,
-  SafetyAndSecurityCarrierWithEori,
-  SafetyAndSecurityCarrierWithoutEori,
-  SafetyAndSecurityConsignee,
-  SafetyAndSecurityConsigneeWithEori,
-  SafetyAndSecurityConsigneeWithoutEori,
-  SafetyAndSecurityConsignor,
-  SafetyAndSecurityConsignorWithEori,
-  SafetyAndSecurityConsignorWithoutEori
-}
+import models.messages.safetyAndSecurity._
 import models.messages.trader._
 import utils.NonEmptyListXMLReader._
 import xml.XMLWrites

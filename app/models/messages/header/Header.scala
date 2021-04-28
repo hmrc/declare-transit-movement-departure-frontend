@@ -16,17 +16,16 @@
 
 package models.messages.header
 
-import java.time.LocalDate
-
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.XMLReads._
-import xml.XMLWrites._
-import models.messages.escapeXml
 import models.LanguageCodeEnglish
+import models.XMLReads._
+import models.messages.escapeXml
 import utils.Format
 import xml.XMLWrites
+import xml.XMLWrites._
 
+import java.time.LocalDate
 import scala.xml.NodeSeq
 
 case class Header(

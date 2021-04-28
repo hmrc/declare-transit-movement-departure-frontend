@@ -18,7 +18,6 @@ package controllers
 
 import config.ManageTransitMovementsService
 import controllers.actions._
-import javax.inject.Inject
 import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -27,6 +26,7 @@ import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class SubmissionConfirmationController @Inject()(
