@@ -16,18 +16,15 @@
 
 package models.journeyDomain
 
-import java.time.LocalDateTime
-
 import cats.data._
 import cats.implicits._
 import derivable.DeriveNumberOfOfficeOfTransits
-import models.journeyDomain.ItemTraderDetails.RequiredDetails
-import models.{Index, UserAnswers}
+import models.Index
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.reference.{CountryCode, CustomsOffice}
 import pages._
-import play.api.libs.json.JsObject
-import queries.{Gettable, Query}
+
+import java.time.LocalDateTime
 
 final case class RouteDetails(
   countryOfDispatch: CountryCode,

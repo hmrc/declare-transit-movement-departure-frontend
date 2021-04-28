@@ -19,8 +19,8 @@ package models.journeyDomain
 import cats.data.{NonEmptyList, ReaderT}
 import cats.implicits._
 import derivable.DeriveNumberOfDocuments
-import models.{Index, UserAnswers}
 import models.reference.CircumstanceIndicator
+import models.{Index, UserAnswers}
 import pages.AddSecurityDetailsPage
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}

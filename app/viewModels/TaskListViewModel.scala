@@ -20,8 +20,8 @@ import cats.data.NonEmptyList
 import cats.implicits._
 import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
-import models.journeyDomain.{UserAnswersReader, _}
 import models.journeyDomain.traderDetails.TraderDetails
+import models.journeyDomain.{UserAnswersReader, _}
 import models.{DependentSection, Index, NormalMode, ProcedureType, SectionDetails, UserAnswers}
 import pages._
 import pages.guaranteeDetails.GuaranteeTypePage

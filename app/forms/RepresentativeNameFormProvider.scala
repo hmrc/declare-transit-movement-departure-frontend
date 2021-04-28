@@ -18,7 +18,7 @@ package forms
 
 import javax.inject.Inject
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.{alphaNumericRegex, alphaNumericWithSpaceRegex}
+import models.domain.StringFieldRegex.alphaNumericWithSpaceRegex
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
 import play.api.data.Form
 

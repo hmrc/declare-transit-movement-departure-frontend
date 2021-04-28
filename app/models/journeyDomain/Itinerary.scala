@@ -16,13 +16,11 @@
 
 package models.journeyDomain
 
-import cats.data.{NonEmptyList, ReaderT}
-import cats.implicits.{catsStdInstancesForOption, _}
+import cats.data.NonEmptyList
+import cats.implicits._
 import derivable.DeriveNumberOfCountryOfRouting
-import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
+import models.Index
 import models.reference.CountryCode
-import models.{Index, UserAnswers}
-import pages.ProcedureTypePage
 import pages.safetyAndSecurity.CountryOfRoutingPage
 
 case class Itinerary(countryCode: CountryCode)

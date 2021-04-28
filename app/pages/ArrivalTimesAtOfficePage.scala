@@ -16,10 +16,11 @@
 
 package pages
 
-import java.time.LocalDateTime
 import models.Index
 import play.api.libs.json.JsPath
 import queries.Constants.routeDetailsOfficesOfTransit
+
+import java.time.LocalDateTime
 
 case class ArrivalTimesAtOfficePage(index: Index) extends QuestionPage[LocalDateTime] {
 
