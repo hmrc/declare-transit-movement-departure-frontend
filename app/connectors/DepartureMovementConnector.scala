@@ -18,13 +18,14 @@ package connectors
 
 import com.lucidchart.open.xtract.XmlReader
 import config.FrontendAppConfig
+
 import javax.inject.Inject
 import xml.XMLWrites._
 import models.messages.DeclarationRequest
 import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage, DepartureId, GuaranteeNotValidMessage, MessagesSummary, ResponseMessage}
 import play.api.Logger
 import play.api.http.HeaderNames
-import uk.gov.hmrc.http.RawReads.is2xx
+import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
