@@ -123,7 +123,7 @@ class DeclarationRequestService @Inject()(
             dangerousGoodsCode               = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
             producedDocuments                = producedDocuments(itemSection.producedDocuments),
-            specialMention                   = SpecialMentionConversion.specialMentionWithGuaranteeLiability(itemSection.specialMentions, guaranteeDetails, index),
+            specialMention                   = SpecialMentionConversion(itemSection.specialMentions, guaranteeDetails, index),
             traderConsignorGoodsItem         = traderConsignor(itemSection.consignor),
             traderConsigneeGoodsItem         = traderConsignee(itemSection.consignee),
             containers                       = containers(itemSection.containers),
