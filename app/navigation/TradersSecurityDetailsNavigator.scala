@@ -17,12 +17,12 @@
 package navigation
 
 import controllers.addItems.traderSecurityDetails.routes
-import forms.Constants.circumstanceIndicatorCheck
 import models._
 import pages.Page
 import pages.addItems.traderSecurityDetails._
-import pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage
+import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
 import play.api.mvc.Call
+
 import javax.inject.{Inject, Singleton}
 
 @Singleton
@@ -90,6 +90,12 @@ class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
       case (Some(false), CheckMode) if (ua.get(SecurityConsigneeNamePage(index)).isDefined)
       => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
       case (Some(false), CheckMode) => Some(routes.SecurityConsigneeNameController.onPageLoad(ua.id, index, CheckMode))
+    }
+
+  def circumstanceIndicatorCheck(ua: UserAnswers, index: Index, mode: Mode) =
+    ua.get(CircumstanceIndicatorPage) match {
+      case Some("E") => controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(ua.id, index, mode)
+      case _         => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(ua.id, index, mode)
     }
   // format: on
 }

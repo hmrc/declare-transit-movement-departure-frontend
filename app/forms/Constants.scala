@@ -28,9 +28,4 @@ object Constants {
   lazy val loadingPlaceMaxLength: Int  = 35
   lazy val addressRegex: String        = "^[a-zA-Z0-9/@?%,.\\- ]*$"
 
-  def circumstanceIndicatorCheck(ua: UserAnswers, index: Index, mode: Mode) =
-    ua.get(CircumstanceIndicatorPage) match {
-      case Some("E") => controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(ua.id, index, mode)
-      case _         => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(ua.id, index, mode)
-    }
 }

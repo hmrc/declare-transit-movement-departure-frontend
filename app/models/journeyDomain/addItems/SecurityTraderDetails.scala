@@ -16,10 +16,11 @@
 
 package models.journeyDomain.addItems
 
+import cats.data.Kleisli
 import cats.implicits._
 import models.domain.Address
 import models.journeyDomain._
-import models.{EoriNumber, Index}
+import models.{EoriNumber, Index, UserAnswers}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
@@ -44,7 +45,7 @@ object SecurityTraderDetails {
         )
       }
     val useNameAndAddress =
-      AddSecurityConsignorsEoriPage(index).filterMandatoryDependent(!_) {
+      AddSecurityConsignorsEoriPage(index).filterMandatoryDependent(_ == false) {
 
         (
           SecurityConsignorNamePage(index).reader,
@@ -83,7 +84,7 @@ object SecurityTraderDetails {
         }
       }
 
-      val emptyCircumstanceIndicator: UserAnswersReader[SecurityTraderDetails] = AddCircumstanceIndicatorPage.filterMandatoryDependent(!_) {
+      val emptyCircumstanceIndicator: UserAnswersReader[SecurityTraderDetails] = AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == false) {
         SecurityConsigneeEoriPage(index).reader
           .map(EoriNumber(_))
           .map(SecurityTraderDetails(_))
@@ -91,8 +92,8 @@ object SecurityTraderDetails {
       circumstanceIndicator orElse emptyCircumstanceIndicator
     }
 
-    val useNameAndAddress = {
-      AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(!_) {
+    val useNameAndAddress: UserAnswersReader[SecurityTraderDetails] = {
+      AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(_ == false) {
         (
           SecurityConsigneeNamePage(index).reader,
           SecurityConsigneeAddressPage(index).reader
