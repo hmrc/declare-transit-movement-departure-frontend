@@ -39,3 +39,4 @@ migrations
 .vscode/
 project/metals.sbt
 .hydra
+/.bsp/sbt.json
