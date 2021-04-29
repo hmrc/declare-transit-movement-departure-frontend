@@ -64,7 +64,6 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(true)
           .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-          //      .unsafeSetVal(TransportChargesPaymentMethodPage)("Payment in cash")
           .unsafeSetVal(TransportChargesPage(index))("4.00")
           .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
           .unsafeSetVal(AddDangerousGoodsCodePage(index))(true)
