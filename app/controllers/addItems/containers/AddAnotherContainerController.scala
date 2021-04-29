@@ -82,8 +82,7 @@ class AddAnotherContainerController @Inject()(
                   routes.ContainerNumberController.onPageLoad(request.userAnswers.id, itemIndex, containerIndex, mode)
                 case false =>
                   navigator.nextPage(AddAnotherContainerPage(itemIndex), mode, request.userAnswers)
-                case _ =>
-                  controllers.routes.SessionExpiredController.onPageLoad()
+
               }
 
               Future.successful(Redirect(onwardRoute))

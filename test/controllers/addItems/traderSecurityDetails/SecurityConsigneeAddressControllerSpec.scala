@@ -20,14 +20,16 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.traderSecurityDetails.SecurityConsigneeAddressFormProvider
+import generators.{Generators, UserAnswersGenerator}
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
-import models.{ConsigneeAddress, CountryList, NormalMode}
+import models.{ConsigneeAddress, CountryList, NormalMode, UserAnswers}
 import navigation.annotations.TradersSecurityDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
+import org.scalacheck.Arbitrary
 import org.scalatestplus.mockito.MockitoSugar
 import pages.addItems.traderSecurityDetails.{SecurityConsigneeAddressPage, SecurityConsigneeNamePage}
 import play.api.inject.bind
@@ -41,7 +43,13 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class SecurityConsigneeAddressControllerSpec
+    extends SpecBase
+    with MockNunjucksRendererApp
+    with MockitoSugar
+    with NunjucksSupport
+    with JsonMatchers
+    with Generators {
 
   private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
@@ -95,6 +103,22 @@ class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksR
 
       templateCaptor.getValue mustEqual template
       jsonCaptor.getValue must containJson(expectedJson)
+
+    }
+
+    "must redirect to Session Expired for a GET if no existing data is found for SecurityConsigneeNamePage" in {
+      val ua          = Arbitrary.arbitrary[UserAnswers].sample.value
+      val userAnswers = ua.remove(SecurityConsigneeNamePage(index)).success.value
+
+      dataRetrievalWithData(userAnswers)
+
+      val request = FakeRequest(GET, securityConsigneeAddressRoute)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
 
     }
 

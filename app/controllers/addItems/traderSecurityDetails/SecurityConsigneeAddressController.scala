@@ -18,6 +18,7 @@ package controllers.addItems.traderSecurityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import controllers.{routes => mainRoutes}
 import forms.addItems.traderSecurityDetails.SecurityConsigneeAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -80,6 +81,7 @@ class SecurityConsigneeAddressController @Inject()(
                 )
 
                 renderer.render(template, json).map(Ok(_))
+              case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
             }
         }
     }

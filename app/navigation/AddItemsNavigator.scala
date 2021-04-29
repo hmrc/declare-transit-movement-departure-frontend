@@ -175,13 +175,6 @@ class AddItemsNavigator @Inject()() extends Navigator {
       case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
-  private def addItemsSameConsignorForAllItems(ua: UserAnswers, index: Index, mode: Mode) =
-    ua.get(TraderDetailsConsignorEoriKnownPage(index)) match {
-      case None => Some(traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.id, index, mode))
-      case _ if mode == CheckMode=> Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-      case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
-    }
-
   private def isCommodityKnownRouteNormalMode(index: Index, ua: UserAnswers) =
     (ua.get(IsCommodityCodeKnownPage(index)),
       ua.get(AddConsignorPage),
