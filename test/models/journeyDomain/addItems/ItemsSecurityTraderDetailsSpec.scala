@@ -96,7 +96,7 @@ object ItemsSecurityTraderDetailsSpec {
 
   def setItemsSecurityTraderDetails(itemsSecurityTraderDetails: ItemsSecurityTraderDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers =
     startUserAnswers
-      // Set method of payment
+    // Set method of payment
       .unsafeSetOpt(TransportChargesPage(index))(itemsSecurityTraderDetails.methodOfPayment)
 
       // Set commercial reference number
@@ -109,7 +109,7 @@ object ItemsSecurityTraderDetailsSpec {
       // Set Consignor
       .unsafeSetPFn(AddSecurityConsignorsEoriPage(index))(itemsSecurityTraderDetails.consignor)({
         case Some(SecurityTraderEori(_)) => true
-        case Some(_) => false
+        case Some(_)                     => false
       })
       .unsafeSetPFn(SecurityConsignorEoriPage(index))(itemsSecurityTraderDetails.consignor)({
         case Some(SecurityTraderEori(eori)) => eori.value
@@ -124,7 +124,7 @@ object ItemsSecurityTraderDetailsSpec {
       //     Set Consignee
       .unsafeSetPFn(AddSecurityConsigneesEoriPage(index))(itemsSecurityTraderDetails.consignee)({
         case Some(SecurityTraderEori(_)) => true
-        case Some(_) => false
+        case Some(_)                     => false
       })
       .unsafeSetPFn(SecurityConsigneeEoriPage(index))(itemsSecurityTraderDetails.consignee)({
         case Some(SecurityTraderEori(eori)) => eori.value

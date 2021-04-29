@@ -49,7 +49,7 @@ object SecurityTraderDetails {
         (
           SecurityConsignorNamePage(index).reader,
           SecurityConsignorAddressPage(index).reader
-          ).tupled
+        ).tupled
           .map {
             case (name, consignorAddress) =>
               val address = Address.prismAddressToConsignorAddress(consignorAddress)
@@ -96,7 +96,7 @@ object SecurityTraderDetails {
         (
           SecurityConsigneeNamePage(index).reader,
           SecurityConsigneeAddressPage(index).reader
-          ).tupled
+        ).tupled
           .map {
             case (name, consigneeAddress) =>
               val address = Address.prismAddressToConsigneeAddress(consigneeAddress)

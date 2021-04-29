@@ -25,12 +25,12 @@ import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialRefe
 import pages.safetyAndSecurity._
 
 final case class ItemsSecurityTraderDetails(
-                                             methodOfPayment: Option[String],
-                                             commercialReferenceNumber: Option[String],
-                                             dangerousGoodsCode: Option[String],
-                                             consignor: Option[SecurityTraderDetails],
-                                             consignee: Option[SecurityTraderDetails]
-                                           )
+  methodOfPayment: Option[String],
+  commercialReferenceNumber: Option[String],
+  dangerousGoodsCode: Option[String],
+  consignor: Option[SecurityTraderDetails],
+  consignee: Option[SecurityTraderDetails]
+)
 
 object ItemsSecurityTraderDetails {
 
@@ -42,7 +42,7 @@ object ItemsSecurityTraderDetails {
         dangerousGoodsCodePage(index),
         consignorDetails(index),
         consigneeDetails(index)
-        ).tupled.map((ItemsSecurityTraderDetails.apply _).tupled)
+      ).tupled.map((ItemsSecurityTraderDetails.apply _).tupled)
     }
 
   private def methodOfPaymentPage(index: Index): UserAnswersReader[Option[String]] =
@@ -54,7 +54,7 @@ object ItemsSecurityTraderDetails {
     AddCommercialReferenceNumberAllItemsPage.optionalReader
       .flatMap {
         case Some(true) => none[String].pure[UserAnswersReader]
-        case _ => CommercialReferenceNumberPage(index).reader.map(Some(_))
+        case _          => CommercialReferenceNumberPage(index).reader.map(Some(_))
       }
 
   private def dangerousGoodsCodePage(index: Index): UserAnswersReader[Option[String]] =
