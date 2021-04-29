@@ -55,7 +55,7 @@ class OfficeOfTransitCountryController @Inject()(
     with NunjucksSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
-    (identify andThen getData(lrn) andThen requireData andThen officeOfTransitFilter(index, 0)).async {
+    (identify andThen getData(lrn) andThen requireData andThen officeOfTransitFilter(index)).async {
       implicit request =>
         referenceDataConnector.getTransitCountryList() flatMap {
           countries =>
