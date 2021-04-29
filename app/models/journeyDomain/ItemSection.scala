@@ -30,7 +30,7 @@ case class ItemSection(
   consignee: Option[RequiredDetails],
   packages: NonEmptyList[Packages],
   containers: Option[NonEmptyList[Container]],
-  specialMentions: Option[NonEmptyList[SpecialMention]],
+  specialMentions: Option[NonEmptyList[SpecialMentionDomain]],
   producedDocuments: Option[NonEmptyList[ProducedDocument]],
   itemSecurityTraderDetails: Option[ItemsSecurityTraderDetails],
   previousReferences: Option[NonEmptyList[PreviousReferences]]
@@ -58,13 +58,13 @@ object ItemSection {
       }
     }
 
-  private def deriveSpecialMentions(itemIndex: Index): UserAnswersReader[Option[NonEmptyList[SpecialMention]]] =
+  private def deriveSpecialMentions(itemIndex: Index): UserAnswersReader[Option[NonEmptyList[SpecialMentionDomain]]] =
     AddSpecialMentionPage(itemIndex).filterOptionalDependent(identity) {
       DeriveNumberOfSpecialMentions(itemIndex).mandatoryNonEmptyListReader.flatMap {
         _.zipWithIndex
-          .traverse[UserAnswersReader, SpecialMention]({
+          .traverse[UserAnswersReader, SpecialMentionDomain]({
             case (_, index) =>
-              SpecialMention.specialMentionsReader(itemIndex, Index(index))
+              SpecialMentionDomain.specialMentionsReader(itemIndex, Index(index))
           })
       }
     }

@@ -24,7 +24,7 @@ import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.{NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
 import models.journeyDomain.traderDetails.ConsignorDetails
-import models.journeyDomain.{EitherType, JourneyDomain, JourneyDomainSpec, PreTaskListDetails}
+import models.journeyDomain.{EitherType, GuaranteeDetails, JourneyDomain, JourneyDomainSpec, PreTaskListDetails, SpecialMentionDomain}
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
 import models.messages.trader.TraderConsignor
 import models.messages.{DeclarationRequest, InterchangeControlReference}
@@ -36,7 +36,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 
-import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute}
+import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute, GuaranteeWaiver}
 import org.scalacheck.Gen
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -92,79 +92,115 @@ class DeclarationRequestServiceSpec
 
       "special mention section" - {
 
-        "must add GuaranteeSpecialMention to the first special mention in the list when GuaranteeType is 0, 1, 2, 4 or 9" in {
+        "must add SpecialMentionGuaranteeLiabilityAmount to the first special mention in a list if index is 0" in {
 
-          val genGuaranteeType = Gen.oneOf(guaranteeReferenceRoute)
+          val guaranteeType = Gen.oneOf(guaranteeReferenceRoute).sample.value
 
-          forAll(arb[UserAnswers], arb[JourneyDomain], nonEmptyListOf[GuaranteeReference](3), genGuaranteeType) {
-            (userAnswers, journeyDomain, guaranteeReferences, guaranteeType) =>
+          forAll(arb[UserAnswers], arb[JourneyDomain], nonEmptyListOf[GuaranteeReference](1), nonEmptyListOf[SpecialMentionDomain](3)) {
+            (userAnswers, journeyDomain, guaranteeReferences, specialMentionDomain) =>
               val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
               when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
+              val itemDetailsWithSpecialMention = journeyDomain.itemDetails.map(_.copy(specialMentions = Some(specialMentionDomain)))
+
               val updatedJourneyDomain: JourneyDomain = journeyDomain.copy(
-                guarantee = guaranteeReferences.map(_.copy(guaranteeType = guaranteeType))
+                guarantee   = guaranteeReferences.map(_.copy(guaranteeType = guaranteeType)),
+                itemDetails = itemDetailsWithSpecialMention
               )
 
               val updatedUserAnswer                      = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
               val result: EitherType[DeclarationRequest] = service.convert(updatedUserAnswer).futureValue
 
-              result.isRight mustBe true
+              val firstSpecialMention = result.right.value.goodsItems.head.specialMention.head
+              val specialMentionCount = result.right.value.goodsItems.head.specialMention.length
 
-              val firstGoodsItemSpecialMentionLiabilityAmount = result.right.value.goodsItems.head.specialMention.collect {
-                case specialMention: SpecialMentionGuaranteeLiabilityAmount => specialMention
-              }
-
-              val expectedSpecialMention: NonEmptyList[SpecialMentionGuaranteeLiabilityAmount] = guaranteeReferences.map {
-                case GuaranteeReference(_, guaranteeReferenceNumber, GuaranteeReference.defaultLiability, _) =>
-                  val defaultLiabilityAmount = s"${GuaranteeReference.defaultLiability}EUR$guaranteeReferenceNumber"
-                  SpecialMentionGuaranteeLiabilityAmount("CAL", defaultLiabilityAmount)
-
-                case GuaranteeReference(_, guaranteeReferenceNumber, otherAmount, _) =>
-                  val notDefaultAmount = s"${otherAmount}GBP$guaranteeReferenceNumber"
-                  SpecialMentionGuaranteeLiabilityAmount("CAL", notDefaultAmount)
-
-              }
-              firstGoodsItemSpecialMentionLiabilityAmount mustBe expectedSpecialMention.toList
-
-              val otherGoodsItemsSpecialMentionLiabilityAmount = result.right.value.goodsItems.tail.flatMap(
-                _.specialMention.collect {
-                  case specialMention: SpecialMentionGuaranteeLiabilityAmount => specialMention
-                }
-              )
-              otherGoodsItemsSpecialMentionLiabilityAmount mustBe Seq()
+              firstSpecialMention mustBe an[SpecialMentionGuaranteeLiabilityAmount]
+              specialMentionCount mustBe specialMentionDomain.length + 1
           }
         }
 
-        "must not add GuaranteeSpecialMention when GuaranteeType is not 0, 1, 2, 4 or 9" - {
+        "must add SpecialMentionGuaranteeLiabilityAmount as the only SpecialMention in the list if other SpecialMentions are not defined" in {
 
-          val genGuaranteeType = Gen.oneOf(nonGuaranteeReferenceRoute)
+          val guaranteeType = Gen.oneOf(guaranteeReferenceRoute).sample.value
 
-          forAll(arb[UserAnswers], arb[JourneyDomain], nonEmptyListOf[GuaranteeReference](3), genGuaranteeType) {
-            (userAnswers, journeyDomain, guaranteeReferences, guaranteeType) =>
+          forAll(arb[UserAnswers], arb[JourneyDomain], nonEmptyListOf[GuaranteeReference](1)) {
+            (userAnswers, journeyDomain, guaranteeReferences) =>
+              val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
+
+              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+              val itemDetailsWithSpecialMention = journeyDomain.itemDetails.map(_.copy(specialMentions = None))
+
+              val updatedJourneyDomain: JourneyDomain = journeyDomain.copy(
+                guarantee   = guaranteeReferences.map(_.copy(guaranteeType = guaranteeType)),
+                itemDetails = itemDetailsWithSpecialMention
+              )
+
+              val updatedUserAnswer                      = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+              val result: EitherType[DeclarationRequest] = service.convert(updatedUserAnswer).futureValue
+
+              val firstSpecialMention = result.right.value.goodsItems.head.specialMention.head
+              val specialMentionCount = result.right.value.goodsItems.head.specialMention.length
+
+              firstSpecialMention mustBe an[SpecialMentionGuaranteeLiabilityAmount]
+              specialMentionCount mustBe 1
+          }
+        }
+
+        "must add SpecialMentions without SpecialMentionGuaranteeLiabilityAmount when index is not 0 and SpecialMentions are defined" in {
+
+          val guaranteeType = Gen.oneOf(guaranteeReferenceRoute).sample.value
+
+          forAll(arb[UserAnswers], arb[JourneyDomain], nonEmptyListOf[GuaranteeReference](1), nonEmptyListOf[SpecialMentionDomain](2)) {
+            (userAnswers, journeyDomain, guaranteeReferences, specialMentionDomain) =>
+              val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
+
+              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+              val updatedSpecialMentions = journeyDomain.itemDetails.map(_.copy(specialMentions = Some(specialMentionDomain)))
+
+              val updatedJourneyDomain: JourneyDomain = journeyDomain.copy(
+                guarantee   = guaranteeReferences.map(_.copy(guaranteeType = guaranteeType)),
+                itemDetails = updatedSpecialMentions
+              )
+
+              val updatedUserAnswer                      = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+              val result: EitherType[DeclarationRequest] = service.convert(updatedUserAnswer).futureValue
+
+              val getSpecialMentionGuaranteeLiabilityAmount = result.right.value.goodsItems.tail.flatMap(
+                _.specialMention.collect {
+                  case specialMention: SpecialMentionGuaranteeLiabilityAmount => specialMention
+                }
+              )
+
+              val specialMentionCount = result.right.value.goodsItems.tail.head.specialMention.length
+
+              getSpecialMentionGuaranteeLiabilityAmount mustBe Seq.empty
+              specialMentionCount mustBe specialMentionDomain.length
+          }
+        }
+
+        "must return empty list when SpecialMentions are not defined and index is not 0" in {
+
+          forAll(arb[UserAnswers], arb[JourneyDomain]) {
+            (userAnswers, journeyDomain) =>
               val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
               when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
               val updatedJourneyDomain: JourneyDomain = journeyDomain.copy(
-                guarantee = guaranteeReferences.map(_.copy(guaranteeType = guaranteeType))
+                itemDetails = journeyDomain.itemDetails.map(_.copy(specialMentions = None))
               )
 
               val updatedUserAnswer                      = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
               val result: EitherType[DeclarationRequest] = service.convert(updatedUserAnswer).futureValue
 
-              result.isRight mustBe true
-
-              result.right.value.goodsItems.head.specialMention mustBe Seq()
-
-              val otherGoodsItemsSpecialMentionLiabilityAmount = result.right.value.goodsItems.tail.flatMap(
-                _.specialMention.collect {
-                  case specialMention: SpecialMentionGuaranteeLiabilityAmount => specialMention
-                }
-              )
-              otherGoodsItemsSpecialMentionLiabilityAmount mustBe Seq()
+              result.right.value.goodsItems.tail.flatMap(_.specialMention) mustBe Seq.empty
           }
         }
       }

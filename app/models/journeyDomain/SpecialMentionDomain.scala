@@ -13,3 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package models.journeyDomain
+
+import cats.implicits._
+import models.Index
+import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
+
+final case class SpecialMentionDomain(specialMentionType: String, additionalInfo: String)
+
+object SpecialMentionDomain {
+
+  def specialMentionsReader(index: Index, referenceIndex: Index): UserAnswersReader[SpecialMentionDomain] =
+    (
+      SpecialMentionTypePage(index, referenceIndex).reader,
+      SpecialMentionAdditionalInfoPage(index, referenceIndex).reader,
+    ).tupled.map((SpecialMentionDomain.apply _).tupled)
+}

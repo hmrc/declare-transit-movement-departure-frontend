@@ -532,30 +532,38 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
       liabilityAmountGen.map(SpecialMentionGuaranteeLiabilityAmount("CAL", _))
     }
 
-  implicit lazy val arbitrarySpecialMentionEc: Arbitrary[SpecialMentionEc] =
-    Arbitrary {
-      countrySpecificCodeGen.map(SpecialMentionEc(_))
-    }
-
-  implicit lazy val arbitrarySpecialMentionNonEc: Arbitrary[SpecialMentionNonEc] =
+  implicit lazy val arbitrarySpecialMentionExportFromGB: Arbitrary[SpecialMentionExportFromGB] =
     Arbitrary {
       for {
-        additionalInfo <- countrySpecificCodeGen
-        exportCountry  <- stringsWithMaxLength(2)
-      } yield SpecialMentionNonEc(additionalInfo, exportCountry)
+        addInfoCoded <- countrySpecificCodeGen
+        addInfo      <- stringsWithMaxLength(70)
+      } yield SpecialMentionExportFromGB(addInfoCoded, addInfo)
+    }
+
+  implicit lazy val arbitrarySpecialMentionExportFromNI: Arbitrary[SpecialMentionExportFromNI] =
+    Arbitrary {
+      for {
+        additionalInfoCoded <- countrySpecificCodeGen
+        addInfo             <- stringsWithMaxLength(70)
+      } yield SpecialMentionExportFromNI(additionalInfoCoded, addInfo)
     }
 
   implicit lazy val arbitrarySpecialMentionNoCountry: Arbitrary[SpecialMentionNoCountry] =
     Arbitrary {
-      nonCountrySpecificCodeGen.map(SpecialMentionNoCountry(_))
+      for {
+        addInfoCoded <- nonCountrySpecificCodeGen
+        addInfo      <- stringsWithMaxLength(70)
+      } yield SpecialMentionNoCountry(addInfoCoded, addInfo)
     }
 
   implicit lazy val arbitrarySpecialMention: Arbitrary[SpecialMention] =
     Arbitrary {
-      Gen.oneOf(arbitrary[SpecialMentionGuaranteeLiabilityAmount],
-                arbitrary[SpecialMentionEc],
-                arbitrary[SpecialMentionNonEc],
-                arbitrary[SpecialMentionNoCountry])
+      Gen.oneOf(
+        arbitrary[SpecialMentionGuaranteeLiabilityAmount],
+        arbitrary[SpecialMentionExportFromGB],
+        arbitrary[SpecialMentionExportFromNI],
+        arbitrary[SpecialMentionNoCountry]
+      )
     }
 
   implicit lazy val arbitraryBulkPackage: Arbitrary[BulkPackage] =

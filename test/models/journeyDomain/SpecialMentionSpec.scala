@@ -37,10 +37,10 @@ class SpecialMentionSpec extends SpecBase with GeneratorSpec with JourneyModelGe
 
     "can be parsed from UserAnswers" - {
       "when all details for section have been answered" in {
-        forAll(arbitrary[SpecialMention], arbitrary[UserAnswers]) {
+        forAll(arbitrary[SpecialMentionDomain], arbitrary[UserAnswers]) {
           case (specialMention, userAnswers) =>
             val updatedUserAnswers = setSpecialMentionsUserAnswers(specialMention, index, referenceIndex)(userAnswers)
-            val result             = UserAnswersReader[SpecialMention](SpecialMention.specialMentionsReader(index, referenceIndex)).run(updatedUserAnswers)
+            val result             = UserAnswersReader[SpecialMentionDomain](SpecialMentionDomain.specialMentionsReader(index, referenceIndex)).run(updatedUserAnswers)
 
             result.right.value mustEqual specialMention
         }
@@ -49,13 +49,13 @@ class SpecialMentionSpec extends SpecBase with GeneratorSpec with JourneyModelGe
 
     "cannot be parsed from UserAnswers" - {
       "when a mandatory answer is missing" in {
-        forAll(arbitrary[SpecialMention], arbitrary[UserAnswers], mandatoryPages) {
+        forAll(arbitrary[SpecialMentionDomain], arbitrary[UserAnswers], mandatoryPages) {
           case (specialMention, userAnswers, mandatoryPage) =>
             val updatedUserAnswers = setSpecialMentionsUserAnswers(specialMention, index, referenceIndex)(userAnswers)
               .unsafeRemove(mandatoryPage)
 
-            val result: EitherType[SpecialMention] =
-              UserAnswersReader[SpecialMention](SpecialMention.specialMentionsReader(index, referenceIndex)).run(updatedUserAnswers)
+            val result: EitherType[SpecialMentionDomain] =
+              UserAnswersReader[SpecialMentionDomain](SpecialMentionDomain.specialMentionsReader(index, referenceIndex)).run(updatedUserAnswers)
 
             result.left.value.page mustBe mandatoryPage
         }
@@ -67,9 +67,9 @@ class SpecialMentionSpec extends SpecBase with GeneratorSpec with JourneyModelGe
 
 object SpecialMentionSpec extends UserAnswersSpecHelper {
 
-  def setSpecialMentionsUserAnswers(specialMention: SpecialMention, index: Index, referenceIndex: Index)(userAnswers: UserAnswers): UserAnswers =
+  def setSpecialMentionsUserAnswers(specialMention: SpecialMentionDomain, index: Index, referenceIndex: Index)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
-      .unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))(specialMention.specialMention)
+      .unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))(specialMention.specialMentionType)
       .unsafeSetVal(SpecialMentionAdditionalInfoPage(index, referenceIndex))(specialMention.additionalInfo)
 
 }

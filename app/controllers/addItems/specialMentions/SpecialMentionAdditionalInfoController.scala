@@ -50,7 +50,6 @@ class SpecialMentionAdditionalInfoController @Inject()(
     with I18nSupport
     with NunjucksSupport {
 
-//  private val form     = formProvider()
   private val template = "addItems/specialMentions/specialMentionAdditionalInfo.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =

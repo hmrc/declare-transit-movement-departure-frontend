@@ -16,6 +16,7 @@
 
 package models.messages.goodsitem
 
+import cats.implicits.catsSyntaxTuple2Semigroupal
 import com.lucidchart.open.xtract.{ParseError, ParseFailure, ParseSuccess, XmlReader}
 import play.api.libs.json._
 import utils.BinaryToBooleanXMLReader._
@@ -36,254 +37,120 @@ object SpecialMention {
 
   implicit val xmlReader: XmlReader[SpecialMention] =
     SpecialMentionGuaranteeLiabilityAmount.xmlReader
-      .or(SpecialMentionEc.xmlReader)
-      .or(SpecialMentionNonEc.xmlReader)
+      .or(SpecialMentionExportFromGB.xmlReader)
+      .or(SpecialMentionExportFromNI.xmlReader)
       .or(SpecialMentionNoCountry.xmlReader)
-
-  implicit lazy val reads: Reads[SpecialMention] = {
-
-    implicit class ReadsWithContravariantOr[A](a: Reads[A]) {
-
-      def or[B >: A](b: Reads[B]): Reads[B] =
-        a.map[B](identity).orElse(b)
-    }
-
-    implicit def convertToSupertype[A, B >: A](a: Reads[A]): Reads[B] =
-      a.map(identity)
-    SpecialMentionGuaranteeLiabilityAmount.reads or
-      SpecialMentionEc.reads or
-      SpecialMentionNonEc.reads or
-      SpecialMentionNoCountry.reads
-
-  }
-
-  implicit lazy val writes: OWrites[SpecialMention] = OWrites {
-    case sm: SpecialMentionGuaranteeLiabilityAmount => Json.toJsObject(sm)(SpecialMentionGuaranteeLiabilityAmount.writes)
-    case sm: SpecialMentionEc                       => Json.toJsObject(sm)(SpecialMentionEc.writes)
-    case sm: SpecialMentionNonEc                    => Json.toJsObject(sm)(SpecialMentionNonEc.writes)
-    case sm: SpecialMentionNoCountry                => Json.toJsObject(sm)(SpecialMentionNoCountry.writes)
-  }
-
 }
 
-final case class SpecialMentionEc(additionalInformationCoded: String) extends SpecialMention
+final case class SpecialMentionExportFromGB(additionalInformationCoded: String, additionalInformation: String) extends SpecialMention
 
-object SpecialMentionEc {
+object SpecialMentionExportFromGB {
 
-  implicit val xmlReader: XmlReader[SpecialMentionEc] = {
+  implicit val xmlReader: XmlReader[SpecialMentionExportFromGB] = {
 
     import com.lucidchart.open.xtract.__
 
-    case class SpecialMentionEcParseFailure(message: String) extends ParseError
+    case class SpecialMentionExportFromGBParseFailure(message: String) extends ParseError
 
-    (__ \ "ExpFroECMT24")
-      .read[Boolean]
+    (__ \ "ExpFroCouMT25")
+      .read[String]
       .flatMap {
-        case true =>
+        case "GB" =>
           XmlReader(
             _ => ParseSuccess(true)
           )
-        case false =>
+        case _ =>
           XmlReader(
-            _ => ParseFailure(SpecialMentionEcParseFailure("Failed to parse to SpecialMentionEc: ExpFroECMT24 was false"))
+            _ => ParseFailure(SpecialMentionExportFromGBParseFailure("Failed to parse to SpecialMentionExportFromGB: ExpFroCouMT25 was not GB"))
           )
       }
       .flatMap {
         _ =>
-          (__ \ "AddInfCodMT23").read[String].flatMap {
-            code =>
+          (
+            (__ \ "AddInfCodMT23").read[String],
+            (__ \ "AddInfMT21").read[String]
+          ).tupled.flatMap {
+            case (code, addInfo) =>
               if (SpecialMention.countrySpecificCodes.contains(code)) {
                 XmlReader(
-                  _ => ParseSuccess(SpecialMentionEc(code))
+                  _ => ParseSuccess(SpecialMentionExportFromGB(code, addInfo))
                 )
               } else {
                 XmlReader(
-                  _ => ParseFailure(SpecialMentionEcParseFailure(s"Failed to parse to SpecialMentionEc: $code was not country specific"))
+                  _ => ParseFailure(SpecialMentionExportFromGBParseFailure(s"Failed to parse to SpecialMentionExportFromGB: $code was not DG0 or DG1"))
                 )
               }
           }
       }
   }
 
-  implicit lazy val reads: Reads[SpecialMentionEc] = {
-
-    import play.api.libs.functional.syntax._
-
-    (__ \ "exportFromEc")
-      .read[Boolean]
-      .flatMap[Boolean] {
-        fromEc =>
-          if (fromEc) {
-            Reads(
-              _ => JsSuccess(fromEc)
-            )
-          } else {
-            Reads(
-              _ => JsError("exportFromEc must be true")
-            )
-          }
-      }
-      .andKeep(
-        (__ \ "additionalInformationCoded")
-          .read[String]
-          .flatMap[String] {
-            code =>
-              if (SpecialMention.countrySpecificCodes.contains(code)) {
-                Reads(
-                  _ => JsSuccess(code)
-                )
-              } else {
-                Reads(
-                  _ => JsError(s"additionalInformationCoded must be in ${SpecialMention.countrySpecificCodes}")
-                )
-              }
-          }
-      )
-      .andKeep(
-        (__ \ "additionalInformationCoded")
-          .read[String]
-          .map(SpecialMentionEc(_))
-      )
-  }
-
-  implicit lazy val writes: OWrites[SpecialMentionEc] = {
-
-    import play.api.libs.functional.syntax._
-
-    (
-      (__ \ "exportFromEc").write[Boolean] and
-        (__ \ "additionalInformationCoded").write[String]
-    )(
-      s => (true, s.additionalInformationCoded)
-    )
-  }
-
-  implicit def writesXml: XMLWrites[SpecialMentionEc] = XMLWrites[SpecialMentionEc] {
+  implicit def writesXml: XMLWrites[SpecialMentionExportFromGB] = XMLWrites[SpecialMentionExportFromGB] {
     specialMention =>
       <SPEMENMT2>
+        <AddInfMT21>{specialMention.additionalInformation}</AddInfMT21>
+        <AddInfCodMT23>{specialMention.additionalInformationCoded}</AddInfCodMT23>
+        <ExpFroCouMT25>GB</ExpFroCouMT25>
+      </SPEMENMT2>
+  }
+}
+
+final case class SpecialMentionExportFromNI(
+  additionalInformationCoded: String,
+  additionalInformation: String
+) extends SpecialMention
+
+object SpecialMentionExportFromNI {
+
+  implicit val xmlReader: XmlReader[SpecialMentionExportFromNI] = {
+
+    import com.lucidchart.open.xtract.__
+
+    case class SpecialMentionExportFromNIParseFailure(message: String) extends ParseError
+
+    (__ \ "ExpFroECMT24")
+      .read[String]
+      .flatMap {
+        case "1" =>
+          XmlReader(
+            _ => ParseSuccess(true)
+          )
+        case _ =>
+          XmlReader(
+            _ => ParseFailure(SpecialMentionExportFromNIParseFailure(s"Failed to parse to SpecialMentionExportFromNI: ExpFroECMT24 was not 1"))
+          )
+      }
+      .flatMap {
+        _ =>
+          (
+            (__ \ "AddInfCodMT23").read[String],
+            (__ \ "AddInfMT21").read[String]
+          ).tupled.flatMap {
+            case (code, addInfo) =>
+              if (SpecialMention.countrySpecificCodes.contains(code)) {
+                XmlReader(
+                  _ => ParseSuccess(SpecialMentionExportFromNI(code, addInfo))
+                )
+              } else {
+                XmlReader(
+                  _ =>
+                    ParseFailure(SpecialMentionExportFromNIParseFailure(s"Failed to parse to SpecialMentionExportFromNIParseFailure: $code was not DG0 or DG1"))
+                )
+              }
+          }
+      }
+  }
+
+  implicit def writesXml: XMLWrites[SpecialMentionExportFromNI] = XMLWrites[SpecialMentionExportFromNI] {
+    specialMention =>
+      <SPEMENMT2>
+        <AddInfMT21>{specialMention.additionalInformation}</AddInfMT21>
         <AddInfCodMT23>{specialMention.additionalInformationCoded}</AddInfCodMT23>
         <ExpFroECMT24>1</ExpFroECMT24>
       </SPEMENMT2>
   }
 }
 
-final case class SpecialMentionNonEc(
-  additionalInformationCoded: String,
-  exportFromCountry: String
-) extends SpecialMention
-
-object SpecialMentionNonEc {
-
-  implicit val xmlReader: XmlReader[SpecialMentionNonEc] = {
-
-    import com.lucidchart.open.xtract.__
-
-    case class SpecialMentionNonEcParseFailure(message: String) extends ParseError
-
-    (__ \ "ExpFroECMT24")
-      .read[Boolean]
-      .flatMap {
-        case true =>
-          XmlReader(
-            _ => ParseFailure(SpecialMentionNonEcParseFailure("Failed to parse to SpecialMentionNonEc: ExpFroECMT24 was true"))
-          )
-        case false =>
-          XmlReader(
-            _ => ParseSuccess(false)
-          )
-      }
-      .flatMap {
-        _ =>
-          (__ \ "AddInfCodMT23").read[String].flatMap {
-            code =>
-              if (SpecialMention.countrySpecificCodes.contains(code)) {
-                XmlReader(
-                  _ => ParseSuccess(code)
-                )
-              } else {
-                XmlReader(
-                  _ => ParseFailure(SpecialMentionNonEcParseFailure(s"Failed to parse to SpecialMentionNonEc: $code was not country specific"))
-                )
-              }
-          }
-      }
-      .flatMap {
-        code =>
-          (__ \ "ExpFroCouMT25").read[String].flatMap {
-            exportFromCountry =>
-              XmlReader(
-                _ => ParseSuccess(SpecialMentionNonEc(code, exportFromCountry))
-              )
-          }
-      }
-  }
-
-  implicit lazy val reads: Reads[SpecialMentionNonEc] = {
-
-    import play.api.libs.functional.syntax._
-
-    (__ \ "exportFromEc")
-      .read[Boolean]
-      .flatMap[Boolean] {
-        fromEc =>
-          if (fromEc) {
-            Reads(
-              _ => JsError("exportFromEc must be false")
-            )
-          } else {
-            Reads(
-              _ => JsSuccess(fromEc)
-            )
-          }
-      }
-      .andKeep(
-        (__ \ "additionalInformationCoded")
-          .read[String]
-          .flatMap[String] {
-            code =>
-              if (SpecialMention.countrySpecificCodes.contains(code)) {
-                Reads(
-                  _ => JsSuccess(code)
-                )
-              } else {
-                Reads(
-                  _ => JsError(s"additionalInformationCoded must be in ${SpecialMention.countrySpecificCodes}")
-                )
-              }
-          }
-      )
-      .andKeep(
-        (
-          (__ \ "additionalInformationCoded").read[String] and
-            (__ \ "exportFromCountry").read[String]
-        )(SpecialMentionNonEc(_, _))
-      )
-  }
-
-  implicit lazy val writes: OWrites[SpecialMentionNonEc] = {
-
-    import play.api.libs.functional.syntax._
-
-    (
-      (__ \ "exportFromEc").write[Boolean] and
-        (__ \ "additionalInformationCoded").write[String] and
-        (__ \ "exportFromCountry").write[String]
-    )(
-      s => (false, s.additionalInformationCoded, s.exportFromCountry)
-    )
-  }
-
-  implicit def writesXml: XMLWrites[SpecialMentionNonEc] = XMLWrites[SpecialMentionNonEc] {
-    specialMention =>
-      <SPEMENMT2>
-        <AddInfCodMT23>{specialMention.additionalInformationCoded}</AddInfCodMT23>
-        <ExpFroECMT24>0</ExpFroECMT24>
-        <ExpFroCouMT25>{specialMention.exportFromCountry}</ExpFroCouMT25>
-      </SPEMENMT2>
-  }
-}
-
-final case class SpecialMentionNoCountry(additionalInformationCoded: String) extends SpecialMention
+final case class SpecialMentionNoCountry(additionalInformationCoded: String, additionalInformation: String) extends SpecialMention
 
 object SpecialMentionNoCountry {
 
@@ -293,50 +160,25 @@ object SpecialMentionNoCountry {
 
     case class SpecialMentionNoCountryParseFailure(message: String) extends ParseError
 
-    (__ \ "AddInfCodMT23").read[String].flatMap {
-      code =>
-        if (SpecialMention.countrySpecificCodes.contains(code)) {
-          XmlReader(
-            _ => ParseFailure(SpecialMentionNoCountryParseFailure(s"Failed to parse to SpecialMentionNoCountry: $code was country specific"))
-          )
-        } else {
-          XmlReader(
-            _ => ParseSuccess(SpecialMentionNoCountry(code))
-          )
-        }
+    (
+      (__ \ "AddInfCodMT23").read[String],
+      (__ \ "AddInfMT21").read[String]
+    ).tupled.flatMap {
+      case (code, _) if SpecialMention.countrySpecificCodes.contains(code) =>
+        XmlReader(
+          _ => ParseFailure(SpecialMentionNoCountryParseFailure(s"Failed to parse to SpecialMentionNoCountry cannot be DG0 or DG1"))
+        )
+      case (code, info) =>
+        XmlReader(
+          _ => ParseSuccess(SpecialMentionNoCountry(code, info))
+        )
     }
   }
-
-  implicit lazy val reads: Reads[SpecialMentionNoCountry] = {
-
-    import play.api.libs.functional.syntax._
-
-    (__ \ "additionalInformationCoded")
-      .read[String]
-      .flatMap[String] {
-        code =>
-          if (SpecialMention.countrySpecificCodes.contains(code)) {
-            Reads(
-              _ => JsError(s"additionalInformationCoded must not be in ${SpecialMention.countrySpecificCodes}")
-            )
-          } else {
-            Reads(
-              _ => JsSuccess(code)
-            )
-          }
-      }
-      .andKeep(
-        (__ \ "additionalInformationCoded")
-          .read[String]
-          .map(SpecialMentionNoCountry(_))
-      )
-  }
-
-  implicit lazy val writes: OWrites[SpecialMentionNoCountry] = Json.writes[SpecialMentionNoCountry]
 
   implicit def writesXml: XMLWrites[SpecialMentionNoCountry] = XMLWrites[SpecialMentionNoCountry] {
     specialMention =>
       <SPEMENMT2>
+        <AddInfMT21>{specialMention.additionalInformation}</AddInfMT21>
         <AddInfCodMT23>{specialMention.additionalInformationCoded}</AddInfCodMT23>
       </SPEMENMT2>
   }
@@ -369,47 +211,6 @@ object SpecialMentionGuaranteeLiabilityAmount {
           _ => ParseFailure(SpecialMentionGuaranteeLiabilityAmountParseFailure(s"Failed to parse to SpecialMentionGuaranteeLiabilityAmount does not exist"))
         )
     }
-  }
-
-  implicit lazy val reads: Reads[SpecialMentionGuaranteeLiabilityAmount] = {
-
-    import play.api.libs.functional.syntax._
-
-    (__ \ "additionalInformationCoded")
-      .read[String]
-      .flatMap[String] {
-        case "CAL" => {
-          (__ \ "additionalInformation").read[String].flatMap[String] {
-            liabilityAmount =>
-              Reads(
-                _ => JsSuccess(liabilityAmount)
-              )
-          }
-        }
-        case _ => {
-          Reads(
-            _ => JsError(s"Failed to parse to SpecialMentionGuaranteeLiabilityAmount does not exist")
-          )
-        }
-      }
-      .andKeep(
-        (
-          (__ \ "additionalInformationCoded").read[String] and
-            (__ \ "additionalInformation").read[String]
-        )(SpecialMentionGuaranteeLiabilityAmount(_, _))
-      )
-  }
-
-  implicit lazy val writes: OWrites[SpecialMentionGuaranteeLiabilityAmount] = {
-
-    import play.api.libs.functional.syntax._
-
-    (
-      (__ \ "additionalInformation").write[String] and
-        (__ \ "additionalInformationCoded").write[String]
-    )(
-      s => (s.additionalInformationOfLiabilityAmount, s.additionalInformationCoded)
-    )
   }
 
   implicit def writesXml: XMLWrites[SpecialMentionGuaranteeLiabilityAmount] = XMLWrites[SpecialMentionGuaranteeLiabilityAmount] {

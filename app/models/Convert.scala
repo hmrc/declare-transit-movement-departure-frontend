@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-package models.journeyDomain
+package models
 
-import cats.implicits._
-import models.Index
-import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
-
-final case class SpecialMention(specialMention: String, additionalInfo: String)
-
-object SpecialMention {
-
-  def specialMentionsReader(index: Index, referenceIndex: Index): UserAnswersReader[SpecialMention] =
-    (
-      SpecialMentionTypePage(index, referenceIndex).reader,
-      SpecialMentionAdditionalInfoPage(index, referenceIndex).reader,
-    ).tupled.map((SpecialMention.apply _).tupled)
-}
+trait Convert[F[_], G[_], A, B] extends (F[A] => G[B])
