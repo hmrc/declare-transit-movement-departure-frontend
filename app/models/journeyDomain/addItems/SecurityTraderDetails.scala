@@ -16,11 +16,10 @@
 
 package models.journeyDomain.addItems
 
-import cats.data._
 import cats.implicits._
 import models.domain.Address
 import models.journeyDomain._
-import models.{EoriNumber, Index, UserAnswers}
+import models.{EoriNumber, Index}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
@@ -50,17 +49,13 @@ object SecurityTraderDetails {
         (
           SecurityConsignorNamePage(index).reader,
           SecurityConsignorAddressPage(index).reader
-        ).tupled
+          ).tupled
           .map {
             case (name, consignorAddress) =>
               val address = Address.prismAddressToConsignorAddress(consignorAddress)
               SecurityTraderDetails(name, address)
           }
       }
-//    val isEoriKnown: Kleisli[EitherType, UserAnswers, SecurityTraderDetails] =
-//      AddSecurityConsignorsEoriPage(index).reader.flatMap(
-//        isEoriKnown => if (isEoriKnown) useEori else useNameAndAddress
-//      )
 
     AddSecurityDetailsPage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
@@ -68,12 +63,6 @@ object SecurityTraderDetails {
           .filterOptionalDependent(_ == false)(useEori orElse useNameAndAddress)
       }
       .map(_.flatten)
-    // TODO add matcher
-//    AddSafetyAndSecurityConsignorPage.reader
-//      .flatMap {
-//        _ =>
-//          isEoriKnown.map(_.some)
-//      }
   }
 
   def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
@@ -107,7 +96,7 @@ object SecurityTraderDetails {
         (
           SecurityConsigneeNamePage(index).reader,
           SecurityConsigneeAddressPage(index).reader
-        ).tupled
+          ).tupled
           .map {
             case (name, consigneeAddress) =>
               val address = Address.prismAddressToConsigneeAddress(consigneeAddress)

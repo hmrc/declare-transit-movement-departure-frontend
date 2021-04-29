@@ -18,13 +18,9 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
 import generators.JourneyModelGenerators
-import models.{ConsigneeAddress, ConsignorAddress, EoriNumber}
 import models.domain.Address
-import models.journeyDomain.EitherType
 import models.reference._
-import org.scalactic.source
-import org.scalatest.Resources
-import org.scalatest.exceptions.{StackDepthException, TestFailedException}
+import models.{ConsigneeAddress, ConsignorAddress, EoriNumber}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
@@ -69,7 +65,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
               val expected = SecurityTraderEori(EoriNumber("testEori"))
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
               result.value mustEqual expected
             }
@@ -83,7 +79,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
               val expected = SecurityTraderEori(EoriNumber("testEori"))
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
               result.value mustEqual expected
             }
@@ -97,7 +93,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
               val expected = SecurityTraderEori(EoriNumber("testEori"))
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
               result.value mustEqual expected
             }
@@ -116,9 +112,9 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
                 .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
 
-              val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+              val address = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
               val expected = SecurityPersonalInformation("testName", address)
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
               result.value mustEqual expected
             }
@@ -136,7 +132,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
                 .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
 
-              val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+              val address = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
               val expected = SecurityPersonalInformation("testName", address)
 
               val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
@@ -155,7 +151,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
               val expected = SecurityTraderEori(EoriNumber("testEori"))
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
               result.value mustEqual expected
             }
@@ -200,7 +196,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
               .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
 
             val expected = SecurityTraderEori(EoriNumber("testEori"))
-            val result   = SecurityTraderDetails.consignorDetails(index).run(ua).isSuccessful
+            val result = SecurityTraderDetails.consignorDetails(index).run(ua).isSuccessful
 
             result.value mustEqual expected
           }
@@ -219,9 +215,9 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
               .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
               .unsafeSetVal(SecurityConsignorAddressPage(index))(consigneeAddress)
 
-            val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+            val address = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
             val expected = SecurityPersonalInformation("testName", address)
-            val result   = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
+            val result = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
 
             result.value mustEqual expected
           }

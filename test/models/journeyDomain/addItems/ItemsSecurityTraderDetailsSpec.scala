@@ -20,7 +20,6 @@ import base.{GeneratorSpec, SpecBase}
 import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.journeyDomain.{EitherType, UserAnswersReader}
 import models.reference.{Country, CountryCode}
 import models.{ConsignorAddress, EoriNumber, Index, UserAnswers}
 import org.scalatest.TryValues
@@ -47,7 +46,6 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(true)
           .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
-          .unsafeSetVal(TransportChargesPage(index))("Payment in cash")
           .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
           .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
           .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
@@ -98,7 +96,7 @@ object ItemsSecurityTraderDetailsSpec {
 
   def setItemsSecurityTraderDetails(itemsSecurityTraderDetails: ItemsSecurityTraderDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers =
     startUserAnswers
-    // Set method of payment
+      // Set method of payment
       .unsafeSetOpt(TransportChargesPage(index))(itemsSecurityTraderDetails.methodOfPayment)
 
       // Set commercial reference number
@@ -111,7 +109,7 @@ object ItemsSecurityTraderDetailsSpec {
       // Set Consignor
       .unsafeSetPFn(AddSecurityConsignorsEoriPage(index))(itemsSecurityTraderDetails.consignor)({
         case Some(SecurityTraderEori(_)) => true
-        case Some(_)                     => false
+        case Some(_) => false
       })
       .unsafeSetPFn(SecurityConsignorEoriPage(index))(itemsSecurityTraderDetails.consignor)({
         case Some(SecurityTraderEori(eori)) => eori.value
@@ -126,7 +124,7 @@ object ItemsSecurityTraderDetailsSpec {
       //     Set Consignee
       .unsafeSetPFn(AddSecurityConsigneesEoriPage(index))(itemsSecurityTraderDetails.consignee)({
         case Some(SecurityTraderEori(_)) => true
-        case Some(_)                     => false
+        case Some(_) => false
       })
       .unsafeSetPFn(SecurityConsigneeEoriPage(index))(itemsSecurityTraderDetails.consignee)({
         case Some(SecurityTraderEori(eori)) => eori.value
