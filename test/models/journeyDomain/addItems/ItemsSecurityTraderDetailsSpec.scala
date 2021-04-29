@@ -46,8 +46,8 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       "then item security details will be defined by user answers with no optional data" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(true)
-          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-          .unsafeSetVal(TransportChargesPage(index))("4.00")
+          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
+          .unsafeSetVal(TransportChargesPage(index))("Payment in cash")
           .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
           .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
           .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
@@ -56,7 +56,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
         val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
         val expected =
-          ItemsSecurityTraderDetails(Some("4.00"), Some("111111"), None, None, None)
+          ItemsSecurityTraderDetails(None, Some("111111"), None, None, None)
         result.value mustBe expected
       }
 
@@ -64,7 +64,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(true)
           .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-          .unsafeSetVal(TransportChargesPage(index))("4.00")
+          .unsafeSetVal(TransportChargesPage(index))("Payment in cash")
           .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
           .unsafeSetVal(AddDangerousGoodsCodePage(index))(true)
           .unsafeSetVal(DangerousGoodsCodePage(index))("4")
@@ -78,12 +78,11 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
           .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
           .unsafeSetVal(SecurityConsigneeEoriPage(index))("GB123456")
 
-        println("*************" + ItemsSecurityTraderDetails.parser(index).run(userAnswers))
         val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
         val expected =
           ItemsSecurityTraderDetails(
-            Some("4.00"),
+            Some("Payment in cash"),
             Some("111111"),
             Some("4"),
             Some(SecurityPersonalInformation("Bob", Address("First line", "Second line", "Postcode", Some(Country(CountryCode("FR"), "France"))))),
