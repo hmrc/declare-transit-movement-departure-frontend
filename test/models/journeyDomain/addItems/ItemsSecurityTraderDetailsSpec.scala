@@ -21,7 +21,8 @@ import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.{EitherType, UserAnswersReader}
-import models.{EoriNumber, Index, UserAnswers}
+import models.reference.{Country, CountryCode}
+import models.{ConsignorAddress, EoriNumber, Index, UserAnswers}
 import org.scalatest.TryValues
 import pages.AddSecurityDetailsPage
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
@@ -42,7 +43,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
 
     "When user selects 'Yes' to Add Safety and Security" - {
 
-      "then item security details will be defined by user answers using no optional data" in {
+      "then item security details will be defined by user answers with no optional data" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(true)
           .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
@@ -56,6 +57,39 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
 
         val expected =
           ItemsSecurityTraderDetails(Some("4.00"), Some("111111"), None, None, None)
+        result.value mustBe expected
+      }
+
+      "then item security details will be defined by user answers with optional data" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
+          //      .unsafeSetVal(TransportChargesPaymentMethodPage)("Payment in cash")
+          .unsafeSetVal(TransportChargesPage(index))("4.00")
+          .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
+          .unsafeSetVal(AddDangerousGoodsCodePage(index))(true)
+          .unsafeSetVal(DangerousGoodsCodePage(index))("4")
+          .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
+          .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
+          .unsafeSetVal(SecurityConsignorNamePage(index))("Bob")
+          .unsafeSetVal(SecurityConsignorAddressPage(index))(ConsignorAddress("First line", "Second line", "Postcode", Country(CountryCode("FR"), "France")))
+          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+          .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+          .unsafeSetVal(CircumstanceIndicatorPage)("A")
+          .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
+          .unsafeSetVal(SecurityConsigneeEoriPage(index))("GB123456")
+
+        println("*************" + ItemsSecurityTraderDetails.parser(index).run(userAnswers))
+        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
+
+        val expected =
+          ItemsSecurityTraderDetails(
+            Some("4.00"),
+            Some("111111"),
+            Some("4"),
+            Some(SecurityPersonalInformation("Bob", Address("First line", "Second line", "Postcode", Some(Country(CountryCode("FR"), "France"))))),
+            Some(SecurityTraderEori(EoriNumber("GB123456")))
+          )
         result.value mustBe expected
       }
     }
