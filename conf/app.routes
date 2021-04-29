@@ -31,7 +31,7 @@ POST       /:lrn/procedure-type                           controllers.ProcedureT
 GET        /:lrn/change-procedure-type                    controllers.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/change-procedure-type                    controllers.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/submissionConfirmation                   controllers.SubmissionConfirmationController.onPageLoad(lrn: LocalReferenceNumber)
+GET        /:lrn/submission-confirmation                   controllers.SubmissionConfirmationController.onPageLoad(lrn: LocalReferenceNumber)
 
 GET        /:departureId/guarantee-rejection              controllers.GuaranteeNotValidController.onPageLoad(departureId: DepartureId)
 
