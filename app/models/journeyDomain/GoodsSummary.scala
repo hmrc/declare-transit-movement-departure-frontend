@@ -90,8 +90,9 @@ object GoodsSummary {
 
     implicit val goodSummaryDetailsReader: UserAnswersReader[GoodSummaryDetails] = {
 
-      UserAnswersReader[GoodSummaryNormalDetails].widen[GoodSummaryDetails] orElse
-        UserAnswersReader[GoodSummarySimplifiedDetails].widen[GoodSummaryDetails]
+      UserAnswersReader[GoodSummaryNormalDetails].widen[GoodSummaryDetails]
+//      orElse
+//        UserAnswersReader[GoodSummarySimplifiedDetails].widen[GoodSummaryDetails]
     }
   }
 

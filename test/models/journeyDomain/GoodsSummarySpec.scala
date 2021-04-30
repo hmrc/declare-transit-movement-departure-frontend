@@ -21,11 +21,24 @@ import generators.JourneyModelGenerators
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
 import models.{Index, ProcedureType, UserAnswers}
 import org.scalacheck.{Arbitrary, Gen}
+import org.scalactic.source.Position
+import org.scalatest.exceptions.{StackDepthException, TestFailedException}
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
 class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+
   import GoodsSummarySpec._
+
+  implicit class UserAnswerReaderResultOps[R](userAnswersReaderResult: EitherType[R]) {
+
+    def isSuccessful(implicit pos: Position): R =
+      userAnswersReaderResult match {
+        case Right(value) => value
+        case Left(value) =>
+          throw new TestFailedException((_: StackDepthException) => Some(s"Expected reader to be successful, reader failed on $value"), None, pos)
+      }
+  }
 
   "GoodsSummary can be parsed" - {
 
@@ -40,9 +53,13 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
           val userAnswers =
-            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
+            setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
-          UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
+          println(s"\n\n ${userAnswers.data} \n\n")
+          UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
       }
     }
 
@@ -53,7 +70,10 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
           val userAnswers =
-            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
+            setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
           UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
       }
@@ -70,7 +90,10 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         forAll(arbGoodsSummary, arb[UserAnswers]) {
           (goodsSummary, ua) =>
             val userAnswers =
-              setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(true)
+              setGoodsSummary(goodsSummary)(ua)
+                .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+                .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
             UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
         }
@@ -89,29 +112,15 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         forAll(arbGoodsSummary, arb[UserAnswers]) {
           (goodsSummary, ua) =>
             val userAnswers =
-              setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
+              setGoodsSummary(goodsSummary)(ua)
+                .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+                .unsafeSetVal(PreLodgeDeclarationPage)(false)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
             UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
         }
 
       }
-    }
-
-    "when the declaration is Simplified procedure" in {
-
-      val simplifiedDetail: Arbitrary[GoodSummaryDetails] =
-        Arbitrary(arbitraryGoodSummarySimplifiedDetails.arbitrary.map(identity[GoodSummaryDetails]))
-
-      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)(simplifiedDetail))
-      forAll(arbGoodsSummary, arb[UserAnswers]) {
-
-        (goodsSummary, ua) =>
-          val userAnswers =
-            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-
-          UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
-      }
-
     }
 
     "when there are no seals and Pre-lodge is false" in {
@@ -121,7 +130,10 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
           val userAnswers =
-            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
+            setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
           UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
       }
@@ -134,7 +146,29 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
           val userAnswers =
-            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
+            setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+
+          UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
+      }
+
+    }
+
+    "when the declaration is Simplified procedure" in {
+
+      val simplifiedDetail: Arbitrary[GoodSummaryDetails] =
+        Arbitrary(arbitraryGoodSummarySimplifiedDetails.arbitrary.map(identity[GoodSummaryDetails]))
+
+      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)(simplifiedDetail))
+      forAll(arbGoodsSummary, arb[UserAnswers]) {
+
+        (goodsSummary, ua) =>
+          val userAnswers =
+            setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
 
           UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
       }
@@ -148,16 +182,8 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
   private def sealIdDetailsPageForIndex(index: Int): SealIdDetailsPage =
     SealIdDetailsPage(Index(index))
 
-  private def procedureType(goodSummaryDetails: GoodSummaryDetails): ProcedureType =
-    goodSummaryDetails match {
-      case _: GoodSummaryNormalDetails     => ProcedureType.Normal
-      case _: GoodSummarySimplifiedDetails => ProcedureType.Simplified
-    }
-
-  // Note: overrides procedure type
   def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
-      .unsafeSetVal(ProcedureTypePage)(procedureType(goodsSummary.goodSummaryDetails))
       .unsafeSetVal(DeclarePackagesPage)(goodsSummary.numberOfPackages.isDefined)
       .unsafeSetOpt(TotalPackagesPage)(goodsSummary.numberOfPackages)
       .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
