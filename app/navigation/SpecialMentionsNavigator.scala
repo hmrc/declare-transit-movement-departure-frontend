@@ -110,14 +110,19 @@ class SpecialMentionsNavigator @Inject()() extends Navigator {
 
   private def showDocumentTypePage(userAnswers: UserAnswers, itemIndex: Index): Option[Boolean] =
     (userAnswers.get(AddSecurityDetailsPage),
-     userAnswers.get(AddCircumstanceIndicatorPage),
      userAnswers.get(AddCommercialReferenceNumberPage),
+     userAnswers.get(AddCircumstanceIndicatorPage),
      itemIndex.position == 0) match {
-      case (Some(true), Some(false), Some(false), true) => Some(true)
-      case (Some(true), Some(true), Some(false), true) =>
+      case (Some(true), Some(false), Some(true), _) => {
         userAnswers.get(CircumstanceIndicatorPage) map (CircumstanceIndicator.conditionalIndicators.contains(_))
-      case (Some(_), _, _, _) => Some(false)
-      case _                  => None
+      }
+      case (Some(true), _, Some(false), true)       => Some(true)
+      case _                                        => Some(false)
+//      case (Some(true), Some(false), Some(false), true) => Some(true)
+//      case (Some(true), Some(true), Some(false), true) =>
+//        userAnswers.get(CircumstanceIndicatorPage) map (CircumstanceIndicator.conditionalIndicators.contains(_))
+//      case (Some(_), _, _, _) => Some(false)
+//      case _                  => None
     }
 
   private def documentsJourney(userAnswers: UserAnswers, itemIndex: Index, mode: Mode): Option[Call] =
