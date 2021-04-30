@@ -16,8 +16,8 @@
 
 package controllers.safetyAndSecurity
 
-import controllers.{routes => mainRoute}
 import base.{MockNunjucksRendererApp, SpecBase}
+import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.AddCommercialReferenceNumberAllItemsFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}

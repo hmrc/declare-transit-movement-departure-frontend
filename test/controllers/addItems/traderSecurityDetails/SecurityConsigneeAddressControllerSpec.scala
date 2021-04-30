@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.traderSecurityDetails.SecurityConsigneeAddressFormProvider
-import generators.{Generators, UserAnswersGenerator}
+import generators.Generators
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{ConsigneeAddress, CountryList, NormalMode, UserAnswers}

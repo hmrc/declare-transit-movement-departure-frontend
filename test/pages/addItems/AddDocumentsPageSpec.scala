@@ -16,8 +16,8 @@
 
 package pages.addItems
 
-import pages.behaviours.PageBehaviours
 import base.SpecBase
+import pages.behaviours.PageBehaviours
 
 class AddDocumentsPageSpec extends PageBehaviours with SpecBase {
 

@@ -17,8 +17,8 @@
 package derivable
 
 import base.{SpecBase, UserAnswersSpecHelper}
+import models.Index
 import models.reference.CountryCode
-import models.{Index, UserAnswers}
 import pages.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
 
 class DeriveOfficesOfTransitIdsSpec extends SpecBase with UserAnswersSpecHelper {

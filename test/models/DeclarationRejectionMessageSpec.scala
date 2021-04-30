@@ -18,12 +18,12 @@ package models
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.Generators
-import java.time.LocalDate
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
+import java.time.LocalDate
 import scala.xml.Elem
 
 class DeclarationRejectionMessageSpec extends AnyFreeSpec with Generators with ScalaCheckPropertyChecks with Matchers with OptionValues {

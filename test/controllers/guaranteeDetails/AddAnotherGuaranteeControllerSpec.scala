@@ -19,14 +19,13 @@ package controllers.guaranteeDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import forms.AddAnotherGuaranteeFormProvider
 import matchers.JsonMatchers
-import models.{GuaranteeType, UserAnswers}
+import models.GuaranteeType
 import navigation.annotations.GuaranteeDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddAnotherGuaranteePage
 import pages.guaranteeDetails.GuaranteeTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder

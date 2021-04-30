@@ -16,9 +16,8 @@
 
 package generators
 
-import java.time.{LocalDate, LocalDateTime}
 import cats.data.NonEmptyList
-import models.DeclarationType.{Option2}
+import models.DeclarationType.Option2
 import models._
 import models.domain.{Address, SealDomain}
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
@@ -35,17 +34,17 @@ import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPacka
 import models.journeyDomain.PreviousReferences.nonEUCountries
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
-import models.journeyDomain.traderDetails._
-import models.journeyDomain.traderDetails.TraderDetails._
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
+import models.journeyDomain.traderDetails.{TraderDetails, _}
 import models.journeyDomain.{traderDetails, _}
-import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.{SpecialMention => _, _}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+
+import java.time.{LocalDate, LocalDateTime}
 
 trait JourneyModelGenerators {
   self: Generators =>

@@ -17,28 +17,24 @@
 package services
 
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
-import cats.data.NonEmptyList
 import generators.{JourneyModelGenerators, ModelGenerators}
+import models.GuaranteeType.guaranteeReferenceRoute
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
-import models.journeyDomain.traderDetails.ConsignorDetails
-import models.journeyDomain.{EitherType, GuaranteeDetails, JourneyDomain, JourneyDomainSpec, PreTaskListDetails, SpecialMentionDomain}
+import models.journeyDomain.{EitherType, JourneyDomain, JourneyDomainSpec, SpecialMentionDomain}
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
-import models.messages.trader.TraderConsignor
 import models.messages.{DeclarationRequest, InterchangeControlReference}
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
+
 import java.time.LocalDateTime
-
-import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute, GuaranteeWaiver}
-import org.scalacheck.Gen
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

@@ -19,9 +19,7 @@ package forms
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class ConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
 

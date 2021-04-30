@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.guaranteeDetails.GuaranteeReferenceFormProvider
 import matchers.JsonMatchers
 import models.GuaranteeType.{FlatRateVoucher, GuaranteeWaiver}
-import models.{Index, NormalMode}
+import models.NormalMode
 import models.messages.guarantee.GuaranteeReferenceWithGrn
 import navigation.annotations.GuaranteeDetails
 import navigation.{FakeNavigator, Navigator}

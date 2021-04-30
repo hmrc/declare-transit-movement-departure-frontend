@@ -21,8 +21,8 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CircumstanceIndicatorFormProvider
 import matchers.JsonMatchers
-import models.{CircumstanceIndicatorList, NormalMode}
 import models.reference.CircumstanceIndicator
+import models.{CircumstanceIndicatorList, NormalMode}
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

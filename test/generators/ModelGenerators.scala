@@ -16,8 +16,6 @@
 
 package generators
 
-import java.time.LocalDateTime
-
 import models._
 import models.domain.SealDomain
 import models.domain.SealDomain.Constants

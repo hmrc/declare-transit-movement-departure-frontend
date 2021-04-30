@@ -18,7 +18,6 @@ package models.messages.header
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import xml.XMLWrites._
 import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.freespec.AnyFreeSpec
@@ -26,6 +25,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.{OptionValues, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import utils.Format
+import xml.XMLWrites._
 
 import scala.xml.NodeSeq
 import scala.xml.Utility.trim

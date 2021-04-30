@@ -18,7 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import generators.{Generators, JourneyModelGenerators}
-import models.journeyDomain.{MovementDetails, MovementDetailsSpec, UserAnswersReader}
+import models.journeyDomain.MovementDetailsSpec
 import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, ProcedureType, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
@@ -26,7 +26,6 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.{AnyContent, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.TaskListViewModel
 
 import scala.concurrent.Future
 

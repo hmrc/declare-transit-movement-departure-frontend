@@ -18,9 +18,7 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import models.messages.guarantee.GuaranteeReferenceWithOther.Constants.otherReferenceNumberLength
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class OtherReferenceFormProviderSpec() extends StringFieldBehaviours {
 

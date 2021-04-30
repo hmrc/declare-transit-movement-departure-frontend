@@ -20,8 +20,8 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
 import models.DeclarationType
-import navigation.{FakeNavigator, Navigator}
 import navigation.annotations.MovementDetails
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}

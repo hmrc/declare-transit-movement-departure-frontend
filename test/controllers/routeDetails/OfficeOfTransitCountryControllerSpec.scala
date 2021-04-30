@@ -18,8 +18,10 @@ package controllers.routeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
+import controllers.{routes => mainRoutes}
 import forms.OfficeOfTransitCountryFormProvider
 import matchers.JsonMatchers
+import models.reference.{Country, CountryCode}
 import models.{CountryList, NormalMode}
 import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
@@ -36,8 +38,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import controllers.{routes => mainRoutes}
-import models.reference.{Country, CountryCode}
 
 import scala.concurrent.Future
 

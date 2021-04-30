@@ -23,7 +23,7 @@ import forms.addItems.AddAnotherDocumentFormProvider
 import matchers.JsonMatchers
 import models.reference.DocumentType
 import models.{DocumentTypeList, NormalMode}
-import navigation.annotations.{AddItems, Document}
+import navigation.annotations.Document
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

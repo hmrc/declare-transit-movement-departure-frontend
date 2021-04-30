@@ -21,8 +21,8 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.OfficeOfDepartureFormProvider
 import matchers.JsonMatchers
-import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{CountryList, CustomsOfficeList, NormalMode}
+import models.reference.{CountryCode, CustomsOffice}
+import models.{CustomsOfficeList, NormalMode}
 import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

@@ -21,6 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.AddConsigneeFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
+import navigation.annotations.TraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -28,14 +29,13 @@ import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AddConsigneePage
 import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-import navigation.annotations.TraderDetails
-import play.api.inject.guice.GuiceApplicationBuilder
 
 import scala.concurrent.Future
 

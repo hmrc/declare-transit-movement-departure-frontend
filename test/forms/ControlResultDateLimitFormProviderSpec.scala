@@ -16,11 +16,11 @@
 
 package forms
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import forms.behaviours.DateBehaviours
 import play.api.data.FormError
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ControlResultDateLimitFormProviderSpec extends DateBehaviours {
 

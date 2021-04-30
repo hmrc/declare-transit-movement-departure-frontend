@@ -23,9 +23,7 @@ import forms.safetyAndSecurity.SafetyAndSecurityConsigneeAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{ConsigneeAddress, CountryList, NormalMode}
-import navigation.annotations.SafetyAndSecurity
-import models.NormalMode
-import navigation.annotations.SafetyAndSecurityTraderDetails
+import navigation.annotations.{SafetyAndSecurity, SafetyAndSecurityTraderDetails}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

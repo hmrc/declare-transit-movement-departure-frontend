@@ -17,17 +17,16 @@
 package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.ConfirmRemoveCountryFormProvider
 import matchers.JsonMatchers
-import controllers.{routes => mainRoute}
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.safetyAndSecurity.ConfirmRemoveCountryPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}

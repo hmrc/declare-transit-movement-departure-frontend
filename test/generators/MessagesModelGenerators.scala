@@ -16,8 +16,6 @@
 
 package generators
 
-import java.time.{LocalDate, LocalTime}
-
 import models.messages._
 import models.messages.customsoffice.{CustomsOffice, CustomsOfficeDeparture, CustomsOfficeDestination, CustomsOfficeTransit}
 import models.messages.goodsitem._
@@ -31,6 +29,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen.{alphaNumChar, choose}
 import org.scalacheck.{Arbitrary, Gen}
 import utils.Format.dateFormatted
+
+import java.time.{LocalDate, LocalTime}
 
 trait MessagesModelGenerators extends ModelGenerators with Generators {
 

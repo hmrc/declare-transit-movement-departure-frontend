@@ -19,8 +19,8 @@ package navigation
 import base.SpecBase
 import controllers.movementDetails.{routes => movementDetailsRoute}
 import generators.Generators
-import models._
 import models.ProcedureType._
+import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._

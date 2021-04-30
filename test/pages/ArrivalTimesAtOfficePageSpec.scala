@@ -16,10 +16,10 @@
 
 package pages
 
-import java.time.LocalDateTime
-
 import models.Index
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDateTime
 
 class ArrivalTimesAtOfficePageSpec extends PageBehaviours {
 

@@ -17,10 +17,8 @@
 package viewModels
 
 import base.SpecBase
-import models.reference.{DocumentType, PreviousReferencesDocumentType, SpecialMention}
-import models.{DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
-import models.reference.{Country, CountryCode, DocumentType, SpecialMention}
-import models.{CountryList, DocumentTypeList, SpecialMentionList}
+import models.reference._
+import models.{CountryList, DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._

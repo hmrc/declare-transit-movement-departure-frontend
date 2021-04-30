@@ -19,8 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.addItems.traderSecurityDetails.routes
 import generators.Generators
-import models.reference.{Country, CountryCode}
-import models.{CheckMode, ConsigneeAddress, ConsignorAddress, NormalMode, UserAnswers}
+import models.{CheckMode, ConsignorAddress, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.traderSecurityDetails._

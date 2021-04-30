@@ -16,8 +16,6 @@
 
 package services
 
-import java.time.LocalDate
-
 import base.{MockServiceApp, SpecBase}
 import connectors.DepartureMovementConnector
 import models.InvalidGuaranteeCode.G01
@@ -29,6 +27,7 @@ import org.scalatest.matchers.must.Matchers
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

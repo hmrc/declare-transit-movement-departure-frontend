@@ -16,7 +16,7 @@
 
 package models
 
-import generators.{Generators, ModelGenerators}
+import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec

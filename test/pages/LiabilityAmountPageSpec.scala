@@ -17,7 +17,7 @@
 package pages
 
 import generators.Generators
-import models.{Index, RepresentativeCapacity, UserAnswers}
+import models.{Index, UserAnswers}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours

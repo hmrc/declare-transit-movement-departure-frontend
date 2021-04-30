@@ -17,13 +17,12 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
-import cats.data.{NonEmptyList, ReaderT}
+import cats.data.NonEmptyList
 import generators.JourneyModelGenerators
 import models.DeclarationType.{Option1, Option2}
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.PreviousReferenceSpec.setPreviousReferenceUserAnswers
-import models.reference.CountryCode
-import models.{DeclarationType, Index, UserAnswers}
+import models.{Index, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.addItems._

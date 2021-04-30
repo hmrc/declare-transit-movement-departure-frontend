@@ -21,7 +21,7 @@ import forms.behaviours.StringFieldBehaviours
 import models.Index
 import models.domain.StringFieldRegex.eoriNumberRegex
 import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
+import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class TraderDetailsConsigneeEoriNumberFormProviderSpec extends StringFieldBehaviours {

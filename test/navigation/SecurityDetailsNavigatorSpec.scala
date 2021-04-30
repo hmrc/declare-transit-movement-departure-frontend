@@ -17,12 +17,12 @@
 package navigation
 
 import base.SpecBase
+import controllers.addItems.securityDetails._
 import generators.Generators
 import models.{CheckMode, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.securityDetails._
-import controllers.addItems.securityDetails._
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage}
 
 class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

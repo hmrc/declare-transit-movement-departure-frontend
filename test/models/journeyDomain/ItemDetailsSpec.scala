@@ -24,7 +24,7 @@ import models.{Index, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.addItems.CommodityCodePage
-import pages.{AddTotalNetMassPage, IsCommodityCodeKnownPage, ItemDescriptionPage, ItemTotalGrossMassPage, QuestionPage, TotalNetMassPage}
+import pages._
 
 class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 

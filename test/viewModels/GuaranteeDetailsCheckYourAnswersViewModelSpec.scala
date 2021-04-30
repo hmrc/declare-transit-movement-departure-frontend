@@ -18,13 +18,13 @@ package viewModels
 
 import base.SpecBase
 import generators.Generators
-import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute, GuaranteeWaiver}
-import models.{GuaranteeType, Index}
+import models.GuaranteeType.{nonGuaranteeReferenceRoute, GuaranteeWaiver}
 import models.reference.{CountryCode, CustomsOffice}
+import models.{GuaranteeType, Index}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
-import pages.{AccessCodePage, DefaultAmountPage, DestinationOfficePage, LiabilityAmountPage, OfficeOfDeparturePage, OtherReferencePage}
+import pages._
 import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
 
 class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

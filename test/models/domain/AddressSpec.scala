@@ -18,8 +18,8 @@ package models.domain
 
 import base.MonocleSpec
 import generators.{Generators, ModelGenerators}
-import models.{CarrierAddress, ConsigneeAddress, ConsignorAddress, PrincipalAddress}
 import models.reference.{Country, CountryCode}
+import models.{CarrierAddress, ConsigneeAddress, ConsignorAddress, PrincipalAddress}
 import monocle.law.discipline.PrismTests
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import play.api.libs.functional.syntax._

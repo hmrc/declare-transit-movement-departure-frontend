@@ -16,24 +16,22 @@
 
 package controllers
 
-import base.SpecBase
-import base.MockNunjucksRendererApp
+import base.{MockNunjucksRendererApp, SpecBase}
 import matchers.JsonMatchers
 import models.{DeclarationRejectionMessage, RejectionError}
-
-import java.time.LocalDate
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsLookupResult, JsObject, Json}
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.DepartureMessageService
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class DeclarationRejectionControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {

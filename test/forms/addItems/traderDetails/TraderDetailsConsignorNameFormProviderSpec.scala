@@ -18,9 +18,7 @@ package forms.addItems.traderDetails
 
 import forms.behaviours.StringFieldBehaviours
 import models.Index
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class TraderDetailsConsignorNameFormProviderSpec extends StringFieldBehaviours {
 

@@ -18,8 +18,8 @@ package viewModels
 
 import base.SpecBase
 import generators.Generators
-import models.{CircumstanceIndicatorList, ConsignorAddress, CountryList}
 import models.reference.{CircumstanceIndicator, Country, CountryCode}
+import models.{CircumstanceIndicatorList, ConsignorAddress, CountryList}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.MessageInterpolators

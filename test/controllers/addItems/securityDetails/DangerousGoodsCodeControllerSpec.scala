@@ -21,8 +21,8 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.securityDetails.DangerousGoodsCodeFormProvider
 import matchers.JsonMatchers
-import models.{DangerousGoodsCodeList, NormalMode}
 import models.reference.DangerousGoodsCode
+import models.{DangerousGoodsCodeList, NormalMode}
 import navigation.annotations.SecurityDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -38,7 +38,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import utils.getDangerousGoodsCodeAsJson
 
 import scala.concurrent.Future
 

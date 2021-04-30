@@ -20,8 +20,8 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.traderDetails.TraderDetailsConsignorEoriKnownFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
 import navigation.annotations.AddItems
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
