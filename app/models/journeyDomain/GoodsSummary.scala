@@ -50,7 +50,7 @@ object GoodsSummary {
 
   object GoodSummaryNormalDetails {
 
-    implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] = {
+    implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
         PreLodgeDeclarationPage.reader
           .flatMap {
@@ -70,7 +70,6 @@ object GoodsSummary {
                 GoodSummaryNormalDetails(None).pure[UserAnswersReader]
           }
       }
-    }
   }
 
   final case class GoodSummarySimplifiedDetails(authorisedLocationCode: String, controlResultDateLimit: LocalDate) extends GoodSummaryDetails
