@@ -16,12 +16,12 @@
 
 package models.journeyDomain
 
-import cats.data.{NonEmptyList, ReaderT}
+import cats.data.NonEmptyList
 import cats.implicits._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
 import models.DeclarationType.Option2
+import models.Index
 import models.reference.CountryCode
-import models.{Index, UserAnswers}
 import pages.addItems._
 import pages.{CountryOfDispatchPage, DeclarationTypePage}
 

@@ -21,7 +21,6 @@ import controllers.actions._
 import derivable.DeriveNumberOfOfficeOfTransits
 import forms.ConfirmRemoveOfficeOfTransitFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -38,6 +37,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmRemoveOfficeOfTransitController @Inject()(

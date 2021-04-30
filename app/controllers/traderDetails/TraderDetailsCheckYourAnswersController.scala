@@ -18,17 +18,17 @@ package controllers.traderDetails
 
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import javax.inject.Inject
 import models.{LocalReferenceNumber, UserAnswers}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.viewmodels.MessageInterpolators
 import utils.TraderDetailsCheckYourAnswersHelper
 import viewModels.sections.Section
-import uk.gov.hmrc.viewmodels.MessageInterpolators
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class TraderDetailsCheckYourAnswersController @Inject()(

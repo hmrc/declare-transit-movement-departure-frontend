@@ -18,7 +18,6 @@ package controllers.addItems
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import javax.inject.Inject
 import models.{DependentSection, Index, LocalReferenceNumber}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
@@ -28,6 +27,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.AddItemsCheckYourAnswersViewModel
 import viewModels.sections.Section
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ItemsCheckYourAnswersController @Inject()(

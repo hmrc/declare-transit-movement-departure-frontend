@@ -16,9 +16,9 @@
 
 package models.messages.goodsitem
 
+import cats.syntax.all._
 import com.lucidchart.open.xtract.XmlReader
 import play.api.libs.json._
-import cats.syntax.all._
 import xml.XMLWrites
 
 import scala.xml.NodeSeq

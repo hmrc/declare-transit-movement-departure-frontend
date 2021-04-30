@@ -17,7 +17,7 @@
 package pages.safetyAndSecurity
 
 import models.Index
-import models.reference.{CountryCode}
+import models.reference.CountryCode
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import queries.Constants.countriesOfRouting

@@ -18,8 +18,8 @@ package models.messages.trader
 
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.messages.escapeXml
 import models.LanguageCodeEnglish
+import models.messages.escapeXml
 import xml.XMLWrites
 
 import scala.xml._

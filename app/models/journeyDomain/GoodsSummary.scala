@@ -16,14 +16,14 @@
 
 package models.journeyDomain
 
-import java.time.LocalDate
-
 import cats.implicits._
 import derivable.DeriveNumberOfSeals
 import models.ProcedureType
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
 import pages._
+
+import java.time.LocalDate
 
 case class GoodsSummary(
   numberOfPackages: Option[Int],

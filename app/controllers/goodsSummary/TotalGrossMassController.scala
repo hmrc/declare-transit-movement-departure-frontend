@@ -18,7 +18,6 @@ package controllers.goodsSummary
 
 import controllers.actions._
 import forms.TotalGrossMassFormProvider
-import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.GoodsSummary
@@ -31,6 +30,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TotalGrossMassController @Inject()(

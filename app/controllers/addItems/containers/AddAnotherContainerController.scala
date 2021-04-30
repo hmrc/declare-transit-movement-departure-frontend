@@ -19,8 +19,6 @@ package controllers.addItems.containers
 import controllers.actions._
 import derivable.DeriveNumberOfContainers
 import forms.addItems.containers.AddAnotherContainerFormProvider
-
-import javax.inject.Inject
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -36,6 +34,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.ContainersCheckYourAnswersHelper
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherContainerController @Inject()(

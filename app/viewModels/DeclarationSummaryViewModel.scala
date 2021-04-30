@@ -18,7 +18,7 @@ package viewModels
 
 import config.ManageTransitMovementsService
 import models.journeyDomain.{EitherType, JourneyDomain, UserAnswersReader}
-import models.{LocalReferenceNumber, SectionDetails, UserAnswers}
+import models.{LocalReferenceNumber, UserAnswers}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc.Call

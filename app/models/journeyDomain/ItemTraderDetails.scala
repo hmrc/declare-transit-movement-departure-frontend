@@ -21,8 +21,8 @@ import cats.implicits._
 import models.domain.Address
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.{EoriNumber, Index, UserAnswers}
-import pages.addItems.traderDetails._
 import pages._
+import pages.addItems.traderDetails._
 
 case class ItemTraderDetails(consignor: Option[RequiredDetails], consignee: Option[RequiredDetails])
 

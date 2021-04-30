@@ -19,8 +19,7 @@ package controllers.safetyAndSecurity
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import javax.inject.Inject
-import models.{DependentSection, Index, LocalReferenceNumber, NormalMode}
+import models.{DependentSection, LocalReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -29,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.SafetyAndSecurityCheckYourAnswersViewModel
 import viewModels.sections.Section
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class SafetyAndSecurityCheckYourAnswersController @Inject()(

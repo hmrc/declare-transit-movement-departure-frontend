@@ -16,15 +16,14 @@
 
 package models.messages
 
-import java.time.{LocalDate, LocalTime}
-
-import com.lucidchart.open.xtract.{__, XmlReader}
 import cats.syntax.all._
+import com.lucidchart.open.xtract.{__, XmlReader}
 import models.XMLReads._
 import utils.Format
 import xml.XMLWrites
 import xml.XMLWrites._
 
+import java.time.{LocalDate, LocalTime}
 import scala.xml.NodeSeq
 
 case class Meta(interchangeControlReference: InterchangeControlReference,
