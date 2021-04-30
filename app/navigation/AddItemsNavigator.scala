@@ -52,7 +52,6 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case DeclareNumberOfPackagesPage(itemIndex, packageIndex) => ua => declareNumberOfPackages(itemIndex, packageIndex, ua, NormalMode)
     case TotalPiecesPage(itemIndex, packageIndex)             => ua => Some(addItemsRoutes.AddMarkController.onPageLoad(ua.id, itemIndex, packageIndex, NormalMode))
     case AddMarkPage(itemIndex, packageIndex)                 => ua => addMark(itemIndex, packageIndex, ua, NormalMode)
-    case DeclareMarkPage(itemIndex, packageIndex)             => ua => Some(addItemsRoutes.AddAnotherPackageController.onPageLoad(ua.id, itemIndex, NormalMode))
     case AddAnotherPackagePage(itemIndex)                     => ua => addAnotherPackage(itemIndex, ua, NormalMode)
     case TraderDetailsConsignorEoriKnownPage(index)           => ua => consignorEoriKnown(ua, index, NormalMode)
     case TraderDetailsConsignorEoriNumberPage(index)          => ua => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.id, index, NormalMode))
@@ -63,7 +62,6 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case TraderDetailsConsigneeNamePage(index)                => ua => consigneeName(ua, index, NormalMode)
     case TraderDetailsConsigneeAddressPage(index)             => ua => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.id, index, Index(0), NormalMode))
     case DeclareMarkPage(itemIndex, _)                        => ua => Some(addItemsRoutes.AddAnotherPackageController.onPageLoad(ua.id, itemIndex, NormalMode))
-    case AddAnotherPackagePage(itemIndex)                     => ua => addAnotherPackage(itemIndex, ua, NormalMode)
     case RemovePackagePage(itemIndex)                         => ua => Some(removePackage(itemIndex, NormalMode)(ua))
     case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, referenceIndex) => ua => Some(removePreviousAdministrativeReference(itemIndex, NormalMode)(ua))
     case AddAdministrativeReferencePage(itemIndex)            => ua => addAdministrativeReferencePage(itemIndex, ua, NormalMode)
@@ -75,9 +73,6 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case ContainerNumberPage(itemIndex, containerIndex) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.id, itemIndex, NormalMode))
     case AddAnotherContainerPage(itemIndex) => ua => Some(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(ua.id, itemIndex, NormalMode))
     case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, NormalMode))
-    case ContainerNumberPage(itemIndex, containerIndex)       => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.id, itemIndex, NormalMode))
-    case AddAnotherContainerPage(itemIndex)                   => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex))
-    case ConfirmRemoveContainerPage(index, _)                 => ua => Some(confirmRemoveContainerRoute(ua, index, NormalMode))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
@@ -94,10 +89,6 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case AddMarkPage(itemIndex, packageIndex)                 => ua => addMark(itemIndex, packageIndex, ua, CheckMode)
     case DeclareMarkPage(itemIndex, packageIndex)             => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex))
     case AddAnotherPackagePage(itemIndex)                     => ua => addAnotherPackage(itemIndex, ua, CheckMode)
-    case ItemDescriptionPage(index)                           => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case ItemTotalGrossMassPage(index)                        => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case AddTotalNetMassPage(index)                           => ua => addTotalNetMassRoute(index, ua,  CheckMode)
-    case TotalNetMassPage(index)                              => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id,index))
     case TraderDetailsConsignorEoriKnownPage(index)           => ua => consignorEoriKnown(ua, index, CheckMode)
     case TraderDetailsConsignorEoriNumberPage(index)          => ua => consignorEoriNumberCheckMode(ua, index)
     case TraderDetailsConsignorNamePage(index)                => ua => consignorName(ua, index, CheckMode)
@@ -106,10 +97,7 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case TraderDetailsConsigneeEoriNumberPage(index)          => ua => consigneeEoriNumberCheckMode(ua, index)
     case TraderDetailsConsigneeNamePage(index)                => ua => consigneeName(ua, index, CheckMode)
     case TraderDetailsConsigneeAddressPage(index)             => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case DeclareMarkPage(itemIndex, packageIndex)             => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex))
-    case AddAnotherPackagePage(itemIndex)                     => ua => addAnotherPackage(itemIndex, ua, CheckMode)
     case RemovePackagePage(itemIndex)                         => ua => Some(removePackage(itemIndex, CheckMode)(ua))
-    case RemovePackagePage(itemIndex)                         => ua => Some(addAnotherPackageRoutes.AddAnotherPackageController.onPageLoad(ua.id, itemIndex, CheckMode))
     case AddAdministrativeReferencePage(itemIndex)            => ua =>  addAdministrativeReferencePage(itemIndex, ua, CheckMode)
     case ReferenceTypePage(itemIndex, referenceIndex)         => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.id, itemIndex, referenceIndex, CheckMode))
     case PreviousReferencePage(itemIndex, referenceIndex)     => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.id, itemIndex, referenceIndex, CheckMode))
@@ -153,8 +141,9 @@ class AddItemsNavigator @Inject()() extends Navigator {
 
   private def consignorName(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(TraderDetailsConsignorAddressPage(index)),mode) match {
-      case (None, _)                => Some(traderDetailsRoutes.TraderDetailsConsignorAddressController.onPageLoad (ua.id, index, mode))
       case (Some(value), CheckMode) => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+      case (None, _)                => Some(traderDetailsRoutes.TraderDetailsConsignorAddressController.onPageLoad (ua.id, index, mode))
+      case _                        => Some(mainRoutes.SessionExpiredController.onPageLoad ())
     }
 
   private def consignorEoriNumberCheckMode(ua: UserAnswers, index: Index) =
@@ -301,8 +290,10 @@ class AddItemsNavigator @Inject()() extends Navigator {
         case (Some(true), Some(true)) => ua.get(AddCommercialReferenceNumberAllItemsPage) match {
           case Some(true) => controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad (ua.id, itemIndex, NormalMode)
           case Some(false) => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.id, itemIndex, NormalMode)
+          case _ => mainRoutes.SessionExpiredController.onPageLoad()
         }
         case (Some(false), _) => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex)
+        case _ => mainRoutes.SessionExpiredController.onPageLoad()
       }
     }
   }
@@ -326,8 +317,10 @@ class AddItemsNavigator @Inject()() extends Navigator {
         case (Some(true), Some(true)) => ua.get(AddCommercialReferenceNumberAllItemsPage) match {
           case Some(true) => controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(ua.id, itemIndex, NormalMode)
           case Some(false) => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.id, itemIndex, NormalMode)
+          case _ => mainRoutes.SessionExpiredController.onPageLoad()
         }
         case (Some(false), _) => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex)
+        case _ => mainRoutes.SessionExpiredController.onPageLoad()
       }
     }
   }

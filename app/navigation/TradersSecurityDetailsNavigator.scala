@@ -50,7 +50,7 @@ class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
     case SecurityConsigneeAddressPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
   }
 
-  private def securityConsignorNameRoute(ua: UserAnswers, index: Index) = 
+  private def securityConsignorNameRoute(ua: UserAnswers, index: Index) =
     ua.get(SecurityConsignorAddressPage(index)) match {
       case Some(_) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
       case None => Some(routes.SecurityConsignorAddressController.onPageLoad(ua.id, index, CheckMode))
@@ -62,6 +62,7 @@ class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
         Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
       case Some(false) =>
         Some(routes.AddSecurityConsigneesEoriController.onPageLoad(ua.id, index, NormalMode))
+      case _ => Some(controllers.routes.SessionExpiredController.onPageLoad())
     }
 
   private def addSecurityConsignorsEoriRoute(ua: UserAnswers, index: Index, mode: Mode) =

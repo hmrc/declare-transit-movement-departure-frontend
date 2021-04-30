@@ -49,12 +49,14 @@ class SecurityDetailsNavigator @Inject()() extends Navigator {
       case (Some(false), _, NormalMode) => Some(dangerousGoodsCodeRoute(ua, index))
       case (Some(true), None, CheckMode)    => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.id, index, CheckMode))
       case (Some(_), _, CheckMode) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+      case _ => Some(controllers.routes.SessionExpiredController.onPageLoad())
     }
 
   private def transportChargesRoute(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(AddCommercialReferenceNumberAllItemsPage), mode) match {
       case (Some(true), NormalMode) => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.id, index, NormalMode))
       case (_, NormalMode) => Some(routes.CommercialReferenceNumberController.onPageLoad(ua.id, index, NormalMode))
+      case _ => Some(controllers.routes.SessionExpiredController.onPageLoad())
     }
 
   private def dangerousGoodsCodeRoute(ua: UserAnswers, index: Index) =
@@ -62,6 +64,7 @@ class SecurityDetailsNavigator @Inject()() extends Navigator {
       case (Some(true), Some(true)) => controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index)
       case (Some(true), Some(false)) => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(ua.id, index, NormalMode)
       case (Some(false), _) => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsignorsEoriController.onPageLoad(ua.id, index, NormalMode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   // format: on
 }

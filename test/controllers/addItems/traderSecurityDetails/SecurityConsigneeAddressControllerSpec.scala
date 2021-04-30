@@ -106,7 +106,7 @@ class SecurityConsigneeAddressControllerSpec
 
     }
 
-    "must redirect to Session Expired for a GET if no existing data is found for SecurityConsigneeNamePage" in {
+    "must redirect to Session Expired for a GET if SecurityConsigneeNamePage is empty" in {
       val ua          = Arbitrary.arbitrary[UserAnswers].sample.value
       val userAnswers = ua.remove(SecurityConsigneeNamePage(index)).success.value
 
@@ -243,9 +243,28 @@ class SecurityConsigneeAddressControllerSpec
 
     }
 
-    "must redirect to Session Expired for a POST if no existing data is found" in {
+    "must redirect to Session Expired for a POST if no  data is found" in {
 
       dataRetrievalNoData()
+
+      val request =
+        FakeRequest(POST, securityConsigneeAddressRoute)
+          .withFormUrlEncodedBody(("value", "answer"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+
+    }
+
+    "must redirect to Session Expired for a POST if SecurityConsigneeNamePage is empty" in {
+
+      val ua          = Arbitrary.arbitrary[UserAnswers].sample.value
+      val userAnswers = ua.remove(SecurityConsigneeNamePage(index)).success.value
+
+      dataRetrievalWithData(userAnswers)
 
       val request =
         FakeRequest(POST, securityConsigneeAddressRoute)

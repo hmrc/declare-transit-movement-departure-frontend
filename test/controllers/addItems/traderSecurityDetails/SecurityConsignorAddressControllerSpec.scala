@@ -228,5 +228,36 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with MockNunjucksR
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
 
     }
+
+    "must redirect to Session Expired for a GET if SecurityConsignorNamePage has no data" in {
+      val userAnswers = emptyUserAnswers.remove(SecurityConsignorNamePage(index)).success.value
+      dataRetrievalWithData(userAnswers)
+
+      val request = FakeRequest(GET, securityConsignorAddressRoute)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+
+    }
+
+    "must redirect to Session Expired for a POST if SecurityConsignorNamePage has no data" in {
+
+      val userAnswers = emptyUserAnswers.remove(SecurityConsignorNamePage(index)).success.value
+      dataRetrievalWithData(userAnswers)
+
+      val request =
+        FakeRequest(POST, securityConsignorAddressRoute)
+          .withFormUrlEncodedBody(("value", "answer"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+
+    }
   }
 }

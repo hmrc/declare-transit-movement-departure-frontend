@@ -99,6 +99,7 @@ class SafetyAndSecurityTraderDetailsNavigator @Inject()() extends Navigator {
       case (Some(false), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
       case (Some(true), None, CheckMode) => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, CheckMode)
       case (Some(true), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   private def addSafetyAndSecurityConsignorEoriRoute(ua: UserAnswers, mode:Mode): Call =
@@ -120,6 +121,7 @@ class SafetyAndSecurityTraderDetailsNavigator @Inject()() extends Navigator {
       case (Some(false), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
       case (Some(true), None, CheckMode) => routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, CheckMode)
       case (Some(true), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   private def addSafetyAndSecurityConsigneeEoriRoute(ua: UserAnswers, mode:Mode): Call =

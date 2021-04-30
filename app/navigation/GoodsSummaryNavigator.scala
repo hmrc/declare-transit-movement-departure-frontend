@@ -86,6 +86,7 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
       case (Some(true), _, _)               => routes.TotalPackagesController.onPageLoad(ua.id, mode)
       case (Some(false), _, NormalMode)     => routes.TotalGrossMassController.onPageLoad(ua.id, mode)
       case (Some(false), _, CheckMode)      => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   def totalGrossMassRoute(ua: UserAnswers): Call =
@@ -93,12 +94,14 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
       case (_, Some(true) )     => controllers.routes.LoadingPlaceController.onPageLoad(ua.id, NormalMode)
       case (Some(Normal), _) =>  routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
       case (Some(Simplified), _) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   def loadingPlaceRoute(ua: UserAnswers): Call =
     ua.get(ProcedureTypePage) match {
       case Some(Normal)     => routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
       case Some(Simplified) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   def addCustomsApprovedLocationRoute(ua: UserAnswers, mode: Mode): Call =
@@ -129,6 +132,7 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     (ua.get(SealsInformationPage), mode) match {
       case (Some(true), _)  => routes.SealIdDetailsController.onPageLoad(ua.id, sealIndex, mode)
       case (Some(false), _) => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
   // format: on

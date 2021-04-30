@@ -123,6 +123,7 @@ class SecurityConsignorAddressController @Inject()(
                       } yield Redirect(navigator.nextPage(SecurityConsignorAddressPage(index), mode, updatedAnswers))
                   )
             }
+          case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
         }
     }
 }

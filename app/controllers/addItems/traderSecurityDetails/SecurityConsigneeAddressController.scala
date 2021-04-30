@@ -124,6 +124,7 @@ class SecurityConsigneeAddressController @Inject()(
                       } yield Redirect(navigator.nextPage(SecurityConsigneeAddressPage(index), mode, updatedAnswers))
                   )
             }
+          case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
         }
     }
 }
