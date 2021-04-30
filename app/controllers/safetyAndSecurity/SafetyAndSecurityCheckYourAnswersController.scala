@@ -19,6 +19,7 @@ package controllers.safetyAndSecurity
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
+import models.journeyDomain.{EitherType, SafetyAndSecurity, UserAnswersReader}
 import javax.inject.Inject
 import models.{DependentSection, Index, LocalReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}

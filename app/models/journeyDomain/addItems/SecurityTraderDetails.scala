@@ -71,23 +71,17 @@ object SecurityTraderDetails {
       val circumstanceIndicator: UserAnswersReader[SecurityTraderDetails] = AddCircumstanceIndicatorPage.filterMandatoryDependent(identity) {
         CircumstanceIndicatorPage.reader flatMap {
           case "E" =>
-            SecurityConsigneeEoriPage(index).reader
-              .map(EoriNumber(_))
-              .map(SecurityTraderDetails(_))
+            readConsigneeEori(index)
 
           case _ =>
             AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(identity) {
-              SecurityConsigneeEoriPage(index).reader
-                .map(EoriNumber(_))
-                .map(SecurityTraderDetails(_))
+              readConsigneeEori(index)
             }
         }
       }
 
       val emptyCircumstanceIndicator: UserAnswersReader[SecurityTraderDetails] = AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == false) {
-        SecurityConsigneeEoriPage(index).reader
-          .map(EoriNumber(_))
-          .map(SecurityTraderDetails(_))
+        readConsigneeEori(index)
       }
       circumstanceIndicator orElse emptyCircumstanceIndicator
     }
@@ -113,4 +107,9 @@ object SecurityTraderDetails {
       }
       .map(_.flatten)
   }
+
+  private def readConsigneeEori(index: Index) =
+    SecurityConsigneeEoriPage(index).reader
+      .map(EoriNumber(_))
+      .map(SecurityTraderDetails(_))
 }
