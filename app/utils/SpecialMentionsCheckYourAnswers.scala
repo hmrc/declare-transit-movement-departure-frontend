@@ -17,7 +17,7 @@
 package utils
 
 import controllers.addItems.specialMentions.{routes => specialMentionRoutes}
-import models.{CheckMode, Index, LocalReferenceNumber, Mode, NormalMode, SpecialMentionList, UserAnswers}
+import models.{CheckMode, Index, LocalReferenceNumber, Mode, SpecialMentionList, UserAnswers}
 import pages.addItems.specialMentions._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._

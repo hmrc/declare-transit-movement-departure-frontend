@@ -96,7 +96,8 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
 
       forAll(arb[UserAnswers], arb[SafetyAndSecurity], arb[String]) {
         (baseUserAnswers, safetyAndSecurity, mode) =>
-          val updatedSafetyAndSecurity = safetyAndSecurity.copy(circumstanceIndicator = Some("E"), consignee = Some(SecurityTraderDetails(eori = EoriNumber("1234567"))))
+          val updatedSafetyAndSecurity =
+            safetyAndSecurity.copy(circumstanceIndicator = Some("E"), consignee = Some(SecurityTraderDetails(eori = EoriNumber("1234567"))))
 
           val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
 

@@ -19,7 +19,6 @@ package queries
 import models.Index
 import pages.QuestionPage
 import play.api.libs.json.{JsObject, JsPath}
-import queries.Constants.{containers, items}
 
 final case class ContainersQuery(index: Index, containerIndex: Index) extends QuestionPage[JsObject] {
 

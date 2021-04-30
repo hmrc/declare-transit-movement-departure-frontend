@@ -16,12 +16,8 @@
 
 package pages
 
-import derivable.DeriveNumberOfOfficeOfTransits
-import models.{Index, UserAnswers}
 import models.reference.CountryCode
 import play.api.libs.json.JsPath
-
-import scala.util.Try
 
 case object DestinationCountryPage extends QuestionPage[CountryCode] {
 

@@ -17,8 +17,8 @@
 package pages
 
 import models.UserAnswers
-import play.api.libs.json.JsPath
 import models.journeyDomain.TransportDetails.InlandMode.Constants
+import play.api.libs.json.JsPath
 
 import scala.util.Try
 

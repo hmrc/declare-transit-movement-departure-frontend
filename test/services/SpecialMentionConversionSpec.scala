@@ -19,51 +19,49 @@ package services
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import generators.{JourneyModelGenerators, ModelGenerators}
+import models.GuaranteeType.GuaranteeWaiver
+import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.SpecialMentionDomain
-import models.messages.goodsitem.{SpecialMentionExportFromGB, SpecialMentionNoCountry}
+import models.messages.goodsitem.{SpecialMentionExportFromGB, SpecialMentionGuaranteeLiabilityAmount, SpecialMentionNoCountry}
 
 class SpecialMentionConversionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with ModelGenerators {
 
   "SpecialMentionConversion" - {
 
-    "must return a list of SpecialMentionExportFromGB when given a SpecialMentionDomain with a type of DG0 or DG1" in {
+    "apply" - {
 
-      val specialMentionDomain1            = SpecialMentionDomain("DG0", "Additional info")
-      val specialMentionDomain2            = SpecialMentionDomain("DG1", "Additional info")
-      val specialMentionDomainNonEmptyList = NonEmptyList(specialMentionDomain1, List(specialMentionDomain2))
+      val specialMentions     = Some(NonEmptyList(SpecialMentionDomain("DG0", "Additional info"), List.empty))
+      val guaranteeReferences = NonEmptyList(GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiability, "****"), List.empty)
 
-      val expectedSpecialMention1   = SpecialMentionExportFromGB("DG0", "Additional info")
-      val expectedSpecialMention2   = SpecialMentionExportFromGB("DG1", "Additional info")
-      val expectedSpecialMentionSeq = Seq(expectedSpecialMention1, expectedSpecialMention2)
+      val expectedSpecialMention                = SpecialMentionExportFromGB("DG0", "Additional info")
+      val expectedSpecialMentionLiabilityAmount = SpecialMentionGuaranteeLiabilityAmount("CAL", s"${GuaranteeReference.defaultLiability}EURAB123")
 
-      SpecialMentionConversion(specialMentionDomainNonEmptyList) mustBe expectedSpecialMentionSeq
+      "must add SpecialMentionGuaranteeLiabilityAmount to the first special mention in a list if index is 0" in {
 
-    }
+        val result = SpecialMentionConversion(specialMentions, guaranteeReferences, 0)
 
-    "must return a list of SpecialMentionNoCountry when given a SpecialMentionDomain with a type that is not DG0 or DG1" in {
+        result mustBe Seq(expectedSpecialMentionLiabilityAmount, expectedSpecialMention)
+      }
 
-      val specialMentionDomain1            = SpecialMentionDomain("ABC", "Additional info")
-      val specialMentionDomainNonEmptyList = NonEmptyList(specialMentionDomain1, List.empty)
+      "must add SpecialMentionGuaranteeLiabilityAmount as the only SpecialMention in the list if other SpecialMentions are not defined" in {
 
-      val expectedSpecialMention1   = SpecialMentionNoCountry("ABC", "Additional info")
-      val expectedSpecialMentionSeq = Seq(expectedSpecialMention1)
+        val result = SpecialMentionConversion(None, guaranteeReferences, 0)
 
-      SpecialMentionConversion(specialMentionDomainNonEmptyList) mustBe expectedSpecialMentionSeq
-    }
+        result mustBe Seq(expectedSpecialMentionLiabilityAmount)
+      }
 
-    "must return a list of both SpecialMentionNoCountry and SpecialMentionExportFromGB" in {
+      "must add SpecialMentions without SpecialMentionGuaranteeLiabilityAmount when index is not 0 and SpecialMentions are defined" in {
 
-      val specialMentionDomain1            = SpecialMentionDomain("DG0", "Additional info")
-      val specialMentionDomain2            = SpecialMentionDomain("ABC", "Additional info")
-      val specialMentionDomainNonEmptyList = NonEmptyList(specialMentionDomain1, List(specialMentionDomain2))
+        val result = SpecialMentionConversion(specialMentions, guaranteeReferences, 1)
 
-      val expectedSpecialMention1 = SpecialMentionExportFromGB("DG0", "Additional info")
-      val expectedSpecialMention2 = SpecialMentionNoCountry("ABC", "Additional info")
+        result mustBe Seq(expectedSpecialMention)
+      }
 
-      val expectedSpecialMentionSeq = Seq(expectedSpecialMention1, expectedSpecialMention2)
+      "must return empty list when SpecialMentions are not defined and index is not 0" in {
+        val result = SpecialMentionConversion(None, guaranteeReferences, 1)
 
-      SpecialMentionConversion(specialMentionDomainNonEmptyList) mustBe expectedSpecialMentionSeq
+        result mustBe Seq.empty
+      }
     }
   }
-
 }

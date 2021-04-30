@@ -18,8 +18,6 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions._
-
-import javax.inject.Inject
 import models.DepartureId
 import pages.TechnicalDifficultiesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,7 +27,8 @@ import renderer.Renderer
 import services.DepartureMessageService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class GuaranteeNotValidController @Inject()(
   override val messagesApi: MessagesApi,

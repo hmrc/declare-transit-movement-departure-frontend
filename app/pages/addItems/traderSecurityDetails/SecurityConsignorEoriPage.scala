@@ -19,7 +19,7 @@ package pages.addItems.traderSecurityDetails
 import models.Index
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import queries.Constants.{items, traderSecurityDetails}
+import queries.Constants.items
 
 case class SecurityConsignorEoriPage(index: Index) extends QuestionPage[String] {
 

@@ -19,7 +19,6 @@ package controllers.goodsSummary
 import controllers.actions._
 import derivable.DeriveNumberOfSeals
 import forms.SealsInformationFormProvider
-import javax.inject.Inject
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -35,6 +34,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.AddSealHelper
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SealsInformationController @Inject()(

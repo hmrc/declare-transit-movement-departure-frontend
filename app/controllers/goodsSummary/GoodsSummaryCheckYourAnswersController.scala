@@ -18,7 +18,6 @@ package controllers.goodsSummary
 
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import javax.inject.Inject
 import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -28,6 +27,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.GoodsSummaryCheckYourAnswersViewModel
 import viewModels.sections.Section
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class GoodsSummaryCheckYourAnswersController @Inject()(

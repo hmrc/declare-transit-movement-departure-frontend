@@ -21,19 +21,15 @@ import models.{Convert, Index}
 import models.journeyDomain.{GuaranteeDetails, SpecialMentionDomain}
 import models.messages.goodsitem.{SpecialMention, SpecialMentionExportFromGB, SpecialMentionNoCountry}
 
-private[services] object SpecialMentionConversion
-    extends Convert[(Option[NonEmptyList[SpecialMentionDomain]], NonEmptyList[GuaranteeDetails], Int), Seq[SpecialMention]] {
+private[services] object UserDeclaredSpecialMentionConversion extends Convert[NonEmptyList[SpecialMentionDomain], Seq[SpecialMention]] {
 
-  override def apply(v1: (Option[NonEmptyList[SpecialMentionDomain]], NonEmptyList[GuaranteeDetails], Int)): Seq[SpecialMention] = {
-
-    val (specialMentionDomain, guaranteeDetails, index) = v1
-
-    val specialMentions = specialMentionDomain.map(UserDeclaredSpecialMentionConversion).getOrElse(Seq.empty)
-
-    if (index == 0) {
-      SpecialMentionGuaranteeLiabilityConversion(guaranteeDetails) ++ specialMentions
-    } else {
-      specialMentions
-    }
-  }
+  override def apply(specialMentionDomain: NonEmptyList[SpecialMentionDomain]): Seq[SpecialMention] =
+    specialMentionDomain.map {
+      case SpecialMentionDomain(specialMentionType, additionalInfo) =>
+        if (SpecialMention.countrySpecificCodes.contains(specialMentionType)) {
+          SpecialMentionExportFromGB(specialMentionType, additionalInfo)
+        } else {
+          SpecialMentionNoCountry(specialMentionType, additionalInfo)
+        }
+    }.toList
 }

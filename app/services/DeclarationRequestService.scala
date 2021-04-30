@@ -124,20 +124,12 @@ class DeclarationRequestService @Inject()(
             dangerousGoodsCode               = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
             producedDocuments                = producedDocuments(itemSection.producedDocuments),
-            specialMention = {
-              val specialMentions = itemSection.specialMentions.map(SpecialMentionConversion).getOrElse(Seq.empty)
-
-              if (index == 0) {
-                SpecialMentionGuaranteeLiabilityConversion(guaranteeDetails) ++ specialMentions
-              } else {
-                specialMentions
-              }
-            },
-            traderConsignorGoodsItem  = traderConsignor(itemSection.consignor),
-            traderConsigneeGoodsItem  = traderConsignee(itemSection.consignee),
-            containers                = containers(itemSection.containers),
-            packages                  = packages(itemSection.packages).toList,
-            sensitiveGoodsInformation = Seq.empty, // Not required, defined at security level
+            specialMention                   = SpecialMentionConversion(itemSection.specialMentions, guaranteeDetails, index),
+            traderConsignorGoodsItem         = traderConsignor(itemSection.consignor),
+            traderConsigneeGoodsItem         = traderConsignee(itemSection.consignee),
+            containers                       = containers(itemSection.containers),
+            packages                         = packages(itemSection.packages).toList,
+            sensitiveGoodsInformation        = Seq.empty, // Not required, defined at security level
             GoodsItemSafetyAndSecurityConsignor(itemSection.itemSecurityTraderDetails),
             GoodsItemSafetyAndSecurityConsignee(itemSection.itemSecurityTraderDetails)
           )

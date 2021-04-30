@@ -16,12 +16,12 @@
 
 package models.messages
 
-import java.time.LocalDate
-
 import com.lucidchart.open.xtract.{__, XmlReader}
-import utils.Format
 import models.XMLReads._
+import utils.Format
 import xml.XMLWrites
+
+import java.time.LocalDate
 
 case class ControlResult(datLimERS69: LocalDate)
 

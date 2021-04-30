@@ -16,14 +16,13 @@
 
 package models.messages.customsoffice
 
-import java.time.LocalDateTime
-
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
 import models.XMLReads._
 import utils.Format
 import xml.XMLWrites
 
+import java.time.LocalDateTime
 import scala.xml.NodeSeq
 
 case class CustomsOfficeTransit(referenceNumber: String, arrivalTime: Option[LocalDateTime])

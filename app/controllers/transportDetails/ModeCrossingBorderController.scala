@@ -19,7 +19,6 @@ package controllers.transportDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.ModeCrossingBorderFormProvider
-import javax.inject.Inject
 import models.reference.TransportMode
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -35,6 +34,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.transportModesAsJson
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ModeCrossingBorderController @Inject()(

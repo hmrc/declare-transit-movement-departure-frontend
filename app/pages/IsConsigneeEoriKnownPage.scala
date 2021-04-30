@@ -18,6 +18,7 @@ package pages
 
 import models.UserAnswers
 import play.api.libs.json.JsPath
+
 import scala.util.Try
 
 case object IsConsigneeEoriKnownPage extends QuestionPage[Boolean] {

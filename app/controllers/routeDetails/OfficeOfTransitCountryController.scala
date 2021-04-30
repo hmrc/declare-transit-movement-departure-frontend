@@ -19,7 +19,6 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.OfficeOfTransitCountryFormProvider
-import javax.inject.Inject
 import models.reference.Country
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -28,13 +27,14 @@ import pages.OfficeOfTransitCountryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
+import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class OfficeOfTransitCountryController @Inject()(
@@ -55,7 +55,7 @@ class OfficeOfTransitCountryController @Inject()(
     with NunjucksSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
-    (identify andThen getData(lrn) andThen requireData andThen officeOfTransitFilter(index, 0)).async {
+    (identify andThen getData(lrn) andThen requireData andThen officeOfTransitFilter(index)).async {
       implicit request =>
         referenceDataConnector.getTransitCountryList() flatMap {
           countries =>

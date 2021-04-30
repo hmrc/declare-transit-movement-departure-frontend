@@ -16,12 +16,12 @@
 
 package models.messages.goodsitem
 
+import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
 import models.LanguageCodeEnglish
+import xml.XMLWrites
 
 import scala.xml.NodeSeq
-import cats.syntax.all._
-import xml.XMLWrites
 
 final case class PreviousAdministrativeReference(
   preDocTypAR21: String, //an6 CL014 ref data: Previous document type (Common)

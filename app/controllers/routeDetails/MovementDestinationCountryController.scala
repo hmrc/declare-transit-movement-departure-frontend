@@ -19,7 +19,6 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.MovementDestinationCountryFormProvider
-import javax.inject.Inject
 import models.reference.Country
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -28,13 +27,14 @@ import pages.MovementDestinationCountryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
+import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class MovementDestinationCountryController @Inject()(

@@ -18,7 +18,6 @@ package controllers.safetyAndSecurity
 
 import controllers.actions._
 import forms.safetyAndSecurity.ConfirmRemoveCountryFormProvider
-import javax.inject.Inject
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
@@ -32,6 +31,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmRemoveCountryController @Inject()(

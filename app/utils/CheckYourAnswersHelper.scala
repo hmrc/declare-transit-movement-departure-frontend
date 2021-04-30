@@ -16,8 +16,6 @@
 
 package utils
 
-import java.time.format.DateTimeFormatter
-
 import controllers.routes
 import models.{CheckMode, LocalReferenceNumber, UserAnswers}
 import pages._
@@ -77,7 +75,4 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
 }
 
-object CheckYourAnswersHelper {
-
-  private val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-}
+object CheckYourAnswersHelper

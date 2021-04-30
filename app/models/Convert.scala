@@ -16,4 +16,4 @@
 
 package models
 
-trait Convert[F[_], G[_], A, B] extends (F[A] => G[B])
+trait Convert[A, B] extends (A => B)

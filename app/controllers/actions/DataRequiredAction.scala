@@ -17,11 +17,11 @@
 package controllers.actions
 
 import controllers.routes
-import javax.inject.{Inject, Singleton}
 import models.requests.{DataRequest, OptionalDataRequest}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -18,8 +18,6 @@ package models.messages.goodsitem
 
 import cats.implicits.catsSyntaxTuple2Semigroupal
 import com.lucidchart.open.xtract.{ParseError, ParseFailure, ParseSuccess, XmlReader}
-import play.api.libs.json._
-import utils.BinaryToBooleanXMLReader._
 import xml.XMLWrites
 
 trait SpecialMention {

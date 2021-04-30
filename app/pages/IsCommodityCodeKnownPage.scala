@@ -17,9 +17,9 @@
 package pages
 
 import models.{Index, UserAnswers}
+import pages.addItems.CommodityCodePage
 import play.api.libs.json.JsPath
 import queries.Constants.items
-import pages.addItems.CommodityCodePage
 
 import scala.util.Try
 
