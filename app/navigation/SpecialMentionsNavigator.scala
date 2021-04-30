@@ -75,7 +75,7 @@ class SpecialMentionsNavigator @Inject()() extends Navigator {
       userAnswers =>
         userAnswers.get(AddSpecialMentionPage(itemIndex)) match {
           case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, itemIndex, Index(count(itemIndex)(userAnswers)), NormalMode))
-          case _          => Some(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
+          case _          => documentsJourney(userAnswers, itemIndex, NormalMode)
         }
   }
 
@@ -97,7 +97,7 @@ class SpecialMentionsNavigator @Inject()() extends Navigator {
         userAnswers.get(AddAnotherSpecialMentionPage(itemIndex)) match {
           case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, itemIndex, Index(count(itemIndex)(userAnswers)), NormalMode))
           case _ =>
-            documentsJourney(userAnswers, itemIndex, NormalMode) //Some(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
+            documentsJourney(userAnswers, itemIndex, NormalMode)
         }
     case RemoveSpecialMentionPage(itemIndex, _) =>
       userAnswers =>
