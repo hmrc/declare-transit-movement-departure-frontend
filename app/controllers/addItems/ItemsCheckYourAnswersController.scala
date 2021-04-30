@@ -16,8 +16,10 @@
 
 package controllers.addItems
 
+import cats.data.NonEmptyList
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import models.journeyDomain.{ItemSection, UserAnswersReader}
 import models.{DependentSection, Index, LocalReferenceNumber}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}

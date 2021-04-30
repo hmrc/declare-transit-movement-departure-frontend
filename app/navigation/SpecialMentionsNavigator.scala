@@ -113,16 +113,11 @@ class SpecialMentionsNavigator @Inject()() extends Navigator {
      userAnswers.get(AddCommercialReferenceNumberPage),
      userAnswers.get(AddCircumstanceIndicatorPage),
      itemIndex.position == 0) match {
-      case (Some(true), Some(false), Some(true), _) => {
+      case (Some(true), Some(false), Some(true), true) => {
         userAnswers.get(CircumstanceIndicatorPage) map (CircumstanceIndicator.conditionalIndicators.contains(_))
       }
-      case (Some(true), _, Some(false), true)       => Some(true)
-      case _                                        => Some(false)
-//      case (Some(true), Some(false), Some(false), true) => Some(true)
-//      case (Some(true), Some(true), Some(false), true) =>
-//        userAnswers.get(CircumstanceIndicatorPage) map (CircumstanceIndicator.conditionalIndicators.contains(_))
-//      case (Some(_), _, _, _) => Some(false)
-//      case _                  => None
+      case (Some(true), Some(false), Some(false), true) => Some(true)
+      case _                                            => Some(false)
     }
 
   private def documentsJourney(userAnswers: UserAnswers, itemIndex: Index, mode: Mode): Option[Call] =
