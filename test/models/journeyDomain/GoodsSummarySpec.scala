@@ -22,6 +22,7 @@ import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalD
 import models.{Index, ProcedureType, UserAnswers}
 import org.scalacheck.{Arbitrary, Gen}
 import pages._
+import pages.movementDetails.PreLodgeDeclarationPage
 
 class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
   import GoodsSummarySpec._
@@ -32,32 +33,34 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
     // TODO need to add left test here
 
-    "when number of packages is declared and SafetyAndSecurity is True" in {
+    "when number of packages is declared and SafetyAndSecurity is True and Pre-lodge is false" in {
 
       val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).map(_.copy(numberOfPackages = Some(123)))
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+          val userAnswers =
+            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
 
           UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
       }
     }
 
-    "when number of packages is not declared and SafetyAndSecurity is False" in {
+    "when number of packages is not declared and SafetyAndSecurity is False and Pre-lodge is false" in {
 
       val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).map(_.copy(numberOfPackages = None))
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+          val userAnswers =
+            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
 
           UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
       }
     }
 
     "when the declaration is Normal procedure" - {
-      "and when there are no customs approved location" in {
+      "and Pre-lodge is true and when there are no customs approved location" in {
 
         val normalDetail: Arbitrary[GoodSummaryDetails] =
           Arbitrary(Gen.const(GoodSummaryNormalDetails(None)))
@@ -66,13 +69,14 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
         forAll(arbGoodsSummary, arb[UserAnswers]) {
           (goodsSummary, ua) =>
-            val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+            val userAnswers =
+              setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(true)
 
             UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
         }
       }
 
-      "and when there is a customs approved location" in {
+      "and Pre-lodge is false and when there is a customs approved location" in {
         val normalDetail: Arbitrary[GoodSummaryDetails] =
           Arbitrary(
             stringsWithMaxLength(stringMaxLength).map(
@@ -84,7 +88,8 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
         forAll(arbGoodsSummary, arb[UserAnswers]) {
           (goodsSummary, ua) =>
-            val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+            val userAnswers =
+              setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
 
             UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
         }
@@ -98,35 +103,38 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         Arbitrary(arbitraryGoodSummarySimplifiedDetails.arbitrary.map(identity[GoodSummaryDetails]))
 
       val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)(simplifiedDetail))
-
       forAll(arbGoodsSummary, arb[UserAnswers]) {
+
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+          val userAnswers =
+            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
 
           UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
       }
 
     }
 
-    "when there are no seals" in {
+    "when there are no seals and Pre-lodge is false" in {
 
       val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).map(_.copy(sealNumbers = Seq.empty))
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+          val userAnswers =
+            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
 
           UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
       }
 
     }
 
-    "when there are seals" in {
+    "when there are seals and Pre-lodge is false" in {
       val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).suchThat(_.sealNumbers.nonEmpty)
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+          val userAnswers =
+            setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined).unsafeSetVal(PreLodgeDeclarationPage)(false)
 
           UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
       }

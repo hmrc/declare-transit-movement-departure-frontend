@@ -17,13 +17,13 @@
 package models.journeyDomain
 
 import java.time.LocalDate
-
 import cats.implicits._
 import derivable.DeriveNumberOfSeals
 import models.ProcedureType
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
 import pages._
+import pages.movementDetails.PreLodgeDeclarationPage
 
 case class GoodsSummary(
   numberOfPackages: Option[Int],
@@ -52,14 +52,21 @@ object GoodsSummary {
 
     implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] = {
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
-        AddCustomsApprovedLocationPage.reader
+        PreLodgeDeclarationPage.reader
           .flatMap {
-            locationNeeded =>
-              if (locationNeeded)
-                CustomsApprovedLocationPage.reader.map(
-                  location => GoodSummaryNormalDetails(Some(location))
-                )
-              else
+            prelodged =>
+              if (!prelodged) {
+                AddCustomsApprovedLocationPage.reader
+                  .flatMap {
+                    locationNeeded =>
+                      if (locationNeeded) {
+                        CustomsApprovedLocationPage.reader.map(
+                          location => GoodSummaryNormalDetails(Some(location))
+                        )
+                      } else
+                        GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+                  }
+              } else
                 GoodSummaryNormalDetails(None).pure[UserAnswersReader]
           }
       }
@@ -81,9 +88,11 @@ object GoodsSummary {
 
   object GoodSummaryDetails {
 
-    implicit val goodSummaryDetailsReader: UserAnswersReader[GoodSummaryDetails] =
+    implicit val goodSummaryDetailsReader: UserAnswersReader[GoodSummaryDetails] = {
+
       UserAnswersReader[GoodSummaryNormalDetails].widen[GoodSummaryDetails] orElse
         UserAnswersReader[GoodSummarySimplifiedDetails].widen[GoodSummaryDetails]
+    }
   }
 
 }

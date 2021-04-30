@@ -388,7 +388,7 @@ class DeclarationRequestServiceSpec
         }
       }
 
-      "goodsSummarySimplifiedDetails" - {
+      "goodsSummaryDetails" - {
         "must populate controlResult and authorisedLocationOfGoods when Simplified" in {
 
           forAll(arb[UserAnswers], arbitrarySimplifiedJourneyDomain) {
@@ -405,7 +405,7 @@ class DeclarationRequestServiceSpec
           }
         }
 
-        "must populate not controlResult and authorisedLocationOfGoods when Normal" in {
+        "must not populate controlResult and authorisedLocationOfGoods when Normal" in {
 
           forAll(arb[UserAnswers], arbitraryNormalJourneyDomain) {
             (userAnswers, journeyDomain) =>

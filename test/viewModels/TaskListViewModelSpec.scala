@@ -26,6 +26,7 @@ import models.{DeclarationType, EoriNumber, GuaranteeType, Index, NormalMode, Pr
 import org.scalacheck.Gen
 import pages._
 import pages.guaranteeDetails.GuaranteeTypePage
+import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
 import play.api.libs.json.{JsObject, Json}
 
@@ -889,6 +890,7 @@ class TaskListViewModelSpec
               val userAnswers = GoodsSummarySpec
                 .setGoodsSummary(sectionDetails)(emptyUserAnswers)
                 .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+                .unsafeSetVal(PreLodgeDeclarationPage)(true)
 
               val viewModel = TaskListViewModel(userAnswers)
 
@@ -927,6 +929,7 @@ class TaskListViewModelSpec
               val userAnswers = GoodsSummarySpec
                 .setGoodsSummary(sectionDetails)(emptyUserAnswers)
                 .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+                .unsafeSetVal(PreLodgeDeclarationPage)(true)
 
               val viewModel = TaskListViewModel(userAnswers)
 
