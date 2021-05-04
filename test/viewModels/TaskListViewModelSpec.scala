@@ -891,6 +891,7 @@ class TaskListViewModelSpec
                 .setGoodsSummary(sectionDetails)(emptyUserAnswers)
                 .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
                 .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
               val viewModel = TaskListViewModel(userAnswers)
 
@@ -930,6 +931,7 @@ class TaskListViewModelSpec
                 .setGoodsSummary(sectionDetails)(emptyUserAnswers)
                 .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
                 .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
               val viewModel = TaskListViewModel(userAnswers)
 
