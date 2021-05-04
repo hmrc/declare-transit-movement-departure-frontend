@@ -20,7 +20,6 @@ import controllers.actions._
 import derivable.DeriveNumberOfSeals
 import forms.ConfirmRemoveSealFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
 import models.domain.SealDomain
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
@@ -37,6 +36,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmRemoveSealController @Inject()(

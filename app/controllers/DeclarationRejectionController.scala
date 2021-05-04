@@ -33,7 +33,7 @@ import viewModels.sections.Section
 
 import java.time.LocalDate
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class DeclarationRejectionController @Inject()(
   override val messagesApi: MessagesApi,

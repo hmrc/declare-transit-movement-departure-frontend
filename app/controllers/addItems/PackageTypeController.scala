@@ -19,8 +19,6 @@ package controllers.addItems
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.addItems.PackageTypeFormProvider
-
-import javax.inject.Inject
 import models.reference.PackageType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -36,6 +34,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.packageTypeList
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PackageTypeController @Inject()(

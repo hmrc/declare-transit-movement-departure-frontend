@@ -24,7 +24,7 @@ import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
 
 private[services] object SpecialMentionGuaranteeLiabilityConversion
-    extends Convert[NonEmptyList, Seq, GuaranteeDetails, SpecialMentionGuaranteeLiabilityAmount] {
+    extends Convert[NonEmptyList[GuaranteeDetails], Seq[SpecialMentionGuaranteeLiabilityAmount]] {
 
   override def apply(guaranteeDetails: NonEmptyList[GuaranteeDetails]): Seq[SpecialMentionGuaranteeLiabilityAmount] =
     guaranteeDetails collect {

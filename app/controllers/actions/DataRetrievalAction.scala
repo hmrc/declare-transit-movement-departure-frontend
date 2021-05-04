@@ -17,12 +17,12 @@
 package controllers.actions
 
 import com.google.inject.Singleton
-import javax.inject.Inject
 import models.LocalReferenceNumber
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.SessionRepository
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -20,7 +20,6 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.DestinationOfficeFormProvider
-import javax.inject.Inject
 import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
 import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
@@ -37,6 +36,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DestinationOfficeController @Inject()(

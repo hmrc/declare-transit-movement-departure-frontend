@@ -20,7 +20,6 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.safetyAndSecurity.SafetyAndSecurityConsignorAddressFormProvider
-import javax.inject.Inject
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -35,6 +34,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SafetyAndSecurityConsignorAddressController @Inject()(

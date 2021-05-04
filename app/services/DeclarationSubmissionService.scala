@@ -20,8 +20,7 @@ import cats.implicits._
 import connectors.DepartureMovementConnector
 import javax.inject.Inject
 import models.journeyDomain.ReaderError
-import models.{journeyDomain, UserAnswers}
-import queries.Query
+import models.UserAnswers
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}

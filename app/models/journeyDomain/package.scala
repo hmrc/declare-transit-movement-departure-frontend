@@ -116,6 +116,20 @@ package object journeyDomain {
               }
             )
         }
+
+    def returnOptionalDependant(predicate: A => Boolean): UserAnswersReader[Option[A]] =
+      a.reader(s"Reader for $a failed before reaching predicate")
+        .flatMap {
+          x =>
+            ReaderT[EitherType, UserAnswers, Option[A]](
+              _ =>
+                if (predicate(x)) {
+                  Right(Some(x))
+                } else {
+                  Right(None)
+              }
+            )
+        }
   }
 
   implicit class GettableAsOptionalReaderOps[A](a: Gettable[A]) {

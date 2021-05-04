@@ -21,10 +21,10 @@ import cats.data.NonEmptyList
 import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
+import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, SecurityTraderDetails, TraderEori}
 import models.journeyDomain.SafetyAndSecuritySpec.{setSafetyAndSecurity, setSafetyAndSecurityMinimal}
-import models.reference.CountryCode
-import models.{Index, UserAnswers}
+import models.reference.{Country, CountryCode}
+import models.{EoriNumber, Index, UserAnswers}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages.ModeAtBorderPage
@@ -57,20 +57,19 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
 
       val genModeAtBorder = Gen.oneOf(Seq(4, 40))
 
-      forAll(genModeAtBorder) {
-        mode =>
-          forAll(arb[UserAnswers], genSecurityDetails(genModeAtBorder.map(_.toString))) {
-            (baseUserAnswers, safetyAndSecurity) =>
-              val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode.toString)
+      forAll(arb[UserAnswers], arb[SafetyAndSecurity], genModeAtBorder) {
+        (baseUserAnswers, safetyAndSecurity, mode) =>
+          val updatedSafetyAndSecurity = safetyAndSecurity.copy(circumstanceIndicator = None)
 
-              val userAnswers: UserAnswers = setSafetyAndSecurity(safetyAndSecurity)(updatedUserAnswers)
+          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode.toString)
 
-              val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
 
-              result mustEqual safetyAndSecurity
-          }
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result mustEqual updatedSafetyAndSecurity
+
       }
-
     }
 
     "when the full UserAnswers has been answered and modeAtBorder is not 4 or 40" in {
@@ -81,14 +80,72 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
                mode => mode != "4" | mode != "40"
              )) {
         (baseUserAnswers, safetyAndSecurity, mode) =>
+          val updatedSafetyAndSecurity = safetyAndSecurity.copy(circumstanceIndicator = None)
+
           val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
 
-          val userAnswers = setSafetyAndSecurity(safetyAndSecurity)(updatedUserAnswers)
+          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
 
           val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
 
-          result mustEqual safetyAndSecurity
+          result mustEqual updatedSafetyAndSecurity
       }
+    }
+
+    "when the full UserAnswers has been answered and the circumstance indicator is 'E'" in {
+
+      forAll(arb[UserAnswers], arb[SafetyAndSecurity], arb[String]) {
+        (baseUserAnswers, safetyAndSecurity, mode) =>
+          val updatedSafetyAndSecurity =
+            safetyAndSecurity.copy(circumstanceIndicator = Some("E"), consignee = Some(SecurityTraderDetails(eori = EoriNumber("1234567"))))
+
+          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
+
+          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result mustEqual updatedSafetyAndSecurity
+      }
+    }
+
+    "when the full UserAnswers has been answered and the circumstance indicator is 'B'" in {
+
+      forAll(arb[UserAnswers], arb[SafetyAndSecurity], arb[String]) {
+        (baseUserAnswers, safetyAndSecurity, mode) =>
+          val updatedSafetyAndSecurity = safetyAndSecurity.copy(
+            circumstanceIndicator = Some("B"),
+            consignee             = Some(SecurityTraderDetails("Bob", Address("line 1", "line 2", "line 3", Some(Country(CountryCode("FR"), "France")))))
+          )
+
+          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
+
+          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result mustEqual updatedSafetyAndSecurity
+      }
+
+    }
+
+    "when the full UserAnswers has been answered and the circumstance indicator is not provided" in {
+
+      forAll(arb[UserAnswers], arb[SafetyAndSecurity], arb[String]) {
+        (baseUserAnswers, safetyAndSecurity, mode) =>
+          val updatedSafetyAndSecurity = safetyAndSecurity.copy(
+            circumstanceIndicator = None
+          )
+
+          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
+
+          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result mustEqual updatedSafetyAndSecurity
+      }
+
     }
   }
 

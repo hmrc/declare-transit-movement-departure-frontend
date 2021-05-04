@@ -16,16 +16,16 @@
 
 package utils
 
+import controllers.addItems.containers.{routes => containerRoutes}
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.routes
-import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
-import controllers.addItems.containers.{routes => containerRoutes}
 import controllers.addItems.securityDetails.{routes => securityDetailsRoutes}
+import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
 import controllers.addItems.traderSecurityDetails.{routes => tradersSecurityDetailsRoutes}
 import models._
 import pages.addItems._
 import pages.addItems.containers._
-import pages.addItems.securityDetails.{_}
+import pages.addItems.securityDetails._
 import pages.addItems.traderDetails._
 import pages.addItems.traderSecurityDetails.{
   AddSecurityConsigneesEoriPage,

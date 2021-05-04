@@ -16,9 +16,9 @@
 
 package models.messages
 
+import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
 import models.LanguageCodeEnglish
-import cats.syntax.all._
 import xml.XMLWrites
 
 import scala.xml.NodeSeq

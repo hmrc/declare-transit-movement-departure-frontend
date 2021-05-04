@@ -18,7 +18,6 @@ package controllers.movementDetails
 
 import controllers.actions._
 import forms.movementDetails.PreLodgeDeclarationFormProvider
-import javax.inject.Inject
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.MovementDetails
@@ -31,6 +30,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PreLodgeDeclarationController @Inject()(

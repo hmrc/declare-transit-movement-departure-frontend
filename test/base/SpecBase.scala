@@ -17,9 +17,12 @@
 package base
 
 import models.domain.SealDomain
+import models.journeyDomain.EitherType
 import models.reference.CountryCode
 import models.{DepartureId, EoriNumber, Index, LocalReferenceNumber, PrincipalAddress, UserAnswers}
+import org.scalactic.source
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.exceptions.{StackDepthException, TestFailedException}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{EitherValues, OptionValues, TryValues}
@@ -76,4 +79,15 @@ trait SpecBase
 
   implicit def messages: Messages = Helpers.stubMessages()
 
+  implicit class UserAnswerReaderResultOps[R](userAnswersReaderResult: EitherType[R]) {
+
+    def isSuccessful(implicit pos: source.Position): R =
+      userAnswersReaderResult match {
+        case Right(value) => value
+        case Left(value) =>
+          throw new TestFailedException((_: StackDepthException) => Some(s"Expected reader to be successful, reader failed on $value"), None, pos)
+
+      }
+
+  }
 }

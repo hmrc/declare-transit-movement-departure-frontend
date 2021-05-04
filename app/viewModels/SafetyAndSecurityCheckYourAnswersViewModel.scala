@@ -17,7 +17,7 @@
 package viewModels
 
 import derivable.DeriveNumberOfCountryOfRouting
-import models.{CheckMode, CircumstanceIndicatorList, CountryList, Index, UserAnswers}
+import models.{CircumstanceIndicatorList, CountryList, Index, UserAnswers}
 import uk.gov.hmrc.viewmodels.{MessageInterpolators, SummaryList}
 import utils.SafetyAndSecurityCheckYourAnswerHelper
 import viewModels.sections.Section

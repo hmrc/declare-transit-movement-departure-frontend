@@ -16,13 +16,10 @@
 
 package controllers.routeDetails
 
-import java.time.LocalDateTime
-
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.ArrivalTimesAtOfficeFormProvider
-import javax.inject.Inject
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
@@ -39,6 +36,8 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
 import viewModels.DateTimeInput
 
+import java.time.LocalDateTime
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ArrivalTimesAtOfficeController @Inject()(

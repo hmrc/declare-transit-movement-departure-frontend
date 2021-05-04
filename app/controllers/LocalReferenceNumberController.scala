@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions._
 import forms.LocalReferenceNumberFormProvider
-import javax.inject.Inject
 import models.{EoriNumber, LocalReferenceNumber, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -31,6 +30,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class LocalReferenceNumberController @Inject()(

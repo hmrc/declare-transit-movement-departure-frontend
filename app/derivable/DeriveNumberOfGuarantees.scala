@@ -17,7 +17,7 @@
 package derivable
 
 import play.api.libs.json.{JsObject, JsPath}
-import queries.Constants.{guarantees, items}
+import queries.Constants.guarantees
 
 case object DeriveNumberOfGuarantees extends Derivable[List[JsObject], Int] {
 

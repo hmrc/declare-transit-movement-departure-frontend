@@ -87,7 +87,7 @@ trait MockNunjucksRendererApp extends GuiceOneAppPerSuite with BeforeAndAfterEac
       override protected def executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
     }
 
-    when(mockOfficeOfTransitProvider.apply(any(), any())).thenReturn(fakeOfficeOfTransitFilter)
+    when(mockOfficeOfTransitProvider.apply(any())).thenReturn(fakeOfficeOfTransitFilter)
   }
 
   override def fakeApplication(): Application =

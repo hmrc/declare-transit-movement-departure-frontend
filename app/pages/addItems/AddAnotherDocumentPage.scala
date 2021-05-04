@@ -19,7 +19,7 @@ package pages.addItems
 import models.Index
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import queries.Constants.{documents, items}
+import queries.Constants.items
 
 case class AddAnotherDocumentPage(index: Index) extends QuestionPage[Boolean] {
 

@@ -16,6 +16,9 @@
 
 package forms
 
+import models.{Index, Mode, UserAnswers}
+import pages.safetyAndSecurity.CircumstanceIndicatorPage
+
 object Constants {
 
   lazy val maxLengthEoriNumber: Int    = 17

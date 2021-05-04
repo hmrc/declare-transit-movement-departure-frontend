@@ -17,6 +17,7 @@
 package navigation
 
 import controllers.safetyAndSecurity.routes
+
 import javax.inject.{Inject, Singleton}
 import models._
 import pages.Page
@@ -30,6 +31,7 @@ import pages.safetyAndSecurity.{
   CarrierAddressPage,
   CarrierEoriPage,
   CarrierNamePage,
+  CircumstanceIndicatorPage,
   SafetyAndSecurityConsigneeAddressPage,
   SafetyAndSecurityConsigneeEoriPage,
   SafetyAndSecurityConsigneeNamePage,
@@ -115,13 +117,19 @@ class SafetyAndSecurityTraderDetailsNavigator @Inject()() extends Navigator {
 
   private def addSafetyAndSecurityConsigneeRoute(ua: UserAnswers, mode:Mode): Call =
     (ua.get(AddSafetyAndSecurityConsigneePage), ua.get(AddSafetyAndSecurityConsigneeEoriPage), mode) match {
-      case (Some(true),_,NormalMode)   => routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, NormalMode)
+      case (Some(true),_,NormalMode)   => circumstanceIndicatorCheck(ua, mode)
       case (Some(false),_, NormalMode)  => routes.AddCarrierController.onPageLoad(ua.id, NormalMode)
       case (Some(false), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
-      case (Some(true), None, CheckMode) => routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, CheckMode)
+      case (Some(true), None, CheckMode) => circumstanceIndicatorCheck(ua, mode)
       case (Some(true), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
     }
 
+  private def circumstanceIndicatorCheck(ua: UserAnswers, mode: Mode) =
+    ua.get(CircumstanceIndicatorPage) match {
+      case Some("E") => routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, mode)
+      case _ => routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, mode)
+    }
+  
   private def addSafetyAndSecurityConsigneeEoriRoute(ua: UserAnswers, mode:Mode): Call =
     (ua.get(AddSafetyAndSecurityConsigneeEoriPage), mode) match {
       case (Some(true),  NormalMode)   => routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, NormalMode)
