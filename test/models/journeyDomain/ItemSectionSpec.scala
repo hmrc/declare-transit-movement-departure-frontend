@@ -86,6 +86,57 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
             result.right.value.itemSecurityTraderDetails mustEqual itemSection.itemSecurityTraderDetails
         }
       }
+
+      "when all details for section have been answered with mandatory produced documents through conditional indicators" in {
+        forAll(genItemSectionOld(), arb[UserAnswers], Gen.nonEmptyListOf(arb[ProducedDocument])) {
+          case (itemSection, userAnswers, producedDocuments) =>
+            val indicator          = CircumstanceIndicator.conditionalIndicators.head
+            val updatedItemSection = itemSection.copy()
+
+            val updatedUserAnswer1 = {
+              itemSection.itemSecurityTraderDetails match {
+                case Some(value) =>
+                  userAnswers
+                    .unsafeSetVal(AddTransportChargesPaymentMethodPage)(value.methodOfPayment.isEmpty)
+                    .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(value.commercialReferenceNumber.isEmpty)
+
+                case None => userAnswers
+              }
+            }.unsafeSetVal(AddSecurityDetailsPage)(itemSection.producedDocuments.isDefined)
+              .unsafeSetVal(AddCircumstanceIndicatorPage)(itemSection.producedDocuments.isDefined)
+              .unsafeSetVal(AddCommercialReferenceNumberPage)(itemSection.producedDocuments.isDefined)
+              .unsafeSetVal(AddDocumentsPage(itemIndex))(itemSection.producedDocuments.isDefined)
+              .unsafeSetVal(CircumstanceIndicatorPage)(indicator)
+              .unsafeSetVal(AddConsignorPage)(false)
+              .unsafeSetVal(AddConsigneePage)(false)
+
+            val updatedUserAnswer2 = itemSection.previousReferences match {
+              case None =>
+                updatedUserAnswer1
+                  .unsafeSetVal(DeclarationTypePage)(genOtherDeclarationType)
+                  .unsafeSetVal(CountryOfDispatchPage)(genNonEUCountries)
+                  .unsafeSetVal(AddAdministrativeReferencePage(itemIndex))(false)
+              case Some(_) =>
+                updatedUserAnswer1
+                  .unsafeSetVal(DeclarationTypePage)(genT2DeclarationType)
+                  .unsafeSetVal(CountryOfDispatchPage)(genNonEUCountries)
+            }
+
+            val setSectionUserAnswers = ItemSectionSpec.setItemSection(itemSection, index)(updatedUserAnswer2)
+
+            val result: EitherType[ItemSection] = ItemSection.readerItemSection(index).run(setSectionUserAnswers)
+
+            result.right.value.itemDetails mustEqual itemSection.itemDetails
+            result.right.value.consignor mustEqual itemSection.consignor
+            result.right.value.consignee mustEqual itemSection.consignee
+            result.right.value.packages mustEqual itemSection.packages
+            result.right.value.containers mustEqual itemSection.containers
+            result.right.value.specialMentions mustEqual itemSection.specialMentions
+            result.right.value.producedDocuments mustEqual itemSection.producedDocuments
+            result.right.value.itemSecurityTraderDetails mustEqual itemSection.itemSecurityTraderDetails
+        }
+      }
+
     }
 
     "cannot be parsed" - {

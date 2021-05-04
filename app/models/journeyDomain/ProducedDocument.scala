@@ -16,50 +16,13 @@
 
 package models.journeyDomain
 
-import cats.data.{NonEmptyList, ReaderT}
 import cats.implicits._
-import derivable.DeriveNumberOfDocuments
-import models.reference.CircumstanceIndicator
-import models.{Index, UserAnswers}
-import pages.AddSecurityDetailsPage
+import models.Index
 import pages.addItems._
-import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
 
 final case class ProducedDocument(documentType: String, documentReference: String, extraInformation: Option[String])
 
 object ProducedDocument {
-
-  private def readDocumentType(itemIndex: Index): ReaderT[EitherType, UserAnswers, Boolean] =
-    (for {
-      addSecurity     <- AddSecurityDetailsPage.reader
-      addRef          <- AddCommercialReferenceNumberPage.optionalReader
-      addCircumstance <- AddCircumstanceIndicatorPage.optionalReader
-    } yield {
-      (addSecurity, addRef, addCircumstance, itemIndex.position == 0) match {
-        case (true, Some(false), Some(false), true) => true.pure[UserAnswersReader]
-        case (true, Some(false), Some(true), true)  => CircumstanceIndicatorPage.reader.map(x => CircumstanceIndicator.conditionalIndicators.contains(x))
-        case _                                      => AddDocumentsPage(itemIndex).reader
-      }
-    }).flatMap(x => x)
-
-  def deriveProducedDocuments(itemIndex: Index): UserAnswersReader[Option[NonEmptyList[ProducedDocument]]] =
-    readDocumentType(itemIndex)
-      .flatMap {
-        isTrue =>
-          if (isTrue) {
-            DeriveNumberOfDocuments(itemIndex).optionalNonEmptyListReader.flatMap {
-              _.traverse {
-                _.zipWithIndex
-                  .traverse[UserAnswersReader, ProducedDocument]({
-                    case (_, index) =>
-                      ProducedDocument.producedDocumentReader(itemIndex, Index(index))
-                  })
-              }
-            }
-          } else {
-            none[NonEmptyList[ProducedDocument]].pure[UserAnswersReader]
-          }
-      }
 
   def producedDocumentReader(index: Index, referenceIndex: Index): UserAnswersReader[ProducedDocument] =
     (
