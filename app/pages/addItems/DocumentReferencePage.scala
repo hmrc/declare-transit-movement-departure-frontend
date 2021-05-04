@@ -26,4 +26,6 @@ case class DocumentReferencePage(itemIndex: Index, documentIndex: Index) extends
   override def path: JsPath = JsPath \ items \ itemIndex.position \ documents \ documentIndex.position \ toString
 
   override def toString: String = "documentReference"
+
+  override lazy val reference: Option[String] = Some(s"itemIndex: $itemIndex, documentIndex: $documentIndex")
 }

@@ -30,6 +30,8 @@ case class PackageTypePage(itemIndex: Index, packageIndex: Index) extends Questi
 
   override def toString: String = "packageType"
 
+  override lazy val reference: Option[String] = Some(s"itemIndex: $itemIndex, packageIndex: $packageIndex")
+
   override def cleanup(value: Option[PackageType], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(_) =>
