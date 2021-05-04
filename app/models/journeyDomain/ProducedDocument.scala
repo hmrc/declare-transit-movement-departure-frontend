@@ -16,13 +16,76 @@
 
 package models.journeyDomain
 
+import cats.data.{NonEmptyList, ReaderT}
 import cats.implicits._
-import models.Index
+import derivable.DeriveNumberOfDocuments
+import models.reference.CircumstanceIndicator
+import models.{Index, UserAnswers}
+import pages.AddSecurityDetailsPage
 import pages.addItems._
+import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
 
 final case class ProducedDocument(documentType: String, documentReference: String, extraInformation: Option[String])
 
 object ProducedDocument {
+
+  private def producedDocumentsWithConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    AddSecurityDetailsPage
+      .filterMandatoryDependent(identity) {
+        AddCommercialReferenceNumberPage.filterMandatoryDependent(_ == false) {
+          AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == true) {
+            CircumstanceIndicatorPage.filterMandatoryDependent(
+              x => CircumstanceIndicator.conditionalIndicators.contains(x)
+            ) {
+              DeriveNumberOfDocuments(itemIndex).mandatoryNonEmptyListReader.flatMap {
+                _.zipWithIndex
+                  .traverse[UserAnswersReader, ProducedDocument]({
+                    case (_, index) =>
+                      ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+                  })
+              }
+            }
+          }
+        }
+      }
+      .map(_.some)
+
+  private def producedDocumentsWithoutConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    AddSecurityDetailsPage
+      .filterMandatoryDependent(identity) {
+        AddCommercialReferenceNumberPage.filterMandatoryDependent(_ == false) {
+          AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == false) {
+            DeriveNumberOfDocuments(itemIndex).mandatoryNonEmptyListReader.flatMap {
+              _.zipWithIndex
+                .traverse[UserAnswersReader, ProducedDocument]({
+                  case (_, index) =>
+                    ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+                })
+            }
+          }
+        }
+      }
+      .map(_.some)
+
+  private def producedDocumentsOther(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    AddDocumentsPage(itemIndex).filterOptionalDependent(identity) {
+      DeriveNumberOfDocuments(itemIndex).mandatoryNonEmptyListReader.flatMap {
+        _.zipWithIndex
+          .traverse[UserAnswersReader, ProducedDocument]({
+            case (_, index) =>
+              ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+          })
+      }
+    }
+
+  def deriveProducedDocuments(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    if (itemIndex.position == 0) {
+      producedDocumentsWithConditionalIndicator(itemIndex) orElse
+        producedDocumentsWithoutConditionalIndicator(itemIndex) orElse
+        producedDocumentsOther(itemIndex)
+    } else {
+      producedDocumentsOther(itemIndex)
+    }
 
   def producedDocumentReader(index: Index, referenceIndex: Index): UserAnswersReader[ProducedDocument] =
     (
