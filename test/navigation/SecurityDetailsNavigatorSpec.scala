@@ -23,7 +23,13 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.securityDetails._
 import controllers.addItems.securityDetails._
-import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage}
+import pages.safetyAndSecurity.{
+  AddCircumstanceIndicatorPage,
+  AddCommercialReferenceNumberAllItemsPage,
+  AddSafetyAndSecurityConsigneePage,
+  AddSafetyAndSecurityConsignorPage,
+  CircumstanceIndicatorPage
+}
 
 class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -80,7 +86,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
     }
 
     "Must go from AddDangerousGoodsCodePage" - {
-      "to AddItemsCheckYourAnswersPage when user selects 'No'" in {
+      "to AddItemsCheckYourAnswersPage when user selects 'No' and consignee and consignor are same for all items" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
@@ -99,6 +105,72 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         }
       }
 
+      "to SecurityConsigneesEoriPage when user selects 'No' and consignor is same for all items but consignee isn't and user selects 'E' for circumstance indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddDangerousGoodsCodePage(index), false)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsignorPage, true)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(CircumstanceIndicatorPage, "E")
+              .success
+              .value
+            navigator
+              .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
+              .mustBe(controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
+      }
+
+      "to AddSecurityConsigneesEoriPage when user selects 'No' and consignor is same for all items but consignee isn't and user does not select 'E' for circumstance indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddDangerousGoodsCodePage(index), false)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsignorPage, true)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(CircumstanceIndicatorPage, "B")
+              .success
+              .value
+            navigator
+              .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
+              .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
+      }
+
+      "to AddSecurityConsigneesEoriPage when user selects 'No' and consignor is same for all items but consignee isn't and user selects 'No' to add circumstance indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddDangerousGoodsCodePage(index), false)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsignorPage, true)
+              .success
+              .value
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(AddCircumstanceIndicatorPage, false)
+              .success
+              .value
+            navigator
+              .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
+              .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
+      }
+
       "to DangerousGoodsCodePage when user selects 'Yes'" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -113,7 +185,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
     }
 
-    "Must go from DangerousGoodsCodePage to AddItemsCheckYourAnswersPage" in {
+    "Must go from DangerousGoodsCodePage to AddItemsCheckYourAnswersPage and user selected the same consignor and consignee for all items" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
@@ -126,6 +198,72 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
           navigator
             .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
             .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+      }
+    }
+
+    "to SecurityConsigneesEoriPage when user selects 'No' and consignor is same for all items but consignee isn't and user selects 'E' for circumstance indicator" in {
+      forAll(arbitrary[UserAnswers]) {
+        answers =>
+          val updatedAnswers = answers
+            .set(DangerousGoodsCodePage(index), "testCode")
+            .success
+            .value
+            .set(AddSafetyAndSecurityConsignorPage, true)
+            .success
+            .value
+            .set(AddSafetyAndSecurityConsigneePage, false)
+            .success
+            .value
+            .set(CircumstanceIndicatorPage, "E")
+            .success
+            .value
+          navigator
+            .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
+            .mustBe(controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+      }
+    }
+
+    "to SecurityConsigneesEoriPage when user selects 'No' and consignor is same for all items but consignee isn't and user does not select 'E' for circumstance indicator" in {
+      forAll(arbitrary[UserAnswers]) {
+        answers =>
+          val updatedAnswers = answers
+            .set(DangerousGoodsCodePage(index), "testCode")
+            .success
+            .value
+            .set(AddSafetyAndSecurityConsignorPage, true)
+            .success
+            .value
+            .set(AddSafetyAndSecurityConsigneePage, false)
+            .success
+            .value
+            .set(CircumstanceIndicatorPage, "B")
+            .success
+            .value
+          navigator
+            .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
+            .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+      }
+    }
+
+    "to SecurityConsigneesEoriPage when user selects 'No' and consignor is same for all items but consignee isn't and user selects 'No' to add circumstance indicator" in {
+      forAll(arbitrary[UserAnswers]) {
+        answers =>
+          val updatedAnswers = answers
+            .set(DangerousGoodsCodePage(index), "testCode")
+            .success
+            .value
+            .set(AddSafetyAndSecurityConsignorPage, true)
+            .success
+            .value
+            .set(AddSafetyAndSecurityConsigneePage, false)
+            .success
+            .value
+            .set(AddCircumstanceIndicatorPage, false)
+            .success
+            .value
+          navigator
+            .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
+            .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
       }
     }
   }

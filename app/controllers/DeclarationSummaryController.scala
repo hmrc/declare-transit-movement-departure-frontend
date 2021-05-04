@@ -16,10 +16,12 @@
 
 package controllers
 
+import cats.data.NonEmptyList
 import config.{FrontendAppConfig, ManageTransitMovementsService}
 import controllers.actions._
 import handlers.ErrorHandler
 import models.LocalReferenceNumber
+import models.journeyDomain.{ItemSection, UserAnswersReader}
 import pages.TechnicalDifficultiesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

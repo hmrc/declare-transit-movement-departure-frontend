@@ -24,7 +24,7 @@ import models.{CheckMode, ConsigneeAddress, ConsignorAddress, NormalMode, UserAn
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.traderSecurityDetails._
-import pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage
+import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
 
 class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -80,55 +80,130 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
       }
     }
 
-    "Must go from SecurityConsignorAddressPage to ItemsCheckYourAnswer page if there is 1 consignee for all items" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddSafetyAndSecurityConsigneePage, true)
-            .success
-            .value
-          navigator
-            .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+    "Must go from SecurityConsignorAddressPage to " - {
+
+      "ItemsCheckYourAnswer page if there is 1 consignee for all items" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, true)
+              .success
+              .value
+            navigator
+              .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+        }
+      }
+
+      "SecurityConsigneeEoriPage if there is not 1 consignee for all items and user selects 'E' for Circumstance Indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(CircumstanceIndicatorPage, "E")
+              .success
+              .value
+            navigator
+              .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
+      }
+
+      "AddSecurityConsigneeEoriPage if there is not 1 consignee for all items and user does not select 'E' for Circumstance Indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(CircumstanceIndicatorPage, "B")
+              .success
+              .value
+            navigator
+              .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
+      }
+
+      "AddSecurityConsigneeEoriPage if there is not 1 consignee for all items and user selects 'No' for Add Circumstance Indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(AddCircumstanceIndicatorPage, false)
+              .success
+              .value
+            navigator
+              .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
       }
     }
 
-    "Must go from SecurityConsignorEoriPage to AddSecurityConsigneeEoriPage if there is not 1 consignee for all items" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddSafetyAndSecurityConsigneePage, false)
-            .success
-            .value
-          navigator
-            .nextPage(SecurityConsignorEoriPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+    "Must go from SecurityConsignorEoriPage to " - {
+      "SecurityConsigneeEoriPage if there is not 1 consignee for all items and user selects 'E' for Circumstance Indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(CircumstanceIndicatorPage, "E")
+              .success
+              .value
+            navigator
+              .nextPage(SecurityConsignorEoriPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
       }
-    }
 
-    "Must go from SecurityConsignorEoriPage to ItemsCheckYourAnswer page if there is 1 consignee for all items" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddSafetyAndSecurityConsigneePage, true)
-            .success
-            .value
-          navigator
-            .nextPage(SecurityConsignorEoriPage(index), NormalMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+      "AddSecurityConsigneeEoriPage if there is not 1 consignee for all items and user does not select 'E' for Circumstance Indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(CircumstanceIndicatorPage, "B")
+              .success
+              .value
+            navigator
+              .nextPage(SecurityConsignorEoriPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
       }
-    }
 
-    "Must go from AddSecurityConsigneeEoriPage to SecurityConsigneeEoriPage when user selects yes" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddSecurityConsigneesEoriPage(index), true)
-            .success
-            .value
-          navigator
-            .nextPage(AddSecurityConsigneesEoriPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+      "AddSecurityConsigneeEoriPage if there is not 1 consignee for all items and user selects 'No' for Add Circumstance Indicator" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, false)
+              .success
+              .value
+              .set(AddCircumstanceIndicatorPage, false)
+              .success
+              .value
+            navigator
+              .nextPage(SecurityConsignorEoriPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
+      }
+
+      "SecurityConsigneeEoriPage when user selects yes" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSecurityConsigneesEoriPage(index), true)
+              .success
+              .value
+            navigator
+              .nextPage(AddSecurityConsigneesEoriPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
       }
     }
 

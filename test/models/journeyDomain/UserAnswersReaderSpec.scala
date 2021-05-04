@@ -23,6 +23,7 @@ import play.api.libs.json._
 import queries.Gettable
 
 class UserAnswersReaderSpec extends SpecBase {
+
   case class TestData(field1: Int, field2: String)
 
   implicit val jsonReads: Reads[TestData] = Json.reads[TestData]
@@ -217,4 +218,59 @@ class UserAnswersReaderSpec extends SpecBase {
     }
   }
 
+  "returnOptionalDependant" - {
+    "when the first reader passes" - {
+      "then we return the value of the reader when the predicate passes" in {
+        val testReaders = passingGettable1.returnOptionalDependant(_ == 1)
+        val result      = testReaders.run(testData).right.value
+
+        result mustBe Some(1)
+      }
+
+      "then return None when the predicate fails" in {
+        val testReaders = passingGettable1.returnOptionalDependant(_ != 1)
+        val result      = testReaders.run(testData).right
+
+        result.value mustBe None
+      }
+    }
+
+    "when the first reader fails" - {
+      "then the full reader fails" in {
+        val testReaders = failingGettable.returnOptionalDependant(_ == 1)
+        val result      = testReaders.run(testData).isLeft
+
+        result mustBe true
+      }
+
+    }
+  }
+
+  "returnMandatoryDependant" - {
+    "when the first reader passes" - {
+      "then we return the value of the reader when the predicate passes" in {
+        val testReaders = passingGettable1.returnMandatoryDependent(_ == 1)
+        val result      = testReaders.run(testData).right.value
+
+        result mustBe 1
+      }
+
+      "then fail when the predicate fails" in {
+        val testReaders = passingGettable1.returnMandatoryDependent(_ != 1)
+        val result      = testReaders.run(testData).isLeft
+
+        result mustBe true
+      }
+    }
+
+    "when the first reader fails" - {
+      "then the full reader fails" in {
+        val testReaders = failingGettable.returnMandatoryDependent(_ == 1)
+        val result      = testReaders.run(testData).isLeft
+
+        result mustBe true
+      }
+
+    }
+  }
 }

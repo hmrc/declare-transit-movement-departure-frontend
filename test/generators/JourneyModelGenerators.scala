@@ -18,12 +18,11 @@ package generators
 
 import java.time.{LocalDate, LocalDateTime}
 import cats.data.NonEmptyList
-import models.DeclarationType.{Option2}
+import models.DeclarationType.Option2
 import models._
 import models.domain.{Address, SealDomain}
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
 import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference}
-import models.journeyDomain.ItemsSecurityTraderDetails.{SecurityPersonalInformation, SecurityTraderEori}
 import models.journeyDomain.MovementDetails.{
   DeclarationForSelf,
   DeclarationForSomeoneElse,
@@ -41,6 +40,7 @@ import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
+import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPersonalInformation, SecurityTraderEori}
 import models.journeyDomain.{traderDetails, _}
 import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.{SpecialMention => _, _}
@@ -337,7 +337,7 @@ trait JourneyModelGenerators {
     }
   }
 
-  implicit def arbitraryItemsSecurityTraderDetails(implicit arbAddress: Arbitrary[Address]): Arbitrary[ItemsSecurityTraderDetails.SecurityTraderDetails] =
+  implicit def arbitraryItemsSecurityTraderDetails(implicit arbAddress: Arbitrary[Address]): Arbitrary[models.journeyDomain.addItems.SecurityTraderDetails] =
     Arbitrary(Gen.oneOf(Arbitrary.arbitrary[SecurityPersonalInformation], Arbitrary.arbitrary[SecurityTraderEori]))
 
   implicit lazy val arbitraryItemsSecurityTraderEori: Arbitrary[SecurityTraderEori] =

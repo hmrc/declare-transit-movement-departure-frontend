@@ -21,9 +21,9 @@ import cats.implicits._
 import derivable._
 import models.Index
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
+import models.journeyDomain.addItems.ItemsSecurityTraderDetails
 import pages.addItems.specialMentions.AddSpecialMentionPage
 import pages.{AddSecurityDetailsPage, ContainersUsedPage}
-
 case class ItemSection(
   itemDetails: ItemDetails,
   consignor: Option[RequiredDetails],
@@ -69,11 +69,6 @@ object ItemSection {
       }
     }
 
-  private def securityItemsSecurityTraderDetails(itemIndex: Index): UserAnswersReader[Option[ItemsSecurityTraderDetails]] =
-    AddSecurityDetailsPage.filterOptionalDependent(identity) {
-      ItemsSecurityTraderDetails.parser(itemIndex)
-    }
-
   implicit def readerItemSection(index: Index): UserAnswersReader[ItemSection] =
     (
       ItemDetails.itemDetailsReader(index),
@@ -83,7 +78,7 @@ object ItemSection {
       deriveContainers(index),
       deriveSpecialMentions(index),
       ProducedDocument.deriveProducedDocuments(index),
-      securityItemsSecurityTraderDetails(index),
+      ItemsSecurityTraderDetails.parser(index),
       PreviousReferences.derivePreviousReferences(index)
     ).tupled.map((ItemSection.apply _).tupled)
 

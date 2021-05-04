@@ -95,12 +95,51 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       }
     }
 
-    "must go from AddSafetyAndSecurityConsignee to AddSafetyAndSecurityConsigneeEori if 'true'" in {
+    "must go from AddSafetyAndSecurityConsignee to SafetyAndSecurityConsigneeEoriController if 'true' and selected 'E' for circumstance indicator" in {
 
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
             .set(AddSafetyAndSecurityConsigneePage, true)
+            .success
+            .value
+            .set(CircumstanceIndicatorPage, "E")
+            .success
+            .value
+
+          navigator
+            .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+            .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+      }
+    }
+
+    "must go from AddSafetyAndSecurityConsignee to AddSafetyAndSecurityConsigneeEoriController if 'true' and did not select 'E' for circumstance indicator" in {
+
+      forAll(arbitrary[UserAnswers]) {
+        answers =>
+          val updatedAnswers = answers
+            .set(AddSafetyAndSecurityConsigneePage, true)
+            .success
+            .value
+            .set(CircumstanceIndicatorPage, "B")
+            .success
+            .value
+
+          navigator
+            .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+            .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+      }
+    }
+
+    "must go from AddSafetyAndSecurityConsignee to AddSafetyAndSecurityConsigneeEoriController if 'true' and selected 'No' to add circumstance indicator" in {
+
+      forAll(arbitrary[UserAnswers]) {
+        answers =>
+          val updatedAnswers = answers
+            .set(AddSafetyAndSecurityConsigneePage, true)
+            .success
+            .value
+            .set(AddCircumstanceIndicatorPage, false)
             .success
             .value
 
@@ -466,7 +505,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         }
       }
 
-      "to AddSafetyAndSecurityConsigneeEoriPage when user selects 'Yes' and answers do not exist for consignee" in {
+      "to AddSafetyAndSecurityConsigneeEoriPage when user selects 'Yes' and answers do not exist for consignee and user selects 'E' for Circumstance Indicator" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -475,6 +514,51 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .success
               .value
               .remove(AddSafetyAndSecurityConsigneeEoriPage)
+              .success
+              .value
+              .set(CircumstanceIndicatorPage, "E")
+              .success
+              .value
+
+            navigator
+              .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
+              .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, CheckMode))
+        }
+      }
+
+      "to AddSafetyAndSecurityConsigneeEoriPage when user selects 'Yes' and answers do not exist for consignee and user does not select 'E' for Circumstance Indicator" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, true)
+              .success
+              .value
+              .remove(AddSafetyAndSecurityConsigneeEoriPage)
+              .success
+              .value
+              .set(CircumstanceIndicatorPage, "B")
+              .success
+              .value
+
+            navigator
+              .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
+              .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, CheckMode))
+        }
+      }
+
+      "to AddSafetyAndSecurityConsigneeEoriPage when user selects 'Yes' and answers do not exist for consignee and selects 'No' to Add Circumstance Indicator" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, true)
+              .success
+              .value
+              .remove(AddSafetyAndSecurityConsigneeEoriPage)
+              .success
+              .value
+              .set(AddCircumstanceIndicatorPage, false)
               .success
               .value
 
