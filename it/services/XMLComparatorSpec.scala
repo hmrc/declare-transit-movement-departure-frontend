@@ -22,15 +22,31 @@ import scala.xml.{Node, NodeSeq}
 
 trait XMLComparatorSpec {
   self: Suite =>
-  case class XmlValue(node: String, value: String)
+  case class XmlValue(node: Path, value: String){
+    override def toString: String = s"$node - $value"
+  }
+
+  sealed trait Path {
+    def parent: Path
+  }
+
+  case class RootPath(self: String) extends Path{
+    override def toString: String = self
+
+    override def parent: Path = copy()
+  }
+
+  case class ChildPath(parent: Path, self: String) extends Path {
+    override def toString: String = s"$parent / $self"
+  }
 
   implicit private class NodeOps(actual: Node){
-    def flatter(root: String = "__"): Seq[XmlValue] = {
+    def flatter(root: Path = RootPath("__")): Seq[XmlValue] = {
       if (actual.child.nonEmpty){
         actual.child.flatMap {
           case x if x.label == "#PCDATA" => Seq(XmlValue(root, x.text))
-          case x if x.child.isEmpty => Seq(XmlValue(s"$root / ${x.label}", ""))
-          case x => x.flatter(s"$root / ${x.label}")
+          case x if x.child.isEmpty => Seq(XmlValue(ChildPath(root, x.label), ""))
+          case x => x.flatter(ChildPath(root, x.label))
         }
       } else {
         Nil
@@ -41,11 +57,11 @@ trait XMLComparatorSpec {
 
   implicit class NodeSeqEq(actual: NodeSeq){
 
-    private lazy val actualFields: Seq[XmlValue] = actual.flatMap(x => x.flatter(x.label))
-    private lazy val actualFieldNodes: Seq[String] = actualFields.map(_.node)
+    private lazy val actualFields: Seq[XmlValue] = actual.flatMap(x => x.flatter(RootPath(x.label)))
+    private lazy val actualFieldNodes: Seq[Path] = actualFields.map(_.node)
 
-    private lazy val fieldsMissingInExpected: Seq[String] => Seq[String] = actualFieldNodes diff
-    private lazy val fieldsMissingInActual: Seq[String] => Seq[String] = _ diff actualFieldNodes
+    private lazy val fieldsMissingInExpected: Seq[Path] => Seq[Path] = actualFieldNodes diff
+    private lazy val fieldsMissingInActual: Seq[Path] => Seq[Path] = _ diff actualFieldNodes
 
     private lazy val getCommonFields: XmlValue => Seq[XmlValue] = xml => actualFields.filter(_.node == xml.node)
 
@@ -75,8 +91,10 @@ trait XMLComparatorSpec {
         }
     }.flatten.distinct
 
+//    def recursiveGroupPath
+
     def xmlMustEqual(expected: NodeSeq): Unit ={
-      lazy val expectedFields      = expected.flatMap(x => x.flatter(x.label))
+      lazy val expectedFields      = expected.flatMap(x => x.flatter(RootPath(x.label)))
       lazy val expectedFieldNodes  = expectedFields.map(_.node)
       lazy val missingFromActual   = fieldsMissingInActual(expectedFieldNodes)
       lazy val missingFromExpected = fieldsMissingInExpected(expectedFieldNodes)
@@ -90,7 +108,15 @@ trait XMLComparatorSpec {
       lazy val missingFromActualString = if(missingFromActual.isEmpty) "" else s"\n(${missingFromActual.length}) Fields missing from actual: " +
         s"\n  ${missingFromActual.mkString("\n  ")}"
 
-      if(expected != actual) {
+      if(expected.toString() != actual.toString()) {
+//        println(
+//          expectedFields
+//            .zip(actualFields)
+//            .map{x =>
+//              val colour = if(x._1.value != x._2.value) Console.CYAN else Console.YELLOW
+//              colour + "exp: " + x._1 + " act: " + x._2 + Console.RESET
+//            }.mkString("\n")
+//        )
         fail(s"The XMLs tested didn't match each other $incorrectString $missingFromActualString $missingFromExpectedString")
       }
     }
