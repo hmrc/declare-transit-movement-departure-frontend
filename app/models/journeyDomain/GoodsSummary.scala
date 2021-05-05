@@ -16,6 +16,9 @@
 
 package models.journeyDomain
 
+import java.time.LocalDate
+
+import cats._
 import cats.implicits._
 import derivable.DeriveNumberOfSeals
 import models.ProcedureType
@@ -53,20 +56,25 @@ object GoodsSummary {
 
     implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
-        PreLodgeDeclarationPage.filterMandatoryDependent(_=>false){
-          AddCustomsApprovedLocationPage.filterMandatoryDependent(_=> true){
+        val notPreLodgeWithCustomApprovedLocation= PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
+          AddCustomsApprovedLocationPage.filterMandatoryDependent(_ == true) {
             CustomsApprovedLocationPage.reader.map(
               location => GoodSummaryNormalDetails(Some(location))
             )
           }
-          AddCustomsApprovedLocationPage.filterMandatoryDependent(_=> false){
-            GoodSummaryNormalDetails(None).pure[UserAnswersReader]
-          }
         }
-        PreLodgeDeclarationPage.filterMandatoryDependent(_=>true){
+
+        val notPreLodgeWithoutCustomApprovedLocation =
+          PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
+            AddCustomsApprovedLocationPage.filterMandatoryDependent(_ == false) {
+              GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+            }
+          }
+        val preLodge = PreLodgeDeclarationPage.filterMandatoryDependent(_ == true) {
           GoodSummaryNormalDetails(None).pure[UserAnswersReader]
         }
 
+        preLodge orElse notPreLodgeWithCustomApprovedLocation orElse notPreLodgeWithoutCustomApprovedLocation
       }
   }
 
