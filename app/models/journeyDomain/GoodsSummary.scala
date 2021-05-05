@@ -56,7 +56,7 @@ object GoodsSummary {
 
     implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
-        val notPreLodgeWithCustomApprovedLocation= PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
+        val notPreLodgeWithCustomApprovedLocation = PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
           AddCustomsApprovedLocationPage.filterMandatoryDependent(_ == true) {
             CustomsApprovedLocationPage.reader.map(
               location => GoodSummaryNormalDetails(Some(location))
