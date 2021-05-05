@@ -53,23 +53,20 @@ object GoodsSummary {
 
     implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
-        PreLodgeDeclarationPage.reader
-          .flatMap {
-            prelodged =>
-              if (!prelodged) {
-                AddCustomsApprovedLocationPage.reader
-                  .flatMap {
-                    locationNeeded =>
-                      if (locationNeeded) {
-                        CustomsApprovedLocationPage.reader.map(
-                          location => GoodSummaryNormalDetails(Some(location))
-                        )
-                      } else
-                        GoodSummaryNormalDetails(None).pure[UserAnswersReader]
-                  }
-              } else
-                GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+        PreLodgeDeclarationPage.filterMandatoryDependent(_=>false){
+          AddCustomsApprovedLocationPage.filterMandatoryDependent(_=> true){
+            CustomsApprovedLocationPage.reader.map(
+              location => GoodSummaryNormalDetails(Some(location))
+            )
           }
+          AddCustomsApprovedLocationPage.filterMandatoryDependent(_=> false){
+            GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+          }
+        }
+        PreLodgeDeclarationPage.filterMandatoryDependent(_=>true){
+          GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+        }
+
       }
   }
 
