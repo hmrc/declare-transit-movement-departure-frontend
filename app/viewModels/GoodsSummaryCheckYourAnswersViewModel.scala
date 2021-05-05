@@ -32,7 +32,6 @@ object GoodsSummaryCheckYourAnswersViewModel {
     val checkYourAnswersHelper            = new CheckYourAnswersHelper(userAnswers)
     val addSealHelper                     = new AddSealHelper(userAnswers)
 
-    val declarePackages: Option[SummaryList.Row]            = goodsSummaryheckYourAnswersHelper.declarePackages
     val totalPackages: Option[SummaryList.Row]              = goodsSummaryheckYourAnswersHelper.totalPackages
     val totalGrossMass: Option[SummaryList.Row]             = goodsSummaryheckYourAnswersHelper.totalGrossMass
     val authorisedLocationCode: Option[SummaryList.Row]     = goodsSummaryheckYourAnswersHelper.authorisedLocationCode
@@ -46,7 +45,6 @@ object GoodsSummaryCheckYourAnswersViewModel {
     val sealsInformation: Option[SummaryList.Row]           = goodsSummaryheckYourAnswersHelper.sealsInformation
 
     val checkYourAnswersData = Seq(
-      declarePackages,
       totalPackages,
       totalGrossMass,
       authorisedLocationCode,

@@ -38,27 +38,6 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
     "in Normal Mode" - {
 
-      "must go from DeclarePackagesPage to TotalPackagesPage when user selects Yes" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers.set(DeclarePackagesPage, true).toOption.value
-
-            navigator
-              .nextPage(DeclarePackagesPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.TotalPackagesController.onPageLoad(updatedAnswers.id, NormalMode))
-        }
-      }
-
-      "must go from DeclarePackagesPage to TotalGrossMassPage when user selects No" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers.set(DeclarePackagesPage, false).toOption.value
-
-            navigator
-              .nextPage(DeclarePackagesPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.TotalGrossMassController.onPageLoad(updatedAnswers.id, NormalMode))
-        }
-      }
 
       "must go from TotalPackagesPage to TotalGrossMassPage when submitted" in {
         forAll(arbitrary[UserAnswers]) {
@@ -315,53 +294,6 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
     }
 
     "in Check Mode" - {
-
-      "must go from DeclarePackagesPage to TotalPackagesPage when selecting Yes and TotalPackages has no data" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers
-              .set(DeclarePackagesPage, true).toOption.value
-              .remove(TotalPackagesPage).success.value
-
-            navigator
-              .nextPage(DeclarePackagesPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.TotalPackagesController.onPageLoad(updatedAnswers.id, CheckMode))
-        }
-      }
-
-      "must go from DeclarePackagesPage to CheckYourAnswersPage when selecting Yes and TotalPackages has data" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers
-              .set(DeclarePackagesPage, true)
-              .toOption
-              .value
-              .set(TotalPackagesPage, 1)
-              .success
-              .value
-
-            navigator
-              .nextPage(DeclarePackagesPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
-        }
-      }
-
-      "must go from DeclarePackagesPage to CheckYourAnswersPage when selecting No" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers
-              .set(DeclarePackagesPage, false)
-              .toOption
-              .value
-              .remove(TotalPackagesPage)
-              .success
-              .value
-
-            navigator
-              .nextPage(DeclarePackagesPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
-        }
-      }
 
       "must go from TotalGrossMage to CheckYourAnswersPage " in {
         forAll(arbitrary[UserAnswers]) {

@@ -30,7 +30,6 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case DeclarePackagesPage            => ua => Some(declarePackageRoute(ua, NormalMode))
     case TotalPackagesPage              => ua => Some(routes.TotalGrossMassController.onPageLoad(ua.id, NormalMode))
     case TotalGrossMassPage             => ua => Some(totalGrossMassRoute(ua))
     case AuthorisedLocationCodePage     => ua => Some(routes.ControlResultDateLimitController.onPageLoad(ua.id, NormalMode))
@@ -48,7 +47,6 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case DeclarePackagesPage            => ua => Some(declarePackageRoute(ua, CheckMode))
     case TotalPackagesPage              => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
     case TotalGrossMassPage             => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
     case AuthorisedLocationCodePage     => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
@@ -79,14 +77,6 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
       case _          => routes.SealsInformationController.onPageLoad(ua.id, mode)
     }
   }
-
-  def declarePackageRoute(ua: UserAnswers, mode: Mode): Call =
-    (ua.get(DeclarePackagesPage), ua.get(TotalPackagesPage), mode) match {
-      case (Some(true), Some(_), CheckMode) => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
-      case (Some(true), _, _)               => routes.TotalPackagesController.onPageLoad(ua.id, mode)
-      case (Some(false), _, NormalMode)     => routes.TotalGrossMassController.onPageLoad(ua.id, mode)
-      case (Some(false), _, CheckMode)      => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
-    }
 
   def totalGrossMassRoute(ua: UserAnswers): Call =
     (ua.get(ProcedureTypePage), ua.get(AddSecurityDetailsPage)) match {

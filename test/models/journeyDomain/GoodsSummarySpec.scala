@@ -34,19 +34,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
     "when number of packages is declared and SafetyAndSecurity is True" in {
 
-      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).map(_.copy(numberOfPackages = Some(123)))
-
-      forAll(arbGoodsSummary, arb[UserAnswers]) {
-        (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-
-          UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
-      }
-    }
-
-    "when number of packages is not declared and SafetyAndSecurity is False" in {
-
-      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).map(_.copy(numberOfPackages = None))
+      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).map(_.copy(numberOfPackages = 123))
 
       forAll(arbGoodsSummary, arb[UserAnswers]) {
         (goodsSummary, ua) =>
@@ -150,8 +138,7 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
   def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
       .unsafeSetVal(ProcedureTypePage)(procedureType(goodsSummary.goodSummaryDetails))
-      .unsafeSetVal(DeclarePackagesPage)(goodsSummary.numberOfPackages.isDefined)
-      .unsafeSetOpt(TotalPackagesPage)(goodsSummary.numberOfPackages)
+      .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
       .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {

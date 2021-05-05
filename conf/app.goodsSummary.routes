@@ -1,7 +1,3 @@
-GET        /:lrn/goods-summary/declare-packages                        controllers.goodsSummary.DeclarePackagesController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/goods-summary/declare-packages                       controllers.goodsSummary.DeclarePackagesController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/goods-summary/change-declare-packages                  controllers.goodsSummary.DeclarePackagesController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/goods-summary/change-declare-packages                 controllers.goodsSummary.DeclarePackagesController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/goods-summary/total-packages                  controllers.goodsSummary.TotalPackagesController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/goods-summary/total-packages                  controllers.goodsSummary.TotalPackagesController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

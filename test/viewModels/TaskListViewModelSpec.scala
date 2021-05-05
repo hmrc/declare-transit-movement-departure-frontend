@@ -870,9 +870,9 @@ class TaskListViewModelSpec
         }
 
         "is InProgress when the first question for the section has been answered" in {
-          forAll(arb[Boolean]) {
+          forAll(arb[Int]) {
             pageAnswer =>
-              val userAnswers = emptyUserAnswers.unsafeSetVal(DeclarePackagesPage)(pageAnswer)
+              val userAnswers = emptyUserAnswers.unsafeSetVal(TotalPackagesPage)(pageAnswer)
 
               val viewModel = TaskListViewModel(userAnswers)
 
@@ -901,19 +901,19 @@ class TaskListViewModelSpec
         "when the status is Not started, links to the first page" in {
           val viewModel = TaskListViewModel(emptyUserAnswers)
 
-          val expectedHref: String = controllers.goodsSummary.routes.DeclarePackagesController.onPageLoad(lrn, NormalMode).url
+          val expectedHref: String = controllers.goodsSummary.routes.TotalPackagesController.onPageLoad(lrn, NormalMode).url
 
           viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
         }
 
         "when the status is InProgress, links to the first page" in {
-          forAll(arb[Boolean]) {
+          forAll(arb[Int]) {
             pageAnswer =>
-              val userAnswers = emptyUserAnswers.unsafeSetVal(DeclarePackagesPage)(pageAnswer)
+              val userAnswers = emptyUserAnswers.unsafeSetVal(TotalPackagesPage)(pageAnswer)
 
               val viewModel = TaskListViewModel(userAnswers)
 
-              val expectedHref: String = controllers.goodsSummary.routes.DeclarePackagesController.onPageLoad(lrn, NormalMode).url
+              val expectedHref: String = controllers.goodsSummary.routes.TotalPackagesController.onPageLoad(lrn, NormalMode).url
 
               viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
           }
