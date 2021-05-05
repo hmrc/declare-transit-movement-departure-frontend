@@ -21,9 +21,10 @@ import cats.implicits._
 import derivable._
 import models.Index
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
+import models.journeyDomain.ProducedDocument.deriveProducedDocuments
 import models.journeyDomain.addItems.ItemsSecurityTraderDetails
+import pages.ContainersUsedPage
 import pages.addItems.specialMentions.AddSpecialMentionPage
-import pages.{AddSecurityDetailsPage, ContainersUsedPage}
 case class ItemSection(
   itemDetails: ItemDetails,
   consignor: Option[RequiredDetails],
@@ -77,7 +78,7 @@ object ItemSection {
       derivePackage(index),
       deriveContainers(index),
       deriveSpecialMentions(index),
-      ProducedDocument.deriveProducedDocuments(index),
+      deriveProducedDocuments(index),
       ItemsSecurityTraderDetails.parser(index),
       PreviousReferences.derivePreviousReferences(index)
     ).tupled.map((ItemSection.apply _).tupled)
