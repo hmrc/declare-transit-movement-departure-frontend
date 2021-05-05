@@ -77,6 +77,13 @@ class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
           val packages = goodsItem.packages.flatMap(
             value => packageNode(value)
           )
+          val goodsItemSecurityConsignor = goodsItem.goodsItemSecurityConsignor.fold(NodeSeq.Empty)(
+            value => getGoodsItemSecurityConsignor(Some(value))
+          )
+
+          val goodsItemSecurityConsignee = goodsItem.goodsItemSecurityConsignee.fold(NodeSeq.Empty)(
+            value => getGoodsItemSecurityConsignee(Some(value))
+          )
 
           val sensitiveGoodsInformation = goodsItem.sensitiveGoodsInformation.flatMap(_.toXml)
 
@@ -114,6 +121,8 @@ class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
               {containers}
               {packages}
               {sensitiveGoodsInformation}
+              {goodsItemSecurityConsignor}
+              {goodsItemSecurityConsignee}
             </GOOITEGDS>
 
           goodsItem.toXml mustEqual expectedResult
@@ -144,5 +153,17 @@ class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
     case packageItem: RegularPackage  => packageItem.toXml
     case packageItem: BulkPackage     => packageItem.toXml
     case _                            => NodeSeq.Empty
+  }
+
+  def getGoodsItemSecurityConsignor(goodsItemSecurityConsignor: Option[GoodsItemSecurityConsignor]): NodeSeq = goodsItemSecurityConsignor match {
+    case Some(goodsItemSecurityConsignor: ItemsSecurityConsignorWithEori)    => goodsItemSecurityConsignor.toXml
+    case Some(goodsItemSecurityConsignor: ItemsSecurityConsignorWithoutEori) => goodsItemSecurityConsignor.toXml
+    case _                                                                   => NodeSeq.Empty
+  }
+
+  def getGoodsItemSecurityConsignee(goodsItemSecurityConsignee: Option[GoodsItemSecurityConsignee]): NodeSeq = goodsItemSecurityConsignee match {
+    case Some(goodsItemSecurityConsignee: ItemsSecurityConsigneeWithEori)    => goodsItemSecurityConsignee.toXml
+    case Some(goodsItemSecurityConsignee: ItemsSecurityConsigneeWithoutEori) => goodsItemSecurityConsignee.toXml
+    case _                                                                   => NodeSeq.Empty
   }
 }
