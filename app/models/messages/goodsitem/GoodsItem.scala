@@ -127,6 +127,9 @@ object GoodsItem {
 
       val sensitiveGoodsInformation = goodsItem.sensitiveGoodsInformation.flatMap(_.toXml)
 
+      val goodsItemSecurityConsignor = goodsItemSecurityConsignorNode(goodsItem.goodsItemSecurityConsignor)
+      val goodsItemSecurityConsignee = goodsItemSecurityConsigneeNode(goodsItem.goodsItemSecurityConsignee)
+
       <GOOITEGDS>
         <IteNumGDS7>{goodsItem.itemNumber}</IteNumGDS7>
         {commodityCode}
@@ -148,6 +151,8 @@ object GoodsItem {
         {containers}
         {packages}
         {sensitiveGoodsInformation}
+        {goodsItemSecurityConsignor}
+        {goodsItemSecurityConsignee}
       </GOOITEGDS>
   }
 
@@ -164,6 +169,18 @@ object GoodsItem {
     case packageItem: RegularPackage  => packageItem.toXml
     case packageItem: BulkPackage     => packageItem.toXml
     case _                            => NodeSeq.Empty
+  }
+
+  def goodsItemSecurityConsignorNode(goodsItemSecurityConsignor: Option[GoodsItemSecurityConsignor]): NodeSeq = goodsItemSecurityConsignor match {
+    case Some(goodsItemSecurityConsignor: ItemsSecurityConsignorWithEori)    => goodsItemSecurityConsignor.toXml
+    case Some(goodsItemSecurityConsignor: ItemsSecurityConsignorWithoutEori) => goodsItemSecurityConsignor.toXml
+    case _                                                                   => NodeSeq.Empty
+  }
+
+  def goodsItemSecurityConsigneeNode(goodsItemSecurityConsignee: Option[GoodsItemSecurityConsignee]): NodeSeq = goodsItemSecurityConsignee match {
+    case Some(goodsItemSecurityConsignee: ItemsSecurityConsigneeWithEori)    => goodsItemSecurityConsignee.toXml
+    case Some(goodsItemSecurityConsignee: ItemsSecurityConsigneeWithoutEori) => goodsItemSecurityConsignee.toXml
+    case _                                                                   => NodeSeq.Empty
   }
 
 }
