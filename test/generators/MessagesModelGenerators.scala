@@ -459,13 +459,16 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         uNDanGooCodGDI1      <- Gen.option(stringsWithMaxLength(GoodsItem.Constants.dangerousGoodsCodeLength, alphaNumChar))
         previousAdministrativeReference <- listWithMaxLength(PreviousAdministrativeReference.Constants.previousAdministrativeReferenceCount,
                                                              arbitrary[PreviousAdministrativeReference])
-        producedDocuments         <- listWithMaxLength(ProducedDocument.Constants.producedDocumentCount, arbitrary[ProducedDocument])
-        specialMentions           <- listWithMaxLength(SpecialMention.Constants.specialMentionCount, arbitrary[SpecialMention])
-        traderConsignorGoodsItem  <- Gen.option(arbitrary[TraderConsignorGoodsItem])
-        traderConsigneeGoodsItem  <- Gen.option(arbitrary[TraderConsigneeGoodsItem])
-        containers                <- listWithMaxLength(Containers.Constants.containerCount, stringsWithMaxLength(Containers.Constants.containerNumberLength, alphaNumChar))
-        packages                  <- listWithMaxLength(Package.Constants.packageCount, arbitrary[Package])
-        sensitiveGoodsInformation <- listWithMaxLength(SensitiveGoodsInformation.Constants.sensitiveGoodsInformationCount, arbitrary[SensitiveGoodsInformation])
+        producedDocuments          <- listWithMaxLength(ProducedDocument.Constants.producedDocumentCount, arbitrary[ProducedDocument])
+        specialMentions            <- listWithMaxLength(SpecialMention.Constants.specialMentionCount, arbitrary[SpecialMention])
+        traderConsignorGoodsItem   <- Gen.option(arbitrary[TraderConsignorGoodsItem])
+        traderConsigneeGoodsItem   <- Gen.option(arbitrary[TraderConsigneeGoodsItem])
+        containers                 <- listWithMaxLength(Containers.Constants.containerCount, stringsWithMaxLength(Containers.Constants.containerNumberLength, alphaNumChar))
+        packages                   <- listWithMaxLength(Package.Constants.packageCount, arbitrary[Package])
+        sensitiveGoodsInformation  <- listWithMaxLength(SensitiveGoodsInformation.Constants.sensitiveGoodsInformationCount, arbitrary[SensitiveGoodsInformation])
+        goodsItemSecurityConsignor <- Gen.option(arbitraryGoodsItemSecurityConsignor.arbitrary)
+        goodsItemSecurityConsignee <- Gen.option(arbitraryGoodsItemSecurityConsignee.arbitrary)
+
       } yield
         GoodsItem(
           itemNumber,
@@ -487,10 +490,18 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
           containers,
           packages,
           sensitiveGoodsInformation,
-          None, //TODO Change this to gen
-          None
+          goodsItemSecurityConsignor,
+          goodsItemSecurityConsignee
         )
     }
+
+  implicit lazy val arbitraryGoodsItemSecurityConsignor: Arbitrary[GoodsItemSecurityConsignor] = Arbitrary {
+    Gen.oneOf[GoodsItemSecurityConsignor](arbitrary[ItemsSecurityConsignorWithEori], arbitrary[ItemsSecurityConsignorWithoutEori])
+  }
+
+  implicit lazy val arbitraryGoodsItemSecurityConsignee: Arbitrary[GoodsItemSecurityConsignee] = Arbitrary {
+    Gen.oneOf[GoodsItemSecurityConsignee](arbitrary[ItemsSecurityConsigneeWithEori], arbitrary[ItemsSecurityConsigneeWithoutEori])
+  }
 
   implicit lazy val arbitraryPreviousAdministrativeReferences: Arbitrary[PreviousAdministrativeReference] =
     Arbitrary {
