@@ -172,7 +172,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1SPMT1")
         .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(0)))("GD1SPMT1Info")
         .unsafeSetVal(pages.addItems.specialMentions.AddAnotherSpecialMentionPage(firstGoodItem))(true)
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1SPMT2")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("DG0")
         .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(0)))("GD1SPMT2Info")
         .unsafeSetVal(pages.addItems.specialMentions.AddAnotherSpecialMentionPage(firstGoodItem))(false)
         .unsafeSetVal(pages.addItems.AddDocumentsPage(firstGoodItem))(true)
@@ -203,7 +203,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsigneesEoriPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeEoriPage(firstGoodItem))("GD1SECCONEE")
         /*
-          * Item Details section - Item One
+          * Item Details section - Item Two
           * */
         .unsafeSetVal(ItemDescriptionPage(secondGoodItem))("ItemTwosDescription")
         .unsafeSetVal(ItemTotalGrossMassPage(secondGoodItem))("25001")
@@ -282,13 +282,19 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
 
       /*
       * TODO:
-      *  MesSenMES3 is missing in the service. It is mandatory
       *  PRODOCDC2 not working properly for first item
+      *  TRACORSECGOO021 and TRACONSECGOO013 are not being populated
+      *  VALLIMECVLE and VALLIMNONECLIM ever populated?
+      *  OthGuaRefREF4 condeition for achieveing this?
+      *  SGICODSD2 how do you know if this is to be used?
+      *  SPEMENT ExpFroECMT25 never happends?
+      *  CouOfDisGDS58 are we assuming its only one for this service?
+      *  Destination are we assuming its only one for this service?
+      *  DecTypGDS15 what is it and when is it set?
       */
       val expectedXml = <CC015B>
         <SynIdeMES1>UNOC</SynIdeMES1>
         <SynVerNumMES2>3</SynVerNumMES2>
-        <MesSenMES3>NCTS</MesSenMES3>
         <MesRecMES6>NCTS</MesRecMES6>
         <DatOfPreMES9>20201212</DatOfPreMES9>
         <TimOfPreMES10>2030</TimOfPreMES10>
@@ -383,28 +389,14 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <GuaTypGUA1>1</GuaTypGUA1>
           <GUAREFREF>
             <GuaRefNumGRNREF1>GUA1Ref</GuaRefNumGRNREF1>
-            <OthGuaRefREF4></OthGuaRefREF4>
-            <AccCodeREF6></AccCodeREF6>
-            <VALLIMECVLE>
-              <NotValForECVLE1></NotValForECVLE1>
-            </VALLIMECVLE>
-            <VALLIMNONECLIM>
-              <NotValForOthConPLIM2></NotValForOthConPLIM2>
-            </VALLIMNONECLIM>
+            <AccCodREF6>1234</AccCodREF6>
           </GUAREFREF>
         </GUAGUA>
         <GUAGUA>
           <GuaTypGUA1>0</GuaTypGUA1>
           <GUAREFREF>
             <GuaRefNumGRNREF1>GUA2Ref</GuaRefNumGRNREF1>
-            <OthGuaRefREF4></OthGuaRefREF4>
-            <AccCodeREF6></AccCodeREF6>
-            <VALLIMECVLE>
-              <NotValForECVLE1></NotValForECVLE1>
-            </VALLIMECVLE>
-            <VALLIMNONECLIM>
-              <NotValForOthConPLIM2></NotValForOthConPLIM2>
-            </VALLIMNONECLIM>
+            <AccCodREF6>4321</AccCodREF6>
           </GUAREFREF>
         </GUAGUA>
         <GOOITEGDS>
@@ -412,49 +404,47 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <DecTypGDS15></DecTypGDS15>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
+          <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
-          <CouOfDisGDS58></CouOfDisGDS58>
-          <CouOfDesGDS59></CouOfDesGDS59>
-          <MetOfPayGDI12></MetOfPayGDI12>
           <ComRefNumGIM1>GD1CRN</ComRefNumGIM1>
           <UNDanGooCodGDI1>GD1DGGDSCODE</UNDanGooCodGDI1>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PREREF1</PreDocTypAR21>
             <PreDocRefAR26>GD1PREREF1Ref</PreDocRefAR26>
+            <PreDocRefLNG>EN</PreDocRefLNG>
             <ComOfInfAR29>GD1PREREF1Info</ComOfInfAR29>
+            <ComOfInfAR29LNG>EN</ComOfInfAR29LNG>
           </PREADMREFAR2>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PREREF2</PreDocTypAR21>
             <PreDocRefAR26>GD1PREREF2Ref</PreDocRefAR26>
+            <PreDocRefLNG>EN</PreDocRefLNG>
           </PREADMREFAR2>
           <PRODOCDC2>
-            <DocTypDC21></DocTypDC21>
-            <DocRefDC23></DocRefDC23>
-            <ComOfInfDC25></ComOfInfDC25>
+            <DocTypDC21>GD1DOC1</DocTypDC21>
+            <DocRefDC23>GD1DOC1Ref</DocRefDC23>
+            <DocRefDCLNG>EN</DocRefDCLNG>
+            <ComOfInfDC25>GD1DOC1Info</ComOfInfDC25>
+            <ComOfInfDC25LNG>EN</ComOfInfDC25LNG>
           </PRODOCDC2>
           <PRODOCDC2>
-            <DocTypDC21></DocTypDC21>
-            <DocRefDC23></DocRefDC23>
-            <ComOfInfDC25></ComOfInfDC25>
+            <DocTypDC21>GD1DOC1</DocTypDC21>
+            <DocRefDC23>GD1DOC1Ref</DocRefDC23>
+            <DocRefDCLNG>EN</DocRefDCLNG>
           </PRODOCDC2>
           <SPEMENMT2>
             <AddInfMT21>10000EURGUA1Ref</AddInfMT21>
             <AddInfCodMT23>CAL</AddInfCodMT23>
-            <ExpFroECMT24></ExpFroECMT24>
-            <ExpFroCouMT25></ExpFroCouMT25>
           </SPEMENMT2>
           <SPEMENMT2>
             <AddInfMT21>500GBPGUA2Ref</AddInfMT21>
             <AddInfCodMT23>CAL</AddInfCodMT23>
-            <ExpFroECMT24></ExpFroECMT24>
-            <ExpFroCouMT25></ExpFroCouMT25>
           </SPEMENMT2>
           <SPEMENMT2>
             <AddInfMT21>GD1SPMT2Info</AddInfMT21>
-            <AddInfCodMT23>GD1SPMT2</AddInfCodMT23>
-            <ExpFroECMT24></ExpFroECMT24>
-            <ExpFroCouMT25></ExpFroCouMT25>
+            <AddInfCodMT23>DG0</AddInfCodMT23>
+            <ExpFroCouMT25>GB</ExpFroCouMT25>
           </SPEMENMT2>
           <TRACONCO2>
             <NamCO27>ConorName</NamCO27>
@@ -462,6 +452,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCO223>ConorLine3</PosCodCO223>
             <CitCO224>ConorLine2</CitCO224>
             <CouCO225>GD1</CouCO225>
+            <NADLNGGTCO>EN</NADLNGGTCO>
             <TINCO259>Conor123</TINCO259>
           </TRACONCO2>
           <TRACONCE2>
@@ -470,10 +461,14 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCE223>ConeeLine3</PosCodCE223>
             <CitCE224>ConeeLine2</CitCE224>
             <CouCE225>GD1</CouCE225>
+            <NADLNGGICE>EN</NADLNGGICE>
             <TINCE259>Conee123</TINCE259>
           </TRACONCE2>
           <CONNR2>
-            <ConNumNR21></ConNumNR21>
+            <ConNumNR21>GD1CN1NUM1</ConNumNR21>
+          </CONNR2>
+          <CONNR2>
+            <ConNumNR21>GD1CN2NUMS</ConNumNR21>
           </CONNR2>
           <PACGS2>
             <KinOfPacGS23>VQ</KinOfPacGS23>
@@ -488,51 +483,39 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <MarNumOfPacGS21>GD1PK3MK</MarNumOfPacGS21>
             <KinOfPacGS23>BAG</KinOfPacGS23>
           </PACGS2>
-          <SGICODSD2>
-            <SenGooCodSD22></SenGooCodSD22>
-            <SenQuaSD23></SenQuaSD23>
-          </SGICODSD2>
           <TRACORSECGOO021>
-            <NamTRACORSECGOO025></NamTRACORSECGOO025>
-            <StrNumTRACORSECGOO027></StrNumTRACORSECGOO027>
-            <PosCodTRACORSECGOO026></PosCodTRACORSECGOO026>
-            <CitTRACORSECGOO022></CitTRACORSECGOO022>
-            <CouCodTRACORSECGOO023></CouCodTRACORSECGOO023>
-            <TINTRACORSECGOO028></TINTRACORSECGOO028>
+            <TINTRACORSECGOO028>GD1SECCONOR</TINTRACORSECGOO028>
           </TRACORSECGOO021>
           <TRACONSECGOO013>
-            <NamTRACONSECGOO017></NamTRACONSECGOO017>
-            <StrNumTRACONSECGOO019></StrNumTRACONSECGOO019>
-            <PosCodTRACONSECGOO018></PosCodTRACONSECGOO018>
-            <CityTRACONSECGOO014></CityTRACONSECGOO014>
-            <CouCodTRACONSECGOO015></CouCodTRACONSECGOO015>
-            <TINTRACONSECGOO020></TINTRACONSECGOO020>
+            <TINTRACONSECGOO020>GD1SECCONEE</TINTRACONSECGOO020>
           </TRACONSECGOO013>
         </GOOITEGDS>
         <GOOITEGDS>
           <IteNumGDS7>2</IteNumGDS7>
           <DecTypGDS15></DecTypGDS15>
           <GooDesGDS23>ItemTwosDescription</GooDesGDS23>
+          <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25001</GroMasGDS46>
           <CouOfDisGDS58></CouOfDisGDS58>
-          <CouOfDesGDS59></CouOfDesGDS59>
           <MetOfPayGDI12></MetOfPayGDI12>
           <ComRefNumGIM1>GD2CRN</ComRefNumGIM1>
           <PREADMREFAR2>
             <PreDocTypAR21>GD2PREREF1</PreDocTypAR21>
             <PreDocRefAR26>GD2PREREF1Ref</PreDocRefAR26>
+            <PreDocRefLNG>EN</PreDocRefLNG>
             <ComOfInfAR29>GD2PREREF1Info</ComOfInfAR29>
+            <ComOfInfAR29LNG>EN</ComOfInfAR29LNG>
           </PREADMREFAR2>
           <PRODOCDC2>
             <DocTypDC21>GD2DOC1</DocTypDC21>
             <DocRefDC23>GD2DOC1Ref</DocRefDC23>
+            <DocRefDCLNG>EN</DocRefDCLNG>
             <ComOfInfDC25>GD2DOC1Info</ComOfInfDC25>
+            <ComOfInfDC25LNG>EN</ComOfInfDC25LNG>
           </PRODOCDC2>
           <SPEMENMT2>
             <AddInfMT21>GD2SPMT1Info</AddInfMT21>
             <AddInfCodMT23>GD2SPMT1</AddInfCodMT23>
-            <ExpFroECMT24></ExpFroECMT24>
-            <ExpFroCouMT25></ExpFroCouMT25>
           </SPEMENMT2>
           <TRACONCO2>
             <NamCO27>ConorName</NamCO27>
@@ -540,6 +523,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCO223>ConorLine3</PosCodCO223>
             <CitCO224>ConorLine2</CitCO224>
             <CouCO225>GD2</CouCO225>
+            <NADLNGGTCO>EN</NADLNGGTCO>
           </TRACONCO2>
           <TRACONCE2>
             <NamCE27>ConeeName</NamCE27>
@@ -547,9 +531,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCE223>ConeeLine3</PosCodCE223>
             <CitCE224>ConeeLine2</CitCE224>
             <CouCE225>GD2</CouCE225>
+            <NADLNGGICE>EN</NADLNGGICE>
           </TRACONCE2>
           <CONNR2>
-            <ConNumNR21></ConNumNR21>
+            <ConNumNR21>GD2CN1NUM1</ConNumNR21>
           </CONNR2>
           <PACGS2>
             <KinOfPacGS23>VQ</KinOfPacGS23>
@@ -564,14 +549,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <MarNumOfPacGS21>GD2PK3MK</MarNumOfPacGS21>
             <KinOfPacGS23>BAG</KinOfPacGS23>
           </PACGS2>
-          <SGICODSD2>
-            <SenGooCodSD22></SenGooCodSD22>
-            <SenQuaSD23></SenQuaSD23>
-          </SGICODSD2>
           <TRACORSECGOO021>
-            <NamTRACORSECGOO025></NamTRACORSECGOO025>
-            <StrNumTRACORSECGOO027></StrNumTRACORSECGOO027>
-            <PosCodTRACORSECGOO026></PosCodTRACORSECGOO026>
+            <NamTRACORSECGOO025>GD2SECCONORName</NamTRACORSECGOO025>
+            <StrNumTRACORSECGOO027>GD2CONORL1</StrNumTRACORSECGOO027>
+            <PosCodTRACORSECGOO026>GD2CONORL1</PosCodTRACORSECGOO026>
             <CitTRACORSECGOO022></CitTRACORSECGOO022>
             <CouCodTRACORSECGOO023></CouCodTRACORSECGOO023>
             <TINTRACORSECGOO028></TINTRACORSECGOO028>
@@ -592,35 +573,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <CouOfRouCodITI1>CORP2</CouOfRouCodITI1>
         </ITI>
         <CARTRA100>
-          <NamCARTRA121></NamCARTRA121>
-          <StrAndNumCARTRA254></StrAndNumCARTRA254>
-          <PosCodCARTRA121></PosCodCARTRA121>
-          <CitCARTRA789></CitCARTRA789>
-          <CouCodCARTRA587></CouCodCARTRA587>
-          <NADCARTRA121></NADCARTRA121>
           <TINCARTRA254>CarrierEori</TINCARTRA254>
         </CARTRA100>
-        <TRACORSEC037>
-          <NamTRACORSEC041></NamTRACORSEC041>
-          <StrNumTRACORSEC043></StrNumTRACORSEC043>
-          <PosCodTRACORSEC042></PosCodTRACORSEC042>
-          <CitTRACORSEC038></CitTRACORSEC038>
-          <CouCodTRACORSEC039></CouCodTRACORSEC039>
-          <TINTRACORSEC044></TINTRACORSEC044>
-        </TRACORSEC037>
-        <TRACONSEC029>
-          <NameTRACONSEC033></NameTRACONSEC033>
-          <StrNumTRAACONSEC035></StrNumTRAACONSEC035>
-          <PosCodTRACONSEC034></PosCodTRACONSEC034>
-          <CitTRACONSEC030></CitTRACONSEC030>
-          <CouCodTRACONSEC031></CouCodTRACONSEC031>
-          <TINTRACONSEC036></TINTRACONSEC036>
-        </TRACONSEC029>
       </CC015B>
 
-      println(service.convert(userAnswers)
-        .futureValue
-        .right.value.toXml.map(scala.xml.Utility.trim))
+
       service.convert(userAnswers)
         .futureValue
         .right.value.toXml.map(scala.xml.Utility.trim) xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
