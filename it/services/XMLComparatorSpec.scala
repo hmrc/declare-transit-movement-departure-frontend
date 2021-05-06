@@ -108,16 +108,24 @@ trait XMLComparatorSpec {
       lazy val missingFromActualString = if(missingFromActual.isEmpty) "" else s"\n(${missingFromActual.length}) Fields missing from actual: " +
         s"\n  ${missingFromActual.mkString("\n  ")}"
 
+      lazy val mismatchedPositionFields = expectedFields
+        .zip(actualFields)
+        .flatMap{x =>
+          if(x._1.value != x._2.value) {
+            Some(s"ACTUAL: ${Console.CYAN}${x._2}${Console.RED} EXPECTED: ${Console.CYAN}${x._1}${Console.RED}")
+          } else {
+            None
+          }
+        }.mkString("\n", "\n", "\n")
+
       if(expected.toString() != actual.toString()) {
-//        println(
-//          expectedFields
-//            .zip(actualFields)
-//            .map{x =>
-//              val colour = if(x._1.value != x._2.value) Console.CYAN else Console.YELLOW
-//              colour + "exp: " + x._1 + " act: " + x._2 + Console.RESET
-//            }.mkString("\n")
-//        )
-        fail(s"The XMLs tested didn't match each other $incorrectString $missingFromActualString $missingFromExpectedString")
+
+        val failureMessage = if(s"$incorrectString$missingFromActualString$missingFromExpectedString".trim.nonEmpty){
+          s"$incorrectString $missingFromActualString $missingFromExpectedString"
+        } else {
+          s"\nThe following fields are in different positions in the XML: $mismatchedPositionFields"
+        }
+        fail(s"The XMLs tested didn't match each other $failureMessage")
       }
     }
   }
