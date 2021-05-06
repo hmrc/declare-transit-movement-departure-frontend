@@ -16,19 +16,16 @@
 
 package services
 
+import itUtils.{MockDateTimeService, UserAnswersSpecHelper, XMLComparatorSpec, XSDSchemaValidationSpec}
 import models.domain.SealDomain
 import models.reference.{Country, CountryCode, CustomsOffice, PackageType}
-import models.{CarrierAddress, ConsigneeAddress, ConsignorAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, PrincipalAddress, ProcedureType, RepresentativeCapacity, UserAnswers}
+import models._
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.EitherValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage
-import pages.movementDetails.PreLodgeDeclarationPage
-import pages.safetyAndSecurity._
-import pages._
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -75,84 +72,84 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
       val secondGoodItem: Index =  Index(1)
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-        .unsafeSetVal(AddSecurityDetailsPage)(true)
+        .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
+        .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
         /*
         * General Information Section
         * */
-        .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
-        .unsafeSetVal(PreLodgeDeclarationPage)(true)
-        .unsafeSetVal(ContainersUsedPage)(true)
-        .unsafeSetVal(DeclarationPlacePage)("XX1 1XX")
-        .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
-        .unsafeSetVal(RepresentativeNamePage)("John Doe")
-        .unsafeSetVal(RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
+        .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
+        .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(true)
+        .unsafeSetVal(pages.ContainersUsedPage)(true)
+        .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
+        .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(true)
+        .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
+        .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
         /*
         * RouteDetails
         * */
-        .unsafeSetVal(CountryOfDispatchPage)(CountryCode("SC"))
-        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
-        .unsafeSetVal(DestinationCountryPage)(CountryCode("DC"))
-        .unsafeSetVal(MovementDestinationCountryPage)(CountryCode("MD"))
-        .unsafeSetVal(DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-        .unsafeSetVal(ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
-        .unsafeSetVal(AddTransitOfficePage)(true)
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(1)))("TOP12342")
-        .unsafeSetVal(ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
-        .unsafeSetVal(AddTransitOfficePage)(false)
+        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryCode("SC"))
+        .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
+        .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
+        .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
+        .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
+        .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+        .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+        .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+        .unsafeSetVal(pages.AddTransitOfficePage)(true)
+        .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
+        .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(1)))("TOP12342")
+        .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+        .unsafeSetVal(pages.AddTransitOfficePage)(false)
         /*
         * Transport Details
         * */
-        .unsafeSetVal(InlandModePage)("4")
-        .unsafeSetVal(AddIdAtDeparturePage)(false)
-        .unsafeSetVal(AddNationalityAtDeparturePage)(true)
-        .unsafeSetVal(NationalityAtDeparturePage)(CountryCode("ND"))
-        .unsafeSetVal(ChangeAtBorderPage)(false)
+        .unsafeSetVal(pages.InlandModePage)("4")
+        .unsafeSetVal(pages.AddIdAtDeparturePage)(false)
+        .unsafeSetVal(pages.AddNationalityAtDeparturePage)(true)
+        .unsafeSetVal(pages.NationalityAtDeparturePage)(CountryCode("ND"))
+        .unsafeSetVal(pages.ChangeAtBorderPage)(false)
         /*
         * Traders Details
         * */
-        .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
-        .unsafeSetVal(PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
-        .unsafeSetVal(AddConsignorPage)(false)
-        .unsafeSetVal(AddConsigneePage)(false)
+        .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
+        .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
+        .unsafeSetVal(pages.PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
+        .unsafeSetVal(pages.AddConsignorPage)(false)
+        .unsafeSetVal(pages.AddConsigneePage)(false)
         /*
         * Safety & Security Details
         * */
-        .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
-        .unsafeSetVal(CircumstanceIndicatorPage)("A")
-        .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-        .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCircumstanceIndicatorPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.CircumstanceIndicatorPage)("A")
+        .unsafeSetVal(pages.safetyAndSecurity.AddTransportChargesPaymentMethodPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCommercialReferenceNumberPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddCommercialReferenceNumberAllItemsPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.AddConveyanceReferenceNumberPage)(true)
-        .unsafeSetVal(ConveyanceReferenceNumberPage)("SomeConv")
-        .unsafeSetVal(PlaceOfUnloadingCodePage)("PlaceOfUnloadingPage")
-        .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("CA"))
-        .unsafeSetVal(AddAnotherCountryOfRoutingPage)(true)
-        .unsafeSetVal(CountryOfRoutingPage(Index(1)))(CountryCode("CB"))
-        .unsafeSetVal(AddAnotherCountryOfRoutingPage)(false)
-        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
-        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
-        .unsafeSetVal(AddCarrierPage)(true)
-        .unsafeSetVal(AddCarrierEoriPage)(true)
-        .unsafeSetVal(CarrierEoriPage)("CarrierEori")
+        .unsafeSetVal(pages.safetyAndSecurity.ConveyanceReferenceNumberPage)("SomeConv")
+        .unsafeSetVal(pages.safetyAndSecurity.PlaceOfUnloadingCodePage)("PlaceOfUnloadingPage")
+        .unsafeSetVal(pages.safetyAndSecurity.CountryOfRoutingPage(Index(0)))(CountryCode("CA"))
+        .unsafeSetVal(pages.safetyAndSecurity.AddAnotherCountryOfRoutingPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.CountryOfRoutingPage(Index(1)))(CountryCode("CB"))
+        .unsafeSetVal(pages.safetyAndSecurity.AddAnotherCountryOfRoutingPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCarrierPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCarrierEoriPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.CarrierEoriPage)("CarrierEori")
         /*
         * Item Details section - Item One
         * */
-        .unsafeSetVal(ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-        .unsafeSetVal(ItemTotalGrossMassPage(firstGoodItem))("25000")
-        .unsafeSetVal(AddTotalNetMassPage(firstGoodItem))(true)
-        .unsafeSetVal(TotalNetMassPage(firstGoodItem))("12342")
+        .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+        .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
+        .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.CommodityCodePage(firstGoodItem))("ComoCode1")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriNumberPage(firstGoodItem))("Conor123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(firstGoodItem))("ConorName")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(firstGoodItem))(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")))
-        .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(firstGoodItem))(true)
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriNumberPage(firstGoodItem))("Conee123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(firstGoodItem))("ConeeName")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(firstGoodItem))(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")))
@@ -210,9 +207,9 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         /*
           * Item Details section - Item Two
           * */
-        .unsafeSetVal(ItemDescriptionPage(secondGoodItem))("ItemTwosDescription")
-        .unsafeSetVal(ItemTotalGrossMassPage(secondGoodItem))("25001")
-        .unsafeSetVal(AddTotalNetMassPage(secondGoodItem))(false)
+        .unsafeSetVal(pages.ItemDescriptionPage(secondGoodItem))("ItemTwosDescription")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))("25001")
+        .unsafeSetVal(pages.AddTotalNetMassPage(secondGoodItem))(false)
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(secondGoodItem))("ConorName")
@@ -572,38 +569,38 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
       val firstGoodItem: Index =  Index(0)
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-        .unsafeSetVal(AddSecurityDetailsPage)(false)
+        .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Simplified)
+        .unsafeSetVal(pages.AddSecurityDetailsPage)(false)
         /*
         * General Information Section
         * */
-        .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
-        .unsafeSetVal(ContainersUsedPage)(false)
-        .unsafeSetVal(DeclarationPlacePage)("XX1 1XX")
-        .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
+        .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
+        .unsafeSetVal(pages.ContainersUsedPage)(false)
+        .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
+        .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(false)
         /*
         * RouteDetails
         * */
-        .unsafeSetVal(CountryOfDispatchPage)(CountryCode("SC"))
-        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
-        .unsafeSetVal(DestinationCountryPage)(CountryCode("DC"))
-        .unsafeSetVal(MovementDestinationCountryPage)(CountryCode("MD"))
-        .unsafeSetVal(DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-        .unsafeSetVal(ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
-        .unsafeSetVal(AddTransitOfficePage)(true)
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(1)))("TOP12342")
-        .unsafeSetVal(ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
-        .unsafeSetVal(AddTransitOfficePage)(false)
+        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryCode("SC"))
+        .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
+        .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
+        .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
+        .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
+        .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+        .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+        .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+        .unsafeSetVal(pages.AddTransitOfficePage)(true)
+        .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
+        .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(1)))("TOP12342")
+        .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+        .unsafeSetVal(pages.AddTransitOfficePage)(false)
         /*
         * Transport Details
         * */
-        .unsafeSetVal(InlandModePage)("3")
+        .unsafeSetVal(pages.InlandModePage)("3")
         .unsafeSetVal(pages.IdAtDeparturePage)("SomeIdAtDeparture")
-        .unsafeSetVal(NationalityAtDeparturePage)(CountryCode("ND"))
-        .unsafeSetVal(ChangeAtBorderPage)(true)
+        .unsafeSetVal(pages.NationalityAtDeparturePage)(CountryCode("ND"))
+        .unsafeSetVal(pages.ChangeAtBorderPage)(true)
         .unsafeSetVal(pages.ModeAtBorderPage)("3")
         .unsafeSetVal(pages.ModeCrossingBorderPage)("8")
         .unsafeSetVal(pages.IdCrossingBorderPage)("IDCBP")
@@ -612,20 +609,20 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * Traders Details
         * */
         .unsafeSetVal(pages.WhatIsPrincipalEoriPage)("PRINCEORI")
-        .unsafeSetVal(AddConsignorPage)(true)
+        .unsafeSetVal(pages.AddConsignorPage)(true)
         .unsafeSetVal(pages.IsConsignorEoriKnownPage)(false)
         .unsafeSetVal(pages.ConsignorNamePage)("ConsignorName")
         .unsafeSetVal(pages.ConsignorAddressPage)(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
-        .unsafeSetVal(AddConsigneePage)(true)
+        .unsafeSetVal(pages.AddConsigneePage)(true)
         .unsafeSetVal(pages.IsConsigneeEoriKnownPage)(false)
         .unsafeSetVal(pages.ConsigneeNamePage)("ConsigneeName")
         .unsafeSetVal(pages.ConsigneeAddressPage)(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
         /*
         * Item Details section - Item One
         * */
-        .unsafeSetVal(ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-        .unsafeSetVal(ItemTotalGrossMassPage(firstGoodItem))("25000")
-        .unsafeSetVal(AddTotalNetMassPage(firstGoodItem))(false)
+        .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+        .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(false)
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(false)
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
         .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(0)))(false)
@@ -776,54 +773,54 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
       val firstGoodItem: Index =  Index(0)
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-        .unsafeSetVal(AddSecurityDetailsPage)(true)
+        .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
+        .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
         /*
         * General Information Section
         * */
-        .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
-        .unsafeSetVal(PreLodgeDeclarationPage)(true)
-        .unsafeSetVal(ContainersUsedPage)(true)
-        .unsafeSetVal(DeclarationPlacePage)("XX1 1XX")
-        .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
-        .unsafeSetVal(RepresentativeNamePage)("John Doe")
-        .unsafeSetVal(RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
+        .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
+        .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(true)
+        .unsafeSetVal(pages.ContainersUsedPage)(true)
+        .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
+        .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(true)
+        .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
+        .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
         /*
         * RouteDetails
         * */
-        .unsafeSetVal(CountryOfDispatchPage)(CountryCode("SC"))
-        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
-        .unsafeSetVal(DestinationCountryPage)(CountryCode("DC"))
-        .unsafeSetVal(MovementDestinationCountryPage)(CountryCode("MD"))
-        .unsafeSetVal(DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-        .unsafeSetVal(ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
-        .unsafeSetVal(AddTransitOfficePage)(true)
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-        .unsafeSetVal(ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
-        .unsafeSetVal(AddTransitOfficePage)(false)
+        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryCode("SC"))
+        .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
+        .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
+        .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
+        .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
+        .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+        .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+        .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+        .unsafeSetVal(pages.AddTransitOfficePage)(true)
+        .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+        .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+        .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+        .unsafeSetVal(pages.AddTransitOfficePage)(false)
         /*
         * Transport Details
         * */
-        .unsafeSetVal(InlandModePage)("5")
-        .unsafeSetVal(AddIdAtDeparturePage)(false)
-        .unsafeSetVal(AddNationalityAtDeparturePage)(true)
-        .unsafeSetVal(NationalityAtDeparturePage)(CountryCode("ND"))
-        .unsafeSetVal(ChangeAtBorderPage)(false)
+        .unsafeSetVal(pages.InlandModePage)("5")
+        .unsafeSetVal(pages.AddIdAtDeparturePage)(false)
+        .unsafeSetVal(pages.AddNationalityAtDeparturePage)(true)
+        .unsafeSetVal(pages.NationalityAtDeparturePage)(CountryCode("ND"))
+        .unsafeSetVal(pages.ChangeAtBorderPage)(false)
         /*
         * Traders Details
         * */
-        .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
-        .unsafeSetVal(PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
-        .unsafeSetVal(AddConsignorPage)(true)
+        .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
+        .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
+        .unsafeSetVal(pages.PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
+        .unsafeSetVal(pages.AddConsignorPage)(true)
         .unsafeSetVal(pages.IsConsignorEoriKnownPage)(true)
         .unsafeSetVal(pages.ConsignorEoriPage)("ConorEori")
         .unsafeSetVal(pages.ConsignorNamePage)("ConsignorName")
         .unsafeSetVal(pages.ConsignorAddressPage)(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
-        .unsafeSetVal(AddConsigneePage)(true)
+        .unsafeSetVal(pages.AddConsigneePage)(true)
         .unsafeSetVal(pages.IsConsigneeEoriKnownPage)(true)
         .unsafeSetVal(pages.WhatIsConsigneeEoriPage)("ConeeEori")
         .unsafeSetVal(pages.ConsigneeNamePage)("ConsigneeName")
@@ -831,29 +828,29 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         /*
         * Safety & Security Details
         * */
-        .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
-        .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-        .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCircumstanceIndicatorPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddTransportChargesPaymentMethodPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCommercialReferenceNumberPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.AddConveyanceReferenceNumberPage)(false)
-        .unsafeSetVal(PlaceOfUnloadingCodePage)("PlaceOfUnloadingPage")
-        .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("CA"))
-        .unsafeSetVal(AddAnotherCountryOfRoutingPage)(false)
-        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.PlaceOfUnloadingCodePage)("PlaceOfUnloadingPage")
+        .unsafeSetVal(pages.safetyAndSecurity.CountryOfRoutingPage(Index(0)))(CountryCode("CA"))
+        .unsafeSetVal(pages.safetyAndSecurity.AddAnotherCountryOfRoutingPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorNamePage)("SafeSecName")
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorAddressPage)(ConsignorAddress("SecConorLine1", "SecConorLine2", "SecCorL3", Country(CountryCode("CN"), "SomethingSecCO")))
-        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneeEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeNamePage)("SafeSecName")
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeAddressPage)(ConsigneeAddress("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Country(CountryCode("CN"), "SomethingSecCE")))
-        .unsafeSetVal(AddCarrierPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCarrierPage)(false)
         /*
         * Item Details section - Item One
         * */
-        .unsafeSetVal(ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-        .unsafeSetVal(ItemTotalGrossMassPage(firstGoodItem))("25000")
-        .unsafeSetVal(AddTotalNetMassPage(firstGoodItem))(true)
-        .unsafeSetVal(TotalNetMassPage(firstGoodItem))("12342")
+        .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+        .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
+        .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.CommodityCodePage(firstGoodItem))("ComoCode1")
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
@@ -1134,86 +1131,86 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
       val firstGoodItem: Index =  Index(0)
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-        .unsafeSetVal(AddSecurityDetailsPage)(true)
+        .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
+        .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
         /*
         * General Information Section
         * */
-        .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
-        .unsafeSetVal(PreLodgeDeclarationPage)(true)
-        .unsafeSetVal(ContainersUsedPage)(true)
-        .unsafeSetVal(DeclarationPlacePage)("XX1 1XX")
-        .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
-        .unsafeSetVal(RepresentativeNamePage)("John Doe")
-        .unsafeSetVal(RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
+        .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
+        .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(true)
+        .unsafeSetVal(pages.ContainersUsedPage)(true)
+        .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
+        .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(true)
+        .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
+        .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
         /*
         * RouteDetails
         * */
-        .unsafeSetVal(CountryOfDispatchPage)(CountryCode("SC"))
-        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
-        .unsafeSetVal(DestinationCountryPage)(CountryCode("DC"))
-        .unsafeSetVal(MovementDestinationCountryPage)(CountryCode("MD"))
-        .unsafeSetVal(DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-        .unsafeSetVal(ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
-        .unsafeSetVal(AddTransitOfficePage)(true)
-        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-        .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-        .unsafeSetVal(ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
-        .unsafeSetVal(AddTransitOfficePage)(false)
+        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryCode("SC"))
+        .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
+        .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
+        .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
+        .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
+        .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+        .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+        .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+        .unsafeSetVal(pages.AddTransitOfficePage)(true)
+        .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+        .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+        .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+        .unsafeSetVal(pages.AddTransitOfficePage)(false)
         /*
         * Transport Details
         * */
-        .unsafeSetVal(InlandModePage)("2")
-        .unsafeSetVal(AddIdAtDeparturePage)(false)
+        .unsafeSetVal(pages.InlandModePage)("2")
+        .unsafeSetVal(pages.AddIdAtDeparturePage)(false)
         .unsafeSetVal(pages.IdAtDeparturePage)("IDADEP")
-        .unsafeSetVal(ChangeAtBorderPage)(false)
+        .unsafeSetVal(pages.ChangeAtBorderPage)(false)
         /*
         * Traders Details
         * */
-        .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
-        .unsafeSetVal(PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
-        .unsafeSetVal(AddConsignorPage)(false)
-        .unsafeSetVal(AddConsigneePage)(false)
+        .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
+        .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
+        .unsafeSetVal(pages.PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
+        .unsafeSetVal(pages.AddConsignorPage)(false)
+        .unsafeSetVal(pages.AddConsigneePage)(false)
         /*
         * Safety & Security Details
         * */
-        .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
-        .unsafeSetVal(CircumstanceIndicatorPage)("E")
-        .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-        .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCircumstanceIndicatorPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.CircumstanceIndicatorPage)("E")
+        .unsafeSetVal(pages.safetyAndSecurity.AddTransportChargesPaymentMethodPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCommercialReferenceNumberPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddCommercialReferenceNumberAllItemsPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.CommercialReferenceNumberAllItemsPage)("COMREFALL")
         .unsafeSetVal(pages.safetyAndSecurity.AddConveyanceReferenceNumberPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.AddPlaceOfUnloadingCodePage)(false)
-        .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("CA"))
-        .unsafeSetVal(AddAnotherCountryOfRoutingPage)(false)
-        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.CountryOfRoutingPage(Index(0)))(CountryCode("CA"))
+        .unsafeSetVal(pages.safetyAndSecurity.AddAnotherCountryOfRoutingPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorEoriPage)("SafeSecConorEori")
-        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneeEoriPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeEoriPage)("SafeSecConeeEori")
-        .unsafeSetVal(AddCarrierPage)(true)
-        .unsafeSetVal(AddCarrierEoriPage)(false)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCarrierPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCarrierEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.CarrierNamePage)("CarrierName")
         .unsafeSetVal(pages.safetyAndSecurity.CarrierAddressPage)(CarrierAddress("CarAddL1", "CarAddL2", "CarAddL3", Country(CountryCode("CA"), "CARRDESC")))
         /*
         * Item Details section - Item One
         * */
-        .unsafeSetVal(ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-        .unsafeSetVal(ItemTotalGrossMassPage(firstGoodItem))("25000")
-        .unsafeSetVal(AddTotalNetMassPage(firstGoodItem))(true)
-        .unsafeSetVal(TotalNetMassPage(firstGoodItem))("12342")
+        .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+        .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
+        .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.CommodityCodePage(firstGoodItem))("ComoCode1")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriNumberPage(firstGoodItem))("Conor123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(firstGoodItem))("ConorName")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(firstGoodItem))(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")))
-        .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(firstGoodItem))(true)
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriNumberPage(firstGoodItem))("Conee123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(firstGoodItem))("ConeeName")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(firstGoodItem))(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")))

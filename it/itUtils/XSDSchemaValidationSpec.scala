@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package services
+package itUtils
 
 import org.xml.sax.InputSource
 import org.xml.sax.helpers.DefaultHandler
@@ -24,8 +24,8 @@ import java.net.URL
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.validation.Schema
 import scala.util.Try
-import scala.xml.{Elem, SAXParseException, SAXParser}
 import scala.xml.factory.XMLLoader
+import scala.xml.{Elem, SAXParseException, SAXParser}
 
 trait XSDSchemaValidationSpec {
   private val schemaLang = javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI
