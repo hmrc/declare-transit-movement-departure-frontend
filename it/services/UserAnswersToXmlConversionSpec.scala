@@ -124,9 +124,9 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * */
         .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
         .unsafeSetVal(CircumstanceIndicatorPage)("A")
-        .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
-        .unsafeSetVal(TransportChargesPaymentMethodPage)("C")
-        .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+        .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
+        .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
+        .unsafeSetVal(pages.safetyAndSecurity.AddCommercialReferenceNumberAllItemsPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.AddConveyanceReferenceNumberPage)(true)
         .unsafeSetVal(ConveyanceReferenceNumberPage)("SomeConv")
         .unsafeSetVal(PlaceOfUnloadingCodePage)("PlaceOfUnloadingPage")
@@ -162,7 +162,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.AddAnotherPackagePage(firstGoodItem))(true)
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(1)))(PackageType(PackageType.unpackedCodes.head, "GD1PKG2"))
         .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(1)))(false)
-        .unsafeSetVal(pages.addItems.HowManyPackagesPage(firstGoodItem, Index(1)))(23)
         .unsafeSetVal(pages.addItems.TotalPiecesPage(firstGoodItem, Index(1)))(12)
         .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(1)))(true)
         .unsafeSetVal(pages.addItems.DeclareMarkPage(firstGoodItem, Index(1)))("GD1PK2MK")
@@ -199,6 +198,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.PreviousReferencePage(firstGoodItem, Index(1)))("GD1PR2Ref")
         .unsafeSetVal(pages.addItems.AddExtraInformationPage(firstGoodItem, Index(1)))(false)
         .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(firstGoodItem))(false)
+        .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(firstGoodItem))("T")
         .unsafeSetVal(pages.addItems.securityDetails.CommercialReferenceNumberPage(firstGoodItem))("GD1CRN")
         .unsafeSetVal(pages.addItems.securityDetails.AddDangerousGoodsCodePage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.securityDetails.DangerousGoodsCodePage(firstGoodItem))("GD1C")
@@ -206,6 +206,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsignorEoriPage(firstGoodItem))("GD1SECCONOR")
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsigneesEoriPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeEoriPage(firstGoodItem))("GD1SECCONEE")
+        .unsafeSetVal(pages.addItems.AddAnotherItemPage)(true)
         /*
           * Item Details section - Item Two
           * */
@@ -216,7 +217,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(secondGoodItem))("ConorName")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(secondGoodItem))(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GB"), "SomethingCO")))
-        .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(secondGoodItem))(false)
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(secondGoodItem))("ConeeName")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(secondGoodItem))(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE")))
         .unsafeSetVal(pages.PackageTypePage(secondGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD2PKG1"))
@@ -250,6 +251,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.AddExtraInformationPage(secondGoodItem, Index(0)))(true)
         .unsafeSetVal(pages.addItems.ExtraInformationPage(secondGoodItem, Index(0)))("GD2PR1Info")
         .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(secondGoodItem))(false)
+        .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(secondGoodItem))("U")
         .unsafeSetVal(pages.addItems.securityDetails.CommercialReferenceNumberPage(secondGoodItem))("GD2CRN")
         .unsafeSetVal(pages.addItems.securityDetails.AddDangerousGoodsCodePage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsignorsEoriPage(secondGoodItem))(false)
@@ -258,8 +260,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsigneesEoriPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeNamePage(secondGoodItem))("GD2SECCONEEName")
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeAddressPage(secondGoodItem))(ConsigneeAddress("GD2CONEEL1", "GD2CONEEL2", "GD2CEEL1", Country(CountryCode("GB"), "GD2CONNEE")))
-      /*
+        .unsafeSetVal(pages.addItems.AddAnotherItemPage)(false)
+        /*
       * Goods Summary
+      * TODO: remove DeclarePackagesPage once ticket to remove is played and ensure it still passes
       */
         .unsafeSetVal(pages.DeclarePackagesPage)(true)
         .unsafeSetVal(pages.TotalPackagesPage)(1)
@@ -285,9 +289,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
 
       /*
-      * TODO:
-      *  PRODOCDC2 not working properly for first item
-      *  TRACORSECGOO021 and TRACONSECGOO013 are not being populated
+      * TODO
       */
       val expectedXml = <CC015B>
         <SynIdeMES1>UNOC</SynIdeMES1>
@@ -324,7 +326,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <DecPlaHEA394LNG>EN</DecPlaHEA394LNG>
           <SpeCirIndHEA1>A</SpeCirIndHEA1>
-          <TraChaMetOfPayHEA1>C</TraChaMetOfPayHEA1>
           <SecHEA358>1</SecHEA358>
           <ConRefNumHEA>SomeConv</ConRefNumHEA>
           <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
@@ -389,6 +390,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
+          <MetOfPayGDI12>T</MetOfPayGDI12>
           <ComRefNumGIM1>GD1CRN</ComRefNumGIM1>
           <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>
           <PREADMREFAR2>
@@ -477,6 +479,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <GooDesGDS23>ItemTwosDescription</GooDesGDS23>
           <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25001</GroMasGDS46>
+          <MetOfPayGDI12>U</MetOfPayGDI12>
           <ComRefNumGIM1>GD2CRN</ComRefNumGIM1>
           <PREADMREFAR2>
             <PreDocTypAR21>GD2PR1</PreDocTypAR21>
@@ -645,6 +648,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.AddAdministrativeReferencePage(firstGoodItem))(false)
         /*
         * Goods Summary
+        * TODO: remove DeclarePackagesPage when story played
         */
         .unsafeSetVal(pages.DeclarePackagesPage)(true)
         .unsafeSetVal(pages.TotalPackagesPage)(1)
@@ -658,13 +662,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(0)))(GuaranteeType.CashDepositGuarantee)
         .unsafeSetVal(pages.OtherReferencePage(Index(0)))("GUA1Reference")
         .unsafeSetVal(pages.AddAnotherGuaranteePage)(false)
-
-      /**
-        * TODO:
-        *   arrival time for transit NOT SET
-        *   NAD_LNG FOR EORI?
-        *   ArrTimTRACUS085 not present
-        * */
 
       val expectedXml = <CC015B>
         <SynIdeMES1>UNOC</SynIdeMES1>
@@ -822,11 +819,13 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(PrincipalNamePage)("PrincipalName")
         .unsafeSetVal(PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
         .unsafeSetVal(AddConsignorPage)(true)
-        .unsafeSetVal(pages.IsConsignorEoriKnownPage)(false)
+        .unsafeSetVal(pages.IsConsignorEoriKnownPage)(true)
+        .unsafeSetVal(pages.ConsignorEoriPage)("ConorEori")
         .unsafeSetVal(pages.ConsignorNamePage)("ConsignorName")
         .unsafeSetVal(pages.ConsignorAddressPage)(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
         .unsafeSetVal(AddConsigneePage)(true)
-        .unsafeSetVal(pages.IsConsigneeEoriKnownPage)(false)
+        .unsafeSetVal(pages.IsConsigneeEoriKnownPage)(true)
+        .unsafeSetVal(pages.WhatIsConsigneeEoriPage)("ConeeEori")
         .unsafeSetVal(pages.ConsigneeNamePage)("ConsigneeName")
         .unsafeSetVal(pages.ConsigneeAddressPage)(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
         /*
@@ -839,11 +838,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(PlaceOfUnloadingCodePage)("PlaceOfUnloadingPage")
         .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("CA"))
         .unsafeSetVal(AddAnotherCountryOfRoutingPage)(false)
-        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorNamePage)("SafeSecName")
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorAddressPage)(ConsignorAddress("SecConorLine1", "SecConorLine2", "SecCorL3", Country(CountryCode("CN"), "SomethingSecCO")))
-        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneeEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeNamePage)("SafeSecName")
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeAddressPage)(ConsigneeAddress("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Country(CountryCode("CN"), "SomethingSecCE")))
@@ -911,6 +910,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.AddAnotherItemPage)(false)
         /*
         * Goods Summary
+        * TODO remove DeclarePackagesPage when done
         */
         .unsafeSetVal(pages.DeclarePackagesPage)(true)
         .unsafeSetVal(pages.TotalPackagesPage)(1)
@@ -935,7 +935,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
 
       /**
         * TODO:
-        *   TotNumOfPacHEA306 count?
         *   Nature of something missing?
         * */
       val expectedXml = <CC015B>
@@ -988,6 +987,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <CitCO124>ConorLine2</CitCO124>
           <CouCO125>CN</CouCO125>
           <TRACONCO1LNG>EN</TRACONCO1LNG>
+          <TINCO159>ConorEori</TINCO159>
         </TRACONCO1>
         <TRACONCE1>
           <NamCE17>ConsigneeName</NamCE17>
@@ -996,6 +996,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <CitCE124>ConeeLine2</CitCE124>
           <CouCE125>CN</CouCE125>
           <NADLNGCE>EN</NADLNGCE>
+          <TINCE159>ConeeEori</TINCE159>
         </TRACONCE1>
         <CUSOFFDEPEPT>
           <RefNumEPT1>OOD1234A</RefNumEPT1>
@@ -1189,10 +1190,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.safetyAndSecurity.AddPlaceOfUnloadingCodePage)(false)
         .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("CA"))
         .unsafeSetVal(AddAnotherCountryOfRoutingPage)(false)
-        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorEoriPage)("SafeSecConorEori")
-        .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+        .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneeEoriPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeEoriPage)("SafeSecConeeEori")
         .unsafeSetVal(AddCarrierPage)(true)
