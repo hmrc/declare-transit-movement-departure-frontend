@@ -71,7 +71,6 @@ object SafetyAndSecurityConsignorWithoutEori {
         <PosCodTRACORSEC042>{consignor.postCode}</PosCodTRACORSEC042>
         <CitTRACORSEC038>{consignor.city}</CitTRACORSEC038>
         <CouCodTRACORSEC039>{consignor.countryCode}</CouCodTRACORSEC039>
-        <TRACORSEC037LNG>{LanguageCodeEnglish.code}</TRACORSEC037LNG>
       </TRACORSEC037>
   }
 }

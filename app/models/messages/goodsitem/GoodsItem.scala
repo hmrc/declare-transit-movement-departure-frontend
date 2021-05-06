@@ -135,7 +135,6 @@ object GoodsItem {
         {commodityCode}
         {declarationType}
         <GooDesGDS23>{goodsItem.description}</GooDesGDS23>
-        <GooDesGDS23LNG>{LanguageCodeEnglish.code}</GooDesGDS23LNG>
         {grossMass}
         {netMass}
         {countryOfDispatch}

@@ -47,7 +47,6 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
 
           val agrLocOfGooHEA39 = header.agrLocOfGooHEA39.map(
             value => <AgrLocOfGooHEA39>{escapeXml(value)}</AgrLocOfGooHEA39>
-              <AgrLocOfGooHEA39LNG>EN</AgrLocOfGooHEA39LNG>
           )
 
           val autLocOfGooCodHEA41 = header.autLocOfGooCodHEA41.map(
@@ -69,11 +68,11 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
           )
 
           val speCirIndHEA1 = header.speCirIndHEA1.map(
-            value => <SpeCirIndHEA1>{value.toString}</SpeCirIndHEA1>
+            value => <SpeCirIndHEA1>{value}</SpeCirIndHEA1>
           )
 
           val traChaMetOfPayHEA1 = header.traChaMetOfPayHEA1.map(
-            value => <TraChaMetOfPayHEA1>{value.toString}</TraChaMetOfPayHEA1>
+            value => <TraChaMetOfPayHEA1>{value}</TraChaMetOfPayHEA1>
           )
 
           val comRefNumHEA = header.comRefNumHEA.map(
@@ -85,12 +84,11 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
           )
 
           val conRefNumHEA = header.conRefNumHEA.map(
-            value => <ConRefNumHEA>{value.toString}</ConRefNumHEA>
+            value => <ConRefNumHEA>{value}</ConRefNumHEA>
           )
 
           val codPlUnHEA357 = header.codPlUnHEA357.map(
-            value => <CodPlUnHEA357>{value.toString}</CodPlUnHEA357>
-              <CodPlUnHEA357LNG>EN</CodPlUnHEA357LNG>
+            value => <CodPlUnHEA357>{value}</CodPlUnHEA357>
           )
 
           val expectedResult: NodeSeq =
@@ -107,13 +105,11 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
               {header.transportDetails.toXml}
               <ConIndHEA96>{header.conIndHEA96.toString}</ConIndHEA96>
               <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
-              <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
               <TotNumOfIteHEA305>{header.totNumOfIteHEA305.toString}</TotNumOfIteHEA305>
               {totNumOfPacHEA306.getOrElse(NodeSeq.Empty)}
               <TotGroMasHEA307>{header.totGroMasHEA307.toString}</TotGroMasHEA307>
               <DecDatHEA383>{Format.dateFormatted(header.decDatHEA383)}</DecDatHEA383>
               <DecPlaHEA394>{escapeXml(header.decPlaHEA394)}</DecPlaHEA394>
-              <DecPlaHEA394LNG>EN</DecPlaHEA394LNG>
               {speCirIndHEA1.getOrElse(NodeSeq.Empty)}
               {traChaMetOfPayHEA1.getOrElse(NodeSeq.Empty)}
               {comRefNumHEA.getOrElse(NodeSeq.Empty)}

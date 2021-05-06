@@ -52,7 +52,6 @@ class TransportSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
             value => <IdeOfMeaOfTraAtDHEA78>
               {escapeXml(value)}
             </IdeOfMeaOfTraAtDHEA78>
-              <IdeOfMeaOfTraAtDHEA78LNG>EN</IdeOfMeaOfTraAtDHEA78LNG>
           )
 
           val natOfMeaOfTraAtDHEA80 = transport.natOfMeaOfTraAtDHEA80.map(
@@ -65,7 +64,6 @@ class TransportSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
             value => <IdeOfMeaOfTraCroHEA85>
               {escapeXml(value)}
             </IdeOfMeaOfTraCroHEA85>
-              <IdeOfMeaOfTraCroHEA85LNG>EN</IdeOfMeaOfTraCroHEA85LNG>
           )
 
           val natOfMeaOfTraCroHEA87 = transport.natOfMeaOfTraCroHEA87.map(

@@ -88,7 +88,6 @@ object Header {
           ) ++
           header.agrLocOfGooHEA39.fold(NodeSeq.Empty)(
             value => <AgrLocOfGooHEA39>{escapeXml(value)}</AgrLocOfGooHEA39>
-            <AgrLocOfGooHEA39LNG>{LanguageCodeEnglish.code}</AgrLocOfGooHEA39LNG>
           ) ++
           header.autLocOfGooCodHEA41.fold(NodeSeq.Empty)(
             value => <AutLocOfGooCodHEA41>{escapeXml(value)}</AutLocOfGooCodHEA41>
@@ -105,20 +104,18 @@ object Header {
       }
         <ConIndHEA96>{header.conIndHEA96.toString}</ConIndHEA96>
         <DiaLanIndAtDepHEA254>{LanguageCodeEnglish.code}</DiaLanIndAtDepHEA254>
-        <NCTSAccDocHEA601LNG>{LanguageCodeEnglish.code}</NCTSAccDocHEA601LNG>
         <TotNumOfIteHEA305>{header.totNumOfIteHEA305.toString}</TotNumOfIteHEA305>
         {
         header.totNumOfPacHEA306.fold(NodeSeq.Empty)(
           value => <TotNumOfPacHEA306>{value.toString}</TotNumOfPacHEA306>
         )
       }
-        <TotGroMasHEA307>{header.totGroMasHEA307.toString}</TotGroMasHEA307>
+        <TotGroMasHEA307>{header.totGroMasHEA307}</TotGroMasHEA307>
         <DecDatHEA383>{Format.dateFormatted(header.decDatHEA383)}</DecDatHEA383>
         <DecPlaHEA394>{escapeXml(header.decPlaHEA394)}</DecPlaHEA394>
-        <DecPlaHEA394LNG>{LanguageCodeEnglish.code}</DecPlaHEA394LNG>
         {
         header.speCirIndHEA1.fold(NodeSeq.Empty)(
-          value => <SpeCirIndHEA1>{value.toString}</SpeCirIndHEA1>
+          value => <SpeCirIndHEA1>{value}</SpeCirIndHEA1>
         ) ++
           header.traChaMetOfPayHEA1.fold(NodeSeq.Empty)(
             value => <TraChaMetOfPayHEA1>{value}</TraChaMetOfPayHEA1>
@@ -134,21 +131,11 @@ object Header {
           ) ++
           header.codPlUnHEA357.fold(NodeSeq.Empty)(
             value => <CodPlUnHEA357>{value}</CodPlUnHEA357>
-            <CodPlUnHEA357LNG>{LanguageCodeEnglish.code}</CodPlUnHEA357LNG>
           )
       }
       </HEAHEA>
   }
   // scalastyle:on
-
-  //TODO: Following need adding
-  //<xs:element name="SpeCirIndHEA1" type="xs:string" minOccurs="0"/>
-  //<xs:element name="TraChaMetOfPayHEA1" type="xs:string" minOccurs="0"/>
-  //<xs:element name="ComRefNumHEA" type="xs:string" minOccurs="0"/>
-  //<xs:element name="SecHEA358" type="xs:string" minOccurs="0"/>
-  //<xs:element name="ConRefNumHEA" type="xs:string" minOccurs="0"/>
-  //<xs:element name="CodPlUnHEA357" type="xs:string" minOccurs="0"/>
-  //<xs:element name="CodPlUnHEA357LNG" type="xs:string" minOccurs="0"/>
 
   implicit val reads: XmlReader[Header] = (
     (__ \ "RefNumHEA4").read[String],
@@ -175,9 +162,3 @@ object Header {
     (__ \ "CodPlUnHEA357").read[String].optional
   ).mapN(apply)
 }
-//<xs:element name="SpeCirIndHEA1" type="xs:string" minOccurs="0"/>
-//<xs:element name="TraChaMetOfPayHEA1" type="xs:string" minOccurs="0"/>
-//<xs:element name="ComRefNumHEA" type="xs:string" minOccurs="0"/>
-//<xs:element name="SecHEA358" type="xs:string" minOccurs="0"/>
-//<xs:element name="ConRefNumHEA" type="xs:string" minOccurs="0"/>
-//<xs:element name="CodPlUnHEA357" type="xs:string" minOccurs="0"/>

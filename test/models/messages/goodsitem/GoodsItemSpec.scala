@@ -93,7 +93,6 @@ class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
               {commodityCode}
               {declarationType}
               <GooDesGDS23>{goodsItem.description}</GooDesGDS23>
-              <GooDesGDS23LNG>EN</GooDesGDS23LNG>
               {grossMass}
               {netMass}
               {countryOfDispatch}
