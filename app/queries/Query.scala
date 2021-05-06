@@ -25,9 +25,7 @@ sealed trait Query {
   def path: JsPath
 }
 
-trait Gettable[A] extends Query {
-  lazy val reference: Option[String] = None
-}
+trait Gettable[A] extends Query
 
 trait Settable[A] extends Query {
 

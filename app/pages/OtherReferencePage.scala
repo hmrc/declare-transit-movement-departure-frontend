@@ -25,6 +25,4 @@ case class OtherReferencePage(index: Index) extends QuestionPage[String] {
   override def path: JsPath = JsPath \ guarantees \ index.position \ toString
 
   override def toString: String = "otherReference"
-
-  override lazy val reference: Option[String] = Some(s"GuaranteeIndex: $index")
 }
