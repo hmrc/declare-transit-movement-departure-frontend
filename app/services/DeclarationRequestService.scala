@@ -170,7 +170,7 @@ class DeclarationRequestService @Inject()(
     def GoodsItemSafetyAndSecurityConsignee(itemSecurityTraderDetails: Option[ItemsSecurityTraderDetails]): Option[GoodsItemSecurityConsignee] =
       itemSecurityTraderDetails.flatMap {
         x =>
-          x.consignee.map {
+          x.consignor.map {
             case SecurityPersonalInformation(name, Address(buildingAndStreet, city, postcode, _)) =>
               ItemsSecurityConsigneeWithoutEori(name, buildingAndStreet, postcode, city, "GB")
             case SecurityTraderEori(eori) =>
