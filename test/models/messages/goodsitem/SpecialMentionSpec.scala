@@ -43,8 +43,8 @@ class SpecialMentionSpec
           specialMentionGuaranteeLiabilityAmount =>
             val expectedResult =
               <SPEMENMT2>
-                <AddInfCodMT23>CAL</AddInfCodMT23>
                 <AddInfMT21>{specialMentionGuaranteeLiabilityAmount.additionalInformationOfLiabilityAmount}</AddInfMT21>
+                <AddInfCodMT23>CAL</AddInfCodMT23>
               </SPEMENMT2>
 
             specialMentionGuaranteeLiabilityAmount.toXml mustEqual expectedResult
@@ -57,8 +57,8 @@ class SpecialMentionSpec
           specialMentionGuaranteeLiabilityAmount =>
             val xml =
               <SPEMENMT2>
-                <AddInfCodMT23>CAL</AddInfCodMT23>
                 <AddInfMT21>{specialMentionGuaranteeLiabilityAmount.additionalInformationOfLiabilityAmount}</AddInfMT21>
+                <AddInfCodMT23>CAL</AddInfCodMT23>
               </SPEMENMT2>
 
             val result = XmlReader.of[SpecialMention].read(xml).toOption.value
@@ -75,8 +75,8 @@ class SpecialMentionSpec
           specialMentionGuaranteeLiabilityAmount =>
             val xml =
               <SPEMENMT2>
-                <AddInfCodMT23>XYZ</AddInfCodMT23>
                 <AddInfMT21>{specialMentionGuaranteeLiabilityAmount.additionalInformationOfLiabilityAmount}</AddInfMT21>
+                <AddInfCodMT23>XYZ</AddInfCodMT23>
               </SPEMENMT2>
 
             val result = XmlReader.of[SpecialMentionGuaranteeLiabilityAmount].read(xml).toOption
