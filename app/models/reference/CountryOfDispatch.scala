@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package models.reference
 
-import models.UserAnswers
-import models.reference.{CountryCode, CountryOfDispatch}
-import play.api.libs.json.JsPath
+import play.api.libs.json._
 
-import scala.util.Try
+case class CountryOfDispatch(country: CountryCode, isEu: Boolean)
 
-case object CountryOfDispatchPage extends QuestionPage[CountryOfDispatch] {
+object CountryOfDispatch {
+  implicit val format: OFormat[CountryOfDispatch] = Json.format[CountryOfDispatch]
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "countryOfDispatch"
-
-  override def cleanup(value: Option[CountryOfDispatch], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(_) =>
-        userAnswers.remove(OfficeOfDeparturePage)
-      case _ => super.cleanup(value, userAnswers)
-    }
 }

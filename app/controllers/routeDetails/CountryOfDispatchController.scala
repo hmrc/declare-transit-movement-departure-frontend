@@ -19,8 +19,8 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.CountryOfDispatchFormProvider
-import models.reference.Country
-import models.{LocalReferenceNumber, Mode}
+import models.reference.{Country, CountryOfDispatch}
+import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import pages.CountryOfDispatchPage
@@ -79,7 +79,9 @@ class CountryOfDispatchController @Inject()(
               formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
               value =>
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfDispatchPage, value.code))
+                  getNonEuCountries: CountryList <- referenceDataConnector.getNonEUTransitCountryList
+                  isEu: Boolean = getNonEuCountries.countries.contains(value)
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfDispatchPage, CountryOfDispatch(value.code, isEu)))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(CountryOfDispatchPage, mode, updatedAnswers))
             )

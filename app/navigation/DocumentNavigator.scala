@@ -16,9 +16,10 @@
 
 package navigation
 
+import connectors.ReferenceDataConnector
 import derivable.{DeriveNumberOfDocuments, DeriveNumberOfPreviousAdministrativeReferences}
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
-import models.{CheckMode, DeclarationType, Index, Mode, NormalMode, UserAnswers}
+import models.{CheckMode, CountryList, DeclarationType, Index, Mode, NormalMode, UserAnswers}
 import pages.{CountryOfDispatchPage, DeclarationTypePage, Page}
 import pages.addItems.{
   AddAnotherDocumentPage,
@@ -31,8 +32,12 @@ import pages.addItems.{
 }
 import play.api.mvc.Call
 import controllers.addItems.routes
+
 import javax.inject.{Inject, Singleton}
-import models.reference.CountryCode
+import models.reference.{Country, CountryCode}
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DocumentNavigator @Inject()() extends Navigator {
