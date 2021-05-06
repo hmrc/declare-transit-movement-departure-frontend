@@ -17,7 +17,7 @@
 package pages
 
 import models.UserAnswers
-import models.reference.{CountryCode, CountryOfDispatch}
+import models.reference.CountryOfDispatch
 import play.api.libs.json.JsPath
 
 import scala.util.Try

@@ -61,7 +61,7 @@ class CountryOfDispatchController @Inject()(
 
           val preparedForm = request.userAnswers
             .get(CountryOfDispatchPage)
-            .flatMap(countries.getCountry)
+            .flatMap(x => countries.getCountry(x.country))
             .map(form.fill)
             .getOrElse(form)
 
