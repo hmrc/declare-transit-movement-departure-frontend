@@ -19,7 +19,7 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
 import generators.JourneyModelGenerators
 import models.domain.SealDomain
-import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
+import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
 import models.{Index, ProcedureType, UserAnswers}
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
@@ -30,57 +30,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
   "GoodsSummary can be parsed" - {
 
-    "when the user want to declare number of packages" in {
-      forAll(arb[UserAnswers]) {
-        ua =>
-          val goodsSummary = GoodsSummary(
-            numberOfPackages   = Some(1),
-            totalMass          = "11.1",
-            loadingPlace       = None,
-            goodSummaryDetails = GoodSummaryNormalDetails(None),
-            sealNumbers        = Seq.empty
-          )
-
-          val userAnswers =
-            GoodsSummarySpec
-              .setGoodsSummary(goodsSummary)(ua)
-              .unsafeSetVal(AddSecurityDetailsPage)(false)
-              .unsafeSetVal(PreLodgeDeclarationPage)(false)
-              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-              .unsafeSetVal(DeclarePackagesPage)(true)
-
-          UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
-      }
-    }
-
-    "when the user does not want to declare number of packages" in {
-      forAll(arb[UserAnswers]) {
-        ua =>
-          val goodsSummary = GoodsSummary(
-            numberOfPackages   = None,
-            totalMass          = "11.1",
-            loadingPlace       = None,
-            goodSummaryDetails = GoodSummaryNormalDetails(None),
-            sealNumbers        = Seq.empty
-          )
-
-          val userAnswers =
-            GoodsSummarySpec
-              .setGoodsSummary(goodsSummary)(ua)
-              .unsafeSetVal(AddSecurityDetailsPage)(false)
-              .unsafeSetVal(PreLodgeDeclarationPage)(false)
-              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-              .unsafeSetVal(DeclarePackagesPage)(false)
-
-          UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
-      }
-    }
-
     "when Safety and security is No" in {
       forAll(arb[UserAnswers]) {
         ua =>
           val goodsSummary = GoodsSummary(
-            numberOfPackages   = Some(1),
+            numberOfPackages   = 1,
             totalMass          = "11.1",
             loadingPlace       = None,
             goodSummaryDetails = GoodSummaryNormalDetails(None),
@@ -102,7 +56,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       forAll(arb[UserAnswers]) {
         ua =>
           val goodsSummary = GoodsSummary(
-            numberOfPackages   = Some(1),
+            numberOfPackages   = 1,
             totalMass          = "11.1",
             loadingPlace       = Some("loadingPlaceValue"),
             goodSummaryDetails = GoodSummaryNormalDetails(None),
@@ -126,7 +80,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           forAll(arb[UserAnswers]) {
             ua =>
               val goodsSummary = GoodsSummary(
-                numberOfPackages   = Some(1),
+                numberOfPackages   = 1,
                 totalMass          = "11.1",
                 loadingPlace       = None,
                 goodSummaryDetails = GoodSummaryNormalDetails(Some("customsApprovedLocationValue")),
@@ -149,7 +103,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           forAll(arb[UserAnswers]) {
             ua =>
               val goodsSummary = GoodsSummary(
-                numberOfPackages   = Some(1),
+                numberOfPackages   = 1,
                 totalMass          = "11.1",
                 loadingPlace       = None,
                 goodSummaryDetails = GoodSummaryNormalDetails(None),
@@ -173,7 +127,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         forAll(arb[UserAnswers]) {
           ua =>
             val goodsSummary = GoodsSummary(
-              numberOfPackages   = Some(1),
+              numberOfPackages   = 1,
               totalMass          = "11.1",
               loadingPlace       = None,
               goodSummaryDetails = GoodSummaryNormalDetails(None),
@@ -196,7 +150,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       forAll(arb[UserAnswers]) {
         ua =>
           val goodsSummary = GoodsSummary(
-            numberOfPackages   = Some(1),
+            numberOfPackages   = 1,
             totalMass          = "11.1",
             loadingPlace       = None,
             goodSummaryDetails = GoodSummarySimplifiedDetails("authorisedLocationCode", LocalDate.now()),
@@ -218,7 +172,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       forAll(arb[UserAnswers]) {
         ua =>
           val goodsSummary = GoodsSummary(
-            numberOfPackages   = Some(1),
+            numberOfPackages   = 1,
             totalMass          = "11.1",
             loadingPlace       = None,
             goodSummaryDetails = GoodSummarySimplifiedDetails("authorisedLocationCode", LocalDate.now()),
@@ -246,10 +200,16 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
   private def sealIdDetailsPageForIndex(index: Int): SealIdDetailsPage =
     SealIdDetailsPage(Index(index))
 
+  private def procedureType(goodSummaryDetails: GoodSummaryDetails): ProcedureType =
+    goodSummaryDetails match {
+      case _: GoodSummaryNormalDetails     => ProcedureType.Normal
+      case _: GoodSummarySimplifiedDetails => ProcedureType.Simplified
+    }
+
   def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
-      .unsafeSetVal(DeclarePackagesPage)(goodsSummary.numberOfPackages.isDefined)
-      .unsafeSetOpt(TotalPackagesPage)(goodsSummary.numberOfPackages)
+      .unsafeSetVal(ProcedureTypePage)(procedureType(goodsSummary.goodSummaryDetails))
+      .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
       .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {

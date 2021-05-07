@@ -30,7 +30,7 @@ import pages.movementDetails.PreLodgeDeclarationPage
 import java.time.LocalDate
 
 case class GoodsSummary(
-  numberOfPackages: Option[Int],
+  numberOfPackages: Int,
   totalMass: String,
   loadingPlace: Option[String],
   goodSummaryDetails: GoodSummaryDetails,
@@ -41,7 +41,7 @@ object GoodsSummary {
 
   implicit val parser: UserAnswersReader[GoodsSummary] =
     (
-      DeclarePackagesPage.filterOptionalDependent(identity)(TotalPackagesPage.optionalReader).map(_.flatten),
+      TotalPackagesPage.reader,
       TotalGrossMassPage.reader,
       AddSecurityDetailsPage.filterOptionalDependent(identity)(LoadingPlacePage.optionalReader).map(_.flatten),
       UserAnswersReader[GoodSummaryDetails],

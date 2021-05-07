@@ -41,7 +41,7 @@ case class Header(
   transportDetails: Transport,
   conIndHEA96: Int, //TODO: If user specifies they're using a container, this is set to 1 (Containerised indicator)
   totNumOfIteHEA305: Int,
-  totNumOfPacHEA306: Option[Int],
+  totNumOfPacHEA306: Int,
   totGroMasHEA307: String,
   decDatHEA383: LocalDate,
   decPlaHEA394: String,
@@ -107,11 +107,7 @@ object Header {
         <DiaLanIndAtDepHEA254>{LanguageCodeEnglish.code}</DiaLanIndAtDepHEA254>
         <NCTSAccDocHEA601LNG>{LanguageCodeEnglish.code}</NCTSAccDocHEA601LNG>
         <TotNumOfIteHEA305>{header.totNumOfIteHEA305.toString}</TotNumOfIteHEA305>
-        {
-        header.totNumOfPacHEA306.fold(NodeSeq.Empty)(
-          value => <TotNumOfPacHEA306>{value.toString}</TotNumOfPacHEA306>
-        )
-      }
+        <TotNumOfPacHEA306>{header.totNumOfPacHEA306.toString}</TotNumOfPacHEA306>
         <TotGroMasHEA307>{header.totGroMasHEA307.toString}</TotGroMasHEA307>
         <DecDatHEA383>{Format.dateFormatted(header.decDatHEA383)}</DecDatHEA383>
         <DecPlaHEA394>{escapeXml(header.decPlaHEA394)}</DecPlaHEA394>
@@ -163,7 +159,7 @@ object Header {
     __.read[Transport],
     (__ \ "ConIndHEA96").read[Int],
     (__ \ "TotNumOfIteHEA305").read[Int],
-    (__ \ "TotNumOfPacHEA306").read[Int].optional,
+    (__ \ "TotNumOfPacHEA306").read[Int],
     (__ \ "TotGroMasHEA307").read[String],
     (__ \ "DecDatHEA383").read[LocalDate],
     (__ \ "DecPlaHEA394").read[String],

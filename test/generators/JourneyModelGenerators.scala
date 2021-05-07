@@ -748,7 +748,7 @@ trait JourneyModelGenerators {
     Arbitrary {
       for {
         loadingPlace       <- if (safetyAndSecurity) { nonEmptyString.map(Some(_)) } else { Gen.const(None) }
-        numberOfPackages   <- Gen.some(Gen.choose(1, 100))
+        numberOfPackages   <- Gen.choose(1, 100)
         totalMass          <- Gen.choose(1, 100).map(_.toString)
         goodSummaryDetails <- arbitraryGoodSummaryDetails.arbitrary
         sealNumbers        <- listWithMaxLength[SealDomain](10)
