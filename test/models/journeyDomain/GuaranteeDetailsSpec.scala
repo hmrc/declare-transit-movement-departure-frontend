@@ -96,7 +96,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with JourneyModel
                   .value
               val result = UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).run(updatedUserAnswer).right.value
 
-              result.liabilityAmount mustEqual LiabilityAmount("10000", "EUR")
+              result.liabilityAmount mustEqual LiabilityAmount("10000", CurrencyCode.EUR)
           }
         }
 

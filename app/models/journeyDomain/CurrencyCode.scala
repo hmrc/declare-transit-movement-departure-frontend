@@ -16,12 +16,18 @@
 
 package models.journeyDomain
 
-import play.api.libs.json.{Json, OWrites}
+import models.{Enumerable, WithName}
 
-final case class LiabilityAmount(amount: String, currencyCode: CurrencyCode) {
-  override def toString: String = s"$amount$currencyCode"
-}
+sealed trait CurrencyCode
 
-object LiabilityAmount {
-  implicit val writes: OWrites[LiabilityAmount] = Json.writes[LiabilityAmount]
+object CurrencyCode extends Enumerable.Implicits {
+
+  case object GBP extends WithName("GBP") with CurrencyCode
+  case object EUR extends WithName("EUR") with CurrencyCode
+
+  val values: Seq[CurrencyCode] = Seq(GBP, EUR)
+
+  implicit val enumerable: Enumerable[CurrencyCode] =
+    Enumerable(values.map(v => v.toString -> v): _*)
+
 }
