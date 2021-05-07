@@ -505,11 +505,6 @@ addAnotherTransitOffice.checkYourAnswersLabel = Office of transit {0}
 addAnotherTransitOffice.paragraph = If there is no office of transit, enter the office of destination.
 addAnotherTransitOffice.error.required = Enter the office of transit in {0} that you want to add
 
-declarePackages.title = Do you have any packages to declare?
-declarePackages.heading = Do you have any packages to declare?
-declarePackages.checkYourAnswersLabel = Do you have any packages to declare?
-declarePackages.error.required = Select yes if you have any packages to declare
-
 totalPackages.title = How many packages are you declaring?
 totalPackages.heading = How many packages are you declaring?
 totalPackages.checkYourAnswersLabel = How many packages are you declaring?
