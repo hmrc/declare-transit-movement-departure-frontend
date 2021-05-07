@@ -33,7 +33,13 @@ import services.{DateTimeService, MockDateTimeService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class InterchangeControlReferenceIdRepositorySpec extends ItSpecBase with MongoSuite with BeforeAndAfterEach with GuiceOneAppPerSuite with MockDateTimeService {
+class InterchangeControlReferenceIdRepositorySpec
+    extends ItSpecBase
+    with MongoSuite
+    with BeforeAndAfterEach
+    with GuiceOneAppPerSuite
+    with MockDateTimeService
+    with FailOnUnindexedQueries {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(
