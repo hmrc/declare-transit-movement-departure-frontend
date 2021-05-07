@@ -696,7 +696,7 @@ trait JourneyModelGenerators {
   implicit def arbitraryRouteDetails(safetyAndSecurityFlag: Boolean): Arbitrary[RouteDetails] =
     Arbitrary {
       for {
-        countryOfDispatch  <- arbitrary[CountryCode]
+        countryOfDispatch  <- arbitrary[CountryOfDispatch]
         officeOfDeparture  <- arbitrary[CustomsOffice]
         destinationCountry <- arbitrary[CountryCode]
         destinationOffice  <- arbitrary[CustomsOffice]

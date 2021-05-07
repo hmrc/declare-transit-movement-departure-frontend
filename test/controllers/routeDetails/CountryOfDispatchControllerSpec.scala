@@ -21,7 +21,7 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.CountryOfDispatchFormProvider
 import matchers.JsonMatchers
-import models.reference.{Country, CountryCode}
+import models.reference.{Country, CountryCode, CountryOfDispatch}
 import models.{CountryList, NormalMode}
 import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
@@ -95,7 +95,7 @@ class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, CountryCode("GB")).success.value
+      val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, CountryOfDispatch(CountryCode("GB"), true)).success.value
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

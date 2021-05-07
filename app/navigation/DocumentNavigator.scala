@@ -71,7 +71,15 @@ class DocumentNavigator @Inject()() extends Navigator {
   private def previousReferencesRoute(ua:UserAnswers, index:Index, mode:Mode) = {
     val nonEUCountries = Seq(CountryCode("AD"), CountryCode("IS"), CountryCode("LI"), CountryCode("NO"), CountryCode("SM"), CountryCode("SJ"), CountryCode("CH"))
     val declarationTypes = Seq(DeclarationType.Option2)
-    val isNonEUCountry: Boolean = ua.get(CountryOfDispatchPage).fold(false)(code => nonEUCountries.contains(code))
+
+//    val countryOfDispatch = ua.get(CountryOfDispatchPage).flatMap  {
+//      case value if value.isEu =>  Some(previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.id, index, Index(referenceIndex), mode))
+//      case value if !value.isEu => Some(previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(ua.id, index, mode))
+//      case _ => ???
+//
+//    }
+
+    val isNonEUCountry: Boolean = ua.get(CountryOfDispatchPage).fold(false)(code => nonEUCountries.contains(code.country))
     val isAllowedDeclarationType: Boolean = ua.get(DeclarationTypePage).fold(false)(declarationTypes.contains(_))
     val referenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)
     (isNonEUCountry, isAllowedDeclarationType) match {

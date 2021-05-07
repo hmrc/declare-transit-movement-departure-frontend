@@ -17,11 +17,10 @@
 package generators
 
 import java.time.LocalDateTime
-
 import models._
 import models.domain.SealDomain
 import models.domain.SealDomain.Constants
-import models.reference.{Country, CountryCode, CustomsOffice, PackageType}
+import models.reference.{Country, CountryCode, CountryOfDispatch, CustomsOffice, PackageType}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -107,6 +106,25 @@ trait ModelGenerators {
           code => CountryCode(code.mkString)
         )
     }
+
+  lazy val genCountryOfDispatchIsEu: Gen[CountryOfDispatch] =
+    for {
+      code <- arbitrary[CountryCode]
+    } yield CountryOfDispatch(code, true)
+
+  lazy val genCountryOfDispatchNonEu: Gen[CountryOfDispatch] =
+    for {
+      code <- arbitrary[CountryCode]
+    } yield CountryOfDispatch(code, false)
+
+  implicit lazy val arbitraryCountryOfDispatch: Arbitrary[CountryOfDispatch] = {
+    Arbitrary {
+      for {
+        code <- arbitrary[CountryCode]
+        isEu <- arbitrary[Boolean]
+      } yield CountryOfDispatch(code, isEu)
+    }
+  }
 
   implicit lazy val arbitraryCountry: Arbitrary[Country] =
     Arbitrary {
