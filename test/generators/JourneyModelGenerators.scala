@@ -543,7 +543,7 @@ trait JourneyModelGenerators {
     Arbitrary {
       for {
         amount   <- nonEmptyString
-        currency <- Gen.const(GuaranteeReference.currency_GB)
+        currency <- Gen.const(GuaranteeReference.currency_GBP)
       } yield LiabilityAmount(amount, currency)
     }
 

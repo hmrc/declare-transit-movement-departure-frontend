@@ -50,16 +50,16 @@ object GuaranteeDetails {
   object GuaranteeReference {
 
     private val defaultLiability                = "10000"
-    val currency_GB                             = "GB"
+    val currency_GBP                            = "GBP"
     val currency_EUR                            = "EUR"
     val defaultLiabilityAmount: LiabilityAmount = LiabilityAmount(defaultLiability, currency_EUR)
 
     private def liabilityAmount(index: Index): UserAnswersReader[LiabilityAmount] = DefaultAmountPage(index).optionalReader.flatMap {
       case Some(defaultAmountPage) =>
         if (defaultAmountPage) { defaultLiabilityAmount.pure[UserAnswersReader] } else {
-          LiabilityAmountPage(index).reader.map(amount => LiabilityAmount(amount, currency_GB))
+          LiabilityAmountPage(index).reader.map(amount => LiabilityAmount(amount, currency_GBP))
         }
-      case None => LiabilityAmountPage(index).reader.map(amount => LiabilityAmount(amount, currency_GB))
+      case None => LiabilityAmountPage(index).reader.map(amount => LiabilityAmount(amount, currency_GBP))
     }
 
     def parseGuaranteeReference(index: Index): UserAnswersReader[GuaranteeReference] =
