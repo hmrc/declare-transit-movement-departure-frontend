@@ -18,11 +18,14 @@ package navigation
 
 import controllers.goodsSummary.routes
 import derivable.DeriveNumberOfSeals
+
 import javax.inject.{Inject, Singleton}
 import models.ProcedureType.{Normal, Simplified}
 import models._
 import pages._
 import play.api.mvc.Call
+import controllers.LoadingPlaceController
+import pages.movementDetails.PreLodgeDeclarationPage
 
 @Singleton
 class GoodsSummaryNavigator @Inject()() extends Navigator {
@@ -30,7 +33,6 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case DeclarePackagesPage            => ua => Some(declarePackageRoute(ua, NormalMode))
     case TotalPackagesPage              => ua => Some(routes.TotalGrossMassController.onPageLoad(ua.id, NormalMode))
     case TotalGrossMassPage             => ua => Some(totalGrossMassRoute(ua))
     case AuthorisedLocationCodePage     => ua => Some(routes.ControlResultDateLimitController.onPageLoad(ua.id, NormalMode))
@@ -48,7 +50,6 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case DeclarePackagesPage            => ua => Some(declarePackageRoute(ua, CheckMode))
     case TotalPackagesPage              => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
     case TotalGrossMassPage             => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
     case AuthorisedLocationCodePage     => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
@@ -80,25 +81,19 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     }
   }
 
-  def declarePackageRoute(ua: UserAnswers, mode: Mode): Call =
-    (ua.get(DeclarePackagesPage), ua.get(TotalPackagesPage), mode) match {
-      case (Some(true), Some(_), CheckMode) => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
-      case (Some(true), _, _)               => routes.TotalPackagesController.onPageLoad(ua.id, mode)
-      case (Some(false), _, NormalMode)     => routes.TotalGrossMassController.onPageLoad(ua.id, mode)
-      case (Some(false), _, CheckMode)      => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
-    }
-
   def totalGrossMassRoute(ua: UserAnswers): Call =
-    (ua.get(ProcedureTypePage), ua.get(AddSecurityDetailsPage)) match {
-      case (_, Some(true) )     => controllers.routes.LoadingPlaceController.onPageLoad(ua.id, NormalMode)
-      case (Some(Normal), _) =>  routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
-      case (Some(Simplified), _) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
+    (ua.get(ProcedureTypePage), ua.get(AddSecurityDetailsPage), ua.get(PreLodgeDeclarationPage)) match {
+      case (_, Some(true),_ )     => controllers.routes.LoadingPlaceController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), _, Some(false)) =>  routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), _, Some(true)) =>  routes.AddSealsController.onPageLoad(ua.id, NormalMode)
+      case (Some(Simplified), _, _) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
     }
 
   def loadingPlaceRoute(ua: UserAnswers): Call =
-    ua.get(ProcedureTypePage) match {
-      case Some(Normal)     => routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
-      case Some(Simplified) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
+    (ua.get(ProcedureTypePage), ua.get(PreLodgeDeclarationPage)) match {
+      case (Some(Normal), Some(false))     => routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), Some(true))     => routes.AddSealsController.onPageLoad(ua.id, NormalMode)
+      case (Some(Simplified),_) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
     }
 
   def addCustomsApprovedLocationRoute(ua: UserAnswers, mode: Mode): Call =

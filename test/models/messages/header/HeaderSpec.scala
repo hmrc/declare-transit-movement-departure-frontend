@@ -64,10 +64,6 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
             value => <CusSubPlaHEA66>{escapeXml(value)}</CusSubPlaHEA66>
           )
 
-          val totNumOfPacHEA306 = header.totNumOfPacHEA306.map(
-            value => <TotNumOfPacHEA306>{value.toString}</TotNumOfPacHEA306>
-          )
-
           val speCirIndHEA1 = header.speCirIndHEA1.map(
             value => <SpeCirIndHEA1>{value}</SpeCirIndHEA1>
           )
@@ -108,8 +104,8 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
               <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
               <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
               <TotNumOfIteHEA305>{header.totNumOfIteHEA305.toString}</TotNumOfIteHEA305>
-              {totNumOfPacHEA306.getOrElse(NodeSeq.Empty)}
-              <TotGroMasHEA307>{header.totGroMasHEA307}</TotGroMasHEA307>
+              <TotNumOfPacHEA306>{header.totNumOfPacHEA306.toString}</TotNumOfPacHEA306>
+              <TotGroMasHEA307>{header.totGroMasHEA307.toString}</TotGroMasHEA307>
               <DecDatHEA383>{Format.dateFormatted(header.decDatHEA383)}</DecDatHEA383>
               <DecPlaHEA394>{escapeXml(header.decPlaHEA394)}</DecPlaHEA394>
               {speCirIndHEA1.getOrElse(NodeSeq.Empty)}

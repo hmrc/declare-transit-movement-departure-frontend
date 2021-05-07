@@ -130,10 +130,10 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.goodsSummary.routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url
       )
       .ifInProgress(
-        DeclarePackagesPage.reader,
-        controllers.goodsSummary.routes.DeclarePackagesController.onPageLoad(lrn, NormalMode).url
+        TotalPackagesPage.reader,
+        controllers.goodsSummary.routes.TotalPackagesController.onPageLoad(lrn, NormalMode).url
       )
-      .ifNotStarted(controllers.goodsSummary.routes.DeclarePackagesController.onPageLoad(lrn, NormalMode).url)
+      .ifNotStarted(controllers.goodsSummary.routes.TotalPackagesController.onPageLoad(lrn, NormalMode).url)
       .section
 
   private val guaranteeDetails =

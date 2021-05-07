@@ -16,17 +16,21 @@
 
 package models.journeyDomain
 
+import java.time.LocalDate
+
+import cats._
 import cats.implicits._
 import derivable.DeriveNumberOfSeals
 import models.ProcedureType
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
 import pages._
+import pages.movementDetails.PreLodgeDeclarationPage
 
 import java.time.LocalDate
 
 case class GoodsSummary(
-  numberOfPackages: Option[Int],
+  numberOfPackages: Int,
   totalMass: String,
   loadingPlace: Option[String],
   goodSummaryDetails: GoodSummaryDetails,
@@ -37,7 +41,7 @@ object GoodsSummary {
 
   implicit val parser: UserAnswersReader[GoodsSummary] =
     (
-      DeclarePackagesPage.filterOptionalDependent(identity)(TotalPackagesPage.optionalReader).map(_.flatten),
+      TotalPackagesPage.reader,
       TotalGrossMassPage.reader,
       AddSecurityDetailsPage.filterOptionalDependent(identity)(LoadingPlacePage.optionalReader).map(_.flatten),
       UserAnswersReader[GoodSummaryDetails],
@@ -50,20 +54,28 @@ object GoodsSummary {
 
   object GoodSummaryNormalDetails {
 
-    implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] = {
+    implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
-        AddCustomsApprovedLocationPage.reader
-          .flatMap {
-            locationNeeded =>
-              if (locationNeeded)
-                CustomsApprovedLocationPage.reader.map(
-                  location => GoodSummaryNormalDetails(Some(location))
-                )
-              else
-                GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+        val notPreLodgeWithCustomApprovedLocation = PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
+          AddCustomsApprovedLocationPage.filterMandatoryDependent(_ == true) {
+            CustomsApprovedLocationPage.reader.map(
+              location => GoodSummaryNormalDetails(Some(location))
+            )
           }
+        }
+
+        val notPreLodgeWithoutCustomApprovedLocation =
+          PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
+            AddCustomsApprovedLocationPage.filterMandatoryDependent(_ == false) {
+              GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+            }
+          }
+        val preLodge = PreLodgeDeclarationPage.filterMandatoryDependent(_ == true) {
+          GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+        }
+
+        preLodge orElse notPreLodgeWithCustomApprovedLocation orElse notPreLodgeWithoutCustomApprovedLocation
       }
-    }
   }
 
   final case class GoodSummarySimplifiedDetails(authorisedLocationCode: String, controlResultDateLimit: LocalDate) extends GoodSummaryDetails
