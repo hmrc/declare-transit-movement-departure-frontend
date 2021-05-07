@@ -203,7 +203,6 @@ class DeclarationRequestService @Inject()(
         case TransitInformation(office, arrivalTime) => CustomsOfficeTransit(office, arrivalTime)
       }.toList
 
-    // TODO confirm if authorisedLocationCode is the same thing (else last case just returns None)
     def customsSubPlace(movementDetails: MovementDetails, goodsSummary: GoodsSummary): Option[String] =
       goodsSummary.goodSummaryDetails match {
         case GoodsSummary.GoodSummaryNormalDetails(customsApprovedLocation) =>
@@ -212,8 +211,7 @@ class DeclarationRequestService @Inject()(
               if (prelodge) Some("Pre-lodge") else customsApprovedLocation
             case _ => None
           }
-        case GoodsSummary.GoodSummarySimplifiedDetails(authorisedLocationCode, _) =>
-          Some(authorisedLocationCode)
+        case _ => None
       }
 
     def headerSeals(domainSeals: Seq[SealDomain]): Option[Seals] =
