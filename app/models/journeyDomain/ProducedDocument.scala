@@ -29,26 +29,15 @@ final case class ProducedDocument(documentType: String, documentReference: Strin
 
 object ProducedDocument {
 
-  private def readDocumentType(itemIndex: Index): ReaderT[EitherType, UserAnswers, Boolean] =
-    (for {
-      addSecurity     <- AddSecurityDetailsPage.reader
-      addRef          <- AddCommercialReferenceNumberPage.optionalReader
-      addCircumstance <- AddCircumstanceIndicatorPage.optionalReader
-    } yield {
-      (addSecurity, addRef, addCircumstance, itemIndex.position == 0) match {
-        case (true, Some(false), Some(false), true) => true.pure[UserAnswersReader]
-        case (true, Some(false), Some(true), true)  => CircumstanceIndicatorPage.reader.map(x => CircumstanceIndicator.conditionalIndicators.contains(x))
-        case _                                      => AddDocumentsPage(itemIndex).reader
-      }
-    }).flatMap(x => x)
-
-  def deriveProducedDocuments(itemIndex: Index): UserAnswersReader[Option[NonEmptyList[ProducedDocument]]] =
-    readDocumentType(itemIndex)
-      .flatMap {
-        isTrue =>
-          if (isTrue) {
-            DeriveNumberOfDocuments(itemIndex).optionalNonEmptyListReader.flatMap {
-              _.traverse {
+  private def producedDocumentsWithConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    AddSecurityDetailsPage
+      .filterMandatoryDependent(identity) {
+        AddCommercialReferenceNumberPage.filterMandatoryDependent(_ == false) {
+          AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == true) {
+            CircumstanceIndicatorPage.filterMandatoryDependent(
+              x => CircumstanceIndicator.conditionalIndicators.contains(x)
+            ) {
+              DeriveNumberOfDocuments(itemIndex).mandatoryNonEmptyListReader.flatMap {
                 _.zipWithIndex
                   .traverse[UserAnswersReader, ProducedDocument]({
                     case (_, index) =>
@@ -56,10 +45,47 @@ object ProducedDocument {
                   })
               }
             }
-          } else {
-            none[NonEmptyList[ProducedDocument]].pure[UserAnswersReader]
           }
+        }
       }
+      .map(_.some)
+
+  private def producedDocumentsWithoutConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    AddSecurityDetailsPage
+      .filterMandatoryDependent(identity) {
+        AddCommercialReferenceNumberPage.filterMandatoryDependent(_ == false) {
+          AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == false) {
+            DeriveNumberOfDocuments(itemIndex).mandatoryNonEmptyListReader.flatMap {
+              _.zipWithIndex
+                .traverse[UserAnswersReader, ProducedDocument]({
+                  case (_, index) =>
+                    ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+                })
+            }
+          }
+        }
+      }
+      .map(_.some)
+
+  private def producedDocumentsOther(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    AddDocumentsPage(itemIndex).filterOptionalDependent(identity) {
+      DeriveNumberOfDocuments(itemIndex).mandatoryNonEmptyListReader.flatMap {
+        _.zipWithIndex
+          .traverse[UserAnswersReader, ProducedDocument]({
+            case (_, index) =>
+              ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+          })
+      }
+    }
+
+  def deriveProducedDocuments(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    if (itemIndex.position == 0) {
+      producedDocumentsWithConditionalIndicator(itemIndex) orElse
+        producedDocumentsWithoutConditionalIndicator(itemIndex) orElse
+        producedDocumentsOther(itemIndex)
+    } else {
+      producedDocumentsOther(itemIndex)
+    }
 
   def producedDocumentReader(index: Index, referenceIndex: Index): UserAnswersReader[ProducedDocument] =
     (

@@ -18,107 +18,179 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
 import generators.JourneyModelGenerators
+import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
 import models.{Index, ProcedureType, UserAnswers}
-import org.scalacheck.{Arbitrary, Gen}
 import pages._
+import pages.movementDetails.PreLodgeDeclarationPage
 
-class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
-  import GoodsSummarySpec._
+import java.time.LocalDate
+
+class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
 
   "GoodsSummary can be parsed" - {
 
-    val isSecurityDefined: Boolean = arb[Boolean].sample.value
+    "when Safety and security is No" in {
+      forAll(arb[UserAnswers]) {
+        ua =>
+          val goodsSummary = GoodsSummary(
+            numberOfPackages   = 1,
+            totalMass          = "11.1",
+            loadingPlace       = None,
+            goodSummaryDetails = GoodSummaryNormalDetails(None),
+            sealNumbers        = Seq.empty
+          )
 
-    // TODO need to add left test here
+          val userAnswers =
+            GoodsSummarySpec
+              .setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(false)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
-    "when number of packages is declared and SafetyAndSecurity is True" in {
-
-      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).map(_.copy(numberOfPackages = 123))
-
-      forAll(arbGoodsSummary, arb[UserAnswers]) {
-        (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-
-          UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
+          UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
       }
     }
 
-    "when the declaration is Normal procedure" - {
-      "and when there are no customs approved location" in {
+    "when Safety and security is Yes" in {
+      forAll(arb[UserAnswers]) {
+        ua =>
+          val goodsSummary = GoodsSummary(
+            numberOfPackages   = 1,
+            totalMass          = "11.1",
+            loadingPlace       = Some("loadingPlaceValue"),
+            goodSummaryDetails = GoodSummaryNormalDetails(None),
+            sealNumbers        = Seq.empty
+          )
 
-        val normalDetail: Arbitrary[GoodSummaryDetails] =
-          Arbitrary(Gen.const(GoodSummaryNormalDetails(None)))
+          val userAnswers =
+            GoodsSummarySpec
+              .setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(true)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
-        val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)(normalDetail))
+          UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
+      }
+    }
 
-        forAll(arbGoodsSummary, arb[UserAnswers]) {
-          (goodsSummary, ua) =>
-            val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+    "when normal" - {
+      "when pre-lodge is no" - {
+        "when custom approved location needs to be added" in {
+          forAll(arb[UserAnswers]) {
+            ua =>
+              val goodsSummary = GoodsSummary(
+                numberOfPackages   = 1,
+                totalMass          = "11.1",
+                loadingPlace       = None,
+                goodSummaryDetails = GoodSummaryNormalDetails(Some("customsApprovedLocationValue")),
+                sealNumbers        = Seq.empty
+              )
 
-            UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
+              val userAnswers =
+                GoodsSummarySpec
+                  .setGoodsSummary(goodsSummary)(ua)
+                  .unsafeSetVal(AddSecurityDetailsPage)(false)
+                  .unsafeSetVal(PreLodgeDeclarationPage)(false)
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
+
+              UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
+          }
+        }
+
+        "when custom approved location is not added" in {
+          forAll(arb[UserAnswers]) {
+            ua =>
+              val goodsSummary = GoodsSummary(
+                numberOfPackages   = 1,
+                totalMass          = "11.1",
+                loadingPlace       = None,
+                goodSummaryDetails = GoodSummaryNormalDetails(None),
+                sealNumbers        = Seq.empty
+              )
+
+              val userAnswers =
+                GoodsSummarySpec
+                  .setGoodsSummary(goodsSummary)(ua)
+                  .unsafeSetVal(AddSecurityDetailsPage)(false)
+                  .unsafeSetVal(PreLodgeDeclarationPage)(false)
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
+
+              UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
+          }
         }
       }
 
-      "and when there is a customs approved location" in {
-        val normalDetail: Arbitrary[GoodSummaryDetails] =
-          Arbitrary(
-            stringsWithMaxLength(stringMaxLength).map(
-              x => GoodSummaryNormalDetails(Some(x))
+      "when pre-lodge is yes" in {
+        forAll(arb[UserAnswers]) {
+          ua =>
+            val goodsSummary = GoodsSummary(
+              numberOfPackages   = 1,
+              totalMass          = "11.1",
+              loadingPlace       = None,
+              goodSummaryDetails = GoodSummaryNormalDetails(None),
+              sealNumbers        = Seq.empty
+            )
+
+            val userAnswers =
+              GoodsSummarySpec
+                .setGoodsSummary(goodsSummary)(ua)
+                .unsafeSetVal(AddSecurityDetailsPage)(false)
+                .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+
+            UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
+        }
+      }
+    }
+
+    "when simplified" in {
+      forAll(arb[UserAnswers]) {
+        ua =>
+          val goodsSummary = GoodsSummary(
+            numberOfPackages   = 1,
+            totalMass          = "11.1",
+            loadingPlace       = None,
+            goodSummaryDetails = GoodSummarySimplifiedDetails("authorisedLocationCode", LocalDate.now()),
+            sealNumbers        = Seq.empty
+          )
+
+          val userAnswers =
+            GoodsSummarySpec
+              .setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(false)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+
+          UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
+      }
+    }
+
+    "when customs seals are added by the user" in {
+      forAll(arb[UserAnswers]) {
+        ua =>
+          val goodsSummary = GoodsSummary(
+            numberOfPackages   = 1,
+            totalMass          = "11.1",
+            loadingPlace       = None,
+            goodSummaryDetails = GoodSummarySimplifiedDetails("authorisedLocationCode", LocalDate.now()),
+            sealNumbers = Seq(
+              SealDomain("numberOrMarkValue")
             )
           )
 
-        val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)(normalDetail))
+          val userAnswers =
+            GoodsSummarySpec
+              .setGoodsSummary(goodsSummary)(ua)
+              .unsafeSetVal(AddSecurityDetailsPage)(false)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+              .unsafeSetVal(AddSealsPage)(true)
 
-        forAll(arbGoodsSummary, arb[UserAnswers]) {
-          (goodsSummary, ua) =>
-            val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-
-            UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
-        }
-
+          UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
       }
-    }
-
-    "when the declaration is Simplified procedure" in {
-
-      val simplifiedDetail: Arbitrary[GoodSummaryDetails] =
-        Arbitrary(arbitraryGoodSummarySimplifiedDetails.arbitrary.map(identity[GoodSummaryDetails]))
-
-      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)(simplifiedDetail))
-
-      forAll(arbGoodsSummary, arb[UserAnswers]) {
-        (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-
-          UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
-      }
-
-    }
-
-    "when there are no seals" in {
-
-      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).map(_.copy(sealNumbers = Seq.empty))
-
-      forAll(arbGoodsSummary, arb[UserAnswers]) {
-        (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-
-          UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
-      }
-
-    }
-
-    "when there are seals" in {
-      val arbGoodsSummary = arb(arbitraryGoodsSummary(isSecurityDefined)).suchThat(_.sealNumbers.nonEmpty)
-
-      forAll(arbGoodsSummary, arb[UserAnswers]) {
-        (goodsSummary, ua) =>
-          val userAnswers = setGoodsSummary(goodsSummary)(ua).unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-
-          UserAnswersReader[GoodsSummary].run(userAnswers).right.value mustEqual goodsSummary
-      }
-
     }
   }
 }
@@ -134,7 +206,6 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
       case _: GoodSummarySimplifiedDetails => ProcedureType.Simplified
     }
 
-  // Note: overrides procedure type
   def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
       .unsafeSetVal(ProcedureTypePage)(procedureType(goodsSummary.goodSummaryDetails))
@@ -142,7 +213,8 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
       .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetails(customsApprovedLocation) => customsApprovedLocation.isDefined
+        case GoodSummaryNormalDetails(Some(_)) => true
+        case GoodSummaryNormalDetails(None)    => false
       }
       .unsafeSetPFnOpt(CustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
         case GoodSummaryNormalDetails(customsApprovedLocation) => customsApprovedLocation
