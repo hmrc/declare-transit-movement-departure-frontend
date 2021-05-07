@@ -133,7 +133,7 @@ class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRenderer
     "must redirect to the next page when valid data is submitted" in {
       dataRetrievalWithData(emptyUserAnswers)
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getNonEUTransitCountryList()(any(), any())).thenReturn(Future.successful(countries))
 
       val request =
         FakeRequest(POST, countryOfDispatchRoute)

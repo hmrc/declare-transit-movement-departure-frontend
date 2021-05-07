@@ -123,7 +123,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with JourneyMode
         "and CountryOfDispatchPage is an EU Country " +
         "and AddAdministrativeReferencePage is true" in {
 
-        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchNonEu) {
+        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
           case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
             val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
             val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
@@ -147,7 +147,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with JourneyMode
         "and CountryOfDispatchPage is an EU Country " +
         "and AddAdministrativeReferencePage is false" in {
 
-        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchNonEu) {
+        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
           case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
             val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
             val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
@@ -201,7 +201,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with JourneyMode
         "and CountryOfDispatchPage is an EU Country " +
         "and AddAdministrativeReferencePage is missing" in {
 
-        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchNonEu) {
+        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
           case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
             val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
             val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
