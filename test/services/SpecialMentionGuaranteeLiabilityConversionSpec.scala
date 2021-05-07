@@ -21,6 +21,7 @@ import cats.data.NonEmptyList
 import generators.{JourneyModelGenerators, ModelGenerators}
 import models.GuaranteeType.{nonGuaranteeReferenceRoute, GuaranteeNotRequired, GuaranteeWaiver}
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
+import models.journeyDomain.LiabilityAmount
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
 import org.scalacheck.Gen
 
@@ -33,12 +34,12 @@ class SpecialMentionGuaranteeLiabilityConversionSpec extends SpecBase with Gener
       "with a GuaranteeType of 0, 1, 2, 4 or 9 " +
       "and a default liability amount" in {
 
-      val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiability, "****")
+      val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiabilityAmount, "****")
 
       val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
 
       val expectedAdditionalInformationFormat =
-        s"${GuaranteeReference.defaultLiability}EURAB123"
+        s"${GuaranteeReference.defaultLiabilityAmount.amount}EURAB123"
 
       val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
 
@@ -50,7 +51,7 @@ class SpecialMentionGuaranteeLiabilityConversionSpec extends SpecBase with Gener
       "with a GuaranteeType of 0, 1, 2, 4 or 9 " +
       "and liability amount is not the default liability" in {
 
-      val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", "1234", "****")
+      val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", LiabilityAmount("1234", "GBP"), "****")
 
       val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
 
@@ -62,15 +63,15 @@ class SpecialMentionGuaranteeLiabilityConversionSpec extends SpecBase with Gener
     }
 
     "must return multiple SpecialMentionGuaranteeLiabilityAmount if there are multiple valid GuaranteeReference" in {
-
-      val guaranteeReference1       = GuaranteeReference(GuaranteeWaiver, "AB123", "1234", "****")
-      val guaranteeReference2       = GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiability, "****")
-      val invalidGuaranteeReference = GuaranteeReference(GuaranteeNotRequired, "AB123", "1234", "****")
+      val liabilityAmount           = LiabilityAmount("1234", "GBP")
+      val guaranteeReference1       = GuaranteeReference(GuaranteeWaiver, "AB123", liabilityAmount, "****")
+      val guaranteeReference2       = GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiabilityAmount, "****")
+      val invalidGuaranteeReference = GuaranteeReference(GuaranteeNotRequired, "AB123", liabilityAmount, "****")
 
       val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List(guaranteeReference2, invalidGuaranteeReference))
 
       val expectedAdditionalInformationFormat1 = "1234GBPAB123"
-      val expectedAdditionalInformationFormat2 = s"${GuaranteeReference.defaultLiability}EURAB123"
+      val expectedAdditionalInformationFormat2 = s"${GuaranteeReference.defaultLiabilityAmount.amount}EURAB123"
 
       val expectedResult1 = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat1)
       val expectedResult2 = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat2)

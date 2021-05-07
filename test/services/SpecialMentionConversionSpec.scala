@@ -31,10 +31,10 @@ class SpecialMentionConversionSpec extends SpecBase with GeneratorSpec with Jour
     "apply" - {
 
       val specialMentions     = Some(NonEmptyList(SpecialMentionDomain("DG0", "Additional info"), List.empty))
-      val guaranteeReferences = NonEmptyList(GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiability, "****"), List.empty)
+      val guaranteeReferences = NonEmptyList(GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiabilityAmount, "****"), List.empty)
 
       val expectedSpecialMention                = SpecialMentionExportFromGB("DG0", "Additional info")
-      val expectedSpecialMentionLiabilityAmount = SpecialMentionGuaranteeLiabilityAmount("CAL", s"${GuaranteeReference.defaultLiability}EURAB123")
+      val expectedSpecialMentionLiabilityAmount = SpecialMentionGuaranteeLiabilityAmount("CAL", s"${GuaranteeReference.defaultLiabilityAmount.amount}EURAB123")
 
       "must add SpecialMentionGuaranteeLiabilityAmount to the first special mention in a list if index is 0" in {
 

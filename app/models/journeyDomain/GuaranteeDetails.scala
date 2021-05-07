@@ -43,18 +43,23 @@ object GuaranteeDetails {
   final case class GuaranteeReference(
     guaranteeType: GuaranteeType,
     guaranteeReferenceNumber: String,
-    liabilityAmount: String,
+    liabilityAmount: LiabilityAmount,
     accessCode: String
   ) extends GuaranteeDetails
 
   object GuaranteeReference {
 
-    val defaultLiability = "10000"
+    private val defaultLiability                = "10000"
+    val currency_GB                             = "GB"
+    val currency_EUR                            = "EUR"
+    val defaultLiabilityAmount: LiabilityAmount = LiabilityAmount(defaultLiability, currency_EUR)
 
-    private def liabilityAmount(index: Index): UserAnswersReader[String] = DefaultAmountPage(index).optionalReader.flatMap {
+    private def liabilityAmount(index: Index): UserAnswersReader[LiabilityAmount] = DefaultAmountPage(index).optionalReader.flatMap {
       case Some(defaultAmountPage) =>
-        if (defaultAmountPage) defaultLiability.pure[UserAnswersReader] else LiabilityAmountPage(index).reader
-      case None => LiabilityAmountPage(index).reader
+        if (defaultAmountPage) { defaultLiabilityAmount.pure[UserAnswersReader] } else {
+          LiabilityAmountPage(index).reader.map(amount => LiabilityAmount(amount, currency_GB))
+        }
+      case None => LiabilityAmountPage(index).reader.map(amount => LiabilityAmount(amount, currency_GB))
     }
 
     def parseGuaranteeReference(index: Index): UserAnswersReader[GuaranteeReference] =
