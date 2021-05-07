@@ -16,6 +16,7 @@
 
 package repositories
 
+import itSpecBase.ItSpecBase
 import models.messages.InterchangeControlReference
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -32,15 +33,7 @@ import services.{DateTimeService, MockDateTimeService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class InterchangeControlReferenceIdRepositorySpec
-  extends AnyFreeSpec
-    with Matchers
-    with MongoSuite
-    with ScalaFutures
-    with BeforeAndAfterEach
-    with GuiceOneAppPerSuite
-    with IntegrationPatience
-    with MockDateTimeService {
+class InterchangeControlReferenceIdRepositorySpec extends ItSpecBase with MongoSuite with BeforeAndAfterEach with GuiceOneAppPerSuite with MockDateTimeService {
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(
@@ -82,7 +75,8 @@ class InterchangeControlReferenceIdRepositorySpec
               Json.obj(
                 "_id"        -> mockTimeService.dateFormatted,
                 "last-index" -> 1
-              ))
+              )
+            )
       }.futureValue
 
       val first  = service.nextInterchangeControlReferenceId().futureValue
