@@ -92,8 +92,6 @@ trait XMLComparatorSpec {
         }
     }.flatten.distinct
 
-    //    def recursiveGroupPath
-
     def xmlMustEqual(expected: NodeSeq): Unit = {
       lazy val expectedFields = expected.flatMap(x => x.flatter(RootPath(x.label)))
       lazy val expectedFieldNodes = expectedFields.map(_.node)
