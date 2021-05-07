@@ -104,6 +104,7 @@ object Header {
       }
         <ConIndHEA96>{header.conIndHEA96.toString}</ConIndHEA96>
         <DiaLanIndAtDepHEA254>{LanguageCodeEnglish.code}</DiaLanIndAtDepHEA254>
+        <NCTSAccDocHEA601LNG>{LanguageCodeEnglish.code}</NCTSAccDocHEA601LNG>
         <TotNumOfIteHEA305>{header.totNumOfIteHEA305.toString}</TotNumOfIteHEA305>
         {
         header.totNumOfPacHEA306.fold(NodeSeq.Empty)(

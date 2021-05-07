@@ -18,6 +18,7 @@ package models.messages.header
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
+import models.LanguageCodeEnglish
 import xml.XMLWrites._
 import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
@@ -76,7 +77,7 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
           )
 
           val comRefNumHEA = header.comRefNumHEA.map(
-            value => <ComRefNumHEA>{value.toString}</ComRefNumHEA>
+            value => <ComRefNumHEA>{value}</ComRefNumHEA>
           )
 
           val secHEA358 = header.secHEA358.map(
@@ -105,9 +106,10 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
               {header.transportDetails.toXml}
               <ConIndHEA96>{header.conIndHEA96.toString}</ConIndHEA96>
               <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
+              <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
               <TotNumOfIteHEA305>{header.totNumOfIteHEA305.toString}</TotNumOfIteHEA305>
               {totNumOfPacHEA306.getOrElse(NodeSeq.Empty)}
-              <TotGroMasHEA307>{header.totGroMasHEA307.toString}</TotGroMasHEA307>
+              <TotGroMasHEA307>{header.totGroMasHEA307}</TotGroMasHEA307>
               <DecDatHEA383>{Format.dateFormatted(header.decDatHEA383)}</DecDatHEA383>
               <DecPlaHEA394>{escapeXml(header.decPlaHEA394)}</DecPlaHEA394>
               {speCirIndHEA1.getOrElse(NodeSeq.Empty)}
