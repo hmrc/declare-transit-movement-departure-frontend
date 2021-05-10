@@ -52,7 +52,6 @@ class TraderConsigneeGoodsItemSpec
               <PosCodCE223>{trader.postCode}</PosCodCE223>
               <CitCE224>{escapeXml(trader.city)}</CitCE224>
               <CouCE225>{trader.countryCode}</CouCE225>
-              <NADLNGGICE>EN</NADLNGGICE>
               {eori.getOrElse(NodeSeq.Empty)}
             </TRACONCE2>
 

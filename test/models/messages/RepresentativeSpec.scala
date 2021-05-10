@@ -48,7 +48,6 @@ class RepresentativeSpec
             <REPREP>
               <NamREP5>{escapeXml(representative.namREP5)}</NamREP5>
               {representativeCapacity.getOrElse(NodeSeq.Empty)}
-              <RepCapREP18LNG>EN</RepCapREP18LNG>
             </REPREP>
 
           representative.toXml mustEqual expectedResult

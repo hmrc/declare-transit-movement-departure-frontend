@@ -63,7 +63,6 @@ object ItemsSecurityConsigneeWithoutEori {
         <PosCodTRACONSECGOO018>{consignee.postCode}</PosCodTRACONSECGOO018>
         <CityTRACONSECGOO014>{consignee.city}</CityTRACONSECGOO014>
         <CouCodTRACONSECGOO015>{consignee.countryCode}</CouCodTRACONSECGOO015>
-        <TRACONSECGOO013LNG>{LanguageCodeEnglish.code}</TRACONSECGOO013LNG>
       </TRACONSECGOO013>
   }
 

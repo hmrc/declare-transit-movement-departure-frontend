@@ -16,15 +16,11 @@
 
 package models.messages
 
-import models.{LanguageCode, LanguageCodeEnglish}
-
 case class Seal(numberOrMark: String)
 
 object Seal {
 
   object Constants {
-    val sealNumberOrMarkLength     = 20
-    val languageCode: LanguageCode = LanguageCodeEnglish
+    val sealNumberOrMarkLength = 20
   }
-
 }

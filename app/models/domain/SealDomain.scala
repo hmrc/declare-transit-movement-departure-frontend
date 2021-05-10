@@ -18,7 +18,6 @@ package models.domain
 
 import forms.mappings.StringEquivalence
 import models.messages.Seal
-import models.{LanguageCode, LanguageCodeEnglish}
 import play.api.libs.json.{Json, OFormat}
 
 case class SealDomain(numberOrMark: String)
@@ -26,8 +25,7 @@ case class SealDomain(numberOrMark: String)
 object SealDomain {
 
   object Constants {
-    val sealNumberOrMarkLength     = 20
-    val languageCode: LanguageCode = LanguageCodeEnglish
+    val sealNumberOrMarkLength = 20
   }
 
   def domainSealToSeal(sealDomain: SealDomain): Seal = SealDomain.unapply(sealDomain).map(Seal.apply).get

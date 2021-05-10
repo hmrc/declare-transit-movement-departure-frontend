@@ -88,7 +88,6 @@ class GoodsItemSecurityConsignorSpec
               <PosCodTRACORSECGOO026>{consignor.postCode}</PosCodTRACORSECGOO026>
               <CitTRACORSECGOO022>{consignor.city}</CitTRACORSECGOO022>
               <CouCodTRACORSECGOO023>{consignor.countryCode}</CouCodTRACORSECGOO023>
-              <TRACORSECGOO021LNG>EN</TRACORSECGOO021LNG>
             </TRACORSECGOO021>
 
           consignor.toXml mustEqual expectedResult

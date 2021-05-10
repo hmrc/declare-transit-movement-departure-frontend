@@ -18,6 +18,7 @@ package models.messages.header
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
+import models.LanguageCodeEnglish
 import xml.XMLWrites._
 import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
@@ -47,7 +48,6 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
 
           val agrLocOfGooHEA39 = header.agrLocOfGooHEA39.map(
             value => <AgrLocOfGooHEA39>{escapeXml(value)}</AgrLocOfGooHEA39>
-              <AgrLocOfGooHEA39LNG>EN</AgrLocOfGooHEA39LNG>
           )
 
           val autLocOfGooCodHEA41 = header.autLocOfGooCodHEA41.map(
@@ -65,15 +65,15 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
           )
 
           val speCirIndHEA1 = header.speCirIndHEA1.map(
-            value => <SpeCirIndHEA1>{value.toString}</SpeCirIndHEA1>
+            value => <SpeCirIndHEA1>{value}</SpeCirIndHEA1>
           )
 
           val traChaMetOfPayHEA1 = header.traChaMetOfPayHEA1.map(
-            value => <TraChaMetOfPayHEA1>{value.toString}</TraChaMetOfPayHEA1>
+            value => <TraChaMetOfPayHEA1>{value}</TraChaMetOfPayHEA1>
           )
 
           val comRefNumHEA = header.comRefNumHEA.map(
-            value => <ComRefNumHEA>{value.toString}</ComRefNumHEA>
+            value => <ComRefNumHEA>{value}</ComRefNumHEA>
           )
 
           val secHEA358 = header.secHEA358.map(
@@ -81,12 +81,11 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
           )
 
           val conRefNumHEA = header.conRefNumHEA.map(
-            value => <ConRefNumHEA>{value.toString}</ConRefNumHEA>
+            value => <ConRefNumHEA>{value}</ConRefNumHEA>
           )
 
           val codPlUnHEA357 = header.codPlUnHEA357.map(
-            value => <CodPlUnHEA357>{value.toString}</CodPlUnHEA357>
-              <CodPlUnHEA357LNG>EN</CodPlUnHEA357LNG>
+            value => <CodPlUnHEA357>{value}</CodPlUnHEA357>
           )
 
           val expectedResult: NodeSeq =
@@ -109,7 +108,6 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
               <TotGroMasHEA307>{header.totGroMasHEA307.toString}</TotGroMasHEA307>
               <DecDatHEA383>{Format.dateFormatted(header.decDatHEA383)}</DecDatHEA383>
               <DecPlaHEA394>{escapeXml(header.decPlaHEA394)}</DecPlaHEA394>
-              <DecPlaHEA394LNG>EN</DecPlaHEA394LNG>
               {speCirIndHEA1.getOrElse(NodeSeq.Empty)}
               {traChaMetOfPayHEA1.getOrElse(NodeSeq.Empty)}
               {comRefNumHEA.getOrElse(NodeSeq.Empty)}

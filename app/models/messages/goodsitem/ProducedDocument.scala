@@ -52,13 +52,11 @@ object ProducedDocument {
 
       val complementOfInformation = references.complementOfInformation.fold(NodeSeq.Empty)(
         value => <ComOfInfDC25>{value}</ComOfInfDC25>
-        <ComOfInfDC25LNG>{LanguageCodeEnglish.code}</ComOfInfDC25LNG>
       )
 
       <PRODOCDC2>
         <DocTypDC21>{references.documentType}</DocTypDC21>
         {reference}
-        <DocRefDCLNG>{LanguageCodeEnglish.code}</DocRefDCLNG>
         {complementOfInformation}
       </PRODOCDC2>
   }
