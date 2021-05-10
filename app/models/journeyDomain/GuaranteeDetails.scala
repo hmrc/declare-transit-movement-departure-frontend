@@ -20,6 +20,7 @@ import cats.data.NonEmptyList
 import cats.implicits._
 import derivable.DeriveNumberOfGuarantees
 import models.{GuaranteeType, Index}
+import DefaultLiabilityAmount._
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
 
@@ -43,18 +44,18 @@ object GuaranteeDetails {
   final case class GuaranteeReference(
     guaranteeType: GuaranteeType,
     guaranteeReferenceNumber: String,
-    liabilityAmount: String,
+    liabilityAmount: LiabilityAmount,
     accessCode: String
   ) extends GuaranteeDetails
 
   object GuaranteeReference {
 
-    val defaultLiability = "10000"
-
-    private def liabilityAmount(index: Index): UserAnswersReader[String] = DefaultAmountPage(index).optionalReader.flatMap {
+    private def liabilityAmount(index: Index): UserAnswersReader[LiabilityAmount] = DefaultAmountPage(index).optionalReader.flatMap {
       case Some(defaultAmountPage) =>
-        if (defaultAmountPage) defaultLiability.pure[UserAnswersReader] else LiabilityAmountPage(index).reader
-      case None => LiabilityAmountPage(index).reader
+        if (defaultAmountPage) { UserAnswersReader[DefaultLiabilityAmount.type].widen[LiabilityAmount] } else {
+          LiabilityAmountPage(index).reader.map(amount => OtherLiabilityAmount(amount, CurrencyCode.GBP))
+        }
+      case None => LiabilityAmountPage(index).reader.map(amount => OtherLiabilityAmount(amount, CurrencyCode.GBP))
     }
 
     def parseGuaranteeReference(index: Index): UserAnswersReader[GuaranteeReference] =

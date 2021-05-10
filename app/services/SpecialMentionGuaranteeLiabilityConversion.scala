@@ -20,7 +20,6 @@ import cats.data.NonEmptyList
 import models.Convert
 import models.GuaranteeType.guaranteeReferenceRoute
 import models.journeyDomain.GuaranteeDetails
-import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
 
 private[services] object SpecialMentionGuaranteeLiabilityConversion
@@ -30,11 +29,7 @@ private[services] object SpecialMentionGuaranteeLiabilityConversion
     guaranteeDetails collect {
       case GuaranteeDetails.GuaranteeReference(guaranteeType, guaranteeReferenceNumber, liabilityAmount, _)
           if guaranteeReferenceRoute.contains(guaranteeType) =>
-        val additionalInformationFormat = if (liabilityAmount == GuaranteeReference.defaultLiability) {
-          s"${liabilityAmount}EUR$guaranteeReferenceNumber"
-        } else {
-          s"${liabilityAmount}GBP$guaranteeReferenceNumber"
-        }
+        val additionalInformationFormat = s"${liabilityAmount.toString}$guaranteeReferenceNumber"
 
         SpecialMentionGuaranteeLiabilityAmount("CAL", additionalInformationFormat)
     }
