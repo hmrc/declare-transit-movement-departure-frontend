@@ -16,8 +16,9 @@
 
 package models.journeyDomain
 
-import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
+import base.{GeneratorSpec, SpecBase}
 import cats.data.{NonEmptyList, ReaderT}
+import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.ProducedDocumentSpec.setProducedDocumentsUserAnswers

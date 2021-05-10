@@ -16,7 +16,8 @@
 
 package models.journeyDomain
 
-import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
+import base.{GeneratorSpec, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}

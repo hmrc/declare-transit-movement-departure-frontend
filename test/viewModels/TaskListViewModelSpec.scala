@@ -16,7 +16,8 @@
 
 package viewModels
 
-import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
+import base.{GeneratorSpec, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import generators.{JourneyModelGenerators, ModelGenerators, UserAnswersGenerator}
 import models.journeyDomain.MovementDetails.{NormalMovementDetails, SimplifiedMovementDetails}
 import models.journeyDomain._

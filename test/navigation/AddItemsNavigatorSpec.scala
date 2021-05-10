@@ -16,7 +16,8 @@
 
 package navigation
 
-import base.{SpecBase, UserAnswersSpecHelper}
+import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.containers.{routes => containerRoutes}
 import controllers.addItems.previousReferences.{routes => previousReferenceRoutes}
 import controllers.addItems.routes

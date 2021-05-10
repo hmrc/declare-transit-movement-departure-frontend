@@ -16,7 +16,8 @@
 
 package services
 
-import itUtils.{MockDateTimeService, UserAnswersSpecHelper, XMLComparatorSpec, XSDSchemaValidationSpec}
+import itUtils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
+import commonTestUtils.UserAnswersSpecHelper
 import models.domain.SealDomain
 import models.reference.{Country, CountryCode, CustomsOffice, PackageType}
 import models._
@@ -283,9 +284,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.LiabilityAmountPage(Index(1)))("500")
         .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
 
-      /*
-      * TODO
-      */
       val expectedXml = <CC015B>
         <SynIdeMES1>UNOC</SynIdeMES1>
         <SynVerNumMES2>3</SynVerNumMES2>
