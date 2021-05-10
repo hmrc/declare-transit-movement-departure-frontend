@@ -302,7 +302,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
           <AgrLocOfGooHEA39>Pre-lodge</AgrLocOfGooHEA39>
-          <AgrLocOfGooHEA39LNG>EN</AgrLocOfGooHEA39LNG>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
           <CusSubPlaHEA66>Pre-lodge</CusSubPlaHEA66>
@@ -319,12 +318,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <TotGroMasHEA307>12131415</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
-          <DecPlaHEA394LNG>EN</DecPlaHEA394LNG>
           <SpeCirIndHEA1>A</SpeCirIndHEA1>
           <SecHEA358>1</SecHEA358>
           <ConRefNumHEA>SomeConv</ConRefNumHEA>
           <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
-          <CodPlUnHEA357LNG>EN</CodPlUnHEA357LNG>
         </HEAHEA>
         <TRAPRIPC1>
           <NamPC17>PrincipalName</NamPC17>
@@ -332,7 +329,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodPC123>AA1 1AA</PosCodPC123>
           <CitPC124>PrincipalTown</CitPC124>
           <CouPC125>GB</CouPC125>
-          <NADLNGPC>EN</NADLNGPC>
         </TRAPRIPC1>
         <CUSOFFDEPEPT>
           <RefNumEPT1>OOD1234A</RefNumEPT1>
@@ -351,17 +347,14 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         <REPREP>
           <NamREP5>John Doe</NamREP5>
           <RepCapREP18>direct</RepCapREP18>
-          <RepCapREP18LNG>EN</RepCapREP18LNG>
         </REPREP>
         <SEAINFSLI>
           <SeaNumSLI2>2</SeaNumSLI2>
           <SEAIDSID>
             <SeaIdeSID1>SEAL1</SeaIdeSID1>
-            <SeaIdeSID1LNG>EN</SeaIdeSID1LNG>
           </SEAIDSID>
           <SEAIDSID>
             <SeaIdeSID1>SEAL2</SeaIdeSID1>
-            <SeaIdeSID1LNG>EN</SeaIdeSID1LNG>
           </SEAIDSID>
         </SEAINFSLI>
         <GUAGUA>
@@ -382,7 +375,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>T</MetOfPayGDI12>
@@ -391,26 +383,20 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR1</PreDocTypAR21>
             <PreDocRefAR26>GD1PR1Ref</PreDocRefAR26>
-            <PreDocRefLNG>EN</PreDocRefLNG>
             <ComOfInfAR29>GD1PR1Info</ComOfInfAR29>
-            <ComOfInfAR29LNG>EN</ComOfInfAR29LNG>
           </PREADMREFAR2>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR2</PreDocTypAR21>
             <PreDocRefAR26>GD1PR2Ref</PreDocRefAR26>
-            <PreDocRefLNG>EN</PreDocRefLNG>
           </PREADMREFAR2>
           <PRODOCDC2>
             <DocTypDC21>G1D1</DocTypDC21>
             <DocRefDC23>G1D1Ref</DocRefDC23>
-            <DocRefDCLNG>EN</DocRefDCLNG>
             <ComOfInfDC25>G1D1Info</ComOfInfDC25>
-            <ComOfInfDC25LNG>EN</ComOfInfDC25LNG>
           </PRODOCDC2>
           <PRODOCDC2>
             <DocTypDC21>G1D2</DocTypDC21>
             <DocRefDC23>G1D2Ref</DocRefDC23>
-            <DocRefDCLNG>EN</DocRefDCLNG>
           </PRODOCDC2>
           <SPEMENMT2>
             <AddInfMT21>10000EURGUA1Ref</AddInfMT21>
@@ -435,7 +421,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCO223>ConorL3</PosCodCO223>
             <CitCO224>ConorLine2</CitCO224>
             <CouCO225>GA</CouCO225>
-            <NADLNGGTCO>EN</NADLNGGTCO>
             <TINCO259>Conor123</TINCO259>
           </TRACONCO2>
           <TRACONCE2>
@@ -444,7 +429,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCE223>ConeeL3</PosCodCE223>
             <CitCE224>ConeeLine2</CitCE224>
             <CouCE225>GA</CouCE225>
-            <NADLNGGICE>EN</NADLNGGICE>
             <TINCE259>Conee123</TINCE259>
           </TRACONCE2>
           <CONNR2>
@@ -476,23 +460,18 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         <GOOITEGDS>
           <IteNumGDS7>2</IteNumGDS7>
           <GooDesGDS23>ItemTwosDescription</GooDesGDS23>
-          <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25001</GroMasGDS46>
           <MetOfPayGDI12>U</MetOfPayGDI12>
           <ComRefNumGIM1>GD2CRN</ComRefNumGIM1>
           <PREADMREFAR2>
             <PreDocTypAR21>GD2PR1</PreDocTypAR21>
             <PreDocRefAR26>GD2PR1Ref</PreDocRefAR26>
-            <PreDocRefLNG>EN</PreDocRefLNG>
             <ComOfInfAR29>GD2PR1Info</ComOfInfAR29>
-            <ComOfInfAR29LNG>EN</ComOfInfAR29LNG>
           </PREADMREFAR2>
           <PRODOCDC2>
             <DocTypDC21>G2D1</DocTypDC21>
             <DocRefDC23>G2D1Ref</DocRefDC23>
-            <DocRefDCLNG>EN</DocRefDCLNG>
             <ComOfInfDC25>G2D1Info</ComOfInfDC25>
-            <ComOfInfDC25LNG>EN</ComOfInfDC25LNG>
           </PRODOCDC2>
           <SPEMENMT2>
             <AddInfMT21>GD2S1Info</AddInfMT21>
@@ -504,7 +483,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCO223>ConorL3</PosCodCO223>
             <CitCO224>ConorLine2</CitCO224>
             <CouCO225>GB</CouCO225>
-            <NADLNGGTCO>EN</NADLNGGTCO>
           </TRACONCO2>
           <TRACONCE2>
             <NamCE27>ConeeName</NamCE27>
@@ -512,7 +490,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCE223>ConeeL3</PosCodCE223>
             <CitCE224>ConeeLine2</CitCE224>
             <CouCE225>GB</CouCE225>
-            <NADLNGGICE>EN</NADLNGGICE>
           </TRACONCE2>
           <CONNR2>
             <ConNumNR21>GD2CN1NUM1</ConNumNR21>
@@ -524,7 +501,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <MarNumOfPacGS21>GD2PK2MK</MarNumOfPacGS21>
             <KinOfPacGS23>NE</KinOfPacGS23>
             <NumOfPieGS25>12</NumOfPieGS25>
-            <NumOfPacGS24>23</NumOfPacGS24>
           </PACGS2>
           <PACGS2>
             <MarNumOfPacGS21>GD2PK3MK</MarNumOfPacGS21>
@@ -537,7 +513,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodTRACORSECGOO026>GD2CONL1</PosCodTRACORSECGOO026>
             <CitTRACORSECGOO022>GD2CONORL2</CitTRACORSECGOO022>
             <CouCodTRACORSECGOO023>GB</CouCodTRACORSECGOO023>
-            <TRACORSECGOO021LNG>EN</TRACORSECGOO021LNG>
           </TRACORSECGOO021>
           <TRACONSECGOO013>
             <NamTRACONSECGOO017>GD2SECCONEEName</NamTRACONSECGOO017>
@@ -545,7 +520,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodTRACONSECGOO018>GD2CEEL1</PosCodTRACONSECGOO018>
             <CityTRACONSECGOO014>GD2CONEEL2</CityTRACONSECGOO014>
             <CouCodTRACONSECGOO015>GB</CouCodTRACONSECGOO015>
-            <TRACONSECGOO013LNG>EN</TRACONSECGOO013LNG>
           </TRACONSECGOO013>
         </GOOITEGDS>
         <ITI>
@@ -678,10 +652,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <InlTraModHEA75>3</InlTraModHEA75>
           <TraModAtBorHEA76>3</TraModAtBorHEA76>
           <IdeOfMeaOfTraAtDHEA78>SomeIdAtDeparture</IdeOfMeaOfTraAtDHEA78>
-          <IdeOfMeaOfTraAtDHEA78LNG>EN</IdeOfMeaOfTraAtDHEA78LNG>
           <NatOfMeaOfTraAtDHEA80>ND</NatOfMeaOfTraAtDHEA80>
           <IdeOfMeaOfTraCroHEA85>IDCBP</IdeOfMeaOfTraCroHEA85>
-          <IdeOfMeaOfTraCroHEA85LNG>EN</IdeOfMeaOfTraCroHEA85LNG>
           <NatOfMeaOfTraCroHEA87>NC</NatOfMeaOfTraCroHEA87>
           <TypOfMeaOfTraCroHEA88>8</TypOfMeaOfTraCroHEA88>
           <ConIndHEA96>0</ConIndHEA96>
@@ -692,10 +664,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <TotGroMasHEA307>12131415</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
-          <DecPlaHEA394LNG>EN</DecPlaHEA394LNG>
         </HEAHEA>
         <TRAPRIPC1>
-          <NADLNGPC>EN</NADLNGPC>
           <TINPC159>PRINCEORI</TINPC159>
         </TRAPRIPC1>
         <TRACONCO1>
@@ -704,7 +674,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodCO123>ConorL3</PosCodCO123>
           <CitCO124>ConorLine2</CitCO124>
           <CouCO125>CN</CouCO125>
-          <TRACONCO1LNG>EN</TRACONCO1LNG>
         </TRACONCO1>
         <TRACONCE1>
           <NamCE17>ConsigneeName</NamCE17>
@@ -712,7 +681,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodCE123>ConeeL3</PosCodCE123>
           <CitCE124>ConeeLine2</CitCE124>
           <CouCE125>CN</CouCE125>
-          <NADLNGCE>EN</NADLNGCE>
         </TRACONCE1>
         <CUSOFFDEPEPT>
           <RefNumEPT1>OOD1234A</RefNumEPT1>
@@ -739,7 +707,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         <GOOITEGDS>
           <IteNumGDS7>1</IteNumGDS7>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25000</GroMasGDS46>
           <PACGS2>
             <KinOfPacGS23>VQ</KinOfPacGS23>
@@ -747,7 +714,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PACGS2>
             <MarNumOfPacGS21>GD1PK2MK</MarNumOfPacGS21>
             <KinOfPacGS23>NE</KinOfPacGS23>
-            <NumOfPacGS24>23</NumOfPacGS24>
             <NumOfPieGS25>12</NumOfPieGS25>
           </PACGS2>
           <PACGS2>
@@ -941,7 +907,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
           <AgrLocOfGooHEA39>Pre-lodge</AgrLocOfGooHEA39>
-          <AgrLocOfGooHEA39LNG>EN</AgrLocOfGooHEA39LNG>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
           <CusSubPlaHEA66>Pre-lodge</CusSubPlaHEA66>
@@ -956,10 +921,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <TotGroMasHEA307>12131415</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
-          <DecPlaHEA394LNG>EN</DecPlaHEA394LNG>
           <SecHEA358>1</SecHEA358>
           <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
-          <CodPlUnHEA357LNG>EN</CodPlUnHEA357LNG>
         </HEAHEA>
         <TRAPRIPC1>
           <NamPC17>PrincipalName</NamPC17>
@@ -967,7 +930,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodPC123>AA1 1AA</PosCodPC123>
           <CitPC124>PrincipalTown</CitPC124>
           <CouPC125>GB</CouPC125>
-          <NADLNGPC>EN</NADLNGPC>
         </TRAPRIPC1>
         <TRACONCO1>
           <NamCO17>ConsignorName</NamCO17>
@@ -975,7 +937,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodCO123>ConorL3</PosCodCO123>
           <CitCO124>ConorLine2</CitCO124>
           <CouCO125>CN</CouCO125>
-          <TRACONCO1LNG>EN</TRACONCO1LNG>
           <TINCO159>ConorEori</TINCO159>
         </TRACONCO1>
         <TRACONCE1>
@@ -984,7 +945,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodCE123>ConeeL3</PosCodCE123>
           <CitCE124>ConeeLine2</CitCE124>
           <CouCE125>CN</CouCE125>
-          <NADLNGCE>EN</NADLNGCE>
           <TINCE159>ConeeEori</TINCE159>
         </TRACONCE1>
         <CUSOFFDEPEPT>
@@ -1000,13 +960,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         <REPREP>
           <NamREP5>John Doe</NamREP5>
           <RepCapREP18>direct</RepCapREP18>
-          <RepCapREP18LNG>EN</RepCapREP18LNG>
         </REPREP>
         <SEAINFSLI>
           <SeaNumSLI2>1</SeaNumSLI2>
           <SEAIDSID>
             <SeaIdeSID1>SEAL1</SeaIdeSID1>
-            <SeaIdeSID1LNG>EN</SeaIdeSID1LNG>
           </SEAIDSID>
         </SEAINFSLI>
         <GUAGUA>
@@ -1027,7 +985,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>M</MetOfPayGDI12>
@@ -1036,26 +993,20 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR1</PreDocTypAR21>
             <PreDocRefAR26>GD1PR1Ref</PreDocRefAR26>
-            <PreDocRefLNG>EN</PreDocRefLNG>
             <ComOfInfAR29>GD1PR1Info</ComOfInfAR29>
-            <ComOfInfAR29LNG>EN</ComOfInfAR29LNG>
           </PREADMREFAR2>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR2</PreDocTypAR21>
             <PreDocRefAR26>GD1PR2Ref</PreDocRefAR26>
-            <PreDocRefLNG>EN</PreDocRefLNG>
           </PREADMREFAR2>
           <PRODOCDC2>
             <DocTypDC21>G1D1</DocTypDC21>
             <DocRefDC23>G1D1Ref</DocRefDC23>
-            <DocRefDCLNG>EN</DocRefDCLNG>
             <ComOfInfDC25>G1D1Info</ComOfInfDC25>
-            <ComOfInfDC25LNG>EN</ComOfInfDC25LNG>
           </PRODOCDC2>
           <PRODOCDC2>
             <DocTypDC21>G1D2</DocTypDC21>
             <DocRefDC23>G1D2Ref</DocRefDC23>
-            <DocRefDCLNG>EN</DocRefDCLNG>
           </PRODOCDC2>
           <SPEMENMT2>
             <AddInfMT21>10000EURGUA1Ref</AddInfMT21>
@@ -1085,7 +1036,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PACGS2>
             <MarNumOfPacGS21>GD1PK2MK</MarNumOfPacGS21>
             <KinOfPacGS23>NE</KinOfPacGS23>
-            <NumOfPacGS24>23</NumOfPacGS24>
             <NumOfPieGS25>12</NumOfPieGS25>
           </PACGS2>
           <PACGS2>
@@ -1103,7 +1053,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodTRACORSEC042>SecCorL3</PosCodTRACORSEC042>
           <CitTRACORSEC038>SecConorLine2</CitTRACORSEC038>
           <CouCodTRACORSEC039>CN</CouCodTRACORSEC039>
-          <TRACORSEC037LNG>EN</TRACORSEC037LNG>
         </TRACORSEC037>
         <TRACONSEC029>
           <NameTRACONSEC033>SafeSecName</NameTRACONSEC033>
@@ -1111,7 +1060,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodTRACONSEC034>SecCeeL3</PosCodTRACONSEC034>
           <CitTRACONSEC030>SecConeeLine2</CitTRACONSEC030>
           <CouCodTRACONSEC031>CN</CouCodTRACONSEC031>
-          <TRACONSEC029LNG>EN</TRACONSEC029LNG>
         </TRACONSEC029>
       </CC015B>
 
@@ -1302,7 +1250,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
           <AgrLocOfGooHEA39>CUSAPPLOC</AgrLocOfGooHEA39>
-          <AgrLocOfGooHEA39LNG>EN</AgrLocOfGooHEA39LNG>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
           <CusSubPlaHEA66>CUSAPPLOC</CusSubPlaHEA66>
@@ -1317,7 +1264,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <TotGroMasHEA307>12131415</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
-          <DecPlaHEA394LNG>EN</DecPlaHEA394LNG>
           <SpeCirIndHEA1>E</SpeCirIndHEA1>
           <ComRefNumHEA>COMREFALL</ComRefNumHEA>
           <SecHEA358>1</SecHEA358>
@@ -1328,7 +1274,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodPC123>AA1 1AA</PosCodPC123>
           <CitPC124>PrincipalTown</CitPC124>
           <CouPC125>GB</CouPC125>
-          <NADLNGPC>EN</NADLNGPC>
         </TRAPRIPC1>
         <CUSOFFDEPEPT>
           <RefNumEPT1>OOD1234A</RefNumEPT1>
@@ -1343,17 +1288,14 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         <REPREP>
           <NamREP5>John Doe</NamREP5>
           <RepCapREP18>direct</RepCapREP18>
-          <RepCapREP18LNG>EN</RepCapREP18LNG>
         </REPREP>
         <SEAINFSLI>
           <SeaNumSLI2>2</SeaNumSLI2>
           <SEAIDSID>
             <SeaIdeSID1>SEAL1</SeaIdeSID1>
-            <SeaIdeSID1LNG>EN</SeaIdeSID1LNG>
           </SEAIDSID>
           <SEAIDSID>
             <SeaIdeSID1>SEAL2</SeaIdeSID1>
-            <SeaIdeSID1LNG>EN</SeaIdeSID1LNG>
           </SEAIDSID>
         </SEAINFSLI>
         <GUAGUA>
@@ -1374,7 +1316,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GooDesGDS23LNG>EN</GooDesGDS23LNG>
           <GroMasGDS46>25000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>W</MetOfPayGDI12>
@@ -1382,26 +1323,20 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR1</PreDocTypAR21>
             <PreDocRefAR26>GD1PR1Ref</PreDocRefAR26>
-            <PreDocRefLNG>EN</PreDocRefLNG>
             <ComOfInfAR29>GD1PR1Info</ComOfInfAR29>
-            <ComOfInfAR29LNG>EN</ComOfInfAR29LNG>
           </PREADMREFAR2>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR2</PreDocTypAR21>
             <PreDocRefAR26>GD1PR2Ref</PreDocRefAR26>
-            <PreDocRefLNG>EN</PreDocRefLNG>
           </PREADMREFAR2>
           <PRODOCDC2>
             <DocTypDC21>G1D1</DocTypDC21>
             <DocRefDC23>G1D1Ref</DocRefDC23>
-            <DocRefDCLNG>EN</DocRefDCLNG>
             <ComOfInfDC25>G1D1Info</ComOfInfDC25>
-            <ComOfInfDC25LNG>EN</ComOfInfDC25LNG>
           </PRODOCDC2>
           <PRODOCDC2>
             <DocTypDC21>G1D2</DocTypDC21>
             <DocRefDC23>G1D2Ref</DocRefDC23>
-            <DocRefDCLNG>EN</DocRefDCLNG>
           </PRODOCDC2>
           <SPEMENMT2>
             <AddInfMT21>10000EURGUA1Ref</AddInfMT21>
@@ -1425,7 +1360,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCO223>ConorL3</PosCodCO223>
             <CitCO224>ConorLine2</CitCO224>
             <CouCO225>GA</CouCO225>
-            <NADLNGGTCO>EN</NADLNGGTCO>
             <TINCO259>Conor123</TINCO259>
           </TRACONCO2>
           <TRACONCE2>
@@ -1434,7 +1368,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <PosCodCE223>ConeeL3</PosCodCE223>
             <CitCE224>ConeeLine2</CitCE224>
             <CouCE225>GA</CouCE225>
-            <NADLNGGICE>EN</NADLNGGICE>
             <TINCE259>Conee123</TINCE259>
           </TRACONCE2>
           <CONNR2>
@@ -1449,7 +1382,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PACGS2>
             <MarNumOfPacGS21>GD1PK2MK</MarNumOfPacGS21>
             <KinOfPacGS23>NE</KinOfPacGS23>
-            <NumOfPacGS24>23</NumOfPacGS24>
             <NumOfPieGS25>12</NumOfPieGS25>
           </PACGS2>
           <PACGS2>
@@ -1467,7 +1399,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <PosCodCARTRA121>CarAddL3</PosCodCARTRA121>
           <CitCARTRA789>CarAddL2</CitCARTRA789>
           <CouCodCARTRA587>CA</CouCodCARTRA587>
-          <NADCARTRA121>EN</NADCARTRA121>
         </CARTRA100>
         <TRACORSEC037>
           <TINTRACORSEC044>SafeSecConorEori</TINTRACORSEC044>
