@@ -21,7 +21,7 @@ import cats.implicits._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
 import models.DeclarationType.Option2
 import models.Index
-import models.reference.CountryCode
+import models.reference.{CountryCode, CountryOfDispatch}
 import pages.addItems._
 import pages.{CountryOfDispatchPage, DeclarationTypePage}
 
@@ -32,9 +32,6 @@ final case class PreviousReferences(
 )
 
 object PreviousReferences {
-
-  val nonEUCountries =
-    Seq(CountryCode("AD"), CountryCode("IS"), CountryCode("LI"), CountryCode("NO"), CountryCode("SM"), CountryCode("SJ"), CountryCode("CH"))
 
   def previousReferenceReader(itemIndex: Index, referenceIndex: Index): UserAnswersReader[PreviousReferences] = {
 
@@ -55,7 +52,7 @@ object PreviousReferences {
       DeclarationTypePage.reader,
       CountryOfDispatchPage.reader
     ).tupled.flatMap {
-      case (Option2, code) if nonEUCountries.contains(code) =>
+      case (Option2, CountryOfDispatch(_, false)) =>
         allPreviousReferencesReader(itemIndex)
       case _ =>
         AddAdministrativeReferencePage(itemIndex).reader.flatMap { // Optional reader if any other condition

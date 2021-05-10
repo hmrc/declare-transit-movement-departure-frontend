@@ -31,7 +31,6 @@ import models.journeyDomain.MovementDetails.{
   SimplifiedMovementDetails
 }
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
-import models.journeyDomain.PreviousReferences.nonEUCountries
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.journeyDomain.traderDetails._
@@ -444,8 +443,8 @@ trait JourneyModelGenerators {
       safetyAndSecurity.commercialReferenceNumber.isDefined
 
     val isPreviousReferenceMandatory: Boolean = (movementDetails.declarationType, routeDetails.countryOfDispatch) match {
-      case (Option2, code) if nonEUCountries.contains(code) => true
-      case _                                                => false
+      case (Option2, CountryOfDispatch(_, false)) => true
+      case _                                      => false
     }
 
     for {
