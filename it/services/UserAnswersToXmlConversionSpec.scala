@@ -169,11 +169,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.containers.ContainerNumberPage(firstGoodItem, Index(0)))("GD1CN1NUM1")
         .unsafeSetVal(pages.addItems.containers.ContainerNumberPage(firstGoodItem, Index(1)))("GD1CN2NUMS")
         .unsafeSetVal(pages.addItems.specialMentions.AddSpecialMentionPage(firstGoodItem))(true)
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1SPMT1")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1S1")
         .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(0)))("GD1SPMT1Info")
         .unsafeSetVal(pages.addItems.specialMentions.AddAnotherSpecialMentionPage(firstGoodItem))(true)
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("DG0")
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(0)))("GD1S2Info")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(1)))("DG0")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(1)))("GD1S2Info")
         .unsafeSetVal(pages.addItems.specialMentions.AddAnotherSpecialMentionPage(firstGoodItem))(false)
         .unsafeSetVal(pages.addItems.AddDocumentsPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.DocumentTypePage(firstGoodItem, Index(0)))("G1D1")
@@ -260,9 +260,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.AddAnotherItemPage)(false)
         /*
       * Goods Summary
-      * TODO: remove DeclarePackagesPage once ticket to remove is played and ensure it still passes
       */
-        .unsafeSetVal(pages.DeclarePackagesPage)(true)
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
@@ -307,7 +305,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <AgrLocOfGooHEA39LNG>EN</AgrLocOfGooHEA39LNG>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
-          <CusSubPlaHEA66>CUSAPPLOC</CusSubPlaHEA66>
+          <CusSubPlaHEA66>Pre-lodge</CusSubPlaHEA66>
           <InlTraModHEA75>4</InlTraModHEA75>
           <TraModAtBorHEA76>4</TraModAtBorHEA76>
           <NatOfMeaOfTraAtDHEA80>ND</NatOfMeaOfTraAtDHEA80>
@@ -421,6 +419,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <SPEMENMT2>
             <AddInfMT21>500GBPGUA2Ref</AddInfMT21>
             <AddInfCodMT23>CAL</AddInfCodMT23>
+          </SPEMENMT2>
+          <SPEMENMT2>
+            <AddInfMT21>GD1SPMT1Info</AddInfMT21>
+            <AddInfCodMT23>GD1S1</AddInfCodMT23>
           </SPEMENMT2>
           <SPEMENMT2>
             <AddInfMT21>GD1S2Info</AddInfMT21>
@@ -638,16 +640,12 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(2)))(PackageType("BAG", "GD1PKG3"))
         .unsafeSetVal(pages.addItems.HowManyPackagesPage(firstGoodItem, Index(2)))(2)
         .unsafeSetVal(pages.addItems.DeclareMarkPage(firstGoodItem, Index(2)))("GD1PK3MK")
-        .unsafeSetVal(pages.addItems.containers.ContainerNumberPage(firstGoodItem, Index(0)))("GD1CN1NUM1")
-        .unsafeSetVal(pages.addItems.containers.ContainerNumberPage(firstGoodItem, Index(1)))("GD1CN2NUMS")
         .unsafeSetVal(pages.addItems.specialMentions.AddSpecialMentionPage(firstGoodItem))(false)
         .unsafeSetVal(pages.addItems.AddDocumentsPage(firstGoodItem))(false)
         .unsafeSetVal(pages.addItems.AddAdministrativeReferencePage(firstGoodItem))(false)
         /*
         * Goods Summary
-        * TODO: remove DeclarePackagesPage when story played
         */
-        .unsafeSetVal(pages.DeclarePackagesPage)(true)
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.AuthorisedLocationCodePage)("AuthLocationCode")
@@ -677,7 +675,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
           <AutLocOfGooCodHEA41>AuthLocationCode</AutLocOfGooCodHEA41>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
-          <CusSubPlaHEA66>AuthLocationCode</CusSubPlaHEA66>
           <InlTraModHEA75>3</InlTraModHEA75>
           <TraModAtBorHEA76>3</TraModAtBorHEA76>
           <IdeOfMeaOfTraAtDHEA78>SomeIdAtDeparture</IdeOfMeaOfTraAtDHEA78>
@@ -870,11 +867,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.containers.ContainerNumberPage(firstGoodItem, Index(0)))("GD1CN1NUM1")
         .unsafeSetVal(pages.addItems.containers.ContainerNumberPage(firstGoodItem, Index(1)))("GD1CN2NUMS")
         .unsafeSetVal(pages.addItems.specialMentions.AddSpecialMentionPage(firstGoodItem))(true)
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1SPMT1")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1S1")
         .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(0)))("GD1SPMT1Info")
         .unsafeSetVal(pages.addItems.specialMentions.AddAnotherSpecialMentionPage(firstGoodItem))(true)
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1S2")
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(0)))("GD1S2Info")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(1)))("GD1S2")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(1)))("GD1S2Info")
         .unsafeSetVal(pages.addItems.specialMentions.AddAnotherSpecialMentionPage(firstGoodItem))(false)
         .unsafeSetVal(pages.addItems.AddDocumentsPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.DocumentTypePage(firstGoodItem, Index(0)))("G1D1")
@@ -907,9 +904,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.AddAnotherItemPage)(false)
         /*
         * Goods Summary
-        * TODO remove DeclarePackagesPage when done
         */
-        .unsafeSetVal(pages.DeclarePackagesPage)(true)
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
@@ -930,10 +925,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.LiabilityAmountPage(Index(1)))("500")
         .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
 
-      /**
-        * TODO:
-        *   Nature of something missing?
-        * */
       val expectedXml = <CC015B>
         <SynIdeMES1>UNOC</SynIdeMES1>
         <SynVerNumMES2>3</SynVerNumMES2>
@@ -953,6 +944,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <AgrLocOfGooHEA39LNG>EN</AgrLocOfGooHEA39LNG>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
+          <CusSubPlaHEA66>Pre-lodge</CusSubPlaHEA66>
           <InlTraModHEA75>5</InlTraModHEA75>
           <TraModAtBorHEA76>5</TraModAtBorHEA76>
           <TypOfMeaOfTraCroHEA88>5</TypOfMeaOfTraCroHEA88>
@@ -1074,6 +1066,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
             <AddInfCodMT23>CAL</AddInfCodMT23>
           </SPEMENMT2>
           <SPEMENMT2>
+            <AddInfMT21>GD1SPMT1Info</AddInfMT21>
+            <AddInfCodMT23>GD1S1</AddInfCodMT23>
+          </SPEMENMT2>
+          <SPEMENMT2>
             <AddInfMT21>GD1S2Info</AddInfMT21>
             <AddInfCodMT23>GD1S2</AddInfCodMT23>
           </SPEMENMT2>
@@ -1137,7 +1133,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * General Information Section
         * */
         .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
-        .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(true)
+        .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(false)
         .unsafeSetVal(pages.ContainersUsedPage)(true)
         .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
         .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(true)
@@ -1231,11 +1227,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.containers.ContainerNumberPage(firstGoodItem, Index(0)))("GD1CN1NUM1")
         .unsafeSetVal(pages.addItems.containers.ContainerNumberPage(firstGoodItem, Index(1)))("GD1CN2NUMS")
         .unsafeSetVal(pages.addItems.specialMentions.AddSpecialMentionPage(firstGoodItem))(true)
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1SPMT1")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1S1")
         .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(0)))("GD1SPMT1Info")
         .unsafeSetVal(pages.addItems.specialMentions.AddAnotherSpecialMentionPage(firstGoodItem))(true)
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(0)))("GD1S2")
-        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(0)))("GD1S2Info")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionTypePage(firstGoodItem, Index(1)))("GD1S2")
+        .unsafeSetVal(pages.addItems.specialMentions.SpecialMentionAdditionalInfoPage(firstGoodItem, Index(1)))("GD1S2Info")
         .unsafeSetVal(pages.addItems.specialMentions.AddAnotherSpecialMentionPage(firstGoodItem))(false)
         .unsafeSetVal(pages.addItems.AddDocumentsPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.DocumentTypePage(firstGoodItem, Index(0)))("G1D1")
@@ -1268,7 +1264,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         /*
         * Goods Summary
         */
-        .unsafeSetVal(pages.DeclarePackagesPage)(true)
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
@@ -1306,7 +1301,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <RefNumHEA4>TestRefNumber</RefNumHEA4>
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
-          <AgrLocOfGooHEA39>Pre-lodge</AgrLocOfGooHEA39>
+          <AgrLocOfGooHEA39>CUSAPPLOC</AgrLocOfGooHEA39>
           <AgrLocOfGooHEA39LNG>EN</AgrLocOfGooHEA39LNG>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
@@ -1415,6 +1410,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <SPEMENMT2>
             <AddInfMT21>500GBPGUA2Ref</AddInfMT21>
             <AddInfCodMT23>CAL</AddInfCodMT23>
+          </SPEMENMT2>
+          <SPEMENMT2>
+            <AddInfMT21>GD1SPMT1Info</AddInfMT21>
+            <AddInfCodMT23>GD1S1</AddInfCodMT23>
           </SPEMENMT2>
           <SPEMENMT2>
             <AddInfMT21>GD1S2Info</AddInfMT21>
