@@ -20,7 +20,6 @@ import cats.data.NonEmptyList
 import models.Convert
 import models.GuaranteeType.guaranteeReferenceRoute
 import models.journeyDomain.GuaranteeDetails
-import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
 
 private[services] object SpecialMentionGuaranteeLiabilityConversion

@@ -16,12 +16,19 @@
 
 package models.journeyDomain
 
-import play.api.libs.json.{Json, OWrites}
+import cats.implicits.{catsSyntaxApplicativeId, _}
 
-final case class LiabilityAmount(amount: String, currencyCode: CurrencyCode) {
-  override def toString: String = s"$amount$currencyCode"
+sealed trait LiabilityAmount
+
+object DefaultLiabilityAmount extends LiabilityAmount {
+  private val amount: String       = "10000"
+  private val currencyCode: String = "EUR"
+  override def toString: String    = s"$amount$currencyCode"
+
+  implicit val readDefaultLiabilityAmount: UserAnswersReader[DefaultLiabilityAmount.type] =
+    DefaultLiabilityAmount.pure[UserAnswersReader]
 }
 
-object LiabilityAmount {
-  implicit val writes: OWrites[LiabilityAmount] = Json.writes[LiabilityAmount]
+final case class OtherLiabilityAmount(amount: String, currencyCode: CurrencyCode) extends LiabilityAmount {
+  override def toString: String = s"$amount$currencyCode"
 }

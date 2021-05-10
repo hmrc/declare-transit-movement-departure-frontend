@@ -21,7 +21,7 @@ import cats.data.NonEmptyList
 import generators.{JourneyModelGenerators, ModelGenerators}
 import models.GuaranteeType.GuaranteeWaiver
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
-import models.journeyDomain.SpecialMentionDomain
+import models.journeyDomain.{DefaultLiabilityAmount, SpecialMentionDomain}
 import models.messages.goodsitem.{SpecialMentionExportFromGB, SpecialMentionGuaranteeLiabilityAmount, SpecialMentionNoCountry}
 
 class SpecialMentionConversionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with ModelGenerators {
@@ -31,10 +31,10 @@ class SpecialMentionConversionSpec extends SpecBase with GeneratorSpec with Jour
     "apply" - {
 
       val specialMentions     = Some(NonEmptyList(SpecialMentionDomain("DG0", "Additional info"), List.empty))
-      val guaranteeReferences = NonEmptyList(GuaranteeReference(GuaranteeWaiver, "AB123", GuaranteeReference.defaultLiabilityAmount, "****"), List.empty)
+      val guaranteeReferences = NonEmptyList(GuaranteeReference(GuaranteeWaiver, "AB123", DefaultLiabilityAmount, "****"), List.empty)
 
       val expectedSpecialMention                = SpecialMentionExportFromGB("DG0", "Additional info")
-      val expectedSpecialMentionLiabilityAmount = SpecialMentionGuaranteeLiabilityAmount("CAL", s"${GuaranteeReference.defaultLiabilityAmount.amount}EURAB123")
+      val expectedSpecialMentionLiabilityAmount = SpecialMentionGuaranteeLiabilityAmount("CAL", s"10000EURAB123")
 
       "must add SpecialMentionGuaranteeLiabilityAmount to the first special mention in a list if index is 0" in {
 

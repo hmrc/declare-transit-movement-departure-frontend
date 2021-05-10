@@ -544,7 +544,7 @@ trait JourneyModelGenerators {
       for {
         amount   <- nonEmptyString
         currency <- Gen.const(CurrencyCode.GBP)
-      } yield LiabilityAmount(amount, currency)
+      } yield OtherLiabilityAmount(amount, currency)
     }
 
   implicit lazy val arbitraryGuaranteeReference: Arbitrary[GuaranteeReference] =
