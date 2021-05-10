@@ -43,7 +43,6 @@ class SealsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks 
                 id =>
                   <SEAIDSID>
                       <SeaIdeSID1>{id}</SeaIdeSID1>
-                      <SeaIdeSID1LNG>{LanguageCodeEnglish.code}</SeaIdeSID1LNG>
                     </SEAIDSID>
               }
             }

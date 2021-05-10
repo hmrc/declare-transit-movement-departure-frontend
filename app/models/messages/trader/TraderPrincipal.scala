@@ -77,7 +77,6 @@ object TraderPrincipalWithEori {
               <CouPC125>{countryCode}</CouPC125>
           }
       }
-        <NADLNGPC>{LanguageCodeEnglish.code}</NADLNGPC>
         <TINPC159>{trader.eori}</TINPC159>
       </TRAPRIPC1>
   }
@@ -109,7 +108,6 @@ object TraderPrincipalWithoutEori {
         <PosCodPC123>{trader.postCode}</PosCodPC123>
         <CitPC124>{escapeXml(trader.city)}</CitPC124>
         <CouPC125>{trader.countryCode}</CouPC125>
-        <NADLNGPC>{LanguageCodeEnglish.code}</NADLNGPC>
       </TRAPRIPC1>
   }
 }

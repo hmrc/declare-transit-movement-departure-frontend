@@ -47,13 +47,11 @@ class ProducedDocumentSpec
 
           val complementOfInformation = producedDocument.complementOfInformation.fold(NodeSeq.Empty)(
             value => <ComOfInfDC25>{value}</ComOfInfDC25>
-            <ComOfInfDC25LNG>EN</ComOfInfDC25LNG>
           )
 
           val expectedResult = <PRODOCDC2>
             <DocTypDC21>{producedDocument.documentType}</DocTypDC21>
             {reference}
-            <DocRefDCLNG>EN</DocRefDCLNG>
             {complementOfInformation}
           </PRODOCDC2>
 

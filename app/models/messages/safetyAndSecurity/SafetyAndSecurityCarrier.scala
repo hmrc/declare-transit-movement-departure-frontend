@@ -72,7 +72,6 @@ object SafetyAndSecurityCarrierWithoutEori {
         <PosCodCARTRA121>{carrier.postCode}</PosCodCARTRA121>
         <CitCARTRA789>{carrier.city}</CitCARTRA789>
         <CouCodCARTRA587>{carrier.countryCode}</CouCodCARTRA587>
-        <NADCARTRA121>{LanguageCodeEnglish.code}</NADCARTRA121>
       </CARTRA100>
   }
 }

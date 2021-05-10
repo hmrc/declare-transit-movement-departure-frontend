@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package repositories
 
-import javax.inject.Inject
+private[repositories] object IndexLogMessages {
 
-import forms.mappings.Mappings
-import play.api.data.Form
+  def indexManagerResultLogMessage(collectionName: String, indexName: String, result: Boolean): String =
+    if (result) {
+      s"[IndexManagement][$collectionName] New index created for `$indexName`"
+    } else {
+      s"[IndexManagement][$collectionName] Index already for `$indexName`"
+    }
 
-class DeclarePackagesFormProvider @Inject() extends Mappings {
+  def indexManagerFailedKey(collectionName: String) = s"[IndexManagement][$collectionName]"
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("declarePackages.error.required")
-    )
 }

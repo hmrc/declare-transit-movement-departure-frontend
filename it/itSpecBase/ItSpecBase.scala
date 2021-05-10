@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package pages
+package itSpecBase
 
-import pages.behaviours.PageBehaviours
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 
-class DeclarePackagesPageSpec extends PageBehaviours {
-
-  "DeclarePackagesPage" - {
-
-    beRetrievable[Boolean](DeclarePackagesPage)
-
-    beSettable[Boolean](DeclarePackagesPage)
-
-    beRemovable[Boolean](DeclarePackagesPage)
-  }
-}
+trait ItSpecBase extends AnyFreeSpec with Matchers with ScalaFutures with IntegrationPatience

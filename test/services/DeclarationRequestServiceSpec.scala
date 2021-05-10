@@ -16,28 +16,23 @@
 
 package services
 
+import java.time.LocalDateTime
+
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
-import cats.data.NonEmptyList
 import generators.{JourneyModelGenerators, ModelGenerators}
-import models.journeyDomain.GuaranteeDetails.GuaranteeReference
+import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
+import models.journeyDomain.MovementDetails.{NormalMovementDetails, SimplifiedMovementDetails}
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
-import models.journeyDomain.traderDetails.ConsignorDetails
-import models.journeyDomain.{EitherType, GuaranteeDetails, JourneyDomain, JourneyDomainSpec, PreTaskListDetails, SpecialMentionDomain}
-import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
-import models.messages.trader.TraderConsignor
-import models.messages.{DeclarationRequest, InterchangeControlReference}
+import models.journeyDomain.{JourneyDomain, JourneyDomainSpec}
+import models.messages.InterchangeControlReference
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
-import java.time.LocalDateTime
-
-import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute, GuaranteeWaiver}
-import org.scalacheck.Gen
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -109,6 +104,108 @@ class DeclarationRequestServiceSpec
               } else {
                 result.right.value.header.secHEA358 mustBe None
               }
+          }
+        }
+      }
+
+      "cusSubPlaHEA66" - {
+
+        "Normal Journey" - {
+
+          "must be set with customs approved location when not defined as prelodge" in {
+
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetails]) {
+              (userAnswers, normalJourneyDomain, normalMovementDetails, normalGoodsSummary) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge                      = false, containersUsed = false)
+                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(Some("customsApprovedLocation")))
+                val updatedJourneyDomain           = normalJourneyDomain.copy(movementDetails                 = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.cusSubPlaHEA66.value mustBe "customsApprovedLocation"
+                result.right.value.header.autLocOfGooCodHEA41 mustBe None
+            }
+          }
+
+          "must be set with prelodge when defined as prelodge" in {
+
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails]) {
+              (userAnswers, normalJourneyDomain, normalMovementDetails) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val movementDetailsWithPrelodge = normalMovementDetails.copy(prelodge      = true, containersUsed = false)
+                val updatedJourneyDomain        = normalJourneyDomain.copy(movementDetails = movementDetailsWithPrelodge)
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.cusSubPlaHEA66.value mustBe "Pre-lodge"
+                result.right.value.header.autLocOfGooCodHEA41 mustBe None
+            }
+          }
+        }
+
+        "Simplified Journey" - {
+
+          "must not be set" in {
+
+            forAll(arb[UserAnswers], arbitrarySimplifiedJourneyDomain) {
+              (userAnswers, simplifiedJourneyDomain) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(simplifiedJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.cusSubPlaHEA66 mustBe None
+            }
+          }
+        }
+      }
+
+      "autLocOfGooCodHEA41" - {
+
+        "Simplified Journey" - {
+
+          "must be set with authorised location code" in {
+
+            forAll(arb[UserAnswers], arbitrarySimplifiedJourneyDomain, arb[GoodSummarySimplifiedDetails]) {
+              (userAnswers, simplifiedJourneyDomain, goodsSummarySimplifiedDetails) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val updatedGoodsSummary  = simplifiedJourneyDomain.goodsSummary.copy(goodSummaryDetails = goodsSummarySimplifiedDetails)
+                val updatedJourneyDomain = simplifiedJourneyDomain.copy(goodsSummary                    = updatedGoodsSummary)
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.autLocOfGooCodHEA41.value mustBe goodsSummarySimplifiedDetails.authorisedLocationCode
+                result.right.value.header.cusSubPlaHEA66 mustBe None
+            }
+          }
+
+        }
+
+        "Normal Journey" - {
+
+          "must not be set" in {
+
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain) {
+              (userAnswers, normalJourneyDomain) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(normalJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.autLocOfGooCodHEA41 mustBe None
+            }
           }
         }
       }
@@ -273,7 +370,7 @@ class DeclarationRequestServiceSpec
         }
       }
 
-      "goodsSummarySimplifiedDetails" - {
+      "goodsSummaryDetails" - {
         "must populate controlResult and authorisedLocationOfGoods when Simplified" in {
 
           forAll(arb[UserAnswers], arbitrarySimplifiedJourneyDomain) {
@@ -290,7 +387,7 @@ class DeclarationRequestServiceSpec
           }
         }
 
-        "must populate not controlResult and authorisedLocationOfGoods when Normal" in {
+        "must not populate controlResult and authorisedLocationOfGoods when Normal" in {
 
           forAll(arb[UserAnswers], arbitraryNormalJourneyDomain) {
             (userAnswers, journeyDomain) =>

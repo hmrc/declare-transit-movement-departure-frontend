@@ -44,7 +44,6 @@ object Representative {
           value => <RepCapREP18>{value}</RepCapREP18>
         }
       }
-        <RepCapREP18LNG>{LanguageCodeEnglish.code}</RepCapREP18LNG>
       </REPREP>
   }
 }

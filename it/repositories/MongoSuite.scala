@@ -19,10 +19,9 @@ package repositories
 import com.typesafe.config.ConfigFactory
 import org.scalatest.TestSuite
 import play.api.Configuration
-import reactivemongo.api.{DefaultDB, MongoConnection, MongoDriver}
+import reactivemongo.api.{AsyncDriver, DefaultDB, MongoConnection, MongoDriver}
 
 import scala.concurrent.Future
-import scala.util.Try
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object MongoSuite {
@@ -31,13 +30,14 @@ object MongoSuite {
     ConfigFactory.load(
       System.getProperty(
         "config.resource"
-      )))
+      )
+    )
+  )
 
-  private lazy val parsedUri: Future[MongoConnection.ParsedURI] = Future.fromTry {
-    MongoConnection.parseURI(config.get[String]("mongodb.uri"))
-  }
+  private lazy val parsedUri: Future[MongoConnection.ParsedURI] =
+    MongoConnection.fromString(config.get[String]("mongodb.uri"))
 
-  lazy val connection: Future[Try[MongoConnection]] = parsedUri.map { MongoDriver().connection(_, strictUri = false) }
+  lazy val connection: Future[MongoConnection] = parsedUri.flatMap(AsyncDriver().connect(_))
 }
 
 trait MongoSuite {
@@ -45,10 +45,9 @@ trait MongoSuite {
 
   def database: Future[DefaultDB] =
     for {
-      uri              <- MongoSuite.parsedUri
-      connectionFuture <- MongoSuite.connection
-      connection       <- Future.fromTry(connectionFuture)
-      database         <- connection.database(uri.db.get)
+      uri        <- MongoSuite.parsedUri
+      connection <- MongoSuite.connection
+      database   <- connection.database(uri.db.get)
     } yield database
 
 }

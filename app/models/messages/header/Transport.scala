@@ -51,14 +51,12 @@ object Transport {
         ) ++
         transport.ideOfMeaOfTraAtDHEA78.fold(NodeSeq.Empty)(
           value => <IdeOfMeaOfTraAtDHEA78>{escapeXml(value)}</IdeOfMeaOfTraAtDHEA78>
-          <IdeOfMeaOfTraAtDHEA78LNG>{LanguageCodeEnglish.code}</IdeOfMeaOfTraAtDHEA78LNG>
         ) ++
         transport.natOfMeaOfTraAtDHEA80.fold(NodeSeq.Empty)(
           value => <NatOfMeaOfTraAtDHEA80>{escapeXml(value)}</NatOfMeaOfTraAtDHEA80>
         ) ++
         transport.ideOfMeaOfTraCroHEA85.fold(NodeSeq.Empty)(
           value => <IdeOfMeaOfTraCroHEA85>{escapeXml(value)}</IdeOfMeaOfTraCroHEA85>
-          <IdeOfMeaOfTraCroHEA85LNG>{LanguageCodeEnglish.code}</IdeOfMeaOfTraCroHEA85LNG>
         ) ++
         transport.natOfMeaOfTraCroHEA87.fold(NodeSeq.Empty)(
           value => <NatOfMeaOfTraCroHEA87>{escapeXml(value)}</NatOfMeaOfTraCroHEA87>

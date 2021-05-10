@@ -203,13 +203,15 @@ class DeclarationRequestService @Inject()(
         case TransitInformation(office, arrivalTime) => CustomsOfficeTransit(office, arrivalTime)
       }.toList
 
-    // TODO confirm if authorisedLocationCode is the same thing (else last case just returns None)
-    def customsSubPlace(goodsSummary: GoodsSummary): Option[String] =
+    def customsSubPlace(movementDetails: MovementDetails, goodsSummary: GoodsSummary): Option[String] =
       goodsSummary.goodSummaryDetails match {
         case GoodsSummary.GoodSummaryNormalDetails(customsApprovedLocation) =>
-          customsApprovedLocation
-        case GoodsSummary.GoodSummarySimplifiedDetails(authorisedLocationCode, _) =>
-          Some(authorisedLocationCode)
+          movementDetails match {
+            case MovementDetails.NormalMovementDetails(_, prelodge, _, _, _) =>
+              if (prelodge) Some("Pre-lodge") else customsApprovedLocation
+            case _ => None
+          }
+        case _ => None
       }
 
     def headerSeals(domainSeals: Seq[SealDomain]): Option[Seals] =
@@ -363,7 +365,7 @@ class DeclarationRequestService @Inject()(
         autLocOfGooCodHEA41 = goodsSummarySimplifiedDetails(goodsSummary.goodSummaryDetails).map(_.authorisedLocationCode),
         plaOfLoaCodHEA46    = goodsSummary.loadingPlace,
         couOfDisCodHEA55    = Some(routeDetails.countryOfDispatch.country.code),
-        cusSubPlaHEA66      = customsSubPlace(goodsSummary),
+        cusSubPlaHEA66      = customsSubPlace(movementDetails, goodsSummary),
         transportDetails = Transport(
           inlTraModHEA75        = Some(transportDetails.inlandMode.code),
           traModAtBorHEA76      = Some(detailsAtBorderMode(transportDetails.detailsAtBorder, transportDetails.inlandMode.code)),

@@ -196,14 +196,13 @@ object SpecialMentionGuaranteeLiabilityAmount {
     case class SpecialMentionGuaranteeLiabilityAmountParseFailure(message: String) extends ParseError
 
     (__ \ "AddInfCodMT23").read[String].flatMap {
-      case "CAL" => {
+      case "CAL" =>
         (__ \ "AddInfMT21").read[String].flatMap {
           liabilityAmount =>
             XmlReader(
               _ => ParseSuccess(SpecialMentionGuaranteeLiabilityAmount("CAL", liabilityAmount))
             )
         }
-      }
       case _ =>
         XmlReader(
           _ => ParseFailure(SpecialMentionGuaranteeLiabilityAmountParseFailure(s"Failed to parse to SpecialMentionGuaranteeLiabilityAmount does not exist"))
@@ -214,8 +213,8 @@ object SpecialMentionGuaranteeLiabilityAmount {
   implicit def writesXml: XMLWrites[SpecialMentionGuaranteeLiabilityAmount] = XMLWrites[SpecialMentionGuaranteeLiabilityAmount] {
     specialMention =>
       <SPEMENMT2>
-        <AddInfCodMT23>CAL</AddInfCodMT23>
         <AddInfMT21>{specialMention.additionalInformationOfLiabilityAmount}</AddInfMT21>
+        <AddInfCodMT23>CAL</AddInfCodMT23>
       </SPEMENMT2>
   }
 

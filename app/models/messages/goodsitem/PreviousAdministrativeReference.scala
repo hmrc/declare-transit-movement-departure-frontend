@@ -45,13 +45,11 @@ object PreviousAdministrativeReference {
     references =>
       val comOfInfAR29 = references.comOfInfAR29.fold(NodeSeq.Empty)(
         value => <ComOfInfAR29>{value}</ComOfInfAR29>
-        <ComOfInfAR29LNG>{LanguageCodeEnglish.code}</ComOfInfAR29LNG>
       )
 
       <PREADMREFAR2>
         <PreDocTypAR21>{references.preDocTypAR21}</PreDocTypAR21>
         <PreDocRefAR26>{references.preDocRefAR26}</PreDocRefAR26>
-        <PreDocRefLNG>{LanguageCodeEnglish.code}</PreDocRefLNG>
         {comOfInfAR29}
       </PREADMREFAR2>
   }

@@ -231,7 +231,7 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         transportDetails    <- arbitrary[Transport]
         conIndHEA96         <- choose(min = 0: Int, 1: Int)
         totNumOfIteHEA305   <- choose(min = 1: Int, 100: Int)
-        totNumOfPacHEA306   <- Gen.option(choose(min = 1: Int, 100: Int))
+        totNumOfPacHEA306   <- Gen.choose(min = 1: Int, 100: Int)
         grossMass           <- Gen.choose(0.0, 99999999.999).map(BigDecimal(_).bigDecimal.setScale(3, BigDecimal.RoundingMode.DOWN))
         decDatHEA383        <- arbitrary[LocalDate]
         decPlaHEA394        <- stringsWithMaxLength(Header.Constants.declarationPlace, alphaNumChar)

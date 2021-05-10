@@ -45,7 +45,6 @@ object Seals {
           id =>
             <SEAIDSID>
                 <SeaIdeSID1>{id}</SeaIdeSID1>
-                <SeaIdeSID1LNG>{LanguageCodeEnglish.code}</SeaIdeSID1LNG>
               </SEAIDSID>
         }
       }

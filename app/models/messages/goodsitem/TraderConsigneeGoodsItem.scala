@@ -52,7 +52,6 @@ object TraderConsigneeGoodsItem {
         <PosCodCE223>{trader.postCode}</PosCodCE223>
         <CitCE224>{escapeXml(trader.city)}</CitCE224>
         <CouCE225>{trader.countryCode}</CouCE225>
-        <NADLNGGICE>{LanguageCodeEnglish.code}</NADLNGGICE>
         {
         trader.eori.fold(NodeSeq.Empty) {
           eori =>
