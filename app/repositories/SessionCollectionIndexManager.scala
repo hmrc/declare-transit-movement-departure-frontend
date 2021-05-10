@@ -16,6 +16,8 @@
 
 package repositories
 
+import logging.Logging
+
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import reactivemongo.api.indexes.IndexType
@@ -28,7 +30,8 @@ private[repositories] class SessionCollectionIndexManagerImpl @Inject()(
   sessionCollection: SessionCollection,
   config: Configuration
 )(implicit ec: ExecutionContext)
-    extends SessionCollectionIndexManager {
+    extends SessionCollectionIndexManager
+    with Logging {
 
   private val cacheTtl = config.get[Int]("mongodb.timeToLiveInSeconds")
 
@@ -38,15 +41,28 @@ private[repositories] class SessionCollectionIndexManagerImpl @Inject()(
     options = BSONDocument("expireAfterSeconds" -> cacheTtl)
   )
 
+  private val eoriIndex = SimpleMongoIndexConfig(
+    key  = Seq("eoriNumber" -> IndexType.Ascending),
+    name = Some("eoriNumber-index")
+  )
+
   val started: Future[Unit] =
-    sessionCollection()
-      .flatMap {
-        _.indexesManager.ensure(lastUpdatedIndex)
-      }
-      .map(
+    (for {
+      collection             <- sessionCollection()
+      lastUpdatedIndexResult <- collection.indexesManager.ensure(lastUpdatedIndex)
+      eoriIndexResult        <- collection.indexesManager.ensure(eoriIndex)
+    } yield {
+      logger.info(IndexLogMessages.indexManagerResultLogMessage(sessionCollection.collectionName, lastUpdatedIndex.name.get, lastUpdatedIndexResult))
+      logger.info(IndexLogMessages.indexManagerResultLogMessage(sessionCollection.collectionName, eoriIndex.name.get, eoriIndexResult))
+    }).map(
         _ => ()
       )
-
+      .recover {
+        case e: Throwable =>
+          val message = IndexLogMessages.indexManagerFailedKey(sessionCollection.collectionName) + " failed with exception"
+          logger.error(message, e)
+          throw e
+      }
 }
 
 private[repositories] trait SessionCollectionIndexManager {

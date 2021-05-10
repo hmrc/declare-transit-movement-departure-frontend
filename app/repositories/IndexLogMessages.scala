@@ -16,23 +16,15 @@
 
 package repositories
 
-import javax.inject.{Inject, Singleton}
-import play.modules.reactivemongo.ReactiveMongoApi
-import reactivemongo.play.json.collection.JSONCollection
+private[repositories] object IndexLogMessages {
 
-import scala.concurrent.{ExecutionContext, Future}
+  def indexManagerResultLogMessage(collectionName: String, indexName: String, result: Boolean): String =
+    if (result) {
+      s"[IndexManagement][$collectionName] New index created for `$indexName`"
+    } else {
+      s"[IndexManagement][$collectionName] Index already for `$indexName`"
+    }
 
-@Singleton
-private[repositories] class SessionCollection @Inject()(mongo: ReactiveMongoApi)(implicit ec: ExecutionContext) extends (() => Future[JSONCollection]) {
-
-  val collectionName = SessionCollection.collectionName
-
-  override def apply(): Future[JSONCollection] = mongo.database.map(_.collection[JSONCollection](collectionName))
-
-}
-
-object SessionCollection {
-
-  val collectionName: String = "user-answers"
+  def indexManagerFailedKey(collectionName: String) = s"[IndexManagement][$collectionName]"
 
 }
