@@ -52,7 +52,7 @@ object PreviousReferences {
       DeclarationTypePage.reader,
       CountryOfDispatchPage.reader
     ).tupled.flatMap {
-      case (Option2, CountryOfDispatch(_, false)) =>
+      case (Option2, CountryOfDispatch(_, true)) =>
         allPreviousReferencesReader(itemIndex)
       case _ =>
         AddAdministrativeReferencePage(itemIndex).reader.flatMap { // Optional reader if any other condition

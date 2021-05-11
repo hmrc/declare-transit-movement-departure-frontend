@@ -443,8 +443,8 @@ trait JourneyModelGenerators {
       safetyAndSecurity.commercialReferenceNumber.isDefined
 
     val isPreviousReferenceMandatory: Boolean = (movementDetails.declarationType, routeDetails.countryOfDispatch) match {
-      case (Option2, CountryOfDispatch(_, false)) => true
-      case _                                      => false
+      case (Option2, CountryOfDispatch(_, true)) => true
+      case _                                     => false
     }
 
     for {
@@ -457,7 +457,7 @@ trait JourneyModelGenerators {
       producedDocuments         <- if (isDocumentTypeMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) } else Gen.const(None)
       methodOfPayment           <- arbitrary[String]
       commercialReferenceNumber <- arbitrary[String]
-      previousReferences        <- if (isPreviousReferenceMandatory) nonEmptyListOf[PreviousReferences](1).map(Some(_)) else Gen.const(None)
+      previousReferences        <- Gen.some(nonEmptyListOf[PreviousReferences](1))
       itemSecurityTraderDetails <- if (addSafetyAndSecurity) arbitrary[ItemsSecurityTraderDetails].map {
         itemsSecurityTraderDetails =>
           val setMethodOfPayment = safetyAndSecurity.paymentMethod match {
