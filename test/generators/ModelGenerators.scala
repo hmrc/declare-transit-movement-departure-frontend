@@ -110,12 +110,12 @@ trait ModelGenerators {
   lazy val genCountryOfDispatchIsEu: Gen[CountryOfDispatch] =
     for {
       code <- arbitrary[CountryCode]
-    } yield CountryOfDispatch(code, true)
+    } yield CountryOfDispatch(code, false)
 
   lazy val genCountryOfDispatchNonEu: Gen[CountryOfDispatch] =
     for {
       code <- arbitrary[CountryCode]
-    } yield CountryOfDispatch(code, false)
+    } yield CountryOfDispatch(code, true)
 
   implicit lazy val arbitraryCountryOfDispatch: Arbitrary[CountryOfDispatch] = {
     Arbitrary {

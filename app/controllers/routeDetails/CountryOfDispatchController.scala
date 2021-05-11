@@ -80,8 +80,8 @@ class CountryOfDispatchController @Inject()(
               value =>
                 for {
                   getNonEuCountries: CountryList <- referenceDataConnector.getNonEUTransitCountryList
-                  isEu: Boolean = getNonEuCountries.countries.contains(value)
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfDispatchPage, CountryOfDispatch(value.code, isEu)))
+                  isNotEu: Boolean = getNonEuCountries.countries.contains(value)
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfDispatchPage, CountryOfDispatch(value.code, isNotEu)))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(CountryOfDispatchPage, mode, updatedAnswers))
             )

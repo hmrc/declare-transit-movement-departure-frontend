@@ -34,7 +34,7 @@ import play.api.mvc.Call
 import controllers.addItems.routes
 
 import javax.inject.{Inject, Singleton}
-import models.reference.{Country, CountryCode}
+import models.reference.{Country, CountryCode, CountryOfDispatch}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -70,13 +70,10 @@ class DocumentNavigator @Inject()() extends Navigator {
 
   private def previousReferencesRoute(ua:UserAnswers, index:Index, mode:Mode) = {
     val declarationTypes = Seq(DeclarationType.Option2)
-    val countryOfDispatch = ua.get(CountryOfDispatchPage).flatMap  {
-      case value if value.isEu => Some(true)
-      case _ => Some(false)
-
-    }
+    val countryOfDispatch: Option[Boolean] = ua.get(CountryOfDispatchPage).map(_.isNotEu)
     val isAllowedDeclarationType: Boolean = ua.get(DeclarationTypePage).fold(false)(declarationTypes.contains(_))
     val referenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)
+
     (countryOfDispatch, isAllowedDeclarationType) match {
       case (Some(true), true) => Some(previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.id, index, Index(referenceIndex), mode))
       case _ => Some(previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(ua.id, index, mode))
