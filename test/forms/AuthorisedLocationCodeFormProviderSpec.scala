@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import models.domain.StringFieldRegex.authorisedLocationCodeRegex
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
@@ -26,7 +27,6 @@ class AuthorisedLocationCodeFormProviderSpec extends StringFieldBehaviours {
   private val requiredKey = "authorisedLocationCode.error.required"
   private val lengthKey   = "authorisedLocationCode.error.length"
   private val maxLength   = 17
-  private val invalidKey  = "authorisedLocationCode.error.invalidCharacters"
   private val form        = new AuthorisedLocationCodeFormProvider()()
 
   ".value" - {
@@ -52,6 +52,26 @@ class AuthorisedLocationCodeFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    "must bind special characters" in {
+
+      val specialCharacterString = "&'@/.-?% "
+
+      val result = form.bind(Map(fieldName -> "&'@/.-?% ")).apply(fieldName)
+
+      result.value.value mustBe specialCharacterString
+    }
+
+    "must not bind strings with invalid characters" in {
+
+      val invalidKey             = "authorisedLocationCode.error.invalidCharacters"
+      val expectedError          = FormError(fieldName, invalidKey, Seq(authorisedLocationCodeRegex))
+      val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~<>,±üçñèé@]{$maxLength}")
+
+      forAll(generator) {
+        invalidString =>
+          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+          result.errors must contain(expectedError)
+      }
+    }
   }
 }
