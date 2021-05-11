@@ -71,7 +71,7 @@ class DocumentNavigator @Inject()() extends Navigator {
   private def previousReferencesRoute(ua:UserAnswers, index:Index, mode:Mode) = {
     val declarationTypes = Seq(DeclarationType.Option2)
     val countryOfDispatch = ua.get(CountryOfDispatchPage).flatMap  {
-      case value if !value.isEu => Some(true)
+      case value if value.isEu => Some(true)
       case _ => Some(false)
 
     }
