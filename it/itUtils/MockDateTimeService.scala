@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package services
+package itUtils
 
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfterEach, Suite}
 import org.scalatestplus.mockito.MockitoSugar
+import services.DateTimeService
 
 trait MockDateTimeService extends MockitoSugar with BeforeAndAfterEach {
   this: Suite =>

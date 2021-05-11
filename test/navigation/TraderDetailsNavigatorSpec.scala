@@ -16,7 +16,8 @@
 
 package navigation
 
-import base.{SpecBase, UserAnswersSpecHelper}
+import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
 import controllers.traderDetails.{routes => traderDetailsRoute}
 import generators.Generators
 import models._

@@ -16,6 +16,7 @@
 
 package repositories
 
+import itUtils.MockDateTimeService
 import itSpecBase.ItSpecBase
 import models.messages.InterchangeControlReference
 import org.scalatest.BeforeAndAfterEach
@@ -29,7 +30,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import reactivemongo.play.json.ImplicitBSONHandlers._
 import reactivemongo.play.json.collection.JSONCollection
-import services.{DateTimeService, MockDateTimeService}
+import services.DateTimeService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

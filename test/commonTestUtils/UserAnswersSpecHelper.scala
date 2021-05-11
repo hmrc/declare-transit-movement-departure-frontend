@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package base
+package commonTestUtils
 
 import models.{Index, UserAnswers}
 import org.scalactic.source.Position
@@ -26,6 +26,7 @@ import queries.Gettable
 trait UserAnswersSpecHelper {
 
   implicit class UserAnswersSpecHelperOps(userAnswers: UserAnswers) {
+
     import models.RichJsObject
 
     private def unsafeSetWithOutCleanup[A: Writes](page: QuestionPage[A], value: A): UserAnswers =
@@ -97,4 +98,5 @@ trait UserAnswersSpecHelper {
   object UserAnswersNoErrorException {
     def apply(method: String, message: String)(implicit pos: Position) = new UserAnswersNoErrorException(method, message, pos)
   }
+
 }

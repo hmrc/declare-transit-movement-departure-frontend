@@ -16,7 +16,8 @@
 
 package controllers.actions
 
-import base.{SpecBase, UserAnswersSpecHelper}
+import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
 import models.reference.CountryCode
 import models.requests.DataRequest
 import models.{Index, NormalMode}
