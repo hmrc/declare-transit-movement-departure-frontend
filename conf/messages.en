@@ -528,7 +528,7 @@ authorisedLocationCode.checkYourAnswersLabel = What is the authorised location c
 authorisedLocationCode.paragraph = The code can be found in the registration documents.
 authorisedLocationCode.error.required = Enter the authorised location code
 authorisedLocationCode.error.length = The authorised location code must be 17 characters or less
-authorisedLocationCode.error.invalidCharacters = The authorised location code must only include letters a to z without accents without accents, numbers 0 to 9
+authorisedLocationCode.error.invalidCharacters = The authorised location code must only include letters a to z, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 
 customsApprovedLocation.title = Where is the Customs-approved location?
 customsApprovedLocation.heading = Where is the Customs-approved location?
