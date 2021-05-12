@@ -16,6 +16,7 @@
 
 package forms
 
+import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
@@ -28,12 +29,10 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
   private val country       = Country(CountryCode("GB"), "United Kingdom")
   private val countries     = CountryList(Seq(country))
   private val consignorName = "consignorName"
-  //private val formProvider  = new ConsignorAddressFormProvider()
-  private val form = new ConsignorAddressFormProvider()(countries, consignorName)
-  val maxLength    = 35
+  private val form          = new ConsignorAddressFormProvider()(countries, consignorName)
 
-  val validAddressStringGenOverLength: Gen[String] = for {
-    num  <- Gen.chooseNum[Int](maxLength + 1, maxLength + 5)
+  private val validAddressStringGenOverLength: Gen[String] = for {
+    num  <- Gen.chooseNum[Int](addressMaxLength + 1, addressMaxLength + 5)
     list <- Gen.listOfN(num, Gen.alphaNumChar)
   } yield list.mkString("")
 
@@ -43,18 +42,17 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = "consignorAddress.error.AddressLine1.required"
     val lengthKey   = "consignorAddress.error.AddressLine1.length"
     val invalidKey  = "consignorAddress.error.AddressLine1.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength   = addressMaxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
       validAddressStringGenOverLength
     )
@@ -65,7 +63,7 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
   }
 
   ".AddressLine2" - {
@@ -74,18 +72,17 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = "consignorAddress.error.AddressLine2.required"
     val lengthKey   = "consignorAddress.error.AddressLine2.length"
     val invalidKey  = "consignorAddress.error.AddressLine2.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength   = addressMaxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
       validAddressStringGenOverLength
     )
@@ -96,7 +93,7 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
   }
 
   ".AddressLine3" - {
@@ -105,18 +102,17 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = "consignorAddress.error.AddressLine3.required"
     val lengthKey   = "consignorAddress.error.AddressLine3.length"
     val invalidKey  = "consignorAddress.error.AddressLine3.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength   = addressMaxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
       validAddressStringGenOverLength
     )
@@ -127,6 +123,6 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
   }
 }
