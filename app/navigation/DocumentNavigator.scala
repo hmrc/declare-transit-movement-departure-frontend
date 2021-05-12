@@ -76,10 +76,11 @@ class DocumentNavigator @Inject()() extends Navigator {
   }
 
   private def addAnotherDocumentRoute(ua:UserAnswers, index:Index, mode:Mode) =
-    ua.get(AddAnotherDocumentPage(index)) match {
-      case Some(true) => Some(routes.DocumentTypeController.onPageLoad(ua.id, index, Index(count(index)(ua)), mode))
-      case Some(false) => previousReferencesRoute(ua, index, mode)
-    }
+    (ua.get(AddAnotherDocumentPage(index)), mode) match {
+      case (Some(true), _) => Some(routes.DocumentTypeController.onPageLoad(ua.id, index, Index(count(index)(ua)), mode))
+      case (Some(false), NormalMode) => previousReferencesRoute(ua, index, mode)
+      case (Some(false), CheckMode) => Some(routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+  }
 
   private def addExtraDocumentInformationRoute(ua:UserAnswers, index:Index, documentIndex:Index, mode:Mode) =
     ua.get(AddExtraDocumentInformationPage(index, documentIndex)) match {

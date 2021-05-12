@@ -244,17 +244,17 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
     "AddAnotherDocumentPage must go to" - {
       "DocumentType if user selects 'Yes'" in {
         val updatedAnswers = emptyUserAnswers
-          .set(AddDocumentsPage(index), true).success.value
+          .set(AddAnotherDocumentPage(index), true).success.value
         navigator
-          .nextPage(AddDocumentsPage(index), CheckMode, updatedAnswers)
+          .nextPage(AddAnotherDocumentPage(index), CheckMode, updatedAnswers)
           .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(updatedAnswers.id, index, documentIndex, CheckMode))
       }
 
       "ItemDetailsCheckYourAnswers if user selects 'No'" in {
         val updatedAnswers = emptyUserAnswers
-          .set(AddDocumentsPage(index), false).success.value
+          .set(AddAnotherDocumentPage(index), false).success.value
         navigator
-          .nextPage(AddDocumentsPage(index), CheckMode, updatedAnswers)
+          .nextPage(AddAnotherDocumentPage(index), CheckMode, updatedAnswers)
           .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
       }
     }
