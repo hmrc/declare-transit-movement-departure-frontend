@@ -1313,9 +1313,13 @@ safetyAndSecurityConsignorAddress.AddressLine2 = Address line 2
 safetyAndSecurityConsignorAddress.AddressLine3 = Address line 3
 safetyAndSecurityConsignorAddress.AddressLine4 = Country
 safetyAndSecurityConsignorAddress.checkYourAnswersLabel.visuallyHidden = change security consignor’s address
-safetyAndSecurityConsignorAddress.error.required = Enter address line {0} of the security consignor’s address
-safetyAndSecurityConsignorAddress.error.length =  Address line {0} of of the security consignor’s address must be 35 characters or less
-safetyAndSecurityConsignorAddress.error.invalid =  Address line {0} of of the security consignor’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+safetyAndSecurityConsignorAddress.error.country.required = Enter the country of {0}’s address
+safetyAndSecurityConsignorAddress.error.AddressLine1.length = Address line 1 of {0} must be 35 characters or less
+safetyAndSecurityConsignorAddress.error.AddressLine2.length = Address line 2 of {0} must be 35 characters or less
+safetyAndSecurityConsignorAddress.error.AddressLine3.length = Address line 3 of {0} must be 35 characters or less
+safetyAndSecurityConsignorAddress.error.AddressLine1.invalid= Address line 1 of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+safetyAndSecurityConsignorAddress.error.AddressLine2.invalid= Address line 2 of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+safetyAndSecurityConsignorAddress.error.AddressLine3.invalid= Address line 3 of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 
 safetyAndSecurityConsignorEori.title = What is the security consignor’s EORI number?
 safetyAndSecurityConsignorEori.heading = What is the security consignor’s EORI number?
