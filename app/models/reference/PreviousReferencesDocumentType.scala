@@ -18,7 +18,7 @@ package models.reference
 
 import play.api.libs.json.{Format, Json}
 
-case class PreviousReferencesDocumentType(code: String, description: String)
+case class PreviousReferencesDocumentType(code: String, description: Option[String])
 
 object PreviousReferencesDocumentType {
 
