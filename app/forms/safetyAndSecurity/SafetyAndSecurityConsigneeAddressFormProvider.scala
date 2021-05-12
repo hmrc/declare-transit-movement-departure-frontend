@@ -30,27 +30,24 @@ class SafetyAndSecurityConsigneeAddressFormProvider @Inject() extends Mappings {
 
   val maxLength = 35
 
-  def apply(countryList: CountryList): Form[ConsigneeAddress] = Form(
+  def apply(countryList: CountryList, consigneeName: String): Form[ConsigneeAddress] = Form(
     mapping(
-      "AddressLine1" -> text("safetyAndSecurityConsigneeAddress.error.required", "1")
-        .verifying(
-          StopOnFirstFail[String](
-            maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.length", "1"),
-            regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.invalid")
-          )),
-      "AddressLine2" -> text("safetyAndSecurityConsigneeAddress.error.required", "2")
-        .verifying(
-          StopOnFirstFail[String](
-            maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.length", "2"),
-            regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.invalid")
-          )),
-      "AddressLine3" -> text("safetyAndSecurityConsigneeAddress.error.required", "3")
-        .verifying(
-          StopOnFirstFail[String](
-            maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.length", "3"),
-            regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.invalid")
-          )),
-      "country" -> text("safetyAndSecurityConsignorEori.error.country.required")
+      "AddressLine1" -> text("safetyAndSecurityConsigneeAddress.error.AddressLine1.required", Seq(consigneeName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.AddressLine1.length", Seq(consigneeName)),
+          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.AddressLine1.invalid", Seq(consigneeName))
+        )),
+      "AddressLine2" -> text("safetyAndSecurityConsigneeAddress.error.AddressLine2.required", Seq(consigneeName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.AddressLine2.length", Seq(consigneeName)),
+          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.AddressLine2.invalid", Seq(consigneeName))
+        )),
+      "AddressLine3" -> text("safetyAndSecurityConsigneeAddress.error.AddressLine3.required", Seq(consigneeName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.AddressLine3.length", Seq(consigneeName)),
+          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.AddressLine3.invalid", Seq(consigneeName))
+        )),
+      "country" -> text("safetyAndSecurityConsignorEori.error.country.required", Seq(consigneeName))
         .verifying("safetyAndSecurityConsigneeAddress.AddressLine4.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(ConsigneeAddress.apply)(ConsigneeAddress.unapply)
