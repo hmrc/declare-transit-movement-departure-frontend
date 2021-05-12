@@ -82,7 +82,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
           val result = form.bind(Map(fieldName -> string)).apply(fieldName)
           result.errors.headOption.value.key mustEqual lengthError.key
           result.errors.headOption.value.message mustEqual lengthError.message
-          result.errors.headOption.value.args.toSeq mustEqual lengthError.args
+          result.errors.headOption.value.args.head mustEqual lengthError.args
       }
     }
 }
