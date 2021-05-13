@@ -61,7 +61,7 @@ object AddItemsCheckYourAnswersViewModel {
       checkYourAnswersHelper.addSecurityConsigneesEori(index),
       checkYourAnswersHelper.securityConsigneeEori(index),
       checkYourAnswersHelper.securityConsigneeName(index),
-      checkYourAnswersHelper.securityConsigneeAddress(index, countryList)
+      checkYourAnswersHelper.securityConsigneeAddress(index)
     ).flatten
   )
 

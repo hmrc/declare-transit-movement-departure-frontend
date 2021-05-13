@@ -49,7 +49,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererA
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new ConsigneeAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, "consigneeName")
 
   private lazy val consigneeAddressRoute = routes.ConsigneeAddressController.onPageLoad(lrn, NormalMode).url
 

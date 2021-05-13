@@ -292,7 +292,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       val consigneesName =
         userAnswers.get(TraderDetailsConsigneeNamePage(itemIndex)).getOrElse(msg"traderDetailsConsigneeAddress.checkYourAnswersLabel.fallback")
       val address = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.AddressLine3, answer.country.description)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>"))
       Row(
         key   = Key(msg"traderDetailsConsigneeAddress.checkYourAnswersLabel".withArgs(consigneesName), classes = Seq("govuk-!-width-one-half")),
@@ -725,12 +725,12 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def securityConsigneeAddress(index: Index, countryList: CountryList): Option[Row] = userAnswers.get(SecurityConsigneeAddressPage(index)) map {
+  def securityConsigneeAddress(index: Index): Option[Row] = userAnswers.get(SecurityConsigneeAddressPage(index)) map {
     answer =>
       val consigneesName =
         userAnswers.get(SecurityConsigneeNamePage(index)).getOrElse(msg"securityDetailsConsigneeAddress.checkYourAnswersLabel.fallback")
       val address = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.AddressLine3, answer.country.description)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>"))
       Row(
         key   = Key(msg"securityConsigneeAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),

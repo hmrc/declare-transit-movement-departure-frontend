@@ -28,7 +28,7 @@ class ConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
   private val country      = Country(CountryCode("GB"), "United Kingdom")
   private val countries    = CountryList(Seq(country))
   private val formProvider = new ConsigneeAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, "consigneeName")
 
   ".AddressLine1" - {
 
@@ -94,10 +94,10 @@ class ConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "consigneeAddress.error.AddressLine3.required"
-    val lengthKey   = "consigneeAddress.error.AddressLine3.length"
-    val invalidKey  = "consigneeAddress.error.AddressLine3.invalid"
-    val maxLength   = 35
+    val requiredKey = "consigneeAddress.error.postalCode.required"
+    val lengthKey   = "consigneeAddress.error.postalCode.length"
+    val invalidKey  = "consigneeAddress.error.postalCode.invalid"
+    val maxLength   = 9
 
     behave like fieldThatBindsValidData(
       form,
