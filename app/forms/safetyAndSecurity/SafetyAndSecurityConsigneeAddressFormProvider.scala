@@ -47,8 +47,8 @@ class SafetyAndSecurityConsigneeAddressFormProvider @Inject() extends Mappings {
           maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.AddressLine3.length", consigneeName),
           regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.AddressLine3.invalid", Seq(consigneeName))
         )),
-      "country" -> text("safetyAndSecurityConsignorEori.error.country.required", Seq(consigneeName))
-        .verifying("safetyAndSecurityConsigneeAddress.AddressLine4.required", value => countryList.fullList.exists(_.code.code == value))
+      "country" -> text("safetyAndSecurityConsigneeAddress.error.country.required", Seq(consigneeName))
+        .verifying("safetyAndSecurityConsigneeAddress.error.country.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(ConsigneeAddress.apply)(ConsigneeAddress.unapply)
   )
