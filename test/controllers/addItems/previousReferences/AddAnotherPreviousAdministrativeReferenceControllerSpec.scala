@@ -56,8 +56,8 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
   private val mockRefDataConnector = mock[ReferenceDataConnector]
   private val documentTypeList = PreviousReferencesDocumentTypeList(
     Seq(
-      PreviousReferencesDocumentType("T1", "Description T1"),
-      PreviousReferencesDocumentType("T2F", "Description T2F")
+      PreviousReferencesDocumentType("T1", Some("Description T1")),
+      PreviousReferencesDocumentType("T2F", None)
     ))
 
   lazy val addAnotherPreviousAdministrativeReferenceRoute =

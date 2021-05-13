@@ -39,7 +39,7 @@ import scala.concurrent.Future
 
 class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {
 
-  def onwardRoute(lrn: LocalReferenceNumber) = Call("GET", s"/common-transit-convention-departure/$lrn/task-list")
+  def onwardRoute(lrn: LocalReferenceNumber) = Call("GET", s"/manage-transit-movements-departures/$lrn/task-list")
 
   lazy val transportDetailsRoute: String                 = routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url
   val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]

@@ -33,7 +33,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
   // format: off
 
   private val documentTypeList = DocumentTypeList(Seq(DocumentType("code", "name", true)))
-  private val previousReferencesDocumentTypeList = PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType("code", "name")))
+  private val previousReferencesDocumentTypeList = PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType("code", Some("name"))))
   private val specialMentionList = SpecialMentionList(Seq(SpecialMention("code", "name")))
   val countryList = new CountryList(Seq(Country(CountryCode("FR"), "France")))
 

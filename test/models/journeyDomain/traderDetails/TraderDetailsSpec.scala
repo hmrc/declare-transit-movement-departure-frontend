@@ -16,7 +16,8 @@
 
 package models.journeyDomain.traderDetails
 
-import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
+import base.{GeneratorSpec, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.ProcedureType.Simplified
 import models.domain.Address

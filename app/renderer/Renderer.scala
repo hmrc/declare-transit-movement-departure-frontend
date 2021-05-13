@@ -47,6 +47,7 @@ class Renderer @Inject()(frontendAppConfig: FrontendAppConfig, appConfig: Render
     "timeout"                        -> appConfig.timeoutSeconds,
     "countdown"                      -> appConfig.countdownSeconds,
     "trackingConsentUrl"             -> frontendAppConfig.trackingConsentUrl,
-    "gtmContainer"                   -> frontendAppConfig.gtmContainer
+    "gtmContainer"                   -> frontendAppConfig.gtmContainer,
+    "serviceUrl"                     -> frontendAppConfig.serviceUrl
   )
 }

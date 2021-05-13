@@ -16,7 +16,8 @@
 
 package models.journeyDomain
 
-import base.{GeneratorSpec, SpecBase, UserAnswersSpecHelper}
+import base.{GeneratorSpec, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import generators.{JourneyModelGenerators, ModelGenerators}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.{Index, UserAnswers}

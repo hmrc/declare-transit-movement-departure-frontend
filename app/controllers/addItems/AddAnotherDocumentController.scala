@@ -79,7 +79,7 @@ class AddAnotherDocumentController @Inject()(
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAnotherDocumentPage(index), value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(AddAnotherDocumentPage(index), mode, updatedAnswers))
           )
     }
 

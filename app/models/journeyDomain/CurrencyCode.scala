@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package models.reference
+package models.journeyDomain
 
-import play.api.libs.json.{Format, Json}
+import models.{Enumerable, WithName}
 
-case class PreviousReferencesDocumentType(code: String, description: Option[String])
+sealed trait CurrencyCode
 
-object PreviousReferencesDocumentType {
+object CurrencyCode extends Enumerable.Implicits {
 
-  implicit lazy val format: Format[PreviousReferencesDocumentType] =
-    Json.format[PreviousReferencesDocumentType]
+  case object GBP extends WithName("GBP") with CurrencyCode
+  case object EUR extends WithName("EUR") with CurrencyCode
+
+  val values: Seq[CurrencyCode] = Seq(GBP, EUR)
+
+  implicit val enumerable: Enumerable[CurrencyCode] =
+    Enumerable(values.map(v => v.toString -> v): _*)
+
 }

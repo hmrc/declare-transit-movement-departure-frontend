@@ -48,8 +48,8 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
   private val formProvider = new ReferenceTypeFormProvider()
   private val documentTypeList = PreviousReferencesDocumentTypeList(
     Seq(
-      PreviousReferencesDocumentType("T1", "Description T1"),
-      PreviousReferencesDocumentType("T2F", "Description T2F")
+      PreviousReferencesDocumentType("T1", Some("Description T1")),
+      PreviousReferencesDocumentType("T2F", None)
     )
   )
 
@@ -92,7 +92,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
       val expectedPreviousDocumentTypeJson = Seq(
         Json.obj("value" -> "", "text"    -> ""),
         Json.obj("value" -> "T1", "text"  -> "(T1) Description T1", "selected" -> false),
-        Json.obj("value" -> "T2F", "text" -> "(T2F) Description T2F", "selected" -> false)
+        Json.obj("value" -> "T2F", "text" -> "T2F", "selected" -> false)
       )
 
       val expectedJson = Json.obj(
@@ -135,7 +135,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
       val expectedPreviousDocumentTypeJson = Seq(
         Json.obj("value" -> "", "text"    -> ""),
         Json.obj("value" -> "T1", "text"  -> "(T1) Description T1", "selected" -> true),
-        Json.obj("value" -> "T2F", "text" -> "(T2F) Description T2F", "selected" -> false)
+        Json.obj("value" -> "T2F", "text" -> "T2F", "selected" -> false)
       )
 
       val expectedJson = Json.obj(
