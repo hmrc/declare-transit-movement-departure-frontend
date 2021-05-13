@@ -34,17 +34,17 @@ class SafetyAndSecurityConsignorAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("safetyAndSecurityConsignorAddress.error.AddressLine1.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.AddressLine1.length", Seq(consignorName)),
+          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.AddressLine1.length", consignorName),
           regexp(stringFieldRegex, "safetyAndSecurityConsignorAddress.error.AddressLine1.invalid", Seq(consignorName))
         )),
       "AddressLine2" -> text("safetyAndSecurityConsignorAddress.error.AddressLine2.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.AddressLine2.length", Seq(consignorName)),
+          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.AddressLine2.length", consignorName),
           regexp(stringFieldRegex, "safetyAndSecurityConsignorAddress.error.AddressLine2.invalid", Seq(consignorName))
         )),
       "AddressLine3" -> text("safetyAndSecurityConsignorAddress.error.AddressLine3.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.AddressLine3.length", Seq(consignorName)),
+          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.AddressLine3.length", consignorName),
           regexp(stringFieldRegex, "safetyAndSecurityConsignorAddress.error.AddressLine3.invalid", Seq(consignorName))
         )),
       "country" -> text("safetyAndSecurityConsignorEori.error.country.required", Seq(consignorName))

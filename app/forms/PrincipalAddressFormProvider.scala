@@ -33,13 +33,13 @@ class PrincipalAddressFormProvider @Inject() extends Mappings {
       "numberAndStreet" -> text("principalAddress.error.numberAndStreet.required", Seq(principalName))
         .verifying(StopOnFirstFail[String](
           maxLength(numberAndStreetLength, "principalAddress.error.numberAndStreet.length"),
-          regexp(stringFieldRegex, "principalAddress.error.numberAndStreet.invalid"),
+          regexp(stringFieldRegex, "principalAddress.error.numberAndStreet.invalid", Seq(principalName)),
         )),
       "town" -> text("principalAddress.error.town.required", Seq(principalName))
         .verifying(
           StopOnFirstFail[String](
             maxLength(townLength, "principalAddress.error.town.length"),
-            regexp(stringFieldRegex, "principalAddress.error.town.invalid"),
+            regexp(stringFieldRegex, "principalAddress.error.town.invalid", Seq(principalName)),
           )),
       "postcode" -> text("principalAddress.error.postcode.required", Seq(principalName))
         .verifying(StopOnFirstFail[String](
