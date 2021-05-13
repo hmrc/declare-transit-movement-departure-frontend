@@ -46,7 +46,6 @@ class CarrierAddressFormProvider @Inject() extends Mappings {
           regexp(stringFieldRegex, "carrierAddress.error.AddressLine3.invalid", Seq(carrierName))
         )),
       "country" -> text("carrierAddress.error.country.required", Seq(carrierName))
-        .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(CarrierAddress.apply)(CarrierAddress.unapply)
   )

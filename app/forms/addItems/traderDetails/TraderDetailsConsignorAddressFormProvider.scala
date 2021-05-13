@@ -46,7 +46,6 @@ class TraderDetailsConsignorAddressFormProvider @Inject() extends Mappings {
           regexp(stringFieldRegex, "traderDetailsConsignorAddress.error.AddressLine3.invalid", Seq(consignorName))
         )),
       "country" -> text("traderDetailsConsignorAddress.error.country.required", Seq(consignorName))
-        .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(ConsignorAddress.apply)(ConsignorAddress.unapply)
   )
