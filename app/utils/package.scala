@@ -84,8 +84,8 @@ package object utils {
           "value" -> documentType.code,
           "text" -> {
             documentType match {
-              case PreviousReferencesDocumentType(code, Some(description)) => s"($code) $description"
-              case PreviousReferencesDocumentType(code, None)              => code
+              case PreviousReferencesDocumentType(code, Some(description)) if description.trim.nonEmpty => s"($code) $description"
+              case PreviousReferencesDocumentType(code, _)                                              => code
             }
           },
           "selected" -> value.contains(documentType)
