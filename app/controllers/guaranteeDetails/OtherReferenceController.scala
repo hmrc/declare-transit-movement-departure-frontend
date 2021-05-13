@@ -59,7 +59,7 @@ class OtherReferenceController @Inject()(
       implicit request =>
         val preparedForm = request.userAnswers.get(OtherReferencePage(index)) match {
           case None        => form
-          case Some(value) => form.fill(value)
+          case Some(value) => form.fill(value.toUpperCase)
         }
 
         val json = Json.obj(
@@ -92,7 +92,7 @@ class OtherReferenceController @Inject()(
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherReferencePage(index), value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherReferencePage(index), value.toUpperCase))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(OtherReferencePage(index), mode, updatedAnswers))
           )
