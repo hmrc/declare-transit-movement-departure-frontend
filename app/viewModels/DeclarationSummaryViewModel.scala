@@ -16,19 +16,18 @@
 
 package viewModels
 
-import config.ManageTransitMovementsService
 import models.journeyDomain.{EitherType, JourneyDomain, UserAnswersReader}
 import models.{LocalReferenceNumber, UserAnswers}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc.Call
 
-class DeclarationSummaryViewModel(manageTransitMovementsService: ManageTransitMovementsService, userAnswers: UserAnswers) {
+class DeclarationSummaryViewModel(serviceUrl: String, userAnswers: UserAnswers) {
   import DeclarationSummaryViewModel.nextPage
 
   private val lrn: LocalReferenceNumber      = userAnswers.id
   private val sections: TaskListViewModel    = TaskListViewModel(userAnswers)
-  private val backToTransitMovements: String = manageTransitMovementsService.service.fullServiceUrl
+  private val backToTransitMovements: String = serviceUrl
 
   private val journeyDomain: EitherType[JourneyDomain] = UserAnswersReader[JourneyDomain].run(userAnswers)
 
@@ -46,8 +45,8 @@ object DeclarationSummaryViewModel {
 
   def nextPage(localReferenceNumber: LocalReferenceNumber): Call = controllers.routes.DeclarationSummaryController.onSubmit(localReferenceNumber)
 
-  def apply(manageTransitMovementsService: ManageTransitMovementsService, userAnswers: UserAnswers): DeclarationSummaryViewModel =
-    new DeclarationSummaryViewModel(manageTransitMovementsService, userAnswers)
+  def apply(serviceUrl: String, userAnswers: UserAnswers): DeclarationSummaryViewModel =
+    new DeclarationSummaryViewModel(serviceUrl, userAnswers)
 
   def unapply(arg: DeclarationSummaryViewModel): Option[(LocalReferenceNumber, TaskListViewModel, String, Boolean, Option[String])] =
     Some((arg.lrn, arg.sections, arg.backToTransitMovements, arg.isDeclarationComplete, arg.onSubmitUrl))
