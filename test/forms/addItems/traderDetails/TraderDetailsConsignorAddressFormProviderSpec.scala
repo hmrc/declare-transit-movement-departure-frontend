@@ -16,6 +16,7 @@
 
 package forms.addItems.traderDetails
 
+import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
@@ -25,10 +26,16 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class TraderDetailsConsignorAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val country      = Country(CountryCode("GB"), "United Kingdom")
-  private val countries    = CountryList(Seq(country))
-  private val formProvider = new TraderDetailsConsignorAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val country       = Country(CountryCode("GB"), "United Kingdom")
+  private val countries     = CountryList(Seq(country))
+  private val consignorName = "consignorName"
+  private val formProvider  = new TraderDetailsConsignorAddressFormProvider()
+  private val form          = formProvider(countries, consignorName)
+
+  private val validAddressStringGenOverLength: Gen[String] = for {
+    num  <- Gen.chooseNum[Int](addressMaxLength + 1, addressMaxLength + 5)
+    list <- Gen.listOfN(num, Gen.alphaNumChar)
+  } yield list.mkString("")
 
   ".AddressLine1" - {
 
@@ -36,28 +43,28 @@ class TraderDetailsConsignorAddressFormProviderSpec extends StringFieldBehaviour
     val requiredKey = "traderDetailsConsignorAddress.error.AddressLine1.required"
     val lengthKey   = "traderDetailsConsignorAddress.error.AddressLine1.length"
     val invalidKey  = "traderDetailsConsignorAddress.error.AddressLine1.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
+      validAddressStringGenOverLength
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
   }
 
   ".AddressLine2" - {
@@ -66,28 +73,28 @@ class TraderDetailsConsignorAddressFormProviderSpec extends StringFieldBehaviour
     val requiredKey = "traderDetailsConsignorAddress.error.AddressLine2.required"
     val lengthKey   = "traderDetailsConsignorAddress.error.AddressLine2.length"
     val invalidKey  = "traderDetailsConsignorAddress.error.AddressLine2.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
+      validAddressStringGenOverLength
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
   }
 
   ".AddressLine3" - {
@@ -96,27 +103,27 @@ class TraderDetailsConsignorAddressFormProviderSpec extends StringFieldBehaviour
     val requiredKey = "traderDetailsConsignorAddress.error.AddressLine3.required"
     val lengthKey   = "traderDetailsConsignorAddress.error.AddressLine3.length"
     val invalidKey  = "traderDetailsConsignorAddress.error.AddressLine3.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
+      validAddressStringGenOverLength
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
   }
 }
