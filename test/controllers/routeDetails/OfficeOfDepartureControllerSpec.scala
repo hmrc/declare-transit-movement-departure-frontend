@@ -21,7 +21,7 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.OfficeOfDepartureFormProvider
 import matchers.JsonMatchers
-import models.reference.{Country, CountryCode, CustomsOffice}
+import models.reference.{Country, CountryCode, CountryOfDispatch, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}
 import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
@@ -64,7 +64,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
   "OfficeOfDeparture Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, countryCode).success.value
+      val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, CountryOfDispatch(CountryCode("GB"), true)).success.value
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -114,7 +114,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = emptyUserAnswers
-        .set(CountryOfDispatchPage, countryCode)
+        .set(CountryOfDispatchPage, CountryOfDispatch(CountryCode("GB"), true))
         .success
         .value
         .set(OfficeOfDeparturePage, customsOffice1)
@@ -155,7 +155,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, countryCode).success.value
+      val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, CountryOfDispatch(CountryCode("GB"), true)).success.value
       dataRetrievalWithData(userAnswers)
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
@@ -172,7 +172,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, countryCode).success.value
+      val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, CountryOfDispatch(CountryCode("GB"), true)).success.value
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

@@ -21,13 +21,13 @@ import cats.implicits._
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.Index
 import models.journeyDomain.RouteDetails.TransitInformation
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import pages._
 
 import java.time.LocalDateTime
 
 final case class RouteDetails(
-  countryOfDispatch: CountryCode,
+  countryOfDispatch: CountryOfDispatch,
   officeOfDeparture: CustomsOffice,
   destinationCountry: CountryCode,
   destinationOffice: CustomsOffice,

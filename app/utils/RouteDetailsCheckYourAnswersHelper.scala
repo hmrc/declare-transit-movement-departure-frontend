@@ -119,7 +119,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def countryOfDispatch(codeList: CountryList): Option[Row] = userAnswers.get(CountryOfDispatchPage) map {
     answer =>
-      val countryName = codeList.getCountry(answer).map(_.description).getOrElse(answer.code)
+      val countryName = codeList.getCountry(answer.country).map(_.description).getOrElse(answer.country.code)
 
       Row(
         key   = Key(msg"countryOfDispatch.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),

@@ -23,7 +23,7 @@ import generators.JourneyModelGenerators
 import models.DeclarationType.{Option1, Option2}
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, ItemsSecurityTraderDetailsSpec}
-import models.reference.{CircumstanceIndicator, CountryCode}
+import models.reference.{CircumstanceIndicator, CountryCode, CountryOfDispatch}
 import models.{DeclarationType, Index, UserAnswers}
 import org.scalacheck.Gen
 import pages.addItems.{AddAdministrativeReferencePage, AddDocumentsPage}
@@ -33,15 +33,15 @@ import pages._
 
 class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
-  private val genT2DeclarationType    = Option2
-  private val genNonEUCountries       = Gen.oneOf(nonEUCountries).sample.value
+  private val genT2DeclarationType = Option2
+
   private val genOtherDeclarationType = Option1
 
   "ItemSection" - {
     "can be parsed UserAnswers" - {
       "when all details for section have been answered" in {
-        forAll(genItemSectionOld(), arb[UserAnswers]) {
-          case (itemSection, userAnswers) =>
+        forAll(genItemSectionOld(), arb[UserAnswers], arb[CountryOfDispatch]) {
+          case (itemSection, userAnswers, countryOfDispatch) =>
             val indicator = CircumstanceIndicator.conditionalIndicators.head
 
             val updatedUserAnswer1 = {
@@ -65,12 +65,12 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
               case None =>
                 updatedUserAnswer1
                   .unsafeSetVal(DeclarationTypePage)(genOtherDeclarationType)
-                  .unsafeSetVal(CountryOfDispatchPage)(genNonEUCountries)
+                  .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
                   .unsafeSetVal(AddAdministrativeReferencePage(itemIndex))(false)
               case Some(_) =>
                 updatedUserAnswer1
                   .unsafeSetVal(DeclarationTypePage)(genT2DeclarationType)
-                  .unsafeSetVal(CountryOfDispatchPage)(genNonEUCountries)
+                  .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
             }
 
             val setSectionUserAnswers = ItemSectionSpec.setItemSection(itemSection, index)(updatedUserAnswer2)
@@ -119,8 +119,8 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
   "Seq of ItemSection" - {
     "can be parsed UserAnswers" - {
       "when all details for section have been answered" in {
-        forAll(genItemSectionOld(), arb[UserAnswers]) {
-          case (itemSections, userAnswers) =>
+        forAll(genItemSectionOld(), arb[UserAnswers], arb[CountryOfDispatch]) {
+          case (itemSections, userAnswers, countryOfDispatch) =>
             val indicator = CircumstanceIndicator.conditionalIndicators.head
 
             val updatedUserAnswer1 = {
@@ -142,13 +142,13 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
               case None =>
                 updatedUserAnswer1
                   .unsafeSetVal(DeclarationTypePage)(genOtherDeclarationType)
-                  .unsafeSetVal(CountryOfDispatchPage)(genNonEUCountries)
+                  .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
                   .unsafeSetVal(AddAdministrativeReferencePage(Index(0)))(false)
                   .unsafeSetVal(AddAdministrativeReferencePage(Index(1)))(false)
               case Some(_) =>
                 updatedUserAnswer1
                   .unsafeSetVal(DeclarationTypePage)(genT2DeclarationType)
-                  .unsafeSetVal(CountryOfDispatchPage)(genNonEUCountries)
+                  .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
             }
 
             val setItemSections = ItemSectionSpec.setItemSections(Seq(itemSections, itemSections).toList)(updatedUserAnswer2)

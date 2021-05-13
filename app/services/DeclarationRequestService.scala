@@ -364,7 +364,7 @@ class DeclarationRequestService @Inject()(
         agrLocOfGooHEA39    = agreedLocationOfGoods(movementDetails, goodsSummary.goodSummaryDetails),
         autLocOfGooCodHEA41 = goodsSummarySimplifiedDetails(goodsSummary.goodSummaryDetails).map(_.authorisedLocationCode),
         plaOfLoaCodHEA46    = goodsSummary.loadingPlace,
-        couOfDisCodHEA55    = Some(routeDetails.countryOfDispatch.code),
+        couOfDisCodHEA55    = Some(routeDetails.countryOfDispatch.country.code),
         cusSubPlaHEA66      = customsSubPlace(movementDetails, goodsSummary),
         transportDetails = Transport(
           inlTraModHEA75        = Some(transportDetails.inlandMode.code),

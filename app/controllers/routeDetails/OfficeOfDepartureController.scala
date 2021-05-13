@@ -56,7 +56,7 @@ class OfficeOfDepartureController @Inject()(
     implicit request =>
       request.userAnswers.get(CountryOfDispatchPage) match {
         case Some(countryCode) =>
-          referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode) flatMap {
+          referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode.country) flatMap {
             customsOffices =>
               val form = formProvider(customsOffices)
               val preparedForm = request.userAnswers
@@ -84,7 +84,7 @@ class OfficeOfDepartureController @Inject()(
     implicit request =>
       request.userAnswers.get(CountryOfDispatchPage) match {
         case Some(countryCode) =>
-          referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode) flatMap {
+          referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode.country) flatMap {
             customsOffices =>
               val form = formProvider(customsOffices)
               form

@@ -19,7 +19,7 @@ package services
 import itUtils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
 import commonTestUtils.UserAnswersSpecHelper
 import models.domain.SealDomain
-import models.reference.{Country, CountryCode, CustomsOffice, PackageType}
+import models.reference.{Country, CountryCode, CountryOfDispatch, CustomsOffice, PackageType}
 import models._
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.EitherValues
@@ -88,7 +88,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         /*
         * RouteDetails
         * */
-        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryCode("SC"))
+        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
         .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
         .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
         .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
@@ -555,7 +555,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         /*
         * RouteDetails
         * */
-        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryCode("SC"))
+        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
         .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
         .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
         .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
@@ -749,7 +749,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         /*
         * RouteDetails
         * */
-        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryCode("SC"))
+        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
         .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
         .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
         .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
@@ -1088,7 +1088,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         /*
         * RouteDetails
         * */
-        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryCode("SC"))
+        .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
         .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
         .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
         .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
