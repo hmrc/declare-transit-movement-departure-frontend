@@ -143,8 +143,7 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
       |    "description": "Description T1"
       |  },
       |  {
-      |    "code": "T2F",
-      |    "description": "Description T2F"
+      |    "code": "T2F"
       |  }
       |]
       |""".stripMargin
@@ -406,8 +405,8 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
 
         val expectResult = PreviousReferencesDocumentTypeList(
           Seq(
-            PreviousReferencesDocumentType("T1", "Description T1"),
-            PreviousReferencesDocumentType("T2F", "Description T2F")
+            PreviousReferencesDocumentType("T1", Some("Description T1")),
+            PreviousReferencesDocumentType("T2F", None)
           )
         )
 

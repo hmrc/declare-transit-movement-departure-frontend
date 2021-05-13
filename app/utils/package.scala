@@ -81,8 +81,13 @@ package object utils {
     val documentObjects = documentList.map {
       documentType =>
         Json.obj(
-          "value"    -> documentType.code,
-          "text"     -> s"(${documentType.code}) ${documentType.description}",
+          "value" -> documentType.code,
+          "text" -> {
+            documentType match {
+              case PreviousReferencesDocumentType(code, Some(description)) => s"($code) $description"
+              case PreviousReferencesDocumentType(code, None)              => code
+            }
+          },
           "selected" -> value.contains(documentType)
         )
     }
