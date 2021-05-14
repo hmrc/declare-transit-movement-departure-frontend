@@ -25,8 +25,9 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val countries = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val form      = new SafetyAndSecurityConsignorAddressFormProvider()(countries)
+  private val consignorName = "consignorName"
+  private val countries     = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
+  private val form          = new SafetyAndSecurityConsignorAddressFormProvider()(countries, consignorName)
 
   ".AddressLine1" - {
 
@@ -92,11 +93,11 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "safetyAndSecurityConsignorAddress.error.required"
-    val lengthKey   = "safetyAndSecurityConsignorAddress.error.length"
-    val invalidKey  = "safetyAndSecurityConsignorAddress.error.invalid"
+    val requiredKey = "safetyAndSecurityConsignorAddress.postalCode.error.required"
+    val lengthKey   = "safetyAndSecurityConsignorAddress.postalCode.error.length"
+    val invalidKey  = "safetyAndSecurityConsignorAddress.postalCode.error.invalid"
 
-    val maxLength = 35
+    val maxLength = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -108,16 +109,16 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq("3"))
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, "3")
+      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
   }
 
 }

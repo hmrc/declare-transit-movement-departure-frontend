@@ -67,8 +67,8 @@ class SafetyAndSecurityConsignorAddressController @Inject()(
             request.userAnswers.get(SafetyAndSecurityConsignorNamePage) match {
               case Some(consignorName) =>
                 val preparedForm = request.userAnswers.get(SafetyAndSecurityConsignorAddressPage) match {
-                  case Some(value) => formProvider(countries).fill(value)
-                  case None        => formProvider(countries)
+                  case Some(value) => formProvider(countries, consignorName).fill(value)
+                  case None        => formProvider(countries, consignorName)
                 }
 
                 val json = Json.obj(
@@ -96,7 +96,7 @@ class SafetyAndSecurityConsignorAddressController @Inject()(
           case Some(consignorName) =>
             referenceDataConnector.getCountryList() flatMap {
               countries =>
-                formProvider(countries)
+                formProvider(countries, consignorName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {

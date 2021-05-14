@@ -1310,12 +1310,15 @@ safetyAndSecurityConsignorAddress.heading = What is {0}’s address?
 safetyAndSecurityConsignorAddress.checkYourAnswersLabel = Security consignor’s address
 safetyAndSecurityConsignorAddress.AddressLine1 = Address line 1
 safetyAndSecurityConsignorAddress.AddressLine2 = Address line 2
-safetyAndSecurityConsignorAddress.AddressLine3 = Address line 3
+safetyAndSecurityConsignorAddress.postalCode   = Postal code
 safetyAndSecurityConsignorAddress.AddressLine4 = Country
 safetyAndSecurityConsignorAddress.checkYourAnswersLabel.visuallyHidden = change security consignor’s address
 safetyAndSecurityConsignorAddress.error.required = Enter address line {0} of the security consignor’s address
 safetyAndSecurityConsignorAddress.error.length =  Address line {0} of of the security consignor’s address must be 35 characters or less
 safetyAndSecurityConsignorAddress.error.invalid =  Address line {0} of of the security consignor’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+safetyAndSecurityConsignorAddress.postalCode.error.required = Enter the postal code for {0}’s address
+safetyAndSecurityConsignorAddress.postalCode.error.length = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+safetyAndSecurityConsignorAddress.postalCode.error.invalid = The postal code for {0}’s address must be 9 characters or less
 
 safetyAndSecurityConsignorEori.title = What is the security consignor’s EORI number?
 safetyAndSecurityConsignorEori.heading = What is the security consignor’s EORI number?

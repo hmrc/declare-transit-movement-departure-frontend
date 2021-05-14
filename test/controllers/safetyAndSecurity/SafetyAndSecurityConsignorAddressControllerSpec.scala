@@ -50,9 +50,10 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val consignorName                                      = "consignorName"
 
   private val formProvider = new SafetyAndSecurityConsignorAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, consignorName)
   private val template     = "safetyAndSecurity/safetyAndSecurityConsignorAddress.njk"
 
   lazy val safetyAndSecurityConsignorAddressRoute = routes.SafetyAndSecurityConsignorAddressController.onPageLoad(lrn, NormalMode).url
@@ -79,7 +80,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsignorNamePage, "consignorName").success.value
+      val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsignorNamePage, consignorName).success.value
 
       dataRetrievalWithData(userAnswers)
 
@@ -97,7 +98,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
         "form"          -> form,
         "mode"          -> NormalMode,
         "lrn"           -> lrn,
-        "consignorName" -> "consignorName",
+        "consignorName" -> consignorName,
         "countries"     -> countryJsonList(form.value.map(_.country), countries.fullList)
       )
 
@@ -114,10 +115,10 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
-      val consignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Address line 3", country)
+      val consignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
-        .set(SafetyAndSecurityConsignorNamePage, "consignorName")
+        .set(SafetyAndSecurityConsignorNamePage, consignorName)
         .success
         .value
         .set(SafetyAndSecurityConsignorAddressPage, consignorAddress)
@@ -139,7 +140,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
         Map(
           "AddressLine1" -> "Address line 1",
           "AddressLine2" -> "Address line 2",
-          "AddressLine3" -> "Address line 3",
+          "AddressLine3" -> "Code",
           "country"      -> "GB"
         )
       )
@@ -148,7 +149,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
         "form"          -> filledForm,
         "lrn"           -> lrn,
         "mode"          -> NormalMode,
-        "consignorName" -> "consignorName",
+        "consignorName" -> consignorName,
         "countries"     -> countryJsonList(filledForm.value.map(_.country), countries.fullList)
       )
 
