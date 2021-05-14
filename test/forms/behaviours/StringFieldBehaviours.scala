@@ -32,7 +32,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def fieldWithMinLength(form: Form[_], fieldName: String, minLength: Int, lengthError: FormError, withoutExtendedAscii: Boolean = false): Unit =
+  def fieldWithMinLength(form: Form[_], fieldName: String, minLength: Int, lengthError: FormError): Unit =
     s"must not bind strings longer than $minLength characters" in {
 
       forAll(stringsWithLength(minLength - 1) -> "shortString") {
@@ -82,7 +82,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
           val result = form.bind(Map(fieldName -> string)).apply(fieldName)
           result.errors.headOption.value.key mustEqual lengthError.key
           result.errors.headOption.value.message mustEqual lengthError.message
-          result.errors.headOption.value.args.toSeq mustEqual lengthError.args
+          result.errors.headOption.value.args mustEqual lengthError.args
       }
     }
 }

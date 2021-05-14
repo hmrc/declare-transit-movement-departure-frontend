@@ -71,7 +71,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererA
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val userAnswers = emptyUserAnswers.set(ConsigneeNamePage, "foo").success.value
+      val userAnswers = emptyUserAnswers.set(ConsigneeNamePage, "consigneeName").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, consigneeAddressRoute)
@@ -102,7 +102,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererA
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val consigneeAddress: ConsigneeAddress = ConsigneeAddress("Address line 1", "Address line 2", "Address line 3", country)
+      val consigneeAddress: ConsigneeAddress = ConsigneeAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(ConsigneeNamePage, "consigneeName")
@@ -127,7 +127,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererA
         Map(
           "AddressLine1" -> "Address line 1",
           "AddressLine2" -> "Address line 2",
-          "AddressLine3" -> "Address line 3",
+          "AddressLine3" -> "Code",
           "country"      -> "GB"
         )
       )

@@ -109,15 +109,15 @@ class ConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq("consigneeName"))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq("consigneeName"))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, "consigneeName")
   }
 }
