@@ -61,7 +61,7 @@ class GuaranteeReferenceController @Inject()(
         val preparedForm = request.userAnswers.get(GuaranteeReferencePage(index)) match {
 
           case None        => formProvider(lengthGRN)
-          case Some(value) => formProvider(lengthGRN).fill(value.toUpperCase())
+          case Some(value) => formProvider(lengthGRN).fill(value.toUpperCase)
         }
 
         val json = Json.obj(

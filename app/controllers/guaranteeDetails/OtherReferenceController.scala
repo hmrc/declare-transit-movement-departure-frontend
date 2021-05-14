@@ -59,7 +59,7 @@ class OtherReferenceController @Inject()(
       implicit request =>
         val preparedForm = request.userAnswers.get(OtherReferencePage(index)) match {
           case None        => form
-          case Some(value) => form.fill(value.toUpperCase())
+          case Some(value) => form.fill(value.toUpperCase)
         }
 
         val json = Json.obj(
