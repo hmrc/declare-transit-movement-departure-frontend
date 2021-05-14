@@ -642,7 +642,7 @@ otherReference.checkYourAnswersLabel = Reference for the guarantee
 otherReference.paragraph = You must make sure this reference is up to date.
 otherReference.error.required = Enter the reference for the guarantee
 otherReference.error.length = The reference for the guarantee must be 35 characters or less
-otherReference.error.invalid = The reference for the guarantee must only include letters A to Z and numbers 0 to 9
+otherReference.error.invalid = The reference for the guarantee must only include letters a to z and numbers 0 to 9
 
 guaranteeType.title = Which type of guarantee is being used?
 guaranteeType.heading = Which type of guarantee is being used?

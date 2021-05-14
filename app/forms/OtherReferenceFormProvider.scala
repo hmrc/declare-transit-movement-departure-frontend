@@ -17,7 +17,7 @@
 package forms
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.alphaNumericUpperCaseRegex
+import models.domain.StringFieldRegex.alphaNumericRegex
 import models.messages.guarantee.GuaranteeReferenceWithOther.Constants.otherReferenceNumberLength
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
@@ -32,6 +32,6 @@ class OtherReferenceFormProvider @Inject()() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(otherReferenceNumberLength, "otherReference.error.length"),
-            regexp(alphaNumericUpperCaseRegex, "otherReference.error.invalid")
+            regexp(alphaNumericRegex, "otherReference.error.invalid")
           )))
 }
