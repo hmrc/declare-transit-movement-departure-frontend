@@ -74,7 +74,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
       val expectedJson =
         Json.obj(
           "lrn"                    -> lrn,
-          "backToTransitMovements" -> appConfig.serviceUrl
+          "backToTransitMovements" -> appConfig.manageTransitMovementsViewDeparturesUrl
         )
 
       templateCaptor.getValue mustEqual "declarationSummary.njk"

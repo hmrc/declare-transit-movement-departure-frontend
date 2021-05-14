@@ -16,6 +16,7 @@
 
 package forms.safetyAndSecurity
 
+import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
@@ -23,65 +24,65 @@ import play.api.data.FormError
 
 class SafetyAndSecurityConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "safetyAndSecurityConsigneeAddress.error.required"
-  private val lengthKey   = "safetyAndSecurityConsigneeAddress.error.length"
-  private val invalidKey  = "safetyAndSecurityConsigneeAddress.error.invalid"
-  private val maxLength   = 35
-  private val countries   = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-
+  private val countries     = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   private val consigneeName = "consigneeName"
-
-  val form = new SafetyAndSecurityConsigneeAddressFormProvider()(countries, consigneeName)
+  private val form          = new SafetyAndSecurityConsigneeAddressFormProvider()(countries, consigneeName)
 
   ".AddressLine1" - {
 
-    val fieldName = "AddressLine1"
+    val fieldName   = "AddressLine1"
+    val requiredKey = "safetyAndSecurityConsigneeAddress.error.AddressLine1.required"
+    val lengthKey   = "safetyAndSecurityConsigneeAddress.error.AddressLine1.length"
+    val invalidKey  = "safetyAndSecurityConsigneeAddress.error.AddressLine1.invalid"
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq("1"))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, "1")
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consigneeName)
   }
   ".AddressLine2" - {
 
-    val fieldName = "AddressLine2"
+    val fieldName   = "AddressLine2"
+    val requiredKey = "safetyAndSecurityConsigneeAddress.error.AddressLine2.required"
+    val lengthKey   = "safetyAndSecurityConsigneeAddress.error.AddressLine2.length"
+    val invalidKey  = "safetyAndSecurityConsigneeAddress.error.AddressLine2.invalid"
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq("2"))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, "2")
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consigneeName)
   }
 
   ".AddressLine3" - {

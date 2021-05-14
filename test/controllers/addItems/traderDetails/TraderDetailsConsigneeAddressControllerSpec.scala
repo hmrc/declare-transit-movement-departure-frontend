@@ -53,8 +53,8 @@ class TraderDetailsConsigneeAddressControllerSpec
   private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
-  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val consigneeName                                      = "consigneeName"
+  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new TraderDetailsConsigneeAddressFormProvider()
   private val form         = formProvider(countries, consigneeName, index)

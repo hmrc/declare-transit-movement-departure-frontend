@@ -29,19 +29,22 @@ class ConsignorAddressFormProvider @Inject() extends Mappings {
 
   def apply(countryList: CountryList, consignorName: String): Form[ConsignorAddress] = Form(
     mapping(
-      "AddressLine1" -> text("consignorAddress.error.AddressLine1.required")
-        .verifying(StopOnFirstFail[String](maxLength(35, "consignorAddress.error.AddressLine1.length"),
-                                           regexp(stringFieldRegex, "consignorAddress.error.AddressLine1.invalid"))),
-      "AddressLine2" -> text("consignorAddress.error.AddressLine2.required")
-        .verifying(StopOnFirstFail[String](maxLength(35, "consignorAddress.error.AddressLine2.length"),
-                                           regexp(stringFieldRegex, "consignorAddress.error.AddressLine2.invalid"))),
+      "AddressLine1" -> text("consignorAddress.error.AddressLine1.required", Seq(consignorName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(35, "consignorAddress.error.AddressLine1.length", consignorName),
+          regexp(stringFieldRegex, "consignorAddress.error.AddressLine1.invalid", Seq(consignorName))
+        )),
+      "AddressLine2" -> text("consignorAddress.error.AddressLine2.required", Seq(consignorName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(35, "consignorAddress.error.AddressLine2.length", consignorName),
+          regexp(stringFieldRegex, "consignorAddress.error.AddressLine2.invalid", Seq(consignorName))
+        )),
       "AddressLine3" -> text("consignorAddress.error.postalCode.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
           maxLength(9, "consignorAddress.error.postalCode.length", consignorName),
           regexp(alphaNumericWithSpaceRegex, "consignorAddress.error.postalCode.invalid", Seq(consignorName))
         )),
-      "country" -> text("consignorAddress.error.country.required")
-        .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
+      "country" -> text("consignorAddress.error.country.required", Seq(consignorName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(ConsignorAddress.apply)(ConsignorAddress.unapply)
   )

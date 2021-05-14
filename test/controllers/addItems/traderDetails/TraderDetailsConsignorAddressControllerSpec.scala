@@ -47,11 +47,11 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
   private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
-  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val consignorName                                      = "consignorName"
+  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new TraderDetailsConsignorAddressFormProvider()
-  private val form         = formProvider(countries, consignorName, index)
+  private val form         = formProvider(countries, consignorName)
 
   lazy val traderDetailsConsignorAddressRoute = routes.TraderDetailsConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
 

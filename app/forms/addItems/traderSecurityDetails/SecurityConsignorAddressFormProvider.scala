@@ -33,21 +33,20 @@ class SecurityConsignorAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("securityConsignorAddress.error.AddressLine1.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine1.length", consigneeNameMaxLength),
-          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine1.invalid")
+          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine1.length", consignorName),
+          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine1.invalid", Seq(consignorName))
         )),
       "AddressLine2" -> text("securityConsignorAddress.error.AddressLine2.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine2.length", consigneeNameMaxLength),
-          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine2.invalid")
+          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine2.length", consignorName),
+          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine2.invalid", Seq(consignorName))
         )),
       "AddressLine3" -> text("securityConsignorAddress.error.AddressLine3.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine3.length", consigneeNameMaxLength),
-          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine3.invalid")
+          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine3.length", consignorName),
+          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine3.invalid", Seq(consignorName))
         )),
       "country" -> text("securityConsignorAddress.error.country.required", Seq(consignorName))
-        .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(ConsignorAddress.apply)(ConsignorAddress.unapply)
   )

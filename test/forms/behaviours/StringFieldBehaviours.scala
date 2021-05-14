@@ -67,22 +67,4 @@ trait StringFieldBehaviours extends FieldBehaviours {
           result.errors must equal(expectedError)
       }
     }
-
-  def fieldWithMaxLength(
-    form: Form[_],
-    fieldName: String,
-    maxLength: Int,
-    lengthError: FormError,
-    gen: Gen[String]
-  ): Unit =
-    s"must not bind strings longer than $maxLength characters" in {
-
-      forAll(gen -> "longString") {
-        string =>
-          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-          result.errors.headOption.value.key mustEqual lengthError.key
-          result.errors.headOption.value.message mustEqual lengthError.message
-          result.errors.headOption.value.args mustEqual lengthError.args
-      }
-    }
 }

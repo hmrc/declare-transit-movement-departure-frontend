@@ -311,7 +311,8 @@ principalAddress.error.town.required = Enter the town of {0}’s address
 principalAddress.error.postcode.required = Enter the postcode of {0}’s address
 principalAddress.error.numberAndStreet.length = Number and street must be 35 characters or less
 principalAddress.error.town.length = Town must be 35 characters or less
-principalAddress.error.numberAndStreet.invalidCharacters = The  number and street of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+principalAddress.error.numberAndStreet.invalidCharacters = The  number and street of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
 principalAddress.error.town.invalidCharacters = The town of {0}’s address must only include letters a to z, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 principalAddress.error.postcode.length = Postcode must be 9 characters or less
 principalAddress.error.postcode.invalidFormat = Enter the postcode of {0}’s address in the right format, like AB1 1AB
@@ -791,7 +792,7 @@ traderDetailsConsigneeAddress.checkYourAnswersLabel =  Consignee’s address
 traderDetailsConsigneeAddress.error.required = Enter {0}’s Address
 traderDetailsConsigneeAddress.error.length = The address for {0} must be 100 characters or less
 traderDetailsConsigneeAddress.checkYourAnswersLabel.visuallyHidden = change [{0}’s address]
-traderDetailsConsigneeAddress.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+traderDetailsConsigneeAddress.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 traderDetailsConsigneeAddress.error.required = Enter the {0} of {1}’s address
 traderDetailsConsigneeAddress.error.max_length = The {0} of {1}’s address must be 35 characters or less
 
@@ -849,7 +850,8 @@ traderDetailsConsignorAddress.error.required = Enter {0}’s Address
 traderDetailsConsignorAddress.error.length = The address for {0} must be 100 characters or less
 traderDetailsConsignorAddress.checkYourAnswersLabel.visuallyHidden = change [{0}’s address]
 
-traderDetailsConsignorAddress.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+traderDetailsConsignorAddress.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
 traderDetailsConsignorAddress.error.required = Enter the {0} of {1}’s address
 traderDetailsConsignorAddress.error.max_length = The {0} of {1}’s address must be 35 characters or less
 
@@ -1166,9 +1168,12 @@ securityConsignorAddress.error.country.required = Enter the country of {0}’s a
 securityConsignorAddress.error.AddressLine1.length = Address line 1 must be {0} characters or less
 securityConsignorAddress.error.AddressLine2.length = Address line 2 must be {0} characters or less
 securityConsignorAddress.error.AddressLine3.length = Address line 3 must be {0} characters or less
-securityConsignorAddress.error.AddressLine1.invalid= The first line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-securityConsignorAddress.error.AddressLine2.invalid= The second line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-securityConsignorAddress.error.AddressLine3.invalid= The third line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+securityConsignorAddress.error.AddressLine1.invalid= The first line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+securityConsignorAddress.error.AddressLine2.invalid= The second line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+securityConsignorAddress.error.AddressLine3.invalid= The third line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
 
 securityConsigneeAddress.title = What is the security consignee’s address
 securityConsigneeAddress.heading = What is {0}’s address?
@@ -1184,9 +1189,12 @@ securityConsigneeAddress.error.country.required = Enter the country of {0}’s a
 securityConsigneeAddress.error.AddressLine1.length = Address line 1 must be {0} characters or less
 securityConsigneeAddress.error.AddressLine2.length = Address line 2 must be {0} characters or less
 securityConsigneeAddress.error.AddressLine3.length = Address line 3 must be {0} characters or less
-securityConsigneeAddress.error.AddressLine1.invalid = The first line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-securityConsigneeAddress.error.AddressLine2.invalid = The second line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-securityConsigneeAddress.error.AddressLine3.invalid = The third line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+securityConsigneeAddress.error.AddressLine1.invalid = The first line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+securityConsigneeAddress.error.AddressLine2.invalid = The second line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+securityConsigneeAddress.error.AddressLine3.invalid = The third line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
 
 declarationRejection.title = There is a problem with this departure declaration
 declarationRejection.heading = There is a problem with this departure declaration
@@ -1453,7 +1461,6 @@ securityConsigneeName.checkYourAnswersLabel =  Security consignee’s name
 securityConsigneeName.error.required = Enter the security consignee’s name
 securityConsigneeName.error.length =  The security consignee’s name must be 35 characters or less
 securityConsigneeName.error.invalid = The security consignee’s name must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-
 
 confirmRemoveCountry.title = Are you sure you want to remove this country?
 confirmRemoveCountry.heading = Are you sure you want to remove this country?
