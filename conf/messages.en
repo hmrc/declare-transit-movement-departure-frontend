@@ -1353,7 +1353,7 @@ safetyAndSecurityConsigneeAddress.title = What is {0}’s address?
 safetyAndSecurityConsigneeAddress.heading = What is {0}’s address?
 safetyAndSecurityConsigneeAddress.AddressLine1 = Address line 1
 safetyAndSecurityConsigneeAddress.AddressLine2 = Address line 2
-safetyAndSecurityConsigneeAddress.AddressLine3 = Address line 3
+safetyAndSecurityConsigneeAddress.postalCode   = Postal code
 safetyAndSecurityConsigneeAddress.AddressLine4 = Country
 safetyAndSecurityConsigneeAddress.checkYourAnswersLabel = Security consignee’s address
 safetyAndSecurityConsigneeAddress.checkYourAnswersLabel.visuallyHidden = change security consignee’s address
@@ -1361,6 +1361,11 @@ safetyAndSecurityConsigneeAddress.error.required = Enter address line {0} of the
 safetyAndSecurityConsigneeAddress.AddressLine4.required = Enter the country of the security consignee’s address
 safetyAndSecurityConsigneeAddress.error.length = Address line {0} of of the security consignee’s address must be 35 characters or less
 safetyAndSecurityConsigneeAddress.error.invalid = Address line {0} of of the security consignee’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+safetyAndSecurityConsigneeAddress.postalCode.error.required = Enter the postal code for {0}’s address
+safetyAndSecurityConsigneeAddress.postalCode.error.length = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+safetyAndSecurityConsigneeAddress.postalCode.error.invalid = The postal code for {0}’s address must be 9 characters or less
+
+
 
 safetyAndSecurityConsigneeEori.title = What is the security consignee’s EORI number?
 safetyAndSecurityConsigneeEori.heading = What is the security consignee’s EORI number?

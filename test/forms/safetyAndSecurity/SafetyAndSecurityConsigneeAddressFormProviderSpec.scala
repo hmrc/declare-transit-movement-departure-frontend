@@ -19,9 +19,7 @@ package forms.safetyAndSecurity
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class SafetyAndSecurityConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
 
@@ -31,7 +29,9 @@ class SafetyAndSecurityConsigneeAddressFormProviderSpec extends StringFieldBehav
   private val maxLength   = 35
   private val countries   = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
 
-  val form = new SafetyAndSecurityConsigneeAddressFormProvider()(countries)
+  private val consigneeName = "consigneeName"
+
+  val form = new SafetyAndSecurityConsigneeAddressFormProvider()(countries, consigneeName)
 
   ".AddressLine1" - {
 
@@ -86,7 +86,12 @@ class SafetyAndSecurityConsigneeAddressFormProviderSpec extends StringFieldBehav
 
   ".AddressLine3" - {
 
-    val fieldName = "AddressLine3"
+    val fieldName   = "AddressLine3"
+    val requiredKey = "safetyAndSecurityConsigneeAddress.postalCode.error.required"
+    val lengthKey   = "safetyAndSecurityConsigneeAddress.postalCode.error.length"
+    val invalidKey  = "safetyAndSecurityConsigneeAddress.postalCode.error.invalid"
+
+    val maxLength = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -98,15 +103,15 @@ class SafetyAndSecurityConsigneeAddressFormProviderSpec extends StringFieldBehav
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq("3"))
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, "3")
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consigneeName)
   }
 }

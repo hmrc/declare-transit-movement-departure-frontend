@@ -50,9 +50,10 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val consigneeName                                      = "consigneeName"
 
   private val formProvider = new SafetyAndSecurityConsigneeAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, consigneeName)
   private val template     = "safetyAndSecurity/safetyAndSecurityConsigneeAddress.njk"
 
   lazy val safetyAndSecurityConsigneeAddressRoute = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, NormalMode).url
@@ -79,7 +80,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsigneeNamePage, "ConsigneeName").success.value
+      val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsigneeNamePage, consigneeName).success.value
 
       dataRetrievalWithData(userAnswers)
 
@@ -97,7 +98,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
         "form"          -> form,
         "mode"          -> NormalMode,
         "lrn"           -> lrn,
-        "consigneeName" -> "ConsigneeName",
+        "consigneeName" -> consigneeName,
         "countries"     -> countryJsonList(form.value.map(_.country), countries.fullList)
       )
 
@@ -114,10 +115,10 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
-      val consignorAddress: ConsigneeAddress = ConsigneeAddress("Address line 1", "Address line 2", "Address line 3", country)
+      val consignorAddress: ConsigneeAddress = ConsigneeAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
-        .set(SafetyAndSecurityConsigneeNamePage, "ConsigneeName")
+        .set(SafetyAndSecurityConsigneeNamePage, consigneeName)
         .success
         .value
         .set(SafetyAndSecurityConsigneeAddressPage, consignorAddress)
@@ -139,7 +140,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
         Map(
           "AddressLine1" -> "Address line 1",
           "AddressLine2" -> "Address line 2",
-          "AddressLine3" -> "Address line 3",
+          "AddressLine3" -> "Code",
           "country"      -> "GB"
         )
       )
@@ -148,7 +149,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
         "form"          -> filledForm,
         "lrn"           -> lrn,
         "mode"          -> NormalMode,
-        "consigneeName" -> "ConsigneeName",
+        "consigneeName" -> consigneeName,
         "countries"     -> countryJsonList(filledForm.value.map(_.country), countries.fullList)
       )
 
@@ -166,7 +167,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers
-        .set(SafetyAndSecurityConsigneeNamePage, "ConsigneeName")
+        .set(SafetyAndSecurityConsigneeNamePage, consigneeName)
         .success
         .value
 
@@ -190,7 +191,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
 
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
-      val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsigneeNamePage, "ConsigneeName").success.value
+      val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsigneeNamePage, consigneeName).success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(POST, safetyAndSecurityConsigneeAddressRoute).withFormUrlEncodedBody(("value", ""))
