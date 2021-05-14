@@ -17,18 +17,17 @@
 package forms.safetyAndSecurity
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
+import models.domain.StringFieldRegex.{alphaNumericWithSpaceRegex, stringFieldRegex}
 import models.reference.Country
 import models.{CarrierAddress, CountryList}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class CarrierAddressFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList): Form[CarrierAddress] = Form(
+  def apply(countryList: CountryList, carrierName: String): Form[CarrierAddress] = Form(
     mapping(
       "AddressLine1" -> text("carrierAddress.error.AddressLine1.required")
         .verifying(StopOnFirstFail[String](maxLength(35, "carrierAddress.error.AddressLine1.length"),
@@ -36,9 +35,11 @@ class CarrierAddressFormProvider @Inject() extends Mappings {
       "AddressLine2" -> text("carrierAddress.error.AddressLine2.required")
         .verifying(StopOnFirstFail[String](maxLength(35, "carrierAddress.error.AddressLine2.length"),
                                            regexp(stringFieldRegex, "carrierAddress.error.AddressLine2.invalid"))),
-      "AddressLine3" -> text("carrierAddress.error.AddressLine3.required")
-        .verifying(StopOnFirstFail[String](maxLength(35, "carrierAddress.error.AddressLine3.length"),
-                                           regexp(stringFieldRegex, "carrierAddress.error.AddressLine3.invalid"))),
+      "AddressLine3" -> text("carrierAddress.postalCode.error.required", Seq(carrierName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(9, "carrierAddress.postalCode.error.length", carrierName),
+          regexp(alphaNumericWithSpaceRegex, "carrierAddress.postalCode.error.invalid", Seq(carrierName))
+        )),
       "country" -> text("carrierAddress.error.country.required")
         .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)

@@ -210,7 +210,7 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
   def carrierAddress: Option[Row] = userAnswers.get(CarrierAddressPage) map {
     answer =>
       val carrierAddress = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.AddressLine3, answer.country.description)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>"))
       Row(
         key   = Key(msg"carrierAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),

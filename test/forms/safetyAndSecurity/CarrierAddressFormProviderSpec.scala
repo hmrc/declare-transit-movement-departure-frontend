@@ -25,10 +25,11 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
 
+  private val carrierName  = "carrierName"
   private val country      = Country(CountryCode("GB"), "United Kingdom")
   private val countries    = CountryList(Seq(country))
   private val formProvider = new CarrierAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, carrierName)
 
   ".AddressLine1" - {
 
@@ -91,10 +92,11 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "carrierAddress.error.AddressLine3.required"
-    val lengthKey   = "carrierAddress.error.AddressLine3.length"
-    val invalidKey  = "carrierAddress.error.AddressLine3.invalid"
-    val maxLength   = 35
+    val requiredKey = "carrierAddress.postalCode.error.required"
+    val lengthKey   = "carrierAddress.postalCode.error.length"
+    val invalidKey  = "carrierAddress.postalCode.error.invalid"
+
+    val maxLength = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -106,15 +108,15 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(carrierName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(carrierName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, carrierName)
   }
 }

@@ -1365,8 +1365,6 @@ safetyAndSecurityConsigneeAddress.postalCode.error.required = Enter the postal c
 safetyAndSecurityConsigneeAddress.postalCode.error.length = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
 safetyAndSecurityConsigneeAddress.postalCode.error.invalid = The postal code for {0}’s address must be 9 characters or less
 
-
-
 safetyAndSecurityConsigneeEori.title = What is the security consignee’s EORI number?
 safetyAndSecurityConsigneeEori.heading = What is the security consignee’s EORI number?
 safetyAndSecurityConsigneeEori.checkYourAnswersLabel = Security consignee’s EORI number
@@ -1398,19 +1396,19 @@ carrierAddress.heading = What is {0}’s address?
 carrierAddress.checkYourAnswersLabel = Carrier’s address
 carrierAddress.AddressLine1 = Address line 1
 carrierAddress.AddressLine2 = Address line 2
-carrierAddress.AddressLine3 = Address line 3
+carrierAddress.postalCode = Postal code
 carrierAddress.AddressLine4 = Country
 carrierAddress.error.required = Enter carrierAddress
 carrierAddress.error.AddressLine1.required = Enter the first line of the carrier’s address
 carrierAddress.error.AddressLine2.required = Enter the second line of the carrier’s address
-carrierAddress.error.AddressLine3.required = Enter the third line of the carrier’s address
+carrierAddress.error.postalCode.required =  Enter the postal code for {0}’s address
 carrierAddress.error.country.required = Enter the country of the carrier’s address
 carrierAddress.error.AddressLine1.length = Address line 1 must be 35 characters or less
 carrierAddress.error.AddressLine2.length = Address line 2 must be 35 characters or less
-carrierAddress.error.AddressLine3.length = Address line 3 must be 35 characters or less
+carrierAddress.error.postalCode.length = The postal code for {0}’s address must be 9 characters or less
 carrierAddress.error.AddressLine1.invalid= The first line of the carrier’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
 carrierAddress.error.AddressLine2.invalid= The second line of the carrier’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
-carrierAddress.error.AddressLine3.invalid= The third line of the carrier’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+carrierAddress.error.postalCode.invalid= The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
 
 carrierEori.title = What is the carrier’s EORI number?
 carrierEori.heading = What is the carrier’s EORI number?
