@@ -16,12 +16,10 @@
 
 package controllers
 
-import cats.data.NonEmptyList
-import config.{FrontendAppConfig, ManageTransitMovementsService}
+import config.FrontendAppConfig
 import controllers.actions._
 import handlers.ErrorHandler
 import models.LocalReferenceNumber
-import models.journeyDomain.{ItemSection, UserAnswersReader}
 import pages.TechnicalDifficultiesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -43,7 +41,6 @@ class DeclarationSummaryController @Inject()(
   val renderer: Renderer,
   val appConfig: FrontendAppConfig,
   errorHandler: ErrorHandler,
-  manageTransitMovementsService: ManageTransitMovementsService,
   submissionService: DeclarationSubmissionService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -53,7 +50,7 @@ class DeclarationSummaryController @Inject()(
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       renderer
-        .render("declarationSummary.njk", DeclarationSummaryViewModel(manageTransitMovementsService, request.userAnswers))
+        .render("declarationSummary.njk", DeclarationSummaryViewModel(appConfig.serviceUrl, request.userAnswers))
         .map(Ok(_))
   }
 
