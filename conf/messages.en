@@ -423,9 +423,7 @@ consigneeAddress.error.AddressLine1.length = Address line 1 must be 35 character
 consigneeAddress.error.AddressLine2.length = Address line 2 must be 35 characters or less
 consigneeAddress.error.AddressLine3.length = Address line 3 must be 35 characters or less
 consigneeAddress.error.line1.invalid= The first line of the consignee’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
 consigneeAddress.error.line2.invalid= The second line of the consignee’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
 consigneeAddress.error.line3.invalid= The third line of the consignee’s address must only include letters a to z, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 
 idAtDeparture.title = What is the name, registration or reference of the vehicle at departure?
@@ -877,7 +875,6 @@ traderDetailsConsignorAddress.error.AddressLine1.length = Address line 1 must be
 traderDetailsConsignorAddress.error.AddressLine2.length = Address line 2 must be 35 characters or less
 traderDetailsConsignorAddress.error.AddressLine3.length = Address line 3 must be 35 characters or less
 traderDetailsConsignorAddress.error.AddressLine1.invalid= The first line of consignor’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
 traderDetailsConsignorAddress.error.AddressLine2.invalid= The second line of consignor’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
 traderDetailsConsignorAddress.error.AddressLine3.invalid= The third line of consignor’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
@@ -1379,7 +1376,6 @@ safetyAndSecurityConsigneeAddress.AddressLine4.required = Enter the country of t
 safetyAndSecurityConsigneeAddress.error.length = Address line {0} of of the security consignee’s address must be 35 characters or less
 safetyAndSecurityConsigneeAddress.error.invalid = Address line {0} of of the security consignee’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
-
 safetyAndSecurityConsigneeEori.title = What is the security consignee’s EORI number?
 safetyAndSecurityConsigneeEori.heading = What is the security consignee’s EORI number?
 safetyAndSecurityConsigneeEori.checkYourAnswersLabel = Security consignee’s EORI number
@@ -1470,7 +1466,6 @@ securityConsigneeName.checkYourAnswersLabel =  Security consignee’s name
 securityConsigneeName.error.required = Enter the security consignee’s name
 securityConsigneeName.error.length =  The security consignee’s name must be 35 characters or less
 securityConsigneeName.error.invalid = The security consignee’s name must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-
 
 confirmRemoveCountry.title = Are you sure you want to remove this country?
 confirmRemoveCountry.heading = Are you sure you want to remove this country?

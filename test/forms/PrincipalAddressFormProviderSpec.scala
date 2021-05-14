@@ -53,7 +53,7 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(principalName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, principalName)
   }
 
   ".town" - {
@@ -83,7 +83,7 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(principalName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, principalName)
   }
 
   ".postcode" - {
@@ -91,7 +91,6 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
     val fieldName            = "postcode"
     val requiredKey          = "principalAddress.error.postcode.required"
     val lengthKey            = "principalAddress.error.postcode.length"
-    val invalidKey           = "principalAddress.error.postcode.invalid"
     val invalidCharactersKey = "principalAddress.error.postcode.invalidCharacters"
     val maxLength            = 9
 
@@ -107,6 +106,8 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(principalName))
     )
 
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidCharactersKey, maxLength, principalName)
+
     "must not bind strings longer than max length" in {
 
       val expectedError = List(FormError(fieldName, lengthKey, Seq(maxLength)))
@@ -117,19 +118,5 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
           result.errors mustBe expectedError
       }
     }
-
-    "must not bind strings with invalid characters" in {
-
-      val expectedError          = FormError(fieldName, invalidCharactersKey, Seq(principalName))
-      val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~,±üçñèé@]{9}")
-
-      forAll(generator) {
-
-        invalidString =>
-          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-          result.errors must contain(expectedError)
-      }
-    }
-
   }
 }

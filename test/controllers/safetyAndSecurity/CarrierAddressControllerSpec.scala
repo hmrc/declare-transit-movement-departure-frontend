@@ -53,7 +53,7 @@ class CarrierAddressControllerSpec extends SpecBase with MockNunjucksRendererApp
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new CarrierAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, carrierName)
   private val template     = "safetyAndSecurity/carrierAddress.njk"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

@@ -49,10 +49,11 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
   private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
+  private val consigneeName                                      = "consigneeName"
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new SafetyAndSecurityConsigneeAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, consigneeName)
   private val template     = "safetyAndSecurity/safetyAndSecurityConsigneeAddress.njk"
 
   lazy val safetyAndSecurityConsigneeAddressRoute = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, NormalMode).url

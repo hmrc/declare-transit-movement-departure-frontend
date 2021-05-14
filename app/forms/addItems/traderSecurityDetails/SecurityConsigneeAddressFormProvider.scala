@@ -32,21 +32,20 @@ class SecurityConsigneeAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("securityConsigneeAddress.error.AddressLine1.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsigneeAddress.error.AddressLine1.length", consigneeNameMaxLength),
+          maxLength(addressMaxLength, "securityConsigneeAddress.error.AddressLine1.length", consigneeName),
           regexp(stringFieldRegex, "securityConsigneeAddress.error.AddressLine1.invalid", Seq(consigneeName))
         )),
       "AddressLine2" -> text("securityConsigneeAddress.error.AddressLine2.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsigneeAddress.error.AddressLine2.length", consigneeNameMaxLength),
+          maxLength(addressMaxLength, "securityConsigneeAddress.error.AddressLine2.length", consigneeName),
           regexp(stringFieldRegex, "securityConsigneeAddress.error.AddressLine2.invalid", Seq(consigneeName))
         )),
       "AddressLine3" -> text("securityConsigneeAddress.error.AddressLine3.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsigneeAddress.error.AddressLine3.length", consigneeNameMaxLength),
+          maxLength(addressMaxLength, "securityConsigneeAddress.error.AddressLine3.length", consigneeName),
           regexp(stringFieldRegex, "securityConsigneeAddress.error.AddressLine3.invalid", Seq(consigneeName))
         )),
       "country" -> text("securityConsigneeAddress.error.country.required", Seq(consigneeName))
-        .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(ConsigneeAddress.apply)(ConsigneeAddress.unapply)
   )
