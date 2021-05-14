@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.ManageTransitMovementsService
+import config.FrontendAppConfig
 import controllers.actions._
 import models.LocalReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -37,7 +37,7 @@ class SubmissionConfirmationController @Inject()(
   sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
-  manageTransitMovementsService: ManageTransitMovementsService
+  appConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -48,7 +48,7 @@ class SubmissionConfirmationController @Inject()(
         _ =>
           val json = Json.obj(
             "lrn"                       -> lrn,
-            "manageTransitMovementsUrl" -> manageTransitMovementsService.service.fullServiceUrl,
+            "manageTransitMovementsUrl" -> appConfig.serviceUrl,
             "makeAnotherDeparture"      -> controllers.routes.LocalReferenceNumberController.onPageLoad().url
           )
           renderer.render("submissionConfirmation.njk", json).map(Ok(_))

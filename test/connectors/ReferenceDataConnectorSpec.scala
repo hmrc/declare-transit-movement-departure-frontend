@@ -88,6 +88,22 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
       |]
       |""".stripMargin
 
+  private val nonEUCountryListResponseJson: String =
+    """
+      |[
+      | {
+      |   "code":"GB",
+      |   "state":"valid",
+      |   "description":"United Kingdom"
+      | },
+      | {
+      |   "code":"NO",
+      |   "state":"valid",
+      |   "description":"Norway"
+      | }
+      |]
+      |""".stripMargin
+
   private val transportModeListResponseJson: String =
     """
       |[
@@ -323,6 +339,30 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
       "must return an exception when an error response is returned" in {
 
         checkErrorResponse(s"/$startUrl/transit-countries", connector.getTransitCountryList())
+      }
+    }
+
+    "getNonEUTransitCountryList" - {
+
+      "must return Seq of Country when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$startUrl/non-eu-transit-countries"))
+            .willReturn(okJson(nonEUCountryListResponseJson))
+        )
+
+        val expectedResult: CountryList = CountryList(
+          Seq(
+            Country(CountryCode("GB"), "United Kingdom"),
+            Country(CountryCode("NO"), "Norway")
+          )
+        )
+
+        connector.getNonEUTransitCountryList().futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+
+        checkErrorResponse(s"/$startUrl/non-eu-transit-countries", connector.getNonEUTransitCountryList())
       }
     }
 

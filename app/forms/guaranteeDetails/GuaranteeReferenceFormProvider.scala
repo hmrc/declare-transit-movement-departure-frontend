@@ -17,10 +17,11 @@
 package forms.guaranteeDetails
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.alphaNumericUpperCaseRegex
-import javax.inject.Inject
+import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
+import javax.inject.Inject
 
 class GuaranteeReferenceFormProvider @Inject() extends Mappings {
 
@@ -30,6 +31,6 @@ class GuaranteeReferenceFormProvider @Inject() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(grnMaxLength, "guaranteeReference.error.length"),
-            regexp(alphaNumericUpperCaseRegex, "guaranteeReference.error.invalid")
+            regexp(alphaNumericRegex, "guaranteeReference.error.invalid")
           )))
 }

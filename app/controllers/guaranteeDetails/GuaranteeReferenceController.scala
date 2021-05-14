@@ -61,7 +61,7 @@ class GuaranteeReferenceController @Inject()(
         val preparedForm = request.userAnswers.get(GuaranteeReferencePage(index)) match {
 
           case None        => formProvider(lengthGRN)
-          case Some(value) => formProvider(lengthGRN).fill(value)
+          case Some(value) => formProvider(lengthGRN).fill(value.toUpperCase)
         }
 
         val json = Json.obj(
@@ -95,7 +95,7 @@ class GuaranteeReferenceController @Inject()(
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(GuaranteeReferencePage(index), value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(GuaranteeReferencePage(index), value.toUpperCase))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(GuaranteeReferencePage(index), mode, updatedAnswers))
           )

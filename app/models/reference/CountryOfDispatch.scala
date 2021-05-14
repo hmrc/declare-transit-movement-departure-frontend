@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package config
+package models.reference
 
-import com.google.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.libs.json._
 
-@Singleton
-class ManageTransitMovementsService @Inject()(configuration: Configuration)
-    extends ServiceDetails(configuration, "microservice.services.manageTransitMovementsFrontend")
+case class CountryOfDispatch(country: CountryCode, isNotEu: Boolean)
+
+object CountryOfDispatch {
+  implicit val format: OFormat[CountryOfDispatch] = Json.format[CountryOfDispatch]
+
+}

@@ -19,11 +19,11 @@ package viewModels
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.{JourneyModelGenerators, ModelGenerators, UserAnswersGenerator}
-import models.journeyDomain.MovementDetails.{NormalMovementDetails, SimplifiedMovementDetails}
 import models.journeyDomain._
 import models.journeyDomain.traderDetails.{TraderDetails, TraderDetailsSpec}
-import models.reference.CountryCode
-import models.{DeclarationType, EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status, UserAnswers, WithName}
+import models.reference.{CountryCode, CountryOfDispatch}
+import models.{DeclarationType, EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status, UserAnswers}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages._
 import pages.guaranteeDetails.GuaranteeTypePage
@@ -143,7 +143,7 @@ class TaskListViewModelSpec
         }
 
         "is InProgress when the first question for the section has been answered" in {
-          forAll(arb[CountryCode]) {
+          forAll(arbitrary[CountryOfDispatch]) {
             pageAnswer =>
               val userAnswers = emptyUserAnswers.unsafeSetVal(CountryOfDispatchPage)(pageAnswer)
 
@@ -178,7 +178,7 @@ class TaskListViewModelSpec
         }
 
         "when the status is InProgress, links to the first page" in {
-          forAll(arb[CountryCode]) {
+          forAll(arb[CountryOfDispatch]) {
             pageAnswer =>
               val userAnswers = emptyUserAnswers.unsafeSetVal(CountryOfDispatchPage)(pageAnswer)
 

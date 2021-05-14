@@ -17,27 +17,19 @@
 package viewModels
 
 import base.{GeneratorSpec, SpecBase}
-import config.{ManageTransitMovementsService, Service}
 import generators.JourneyModelGenerators
 import models.journeyDomain.{JourneyDomain, JourneyDomainSpec}
-import org.mockito.Mockito
-import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import play.api.Configuration
 import play.api.libs.json.Json
 
 class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with BeforeAndAfterEach {
 
-  private val service: Service = Service("host", "port", "protocol", "startUrl")
-  val mockConfiguration        = mock[Configuration]
-  when(mockConfiguration.get[Service]("microservice.services.manageTransitMovementsFrontend")).thenReturn(service)
-
-  val manageTransitMovementsService = new ManageTransitMovementsService(mockConfiguration)
+  val serviceUrl = "https://serviceUrl/1222"
 
   "when the declaration is incomplete" ignore {
     "returns lrn, sections, movement link and indicator for incomplete declaration" in {
       val userAnswers                      = emptyUserAnswers
-      val sut: DeclarationSummaryViewModel = DeclarationSummaryViewModel(manageTransitMovementsService, userAnswers)
+      val sut: DeclarationSummaryViewModel = DeclarationSummaryViewModel(serviceUrl, userAnswers)
 
       val result = Json.toJsObject(sut)
 
@@ -45,7 +37,7 @@ class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with J
         Json.obj(
           "lrn"                    -> lrn,
           "sections"               -> TaskListViewModel(userAnswers),
-          "backToTransitMovements" -> service.fullServiceUrl,
+          "backToTransitMovements" -> serviceUrl,
           "isDeclarationComplete"  -> false
         )
 
@@ -57,7 +49,7 @@ class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with J
         journeyDomain =>
           val userAnswers = JourneyDomainSpec.setJourneyDomain(journeyDomain)(emptyUserAnswers)
 
-          val sut = DeclarationSummaryViewModel(manageTransitMovementsService, userAnswers)
+          val sut = DeclarationSummaryViewModel(serviceUrl, userAnswers)
 
           val result = Json.toJsObject(sut)
 
@@ -65,7 +57,7 @@ class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with J
             Json.obj(
               "lrn"                    -> journeyDomain.preTaskList.lrn,
               "sections"               -> TaskListViewModel(userAnswers),
-              "backToTransitMovements" -> service.fullServiceUrl,
+              "backToTransitMovements" -> serviceUrl,
               "isDeclarationComplete"  -> true,
               "onSubmitUrl"            -> DeclarationSummaryViewModel.nextPage(journeyDomain.preTaskList.lrn).url
             )
@@ -74,11 +66,6 @@ class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with J
       }
     }
 
-  }
-
-  override def beforeEach(): Unit = {
-    Mockito.reset(mockConfiguration)
-    super.beforeEach()
   }
 
 }
