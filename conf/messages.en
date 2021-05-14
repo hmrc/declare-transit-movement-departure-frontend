@@ -623,7 +623,7 @@ guaranteeReference.heading = What is the guarantee reference number?
 guaranteeReference.checkYourAnswersLabel = Guarantee reference number
 guaranteeReference.paragraph = You must make sure this reference is up to date.
 guaranteeReference.error.required = Enter the guarantee reference number
-guaranteeReference.error.invalid = The guarantee reference number must only include letters A to Z without accents and numbers 0 to 9
+guaranteeReference.error.invalid = The guarantee reference number must only include letters a to z without accents and numbers 0 to 9
 guaranteeReference.error.length = Guarantee reference number must be {0} characters or less
 
 liabilityAmount.title = How much is the liability amount?
