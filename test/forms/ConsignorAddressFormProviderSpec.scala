@@ -31,11 +31,6 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
   private val consignorName = "consignorName"
   private val form          = new ConsignorAddressFormProvider()(countries, consignorName)
 
-  private val validAddressStringGenOverLength: Gen[String] = for {
-    num  <- Gen.chooseNum[Int](addressMaxLength + 1, addressMaxLength + 5)
-    list <- Gen.listOfN(num, Gen.alphaNumChar)
-  } yield list.mkString("")
-
   ".AddressLine1" - {
 
     val fieldName   = "AddressLine1"
@@ -53,8 +48,7 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
-      validAddressStringGenOverLength
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
@@ -83,8 +77,7 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
-      validAddressStringGenOverLength
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
@@ -113,8 +106,7 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName)),
-      validAddressStringGenOverLength
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(

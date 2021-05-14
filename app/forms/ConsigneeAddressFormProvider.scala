@@ -32,17 +32,17 @@ class ConsigneeAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("consigneeAddress.error.AddressLine1.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "consigneeAddress.error.AddressLine1.length", Seq(consigneeName)),
+          maxLength(35, "consigneeAddress.error.AddressLine1.length", consigneeName),
           regexp(stringFieldRegex, "consigneeAddress.error.AddressLine1.invalid", Seq(consigneeName))
         )),
       "AddressLine2" -> text("consigneeAddress.error.AddressLine2.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "consigneeAddress.error.AddressLine2.length", Seq(consigneeName)),
+          maxLength(35, "consigneeAddress.error.AddressLine2.length", consigneeName),
           regexp(stringFieldRegex, "consigneeAddress.error.AddressLine2.invalid", Seq(consigneeName))
         )),
       "AddressLine3" -> text("consigneeAddress.error.AddressLine3.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "consigneeAddress.error.AddressLine3.length", Seq(consigneeName)),
+          maxLength(35, "consigneeAddress.error.AddressLine3.length", consigneeName),
           regexp(stringFieldRegex, "consigneeAddress.error.AddressLine3.invalid", Seq(consigneeName))
         )),
       "country" -> text("consigneeAddress.error.country.required", Seq(consigneeName))
