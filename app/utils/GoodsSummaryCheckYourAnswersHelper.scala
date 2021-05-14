@@ -28,6 +28,21 @@ import java.time.format.DateTimeFormatter
 
 class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def addAgreedLocationOfGoods: Option[Row] = userAnswers.get(AddAgreedLocationOfGoodsPage) map {
+    answer =>
+      Row(
+        key   = Key(msg"addAgreedLocationOfGoods.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(yesOrNo(answer)),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAgreedLocationOfGoods.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
   def confirmRemoveSeals: Option[Row] = userAnswers.get(ConfirmRemoveSealsPage) map {
     answer =>
       Row(
