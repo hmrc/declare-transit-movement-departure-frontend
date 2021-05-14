@@ -25,10 +25,11 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val country      = Country(CountryCode("GB"), "United Kingdom")
-  private val countries    = CountryList(Seq(country))
-  private val formProvider = new ConsignorAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val country       = Country(CountryCode("GB"), "United Kingdom")
+  private val countries     = CountryList(Seq(country))
+  private val formProvider  = new ConsignorAddressFormProvider()
+  private val consignorName = "consignorName"
+  private val form          = formProvider(countries, consignorName)
 
   ".AddressLine1" - {
 
@@ -103,10 +104,10 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "consignorAddress.error.AddressLine3.required"
-    val lengthKey   = "consignorAddress.error.AddressLine3.length"
-    val invalidKey  = "consignorAddress.error.AddressLine3.invalid"
-    val maxLength   = 35
+    val requiredKey = "consignorAddress.error.postalCode.required"
+    val lengthKey   = "consignorAddress.error.postalCode.length"
+    val invalidKey  = "consignorAddress.error.postalCode.invalid"
+    val maxLength   = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -118,15 +119,15 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
   }
 }

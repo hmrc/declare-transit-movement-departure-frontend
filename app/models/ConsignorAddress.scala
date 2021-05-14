@@ -19,7 +19,7 @@ package models
 import models.reference.Country
 import play.api.libs.json._
 
-case class ConsignorAddress(AddressLine1: String, AddressLine2: String, AddressLine3: String, country: Country)
+case class ConsignorAddress(AddressLine1: String, AddressLine2: String, postalCode: String, country: Country)
 
 object ConsignorAddress {
   implicit val format = Json.format[ConsignorAddress]
