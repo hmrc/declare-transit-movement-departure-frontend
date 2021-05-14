@@ -28,25 +28,24 @@ import javax.inject.Inject
 
 class TraderDetailsConsigneeAddressFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList): Form[ConsigneeAddress] = Form(
+  def apply(countryList: CountryList, consigneeName: String): Form[ConsigneeAddress] = Form(
     mapping(
-      "AddressLine1" -> text("traderDetailsConsigneeAddress.error.AddressLine1.required")
+      "AddressLine1" -> text("traderDetailsConsigneeAddress.error.AddressLine1.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine1.length"),
-          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine1.invalid")
+          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine1.length", consigneeName),
+          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine1.invalid", Seq(consigneeName))
         )),
-      "AddressLine2" -> text("traderDetailsConsigneeAddress.error.AddressLine2.required")
+      "AddressLine2" -> text("traderDetailsConsigneeAddress.error.AddressLine2.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine2.length"),
-          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine2.invalid")
+          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine2.length", consigneeName),
+          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine2.invalid", Seq(consigneeName))
         )),
-      "AddressLine3" -> text("traderDetailsConsigneeAddress.error.AddressLine3.required")
+      "AddressLine3" -> text("traderDetailsConsigneeAddress.error.AddressLine3.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine3.length"),
-          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine3.invalid")
+          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine3.length", consigneeName),
+          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine3.invalid", Seq(consigneeName))
         )),
-      "country" -> text("traderDetailsConsigneeAddress.error.country.required")
-        .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
+      "country" -> text("traderDetailsConsigneeAddress.error.country.required", Seq(consigneeName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(ConsigneeAddress.apply)(ConsigneeAddress.unapply)
   )

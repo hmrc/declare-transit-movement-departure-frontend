@@ -26,8 +26,6 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey   = "securityConsignorAddress.error.required"
-  private val lengthKey     = "securityConsignorAddress.error.length"
   private val country       = Country(CountryCode("GB"), "United Kingdom")
   private val countries     = CountryList(Seq(country))
   private val consignorName = "Test"
@@ -39,19 +37,18 @@ class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = "securityConsignorAddress.error.AddressLine1.required"
     val lengthKey   = "securityConsignorAddress.error.AddressLine1.length"
     val invalidKey  = "securityConsignorAddress.error.AddressLine1.invalid"
-    val maxLength   = addressMaxLength
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
@@ -60,7 +57,7 @@ class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
   }
 
   ".AddressLine2" - {
@@ -81,7 +78,7 @@ class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
@@ -90,7 +87,7 @@ class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
   }
 
   ".AddressLine3" - {
@@ -111,7 +108,7 @@ class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
@@ -120,7 +117,7 @@ class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
   }
 
 }

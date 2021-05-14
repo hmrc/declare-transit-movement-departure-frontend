@@ -46,10 +46,11 @@ class ConsignorAddressControllerSpec extends SpecBase with MockNunjucksRendererA
   private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
+  private val consignorName                                      = "consignorName"
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new ConsignorAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, consignorName)
 
   private lazy val consignorAddressRoute = routes.ConsignorAddressController.onPageLoad(lrn, NormalMode).url
 

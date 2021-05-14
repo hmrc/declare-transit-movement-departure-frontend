@@ -19,7 +19,7 @@ package controllers.traderDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.ConsigneeAddressFormProvider
+import forms.{ConsigneeAddressFormProvider, ConsignorAddressFormProvider}
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{ConsigneeAddress, CountryList, NormalMode}
@@ -46,12 +46,10 @@ class ConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererA
   private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
+  private val consigneeName                                      = "consigneeName"
+  private val form                                               = new ConsigneeAddressFormProvider()(countries, consigneeName)
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-
-  private val formProvider = new ConsigneeAddressFormProvider()
-  private val form         = formProvider(countries)
-
-  private lazy val consigneeAddressRoute = routes.ConsigneeAddressController.onPageLoad(lrn, NormalMode).url
+  private lazy val consigneeAddressRoute                         = routes.ConsigneeAddressController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

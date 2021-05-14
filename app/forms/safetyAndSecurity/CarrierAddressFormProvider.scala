@@ -28,19 +28,24 @@ import javax.inject.Inject
 
 class CarrierAddressFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList): Form[CarrierAddress] = Form(
+  def apply(countryList: CountryList, carrierName: String): Form[CarrierAddress] = Form(
     mapping(
-      "AddressLine1" -> text("carrierAddress.error.AddressLine1.required")
-        .verifying(StopOnFirstFail[String](maxLength(35, "carrierAddress.error.AddressLine1.length"),
-                                           regexp(stringFieldRegex, "carrierAddress.error.AddressLine1.invalid"))),
-      "AddressLine2" -> text("carrierAddress.error.AddressLine2.required")
-        .verifying(StopOnFirstFail[String](maxLength(35, "carrierAddress.error.AddressLine2.length"),
-                                           regexp(stringFieldRegex, "carrierAddress.error.AddressLine2.invalid"))),
-      "AddressLine3" -> text("carrierAddress.error.AddressLine3.required")
-        .verifying(StopOnFirstFail[String](maxLength(35, "carrierAddress.error.AddressLine3.length"),
-                                           regexp(stringFieldRegex, "carrierAddress.error.AddressLine3.invalid"))),
-      "country" -> text("carrierAddress.error.country.required")
-        .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
+      "AddressLine1" -> text("carrierAddress.error.AddressLine1.required", Seq(carrierName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(35, "carrierAddress.error.AddressLine1.length", carrierName),
+          regexp(stringFieldRegex, "carrierAddress.error.AddressLine1.invalid", Seq(carrierName))
+        )),
+      "AddressLine2" -> text("carrierAddress.error.AddressLine2.required", Seq(carrierName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(35, "carrierAddress.error.AddressLine2.length", carrierName),
+          regexp(stringFieldRegex, "carrierAddress.error.AddressLine2.invalid", Seq(carrierName))
+        )),
+      "AddressLine3" -> text("carrierAddress.error.AddressLine3.required", Seq(carrierName))
+        .verifying(StopOnFirstFail[String](
+          maxLength(35, "carrierAddress.error.AddressLine3.length", carrierName),
+          regexp(stringFieldRegex, "carrierAddress.error.AddressLine3.invalid", Seq(carrierName))
+        )),
+      "country" -> text("carrierAddress.error.country.required", Seq(carrierName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(CarrierAddress.apply)(CarrierAddress.unapply)
   )
