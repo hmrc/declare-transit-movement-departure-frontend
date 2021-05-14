@@ -19,7 +19,6 @@ package models.domain
 object StringFieldRegex {
 
   val stringFieldRegex                     = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
-  val alphaNumericUpperCaseRegex           = "^[A-Z0-9]*$".r
   val alphaNumericRegex                    = "^[a-zA-Z0-9]*$".r
   val alphaNumericWithSpaceRegex           = "^[a-zA-Z0-9 ]*$".r
   val commodityCodeCharactersRegex         = "^[0-9]*$"
