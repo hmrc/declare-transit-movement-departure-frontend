@@ -115,6 +115,6 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(carrierName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, carrierName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, carrierName)
   }
 }

@@ -30,7 +30,7 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
   private val countries     = CountryList(Seq(country))
   private val consigneeName = "consigneeName"
   private val formProvider  = new TraderDetailsConsigneeAddressFormProvider()
-  private val form          = formProvider(countries, consigneeName)
+  private val form          = formProvider(countries, consigneeName, Index(0))
 
   ".AddressLine1" - {
 

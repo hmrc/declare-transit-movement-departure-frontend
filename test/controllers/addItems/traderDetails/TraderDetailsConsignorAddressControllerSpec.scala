@@ -51,7 +51,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new TraderDetailsConsignorAddressFormProvider()
-  private val form         = formProvider(countries, consignorName)
+  private val form         = formProvider(countries, consignorName, index)
 
   lazy val traderDetailsConsignorAddressRoute = routes.TraderDetailsConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
 

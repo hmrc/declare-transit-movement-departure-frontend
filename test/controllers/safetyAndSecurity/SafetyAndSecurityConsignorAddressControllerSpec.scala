@@ -51,7 +51,6 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
   private val countries                                          = CountryList(Seq(country))
   private val consignorName                                      = "consignorName"
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val consignorName                                      = "consignorName"
 
   private val formProvider = new SafetyAndSecurityConsignorAddressFormProvider()
   private val form         = formProvider(countries, consignorName)

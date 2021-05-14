@@ -27,7 +27,6 @@ import javax.inject.Inject
 
 class TraderDetailsConsigneeAddressFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList, consigneeName: String): Form[ConsigneeAddress] = Form(
   def apply(countryList: CountryList, consigneeName: String, index: Index): Form[ConsigneeAddress] = Form(
     mapping(
       "AddressLine1" -> text("traderDetailsConsigneeAddress.error.AddressLine1.required", Seq(consigneeName))
