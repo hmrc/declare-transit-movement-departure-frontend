@@ -785,33 +785,31 @@ traderDetailsConsigneeAddress.error.line.required = Enter address line {0} of {1
 traderDetailsConsigneeAddress.error.line.invalid = Address line {0} of {1}’s address for item {2} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 traderDetailsConsigneeAddress.error.line.length = Address line {0} of {1}’s address for item {2} must be 35 characters or less
 traderDetailsConsigneeAddress.error.line.country.required = Enter the country of consignee’s address for item {1}
-
 traderDetailsConsigneeAddress.title = What is the consignee’s address for item {0}
 traderDetailsConsigneeAddress.heading =  What is {0}’s address?
 traderDetailsConsigneeAddress.checkYourAnswersLabel =  Consignee’s address
 traderDetailsConsigneeAddress.error.required = Enter {0}’s Address
 traderDetailsConsigneeAddress.error.length = The address for {0} must be 100 characters or less
-
 traderDetailsConsigneeAddress.checkYourAnswersLabel.visuallyHidden = change [{0}’s address]
-
 traderDetailsConsigneeAddress.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 traderDetailsConsigneeAddress.error.required = Enter the {0} of {1}’s address
 traderDetailsConsigneeAddress.error.max_length = The {0} of {1}’s address must be 35 characters or less
 
 traderDetailsConsigneeAddress.AddressLine1 = Address line 1
 traderDetailsConsigneeAddress.AddressLine2 = Address line 2
-traderDetailsConsigneeAddress.AddressLine3 = Address line 3
+traderDetailsConsigneeAddress.postalCode = Postal code
 traderDetailsConsigneeAddress.AddressLine4 = Country
 traderDetailsConsigneeAddress.error.AddressLine1.required = Enter the first line of the consignee’s address
 traderDetailsConsigneeAddress.error.AddressLine2.required = Enter the second line of the consignee’s address
-traderDetailsConsigneeAddress.error.AddressLine3.required = Enter the third line of the consignee’s address
+traderDetailsConsigneeAddress.error.postalCode.required = Enter the postal code for {0}’s address for item {1}
 traderDetailsConsigneeAddress.error.country.required = Enter the country of the consignee’s address
 traderDetailsConsigneeAddress.error.AddressLine1.length = Address line 1 must be 35 characters or less
 traderDetailsConsigneeAddress.error.AddressLine2.length = Address line 2 must be 35 characters or less
-traderDetailsConsigneeAddress.error.AddressLine3.length = Address line 3 must be 35 characters or less
+traderDetailsConsigneeAddress.error.postalCode.length = The postal code for {0}’s address  for item {1} must be 9 characters or less
 traderDetailsConsigneeAddress.error.AddressLine1.invalid= The first line of the consignee’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 traderDetailsConsigneeAddress.error.AddressLine2.invalid= The second line of the consignee’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-traderDetailsConsigneeAddress.error.AddressLine3.invalid= The third line of the consignee’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+traderDetailsConsigneeAddress.error.postalCode.invalid= The postal code for {0}’s address  for item {1} must only include letters a to z, numbers 0 to 9 and spaces
+
 
 traderDetailsConsigneeEoriKnown.title = Do you know the consignee’s EORI number for item {0}?
 traderDetailsConsigneeEoriKnown.heading = Do you know the consignee’s EORI number for item {0}?

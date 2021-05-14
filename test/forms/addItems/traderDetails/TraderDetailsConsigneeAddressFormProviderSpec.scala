@@ -25,10 +25,11 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val country      = Country(CountryCode("GB"), "United Kingdom")
-  private val countries    = CountryList(Seq(country))
-  private val formProvider = new TraderDetailsConsigneeAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val country       = Country(CountryCode("GB"), "United Kingdom")
+  private val countries     = CountryList(Seq(country))
+  private val consigneeName = "consigneeName"
+  private val formProvider  = new TraderDetailsConsigneeAddressFormProvider()
+  private val form          = formProvider(countries, consigneeName)
 
   ".AddressLine1" - {
 
@@ -93,10 +94,10 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "traderDetailsConsigneeAddress.error.AddressLine3.required"
-    val lengthKey   = "traderDetailsConsigneeAddress.error.AddressLine3.length"
-    val invalidKey  = "traderDetailsConsigneeAddress.error.AddressLine3.invalid"
-    val maxLength   = 35
+    val requiredKey = "traderDetailsConsigneeAddress.error.postalCode.required"
+    val lengthKey   = "traderDetailsConsigneeAddress.error.postalCode.length"
+    val invalidKey  = "traderDetailsConsigneeAddress.error.postalCode.invalid"
+    val maxLength   = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -108,15 +109,15 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consigneeName)
   }
 }
