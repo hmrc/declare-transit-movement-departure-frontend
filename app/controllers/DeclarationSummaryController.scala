@@ -50,7 +50,7 @@ class DeclarationSummaryController @Inject()(
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       renderer
-        .render("declarationSummary.njk", DeclarationSummaryViewModel(appConfig.serviceUrl, request.userAnswers))
+        .render("declarationSummary.njk", DeclarationSummaryViewModel(appConfig.manageTransitMovementsViewDeparturesUrl, request.userAnswers))
         .map(Ok(_))
   }
 
