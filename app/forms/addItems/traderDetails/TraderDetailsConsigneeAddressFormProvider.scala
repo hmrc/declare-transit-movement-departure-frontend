@@ -19,7 +19,7 @@ package forms.addItems.traderDetails
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.{alphaNumericWithSpaceRegex, stringFieldRegex}
 import models.reference.Country
-import models.{ConsigneeAddress, CountryList}
+import models.{ConsigneeAddress, CountryList, Index}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 class TraderDetailsConsigneeAddressFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList, consigneeName: String): Form[ConsigneeAddress] = Form(
+  def apply(countryList: CountryList, consigneeName: String, index: Index): Form[ConsigneeAddress] = Form(
     mapping(
       "AddressLine1" -> text("traderDetailsConsigneeAddress.error.AddressLine1.required")
         .verifying(StopOnFirstFail[String](
@@ -39,10 +39,10 @@ class TraderDetailsConsigneeAddressFormProvider @Inject() extends Mappings {
           maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine2.length"),
           regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine2.invalid")
         )),
-      "AddressLine3" -> text("traderDetailsConsigneeAddress.error.postalCode.required", Seq(consigneeName))
+      "AddressLine3" -> text("traderDetailsConsigneeAddress.error.postalCode.required", Seq(consigneeName, index.position))
         .verifying(StopOnFirstFail[String](
-          maxLength(9, "traderDetailsConsigneeAddress.error.postalCode.length", consigneeName),
-          regexp(alphaNumericWithSpaceRegex, "traderDetailsConsigneeAddress.error.postalCode.invalid", Seq(consigneeName))
+          maxLength(9, "traderDetailsConsigneeAddress.error.postalCode.length", consigneeName, index.position),
+          regexp(alphaNumericWithSpaceRegex, "traderDetailsConsigneeAddress.error.postalCode.invalid", Seq(consigneeName, index.position))
         )),
       "country" -> text("traderDetailsConsigneeAddress.error.country.required")
         .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))

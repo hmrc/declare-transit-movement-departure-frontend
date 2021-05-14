@@ -17,7 +17,7 @@
 package forms.addItems.traderDetails
 
 import forms.behaviours.StringFieldBehaviours
-import models.CountryList
+import models.{CountryList, Index}
 import models.reference.{Country, CountryCode}
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
@@ -29,7 +29,7 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
   private val countries     = CountryList(Seq(country))
   private val consigneeName = "consigneeName"
   private val formProvider  = new TraderDetailsConsigneeAddressFormProvider()
-  private val form          = formProvider(countries, consigneeName)
+  private val form          = formProvider(countries, consigneeName, Index(0))
 
   ".AddressLine1" - {
 
@@ -109,15 +109,15 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName, 0))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName, 0))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consigneeName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consigneeName, 0)
   }
 }

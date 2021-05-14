@@ -57,7 +57,7 @@ class TraderDetailsConsigneeAddressControllerSpec
   private val consigneeName                                      = "consigneeName"
 
   private val formProvider = new TraderDetailsConsigneeAddressFormProvider()
-  private val form         = formProvider(countries, consigneeName)
+  private val form         = formProvider(countries, consigneeName, index)
 
   private lazy val traderDetailsConsigneeAddressRoute = routes.TraderDetailsConsigneeAddressController.onPageLoad(lrn, index, NormalMode).url
 
