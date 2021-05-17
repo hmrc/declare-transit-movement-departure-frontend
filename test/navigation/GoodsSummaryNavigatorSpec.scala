@@ -74,7 +74,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from Loading Place page to Add Seals Page when on Normal journey and selected Yes for PreLodgeDeclaration" in {
+      "must go from Loading Place page to Add Agreed Location of Goods Page when on Normal journey and selected Yes for PreLodgeDeclaration" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
@@ -83,7 +83,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, NormalMode))
         }
       }
 
@@ -120,6 +120,17 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
+      "must go from Agreed Location Of Goods Page to to Add seals page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.set(AgreedLocationOfGoodsPage, "test").toOption.value
+
+            navigator
+              .nextPage(AgreedLocationOfGoodsPage, NormalMode, updatedAnswers)
+              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+        }
+      }
+
       "must go from TotalGrossMassPage to AddCustomsApprovedLocation page when previously " +
         "answered No to add Safety And Security Details and answered No to PreLodgeDeclaration on a Normal route" in {
         forAll(arbitrary[UserAnswers]) {
@@ -150,6 +161,31 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
+      "must go from Add Agreed Location of Goods Page" - {
+        "to Agreed location of goods page when user selects 'Yes'" in {
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddAgreedLocationOfGoodsPage, true).toOption.value
+
+              navigator
+                .nextPage(AddAgreedLocationOfGoodsPage, NormalMode, updatedAnswers)
+                .mustBe(goodsSummaryRoute.AgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, NormalMode))
+          }
+        }
+        "to Add Seals page when user selects 'No'" in {
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddAgreedLocationOfGoodsPage, false).toOption.value
+
+              navigator
+                .nextPage(AddAgreedLocationOfGoodsPage, NormalMode, updatedAnswers)
+                .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+          }
+        }
+      }
+
       "must go from TotalGrossMassPage to AuthoriedLocationCode page when previously answered No to add Safety And Security Details on a Simplified route" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -170,7 +206,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AddCustomsApprovedLocationPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, NormalMode))
         }
       }
 
