@@ -23,6 +23,7 @@ import models.{ConsignorAddress, CountryList}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
 import javax.inject.Inject
 
 class SafetyAndSecurityConsignorAddressFormProvider @Inject() extends Mappings {
@@ -33,18 +34,18 @@ class SafetyAndSecurityConsignorAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("safetyAndSecurityConsignorAddress.error.required", Seq(1))
         .verifying(StopOnFirstFail[String](
-          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.length", 1),
-          regexp(stringFieldRegex, "safetyAndSecurityConsignorAddress.error.invalid", Seq(1))
+          regexp(stringFieldRegex, "safetyAndSecurityConsignorAddress.error.invalid", Seq(1)),
+          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.length", 1)
         )),
       "AddressLine2" -> text("safetyAndSecurityConsignorAddress.error.required", Seq(2))
         .verifying(StopOnFirstFail[String](
-          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.length", 2),
-          regexp(stringFieldRegex, "safetyAndSecurityConsignorAddress.error.invalid", Seq(2))
+          regexp(stringFieldRegex, "safetyAndSecurityConsignorAddress.error.invalid", Seq(2)),
+          maxLength(maxLength, "safetyAndSecurityConsignorAddress.error.length", 2)
         )),
       "AddressLine3" -> text("safetyAndSecurityConsignorAddress.postalCode.error.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(9, "safetyAndSecurityConsignorAddress.postalCode.error.length", consignorName),
-          regexp(alphaNumericWithSpaceRegex, "safetyAndSecurityConsignorAddress.postalCode.error.invalid", Seq(consignorName))
+          regexp(alphaNumericWithSpaceRegex, "safetyAndSecurityConsignorAddress.postalCode.error.invalid", Seq(consignorName)),
+          maxLength(9, "safetyAndSecurityConsignorAddress.postalCode.error.length", consignorName)
         )),
       "country" -> text("safetyAndSecurityConsignorAddress.error.country.required", Seq(consignorName))
         .verifying("safetyAndSecurityConsignorAddress.error.country.required", value => countryList.fullList.exists(_.code.code == value))

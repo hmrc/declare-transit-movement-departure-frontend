@@ -23,6 +23,7 @@ import models.{ConsignorAddress, CountryList}
 import play.api.data.Form
 import play.api.data.Forms._
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
 import javax.inject.Inject
 
 class ConsignorAddressFormProvider @Inject() extends Mappings {
@@ -31,18 +32,18 @@ class ConsignorAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("consignorAddress.error.AddressLine1.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "consignorAddress.error.AddressLine1.length", consignorName),
-          regexp(stringFieldRegex, "consignorAddress.error.AddressLine1.invalid", Seq(consignorName))
+          regexp(stringFieldRegex, "consignorAddress.error.AddressLine1.invalid", Seq(consignorName)),
+          maxLength(35, "consignorAddress.error.AddressLine1.length", consignorName)
         )),
       "AddressLine2" -> text("consignorAddress.error.AddressLine2.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "consignorAddress.error.AddressLine2.length", consignorName),
-          regexp(stringFieldRegex, "consignorAddress.error.AddressLine2.invalid", Seq(consignorName))
+          regexp(stringFieldRegex, "consignorAddress.error.AddressLine2.invalid", Seq(consignorName)),
+          maxLength(35, "consignorAddress.error.AddressLine2.length", consignorName)
         )),
       "AddressLine3" -> text("consignorAddress.error.postalCode.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(9, "consignorAddress.error.postalCode.length", consignorName),
-          regexp(alphaNumericWithSpaceRegex, "consignorAddress.error.postalCode.invalid", Seq(consignorName))
+          regexp(alphaNumericWithSpaceRegex, "consignorAddress.error.postalCode.invalid", Seq(consignorName)),
+          maxLength(9, "consignorAddress.error.postalCode.length", consignorName)
         )),
       "country" -> text("consignorAddress.error.country.required", Seq(consignorName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)

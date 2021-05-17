@@ -23,6 +23,7 @@ import models.{CarrierAddress, CountryList}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
 import javax.inject.Inject
 
 class CarrierAddressFormProvider @Inject() extends Mappings {
@@ -31,18 +32,18 @@ class CarrierAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("carrierAddress.error.AddressLine1.required", Seq(carrierName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "carrierAddress.error.AddressLine1.length", carrierName),
-          regexp(stringFieldRegex, "carrierAddress.error.AddressLine1.invalid", Seq(carrierName))
+          regexp(stringFieldRegex, "carrierAddress.error.AddressLine1.invalid", Seq(carrierName)),
+          maxLength(35, "carrierAddress.error.AddressLine1.length", carrierName)
         )),
       "AddressLine2" -> text("carrierAddress.error.AddressLine2.required", Seq(carrierName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "carrierAddress.error.AddressLine2.length", carrierName),
-          regexp(stringFieldRegex, "carrierAddress.error.AddressLine2.invalid", Seq(carrierName))
+          regexp(stringFieldRegex, "carrierAddress.error.AddressLine2.invalid", Seq(carrierName)),
+          maxLength(35, "carrierAddress.error.AddressLine2.length", carrierName)
         )),
       "AddressLine3" -> text("carrierAddress.error.postalCode.required", Seq(carrierName))
         .verifying(StopOnFirstFail[String](
-          maxLength(9, "carrierAddress.error.postalCode.length", carrierName),
-          regexp(alphaNumericWithSpaceRegex, "carrierAddress.error.postalCode.invalid", Seq(carrierName))
+          regexp(alphaNumericWithSpaceRegex, "carrierAddress.error.postalCode.invalid", Seq(carrierName)),
+          maxLength(9, "carrierAddress.error.postalCode.length", carrierName)
         )),
       "country" -> text("carrierAddress.error.country.required", Seq(carrierName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)

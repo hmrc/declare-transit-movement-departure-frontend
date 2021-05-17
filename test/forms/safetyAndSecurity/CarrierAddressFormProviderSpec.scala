@@ -43,13 +43,6 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(addressMaxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(carrierName))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
@@ -68,13 +61,6 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       stringsWithMaxLength(addressMaxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(carrierName))
     )
 
     behave like mandatoryField(
@@ -100,13 +86,6 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       stringsWithMaxLength(addressMaxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(carrierName))
     )
 
     behave like mandatoryField(

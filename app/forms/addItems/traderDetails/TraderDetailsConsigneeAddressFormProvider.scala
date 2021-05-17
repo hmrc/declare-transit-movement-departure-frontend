@@ -23,6 +23,7 @@ import models.{ConsigneeAddress, CountryList, Index}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
 import javax.inject.Inject
 
 class TraderDetailsConsigneeAddressFormProvider @Inject() extends Mappings {
@@ -31,18 +32,18 @@ class TraderDetailsConsigneeAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("traderDetailsConsigneeAddress.error.AddressLine1.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine1.length", consigneeName),
-          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine1.invalid", Seq(consigneeName))
+          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine1.invalid", Seq(consigneeName)),
+          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine1.length", consigneeName)
         )),
       "AddressLine2" -> text("traderDetailsConsigneeAddress.error.AddressLine2.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine2.length", consigneeName),
-          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine2.invalid", Seq(consigneeName))
+          regexp(stringFieldRegex, "traderDetailsConsigneeAddress.error.AddressLine2.invalid", Seq(consigneeName)),
+          maxLength(35, "traderDetailsConsigneeAddress.error.AddressLine2.length", consigneeName)
         )),
       "AddressLine3" -> text("traderDetailsConsigneeAddress.error.postalCode.required", Seq(consigneeName, index.display))
         .verifying(StopOnFirstFail[String](
-          maxLength(9, "traderDetailsConsigneeAddress.error.postalCode.length", consigneeName, index.display),
-          regexp(alphaNumericWithSpaceRegex, "traderDetailsConsigneeAddress.error.postalCode.invalid", Seq(consigneeName, index.display))
+          regexp(alphaNumericWithSpaceRegex, "traderDetailsConsigneeAddress.error.postalCode.invalid", Seq(consigneeName, index.display)),
+          maxLength(9, "traderDetailsConsigneeAddress.error.postalCode.length", consigneeName, index.display)
         )),
       "country" -> text("traderDetailsConsigneeAddress.error.country.required", Seq(consigneeName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)

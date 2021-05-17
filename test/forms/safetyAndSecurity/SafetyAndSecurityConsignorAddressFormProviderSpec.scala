@@ -43,13 +43,6 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
       stringsWithMaxLength(addressMaxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(1))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
@@ -70,13 +63,6 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
       form,
       fieldName,
       stringsWithMaxLength(addressMaxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(2))
     )
 
     behave like mandatoryField(
@@ -101,13 +87,6 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
       form,
       fieldName,
       stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(

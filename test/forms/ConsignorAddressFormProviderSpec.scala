@@ -44,13 +44,6 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(addressMaxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
@@ -71,13 +64,6 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       stringsWithMaxLength(addressMaxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
@@ -101,13 +87,6 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(

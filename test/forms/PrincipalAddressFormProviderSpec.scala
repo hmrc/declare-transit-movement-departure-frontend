@@ -40,13 +40,6 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
@@ -68,13 +61,6 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
     behave like mandatoryField(
@@ -108,15 +94,5 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
 
     behave like fieldWithInvalidCharacters(form, fieldName, invalidCharactersKey, maxLength, principalName)
 
-    "must not bind strings longer than max length" in {
-
-      val expectedError = List(FormError(fieldName, lengthKey, Seq(maxLength)))
-
-      forAll(stringsLongerThan(maxLength + 1)) {
-        string =>
-          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-          result.errors mustBe expectedError
-      }
-    }
   }
 }

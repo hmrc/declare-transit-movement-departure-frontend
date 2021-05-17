@@ -43,13 +43,6 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
       stringsWithMaxLength(addressMaxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
@@ -70,13 +63,6 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
       form,
       fieldName,
       stringsWithMaxLength(addressMaxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
     )
 
     behave like mandatoryField(
@@ -100,13 +86,6 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
       form,
       fieldName,
       stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName, 1))
     )
 
     behave like mandatoryField(

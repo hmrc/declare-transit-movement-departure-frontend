@@ -17,12 +17,13 @@
 package forms
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.{alphaNumericWithSpaceRegex, stringFieldRegex}
+import models.domain.StringFieldRegex.{stringFieldRegex}
 import models.reference.Country
 import models.{ConsigneeAddress, CountryList}
 import play.api.data.Form
 import play.api.data.Forms._
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
 import javax.inject.Inject
 
 class ConsigneeAddressFormProvider @Inject() extends Mappings {
@@ -31,18 +32,18 @@ class ConsigneeAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("consigneeAddress.error.AddressLine1.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "consigneeAddress.error.AddressLine1.length", consigneeName),
-          regexp(stringFieldRegex, "consigneeAddress.error.AddressLine1.invalid", Seq(consigneeName))
+          regexp(stringFieldRegex, "consigneeAddress.error.AddressLine1.invalid", Seq(consigneeName)),
+          maxLength(35, "consigneeAddress.error.AddressLine1.length", consigneeName)
         )),
       "AddressLine2" -> text("consigneeAddress.error.AddressLine2.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "consigneeAddress.error.AddressLine2.length", consigneeName),
-          regexp(stringFieldRegex, "consigneeAddress.error.AddressLine2.invalid", Seq(consigneeName))
+          regexp(stringFieldRegex, "consigneeAddress.error.AddressLine2.invalid", Seq(consigneeName)),
+          maxLength(35, "consigneeAddress.error.AddressLine2.length", consigneeName)
         )),
       "AddressLine3" -> text("consigneeAddress.error.postalCode.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(9, "consigneeAddress.error.postalCode.length", consigneeName),
-          regexp(alphaNumericWithSpaceRegex, "consigneeAddress.error.postalCode.invalid", Seq(consigneeName))
+          regexp(stringFieldRegex, "consigneeAddress.error.postalCode.invalid", Seq(consigneeName)),
+          maxLength(9, "consigneeAddress.error.postalCode.length", consigneeName)
         )),
       "country" -> text("consigneeAddress.error.country.required", Seq(consigneeName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
