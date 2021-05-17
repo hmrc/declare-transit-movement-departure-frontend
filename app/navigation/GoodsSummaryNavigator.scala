@@ -65,6 +65,8 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     case ConfirmRemoveSealsPage         => ua => Some(confirmRemoveSealsRoute(ua, CheckMode))
     case ConfirmRemoveSealPage()        => ua => Some(confirmRemoveSeal(ua, CheckMode))
     case LoadingPlacePage               => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
+    case AddAgreedLocationOfGoodsPage   => ua => Some(addAgreedLocationOfGoodsRoute(ua, CheckMode))
+    case AgreedLocationOfGoodsPage      => ua =>  Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
 
   }
 
@@ -133,6 +135,8 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     (ua.get(AddAgreedLocationOfGoodsPage), mode) match {
       case (Some(true), NormalMode) => routes.AgreedLocationOfGoodsController.onPageLoad(ua.id, mode)
       case (Some(false), NormalMode) => routes.AddSealsController.onPageLoad(ua.id, mode)
+      case (Some(true), CheckMode) if ua.get(AgreedLocationOfGoodsPage).isEmpty  =>
+        routes.AgreedLocationOfGoodsController.onPageLoad(ua.id, mode)
       case _ => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
     }
     // format: on

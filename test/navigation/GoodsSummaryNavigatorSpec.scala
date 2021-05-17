@@ -515,6 +515,51 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
+      "must go from AddAgreedLocationOfGoodsPage" - {
+        "to Check your answers page when answer is 'No'" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val updatedUserAnswers = userAnswers
+                .set(AddAgreedLocationOfGoodsPage, false)
+                .success
+                .value
+
+              navigator
+                .nextPage(AddAgreedLocationOfGoodsPage, CheckMode, updatedUserAnswers)
+                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedUserAnswers.id))
+          }
+        }
+        "to Check your answers page when answer is 'Yes' and an answer exists for Agreed Location of Goods" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val updatedUserAnswers = userAnswers
+                .set(AddAgreedLocationOfGoodsPage, true)
+                .success
+                .value
+                .set(AgreedLocationOfGoodsPage, "test").success.value
+
+              navigator
+                .nextPage(AddAgreedLocationOfGoodsPage, CheckMode, updatedUserAnswers)
+                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedUserAnswers.id))
+          }
+        }
+
+        "to Agreed Location Of Goods Page when answer is 'Yes' and no answer exists for Agreed Location of Goods" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val updatedUserAnswers = userAnswers
+                .set(AddAgreedLocationOfGoodsPage, true)
+                .success
+                .value
+                .remove(AgreedLocationOfGoodsPage).success.value
+
+              navigator
+                .nextPage(AddAgreedLocationOfGoodsPage, CheckMode, updatedUserAnswers)
+                .mustBe(goodsSummaryRoute.AgreedLocationOfGoodsController.onPageLoad(updatedUserAnswers.id, CheckMode))
+          }
+        }
+      }
+
       "go from AddSealsPage to " - {
         "SealIdDetailsController(1) when 'true' is selected and they have no seals" in {
           forAll(arbitrary[UserAnswers]) {
@@ -582,6 +627,17 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
                 .nextPage(AddSealsPage, CheckMode, updatedUserAnswers)
                 .mustBe(goodsSummaryRoute.ConfirmRemoveSealsController.onPageLoad(updatedUserAnswers.id, CheckMode))
           }
+        }
+      }
+
+      "Must go from Agreed Location Of Goods Page to Check Your Answers Page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.set(AgreedLocationOfGoodsPage, "test").toOption.value
+
+            navigator
+              .nextPage(AgreedLocationOfGoodsPage, CheckMode, updatedAnswers)
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
         }
       }
 
