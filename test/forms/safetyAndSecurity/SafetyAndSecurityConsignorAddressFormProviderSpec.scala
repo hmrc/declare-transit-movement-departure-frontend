@@ -33,9 +33,9 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
   ".AddressLine1" - {
 
     val fieldName   = "AddressLine1"
-    val requiredKey = "safetyAndSecurityConsignorAddress.error.AddressLine1.required"
-    val lengthKey   = "safetyAndSecurityConsignorAddress.error.AddressLine1.length"
-    val invalidKey  = "safetyAndSecurityConsignorAddress.error.AddressLine1.invalid"
+    val requiredKey = "safetyAndSecurityConsignorAddress.error.required"
+    val lengthKey   = "safetyAndSecurityConsignorAddress.error.length"
+    val invalidKey  = "safetyAndSecurityConsignorAddress.error.invalid"
 
     behave like fieldThatBindsValidData(
       form,
@@ -47,24 +47,24 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
       form,
       fieldName,
       maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
+      lengthError = FormError(fieldName, lengthKey, Seq(1))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
+      requiredError = FormError(fieldName, requiredKey, Seq(1))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, 1)
   }
 
   ".AddressLine2" - {
 
     val fieldName   = "AddressLine2"
-    val requiredKey = "safetyAndSecurityConsignorAddress.error.AddressLine2.required"
-    val lengthKey   = "safetyAndSecurityConsignorAddress.error.AddressLine2.length"
-    val invalidKey  = "safetyAndSecurityConsignorAddress.error.AddressLine2.invalid"
+    val requiredKey = "safetyAndSecurityConsignorAddress.error.required"
+    val lengthKey   = "safetyAndSecurityConsignorAddress.error.length"
+    val invalidKey  = "safetyAndSecurityConsignorAddress.error.invalid"
 
     behave like fieldThatBindsValidData(
       form,
@@ -76,35 +76,37 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
       form,
       fieldName,
       maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
+      lengthError = FormError(fieldName, lengthKey, Seq(2))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
+      requiredError = FormError(fieldName, requiredKey, Seq(2))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, 2)
   }
 
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "safetyAndSecurityConsignorAddress.error.AddressLine3.required"
-    val lengthKey   = "safetyAndSecurityConsignorAddress.error.AddressLine3.length"
-    val invalidKey  = "safetyAndSecurityConsignorAddress.error.AddressLine3.invalid"
+    val requiredKey = "safetyAndSecurityConsignorAddress.postalCode.error.required"
+    val lengthKey   = "safetyAndSecurityConsignorAddress.postalCode.error.length"
+    val invalidKey  = "safetyAndSecurityConsignorAddress.postalCode.error.invalid"
+
+    val maxLength = 9
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(addressMaxLength)
+      stringsWithMaxLength(maxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = addressMaxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
@@ -114,7 +116,7 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
       requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
   }
 
 }

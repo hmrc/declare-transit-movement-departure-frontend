@@ -17,18 +17,17 @@
 package forms.addItems.traderDetails
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
-
 import javax.inject.Inject
+import models.domain.StringFieldRegex.{alphaNumericWithSpaceRegex, stringFieldRegex}
 import models.reference.Country
-import models.{ConsignorAddress, CountryList}
+import models.{ConsignorAddress, CountryList, Index}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
 class TraderDetailsConsignorAddressFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList, consignorName: String): Form[ConsignorAddress] = Form(
+  def apply(countryList: CountryList, consignorName: String, index: Index): Form[ConsignorAddress] = Form(
     mapping(
       "AddressLine1" -> text("traderDetailsConsignorAddress.error.AddressLine1.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
@@ -40,10 +39,10 @@ class TraderDetailsConsignorAddressFormProvider @Inject() extends Mappings {
           maxLength(35, "traderDetailsConsignorAddress.error.AddressLine2.length", consignorName),
           regexp(stringFieldRegex, "traderDetailsConsignorAddress.error.AddressLine2.invalid", Seq(consignorName))
         )),
-      "AddressLine3" -> text("traderDetailsConsignorAddress.error.AddressLine3.required", Seq(consignorName))
+      "AddressLine3" -> text("traderDetailsConsignorAddress.error.postalCode.required", Seq(consignorName, index.display))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "traderDetailsConsignorAddress.error.AddressLine3.length", consignorName),
-          regexp(stringFieldRegex, "traderDetailsConsignorAddress.error.AddressLine3.invalid", Seq(consignorName))
+          maxLength(9, "traderDetailsConsignorAddress.error.postalCode.length", consignorName, index.display),
+          regexp(alphaNumericWithSpaceRegex, "traderDetailsConsignorAddress.error.postalCode.invalid", Seq(consignorName, index.display))
         )),
       "country" -> text("traderDetailsConsignorAddress.error.country.required", Seq(consignorName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)

@@ -17,13 +17,12 @@
 package forms
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
+import models.domain.StringFieldRegex.{alphaNumericWithSpaceRegex, stringFieldRegex}
 import models.reference.Country
 import models.{ConsigneeAddress, CountryList}
 import play.api.data.Form
 import play.api.data.Forms._
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class ConsigneeAddressFormProvider @Inject() extends Mappings {
@@ -40,10 +39,10 @@ class ConsigneeAddressFormProvider @Inject() extends Mappings {
           maxLength(35, "consigneeAddress.error.AddressLine2.length", consigneeName),
           regexp(stringFieldRegex, "consigneeAddress.error.AddressLine2.invalid", Seq(consigneeName))
         )),
-      "AddressLine3" -> text("consigneeAddress.error.AddressLine3.required", Seq(consigneeName))
+      "AddressLine3" -> text("consigneeAddress.error.postalCode.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          maxLength(35, "consigneeAddress.error.AddressLine3.length", consigneeName),
-          regexp(stringFieldRegex, "consigneeAddress.error.AddressLine3.invalid", Seq(consigneeName))
+          maxLength(9, "consigneeAddress.error.postalCode.length", consigneeName),
+          regexp(alphaNumericWithSpaceRegex, "consigneeAddress.error.postalCode.invalid", Seq(consigneeName))
         )),
       "country" -> text("consigneeAddress.error.country.required", Seq(consigneeName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)

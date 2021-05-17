@@ -18,18 +18,16 @@ package forms.addItems.traderSecurityDetails
 
 import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
-import models.CountryList
 import models.reference.{Country, CountryCode}
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import models.{CountryList, Index}
+import play.api.data.FormError
 
 class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
 
   private val country       = Country(CountryCode("GB"), "United Kingdom")
   private val countries     = CountryList(Seq(country))
   private val consignorName = "Test"
-  private val form          = new SecurityConsignorAddressFormProvider()(countries, consignorName)
+  private val form          = new SecurityConsignorAddressFormProvider()(countries, consignorName, Index(0))
 
   ".AddressLine1" - {
 
@@ -93,10 +91,10 @@ class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "securityConsignorAddress.error.AddressLine3.required"
-    val lengthKey   = "securityConsignorAddress.error.AddressLine3.length"
-    val invalidKey  = "securityConsignorAddress.error.AddressLine3.invalid"
-    val maxLength   = addressMaxLength
+    val requiredKey = "securityConsignorAddress.error.postalCode.required"
+    val lengthKey   = "securityConsignorAddress.error.postalCode.length"
+    val invalidKey  = "securityConsignorAddress.error.postalCode.invalid"
+    val maxLength   = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -108,16 +106,16 @@ class SecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName, 1))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
+      requiredError = FormError(fieldName, requiredKey, Seq(consignorName, 1))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName, 1)
   }
 
 }

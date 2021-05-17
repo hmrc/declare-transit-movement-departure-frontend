@@ -92,20 +92,21 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "consignorAddress.error.AddressLine3.required"
-    val lengthKey   = "consignorAddress.error.AddressLine3.length"
-    val invalidKey  = "consignorAddress.error.AddressLine3.invalid"
+    val requiredKey = "consignorAddress.error.postalCode.required"
+    val lengthKey   = "consignorAddress.error.postalCode.length"
+    val invalidKey  = "consignorAddress.error.postalCode.invalid"
+    val maxLength   = 9
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(addressMaxLength)
+      stringsWithMaxLength(maxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = addressMaxLength,
+      maxLength   = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
@@ -115,6 +116,6 @@ class ConsignorAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consignorName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
   }
 }

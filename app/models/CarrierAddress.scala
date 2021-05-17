@@ -19,7 +19,7 @@ package models
 import models.reference.Country
 import play.api.libs.json.Json
 
-case class CarrierAddress(AddressLine1: String, AddressLine2: String, AddressLine3: String, country: Country)
+case class CarrierAddress(AddressLine1: String, AddressLine2: String, postalCode: String, country: Country)
 
 object CarrierAddress {
   implicit val format = Json.format[CarrierAddress]

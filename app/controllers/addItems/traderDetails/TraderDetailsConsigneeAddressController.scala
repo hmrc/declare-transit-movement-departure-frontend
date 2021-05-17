@@ -67,8 +67,8 @@ class TraderDetailsConsigneeAddressController @Inject()(
             request.userAnswers.get(TraderDetailsConsigneeNamePage(index)) match {
               case Some(consigneeName) =>
                 val preparedForm = request.userAnswers.get(TraderDetailsConsigneeAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consigneeName).fill(value)
-                  case None        => formProvider(countries, consigneeName)
+                  case Some(value) => formProvider(countries, consigneeName, index).fill(value)
+                  case None        => formProvider(countries, consigneeName, index)
                 }
 
                 val json = Json.obj(
@@ -97,7 +97,7 @@ class TraderDetailsConsigneeAddressController @Inject()(
           case Some(consigneeName) =>
             referenceDataConnector.getCountryList() flatMap {
               countries =>
-                formProvider(countries, consigneeName)
+                formProvider(countries, consigneeName, index)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {

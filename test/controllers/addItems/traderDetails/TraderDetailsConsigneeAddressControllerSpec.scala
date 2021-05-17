@@ -57,7 +57,7 @@ class TraderDetailsConsigneeAddressControllerSpec
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new TraderDetailsConsigneeAddressFormProvider()
-  private val form         = formProvider(countries, consigneeName)
+  private val form         = formProvider(countries, consigneeName, index)
 
   private lazy val traderDetailsConsigneeAddressRoute = routes.TraderDetailsConsigneeAddressController.onPageLoad(lrn, index, NormalMode).url
 
@@ -111,10 +111,10 @@ class TraderDetailsConsigneeAddressControllerSpec
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val tradersDetailsConsigneeAddress: ConsigneeAddress = ConsigneeAddress("Address line 1", "Address line 2", "Address line 3", country)
+      val tradersDetailsConsigneeAddress: ConsigneeAddress = ConsigneeAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
-        .set(TraderDetailsConsigneeNamePage(index), "consigneeName")
+        .set(TraderDetailsConsigneeNamePage(index), consigneeName)
         .success
         .value
         .set(TraderDetailsConsigneeAddressPage(index), tradersDetailsConsigneeAddress)
@@ -136,7 +136,7 @@ class TraderDetailsConsigneeAddressControllerSpec
         Map(
           "AddressLine1" -> "Address line 1",
           "AddressLine2" -> "Address line 2",
-          "AddressLine3" -> "Address line 3",
+          "AddressLine3" -> "Code",
           "country"      -> "GB"
         )
       )
@@ -159,7 +159,7 @@ class TraderDetailsConsigneeAddressControllerSpec
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), "consigneeName").success.value
+      val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), consigneeName).success.value
       dataRetrievalWithData(userAnswers)
 
       val request =
@@ -181,7 +181,7 @@ class TraderDetailsConsigneeAddressControllerSpec
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), "consigneeName").success.value
+      val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), consigneeName).success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(POST, traderDetailsConsigneeAddressRoute).withFormUrlEncodedBody(("value", "invalid value"))

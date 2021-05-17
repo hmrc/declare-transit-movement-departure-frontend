@@ -20,9 +20,7 @@ import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
 
@@ -90,10 +88,13 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".AddressLine3" - {
 
-    val fieldName   = "AddressLine3"
-    val requiredKey = "carrierAddress.error.AddressLine3.required"
-    val lengthKey   = "carrierAddress.error.AddressLine3.length"
-    val invalidKey  = "carrierAddress.error.AddressLine3.invalid"
+    val fieldName = "AddressLine3"
+
+    val requiredKey = "carrierAddress.error.postalCode.required"
+    val lengthKey   = "carrierAddress.error.postalCode.length"
+    val invalidKey  = "carrierAddress.error.postalCode.invalid"
+
+    val maxLength = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -114,6 +115,6 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey, Seq(carrierName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, carrierName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, carrierName)
   }
 }

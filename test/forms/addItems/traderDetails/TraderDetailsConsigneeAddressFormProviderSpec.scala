@@ -18,11 +18,9 @@ package forms.addItems.traderDetails
 
 import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
-import models.CountryList
 import models.reference.{Country, CountryCode}
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import models.{CountryList, Index}
+import play.api.data.FormError
 
 class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
 
@@ -30,7 +28,7 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
   private val countries     = CountryList(Seq(country))
   private val consigneeName = "consigneeName"
   private val formProvider  = new TraderDetailsConsigneeAddressFormProvider()
-  private val form          = formProvider(countries, consigneeName)
+  private val form          = formProvider(countries, consigneeName, Index(0))
 
   ".AddressLine1" - {
 
@@ -93,29 +91,30 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "traderDetailsConsigneeAddress.error.AddressLine3.required"
-    val lengthKey   = "traderDetailsConsigneeAddress.error.AddressLine3.length"
-    val invalidKey  = "traderDetailsConsigneeAddress.error.AddressLine3.invalid"
+    val requiredKey = "traderDetailsConsigneeAddress.error.postalCode.required"
+    val lengthKey   = "traderDetailsConsigneeAddress.error.postalCode.length"
+    val invalidKey  = "traderDetailsConsigneeAddress.error.postalCode.invalid"
+    val maxLength   = 9
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(addressMaxLength)
+      stringsWithMaxLength(maxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = addressMaxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
+      maxLength   = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName, 1))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName, 1))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consigneeName)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consigneeName, 1)
   }
 }

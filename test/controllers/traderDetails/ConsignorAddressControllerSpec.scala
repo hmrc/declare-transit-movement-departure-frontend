@@ -104,7 +104,7 @@ class ConsignorAddressControllerSpec extends SpecBase with MockNunjucksRendererA
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val consignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Address line 3", country)
+      val consignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(ConsignorNamePage, "consignorName")
@@ -130,7 +130,7 @@ class ConsignorAddressControllerSpec extends SpecBase with MockNunjucksRendererA
         Map(
           "AddressLine1" -> "Address line 1",
           "AddressLine2" -> "Address line 2",
-          "AddressLine3" -> "Address line 3",
+          "AddressLine3" -> "Code",
           "country"      -> "GB"
         )
       )

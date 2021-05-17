@@ -112,7 +112,7 @@ class CarrierAddressControllerSpec extends SpecBase with MockNunjucksRendererApp
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val carrierAddress: CarrierAddress = CarrierAddress("Address line 1", "Address line 2", "Address line 3", country)
+      val carrierAddress: CarrierAddress = CarrierAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(CarrierNamePage, "carrierName")
@@ -138,7 +138,7 @@ class CarrierAddressControllerSpec extends SpecBase with MockNunjucksRendererApp
         Map(
           "AddressLine1" -> "Address line 1",
           "AddressLine2" -> "Address line 2",
-          "AddressLine3" -> "Address line 3",
+          "AddressLine3" -> "Code",
           "country"      -> "GB"
         )
       )
