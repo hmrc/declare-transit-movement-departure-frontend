@@ -90,9 +90,9 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
 
     val fieldName = "AddressLine3"
 
-    val requiredKey = "carrierAddress.postalCode.error.required"
-    val lengthKey   = "carrierAddress.postalCode.error.length"
-    val invalidKey  = "carrierAddress.postalCode.error.invalid"
+    val requiredKey = "carrierAddress.error.postalCode.required"
+    val lengthKey   = "carrierAddress.error.postalCode.length"
+    val invalidKey  = "carrierAddress.error.postalCode.invalid"
 
     val maxLength = 9
 

@@ -39,10 +39,10 @@ class CarrierAddressFormProvider @Inject() extends Mappings {
           maxLength(35, "carrierAddress.error.AddressLine2.length", carrierName),
           regexp(stringFieldRegex, "carrierAddress.error.AddressLine2.invalid", Seq(carrierName))
         )),
-      "AddressLine3" -> text("carrierAddress.postalCode.error.required", Seq(carrierName))
+      "AddressLine3" -> text("carrierAddress.error.postalCode.required", Seq(carrierName))
         .verifying(StopOnFirstFail[String](
-          maxLength(9, "carrierAddress.postalCode.error.length", carrierName),
-          regexp(alphaNumericWithSpaceRegex, "carrierAddress.postalCode.error.invalid", Seq(carrierName))
+          maxLength(9, "carrierAddress.error.postalCode.length", carrierName),
+          regexp(alphaNumericWithSpaceRegex, "carrierAddress.error.postalCode.invalid", Seq(carrierName))
         )),
       "country" -> text("carrierAddress.error.country.required", Seq(carrierName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)

@@ -1321,6 +1321,7 @@ safetyAndSecurityConsignorAddress.error.invalid =  Address line {0} of of the se
 safetyAndSecurityConsignorAddress.postalCode.error.required = Enter the postal code for {0}’s address
 safetyAndSecurityConsignorAddress.postalCode.error.length = The postal code for {0}’s address must be 9 characters or less
 safetyAndSecurityConsignorAddress.postalCode.error.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+safetyAndSecurityConsignorAddress.error.country.required = Enter the country of the security consignor’s address
 
 safetyAndSecurityConsignorEori.title = What is the security consignor’s EORI number?
 safetyAndSecurityConsignorEori.heading = What is the security consignor’s EORI number?
@@ -1366,6 +1367,7 @@ safetyAndSecurityConsigneeAddress.error.invalid = Address line {0} of of the sec
 safetyAndSecurityConsigneeAddress.postalCode.error.required = Enter the postal code for {0}’s address
 safetyAndSecurityConsigneeAddress.postalCode.error.length = The postal code for {0}’s address must be 9 characters or less
 safetyAndSecurityConsigneeAddress.postalCode.error.invalid = The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
+safetyAndSecurityConsigneeAddress.error.country.required = Enter the country of the security consignee’s address
 
 safetyAndSecurityConsigneeEori.title = What is the security consignee’s EORI number?
 safetyAndSecurityConsigneeEori.heading = What is the security consignee’s EORI number?

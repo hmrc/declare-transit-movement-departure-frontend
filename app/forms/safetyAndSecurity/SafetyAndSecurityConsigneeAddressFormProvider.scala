@@ -31,15 +31,15 @@ class SafetyAndSecurityConsigneeAddressFormProvider @Inject() extends Mappings {
 
   def apply(countryList: CountryList, consigneeName: String): Form[ConsigneeAddress] = Form(
     mapping(
-      "AddressLine1" -> text("safetyAndSecurityConsigneeAddress.error.AddressLine1.required", Seq(consigneeName))
+      "AddressLine1" -> text("safetyAndSecurityConsigneeAddress.error.required", Seq(1))
         .verifying(StopOnFirstFail[String](
-          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.AddressLine1.length", consigneeName),
-          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.AddressLine1.invalid", Seq(consigneeName))
+          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.length", 1),
+          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.invalid", Seq(1))
         )),
-      "AddressLine2" -> text("safetyAndSecurityConsigneeAddress.error.AddressLine2.required", Seq(consigneeName))
+      "AddressLine2" -> text("safetyAndSecurityConsigneeAddress.error.required", Seq(2))
         .verifying(StopOnFirstFail[String](
-          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.AddressLine2.length", consigneeName),
-          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.AddressLine2.invalid", Seq(consigneeName))
+          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.length", 2),
+          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.invalid", Seq(2))
         )),
       "AddressLine3" -> text("safetyAndSecurityConsigneeAddress.postalCode.error.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
