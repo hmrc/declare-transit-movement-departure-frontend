@@ -1498,3 +1498,9 @@ addAgreedLocationOfGoods.title = Do you need to add an agreed location for the g
 addAgreedLocationOfGoods.heading = Do you need to add an agreed location for the goods?
 addAgreedLocationOfGoods.checkYourAnswersLabel = Add an agreed location for the goods
 addAgreedLocationOfGoods.error.required = Select yes if you need to add an agreed location for the goods
+
+agreedLocationOfGoods.title = agreedLocationOfGoods
+agreedLocationOfGoods.heading = agreedLocationOfGoods
+agreedLocationOfGoods.checkYourAnswersLabel = agreedLocationOfGoods
+agreedLocationOfGoods.error.required = Enter agreedLocationOfGoods
+agreedLocationOfGoods.error.length = AgreedLocationOfGoods must be 35 characters or less
