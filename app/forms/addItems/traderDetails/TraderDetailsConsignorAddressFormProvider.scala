@@ -39,10 +39,10 @@ class TraderDetailsConsignorAddressFormProvider @Inject() extends Mappings {
           maxLength(35, "traderDetailsConsignorAddress.error.AddressLine2.length", consignorName),
           regexp(stringFieldRegex, "traderDetailsConsignorAddress.error.AddressLine2.invalid", Seq(consignorName))
         )),
-      "AddressLine3" -> text("traderDetailsConsignorAddress.error.postalCode.required", Seq(consignorName, index.position))
+      "AddressLine3" -> text("traderDetailsConsignorAddress.error.postalCode.required", Seq(consignorName, index.display))
         .verifying(StopOnFirstFail[String](
-          maxLength(9, "traderDetailsConsignorAddress.error.postalCode.length", consignorName, index.position),
-          regexp(alphaNumericWithSpaceRegex, "traderDetailsConsignorAddress.error.postalCode.invalid", Seq(consignorName, index.position))
+          maxLength(9, "traderDetailsConsignorAddress.error.postalCode.length", consignorName, index.display),
+          regexp(alphaNumericWithSpaceRegex, "traderDetailsConsignorAddress.error.postalCode.invalid", Seq(consignorName, index.display))
         )),
       "country" -> text("traderDetailsConsignorAddress.error.country.required", Seq(consignorName))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
