@@ -383,8 +383,8 @@ consignorAddress.error.country.required = Enter the country of the consignor’s
 consignorAddress.error.AddressLine1.length = Address line 1 must be 35 characters or less
 consignorAddress.error.AddressLine2.length = Address line 2 must be 35 characters or less
 consignorAddress.error.postalCode.length = The postal code for {0}’s address must be 9 characters or less
-consignorAddress.error.line1.invalid= The first line of the consignor’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-consignorAddress.error.line2.invalid= The second line of the consignor’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+consignorAddress.error.AddressLine1.invalid = The first line of the consignor’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+consignorAddress.error.AddressLine2.invalid = The second line of the consignor’s address must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 consignorAddress.error.postalCode.invalid= The postal code for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
 
 countryOfDispatch.title = What is the country of dispatch?
