@@ -1499,8 +1499,9 @@ addAgreedLocationOfGoods.heading = Do you need to add an agreed location for the
 addAgreedLocationOfGoods.checkYourAnswersLabel = Add an agreed location for the goods
 addAgreedLocationOfGoods.error.required = Select yes if you need to add an agreed location for the goods
 
-agreedLocationOfGoods.title = agreedLocationOfGoods
-agreedLocationOfGoods.heading = agreedLocationOfGoods
-agreedLocationOfGoods.checkYourAnswersLabel = agreedLocationOfGoods
-agreedLocationOfGoods.error.required = Enter agreedLocationOfGoods
-agreedLocationOfGoods.error.length = AgreedLocationOfGoods must be 35 characters or less
+agreedLocationOfGoods.title =  What is the agreed location for the goods?
+agreedLocationOfGoods.heading =  What is the agreed location for the goods?
+agreedLocationOfGoods.checkYourAnswersLabel =  Agreed location for the goods
+agreedLocationOfGoods.error.required = Enter the agreed location for the goods
+agreedLocationOfGoods.error.length = The agreed location for the goods must be 35 characters or less
+agreedLocationOfGoods.error.invalid = The agreed location for the goods must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
