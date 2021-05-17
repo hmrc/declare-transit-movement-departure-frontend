@@ -18,11 +18,9 @@ package forms.addItems.traderDetails
 
 import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
-import models.{CountryList, Index}
 import models.reference.{Country, CountryCode}
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import models.{CountryList, Index}
+import play.api.data.FormError
 
 class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
 
@@ -108,15 +106,15 @@ class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviour
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName, 0))
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName, 1))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName, 0))
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName, 1))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consigneeName, 0)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consigneeName, 1)
   }
 }

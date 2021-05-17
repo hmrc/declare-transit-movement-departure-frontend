@@ -1158,42 +1158,38 @@ securityConsignorAddress.title = What is the security consignor’s address
 securityConsignorAddress.heading = What is {0}’s address?
 securityConsignorAddress.AddressLine1 = Address line 1
 securityConsignorAddress.AddressLine2 = Address line 2
-securityConsignorAddress.AddressLine3 = Address line 3
+securityConsignorAddress.postalCode = Postal code
 securityConsignorAddress.AddressLine4 = Country
 securityConsignorAddress.checkYourAnswersLabel = Consignor address
 securityConsignorAddress.error.AddressLine1.required = Enter the first line of {0}’s address
 securityConsignorAddress.error.AddressLine2.required = Enter the second line of {0}’s address
-securityConsignorAddress.error.AddressLine3.required = Enter the third line of {0}’s address
+securityConsignorAddress.error.postalCode.required = Enter the postal code for {0}’s address for item {1}
 securityConsignorAddress.error.country.required = Enter the country of {0}’s address
 securityConsignorAddress.error.AddressLine1.length = Address line 1 must be {0} characters or less
 securityConsignorAddress.error.AddressLine2.length = Address line 2 must be {0} characters or less
-securityConsignorAddress.error.AddressLine3.length = Address line 3 must be {0} characters or less
+securityConsignorAddress.error.postalCode.length = The postal code for {0}’s address  for item {1} must be 9 characters or less
 securityConsignorAddress.error.AddressLine1.invalid= The first line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
 securityConsignorAddress.error.AddressLine2.invalid= The second line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
-securityConsignorAddress.error.AddressLine3.invalid= The third line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+securityConsignorAddress.error.postalCode.invalid= The postal code for {0}’s address  for item {1} must only include letters a to z, numbers 0 to 9 and spaces
 
 
 securityConsigneeAddress.title = What is the security consignee’s address
 securityConsigneeAddress.heading = What is {0}’s address?
 securityConsigneeAddress.AddressLine1 = Address line 1
 securityConsigneeAddress.AddressLine2 = Address line 2
-securityConsigneeAddress.AddressLine3 = Address line 3
+securityConsigneeAddress.postalCode = Postal code
 securityConsigneeAddress.AddressLine4 = Country
 securityConsigneeAddress.checkYourAnswersLabel = Consignee address
 securityConsigneeAddress.error.AddressLine1.required = Enter the first line of {0}’s address
 securityConsigneeAddress.error.AddressLine2.required = Enter the second line of {0}’s address
-securityConsigneeAddress.error.AddressLine3.required = Enter the third line of {0}’s address
+securityConsigneeAddress.error.postalCode.required = Enter the postal code for {0}’s address for item {1}
 securityConsigneeAddress.error.country.required = Enter the country of {0}’s address
 securityConsigneeAddress.error.AddressLine1.length = Address line 1 must be {0} characters or less
 securityConsigneeAddress.error.AddressLine2.length = Address line 2 must be {0} characters or less
-securityConsigneeAddress.error.AddressLine3.length = Address line 3 must be {0} characters or less
+securityConsigneeAddress.error.postalCode.length = The postal code for {0}’s address  for item {1} must be 9 characters or less
 securityConsigneeAddress.error.AddressLine1.invalid = The first line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
 securityConsigneeAddress.error.AddressLine2.invalid = The second line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
-securityConsigneeAddress.error.AddressLine3.invalid = The third line of {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+securityConsigneeAddress.error.postalCode.invalid =  The postal code for {0}’s address  for item {1} must only include letters a to z, numbers 0 to 9 and spaces
 
 
 declarationRejection.title = There is a problem with this departure declaration
