@@ -31,9 +31,9 @@ class SafetyAndSecurityConsigneeAddressFormProviderSpec extends StringFieldBehav
   ".AddressLine1" - {
 
     val fieldName   = "AddressLine1"
-    val requiredKey = "safetyAndSecurityConsigneeAddress.error.required"
-    val lengthKey   = "safetyAndSecurityConsigneeAddress.error.length"
-    val invalidKey  = "safetyAndSecurityConsigneeAddress.error.invalid"
+    val requiredKey = "safetyAndSecurityConsigneeAddress.error.AddressLine1.required"
+    val lengthKey   = "safetyAndSecurityConsigneeAddress.error.AddressLine1.length"
+    val invalidKey  = "safetyAndSecurityConsigneeAddress.error.AddressLine1.invalid"
 
     behave like fieldThatBindsValidData(
       form,
@@ -44,17 +44,17 @@ class SafetyAndSecurityConsigneeAddressFormProviderSpec extends StringFieldBehav
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(1))
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, 1)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consigneeName)
   }
   ".AddressLine2" - {
 
     val fieldName   = "AddressLine2"
-    val requiredKey = "safetyAndSecurityConsigneeAddress.error.required"
-    val lengthKey   = "safetyAndSecurityConsigneeAddress.error.length"
-    val invalidKey  = "safetyAndSecurityConsigneeAddress.error.invalid"
+    val requiredKey = "safetyAndSecurityConsigneeAddress.error.AddressLine2.required"
+    val lengthKey   = "safetyAndSecurityConsigneeAddress.error.AddressLine2.length"
+    val invalidKey  = "safetyAndSecurityConsigneeAddress.error.AddressLine2.invalid"
 
     behave like fieldThatBindsValidData(
       form,
@@ -65,18 +65,18 @@ class SafetyAndSecurityConsigneeAddressFormProviderSpec extends StringFieldBehav
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(2))
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, 2)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consigneeName)
   }
 
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "safetyAndSecurityConsigneeAddress.postalCode.error.required"
-    val lengthKey   = "safetyAndSecurityConsigneeAddress.postalCode.error.length"
-    val invalidKey  = "safetyAndSecurityConsigneeAddress.postalCode.error.invalid"
+    val requiredKey = "safetyAndSecurityConsigneeAddress.postalCode.error.AddressLine3.required"
+    val lengthKey   = "safetyAndSecurityConsigneeAddress.postalCode.error.AddressLine3.length"
+    val invalidKey  = "safetyAndSecurityConsigneeAddress.postalCode.error.AddressLine3.invalid"
 
     val maxLength = 9
 

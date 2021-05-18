@@ -32,20 +32,20 @@ class SafetyAndSecurityConsigneeAddressFormProvider @Inject() extends Mappings {
 
   def apply(countryList: CountryList, consigneeName: String): Form[ConsigneeAddress] = Form(
     mapping(
-      "AddressLine1" -> text("safetyAndSecurityConsigneeAddress.error.required", Seq(1))
+      "AddressLine1" -> text("safetyAndSecurityConsigneeAddress.error.AddressLine1.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.invalid", Seq(1)),
-          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.length", 1)
+          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.AddressLine1.invalid", Seq(consigneeName)),
+          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.AddressLine1.length", consigneeName)
         )),
-      "AddressLine2" -> text("safetyAndSecurityConsigneeAddress.error.required", Seq(2))
+      "AddressLine2" -> text("safetyAndSecurityConsigneeAddress.error.AddressLine2.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.invalid", Seq(2)),
-          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.length", 2)
+          regexp(stringFieldRegex, "safetyAndSecurityConsigneeAddress.error.AddressLine2.invalid", Seq(consigneeName)),
+          maxLength(maxLength, "safetyAndSecurityConsigneeAddress.error.AddressLine2.length", consigneeName)
         )),
-      "AddressLine3" -> text("safetyAndSecurityConsigneeAddress.postalCode.error.required", Seq(consigneeName))
+      "AddressLine3" -> text("safetyAndSecurityConsigneeAddress.postalCode.error.AddressLine3.required", Seq(consigneeName))
         .verifying(StopOnFirstFail[String](
-          regexp(alphaNumericWithSpaceRegex, "safetyAndSecurityConsigneeAddress.postalCode.error.invalid", Seq(consigneeName)),
-          maxLength(9, "safetyAndSecurityConsigneeAddress.postalCode.error.length", consigneeName)
+          regexp(alphaNumericWithSpaceRegex, "safetyAndSecurityConsigneeAddress.postalCode.error.AddressLine3.invalid", Seq(consigneeName)),
+          maxLength(9, "safetyAndSecurityConsigneeAddress.postalCode.error.AddressLine3.length", consigneeName)
         )),
       "country" -> text("safetyAndSecurityConsigneeAddress.error.country.required", Seq(consigneeName))
         .verifying("safetyAndSecurityConsigneeAddress.error.country.required", value => countryList.fullList.exists(_.code.code == value))
