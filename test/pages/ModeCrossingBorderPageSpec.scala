@@ -16,6 +16,7 @@
 
 package pages
 
+import models.journeyDomain.TransportDetails.ModeCrossingBorder.Constants.exemptNationalityDigits
 import models.reference.CountryCode
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.scalacheck.Gen
@@ -32,45 +33,50 @@ class ModeCrossingBorderPageSpec extends PageBehaviours with TryValues with Opti
 
     beRemovable[String](ModeCrossingBorderPage)
 
-    "must clear IdCrossingBorder and Nationality Crossing Border Page if 2, 20, 5, 50, 7 or 70 is selected" in {
-      val crossingMode = Gen.oneOf("2", "20", "5", "50", "7", "70").sample.value
-      val userAnswers  = new UserAnswers(LocalReferenceNumber("AB123").get, EoriNumber("3242343"))
+    "must clear IdCrossingBorder and Nationality Crossing Border Page if a mode that starts with 2, 5 or 7 is selected" in {
 
-      val updatedAnswers = (for {
-        a <- userAnswers.set(NationalityCrossingBorderPage, CountryCode("JJ"))
-        b <- a.set(IdCrossingBorderPage, "23")
-      } yield b).success.value
+      forAll(genExemptNationalityCode) {
+        crossingMode =>
+          val userAnswers = new UserAnswers(LocalReferenceNumber("AB123").get, EoriNumber("3242343"))
 
-      updatedAnswers.get(NationalityCrossingBorderPage).value mustBe CountryCode("JJ")
-      updatedAnswers.get(IdCrossingBorderPage).value mustBe "23"
-      updatedAnswers.get(ModeCrossingBorderPage) mustBe None
+          val updatedAnswers = (for {
+            a <- userAnswers.set(NationalityCrossingBorderPage, CountryCode("JJ"))
+            b <- a.set(IdCrossingBorderPage, "23")
+          } yield b).success.value
 
-      val newUpdateAnswers = updatedAnswers.set(ModeCrossingBorderPage, crossingMode).success.value
+          updatedAnswers.get(NationalityCrossingBorderPage).value mustBe CountryCode("JJ")
+          updatedAnswers.get(IdCrossingBorderPage).value mustBe "23"
+          updatedAnswers.get(ModeCrossingBorderPage) mustBe None
 
-      newUpdateAnswers.get(NationalityCrossingBorderPage) mustBe None
-      newUpdateAnswers.get(IdCrossingBorderPage) mustBe None
-      newUpdateAnswers.get(ModeCrossingBorderPage).value mustBe crossingMode
+          val newUpdateAnswers = updatedAnswers.set(ModeCrossingBorderPage, crossingMode.toString).success.value
+
+          newUpdateAnswers.get(NationalityCrossingBorderPage) mustBe None
+          newUpdateAnswers.get(IdCrossingBorderPage) mustBe None
+          newUpdateAnswers.get(ModeCrossingBorderPage).value mustBe crossingMode.toString
+      }
     }
 
-    "must not clear IdCrossingBorder and Nationality Crossing Border Page if 2, 20, 5, 50, 7 or 70 is selected" in {
-      val invalidModes = Set("2", "20", "5", "50", "7", "70")
-      val crossingMode = Gen.numStr.suchThat(x => !invalidModes(x)).sample.value
-      val userAnswers  = new UserAnswers(LocalReferenceNumber("AB123").get, EoriNumber("3242343"))
+    "must not clear IdCrossingBorder and Nationality Crossing Border Page if any other mode is selected" in {
 
-      val updatedAnswers = (for {
-        a <- userAnswers.set(NationalityCrossingBorderPage, CountryCode("JJ"))
-        b <- a.set(IdCrossingBorderPage, "23")
-      } yield b).success.value
+      forAll(Gen.numStr.suchThat(num => !exemptNationalityDigits.contains(num.take(1)))) {
+        crossingMode =>
+          val userAnswers = new UserAnswers(LocalReferenceNumber("AB123").get, EoriNumber("3242343"))
 
-      updatedAnswers.get(NationalityCrossingBorderPage).value mustBe CountryCode("JJ")
-      updatedAnswers.get(IdCrossingBorderPage).value mustBe "23"
-      updatedAnswers.get(ModeCrossingBorderPage) mustBe None
+          val updatedAnswers = (for {
+            a <- userAnswers.set(NationalityCrossingBorderPage, CountryCode("JJ"))
+            b <- a.set(IdCrossingBorderPage, "23")
+          } yield b).success.value
 
-      val newUpdateAnswers = updatedAnswers.set(ModeCrossingBorderPage, crossingMode).success.value
+          updatedAnswers.get(NationalityCrossingBorderPage).value mustBe CountryCode("JJ")
+          updatedAnswers.get(IdCrossingBorderPage).value mustBe "23"
+          updatedAnswers.get(ModeCrossingBorderPage) mustBe None
 
-      newUpdateAnswers.get(NationalityCrossingBorderPage).value mustBe CountryCode("JJ")
-      newUpdateAnswers.get(IdCrossingBorderPage).value mustBe "23"
-      newUpdateAnswers.get(ModeCrossingBorderPage).value mustBe crossingMode
+          val newUpdateAnswers = updatedAnswers.set(ModeCrossingBorderPage, crossingMode).success.value
+
+          newUpdateAnswers.get(NationalityCrossingBorderPage).value mustBe CountryCode("JJ")
+          newUpdateAnswers.get(IdCrossingBorderPage).value mustBe "23"
+          newUpdateAnswers.get(ModeCrossingBorderPage).value mustBe crossingMode
+      }
     }
   }
 }

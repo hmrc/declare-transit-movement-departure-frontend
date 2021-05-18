@@ -36,6 +36,7 @@ import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, NonSpecialMode, Rail}
+import models.journeyDomain.TransportDetails.ModeCrossingBorder.Constants.exemptNationalityDigits
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
 import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPersonalInformation, SecurityTraderEori}
@@ -216,22 +217,18 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryModeExemptNationality: Arbitrary[ModeExemptNationality] =
     Arbitrary {
       for {
-        codeMode <- Gen.oneOf(Mode5or7.Constants.codes ++ Rail.Constants.codes)
+        codeMode <- genExemptNationalityCode
       } yield ModeExemptNationality(codeMode)
     }
 
-  implicit lazy val arbitraryModeWithNationality: Arbitrary[ModeWithNationality] = {
-
-    val codeList = Mode5or7.Constants.codes ++ Rail.Constants.codes
-
+  implicit lazy val arbitraryModeWithNationality: Arbitrary[ModeWithNationality] =
     Arbitrary {
       for {
         cc         <- arbitrary[CountryCode]
-        codeMode   <- arbitrary[Int].suchThat(!codeList.contains(_))
+        codeMode   <- arbitrary[Int].suchThat(num => !exemptNationalityDigits.contains(num.toString.take(1)))
         idCrossing <- stringsWithMaxLength(stringMaxLength)
       } yield ModeWithNationality(cc, codeMode, idCrossing)
     }
-  }
 
   implicit lazy val arbitraryDetailsAtBorder: Arbitrary[DetailsAtBorder] =
     Arbitrary(
