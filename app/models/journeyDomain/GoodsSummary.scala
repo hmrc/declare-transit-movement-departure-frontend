@@ -16,9 +16,6 @@
 
 package models.journeyDomain
 
-import java.time.LocalDate
-
-import cats._
 import cats.implicits._
 import derivable.DeriveNumberOfSeals
 import models.ProcedureType
@@ -50,32 +47,43 @@ object GoodsSummary {
 
   sealed trait GoodSummaryDetails
 
-  final case class GoodSummaryNormalDetails(customsApprovedLocation: Option[String]) extends GoodSummaryDetails
+  final case class GoodSummaryNormalDetailsWithoutPreLodge(agreedLocationOfGoods: Option[String], customsApprovedLocation: Option[String])
+      extends GoodSummaryDetails
 
-  object GoodSummaryNormalDetails {
-
-    implicit val goodSummaryNormalDetailsReader: UserAnswersReader[GoodSummaryNormalDetails] =
+  object GoodSummaryNormalDetailsWithoutPreLodge {
+    implicit val goodSummaryNormalDetailsWithoutPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge] = {
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
-        val notPreLodgeWithCustomApprovedLocation = PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
-          AddCustomsApprovedLocationPage.filterMandatoryDependent(_ == true) {
-            CustomsApprovedLocationPage.reader.map(
-              location => GoodSummaryNormalDetails(Some(location))
-            )
-          }
+        PreLodgeDeclarationPage.filterMandatoryDependent(_ == true) {
+          (
+            AddCustomsApprovedLocationPage.filterOptionalDependent(_ == true) {
+              CustomsApprovedLocationPage.reader
+            },
+            AddCustomsApprovedLocationPage
+              .filterOptionalDependent(_ == false) {
+                AddAgreedLocationOfGoodsPage.filterOptionalDependent(_ == true) {
+                  AgreedLocationOfGoodsPage.reader
+                }
+              }
+              .map(_.flatten)
+          ).tupled.map((GoodSummaryNormalDetailsWithoutPreLodge.apply _).tupled)
         }
+      }
+    }
+  }
 
-        val notPreLodgeWithoutCustomApprovedLocation =
-          PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
-            AddCustomsApprovedLocationPage.filterMandatoryDependent(_ == false) {
-              GoodSummaryNormalDetails(None).pure[UserAnswersReader]
+  final case class GoodSummaryNormalDetailsWithPreLodge(agreedLocationOfGoods: Option[String]) extends GoodSummaryDetails
+
+  object GoodSummaryNormalDetailsWithPreLodge {
+    implicit val goodSummaryNormalDetailsWithPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithPreLodge] =
+      ProcedureTypePage
+        .filterMandatoryDependent(_ == ProcedureType.Normal) {
+          PreLodgeDeclarationPage.filterMandatoryDependent(_ == true) {
+            AddAgreedLocationOfGoodsPage.filterOptionalDependent(_ == true) {
+              AgreedLocationOfGoodsPage.reader
             }
           }
-        val preLodge = PreLodgeDeclarationPage.filterMandatoryDependent(_ == true) {
-          GoodSummaryNormalDetails(None).pure[UserAnswersReader]
         }
-
-        preLodge orElse notPreLodgeWithCustomApprovedLocation orElse notPreLodgeWithoutCustomApprovedLocation
-      }
+        .map(GoodSummaryNormalDetailsWithPreLodge.apply)
   }
 
   final case class GoodSummarySimplifiedDetails(authorisedLocationCode: String, controlResultDateLimit: LocalDate) extends GoodSummaryDetails
@@ -94,7 +102,8 @@ object GoodsSummary {
   object GoodSummaryDetails {
 
     implicit val goodSummaryDetailsReader: UserAnswersReader[GoodSummaryDetails] =
-      UserAnswersReader[GoodSummaryNormalDetails].widen[GoodSummaryDetails] orElse
+      UserAnswersReader[GoodSummaryNormalDetailsWithPreLodge].widen[GoodSummaryDetails] orElse
+        UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge].widen[GoodSummaryDetails] orElse
         UserAnswersReader[GoodSummarySimplifiedDetails].widen[GoodSummaryDetails]
   }
 
