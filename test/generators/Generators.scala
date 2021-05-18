@@ -234,5 +234,14 @@ trait Generators extends UserAnswersGenerator with ModelGenerators {
     )
   }
 
+  lazy val genExemptNationalityCode: Gen[Int] =
+    for {
+      range1    <- Gen.chooseNum(20, 29)
+      range2    <- Gen.chooseNum(50, 59)
+      range3    <- Gen.chooseNum(70, 79)
+      range4    <- Gen.oneOf(Seq(2, 5, 7))
+      pickRange <- Gen.oneOf(range1, range2, range3, range4)
+    } yield pickRange
+
   val localDateGen: Gen[LocalDate] = datesBetween(LocalDate.of(1900, 1, 1), LocalDate.now)
 }
