@@ -17,8 +17,7 @@
 package pages
 
 import models.UserAnswers
-import models.journeyDomain.TransportDetails.InlandMode.Constants
-import models.journeyDomain.TransportDetails.ModeCrossingBorder.Constants.exemptNationalityDigits
+import models.journeyDomain.TransportDetails.ModeCrossingBorder
 import play.api.libs.json.JsPath
 
 import scala.util.Try
@@ -31,7 +30,7 @@ case object ModeCrossingBorderPage extends QuestionPage[String] {
 
   override def cleanup(value: Option[String], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(mode) if exemptNationalityDigits.contains(mode.take(1)) =>
+      case Some(mode) if ModeCrossingBorder.isExemptFromNationality(mode) =>
         for {
           noNationality <- userAnswers.remove(NationalityCrossingBorderPage)
           noIdCrossing  <- noNationality.remove(IdCrossingBorderPage)

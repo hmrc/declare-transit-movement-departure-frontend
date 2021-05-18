@@ -17,7 +17,6 @@
 package models.journeyDomain
 
 import cats.implicits._
-import models.journeyDomain.TransportDetails.ModeCrossingBorder.Constants.exemptNationalityDigits
 import models.journeyDomain.TransportDetails._
 import models.reference.CountryCode
 import pages._
@@ -151,16 +150,14 @@ object TransportDetails {
 
   object ModeCrossingBorder {
 
-    object Constants {
-      val exemptNationalityDigits = Seq("2", "5", "7")
-    }
+    def isExemptFromNationality(mode: String): Boolean = Seq("2", "5", "7").contains(mode.take(1))
 
     implicit val reader: UserAnswersReader[ModeCrossingBorder] =
       ModeCrossingBorderPage.reader
         .map(_.toInt)
         .flatMap(
           modeCode =>
-            if (exemptNationalityDigits.contains(modeCode.toString.take(1))) {
+            if (ModeCrossingBorder.isExemptFromNationality(modeCode.toString)) {
               ModeExemptNationality(modeCode).pure[UserAnswersReader].widen[ModeCrossingBorder]
             } else {
               (

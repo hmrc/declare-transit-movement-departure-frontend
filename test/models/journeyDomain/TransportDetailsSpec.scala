@@ -30,7 +30,7 @@ import pages._
 class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
   import TransportDetailsSpec._
 
-  "TransportDetail can be parser from UserAnswers" ignore {
+  "TransportDetail can be parser from UserAnswers" - {
     "when there are no change at the border" - {
       "when inland mode is 'Rail'" in {
 
@@ -122,6 +122,40 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
             result mustEqual expected
 
         }
+      }
+    }
+  }
+
+  "ModeCrossingBorder" - {
+
+    "isExemptFromNationality" - {
+
+      "must return true when string starts with 2" in {
+
+        ModeCrossingBorder.isExemptFromNationality("2") mustBe true
+        ModeCrossingBorder.isExemptFromNationality("22") mustBe true
+        ModeCrossingBorder.isExemptFromNationality("234567") mustBe true
+      }
+
+      "must return true when string starts with 5" in {
+
+        ModeCrossingBorder.isExemptFromNationality("5") mustBe true
+        ModeCrossingBorder.isExemptFromNationality("55") mustBe true
+        ModeCrossingBorder.isExemptFromNationality("56789") mustBe true
+      }
+
+      "must return true when string starts with 7" in {
+
+        ModeCrossingBorder.isExemptFromNationality("7") mustBe true
+        ModeCrossingBorder.isExemptFromNationality("77") mustBe true
+        ModeCrossingBorder.isExemptFromNationality("78901") mustBe true
+      }
+
+      "must return false when string starts with anything else" in {
+
+        ModeCrossingBorder.isExemptFromNationality("3") mustBe false
+        ModeCrossingBorder.isExemptFromNationality("12") mustBe false
+        ModeCrossingBorder.isExemptFromNationality("90") mustBe false
       }
     }
   }

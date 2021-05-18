@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.transportDetails.{routes => transportDetailsRoute}
 import generators.Generators
 import models._
-import models.journeyDomain.TransportDetails.ModeCrossingBorder.Constants.exemptNationalityDigits
+import models.journeyDomain.TransportDetails.ModeCrossingBorder
 import models.reference.CountryCode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -213,7 +213,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       }
 
       "must go from ModeCrossingBorder to NationalityCrossingBorder Page when answer does not start with 2, 5 or 7" in {
-        val inlandModesGen = Gen.numStr.suchThat(num => !exemptNationalityDigits.contains(num.take(1)))
+        val inlandModesGen = Gen.numStr.suchThat(num => !ModeCrossingBorder.isExemptFromNationality(num))
         forAll(arbitrary[UserAnswers], inlandModesGen) {
           (answers, inlandMode) =>
             val updatedAnswers = answers.set(ModeCrossingBorderPage, inlandMode).success.value
@@ -411,7 +411,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       }
 
       "must go from ModeCrossingBorder to IdCrossingBorderPage when answer does not start with 2, 5, 7" in {
-        val inlandModesGen = Gen.numStr.suchThat(num => !exemptNationalityDigits.contains(num.take(1)))
+        val inlandModesGen = Gen.numStr.suchThat(num => !ModeCrossingBorder.isExemptFromNationality(num))
         forAll(arbitrary[UserAnswers], inlandModesGen) {
           (answers, inlandMode) =>
             val updatedAnswers = answers.set(ModeCrossingBorderPage, inlandMode).success.value

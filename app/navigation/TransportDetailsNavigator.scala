@@ -19,11 +19,10 @@ package navigation
 import controllers.transportDetails.routes
 import javax.inject.{Inject, Singleton}
 import models._
+import models.journeyDomain.TransportDetails.InlandMode._
+import models.journeyDomain.TransportDetails.ModeCrossingBorder
 import pages._
 import play.api.mvc.Call
-import models.journeyDomain.TransportDetails.InlandMode._
-import models.journeyDomain.TransportDetails.InlandMode
-import models.journeyDomain.TransportDetails.ModeCrossingBorder.Constants.exemptNationalityDigits
 
 @Singleton
 class TransportDetailsNavigator @Inject()() extends Navigator {
@@ -139,25 +138,25 @@ class TransportDetailsNavigator @Inject()() extends Navigator {
 
   private def modeCrossingBorderRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(ModeCrossingBorderPage), mode) match {
-      case (Some(inlandMode), _) if exemptNationalityDigits.contains(inlandMode.take(1)) =>
+      case (Some(inlandMode), _) if ModeCrossingBorder.isExemptFromNationality(inlandMode) =>
         routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
       case _ => routes.IdCrossingBorderController.onPageLoad(ua.id, mode)
     }
 
   private def addIdAtDepartureLaterRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(ContainersUsedPage), ua.get(InlandModePage)) match {
-      case (_, Some(inlandMode)) if exemptNationalityDigits.contains(inlandMode.take(1)) => routes.ChangeAtBorderController.onPageLoad(ua.id, mode)
-      case (Some(true), _)                                                               => routes.AddNationalityAtDepartureController.onPageLoad(ua.id, mode)
-      case (Some(false) | None, _)                                                       => routes.NationalityAtDepartureController.onPageLoad(ua.id, mode)
-      case _                                                                             => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case (_, Some(inlandMode)) if ModeCrossingBorder.isExemptFromNationality(inlandMode) => routes.ChangeAtBorderController.onPageLoad(ua.id, mode)
+      case (Some(true), _)                                                                 => routes.AddNationalityAtDepartureController.onPageLoad(ua.id, mode)
+      case (Some(false) | None, _)                                                         => routes.NationalityAtDepartureController.onPageLoad(ua.id, mode)
+      case _                                                                               => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
     }
 
   private def idAtDepartureRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(ContainersUsedPage), ua.get(InlandModePage)) match {
-      case (_, Some(inlandMode)) if exemptNationalityDigits.contains(inlandMode.take(1)) => routes.ChangeAtBorderController.onPageLoad(ua.id, mode)
-      case (Some(true), _)                                                               => routes.AddNationalityAtDepartureController.onPageLoad(ua.id, mode)
-      case (Some(false) | None, _)                                                       => routes.NationalityAtDepartureController.onPageLoad(ua.id, mode)
-      case _                                                                             => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case (_, Some(inlandMode)) if ModeCrossingBorder.isExemptFromNationality(inlandMode) => routes.ChangeAtBorderController.onPageLoad(ua.id, mode)
+      case (Some(true), _)                                                                 => routes.AddNationalityAtDepartureController.onPageLoad(ua.id, mode)
+      case (Some(false) | None, _)                                                         => routes.NationalityAtDepartureController.onPageLoad(ua.id, mode)
+      case _                                                                               => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.id)
     }
 
   private def inlandModeRoute(ua: UserAnswers, mode: Mode): Call =

@@ -16,7 +16,7 @@
 
 package pages
 
-import models.journeyDomain.TransportDetails.ModeCrossingBorder.Constants.exemptNationalityDigits
+import models.journeyDomain.TransportDetails.ModeCrossingBorder
 import models.reference.CountryCode
 import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.scalacheck.Gen
@@ -58,7 +58,7 @@ class ModeCrossingBorderPageSpec extends PageBehaviours with TryValues with Opti
 
     "must not clear IdCrossingBorder and Nationality Crossing Border Page if any other mode is selected" in {
 
-      forAll(Gen.numStr.suchThat(num => !exemptNationalityDigits.contains(num.take(1)))) {
+      forAll(Gen.numStr.suchThat(num => !ModeCrossingBorder.isExemptFromNationality(num))) {
         crossingMode =>
           val userAnswers = new UserAnswers(LocalReferenceNumber("AB123").get, EoriNumber("3242343"))
 
