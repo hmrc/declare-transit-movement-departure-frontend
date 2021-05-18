@@ -16,12 +16,10 @@
 
 package services
 
-import java.time.LocalDateTime
-
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import generators.{JourneyModelGenerators, ModelGenerators}
-import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
-import models.journeyDomain.MovementDetails.{NormalMovementDetails, SimplifiedMovementDetails}
+import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetailsWithPreLodge, GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
+import models.journeyDomain.MovementDetails.NormalMovementDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
@@ -34,6 +32,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
 
+import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -114,7 +113,7 @@ class DeclarationRequestServiceSpec
 
           "must be set with customs approved location when not defined as prelodge" in {
 
-            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetails]) {
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetailsWithoutPreLodge]) {
               (userAnswers, normalJourneyDomain, normalMovementDetails, normalGoodsSummary) =>
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
                 when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())

@@ -22,7 +22,7 @@ import cats.implicits._
 
 import javax.inject.Inject
 import models.domain.{Address, SealDomain}
-import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
+import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetailsWithPreLodge, GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.JourneyDomain.Constants
 import models.journeyDomain.RouteDetails.TransitInformation
@@ -205,12 +205,8 @@ class DeclarationRequestService @Inject()(
 
     def customsSubPlace(movementDetails: MovementDetails, goodsSummary: GoodsSummary): Option[String] =
       goodsSummary.goodSummaryDetails match {
-        case GoodsSummary.GoodSummaryNormalDetails(customsApprovedLocation) =>
-          movementDetails match {
-            case MovementDetails.NormalMovementDetails(_, prelodge, _, _, _) =>
-              if (prelodge) Some("Pre-lodge") else customsApprovedLocation
-            case _ => None
-          }
+        case GoodsSummary.GoodSummaryNormalDetailsWithoutPreLodge(_, customsApprovedLocation) => customsApprovedLocation
+        case GoodsSummary.GoodSummaryNormalDetailsWithPreLodge(_) =>Some("Pre-lodge")
         case _ => None
       }
 
@@ -266,10 +262,10 @@ class DeclarationRequestService @Inject()(
         case _                                            => None
       }
 
-    def agreedLocationOfGoods(movementDetails: MovementDetails, goodsSummaryDetails: GoodSummaryDetails): Option[String] =
-      (movementDetails, goodsSummaryDetails) match {
-        case (MovementDetails.NormalMovementDetails(_, prelodge, _, _, _), GoodSummaryNormalDetails(approvedLocation)) =>
-          if (prelodge) Some("Pre-lodge") else approvedLocation
+    def agreedLocationOfGoods(goodsSummaryDetails: GoodSummaryDetails): Option[String] =
+   goodsSummaryDetails match {
+        case  GoodSummaryNormalDetailsWithPreLodge(x) => x
+        case  GoodSummaryNormalDetailsWithoutPreLodge(agreedLocationOfGoods, _) => agreedLocationOfGoods
         case _ => None
       }
 
@@ -361,7 +357,7 @@ class DeclarationRequestService @Inject()(
         typOfDecHEA24       = movementDetails.declarationType.code,
         couOfDesCodHEA30    = Some(routeDetails.destinationCountry.code),
         agrLocOfGooCodHEA38 = None, // Not required
-        agrLocOfGooHEA39    = agreedLocationOfGoods(movementDetails, goodsSummary.goodSummaryDetails),
+        agrLocOfGooHEA39    = agreedLocationOfGoods(goodsSummary.goodSummaryDetails),
         autLocOfGooCodHEA41 = goodsSummarySimplifiedDetails(goodsSummary.goodSummaryDetails).map(_.authorisedLocationCode),
         plaOfLoaCodHEA46    = goodsSummary.loadingPlace,
         couOfDisCodHEA55    = Some(routeDetails.countryOfDispatch.country.code),
