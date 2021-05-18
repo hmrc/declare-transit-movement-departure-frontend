@@ -30,6 +30,10 @@ case object AddCustomsApprovedLocationPage extends QuestionPage[Boolean] {
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) => userAnswers.remove(CustomsApprovedLocationPage)
+      case Some(true)  => userAnswers.remove(AddAgreedLocationOfGoodsPage)
+        .flatMap(_.remove(AgreedLocationOfGoodsPage))
       case _           => super.cleanup(value, userAnswers)
     }
 }
+
+
