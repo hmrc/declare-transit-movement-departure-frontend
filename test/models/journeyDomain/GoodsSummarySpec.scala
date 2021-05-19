@@ -65,7 +65,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
               numberOfPackages   = 1,
               totalMass          = "11.1",
               loadingPlace       = Some("loadingPlaceValue"),
-              goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
+              goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, Some("Approved location")),
               sealNumbers        = Seq.empty
             )
             val userAnswers =
@@ -73,8 +73,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
                 .setGoodsSummary(goodsSummary)(ua)
                 .unsafeSetVal(AddSecurityDetailsPage)(true)
                 .unsafeSetVal(PreLodgeDeclarationPage)(false)
-                .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
-                .unsafeSetVal(CustomsApprovedLocationPage)("Customs App Location")
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
             UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
@@ -86,8 +84,8 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
             val goodsSummary = GoodsSummary(
               numberOfPackages   = 1,
               totalMass          = "11.1",
-              loadingPlace       = Some("loadingPlaceValue"),
-              goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
+              loadingPlace       = None,
+              goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(Some("Agreed location of goods"), None),
               sealNumbers        = Seq.empty
             )
             val userAnswers =
@@ -96,9 +94,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
                 .unsafeSetVal(AddSecurityDetailsPage)(false)
                 .unsafeSetVal(PreLodgeDeclarationPage)(false)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
-                .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
-                .unsafeSetVal(AgreedLocationOfGoodsPage)("Agreed location of goods")
 
             UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
         }
@@ -109,8 +104,8 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
             val goodsSummary = GoodsSummary(
               numberOfPackages   = 1,
               totalMass          = "11.1",
-              loadingPlace       = Some("loadingPlaceValue"),
-              goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
+              loadingPlace       = None,
+              goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, None),
               sealNumbers        = Seq.empty
             )
             val userAnswers =
@@ -119,8 +114,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
                 .unsafeSetVal(AddSecurityDetailsPage)(false)
                 .unsafeSetVal(PreLodgeDeclarationPage)(false)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
-                .unsafeSetVal(AddAgreedLocationOfGoodsPage)(false)
 
             UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
         }
@@ -132,7 +125,29 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
             val goodsSummary = GoodsSummary(
               numberOfPackages   = 1,
               totalMass          = "11.1",
-              loadingPlace       = Some("loadingPlaceValue"),
+              loadingPlace       = None,
+              goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(Some("Agreed location of goods")),
+              sealNumbers        = Seq.empty
+            )
+            val userAnswers =
+              GoodsSummarySpec
+                .setGoodsSummary(goodsSummary)(ua)
+                .unsafeSetVal(AddSecurityDetailsPage)(false)
+                .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+
+            UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
+
+        }
+      }
+
+      "when prelodge is true and customer does not add Agreed Location of Goods" in {
+        forAll(arb[UserAnswers]) {
+          ua =>
+            val goodsSummary = GoodsSummary(
+              numberOfPackages   = 1,
+              totalMass          = "11.1",
+              loadingPlace       = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
               sealNumbers        = Seq.empty
             )
@@ -142,37 +157,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
                 .unsafeSetVal(AddSecurityDetailsPage)(false)
                 .unsafeSetVal(PreLodgeDeclarationPage)(true)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
-                .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
-                .unsafeSetVal(AgreedLocationOfGoodsPage)("Agreed location of goods")
 
             UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
-
         }
-        "when prelodge is true and customer does not add Agreed Location of Goods" in {
-          forAll(arb[UserAnswers]) {
-            ua =>
-              val goodsSummary = GoodsSummary(
-                numberOfPackages   = 1,
-                totalMass          = "11.1",
-                loadingPlace       = Some("loadingPlaceValue"),
-                goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
-                sealNumbers        = Seq.empty
-              )
-              val userAnswers =
-                GoodsSummarySpec
-                  .setGoodsSummary(goodsSummary)(ua)
-                  .unsafeSetVal(AddSecurityDetailsPage)(false)
-                  .unsafeSetVal(PreLodgeDeclarationPage)(true)
-                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                  .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
-                  .unsafeSetVal(AddAgreedLocationOfGoodsPage)(false)
-
-              UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
-          }
-        }
-
       }
+
     }
   }
 
@@ -183,24 +172,16 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
   private def sealIdDetailsPageForIndex(index: Int): SealIdDetailsPage =
     SealIdDetailsPage(Index(index))
 
-  private def procedureType(goodSummaryDetails: GoodSummaryDetails): ProcedureType =
-    goodSummaryDetails match {
-      case _: GoodSummaryNormalDetailsWithPreLodge => ProcedureType.Normal
-      case _: GoodSummarySimplifiedDetails         => ProcedureType.Simplified
-    }
-
   def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
-      .unsafeSetVal(ProcedureTypePage)(procedureType(goodsSummary.goodSummaryDetails))
       .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
       .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetailsWithPreLodge(Some(_)) => true
-        case GoodSummaryNormalDetailsWithPreLodge(None)    => false
+        case GoodSummaryNormalDetailsWithoutPreLodge(_, Some(_)) => true
+        case _                                                   => false
       }
       .unsafeSetPFnOpt(CustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetailsWithPreLodge(customsApprovedLocation)       => customsApprovedLocation
         case GoodSummaryNormalDetailsWithoutPreLodge(_, customsApprovedLocation) => customsApprovedLocation
       }
       .unsafeSetPFn(AuthorisedLocationCodePage)(goodsSummary.goodSummaryDetails) {
@@ -211,8 +192,13 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
       }
       .unsafeSetOpt(LoadingPlacePage)(goodsSummary.loadingPlace)
       .unsafeSetPFn(AgreedLocationOfGoodsPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetailsWithoutPreLodge(Some(agreedLocationOfGoods), _) => agreedLocationOfGoods
+        case GoodSummaryNormalDetailsWithoutPreLodge(Some(agreedLocationOfGoods), _)        => agreedLocationOfGoods
+        case GoodsSummary.GoodSummaryNormalDetailsWithPreLodge(Some(agreedLocationOfGoods)) => agreedLocationOfGoods
 
       }
+      .unsafeSetPFn(AddAgreedLocationOfGoodsPage)(goodsSummary.goodSummaryDetails) {
+        case GoodSummaryNormalDetailsWithoutPreLodge(agreedLocationOfGoods, _)        => agreedLocationOfGoods.isDefined
+        case GoodsSummary.GoodSummaryNormalDetailsWithPreLodge(agreedLocationOfGoods) => agreedLocationOfGoods.isDefined
 
+      }
 }

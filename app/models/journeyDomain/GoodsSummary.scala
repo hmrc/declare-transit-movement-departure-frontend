@@ -53,18 +53,18 @@ object GoodsSummary {
   object GoodSummaryNormalDetailsWithoutPreLodge {
     implicit val goodSummaryNormalDetailsWithoutPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge] = {
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
-        PreLodgeDeclarationPage.filterMandatoryDependent(_ == true) {
+        PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
           (
-            AddCustomsApprovedLocationPage.filterOptionalDependent(_ == true) {
-              CustomsApprovedLocationPage.reader
-            },
             AddCustomsApprovedLocationPage
               .filterOptionalDependent(_ == false) {
                 AddAgreedLocationOfGoodsPage.filterOptionalDependent(_ == true) {
                   AgreedLocationOfGoodsPage.reader
                 }
               }
-              .map(_.flatten)
+              .map(_.flatten),
+            AddCustomsApprovedLocationPage.filterOptionalDependent(_ == true) {
+              CustomsApprovedLocationPage.reader
+            }
           ).tupled.map((GoodSummaryNormalDetailsWithoutPreLodge.apply _).tupled)
         }
       }
