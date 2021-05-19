@@ -96,10 +96,11 @@ trait JourneyModelGenerators {
       traderDetails     <- genTraderDetailsNormal
       safetyAndSecurity <- arbitrary[SafetyAndSecurity]
       itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, movementDetails, routeDetails)
-      goodsummarydetailsType = if(movementDetails.prelodge){
+      goodsummarydetailsType = if (movementDetails.prelodge) {
         arbitrary[GoodSummaryNormalDetailsWithPreLodge]
       } else {
-        arbitrary[GoodSummaryNormalDetailsWithPreLodge]}
+        arbitrary[GoodSummaryNormalDetailsWithPreLodge]
+      }
       goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired)(Arbitrary(goodsummarydetailsType)).arbitrary
       guarantees   <- nonEmptyListOf[GuaranteeDetails](3)
     } yield
@@ -751,7 +752,7 @@ trait JourneyModelGenerators {
     Arbitrary {
       for {
         customsApprovedLocation <- Gen.some(stringsWithMaxLength(stringMaxLength))
-        agreedLocationOfGoods <- Gen.some(stringsWithMaxLength(stringMaxLength))
+        agreedLocationOfGoods   <- Gen.some(stringsWithMaxLength(stringMaxLength))
       } yield GoodSummaryNormalDetailsWithoutPreLodge(agreedLocationOfGoods, customsApprovedLocation)
     }
 

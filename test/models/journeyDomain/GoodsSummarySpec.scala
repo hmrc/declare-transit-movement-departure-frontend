@@ -164,39 +164,40 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
       }
     }
-    object GoodsSummarySpec extends UserAnswersSpecHelper {
-
-      private def sealIdDetailsPageForIndex(index: Int): SealIdDetailsPage =
-        SealIdDetailsPage(Index(index))
-
-      private def procedureType(goodSummaryDetails: GoodSummaryDetails): ProcedureType =
-        goodSummaryDetails match {
-          case _: GoodSummaryNormalDetailsWithPreLodge => ProcedureType.Normal
-          case _: GoodSummarySimplifiedDetails         => ProcedureType.Simplified
-        }
-
-      def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
-        userAnswers
-          .unsafeSetVal(ProcedureTypePage)(procedureType(goodsSummary.goodSummaryDetails))
-          .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
-          .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
-          .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
-          .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
-            case GoodSummaryNormalDetailsWithPreLodge(Some(_)) => true
-            case GoodSummaryNormalDetailsWithPreLodge(None)    => false
-          }
-          .unsafeSetPFnOpt(CustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
-            case GoodSummaryNormalDetailsWithPreLodge(customsApprovedLocation) => customsApprovedLocation
-          }
-          .unsafeSetPFn(AuthorisedLocationCodePage)(goodsSummary.goodSummaryDetails) {
-            case GoodSummarySimplifiedDetails(authorisedLocationCode, _) => authorisedLocationCode
-          }
-          .unsafeSetPFn(ControlResultDateLimitPage)(goodsSummary.goodSummaryDetails) {
-            case GoodSummarySimplifiedDetails(_, controlResultDateLimit) => controlResultDateLimit
-          }
-          .unsafeSetOpt(LoadingPlacePage)(goodsSummary.loadingPlace)
-
-    }
   }
+
+}
+
+object GoodsSummarySpec extends UserAnswersSpecHelper {
+
+  private def sealIdDetailsPageForIndex(index: Int): SealIdDetailsPage =
+    SealIdDetailsPage(Index(index))
+
+  private def procedureType(goodSummaryDetails: GoodSummaryDetails): ProcedureType =
+    goodSummaryDetails match {
+      case _: GoodSummaryNormalDetailsWithPreLodge => ProcedureType.Normal
+      case _: GoodSummarySimplifiedDetails         => ProcedureType.Simplified
+    }
+
+  def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
+    userAnswers
+      .unsafeSetVal(ProcedureTypePage)(procedureType(goodsSummary.goodSummaryDetails))
+      .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
+      .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
+      .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
+      .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
+        case GoodSummaryNormalDetailsWithPreLodge(Some(_)) => true
+        case GoodSummaryNormalDetailsWithPreLodge(None)    => false
+      }
+      .unsafeSetPFnOpt(CustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
+        case GoodSummaryNormalDetailsWithPreLodge(customsApprovedLocation) => customsApprovedLocation
+      }
+      .unsafeSetPFn(AuthorisedLocationCodePage)(goodsSummary.goodSummaryDetails) {
+        case GoodSummarySimplifiedDetails(authorisedLocationCode, _) => authorisedLocationCode
+      }
+      .unsafeSetPFn(ControlResultDateLimitPage)(goodsSummary.goodSummaryDetails) {
+        case GoodSummarySimplifiedDetails(_, controlResultDateLimit) => controlResultDateLimit
+      }
+      .unsafeSetOpt(LoadingPlacePage)(goodsSummary.loadingPlace)
 
 }
