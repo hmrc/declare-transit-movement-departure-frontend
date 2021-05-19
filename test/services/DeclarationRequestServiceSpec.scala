@@ -117,9 +117,10 @@ class DeclarationRequestServiceSpec
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
                 when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge                      = false, containersUsed = false)
-                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(Some("customsApprovedLocation")))
-                val updatedJourneyDomain           = normalJourneyDomain.copy(movementDetails                 = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
+                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge = false, containersUsed = false)
+                val updatedGoodsSummary =
+                  normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(None, Some("customsApprovedLocation")))
+                val updatedJourneyDomain = normalJourneyDomain.copy(movementDetails = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
 
                 val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
                 val result            = service.convert(updatedUserAnswer).futureValue
@@ -139,7 +140,7 @@ class DeclarationRequestServiceSpec
                 when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
                 val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge                      = false, containersUsed = false)
-                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(None))
+                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(None, None))
                 val updatedJourneyDomain           = normalJourneyDomain.copy(movementDetails                 = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
 
                 val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
@@ -193,7 +194,7 @@ class DeclarationRequestServiceSpec
 
                 result.right.value.header.cusSubPlaHEA66 mustBe None
                 result.right.value.header.autLocOfGooCodHEA41 mustBe None
-                result.right.value.header.agrLocOfGooHEA39 mustBe "Agreed location of Goods"
+                result.right.value.header.agrLocOfGooHEA39.value mustBe "Agreed location of Goods"
                 result.right.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
@@ -214,7 +215,7 @@ class DeclarationRequestServiceSpec
                 val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
                 val result            = service.convert(updatedUserAnswer).futureValue
 
-                result.right.value.header.agrLocOfGooCodHEA38 mustBe "Pre-lodge"
+                result.right.value.header.agrLocOfGooCodHEA38.value mustBe "Pre-lodge"
             }
           }
 

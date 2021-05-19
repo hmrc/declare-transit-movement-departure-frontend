@@ -886,10 +886,12 @@ class TaskListViewModelSpec
 
           val isSecurityDefined = arb[Boolean].sample.value
 
-          forAll(arb(arbitraryGoodsSummary(isSecurityDefined))) {
-            sectionDetails =>
+          forAll(arb(arbitraryGoodsSummary(isSecurityDefined)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
+            (goodsSummary, detailsWithPrelodge) =>
+              val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = detailsWithPrelodge)
+
               val userAnswers = GoodsSummarySpec
-                .setGoodsSummary(sectionDetails)(emptyUserAnswers)
+                .setGoodsSummary(updatedGoodsSummary)(emptyUserAnswers)
                 .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
                 .unsafeSetVal(PreLodgeDeclarationPage)(true)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
@@ -926,10 +928,11 @@ class TaskListViewModelSpec
         "when the status is Completed, links to the Check your answers page for the section" in {
           val isSecurityDefined = arb[Boolean].sample.value
 
-          forAll(arb(arbitraryGoodsSummary(isSecurityDefined))) {
-            sectionDetails =>
+          forAll(arb(arbitraryGoodsSummary(isSecurityDefined)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
+            (goodsSummary, detailsWithPrelodge) =>
+              val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = detailsWithPrelodge)
               val userAnswers = GoodsSummarySpec
-                .setGoodsSummary(sectionDetails)(emptyUserAnswers)
+                .setGoodsSummary(updatedGoodsSummary)(emptyUserAnswers)
                 .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
                 .unsafeSetVal(PreLodgeDeclarationPage)(true)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
