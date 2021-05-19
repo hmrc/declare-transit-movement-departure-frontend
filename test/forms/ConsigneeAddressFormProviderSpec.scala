@@ -16,19 +16,18 @@
 
 package forms
 
+import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class ConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val country      = Country(CountryCode("GB"), "United Kingdom")
-  private val countries    = CountryList(Seq(country))
-  private val formProvider = new ConsigneeAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val country       = Country(CountryCode("GB"), "United Kingdom")
+  private val countries     = CountryList(Seq(country))
+  private val consigneeName = "consigneeName"
+  private val form          = new ConsigneeAddressFormProvider()(countries, consigneeName)
 
   ".AddressLine1" - {
 
@@ -36,28 +35,27 @@ class ConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = "consigneeAddress.error.AddressLine1.required"
     val lengthKey   = "consigneeAddress.error.AddressLine1.length"
     val invalidKey  = "consigneeAddress.error.AddressLine1.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consigneeName)
 
   }
 
@@ -67,37 +65,36 @@ class ConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = "consigneeAddress.error.AddressLine2.required"
     val lengthKey   = "consigneeAddress.error.AddressLine2.length"
     val invalidKey  = "consigneeAddress.error.AddressLine2.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(consigneeName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(consigneeName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, consigneeName)
   }
 
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "consigneeAddress.error.AddressLine3.required"
-    val lengthKey   = "consigneeAddress.error.AddressLine3.length"
-    val invalidKey  = "consigneeAddress.error.AddressLine3.invalid"
-    val maxLength   = 35
+    val requiredKey = "consigneeAddress.error.postalCode.required"
+    val lengthKey   = "consigneeAddress.error.postalCode.length"
+    val invalidKey  = "consigneeAddress.error.postalCode.invalid"
+    val maxLength   = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -109,15 +106,15 @@ class ConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq("consigneeName"))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq("consigneeName"))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, "consigneeName")
   }
 }

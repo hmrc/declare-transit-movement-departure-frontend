@@ -16,6 +16,7 @@
 
 package forms.safetyAndSecurity
 
+import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
@@ -25,8 +26,9 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val countries = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val form      = new SafetyAndSecurityConsignorAddressFormProvider()(countries)
+  private val countries     = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
+  private val consignorName = "ConsignorName"
+  private val form          = new SafetyAndSecurityConsignorAddressFormProvider()(countries, consignorName)
 
   ".AddressLine1" - {
 
@@ -34,28 +36,27 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
     val requiredKey = "safetyAndSecurityConsignorAddress.error.required"
     val lengthKey   = "safetyAndSecurityConsignorAddress.error.length"
     val invalidKey  = "safetyAndSecurityConsignorAddress.error.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq("1"))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(1))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, "1")
+      requiredError = FormError(fieldName, requiredKey, Seq(1))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, 1)
   }
 
   ".AddressLine2" - {
@@ -65,38 +66,36 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
     val lengthKey   = "safetyAndSecurityConsignorAddress.error.length"
     val invalidKey  = "safetyAndSecurityConsignorAddress.error.invalid"
 
-    val maxLength = 35
-
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq("2"))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(2))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, "2")
+      requiredError = FormError(fieldName, requiredKey, Seq(2))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, 2)
   }
 
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "safetyAndSecurityConsignorAddress.error.required"
-    val lengthKey   = "safetyAndSecurityConsignorAddress.error.length"
-    val invalidKey  = "safetyAndSecurityConsignorAddress.error.invalid"
+    val requiredKey = "safetyAndSecurityConsignorAddress.postalCode.error.required"
+    val lengthKey   = "safetyAndSecurityConsignorAddress.postalCode.error.length"
+    val invalidKey  = "safetyAndSecurityConsignorAddress.postalCode.error.invalid"
 
-    val maxLength = 35
+    val maxLength = 9
 
     behave like fieldThatBindsValidData(
       form,
@@ -108,16 +107,16 @@ class SafetyAndSecurityConsignorAddressFormProviderSpec extends StringFieldBehav
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq("3"))
+      lengthError = FormError(fieldName, lengthKey, Seq(consignorName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey, "3")
+      requiredError = FormError(fieldName, requiredKey, Seq(consignorName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, consignorName)
   }
 
 }

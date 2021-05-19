@@ -337,16 +337,29 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             }
           }
 
-          "must go to DeclareNumberOfPackages when PackageType code is bulk or unpacked" in {
+          "must go to AddMark when PackageType code is bulk" in {
 
-            forAll(arbitrary[UserAnswers], arbitraryBulkOrUnpackedPackageType.arbitrary) {
+            forAll(arbitrary[UserAnswers], arbitraryBulkPackageType.arbitrary) {
               (answers, packageType) =>
                 val updatedAnswers = answers
                   .set(PackageTypePage(index, index), packageType).success.value
 
                 navigator
                   .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.DeclareNumberOfPackagesController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, NormalMode))
+            }
+          }
+
+          "must go to TotalPieces when PackageType code is unpacked" in {
+
+            forAll(arbitrary[UserAnswers], arbitraryUnPackedPackageType.arbitrary) {
+              (answers, packageType) =>
+                val updatedAnswers = answers
+                  .set(PackageTypePage(index, index), packageType).success.value
+
+                navigator
+                  .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
+                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, NormalMode))
             }
           }
         }
@@ -1320,16 +1333,29 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             }
           }
 
-          "must go to DeclareNumberOfPackages when PackageType code is bulk or unpacked" in {
+          "must go to Add Marks when PackageType code is bulk" in {
 
-            forAll(arbitrary[UserAnswers], arbitraryBulkOrUnpackedPackageType.arbitrary) {
+            forAll(arbitrary[UserAnswers], arbitraryBulkPackageType.arbitrary) {
               (answers, packageType) =>
                 val updatedAnswers = answers
                   .set(PackageTypePage(index, index), packageType).success.value
 
                 navigator
                   .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.DeclareNumberOfPackagesController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, CheckMode))
+            }
+          }
+
+          "must go to TotalPieces when PackageType code is unpacked" in {
+
+            forAll(arbitrary[UserAnswers], arbitraryUnPackedPackageType.arbitrary) {
+              (answers, packageType) =>
+                val updatedAnswers = answers
+                  .set(PackageTypePage(index, index), packageType).success.value
+
+                navigator
+                  .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
+                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, CheckMode))
             }
           }
         }

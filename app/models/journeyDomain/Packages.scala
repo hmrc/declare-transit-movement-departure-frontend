@@ -33,7 +33,6 @@ object Packages {
 
   final case class UnpackedPackages(
     packageType: PackageType,
-    howManyPackagesPage: Option[Int],
     totalPieces: Int,
     markOrNumber: Option[String]
   ) extends Packages
@@ -46,7 +45,6 @@ object Packages {
       ) {
         (
           PackageTypePage(itemIndex, referenceIndex).reader,
-          readHowManyPackages(itemIndex, referenceIndex),
           TotalPiecesPage(itemIndex, referenceIndex).reader,
           readMarkOrNumber(itemIndex, referenceIndex)
         ).tupled.map((UnpackedPackages.apply _).tupled)
@@ -55,7 +53,6 @@ object Packages {
 
   final case class BulkPackages(
     packageType: PackageType,
-    howManyPackagesPage: Option[Int],
     markOrNumber: Option[String]
   ) extends Packages
 
@@ -67,7 +64,6 @@ object Packages {
       ) {
         (
           PackageTypePage(itemIndex, referenceIndex).reader,
-          readHowManyPackages(itemIndex, referenceIndex),
           readMarkOrNumber(itemIndex, referenceIndex)
         ).tupled.map((BulkPackages.apply _).tupled)
       }

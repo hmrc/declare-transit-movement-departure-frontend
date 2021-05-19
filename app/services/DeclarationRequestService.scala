@@ -104,9 +104,9 @@ class DeclarationRequestService @Inject()(
 
     def packages(packages: NonEmptyList[Packages]): NonEmptyList[models.messages.goodsitem.Package] =
       packages.map {
-        case Packages.UnpackedPackages(packageType, _, totalPieces, markOrNumber) =>
+        case Packages.UnpackedPackages(packageType, totalPieces, markOrNumber) =>
           UnpackedPackage(packageType.code, totalPieces, markOrNumber)
-        case Packages.BulkPackages(packageType, _, markOrNumber) =>
+        case Packages.BulkPackages(packageType, markOrNumber) =>
           BulkPackage(packageType.code, markOrNumber)
         case Packages.OtherPackages(packageType, howManyPackagesPage, markOrNumber) =>
           RegularPackage(packageType.code, howManyPackagesPage, markOrNumber)

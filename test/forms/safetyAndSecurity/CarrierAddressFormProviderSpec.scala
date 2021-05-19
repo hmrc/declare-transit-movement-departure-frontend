@@ -16,19 +16,19 @@
 
 package forms.safetyAndSecurity
 
+import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
 
   private val country      = Country(CountryCode("GB"), "United Kingdom")
   private val countries    = CountryList(Seq(country))
   private val formProvider = new CarrierAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val carrierName  = "carrierName"
+  private val form         = formProvider(countries, carrierName)
 
   ".AddressLine1" - {
 
@@ -36,27 +36,26 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = "carrierAddress.error.AddressLine1.required"
     val lengthKey   = "carrierAddress.error.AddressLine1.length"
     val invalidKey  = "carrierAddress.error.AddressLine1.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(carrierName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(carrierName))
     )
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, carrierName)
   }
   ".AddressLine2" - {
 
@@ -64,57 +63,58 @@ class CarrierAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey = "carrierAddress.error.AddressLine2.required"
     val lengthKey   = "carrierAddress.error.AddressLine2.length"
     val invalidKey  = "carrierAddress.error.AddressLine2.invalid"
-    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(carrierName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(carrierName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, addressMaxLength, carrierName)
   }
 
   ".AddressLine3" - {
 
-    val fieldName   = "AddressLine3"
-    val requiredKey = "carrierAddress.error.AddressLine3.required"
-    val lengthKey   = "carrierAddress.error.AddressLine3.length"
-    val invalidKey  = "carrierAddress.error.AddressLine3.invalid"
-    val maxLength   = 35
+    val fieldName = "AddressLine3"
+
+    val requiredKey = "carrierAddress.error.postalCode.required"
+    val lengthKey   = "carrierAddress.error.postalCode.length"
+    val invalidKey  = "carrierAddress.error.postalCode.invalid"
+
+    val maxLength = 9
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      stringsWithMaxLength(addressMaxLength)
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      maxLength   = addressMaxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(carrierName))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq(carrierName))
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength, carrierName)
   }
 }
