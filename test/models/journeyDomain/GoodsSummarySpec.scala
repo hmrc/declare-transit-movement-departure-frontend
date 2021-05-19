@@ -19,7 +19,12 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
-import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetailsWithPreLodge, GoodSummarySimplifiedDetails}
+import models.journeyDomain.GoodsSummary.{
+  GoodSummaryDetails,
+  GoodSummaryNormalDetailsWithPreLodge,
+  GoodSummaryNormalDetailsWithoutPreLodge,
+  GoodSummarySimplifiedDetails
+}
 import models.{Index, ProcedureType, UserAnswers}
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
@@ -66,10 +71,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
             val userAnswers =
               GoodsSummarySpec
                 .setGoodsSummary(goodsSummary)(ua)
+                .unsafeSetVal(AddSecurityDetailsPage)(true)
                 .unsafeSetVal(PreLodgeDeclarationPage)(false)
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
                 .unsafeSetVal(CustomsApprovedLocationPage)("Customs App Location")
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
 
             UserAnswersReader[GoodsSummary].run(userAnswers).isSuccessful mustEqual goodsSummary
         }
@@ -87,6 +93,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
             val userAnswers =
               GoodsSummarySpec
                 .setGoodsSummary(goodsSummary)(ua)
+                .unsafeSetVal(AddSecurityDetailsPage)(false)
                 .unsafeSetVal(PreLodgeDeclarationPage)(false)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
@@ -109,6 +116,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
             val userAnswers =
               GoodsSummarySpec
                 .setGoodsSummary(goodsSummary)(ua)
+                .unsafeSetVal(AddSecurityDetailsPage)(false)
                 .unsafeSetVal(PreLodgeDeclarationPage)(false)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
@@ -131,6 +139,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
             val userAnswers =
               GoodsSummarySpec
                 .setGoodsSummary(goodsSummary)(ua)
+                .unsafeSetVal(AddSecurityDetailsPage)(false)
                 .unsafeSetVal(PreLodgeDeclarationPage)(true)
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
@@ -153,6 +162,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
               val userAnswers =
                 GoodsSummarySpec
                   .setGoodsSummary(goodsSummary)(ua)
+                  .unsafeSetVal(AddSecurityDetailsPage)(false)
                   .unsafeSetVal(PreLodgeDeclarationPage)(true)
                   .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                   .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
@@ -190,7 +200,8 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
         case GoodSummaryNormalDetailsWithPreLodge(None)    => false
       }
       .unsafeSetPFnOpt(CustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetailsWithPreLodge(customsApprovedLocation) => customsApprovedLocation
+        case GoodSummaryNormalDetailsWithPreLodge(customsApprovedLocation)       => customsApprovedLocation
+        case GoodSummaryNormalDetailsWithoutPreLodge(_, customsApprovedLocation) => customsApprovedLocation
       }
       .unsafeSetPFn(AuthorisedLocationCodePage)(goodsSummary.goodSummaryDetails) {
         case GoodSummarySimplifiedDetails(authorisedLocationCode, _) => authorisedLocationCode
@@ -199,5 +210,9 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
         case GoodSummarySimplifiedDetails(_, controlResultDateLimit) => controlResultDateLimit
       }
       .unsafeSetOpt(LoadingPlacePage)(goodsSummary.loadingPlace)
+      .unsafeSetPFn(AgreedLocationOfGoodsPage)(goodsSummary.goodSummaryDetails) {
+        case GoodSummaryNormalDetailsWithoutPreLodge(Some(agreedLocationOfGoods), _) => agreedLocationOfGoods
+
+      }
 
 }
