@@ -17,7 +17,6 @@
 package models.journeyDomain
 
 import cats.implicits._
-import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, Rail}
 import models.journeyDomain.TransportDetails._
 import models.reference.CountryCode
 import pages._
@@ -151,12 +150,14 @@ object TransportDetails {
 
   object ModeCrossingBorder {
 
+    def isExemptFromNationality(mode: String): Boolean = Seq("2", "5", "7").contains(mode.take(1))
+
     implicit val reader: UserAnswersReader[ModeCrossingBorder] =
       ModeCrossingBorderPage.reader
         .map(_.toInt)
         .flatMap(
           modeCode =>
-            if ((Mode5or7.Constants.codes ++ Rail.Constants.codes).contains(modeCode)) {
+            if (ModeCrossingBorder.isExemptFromNationality(modeCode.toString)) {
               ModeExemptNationality(modeCode).pure[UserAnswersReader].widen[ModeCrossingBorder]
             } else {
               (
@@ -167,8 +168,7 @@ object TransportDetails {
               }
           }
         )
-
-    final case class ModeExemptNationality(modeCode: Int) extends ModeCrossingBorder // 2, 20, 5, 50, 7, 70
+    final case class ModeExemptNationality(modeCode: Int) extends ModeCrossingBorder
     final case class ModeWithNationality(nationalityCrossingBorder: CountryCode, modeCode: Int, idCrossing: String) extends ModeCrossingBorder
   }
 

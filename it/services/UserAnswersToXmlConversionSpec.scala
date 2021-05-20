@@ -79,7 +79,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * General Information Section
         * */
         .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
-        .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(true)
+        .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(false)
         .unsafeSetVal(pages.ContainersUsedPage)(true)
         .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
         .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(true)
@@ -299,10 +299,9 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <RefNumHEA4>TestRefNumber</RefNumHEA4>
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
-          <AgrLocOfGooHEA39>Pre-lodge</AgrLocOfGooHEA39>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
-          <CusSubPlaHEA66>Pre-lodge</CusSubPlaHEA66>
+          <CusSubPlaHEA66>CUSAPPLOC</CusSubPlaHEA66>
           <InlTraModHEA75>4</InlTraModHEA75>
           <TraModAtBorHEA76>4</TraModAtBorHEA76>
           <NatOfMeaOfTraAtDHEA80>ND</NatOfMeaOfTraAtDHEA80>
@@ -872,7 +871,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
-        .unsafeSetVal(pages.AddCustomsApprovedLocationPage)(false)
+        .unsafeSetVal(pages.AddAgreedLocationOfGoodsPage)(false)
         .unsafeSetVal(pages.AddSealsPage)(true)
         .unsafeSetVal(pages.SealIdDetailsPage(Index(0)))(SealDomain("SEAL1"))
         .unsafeSetVal(pages.SealsInformationPage)(false)
@@ -904,10 +903,9 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <RefNumHEA4>TestRefNumber</RefNumHEA4>
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
-          <AgrLocOfGooHEA39>Pre-lodge</AgrLocOfGooHEA39>
+          <AgrLocOfGooCodHEA38>Pre-lodge</AgrLocOfGooCodHEA38>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
-          <CusSubPlaHEA66>Pre-lodge</CusSubPlaHEA66>
           <InlTraModHEA75>5</InlTraModHEA75>
           <TraModAtBorHEA76>5</TraModAtBorHEA76>
           <TypOfMeaOfTraCroHEA88>5</TypOfMeaOfTraCroHEA88>
@@ -1247,7 +1245,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <RefNumHEA4>TestRefNumber</RefNumHEA4>
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
-          <AgrLocOfGooHEA39>CUSAPPLOC</AgrLocOfGooHEA39>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
           <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
           <CusSubPlaHEA66>CUSAPPLOC</CusSubPlaHEA66>

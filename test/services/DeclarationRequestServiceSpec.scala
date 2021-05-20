@@ -16,12 +16,10 @@
 
 package services
 
-import java.time.LocalDateTime
-
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import generators.{JourneyModelGenerators, ModelGenerators}
-import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
-import models.journeyDomain.MovementDetails.{NormalMovementDetails, SimplifiedMovementDetails}
+import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetailsWithPreLodge, GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
+import models.journeyDomain.MovementDetails.NormalMovementDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
@@ -34,6 +32,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
 
+import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -108,51 +107,139 @@ class DeclarationRequestServiceSpec
         }
       }
 
-      "cusSubPlaHEA66" - {
+      "Normal Journey without Prelodge" - {
 
-        "Normal Journey" - {
+        "cusSubPlaHEA66" - {
+          "must be set with customs approved location when not defined as prelodge and and CustomsApproved Location is added" in {
 
-          "must be set with customs approved location when not defined as prelodge" in {
-
-            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetails]) {
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetailsWithoutPreLodge]) {
               (userAnswers, normalJourneyDomain, normalMovementDetails, normalGoodsSummary) =>
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
                 when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge                      = false, containersUsed = false)
-                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(Some("customsApprovedLocation")))
-                val updatedJourneyDomain           = normalJourneyDomain.copy(movementDetails                 = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
+                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge = false, containersUsed = false)
+                val updatedGoodsSummary =
+                  normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(None, Some("customsApprovedLocation")))
+                val updatedJourneyDomain = normalJourneyDomain.copy(movementDetails = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
 
                 val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
                 val result            = service.convert(updatedUserAnswer).futureValue
 
                 result.right.value.header.cusSubPlaHEA66.value mustBe "customsApprovedLocation"
                 result.right.value.header.autLocOfGooCodHEA41 mustBe None
+                result.right.value.header.agrLocOfGooHEA39 mustBe None
+                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
 
-          "must be set with prelodge when defined as prelodge" in {
+          "must be None when not defined as prelodge and no CustomsApproved Location is added" in {
 
-            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails]) {
-              (userAnswers, normalJourneyDomain, normalMovementDetails) =>
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetailsWithoutPreLodge]) {
+              (userAnswers, normalJourneyDomain, normalMovementDetails, normalGoodsSummary) =>
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
                 when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-                val movementDetailsWithPrelodge = normalMovementDetails.copy(prelodge      = true, containersUsed = false)
-                val updatedJourneyDomain        = normalJourneyDomain.copy(movementDetails = movementDetailsWithPrelodge)
+                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge                      = false, containersUsed = false)
+                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(None, None))
+                val updatedJourneyDomain           = normalJourneyDomain.copy(movementDetails                 = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
 
                 val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
                 val result            = service.convert(updatedUserAnswer).futureValue
 
-                result.right.value.header.cusSubPlaHEA66.value mustBe "Pre-lodge"
+                result.right.value.header.cusSubPlaHEA66 mustBe None
                 result.right.value.header.autLocOfGooCodHEA41 mustBe None
+                result.right.value.header.agrLocOfGooHEA39 mustBe None
+                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+            }
+          }
+        }
+
+        "agrLocOfGooHEA39" - {
+
+          "must be None when not defined as prelodge and no CustomsApproved Location is added and there is no Agreed Location of Goods" in {
+
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetailsWithoutPreLodge]) {
+              (userAnswers, normalJourneyDomain, normalMovementDetails, normalGoodsSummary) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge                      = false, containersUsed = false)
+                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(None, None))
+                val updatedJourneyDomain           = normalJourneyDomain.copy(movementDetails                 = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.cusSubPlaHEA66 mustBe None
+                result.right.value.header.autLocOfGooCodHEA41 mustBe None
+                result.right.value.header.agrLocOfGooHEA39 mustBe None
+                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+            }
+          }
+
+          "must be populated when not defined as prelodge and no CustomsApproved Location is added and there is an Agreed Location of Goods" in {
+
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetailsWithoutPreLodge]) {
+              (userAnswers, normalJourneyDomain, normalMovementDetails, normalGoodsSummary) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge = false, containersUsed = false)
+                val updatedGoodsSummary =
+                  normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(Some("Agreed location of Goods"), None))
+                val updatedJourneyDomain = normalJourneyDomain.copy(movementDetails = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.cusSubPlaHEA66 mustBe None
+                result.right.value.header.autLocOfGooCodHEA41 mustBe None
+                result.right.value.header.agrLocOfGooHEA39.value mustBe "Agreed location of Goods"
+                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+            }
+          }
+        }
+
+        "agrLocOfGooCodHEA38" - {
+
+          "must be defined as 'Pre-lodge' when there is prelodge" in {
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetailsWithoutPreLodge]) {
+              (userAnswers, normalJourneyDomain, normalMovementDetails, normalGoodsSummary) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge                      = true, containersUsed = false)
+                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(None))
+                val updatedJourneyDomain           = normalJourneyDomain.copy(movementDetails                 = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.agrLocOfGooCodHEA38.value mustBe "Pre-lodge"
+            }
+          }
+
+          "must not be defined as 'Pre-lodge' when there is no prelodge" in {
+            forAll(arb[UserAnswers], arbitraryNormalJourneyDomain, arb[NormalMovementDetails], arb[GoodSummaryNormalDetailsWithoutPreLodge]) {
+              (userAnswers, normalJourneyDomain, normalMovementDetails, normalGoodsSummary) =>
+                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+                val movementDetailsWithoutPrelodge = normalMovementDetails.copy(prelodge                      = false, containersUsed = false)
+                val updatedGoodsSummary            = normalJourneyDomain.goodsSummary.copy(goodSummaryDetails = normalGoodsSummary.copy(None))
+                val updatedJourneyDomain           = normalJourneyDomain.copy(movementDetails                 = movementDetailsWithoutPrelodge, goodsSummary = updatedGoodsSummary)
+
+                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(updatedJourneyDomain)(userAnswers)
+                val result            = service.convert(updatedUserAnswer).futureValue
+
+                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
         }
 
         "Simplified Journey" - {
 
-          "must not be set" in {
+          "cusSubPlaHEA66,agrLocOfGooHEA39 and agrLocOfGooCodHEA38  must not be set" in {
 
             forAll(arb[UserAnswers], arbitrarySimplifiedJourneyDomain) {
               (userAnswers, simplifiedJourneyDomain) =>
@@ -163,6 +250,9 @@ class DeclarationRequestServiceSpec
                 val result            = service.convert(updatedUserAnswer).futureValue
 
                 result.right.value.header.cusSubPlaHEA66 mustBe None
+                result.right.value.header.agrLocOfGooHEA39 mustBe None
+                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+
             }
           }
         }

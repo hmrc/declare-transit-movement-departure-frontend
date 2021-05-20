@@ -57,7 +57,7 @@ object MovementDetails {
 
   object NormalMovementDetails {
 
-    implicit val parseSimplifiedMovementDetails: UserAnswersReader[NormalMovementDetails] =
+    implicit val parseNormalMovementDetails: UserAnswersReader[NormalMovementDetails] =
       ProcedureTypePage.reader.flatMap {
         case procedureType if procedureType == Normal =>
           (
@@ -83,7 +83,7 @@ object MovementDetails {
 
   object SimplifiedMovementDetails {
 
-    implicit val makeSimplifiedMovementDetails: UserAnswersReader[SimplifiedMovementDetails] =
+    implicit val parseSimplifiedMovementDetails: UserAnswersReader[SimplifiedMovementDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == Simplified) {
         (
           DeclarationTypePage.reader,

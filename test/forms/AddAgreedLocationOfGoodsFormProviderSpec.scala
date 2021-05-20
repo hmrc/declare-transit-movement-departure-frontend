@@ -16,17 +16,30 @@
 
 package forms
 
-import models.{Index, Mode, UserAnswers}
-import pages.safetyAndSecurity.CircumstanceIndicatorPage
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-object Constants {
+class AddAgreedLocationOfGoodsFormProviderSpec extends BooleanFieldBehaviours {
 
-  lazy val maxLengthEoriNumber: Int       = 17
-  lazy val vehicleIdMaxLength             = 27
-  lazy val consigneeNameMaxLength: Int    = 35
-  lazy val addressMaxLength: Int          = 35
-  lazy val loadingPlaceMaxLength: Int     = 35
-  lazy val maxLengthAgreedLocationOfGoods = 35
-  lazy val addressRegex: String           = "^[a-zA-Z0-9/@?%,.\\- ]*$"
+  val requiredKey = "addAgreedLocationOfGoods.error.required"
+  val invalidKey  = "error.boolean"
 
+  val form = new AddAgreedLocationOfGoodsFormProvider()()
+
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

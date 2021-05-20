@@ -38,6 +38,8 @@ object GoodsSummaryCheckYourAnswersViewModel {
     val controlResultDateLimit: Option[SummaryList.Row]     = goodsSummaryheckYourAnswersHelper.controlResultDateLimit
     val addCustomsApprovedLocation: Option[SummaryList.Row] = goodsSummaryheckYourAnswersHelper.addCustomsApprovedLocation
     val customsApprovedLocation: Option[SummaryList.Row]    = goodsSummaryheckYourAnswersHelper.customsApprovedLocation
+    val addAgreedLocationOfGoods: Option[SummaryList.Row]   = goodsSummaryheckYourAnswersHelper.addAgreedLocationOfGoods
+    val agreedLocationOfGoods: Option[SummaryList.Row]      = goodsSummaryheckYourAnswersHelper.agreedLocationOfGoods
     val loadingPlace: Option[SummaryList.Row]               = checkYourAnswersHelper.loadingPlace
     val addSeals: Option[SummaryList.Row]                   = goodsSummaryheckYourAnswersHelper.addSeals
     val numberOfSeals                                       = userAnswers.get(DeriveNumberOfSeals).getOrElse(0)
@@ -51,6 +53,8 @@ object GoodsSummaryCheckYourAnswersViewModel {
       controlResultDateLimit,
       addCustomsApprovedLocation,
       customsApprovedLocation,
+      addAgreedLocationOfGoods,
+      agreedLocationOfGoods,
       loadingPlace,
       addSeals,
       seals,

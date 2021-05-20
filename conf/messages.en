@@ -1520,3 +1520,15 @@ officeOfTransitCountry.heading = Which country is the office of transit in?
 officeOfTransitCountry.checkYourAnswersLabel = officeOfTransitCountry
 officeOfTransitCountry.paragraph = This is where the goods and accompanying documents are presented. If there is no office of transit, enter the office of destination.
 officeOfTransitCountry.error.required = Enter the country the office of transit is in
+
+addAgreedLocationOfGoods.title = Do you need to add an agreed location for the goods?
+addAgreedLocationOfGoods.heading = Do you need to add an agreed location for the goods?
+addAgreedLocationOfGoods.checkYourAnswersLabel = Add an agreed location for the goods
+addAgreedLocationOfGoods.error.required = Select yes if you need to add an agreed location for the goods
+
+agreedLocationOfGoods.title =  What is the agreed location for the goods?
+agreedLocationOfGoods.heading =  What is the agreed location for the goods?
+agreedLocationOfGoods.checkYourAnswersLabel =  Agreed location for the goods
+agreedLocationOfGoods.error.required = Enter the agreed location for the goods
+agreedLocationOfGoods.error.length = The agreed location for the goods must be 35 characters or less
+agreedLocationOfGoods.error.invalid = The agreed location for the goods must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces

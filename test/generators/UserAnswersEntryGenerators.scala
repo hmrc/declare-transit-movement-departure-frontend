@@ -70,6 +70,20 @@ trait UserAnswersEntryGenerators {
 
   self: Generators =>
 
+  implicit lazy val arbitraryAgreedLocationOfGoodsUserAnswersEntry: Arbitrary[(AgreedLocationOfGoodsPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[AgreedLocationOfGoodsPage.type#Data].map(Json.toJson(_))
+      } yield (AgreedLocationOfGoodsPage, value)
+    }
+
+  implicit lazy val arbitraryAddAgreedLocationOfGoodsUserAnswersEntry: Arbitrary[(AddAgreedLocationOfGoodsPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[AddAgreedLocationOfGoodsPage.type#Data].map(Json.toJson(_))
+      } yield (AddAgreedLocationOfGoodsPage, value)
+    }
+
   implicit lazy val arbitraryOfficeOfTransitCountryUserAnswersEntry: Arbitrary[(OfficeOfTransitCountryPage, JsValue)] =
     Arbitrary {
       for {

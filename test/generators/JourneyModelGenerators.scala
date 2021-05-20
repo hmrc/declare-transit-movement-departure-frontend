@@ -16,11 +16,18 @@
 
 package generators
 
+
+import java.time.{LocalDate, LocalDateTime}
 import cats.data.NonEmptyList
 import models.DeclarationType.Option2
 import models._
 import models.domain.{Address, SealDomain}
-import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
+import models.journeyDomain.GoodsSummary.{
+  GoodSummaryDetails,
+  GoodSummaryNormalDetailsWithPreLodge,
+  GoodSummaryNormalDetailsWithoutPreLodge,
+  GoodSummarySimplifiedDetails
+}
 import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference}
 import models.journeyDomain.MovementDetails.{
   DeclarationForSelf,
@@ -90,7 +97,11 @@ trait JourneyModelGenerators {
       traderDetails     <- genTraderDetailsNormal
       safetyAndSecurity <- arbitrary[SafetyAndSecurity]
       itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, movementDetails, routeDetails)
-      goodsummarydetailsType = arbitrary[GoodSummaryNormalDetails]
+      goodsummarydetailsType = if (movementDetails.prelodge) {
+        arbitrary[GoodSummaryNormalDetailsWithPreLodge]
+      } else {
+        arbitrary[GoodSummaryNormalDetailsWithPreLodge]
+      }
       goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired)(Arbitrary(goodsummarydetailsType)).arbitrary
       guarantees   <- nonEmptyListOf[GuaranteeDetails](3)
     } yield
@@ -212,22 +223,18 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryModeExemptNationality: Arbitrary[ModeExemptNationality] =
     Arbitrary {
       for {
-        codeMode <- Gen.oneOf(Mode5or7.Constants.codes ++ Rail.Constants.codes)
+        codeMode <- genExemptNationalityCode
       } yield ModeExemptNationality(codeMode)
     }
 
-  implicit lazy val arbitraryModeWithNationality: Arbitrary[ModeWithNationality] = {
-
-    val codeList = Mode5or7.Constants.codes ++ Rail.Constants.codes
-
+  implicit lazy val arbitraryModeWithNationality: Arbitrary[ModeWithNationality] =
     Arbitrary {
       for {
         cc         <- arbitrary[CountryCode]
-        codeMode   <- arbitrary[Int].suchThat(!codeList.contains(_))
+        codeMode   <- arbitrary[Int].suchThat(num => !ModeCrossingBorder.isExemptFromNationality(num.toString))
         idCrossing <- stringsWithMaxLength(stringMaxLength)
       } yield ModeWithNationality(cc, codeMode, idCrossing)
     }
-  }
 
   implicit lazy val arbitraryDetailsAtBorder: Arbitrary[DetailsAtBorder] =
     Arbitrary(
@@ -729,16 +736,24 @@ trait JourneyModelGenerators {
       } yield GoodSummarySimplifiedDetails(authorisedLocationCode, controlResultDateLimit)
     }
 
-  implicit lazy val arbitraryGoodSummaryNormalDetails: Arbitrary[GoodSummaryNormalDetails] =
+  implicit lazy val arbitraryGoodSummaryNormalDetailsWithoutPreLodge: Arbitrary[GoodSummaryNormalDetailsWithoutPreLodge] =
     Arbitrary {
       for {
         customsApprovedLocation <- Gen.some(stringsWithMaxLength(stringMaxLength))
-      } yield GoodSummaryNormalDetails(customsApprovedLocation)
+        agreedLocationOfGoods   <- Gen.some(stringsWithMaxLength(stringMaxLength))
+      } yield GoodSummaryNormalDetailsWithoutPreLodge(agreedLocationOfGoods, customsApprovedLocation)
+    }
+
+  implicit lazy val arbitraryGoodSummaryNormalDetailsWithPrelodge: Arbitrary[GoodSummaryNormalDetailsWithPreLodge] =
+    Arbitrary {
+      for {
+        customsApprovedLocation <- Gen.some(stringsWithMaxLength(stringMaxLength))
+      } yield GoodSummaryNormalDetailsWithPreLodge(customsApprovedLocation)
     }
 
   implicit lazy val arbitraryGoodSummaryDetails: Arbitrary[GoodSummaryDetails] =
     Arbitrary {
-      Gen.oneOf(arbitrary[GoodSummaryNormalDetails], arbitrary[GoodSummarySimplifiedDetails])
+      Gen.oneOf(arbitrary[GoodSummaryNormalDetailsWithPreLodge], arbitrary[GoodSummarySimplifiedDetails], arbitrary[GoodSummaryNormalDetailsWithoutPreLodge])
     }
 
   implicit def arbitraryGoodsSummary(safetyAndSecurity: Boolean)(implicit arbitraryGoodSummaryDetails: Arbitrary[GoodSummaryDetails]): Arbitrary[GoodsSummary] =

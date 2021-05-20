@@ -20,7 +20,8 @@ import base.SpecBase
 import controllers.transportDetails.{routes => transportDetailsRoute}
 import generators.Generators
 import models._
-import models.reference.{Country, CountryCode}
+import models.journeyDomain.TransportDetails.ModeCrossingBorder
+import models.reference.CountryCode
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -199,12 +200,11 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
-      "must go from ModeCrossingBorder to TransportDetailsCheckYourAnswers answer is 2, 20, 5, 50, 7 or 70" in {
+      "must go from ModeCrossingBorder to TransportDetailsCheckYourAnswers when inlandMode starts with 2, 5, 7" in {
 
-        val inlandModesGen = Gen.oneOf("2", "5", "7", "20", "50", "70")
-        forAll(arbitrary[UserAnswers], inlandModesGen) {
+        forAll(arbitrary[UserAnswers], genExemptNationalityCode) {
           (answers, inlandMode) =>
-            val updatedAnswers = answers.set(ModeCrossingBorderPage, inlandMode).success.value
+            val updatedAnswers = answers.set(ModeCrossingBorderPage, inlandMode.toString).success.value
 
             navigator
               .nextPage(ModeCrossingBorderPage, NormalMode, updatedAnswers)
@@ -212,9 +212,8 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
-      "must go from ModeCrossingBorder to NationalityCrossingBorder Page when answer  not 2, 20, 5, 50, 7 or 70" in {
-        val unwantedModes  = Set("2", "5", "7", "20", "50", "70")
-        val inlandModesGen = Gen.numStr.suchThat(num => !unwantedModes(num))
+      "must go from ModeCrossingBorder to NationalityCrossingBorder Page when answer does not start with 2, 5 or 7" in {
+        val inlandModesGen = Gen.numStr.suchThat(num => !ModeCrossingBorder.isExemptFromNationality(num))
         forAll(arbitrary[UserAnswers], inlandModesGen) {
           (answers, inlandMode) =>
             val updatedAnswers = answers.set(ModeCrossingBorderPage, inlandMode).success.value
@@ -399,62 +398,27 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
-      "must go from ModeCrossingBorder to TransportDetailsCheckYourAnswers answer is  2, 20, 5, 50, 7 or 70 when answer for NationalityCrossingBorder Exists" in {
-        val inlandModesGen = Gen.oneOf("2", "5", "7", "20", "50", "70")
-        forAll(arbitrary[UserAnswers], inlandModesGen) {
+      "must go from ModeCrossingBorder to TransportDetailsCheckYourAnswers answer starts with 2, 5 or 7" in {
+
+        forAll(arbitrary[UserAnswers], genExemptNationalityCode) {
           (answers, inlandMode) =>
-            val country = Country(CountryCode("GB"), "United Kingdom")
-            val updatedAnswers = answers
-              .set(ModeCrossingBorderPage, inlandMode)
-              .success
-              .value
-              .set(NationalityCrossingBorderPage, country.code)
-              .success
-              .value
+            val updatedAnswers = answers.set(ModeCrossingBorderPage, inlandMode.toString).success.value
 
             navigator
               .nextPage(ModeCrossingBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
         }
       }
 
-      "must go from ModeCrossingBorder to IdCrossingBorderPage when answer is not 2, 20, 5, 50, 7 or 70 when answer for NationalityCrossingBorder does not exist" in {
-        val unwantedModes  = Set("2", "5", "7", "20", "50", "70")
-        val inlandModesGen = Gen.numStr.suchThat(num => !unwantedModes(num))
+      "must go from ModeCrossingBorder to IdCrossingBorderPage when answer does not start with 2, 5, 7" in {
+        val inlandModesGen = Gen.numStr.suchThat(num => !ModeCrossingBorder.isExemptFromNationality(num))
         forAll(arbitrary[UserAnswers], inlandModesGen) {
           (answers, inlandMode) =>
-            val updatedAnswers = answers
-              .set(ModeCrossingBorderPage, inlandMode)
-              .success
-              .value
-              .remove(IdCrossingBorderPage)
-              .success
-              .value
+            val updatedAnswers = answers.set(ModeCrossingBorderPage, inlandMode).success.value
 
             navigator
               .nextPage(ModeCrossingBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.IdCrossingBorderController.onPageLoad(updatedAnswers.id, CheckMode))
-        }
-      }
-
-      "must go from ModeCrossingBorder to TransportDetailsCheckYourAnswers Page when answer not 2, 20, 5, 50, 7 or 70 and answer for IdCrossingBorderPage exists" in {
-        val unwantedModes  = Set("2", "5", "7", "20", "50", "70")
-        val inlandModesGen = Gen.numStr.suchThat(num => !unwantedModes(num))
-        forAll(arbitrary[UserAnswers], inlandModesGen) {
-          (answers, inlandMode) =>
-            val country = Country(CountryCode("GB"), "United Kingdom")
-
-            val updatedAnswers = answers
-              .set(ModeCrossingBorderPage, inlandMode)
-              .success
-              .value
-              .set(IdCrossingBorderPage, "wee")
-              .success
-              .value
-
-            navigator
-              .nextPage(ModeCrossingBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(transportDetailsRoute.IdCrossingBorderController.onPageLoad(answers.id, CheckMode))
         }
       }
 
