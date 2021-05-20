@@ -89,7 +89,7 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     (ua.get(ProcedureTypePage), ua.get(AddSecurityDetailsPage), ua.get(PreLodgeDeclarationPage)) match {
       case (_, Some(true),_ )     => controllers.routes.LoadingPlaceController.onPageLoad(ua.id, NormalMode)
       case (Some(Normal), _, Some(false)) =>  routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
-      case (Some(Normal), _, Some(true)) =>  routes.AddSealsController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), _, Some(true)) =>  routes.AddAgreedLocationOfGoodsController.onPageLoad(ua.id, NormalMode)
       case (Some(Simplified), _, _) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
     }
 

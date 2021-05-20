@@ -146,7 +146,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from TotalGrossMassPage to Add Seals page when previously" +
+      "must go from TotalGrossMassPage to Add Agreed location of goods page when previously" +
         " answered No to add Safety And Security Details and answered Yes to PreLodgeDeclaration on a Normal route" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -157,7 +157,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(TotalGrossMassPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, NormalMode))
         }
       }
 
