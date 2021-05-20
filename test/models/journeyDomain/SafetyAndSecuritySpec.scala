@@ -196,7 +196,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
       })
       .unsafeSetPFn(SafetyAndSecurityConsigneeAddressPage)(safetyAndSecurity.consignee)({
         case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToConsigneeAddress.getOption(address).get
+          Address.prismAddressToCommonAddress.getOption(address).get
       })
       // Set Carrier
       .unsafeSetVal(AddCarrierPage)(safetyAndSecurity.carrier.isDefined)

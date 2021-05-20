@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.ConsigneeAddress
-import play.api.libs.json.JsPath
+import models.reference.Country
+import play.api.libs.json.Json
 
-case object ConsigneeAddressPage extends QuestionPage[ConsigneeAddress] {
+case class CommonAddress(AddressLine1: String, AddressLine2: String, postalCode: String, country: Country)
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "consigneeAddress"
+object CommonAddress {
+  implicit val format = Json.format[CommonAddress]
 }

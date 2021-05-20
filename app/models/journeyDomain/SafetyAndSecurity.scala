@@ -22,7 +22,7 @@ import models.domain.Address
 import models.journeyDomain.Itinerary.readItineraries
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.{EoriNumber, UserAnswers}
-import pages.ModeAtBorderPage
+import pages.{CommonAddressPage, ModeAtBorderPage}
 import pages.safetyAndSecurity._
 
 case class SafetyAndSecurity(
@@ -109,11 +109,11 @@ object SafetyAndSecurity {
     val useAddress =
       (
         SafetyAndSecurityConsignorNamePage.reader,
-        SafetyAndSecurityConsignorAddressPage.reader
+        CommonAddressPage("safetyAndSecurityConsignorAddress").reader
       ).tupled
         .map {
           case (name, consignorAddress) =>
-            val address = Address.prismAddressToConsignorAddress(consignorAddress)
+            val address = Address.prismAddressToCommonAddress(consignorAddress)
 
             SecurityTraderDetails(name, address)
         }
@@ -150,11 +150,11 @@ object SafetyAndSecurity {
     val useAddress: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
       (
         SafetyAndSecurityConsigneeNamePage.reader,
-        SafetyAndSecurityConsigneeAddressPage.reader
+        CommonAddressPage("safetyAndSecurityConsigneeAddress").reader
       ).tupled
         .map {
           case (name, consigneeAddress) =>
-            val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
+            val address = Address.prismAddressToCommonAddress(consigneeAddress)
 
             SecurityTraderDetails(name, address)
         }
@@ -174,11 +174,11 @@ object SafetyAndSecurity {
     val useAddress =
       (
         CarrierNamePage.reader,
-        CarrierAddressPage.reader
+        CommonAddressPage("carrierAddress").reader
       ).tupled
         .map {
           case (name, carrierAddress) =>
-            val address = Address.prismAddressToCarrierAddress(carrierAddress)
+            val address = Address.prismAddressToCommonAddress(carrierAddress)
 
             SecurityTraderDetails(name, address)
         }

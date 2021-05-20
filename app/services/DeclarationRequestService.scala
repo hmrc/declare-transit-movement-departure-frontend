@@ -16,11 +16,8 @@
 
 package services
 
-import java.time.LocalDateTime
 import cats.data.NonEmptyList
 import cats.implicits._
-
-import javax.inject.Inject
 import models.domain.{Address, SealDomain}
 import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
@@ -39,10 +36,12 @@ import models.messages.guarantee.{Guarantee, GuaranteeReferenceWithGrn, Guarante
 import models.messages.header.{Header, Transport}
 import models.messages.safetyAndSecurity._
 import models.messages.trader.{TraderConsignor, TraderPrincipal, TraderPrincipalWithEori, TraderPrincipalWithoutEori, _}
-import models.{CarrierAddress, ConsigneeAddress, ConsignorAddress, EoriNumber, UserAnswers}
+import models.{CommonAddress, EoriNumber, UserAnswers}
 import play.api.Logger
 import repositories.InterchangeControlReferenceIdRepository
 
+import java.time.LocalDateTime
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 trait DeclarationRequestServiceInt {
@@ -232,8 +231,8 @@ class DeclarationRequestService @Inject()(
       requiredDetails
         .flatMap {
           case ItemTraderDetails.RequiredDetails(name, address, eori) =>
-            Address.prismAddressToConsignorAddress.getOption(address).map {
-              case ConsignorAddress(addressLine1, addressLine2, addressLine3, country) =>
+            Address.prismAddressToCommonAddress.getOption(address).map {
+              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
                 TraderConsignorGoodsItem(name, addressLine1, addressLine3, addressLine2, country.code.code, eori.map(_.value))
             }
           case _ =>
@@ -245,8 +244,8 @@ class DeclarationRequestService @Inject()(
       requiredDetails
         .flatMap {
           case ItemTraderDetails.RequiredDetails(name, address, eori) =>
-            Address.prismAddressToConsigneeAddress.getOption(address).map {
-              case ConsigneeAddress(addressLine1, addressLine2, addressLine3, country) =>
+            Address.prismAddressToCommonAddress.getOption(address).map {
+              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
                 TraderConsigneeGoodsItem(name, addressLine1, addressLine3, addressLine2, country.code.code, eori.map(_.value))
             }
           case _ =>
@@ -285,8 +284,8 @@ class DeclarationRequestService @Inject()(
       securityTraderDetails
         .flatMap {
           case SafetyAndSecurity.PersonalInformation(name, address) =>
-            Address.prismAddressToConsigneeAddress.getOption(address).map {
-              case ConsigneeAddress(addressLine1, addressLine2, addressLine3, country) =>
+            Address.prismAddressToCommonAddress.getOption(address).map {
+              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
                 SafetyAndSecurityConsigneeWithoutEori(name, addressLine1, addressLine3, addressLine2, country.code.code)
             }
 
@@ -298,8 +297,8 @@ class DeclarationRequestService @Inject()(
       securityTraderDetails
         .flatMap {
           case SafetyAndSecurity.PersonalInformation(name, address) =>
-            Address.prismAddressToConsignorAddress.getOption(address).map {
-              case ConsignorAddress(addressLine1, addressLine2, addressLine3, country) =>
+            Address.prismAddressToCommonAddress.getOption(address).map {
+              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
                 SafetyAndSecurityConsignorWithoutEori(name, addressLine1, addressLine3, addressLine2, country.code.code)
             }
 
@@ -311,8 +310,8 @@ class DeclarationRequestService @Inject()(
       securityTraderDetails
         .flatMap {
           case SafetyAndSecurity.PersonalInformation(name, address) =>
-            Address.prismAddressToCarrierAddress.getOption(address).map {
-              case CarrierAddress(addressLine1, addressLine2, addressLine3, country) =>
+            Address.prismAddressToCommonAddress.getOption(address).map {
+              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
                 SafetyAndSecurityCarrierWithoutEori(name, addressLine1, addressLine3, addressLine2, country.code.code)
             }
           case SafetyAndSecurity.TraderEori(EoriNumber(eori)) =>
@@ -431,10 +430,10 @@ class DeclarationRequestService @Inject()(
   private def headerConsignor(consignorDetails: ConsignorDetails): TraderConsignor = {
     val ConsignorDetails(name, address, eori) = consignorDetails
 
-    Address.prismAddressToConsignorAddress
+    Address.prismAddressToCommonAddress
       .getOption(address)
       .map {
-        case ConsignorAddress(addressLine1, addressLine2, addressLine3, country) =>
+        case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
           TraderConsignor(name, addressLine1, addressLine3, addressLine2, country.code.code, eori.map(_.value))
       }
       .get
@@ -443,10 +442,10 @@ class DeclarationRequestService @Inject()(
   // TODO: Improve by changing ConsigneeDetails to have a Consignee Address instead
   private def headerConsignee(consigneeDetails: ConsigneeDetails): TraderConsignee = {
     val ConsigneeDetails(name, address, eori) = consigneeDetails
-    Address.prismAddressToConsigneeAddress
+    Address.prismAddressToCommonAddress
       .getOption(address)
       .map {
-        case ConsigneeAddress(addressLine1, addressLine2, addressLine3, country) =>
+        case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
           TraderConsignee(name, addressLine1, addressLine3, addressLine2, country.code.code, eori.map(_.value))
       }
       .get

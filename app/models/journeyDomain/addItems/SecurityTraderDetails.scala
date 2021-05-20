@@ -21,7 +21,7 @@ import cats.implicits._
 import models.domain.Address
 import models.journeyDomain._
 import models.{EoriNumber, Index, UserAnswers}
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, CommonAddItemsAddressPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
@@ -49,11 +49,11 @@ object SecurityTraderDetails {
 
         (
           SecurityConsignorNamePage(index).reader,
-          SecurityConsignorAddressPage(index).reader
+          CommonAddItemsAddressPage(index, "securityConsignorAddress").reader
         ).tupled
           .map {
             case (name, consignorAddress) =>
-              val address = Address.prismAddressToConsignorAddress(consignorAddress)
+              val address = Address.prismAddressToCommonAddress(consignorAddress)
               SecurityTraderDetails(name, address)
           }
       }
@@ -90,11 +90,11 @@ object SecurityTraderDetails {
       AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(_ == false) {
         (
           SecurityConsigneeNamePage(index).reader,
-          SecurityConsigneeAddressPage(index).reader
+          CommonAddItemsAddressPage(index, "securityConsigneeAddress").reader
         ).tupled
           .map {
             case (name, consigneeAddress) =>
-              val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
+              val address = Address.prismAddressToCommonAddress(consigneeAddress)
               SecurityTraderDetails(name, address)
           }
       }

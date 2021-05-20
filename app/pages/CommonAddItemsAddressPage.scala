@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package pages.addItems.traderSecurityDetails
+package pages
 
-import models.{ConsigneeAddress, Index}
-import pages.QuestionPage
+import models.{CommonAddress, Index}
 import play.api.libs.json.JsPath
-import queries.Constants.{items, traderSecurityDetails}
+import queries.Constants.{items, traderDetails}
 
-case class SecurityConsigneeAddressPage(index: Index) extends QuestionPage[ConsigneeAddress] {
+case class CommonAddItemsAddressPage(index: Index, pageUrl: String) extends QuestionPage[CommonAddress] {
 
-  override def path: JsPath = JsPath \ items \ index.position \ traderSecurityDetails \ toString
+  override def path: JsPath = JsPath \ items \ index.position \ traderDetails \ toString
 
-  override def toString: String = "securityConsigneeAddress"
+  override def toString: String = pageUrl
 }

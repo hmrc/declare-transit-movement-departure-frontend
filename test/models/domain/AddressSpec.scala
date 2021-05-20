@@ -84,7 +84,7 @@ class AddressSpec extends MonocleSpec with Generators with ModelGenerators {
 
     checkAll("Prism from Address to PrincipalAddress", PrismTests(Address.prismAddressToPrincipalAddress))
 
-    checkAll("Prism from Address to ConsigneeAddress", PrismTests(Address.prismAddressToConsigneeAddress))
+    checkAll("Prism from Address to ConsigneeAddress", PrismTests(Address.prismAddressToCommonAddress))
 
     checkAll("Prism from Address to ConsignorAddress", PrismTests(Address.prismAddressToConsignorAddress))
 

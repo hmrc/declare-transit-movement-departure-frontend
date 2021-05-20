@@ -17,7 +17,7 @@
 package pages.safetyAndSecurity
 
 import models.UserAnswers
-import pages.QuestionPage
+import pages.{CommonAddressPage, QuestionPage}
 import play.api.libs.json.JsPath
 
 import scala.util.Try
@@ -34,7 +34,7 @@ case object AddSafetyAndSecurityConsigneeEoriPage extends QuestionPage[Boolean] 
       case Some(true) =>
         userAnswers
           .remove(SafetyAndSecurityConsigneeNamePage)
-          .flatMap(_.remove(SafetyAndSecurityConsigneeAddressPage))
+          .flatMap(_.remove(CommonAddressPage("safetyAndSecurityConsigneeAddress")))
       case _ => super.cleanup(value, userAnswers)
     }
 }

@@ -19,12 +19,12 @@ package controllers.traderDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.ConsignorAddressFormProvider
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.{ConsignorAddressPage, ConsignorNamePage}
+import pages.{CommonAddressPage, ConsignorNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,7 +45,7 @@ class ConsignorAddressController @Inject()(
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: ConsignorAddressFormProvider,
+  formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -59,7 +59,7 @@ class ConsignorAddressController @Inject()(
         countries =>
           request.userAnswers.get(ConsignorNamePage) match {
             case Some(consignorName) =>
-              val preparedForm = request.userAnswers.get(ConsignorAddressPage) match {
+              val preparedForm = request.userAnswers.get(CommonAddressPage("consignorAddress")) match {
                 case Some(value) => formProvider(countries, consignorName).fill(value)
                 case None        => formProvider(countries, consignorName)
               }
@@ -105,9 +105,9 @@ class ConsignorAddressController @Inject()(
                   },
                   value =>
                     for {
-                      updatedAnswers <- Future.fromTry(request.userAnswers.set(ConsignorAddressPage, value))
+                      updatedAnswers <- Future.fromTry(request.userAnswers.set(CommonAddressPage("consignorAddress"), value))
                       _              <- sessionRepository.set(updatedAnswers)
-                    } yield Redirect(navigator.nextPage(ConsignorAddressPage, mode, updatedAnswers))
+                    } yield Redirect(navigator.nextPage(CommonAddressPage("consignorAddress"), mode, updatedAnswers))
                 )
           }
         case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))

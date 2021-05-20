@@ -32,20 +32,19 @@ class PrincipalAddressFormProvider @Inject() extends Mappings {
     mapping(
       "numberAndStreet" -> text("principalAddress.error.numberAndStreet.required", Seq(principalName))
         .verifying(StopOnFirstFail[String](
-          maxLength(numberAndStreetLength, "principalAddress.error.numberAndStreet.length"),
-          regexp(stringFieldRegex, "principalAddress.error.numberAndStreet.invalid", Seq(principalName)),
+          regexp(stringFieldRegex, "principalAddress.error.numberAndStreet.invalidCharacters", Seq(principalName)),
+          maxLength(numberAndStreetLength, "principalAddress.error.numberAndStreet.length", principalName),
         )),
       "town" -> text("principalAddress.error.town.required", Seq(principalName))
-        .verifying(
-          StopOnFirstFail[String](
-            maxLength(townLength, "principalAddress.error.town.length"),
-            regexp(stringFieldRegex, "principalAddress.error.town.invalid", Seq(principalName)),
-          )),
+        .verifying(StopOnFirstFail[String](
+          regexp(stringFieldRegex, "principalAddress.error.town.invalidCharacters", Seq(principalName)),
+          maxLength(townLength, "principalAddress.error.town.length", principalName),
+        )),
       "postcode" -> text("principalAddress.error.postcode.required", Seq(principalName))
         .verifying(StopOnFirstFail[String](
-          maxLength(postcodeLength, "principalAddress.error.postcode.length"),
           regexp(validPostcodeCharactersRegex, "principalAddress.error.postcode.invalidCharacters", principalName),
-          regexp(postCodeRegex, "principalAddress.error.postcode.invalidCharacters"),
+          regexp(postCodeRegex, "principalAddress.error.postcode.invalidFormat", principalName),
+          maxLength(postcodeLength, "principalAddress.error.postcode.length", principalName),
         ))
     )(PrincipalAddress.apply)(PrincipalAddress.unapply)
   )

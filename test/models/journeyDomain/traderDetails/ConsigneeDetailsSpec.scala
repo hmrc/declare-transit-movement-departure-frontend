@@ -41,7 +41,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
             val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
 
-            val expectedAddress: Address = Address.prismAddressToConsigneeAddress(address)
+            val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
             result mustEqual ConsigneeDetails(name, expectedAddress, Some(EoriNumber(eoriNumber)))
 
@@ -111,7 +111,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
             val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
 
-            val expectedAddress: Address = Address.prismAddressToConsigneeAddress(address)
+            val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
             result mustEqual ConsigneeDetails(name, expectedAddress, None)
 

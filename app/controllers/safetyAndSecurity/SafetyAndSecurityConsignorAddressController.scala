@@ -19,12 +19,13 @@ package controllers.safetyAndSecurity
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.safetyAndSecurity.SafetyAndSecurityConsignorAddressFormProvider
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurityTraderDetails
-import pages.safetyAndSecurity.{SafetyAndSecurityConsignorAddressPage, SafetyAndSecurityConsignorNamePage}
+import pages.CommonAddressPage
+import pages.safetyAndSecurity.SafetyAndSecurityConsignorNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -46,7 +47,7 @@ class SafetyAndSecurityConsignorAddressController @Inject()(
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: SafetyAndSecurityConsignorAddressFormProvider,
+  formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -66,7 +67,7 @@ class SafetyAndSecurityConsignorAddressController @Inject()(
           countries =>
             request.userAnswers.get(SafetyAndSecurityConsignorNamePage) match {
               case Some(consignorName) =>
-                val preparedForm = request.userAnswers.get(SafetyAndSecurityConsignorAddressPage) match {
+                val preparedForm = request.userAnswers.get(CommonAddressPage("safetyAndSecurityConsignorAddress")) match {
                   case Some(value) => formProvider(countries, consignorName).fill(value)
                   case None        => formProvider(countries, consignorName)
                 }
@@ -116,9 +117,9 @@ class SafetyAndSecurityConsignorAddressController @Inject()(
                     },
                     value =>
                       for {
-                        updatedAnswers <- Future.fromTry(request.userAnswers.set(SafetyAndSecurityConsignorAddressPage, value))
+                        updatedAnswers <- Future.fromTry(request.userAnswers.set(CommonAddressPage("safetyAndSecurityConsignorAddress"), value))
                         _              <- sessionRepository.set(updatedAnswers)
-                      } yield Redirect(navigator.nextPage(SafetyAndSecurityConsignorAddressPage, mode, updatedAnswers))
+                      } yield Redirect(navigator.nextPage(CommonAddressPage("safetyAndSecurityConsignorAddress"), mode, updatedAnswers))
                   )
             }
           case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))

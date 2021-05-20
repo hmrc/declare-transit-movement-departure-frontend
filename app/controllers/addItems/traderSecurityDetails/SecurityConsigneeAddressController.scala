@@ -18,12 +18,13 @@ package controllers.addItems.traderSecurityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.addItems.traderSecurityDetails.SecurityConsigneeAddressFormProvider
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TradersSecurityDetails
-import pages.addItems.traderSecurityDetails.{SecurityConsigneeAddressPage, SecurityConsigneeNamePage}
+import pages.CommonAddItemsAddressPage
+import pages.addItems.traderSecurityDetails.SecurityConsigneeNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,7 +46,7 @@ class SecurityConsigneeAddressController @Inject()(
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: SecurityConsigneeAddressFormProvider,
+  formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -65,9 +66,9 @@ class SecurityConsigneeAddressController @Inject()(
           countries =>
             request.userAnswers.get(SecurityConsigneeNamePage(index)) match {
               case Some(consigneeName) =>
-                val preparedForm = request.userAnswers.get(SecurityConsigneeAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consigneeName, index).fill(value)
-                  case None        => formProvider(countries, consigneeName, index)
+                val preparedForm = request.userAnswers.get(CommonAddItemsAddressPage(index, "securityConsigneeAddress")) match {
+                  case Some(value) => formProvider(countries, consigneeName).fill(value)
+                  case None        => formProvider(countries, consigneeName)
                 }
 
                 val json = Json.obj(
@@ -94,7 +95,7 @@ class SecurityConsigneeAddressController @Inject()(
           case Some(consigneeName) =>
             referenceDataConnector.getCountryList() flatMap {
               countries =>
-                formProvider(countries, consigneeName, index)
+                formProvider(countries, consigneeName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {
@@ -117,9 +118,9 @@ class SecurityConsigneeAddressController @Inject()(
                     },
                     value =>
                       for {
-                        updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityConsigneeAddressPage(index), value))
+                        updatedAnswers <- Future.fromTry(request.userAnswers.set(CommonAddItemsAddressPage(index, "securityConsigneeAddress"), value))
                         _              <- sessionRepository.set(updatedAnswers)
-                      } yield Redirect(navigator.nextPage(SecurityConsigneeAddressPage(index), mode, updatedAnswers))
+                      } yield Redirect(navigator.nextPage(CommonAddItemsAddressPage(index, "securityConsigneeAddress"), mode, updatedAnswers))
                   )
             }
         }

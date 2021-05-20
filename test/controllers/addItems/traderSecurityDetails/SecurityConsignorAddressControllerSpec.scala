@@ -19,7 +19,6 @@ package controllers.addItems.traderSecurityDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.addItems.traderSecurityDetails.SecurityConsignorAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{ConsignorAddress, CountryList, NormalMode}
@@ -29,7 +28,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.addItems.traderSecurityDetails.{SecurityConsignorAddressPage, SecurityConsignorNamePage}
+import pages.addItems.traderSecurityDetails.SecurityConsignorNamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}

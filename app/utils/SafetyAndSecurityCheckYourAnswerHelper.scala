@@ -18,6 +18,7 @@ package utils
 
 import controllers.safetyAndSecurity.routes
 import models.{CheckMode, CircumstanceIndicatorList, CountryList, Index, LocalReferenceNumber, Mode, UserAnswers}
+import pages.CommonAddressPage
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
@@ -207,7 +208,7 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def carrierAddress: Option[Row] = userAnswers.get(CarrierAddressPage) map {
+  def carrierAddress: Option[Row] = userAnswers.get(CommonAddressPage("carrierAddress")) map {
     answer =>
       val carrierAddress = Html(
         Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
@@ -321,7 +322,7 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def safetyAndSecurityConsigneeAddress: Option[Row] = userAnswers.get(SafetyAndSecurityConsigneeAddressPage) map {
+  def safetyAndSecurityConsigneeAddress: Option[Row] = userAnswers.get(CommonAddressPage("safetyAndSecurityConsigneeAddress")) map {
     answer =>
       val consigneeAddress = Html(
         Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
@@ -369,7 +370,7 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def safetyAndSecurityConsignorAddress: Option[Row] = userAnswers.get(SafetyAndSecurityConsignorAddressPage) map {
+  def safetyAndSecurityConsignorAddress: Option[Row] = userAnswers.get(CommonAddressPage("safetyAndSecurityConsignorAddress")) map {
     answer =>
       val consignorAddress = Html(
         Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)

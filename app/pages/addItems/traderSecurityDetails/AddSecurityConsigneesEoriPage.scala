@@ -17,7 +17,7 @@
 package pages.addItems.traderSecurityDetails
 
 import models.{Index, UserAnswers}
-import pages.QuestionPage
+import pages.{CommonAddItemsAddressPage, QuestionPage}
 import play.api.libs.json.JsPath
 import queries.Constants.items
 
@@ -37,7 +37,7 @@ case class AddSecurityConsigneesEoriPage(index: Index) extends QuestionPage[Bool
       case Some(true) =>
         userAnswers
           .remove(SecurityConsigneeNamePage(index))
-          .flatMap(_.remove(SecurityConsigneeAddressPage(index)))
+          .flatMap(_.remove(CommonAddItemsAddressPage(index, "securityConsigneeAddress")))
       case _ => super.cleanup(value, userAnswers)
     }
 }

@@ -19,12 +19,13 @@ package controllers.safetyAndSecurity
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.safetyAndSecurity.CarrierAddressFormProvider
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurityTraderDetails
-import pages.safetyAndSecurity.{CarrierAddressPage, CarrierNamePage}
+import pages.CommonAddressPage
+import pages.safetyAndSecurity.CarrierNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -46,7 +47,7 @@ class CarrierAddressController @Inject()(
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: CarrierAddressFormProvider,
+  formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -66,7 +67,7 @@ class CarrierAddressController @Inject()(
           countries =>
             request.userAnswers.get(CarrierNamePage) match {
               case Some(carrierName) =>
-                val preparedForm = request.userAnswers.get(CarrierAddressPage) match {
+                val preparedForm = request.userAnswers.get(CommonAddressPage("carrierAddress")) match {
                   case Some(value) => formProvider(countries, carrierName).fill(value)
                   case None        => formProvider(countries, carrierName)
                 }
@@ -117,9 +118,9 @@ class CarrierAddressController @Inject()(
                     },
                     value =>
                       for {
-                        updatedAnswers <- Future.fromTry(request.userAnswers.set(CarrierAddressPage, value))
+                        updatedAnswers <- Future.fromTry(request.userAnswers.set(CommonAddressPage("carrierAddress"), value))
                         _              <- sessionRepository.set(updatedAnswers)
-                      } yield Redirect(navigator.nextPage(CarrierAddressPage, mode, updatedAnswers))
+                      } yield Redirect(navigator.nextPage(CommonAddressPage("carrierAddress"), mode, updatedAnswers))
                   )
             }
           case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))

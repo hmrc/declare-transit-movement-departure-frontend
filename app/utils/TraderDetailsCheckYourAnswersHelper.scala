@@ -24,7 +24,7 @@ import uk.gov.hmrc.viewmodels._
 
 class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def consigneeAddress: Option[Row] = userAnswers.get(ConsigneeAddressPage) map {
+  def consigneeAddress: Option[Row] = userAnswers.get(CommonAddressPage("consigneeAddress")) map {
     answer =>
       val address = Html(
         Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
@@ -138,7 +138,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def consignorAddress: Option[Row] = userAnswers.get(ConsignorAddressPage) map {
+  def consignorAddress: Option[Row] = userAnswers.get(CommonAddressPage("consignorAddress")) map {
     answer =>
       val address = Html(
         Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)

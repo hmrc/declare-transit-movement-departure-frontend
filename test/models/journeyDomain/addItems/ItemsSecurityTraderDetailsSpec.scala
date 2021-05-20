@@ -133,7 +133,7 @@ object ItemsSecurityTraderDetailsSpec {
         case Some(SecurityPersonalInformation(name, _)) => name
       })
       .unsafeSetPFn(SecurityConsigneeAddressPage(index))(itemsSecurityTraderDetails.consignee)({
-        case Some(SecurityPersonalInformation(_, address)) => Address.prismAddressToConsigneeAddress.getOption(address).get
+        case Some(SecurityPersonalInformation(_, address)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
 
 }

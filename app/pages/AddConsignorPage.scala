@@ -32,7 +32,7 @@ case object AddConsignorPage extends QuestionPage[Boolean] {
       case Some(true) | Some(false) =>
         userAnswers
           .remove(ConsignorNamePage)
-          .flatMap(_.remove(ConsignorAddressPage))
+          .flatMap(_.remove(CommonAddressPage("consignorAddress")))
           .flatMap(_.remove(ConsignorEoriPage))
           .flatMap(_.remove(IsConsignorEoriKnownPage))
       case _ => super.cleanup(value, userAnswers)

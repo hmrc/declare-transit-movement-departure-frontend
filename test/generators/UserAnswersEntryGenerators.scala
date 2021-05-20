@@ -29,10 +29,8 @@ import pages.addItems.securityDetails._
 import pages.addItems.traderSecurityDetails.{
   AddSecurityConsigneesEoriPage,
   AddSecurityConsignorsEoriPage,
-  SecurityConsigneeAddressPage,
   SecurityConsigneeEoriPage,
   SecurityConsigneeNamePage,
-  SecurityConsignorAddressPage,
   SecurityConsignorEoriPage,
   SecurityConsignorNamePage
 }
@@ -52,7 +50,6 @@ import pages.safetyAndSecurity.{
   AddSafetyAndSecurityConsignorEoriPage,
   AddSafetyAndSecurityConsignorPage,
   AddTransportChargesPaymentMethodPage,
-  CarrierAddressPage,
   CarrierEoriPage,
   CarrierNamePage,
   CircumstanceIndicatorPage,
@@ -61,10 +58,8 @@ import pages.safetyAndSecurity.{
   ConveyanceReferenceNumberPage,
   CountryOfRoutingPage,
   PlaceOfUnloadingCodePage,
-  SafetyAndSecurityConsigneeAddressPage,
   SafetyAndSecurityConsigneeEoriPage,
   SafetyAndSecurityConsigneeNamePage,
-  SafetyAndSecurityConsignorAddressPage,
   SafetyAndSecurityConsignorEoriPage,
   SafetyAndSecurityConsignorNamePage,
   TransportChargesPaymentMethodPage

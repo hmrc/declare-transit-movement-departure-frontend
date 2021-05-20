@@ -19,12 +19,13 @@ package controllers.addItems.traderDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.addItems.traderDetails.TraderDetailsConsignorAddressFormProvider
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.AddItems
-import pages.addItems.traderDetails.{TraderDetailsConsignorAddressPage, TraderDetailsConsignorNamePage}
+import pages.CommonAddItemsAddressPage
+import pages.addItems.traderDetails.TraderDetailsConsignorNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -46,7 +47,7 @@ class TraderDetailsConsignorAddressController @Inject()(
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: TraderDetailsConsignorAddressFormProvider,
+  formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -66,9 +67,9 @@ class TraderDetailsConsignorAddressController @Inject()(
           countries =>
             request.userAnswers.get(TraderDetailsConsignorNamePage(index)) match {
               case Some(consignorName) =>
-                val preparedForm = request.userAnswers.get(TraderDetailsConsignorAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consignorName, index).fill(value)
-                  case None        => formProvider(countries, consignorName, index)
+                val preparedForm = request.userAnswers.get(CommonAddItemsAddressPage(index, "traderDetailsConsignorAddress")) match {
+                  case Some(value) => formProvider(countries, consignorName).fill(value)
+                  case None        => formProvider(countries, consignorName)
                 }
 
                 val json = Json.obj(
@@ -97,7 +98,7 @@ class TraderDetailsConsignorAddressController @Inject()(
           case Some(consignorName) =>
             referenceDataConnector.getCountryList() flatMap {
               countries =>
-                formProvider(countries, consignorName, index)
+                formProvider(countries, consignorName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {
@@ -118,9 +119,9 @@ class TraderDetailsConsignorAddressController @Inject()(
                     },
                     value =>
                       for {
-                        updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderDetailsConsignorAddressPage(index), value))
+                        updatedAnswers <- Future.fromTry(request.userAnswers.set(CommonAddItemsAddressPage(index, "traderDetailsConsignorAddress"), value))
                         _              <- sessionRepository.set(updatedAnswers)
-                      } yield Redirect(navigator.nextPage(TraderDetailsConsignorAddressPage(index), mode, updatedAnswers))
+                      } yield Redirect(navigator.nextPage(CommonAddItemsAddressPage(index, "traderDetailsConsignorAddress"), mode, updatedAnswers))
                   )
             }
           case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))

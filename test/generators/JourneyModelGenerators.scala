@@ -111,7 +111,7 @@ trait JourneyModelGenerators {
 
     val carrierAddress   = Arbitrary(arbitrary[CarrierAddress].map(Address.prismAddressToCarrierAddress.reverseGet))
     val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToConsigneeAddress.reverseGet))
+    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     Arbitrary {
       for {
@@ -155,7 +155,7 @@ trait JourneyModelGenerators {
 
     val carrierAddress   = Arbitrary(arbitrary[CarrierAddress].map(Address.prismAddressToCarrierAddress.reverseGet))
     val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToConsigneeAddress.reverseGet))
+    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     val genConvenyanceReferenceNumber: Gen[Option[String]] = modeAtBorder.flatMap {
       case "4" | "40" => nonEmptyString.map(Some(_))
@@ -323,7 +323,7 @@ trait JourneyModelGenerators {
 
   implicit val arbitraryItemSecurityTraderDetails: Arbitrary[ItemsSecurityTraderDetails] = {
     val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToConsigneeAddress.reverseGet))
+    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     Arbitrary {
       for {
@@ -392,14 +392,14 @@ trait JourneyModelGenerators {
       name             <- stringsWithMaxLength(stringMaxLength)
       consigneeAddress <- arbitrary[ConsigneeAddress]
       eori             <- arbitrary[EoriNumber]
-      address = Address.prismAddressToConsigneeAddress.reverseGet(consigneeAddress)
+      address = Address.prismAddressToCommonAddress.reverseGet(consigneeAddress)
     } yield ConsigneeDetails(name, address, Some(eori))
 
   val genConsigneeDetailsWithoutEori: Gen[ConsigneeDetails] =
     for {
       name             <- stringsWithMaxLength(stringMaxLength)
       consigneeAddress <- arbitrary[ConsigneeAddress]
-      address = Address.prismAddressToConsigneeAddress.reverseGet(consigneeAddress)
+      address = Address.prismAddressToCommonAddress.reverseGet(consigneeAddress)
     } yield ConsigneeDetails(name, address, None)
 
   implicit lazy val arbitraryConsigneeDetails: Arbitrary[ConsigneeDetails] =
@@ -437,7 +437,7 @@ trait JourneyModelGenerators {
     routeDetails: RouteDetails
   ): Gen[ItemSection] = {
     val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToConsigneeAddress.reverseGet))
+    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     val isDocumentTypeMandatory = addSafetyAndSecurity &&
       safetyAndSecurity.commercialReferenceNumber.isDefined
@@ -491,7 +491,7 @@ trait JourneyModelGenerators {
   ): Gen[ItemSection] = {
 
     val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToConsigneeAddress.reverseGet))
+    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     val documentTypeIsMandatory = circumstanceIndicator.fold(addDocument)(CircumstanceIndicator.conditionalIndicators.contains(_))
 

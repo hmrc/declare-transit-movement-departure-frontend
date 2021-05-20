@@ -20,7 +20,7 @@ import cats.implicits._
 import models.EoriNumber
 import models.domain.Address
 import models.journeyDomain.{UserAnswersReader, _}
-import pages.{ConsignorAddressPage, ConsignorEoriPage, ConsignorNamePage, IsConsignorEoriKnownPage}
+import pages.{CommonAddressPage, ConsignorEoriPage, ConsignorNamePage, IsConsignorEoriKnownPage}
 
 case class ConsignorDetails(name: String, address: Address, eori: Option[EoriNumber])
 
@@ -34,11 +34,11 @@ object ConsignorDetails {
     (
       readConsignorEoriPage,
       ConsignorNamePage.reader,
-      ConsignorAddressPage.reader
+      CommonAddressPage("consignorAddress").reader
     ).tupled
       .map {
         case (eori, name, consignorAddress) =>
-          val address = Address.prismAddressToConsignorAddress(consignorAddress)
+          val address = Address.prismAddressToCommonAddress(consignorAddress)
           ConsignorDetails(name, address, eori)
       }
   }

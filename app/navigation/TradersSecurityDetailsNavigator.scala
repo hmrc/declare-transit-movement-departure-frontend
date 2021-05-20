@@ -18,7 +18,7 @@ package navigation
 
 import controllers.addItems.traderSecurityDetails.routes
 import models._
-import pages.Page
+import pages.{CommonAddItemsAddressPage, Page}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
 import play.api.mvc.Call
@@ -34,10 +34,10 @@ class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
     case AddSecurityConsignorsEoriPage(index) => ua => addSecurityConsignorsEoriRoute(ua, index, NormalMode)
     case SecurityConsignorNamePage(index) => ua => Some(routes.SecurityConsignorAddressController.onPageLoad(ua.id, index, NormalMode))
     case SecurityConsignorEoriPage(index) => ua => securityConsignorEoriRoute(ua, index, NormalMode)
-    case SecurityConsignorAddressPage(index) => ua => securityConsignorEoriRoute(ua, index, NormalMode)
+    case CommonAddItemsAddressPage(index, "securityConsignorAddress") => ua => securityConsignorEoriRoute(ua, index, NormalMode)
     case AddSecurityConsigneesEoriPage(index) => ua => addSecurityConsigneesEoriRoute(ua, index, NormalMode)
     case SecurityConsigneeNamePage(index) => ua => Some(routes.SecurityConsigneeAddressController.onPageLoad(ua.id, index, NormalMode))
-    case SecurityConsigneeAddressPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case CommonAddItemsAddressPage(index, "securityConsigneeAddress") => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     case SecurityConsigneeEoriPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
   }
 
@@ -45,14 +45,14 @@ class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
     case AddSecurityConsignorsEoriPage(index) => ua => addSecurityConsignorsEoriRoute(ua, index, CheckMode)
     case SecurityConsignorEoriPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     case SecurityConsignorNamePage(index) => ua => securityConsignorNameRoute(ua, index)
-    case SecurityConsignorAddressPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case CommonAddItemsAddressPage(index, "securityConsignorAddress") => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     case AddSecurityConsigneesEoriPage(index) => ua => addSecurityConsigneesEoriRoute(ua, index, CheckMode)
     case SecurityConsigneeEoriPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case SecurityConsigneeAddressPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case CommonAddItemsAddressPage(index, "securityConsigneeAddress") => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
   }
 
   private def securityConsignorNameRoute(ua: UserAnswers, index: Index) = 
-    ua.get(SecurityConsignorAddressPage(index)) match {
+    ua.get(CommonAddItemsAddressPage(index, "securityConsignorAddress")) match {
       case Some(_) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
       case None => Some(routes.SecurityConsignorAddressController.onPageLoad(ua.id, index, CheckMode))
     }

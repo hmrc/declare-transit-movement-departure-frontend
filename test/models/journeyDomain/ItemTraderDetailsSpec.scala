@@ -78,7 +78,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(false)
 
           val result                   = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
-          val expectedAddress: Address = Address.prismAddressToConsigneeAddress(address)
+          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
           result.consignee.value mustEqual RequiredDetails(name, expectedAddress, None)
 
@@ -98,7 +98,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
 
           val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
-          val expectedAddress: Address = Address.prismAddressToConsigneeAddress(address)
+          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
           result.consignee.value mustEqual RequiredDetails(name, expectedAddress, Some(eori))
       }
@@ -167,7 +167,7 @@ object ItemTraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(RequiredDetails(name, _, _)) => name
       })
       .unsafeSetPFn(TraderDetailsConsigneeAddressPage(index))(itemTraderDetails.consignee)({
-        case Some(RequiredDetails(_, address, _)) => Address.prismAddressToConsigneeAddress.getOption(address).get
+        case Some(RequiredDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
 
 }

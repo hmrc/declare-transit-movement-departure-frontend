@@ -42,9 +42,9 @@ class TraderDetailsNavigator @Inject()() extends Navigator {
     case IsConsignorEoriKnownPage =>
       ua =>
         Some(isConsignorEoriKnownRoute(ua, NormalMode))
-    case ConsignorEoriPage    => reverseRouteToCall(NormalMode)(routes.ConsignorNameController.onPageLoad(_, _))
-    case ConsignorNamePage    => reverseRouteToCall(NormalMode)(routes.ConsignorAddressController.onPageLoad(_, _))
-    case ConsignorAddressPage => reverseRouteToCall(NormalMode)(routes.AddConsigneeController.onPageLoad(_, _))
+    case ConsignorEoriPage                     => reverseRouteToCall(NormalMode)(routes.ConsignorNameController.onPageLoad(_, _))
+    case ConsignorNamePage                     => reverseRouteToCall(NormalMode)(routes.ConsignorAddressController.onPageLoad(_, _))
+    case CommonAddressPage("consignorAddress") => reverseRouteToCall(NormalMode)(routes.AddConsigneeController.onPageLoad(_, _))
     case AddConsigneePage =>
       ua =>
         Some(addConsigneeRoute(ua, NormalMode))
@@ -53,7 +53,7 @@ class TraderDetailsNavigator @Inject()() extends Navigator {
         Some(isConsigneeEoriKnownRoute(ua, NormalMode))
     case ConsigneeNamePage       => reverseRouteToCall(NormalMode)(routes.ConsigneeAddressController.onPageLoad(_, _))
     case WhatIsConsigneeEoriPage => reverseRouteToCall(NormalMode)(routes.ConsigneeNameController.onPageLoad(_, _))
-    case ConsigneeAddressPage =>
+    case CommonAddressPage("consigneeAddress") =>
       ua =>
         Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
   }
@@ -102,7 +102,7 @@ class TraderDetailsNavigator @Inject()() extends Navigator {
 
     case ConsignorNamePage =>
       ua =>
-        ua.get(ConsignorAddressPage) match {
+        ua.get(CommonAddressPage("consignorAddress")) match {
           case Some(value) => Some(checkModeDefaultPage(ua))
           case None        => Some(routes.ConsignorAddressController.onPageLoad(ua.id, CheckMode))
         }
@@ -131,7 +131,7 @@ class TraderDetailsNavigator @Inject()() extends Navigator {
 
     case ConsigneeNamePage =>
       ua =>
-        ua.get(ConsigneeAddressPage) match {
+        ua.get(CommonAddressPage("consigneeAddress")) match {
           case Some(value) => Some(checkModeDefaultPage(ua))
           case None        => Some(routes.ConsigneeAddressController.onPageLoad(ua.id, CheckMode))
         }
