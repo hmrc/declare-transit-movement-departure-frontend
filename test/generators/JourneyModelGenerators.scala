@@ -17,6 +17,7 @@
 package generators
 
 import java.time.{LocalDate, LocalDateTime}
+
 import cats.data.NonEmptyList
 import models.DeclarationType.Option2
 import models._
@@ -33,15 +34,13 @@ import models.journeyDomain.MovementDetails.{
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
-import models.journeyDomain.traderDetails._
-import models.journeyDomain.traderDetails.TraderDetails._
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
 import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPersonalInformation, SecurityTraderEori}
+import models.journeyDomain.traderDetails.{TraderDetails, _}
 import models.journeyDomain.{traderDetails, _}
-import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.{SpecialMention => _, _}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -217,22 +216,18 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryModeExemptNationality: Arbitrary[ModeExemptNationality] =
     Arbitrary {
       for {
-        codeMode <- Gen.oneOf(Mode5or7.Constants.codes ++ Rail.Constants.codes)
+        codeMode <- genExemptNationalityCode
       } yield ModeExemptNationality(codeMode)
     }
 
-  implicit lazy val arbitraryModeWithNationality: Arbitrary[ModeWithNationality] = {
-
-    val codeList = Mode5or7.Constants.codes ++ Rail.Constants.codes
-
+  implicit lazy val arbitraryModeWithNationality: Arbitrary[ModeWithNationality] =
     Arbitrary {
       for {
         cc         <- arbitrary[CountryCode]
-        codeMode   <- arbitrary[Int].suchThat(!codeList.contains(_))
+        codeMode   <- arbitrary[Int].suchThat(num => !ModeCrossingBorder.isExemptFromNationality(num.toString))
         idCrossing <- stringsWithMaxLength(stringMaxLength)
       } yield ModeWithNationality(cc, codeMode, idCrossing)
     }
-  }
 
   implicit lazy val arbitraryDetailsAtBorder: Arbitrary[DetailsAtBorder] =
     Arbitrary(
