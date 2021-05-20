@@ -396,10 +396,25 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from AddCustomsApprovedLocation to CheckYourAnswers page when selecting No" in {
+      "must go from AddCustomsApprovedLocation to AddAgreedLocationOfGoods page when selecting No when AgreedLocationOfGoodsPage is empty" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.set(AddCustomsApprovedLocationPage, false).toOption.value
+            val updatedAnswers = answers
+              .set(AddCustomsApprovedLocationPage, false).toOption.value
+              .remove(AgreedLocationOfGoodsPage).success.value
+
+            navigator
+              .nextPage(AddCustomsApprovedLocationPage, CheckMode, updatedAnswers)
+              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, CheckMode))
+        }
+      }
+
+      "must go from AddCustomsApprovedLocation to CheckYourAnswersPage page when selecting No when AgreedLocationOfGoodsPage is empty" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddCustomsApprovedLocationPage, false).toOption.value
+              .set(AgreedLocationOfGoodsPage, "test").success.value
 
             navigator
               .nextPage(AddCustomsApprovedLocationPage, CheckMode, updatedAnswers)

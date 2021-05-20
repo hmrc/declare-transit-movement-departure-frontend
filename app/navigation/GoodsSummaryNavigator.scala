@@ -105,6 +105,7 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
       case (Some(true), _, NormalMode)   => routes.CustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
       case (Some(true), None, CheckMode) => routes.CustomsApprovedLocationController.onPageLoad(ua.id, CheckMode)
       case (Some(false), _, NormalMode)  => routes.AddAgreedLocationOfGoodsController.onPageLoad(ua.id, NormalMode)
+      case (Some(false), _, CheckMode) if (ua.get(AgreedLocationOfGoodsPage).isEmpty)  => routes.AddAgreedLocationOfGoodsController.onPageLoad(ua.id, CheckMode)
       case _                             => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
     }
 
