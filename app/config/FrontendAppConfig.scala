@@ -33,6 +33,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   val gtmContainer: String       = configuration.get[String]("microservice.services.tracking-consent-frontend.gtm.container")
 
   val betaAuthorizationUrl: String = configuration.get[Service]("microservice.services.transit-movements-trader-authorization").fullServiceUrl
+  val privateBetaToggle: Boolean   = configuration.getOptional[Boolean]("privateBetaToggle").getOrElse(false)
 
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
   lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.referenceData").fullServiceUrl

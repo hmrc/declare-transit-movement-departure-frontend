@@ -18,7 +18,7 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.EnrolmentStoreConnector
+import connectors.{BetaAuthorizationConnector, EnrolmentStoreConnector}
 import controllers.routes
 import models.EoriNumber
 import models.EoriNumber.prefixGBIfMissing
@@ -43,6 +43,7 @@ class AuthenticatedIdentifierAction @Inject()(
   config: FrontendAppConfig,
   val parser: BodyParsers.Default,
   enrolmentStoreConnector: EnrolmentStoreConnector,
+  betaAuthorizationConnector: BetaAuthorizationConnector,
   renderer: Renderer
 )(implicit val executionContext: ExecutionContext)
     extends IdentifierAction
@@ -60,8 +61,16 @@ class AuthenticatedIdentifierAction @Inject()(
             enrolment <- enrolments.enrolments.filter(_.isActivated).find(_.key.equals(config.enrolmentKey))
           } yield
             enrolment.getIdentifier(config.enrolmentIdentifierKey) match {
-              case Some(eoriNumber) => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
-              case _                => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
+              case Some(eoriNumber) =>
+                if (config.privateBetaToggle) {
+                  betaAuthorizationConnector.getBetaUser(eoriNumber.value).flatMap {
+                    case true  => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
+                    case false => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
+                  }
+                } else {
+                  block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
+                }
+              case _ => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
             }).getOrElse(checkForGroupEnrolment(maybeGroupId, config)(hc, request))
       }
   } recover {
@@ -71,7 +80,8 @@ class AuthenticatedIdentifierAction @Inject()(
       Redirect(routes.UnauthorisedController.onPageLoad())
   }
 
-  private def checkForGroupEnrolment[A](maybeGroupId: Option[String], config: FrontendAppConfig)(implicit hc: HeaderCarrier,
+  private def checkForGroupEnrolment[A](maybeGroupId: Option[String], config: FrontendAppConfig)(implicit
+                                                                                                 hc: HeaderCarrier,
                                                                                                  request: Request[A]): Future[Result] = {
     val nctsJson: JsObject = Json.obj("requestAccessToNCTSUrl" -> config.enrolmentManagementFrontendEnrolUrl)
 
