@@ -149,11 +149,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriNumberPage(firstGoodItem))("Conor123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(firstGoodItem))("ConorName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(firstGoodItem))(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")))
+        .unsafeSetVal(pages.CommonAddItemsAddressPage(firstGoodItem, "traderDetailsConsignorAddress"))(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")))
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriNumberPage(firstGoodItem))("Conee123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(firstGoodItem))("ConeeName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(firstGoodItem))(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")))
+        .unsafeSetVal(pages.CommonAddItemsAddressPage(firstGoodItem, "traderDetailsConsigneeAddress"))(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")))
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
         .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(0)))(false)
         .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(0)))(false)
@@ -214,10 +214,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(secondGoodItem))("ConorName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(secondGoodItem))(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GB"), "SomethingCO")))
+        .unsafeSetVal(pages.CommonAddItemsAddressPage(secondGoodItem, "traderDetailsConsignorAddress"))(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GB"), "SomethingCO")))
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(secondGoodItem))("ConeeName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(secondGoodItem))(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE")))
+        .unsafeSetVal(pages.CommonAddItemsAddressPage(secondGoodItem, "traderDetailsConsigneeAddress"))(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE")))
         .unsafeSetVal(pages.PackageTypePage(secondGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD2PKG1"))
         .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(secondGoodItem, Index(0)))(false)
         .unsafeSetVal(pages.addItems.AddMarkPage(secondGoodItem, Index(0)))(false)
@@ -254,10 +254,10 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.securityDetails.AddDangerousGoodsCodePage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsignorsEoriPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsignorNamePage(secondGoodItem))("GD2SECCONORName")
-        .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsignorAddressPage(secondGoodItem))(ConsignorAddress("GD2CONORL1", "GD2CONORL2", "GD2CONL1", Country(CountryCode("GB"), "GD2CONNOR")))
+        .unsafeSetVal(pages.CommonAddItemsAddressPage(secondGoodItem, "securityConsignorAddress"))(CommonAddress("GD2CONORL1", "GD2CONORL2", "GD2CONL1", Country(CountryCode("GB"), "GD2CONNOR")))
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsigneesEoriPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeNamePage(secondGoodItem))("GD2SECCONEEName")
-        .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeAddressPage(secondGoodItem))(ConsigneeAddress("GD2CONEEL1", "GD2CONEEL2", "GD2CEEL1", Country(CountryCode("GB"), "GD2CONNEE")))
+        .unsafeSetVal(pages.CommonAddItemsAddressPage(secondGoodItem, "securityConsigneeAddress"))(CommonAddress("GD2CONEEL1", "GD2CONEEL2", "GD2CEEL1", Country(CountryCode("GB"), "GD2CONNEE")))
         .unsafeSetVal(pages.addItems.AddAnotherItemPage)(false)
         /*
       * Goods Summary
@@ -586,11 +586,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.AddConsignorPage)(true)
         .unsafeSetVal(pages.IsConsignorEoriKnownPage)(false)
         .unsafeSetVal(pages.ConsignorNamePage)("ConsignorName")
-        .unsafeSetVal(pages.ConsignorAddressPage)(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
+        .unsafeSetVal(pages.CommonAddressPage("consignorAddress"))(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
         .unsafeSetVal(pages.AddConsigneePage)(true)
         .unsafeSetVal(pages.IsConsigneeEoriKnownPage)(false)
         .unsafeSetVal(pages.ConsigneeNamePage)("ConsigneeName")
-        .unsafeSetVal(pages.ConsigneeAddressPage)(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
+        .unsafeSetVal(pages.CommonAddressPage("consigneeAddress"))(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
         /*
         * Item Details section - Item One
         * */
@@ -780,12 +780,12 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.IsConsignorEoriKnownPage)(true)
         .unsafeSetVal(pages.ConsignorEoriPage)("ConorEori")
         .unsafeSetVal(pages.ConsignorNamePage)("ConsignorName")
-        .unsafeSetVal(pages.ConsignorAddressPage)(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
+        .unsafeSetVal(pages.CommonAddressPage("consignorAddress"))(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
         .unsafeSetVal(pages.AddConsigneePage)(true)
         .unsafeSetVal(pages.IsConsigneeEoriKnownPage)(true)
         .unsafeSetVal(pages.WhatIsConsigneeEoriPage)("ConeeEori")
         .unsafeSetVal(pages.ConsigneeNamePage)("ConsigneeName")
-        .unsafeSetVal(pages.ConsigneeAddressPage)(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
+        .unsafeSetVal(pages.CommonAddressPage("consigneeAddress"))(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
         /*
         * Safety & Security Details
         * */
@@ -799,11 +799,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorNamePage)("SafeSecName")
-        .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorAddressPage)(ConsignorAddress("SecConorLine1", "SecConorLine2", "SecCorL3", Country(CountryCode("CN"), "SomethingSecCO")))
+        .unsafeSetVal(pages.CommonAddressPage("safetyAndSecurityConsignorAddress"))(CommonAddress("SecConorLine1", "SecConorLine2", "SecCorL3", Country(CountryCode("CN"), "SomethingSecCO")))
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneeEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeNamePage)("SafeSecName")
-        .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeAddressPage)(ConsigneeAddress("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Country(CountryCode("CN"), "SomethingSecCE")))
+        .unsafeSetVal(pages.CommonAddressPage("safetyAndSecurityConsigneeAddress"))(CommonAddress("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Country(CountryCode("CN"), "SomethingSecCE")))
         .unsafeSetVal(pages.safetyAndSecurity.AddCarrierPage)(false)
         /*
         * Item Details section - Item One
@@ -1138,7 +1138,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.safetyAndSecurity.AddCarrierPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddCarrierEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.CarrierNamePage)("CarrierName")
-        .unsafeSetVal(pages.safetyAndSecurity.CarrierAddressPage)(CarrierAddress("CarAddL1", "CarAddL2", "CarAddL3", Country(CountryCode("CA"), "CARRDESC")))
+        .unsafeSetVal(pages.CommonAddressPage("carrierAddress"))(CommonAddress("CarAddL1", "CarAddL2", "CarAddL3", Country(CountryCode("CA"), "CARRDESC")))
         /*
         * Item Details section - Item One
         * */
@@ -1151,11 +1151,11 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriNumberPage(firstGoodItem))("Conor123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(firstGoodItem))("ConorName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(firstGoodItem))(ConsignorAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")))
+        .unsafeSetVal(pages.CommonAddItemsAddressPage(firstGoodItem, "traderDetailsConsignorAddress"))(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")))
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriNumberPage(firstGoodItem))("Conee123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(firstGoodItem))("ConeeName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(firstGoodItem))(ConsigneeAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")))
+        .unsafeSetVal(pages.CommonAddItemsAddressPage(firstGoodItem, "traderDetailsConsigneeAddress"))(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")))
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
         .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(0)))(false)
         .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(0)))(false)
