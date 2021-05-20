@@ -105,22 +105,6 @@ class PackagesSpec extends SpecBase with GeneratorSpec with JourneyModelGenerato
           }
         }
 
-        "DeclareNumberOfPackagesPage is true but HowManyPackagesPage is not defined" in {
-          val genPackages = arbitrary[BulkPackages].map(_.copy(howManyPackagesPage = None))
-
-          forAll(genPackages, arbitrary[UserAnswers]) {
-            case (packages, userAnswers) =>
-              val updatedUserAnswers =
-                setPackageUserAnswers(packages, index, index)(userAnswers)
-                  .unsafeSetVal(DeclareNumberOfPackagesPage(index, index))(true)
-                  .unsafeRemove(HowManyPackagesPage(index, index))
-
-              val result = UserAnswersReader[BulkPackages](BulkPackages.bulkPackageReader(index, index)).run(updatedUserAnswers).left.value
-
-              result.page mustEqual HowManyPackagesPage(index, index)
-          }
-        }
-
         "AddMarkPage is true but DeclareMarkPage is not defined" in {
           val genPackages = arbitrary[BulkPackages].map(_.copy(markOrNumber = None))
 
@@ -165,22 +149,6 @@ class PackagesSpec extends SpecBase with GeneratorSpec with JourneyModelGenerato
           }
         }
 
-        "DeclareNumberOfPackagesPage is true but HowManyPackagesPage is not defined" in {
-          val genPackages = arbitrary[UnpackedPackages].map(_.copy(howManyPackagesPage = None))
-
-          forAll(genPackages, arbitrary[UserAnswers]) {
-            case (packages, userAnswers) =>
-              val updatedUserAnswers =
-                setPackageUserAnswers(packages, index, index)(userAnswers)
-                  .unsafeSetVal(DeclareNumberOfPackagesPage(index, index))(true)
-                  .unsafeRemove(HowManyPackagesPage(index, index))
-
-              val result = UserAnswersReader[UnpackedPackages](UnpackedPackages.unpackedPackagesReader(index, index)).run(updatedUserAnswers).left.value
-
-              result.page mustEqual HowManyPackagesPage(index, index)
-          }
-        }
-
         "AddMarkPage is true but DeclareMarkPage is not defined" in {
           val genPackages = arbitrary[UnpackedPackages].map(_.copy(markOrNumber = None))
 
@@ -213,15 +181,11 @@ object PackagesSpec extends UserAnswersSpecHelper {
       case bulkPackage: BulkPackages =>
         userAnswers
           .unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(bulkPackage.packageType)
-          .unsafeSetVal(DeclareNumberOfPackagesPage(itemIndex, packageIndex))(bulkPackage.howManyPackagesPage.isDefined)
-          .unsafeSetOpt(HowManyPackagesPage(itemIndex, packageIndex))(bulkPackage.howManyPackagesPage)
           .unsafeSetVal(AddMarkPage(itemIndex, packageIndex))(bulkPackage.markOrNumber.isDefined)
           .unsafeSetOpt(DeclareMarkPage(itemIndex, packageIndex))(bulkPackage.markOrNumber)
       case unpackedPackages: UnpackedPackages =>
         userAnswers
           .unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(unpackedPackages.packageType)
-          .unsafeSetVal(DeclareNumberOfPackagesPage(itemIndex, packageIndex))(unpackedPackages.howManyPackagesPage.isDefined)
-          .unsafeSetOpt(HowManyPackagesPage(itemIndex, packageIndex))(unpackedPackages.howManyPackagesPage)
           .unsafeSetVal(TotalPiecesPage(itemIndex, packageIndex))(unpackedPackages.totalPieces)
           .unsafeSetVal(AddMarkPage(itemIndex, packageIndex))(unpackedPackages.markOrNumber.isDefined)
           .unsafeSetOpt(DeclareMarkPage(itemIndex, packageIndex))(unpackedPackages.markOrNumber)

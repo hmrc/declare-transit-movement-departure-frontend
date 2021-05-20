@@ -18,36 +18,34 @@ package forms.addItems.traderSecurityDetails
 
 import forms.Constants.{addressMaxLength, consigneeNameMaxLength}
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
+import models.domain.StringFieldRegex.{alphaNumericWithSpaceRegex, stringFieldRegex}
 import models.reference.Country
-import models.{ConsignorAddress, CountryList}
+import models.{ConsignorAddress, CountryList, Index}
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class SecurityConsignorAddressFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList, consignorName: String): Form[ConsignorAddress] = Form(
+  def apply(countryList: CountryList, consignorName: String, index: Index): Form[ConsignorAddress] = Form(
     mapping(
       "AddressLine1" -> text("securityConsignorAddress.error.AddressLine1.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine1.length", consigneeNameMaxLength),
-          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine1.invalid")
+          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine1.length", consignorName),
+          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine1.invalid", Seq(consignorName))
         )),
       "AddressLine2" -> text("securityConsignorAddress.error.AddressLine2.required", Seq(consignorName))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine2.length", consigneeNameMaxLength),
-          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine2.invalid")
+          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine2.length", consignorName),
+          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine2.invalid", Seq(consignorName))
         )),
-      "AddressLine3" -> text("securityConsignorAddress.error.AddressLine3.required", Seq(consignorName))
+      "AddressLine3" -> text("securityConsignorAddress.error.postalCode.required", Seq(consignorName, index.display))
         .verifying(StopOnFirstFail[String](
-          maxLength(addressMaxLength, "securityConsignorAddress.error.AddressLine3.length", consigneeNameMaxLength),
-          regexp(stringFieldRegex, "securityConsignorAddress.error.AddressLine3.invalid")
+          maxLength(9, "securityConsignorAddress.error.postalCode.length", consignorName, index.display),
+          regexp(alphaNumericWithSpaceRegex, "securityConsignorAddress.error.postalCode.invalid", Seq(consignorName, index.display))
         )),
       "country" -> text("securityConsignorAddress.error.country.required", Seq(consignorName))
-        .verifying("eventCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )(ConsignorAddress.apply)(ConsignorAddress.unapply)
   )

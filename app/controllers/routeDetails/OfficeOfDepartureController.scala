@@ -20,6 +20,7 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.OfficeOfDepartureFormProvider
+import models.reference.CountryCode
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
@@ -54,60 +55,53 @@ class OfficeOfDepartureController @Inject()(
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      request.userAnswers.get(CountryOfDispatchPage) match {
-        case Some(countryCode) =>
-          referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode.country) flatMap {
-            customsOffices =>
-              val form = formProvider(customsOffices)
-              val preparedForm = request.userAnswers
-                .get(OfficeOfDeparturePage)
-                .flatMap(
-                  x => customsOffices.getCustomsOffice(x.id)
-                )
-                .map(form.fill)
-                .getOrElse(form)
+      referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("GB")) flatMap {
+        customsOffices =>
+          val form = formProvider(customsOffices)
+          val preparedForm = request.userAnswers
+            .get(OfficeOfDeparturePage)
+            .flatMap(
+              x => customsOffices.getCustomsOffice(x.id)
+            )
+            .map(form.fill)
+            .getOrElse(form)
 
-              val json = Json.obj(
-                "form"           -> preparedForm,
-                "lrn"            -> lrn,
-                "customsOffices" -> getCustomsOfficesAsJson(preparedForm.value, customsOffices.getAll),
-                "mode"           -> mode
-              )
+          val json = Json.obj(
+            "form"           -> preparedForm,
+            "lrn"            -> lrn,
+            "customsOffices" -> getCustomsOfficesAsJson(preparedForm.value, customsOffices.getAll),
+            "mode"           -> mode
+          )
 
-              renderer.render("officeOfDeparture.njk", json).map(Ok(_))
-          }
-        case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
+          renderer.render("officeOfDeparture.njk", json).map(Ok(_))
       }
+
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      request.userAnswers.get(CountryOfDispatchPage) match {
-        case Some(countryCode) =>
-          referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode.country) flatMap {
-            customsOffices =>
-              val form = formProvider(customsOffices)
-              form
-                .bindFromRequest()
-                .fold(
-                  formWithErrors => {
-                    val json = Json.obj(
-                      "form"           -> formWithErrors,
-                      "lrn"            -> lrn,
-                      "customsOffices" -> getCustomsOfficesAsJson(form.value, customsOffices.getAll),
-                      "mode"           -> mode
-                    )
-
-                    renderer.render("officeOfDeparture.njk", json).map(BadRequest(_))
-                  },
-                  value =>
-                    for {
-                      updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
-                      _              <- sessionRepository.set(updatedAnswers)
-                    } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, updatedAnswers))
+      referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("GB")) flatMap {
+        customsOffices =>
+          val form = formProvider(customsOffices)
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => {
+                val json = Json.obj(
+                  "form"           -> formWithErrors,
+                  "lrn"            -> lrn,
+                  "customsOffices" -> getCustomsOfficesAsJson(form.value, customsOffices.getAll),
+                  "mode"           -> mode
                 )
-          }
-        case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
+
+                renderer.render("officeOfDeparture.njk", json).map(BadRequest(_))
+              },
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, updatedAnswers))
+            )
       }
 
   }

@@ -8,7 +8,7 @@
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
 
 {% block pageTitle %}
-  {{ title(messages("traderDetailsConsignorAddress.title", index), form.errors) }}
+  {{ title(messages("traderDetailsConsigneeAddress.title", index), form.errors) }}
 {% endblock %}
 
 {% block pageHead %}
@@ -68,7 +68,7 @@
                     {{ govukInput({
                       classes: "govuk-!-width-two-thirds",
                       label: {
-                        text: messages('traderDetailsConsigneeAddress.AddressLine3')
+                        text: messages('traderDetailsConsigneeAddress.postalCode')
                       },
                       id: "AddressLine3",
                       name: "AddressLine3",

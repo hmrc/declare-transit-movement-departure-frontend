@@ -27,7 +27,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def consigneeAddress: Option[Row] = userAnswers.get(ConsigneeAddressPage) map {
     answer =>
       val address = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.AddressLine3, answer.country.description)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>")
       )
       Row(
@@ -141,7 +141,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def consignorAddress: Option[Row] = userAnswers.get(ConsignorAddressPage) map {
     answer =>
       val address = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.AddressLine3, answer.country.description)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>")
       )
 

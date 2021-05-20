@@ -16,23 +16,23 @@
 
 package navigation
 
-import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
-import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
-import controllers.addItems.specialMentions.{routes => specialMentionsRoutes}
-import controllers.addItems.{routes => addItemsRoutes}
-import controllers.addItems.{routes => addAnotherPackageRoutes}
 import controllers.addItems.containers.{routes => containerRoutes}
+import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
+import controllers.addItems.specialMentions.{routes => specialMentionsRoutes}
+import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
+import controllers.addItems.{routes => addItemsRoutes}
 import controllers.{routes => mainRoutes}
 import derivable._
-import javax.inject.{Inject, Singleton}
 import models._
-import models.reference.PackageType.{bulkAndUnpackedCodes, bulkCodes, unpackedCodes}
+import models.reference.PackageType.{bulkCodes, unpackedCodes}
 import pages._
 import pages.addItems.containers._
 import pages.addItems.traderDetails._
 import pages.addItems.{AddAnotherPreviousAdministrativeReferencePage, _}
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AddItemsNavigator @Inject()() extends Navigator {
@@ -81,9 +81,7 @@ class AddItemsNavigator @Inject()() extends Navigator {
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case ItemDescriptionPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     case ItemTotalGrossMassPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case AddTotalNetMassPage(index) => ua => addTotalNetMassRoute(index, ua, CheckMode)
     case IsCommodityCodeKnownPage(index) => ua => isCommodityKnownRouteCheckMode(index, ua)
     case CommodityCodePage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     case TotalNetMassPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
@@ -97,7 +95,6 @@ class AddItemsNavigator @Inject()() extends Navigator {
     case ItemDescriptionPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     case ItemTotalGrossMassPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     case AddTotalNetMassPage(index) => ua => addTotalNetMassRoute(index, ua, CheckMode)
-    case TotalNetMassPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     case TraderDetailsConsignorEoriKnownPage(index) => ua => consignorEoriKnown(ua, index, CheckMode)
     case TraderDetailsConsignorEoriNumberPage(index) => ua => consignorEoriNumberCheckMode(ua, index)
     case TraderDetailsConsignorNamePage(index) => ua => consignorName(ua, index, CheckMode)
@@ -128,7 +125,7 @@ class AddItemsNavigator @Inject()() extends Navigator {
     }
 
   private def consigneeEoriNumberCheckMode(ua: UserAnswers, index: Index) =
-    (ua.get(TraderDetailsConsigneeNamePage(index))) match {
+    ua.get(TraderDetailsConsigneeNamePage(index)) match {
       case Some(value) => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
       case _ => Some(traderDetailsRoutes.TraderDetailsConsigneeNameController.onPageLoad(ua.id, index, CheckMode))
     }
@@ -156,7 +153,7 @@ class AddItemsNavigator @Inject()() extends Navigator {
     }
 
   private def consignorEoriNumberCheckMode(ua: UserAnswers, index: Index) =
-    (ua.get(TraderDetailsConsignorNamePage(index))) match {
+    ua.get(TraderDetailsConsignorNamePage(index)) match {
       case Some(value) => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
       case _ => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.id, index, CheckMode))
     }
@@ -234,14 +231,17 @@ class AddItemsNavigator @Inject()() extends Navigator {
 
   def packageType(itemIndex: Index, packageIndex: Index, ua: UserAnswers, mode: Mode): Option[Call] =
     ua.get(PackageTypePage(itemIndex, packageIndex)) match {
-      case Some(packageType) if bulkAndUnpackedCodes.contains(packageType.code) =>
-        Some(addItemsRoutes.DeclareNumberOfPackagesController.onPageLoad(ua.id, itemIndex, packageIndex, mode))
+      case Some(packageType) if bulkCodes.contains(packageType.code) =>
+        Some(addItemsRoutes.AddMarkController.onPageLoad(ua.id, itemIndex, packageIndex, mode))
+      case Some(packageType) if unpackedCodes.contains(packageType.code) =>
+        Some(addItemsRoutes.TotalPiecesController.onPageLoad(ua.id, itemIndex, packageIndex, mode))
       case Some(_) =>
         Some(addItemsRoutes.HowManyPackagesController.onPageLoad(ua.id, itemIndex, packageIndex, mode))
-      case _ => None
+      case _ =>
+        Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
-  def howManyPackages(itemIndex: Index, packageIndex: Index, ua: UserAnswers, mode: Mode) =
+  def howManyPackages(itemIndex: Index, packageIndex: Index, ua: UserAnswers, mode: Mode): Option[Call]  =
     (ua.get(HowManyPackagesPage(itemIndex, packageIndex)), ua.get(PackageTypePage(itemIndex, packageIndex))) match {
       case (Some(_), Some(packageType)) if bulkCodes.contains(packageType.code) =>
         Some(addItemsRoutes.AddMarkController.onPageLoad(ua.id, itemIndex, packageIndex, mode))
@@ -253,7 +253,7 @@ class AddItemsNavigator @Inject()() extends Navigator {
         Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
-  def declareNumberOfPackages(itemIndex: Index, packageIndex: Index, ua: UserAnswers, mode: Mode) =
+  def declareNumberOfPackages(itemIndex: Index, packageIndex: Index, ua: UserAnswers, mode: Mode): Option[Call] =
     (ua.get(DeclareNumberOfPackagesPage(itemIndex, packageIndex)), ua.get(PackageTypePage(itemIndex, packageIndex))) match {
       case (Some(true), _) =>
         Some(addItemsRoutes.HowManyPackagesController.onPageLoad(ua.id, itemIndex, packageIndex, mode))

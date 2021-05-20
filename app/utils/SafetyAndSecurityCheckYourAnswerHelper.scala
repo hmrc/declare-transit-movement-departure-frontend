@@ -210,7 +210,7 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
   def carrierAddress: Option[Row] = userAnswers.get(CarrierAddressPage) map {
     answer =>
       val carrierAddress = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.AddressLine3, answer.country.description)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>"))
       Row(
         key   = Key(msg"carrierAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
@@ -324,7 +324,7 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
   def safetyAndSecurityConsigneeAddress: Option[Row] = userAnswers.get(SafetyAndSecurityConsigneeAddressPage) map {
     answer =>
       val consigneeAddress = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.AddressLine3, answer.country.description)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>"))
       Row(
         key   = Key(msg"safetyAndSecurityConsigneeAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
@@ -372,7 +372,7 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
   def safetyAndSecurityConsignorAddress: Option[Row] = userAnswers.get(SafetyAndSecurityConsignorAddressPage) map {
     answer =>
       val consignorAddress = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.AddressLine3, answer.country.description)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>"))
       Row(
         key   = Key(msg"safetyAndSecurityConsignorAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),

@@ -48,8 +48,7 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with MockNunjucksR
   private val countries                                          = CountryList(Seq(country))
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val formProvider                                       = new SecurityConsignorAddressFormProvider()
-  private val form                                               = formProvider(countries, "Test")
-  private val consignorName                                      = "TestName"
+  private val form                                               = formProvider(countries, "Test", index)
 
   lazy val securityConsignorAddressRoute = routes.SecurityConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
   private val template                   = "addItems/traderSecurityDetails/securityConsignorAddress.njk"
@@ -101,7 +100,7 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with MockNunjucksR
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val tradersDetailsConsignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Address line 3", country)
+      val tradersDetailsConsignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(SecurityConsignorNamePage(index), "ConsignorName")
@@ -126,7 +125,7 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with MockNunjucksR
         Map(
           "AddressLine1" -> "Address line 1",
           "AddressLine2" -> "Address line 2",
-          "AddressLine3" -> "Address line 3",
+          "AddressLine3" -> "Code",
           "country"      -> "GB"
         )
       )

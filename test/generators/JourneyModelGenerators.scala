@@ -571,20 +571,18 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryUnpackedPackages: Arbitrary[UnpackedPackages] =
     Arbitrary {
       for {
-        packageType         <- arbitraryUnPackedPackageType.arbitrary
-        howManyPackagesPage <- Gen.some(Gen.choose(1, 10))
-        totalPieces         <- Gen.choose(1, 10)
-        markOrNumber        <- Gen.some(nonEmptyString)
-      } yield UnpackedPackages(packageType, howManyPackagesPage, totalPieces, markOrNumber)
+        packageType  <- arbitraryUnPackedPackageType.arbitrary
+        totalPieces  <- Gen.choose(1, 10)
+        markOrNumber <- Gen.some(nonEmptyString)
+      } yield UnpackedPackages(packageType, totalPieces, markOrNumber)
     }
 
   implicit lazy val arbitraryBulkPackage: Arbitrary[BulkPackages] =
     Arbitrary {
       for {
-        bulkPackage         <- arbitraryBulkPackageType.arbitrary
-        howManyPackagesPage <- Gen.some(Gen.choose(1, 10))
-        markOrNumber        <- Gen.some(nonEmptyString)
-      } yield BulkPackages(bulkPackage, howManyPackagesPage, markOrNumber)
+        bulkPackage  <- arbitraryBulkPackageType.arbitrary
+        markOrNumber <- Gen.some(nonEmptyString)
+      } yield BulkPackages(bulkPackage, markOrNumber)
     }
 
   implicit lazy val arbitraryOtherPackage: Arbitrary[OtherPackages] =

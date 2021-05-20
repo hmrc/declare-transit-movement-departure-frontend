@@ -47,10 +47,11 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
   private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
+  private val consignorName                                      = "consignorName"
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private val formProvider = new TraderDetailsConsignorAddressFormProvider()
-  private val form         = formProvider(countries)
+  private val form         = formProvider(countries, consignorName, index)
 
   lazy val traderDetailsConsignorAddressRoute = routes.TraderDetailsConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
 
@@ -104,7 +105,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val tradersDetailsConsignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Address line 3", country)
+      val tradersDetailsConsignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(TraderDetailsConsignorNamePage(index), "ConsignorName")
@@ -129,7 +130,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
         Map(
           "AddressLine1" -> "Address line 1",
           "AddressLine2" -> "Address line 2",
-          "AddressLine3" -> "Address line 3",
+          "AddressLine3" -> "Code",
           "country"      -> "GB"
         )
       )
