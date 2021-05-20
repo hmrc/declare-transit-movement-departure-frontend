@@ -58,3 +58,13 @@ GET        /:lrn/goods-summary/confirm-remove-seals                        contr
 POST       /:lrn/goods-summary/confirm-remove-seals                        controllers.goodsSummary.ConfirmRemoveSealsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/goods-summary/change-confirm-remove-seals                  controllers.goodsSummary.ConfirmRemoveSealsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/goods-summary/change-confirm-remove-seals                  controllers.goodsSummary.ConfirmRemoveSealsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/goods-summary/add-agreed-location-of-goods                 controllers.goodsSummary.AddAgreedLocationOfGoodsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/goods-summary/add-agreed-location-of-goods                 controllers.goodsSummary.AddAgreedLocationOfGoodsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/goods-summary/change-add-agreed-location-of-goods          controllers.goodsSummary.AddAgreedLocationOfGoodsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/goods-summary/change-add-agreed-location-of-goods          controllers.goodsSummary.AddAgreedLocationOfGoodsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
+GET        /:lrn/goods-summary/agreed-location-of-goods                     controllers.goodsSummary.AgreedLocationOfGoodsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/goods-summary/agreed-location-of-goods                     controllers.goodsSummary.AgreedLocationOfGoodsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/goods-summary/change-agreed-location-of-goods              controllers.goodsSummary.AgreedLocationOfGoodsController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/goods-summary/change-agreed-location-of-goods              controllers.goodsSummary.AgreedLocationOfGoodsController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

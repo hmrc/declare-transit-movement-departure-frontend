@@ -46,6 +46,8 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     case ConfirmRemoveSealsPage         => ua => Some(confirmRemoveSealsRoute(ua, CheckMode))
     case ConfirmRemoveSealPage()        => ua => Some(confirmRemoveSeal(ua, NormalMode))
     case LoadingPlacePage               => ua => Some(loadingPlaceRoute(ua))
+    case AddAgreedLocationOfGoodsPage   => ua => Some(addAgreedLocationOfGoodsRoute(ua, NormalMode))
+    case AgreedLocationOfGoodsPage     => ua => Some(routes.AddSealsController.onPageLoad(ua.id, NormalMode))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
@@ -63,6 +65,8 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     case ConfirmRemoveSealsPage         => ua => Some(confirmRemoveSealsRoute(ua, CheckMode))
     case ConfirmRemoveSealPage()        => ua => Some(confirmRemoveSeal(ua, CheckMode))
     case LoadingPlacePage               => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
+    case AddAgreedLocationOfGoodsPage   => ua => Some(addAgreedLocationOfGoodsRoute(ua, CheckMode))
+    case AgreedLocationOfGoodsPage      => ua =>  Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
 
   }
 
@@ -85,22 +89,23 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
     (ua.get(ProcedureTypePage), ua.get(AddSecurityDetailsPage), ua.get(PreLodgeDeclarationPage)) match {
       case (_, Some(true),_ )     => controllers.routes.LoadingPlaceController.onPageLoad(ua.id, NormalMode)
       case (Some(Normal), _, Some(false)) =>  routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
-      case (Some(Normal), _, Some(true)) =>  routes.AddSealsController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), _, Some(true)) =>  routes.AddAgreedLocationOfGoodsController.onPageLoad(ua.id, NormalMode)
       case (Some(Simplified), _, _) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
     }
 
   def loadingPlaceRoute(ua: UserAnswers): Call =
     (ua.get(ProcedureTypePage), ua.get(PreLodgeDeclarationPage)) match {
-      case (Some(Normal), Some(false))     => routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
-      case (Some(Normal), Some(true))     => routes.AddSealsController.onPageLoad(ua.id, NormalMode)
       case (Some(Simplified),_) => routes.AuthorisedLocationCodeController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), Some(false))     => routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
+      case (Some(Normal), Some(true))     => routes.AddAgreedLocationOfGoodsController.onPageLoad(ua.id, NormalMode)
     }
 
   def addCustomsApprovedLocationRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(AddCustomsApprovedLocationPage), ua.get(CustomsApprovedLocationPage), mode) match {
       case (Some(true), _, NormalMode)   => routes.CustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
       case (Some(true), None, CheckMode) => routes.CustomsApprovedLocationController.onPageLoad(ua.id, CheckMode)
-      case (Some(false), _, NormalMode)  => routes.AddSealsController.onPageLoad(ua.id, NormalMode)
+      case (Some(false), _, NormalMode)  => routes.AddAgreedLocationOfGoodsController.onPageLoad(ua.id, NormalMode)
+      case (Some(false), _, CheckMode) if (ua.get(AgreedLocationOfGoodsPage).isEmpty)  => routes.AddAgreedLocationOfGoodsController.onPageLoad(ua.id, CheckMode)
       case _                             => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
     }
 
@@ -126,5 +131,14 @@ class GoodsSummaryNavigator @Inject()() extends Navigator {
       case (Some(false), _) => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
     }
   }
-  // format: on
+
+  def addAgreedLocationOfGoodsRoute(ua:UserAnswers, mode: Mode): Call  = 
+    (ua.get(AddAgreedLocationOfGoodsPage), mode) match {
+      case (Some(true), NormalMode) => routes.AgreedLocationOfGoodsController.onPageLoad(ua.id, mode)
+      case (Some(false), NormalMode) => routes.AddSealsController.onPageLoad(ua.id, mode)
+      case (Some(true), CheckMode) if ua.get(AgreedLocationOfGoodsPage).isEmpty  =>
+        routes.AgreedLocationOfGoodsController.onPageLoad(ua.id, mode)
+      case _ => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id)
+    }
+    // format: on
 }

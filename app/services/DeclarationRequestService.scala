@@ -22,7 +22,12 @@ import cats.implicits._
 
 import javax.inject.Inject
 import models.domain.{Address, SealDomain}
-import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetails, GoodSummarySimplifiedDetails}
+import models.journeyDomain.GoodsSummary.{
+  GoodSummaryDetails,
+  GoodSummaryNormalDetailsWithPreLodge,
+  GoodSummaryNormalDetailsWithoutPreLodge,
+  GoodSummarySimplifiedDetails
+}
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.JourneyDomain.Constants
 import models.journeyDomain.RouteDetails.TransitInformation
@@ -203,17 +208,6 @@ class DeclarationRequestService @Inject()(
         case TransitInformation(office, arrivalTime) => CustomsOfficeTransit(office, arrivalTime)
       }.toList
 
-    def customsSubPlace(movementDetails: MovementDetails, goodsSummary: GoodsSummary): Option[String] =
-      goodsSummary.goodSummaryDetails match {
-        case GoodsSummary.GoodSummaryNormalDetails(customsApprovedLocation) =>
-          movementDetails match {
-            case MovementDetails.NormalMovementDetails(_, prelodge, _, _, _) =>
-              if (prelodge) Some("Pre-lodge") else customsApprovedLocation
-            case _ => None
-          }
-        case _ => None
-      }
-
     def headerSeals(domainSeals: Seq[SealDomain]): Option[Seals] =
       if (domainSeals.nonEmpty) {
         val sealList = domainSeals.map(_.numberOrMark)
@@ -266,13 +260,29 @@ class DeclarationRequestService @Inject()(
         case _                                            => None
       }
 
-    def agreedLocationOfGoods(movementDetails: MovementDetails, goodsSummaryDetails: GoodSummaryDetails): Option[String] =
-      (movementDetails, goodsSummaryDetails) match {
-        case (MovementDetails.NormalMovementDetails(_, prelodge, _, _, _), GoodSummaryNormalDetails(approvedLocation)) =>
-          if (prelodge) Some("Pre-lodge") else approvedLocation
-        case _ => None
+//cusSubPlaHEA66
+    def customsSubPlace(goodsSummary: GoodsSummary): Option[String] =
+      goodsSummary.goodSummaryDetails match {
+        case GoodsSummary.GoodSummaryNormalDetailsWithoutPreLodge(None, customsApprovedLocation) => customsApprovedLocation
+        case _                                                                                   => None
       }
 
+//agrLocOfGooHEA39
+    def agreedLocationOfGoods(goodsSummaryDetails: GoodSummaryDetails): Option[String] =
+      goodsSummaryDetails match {
+        case GoodSummaryNormalDetailsWithPreLodge(agreedLocationOfGoods)          => agreedLocationOfGoods
+        case GoodSummaryNormalDetailsWithoutPreLodge(agreedLocationOfGoods, None) => agreedLocationOfGoods
+        case _                                                                    => None
+      }
+
+//agrLocOfGooCodHEA38
+    def agreedLocationOfGoodsCode(goodsSummaryDetails: GoodSummaryDetails): Option[String] =
+      goodsSummaryDetails match {
+        case GoodSummaryNormalDetailsWithPreLodge(_) => Some("Pre-lodge")
+        case _                                       => None
+      }
+
+//autLocOfGooCodHEA41
     def goodsSummarySimplifiedDetails(goodsSummaryDetails: GoodSummaryDetails): Option[GoodSummarySimplifiedDetails] =
       goodsSummaryDetails match {
         case result: GoodSummarySimplifiedDetails => Some(result)
@@ -360,12 +370,12 @@ class DeclarationRequestService @Inject()(
         refNumHEA4          = preTaskList.lrn.value,
         typOfDecHEA24       = movementDetails.declarationType.code,
         couOfDesCodHEA30    = Some(routeDetails.destinationCountry.code),
-        agrLocOfGooCodHEA38 = None, // Not required
-        agrLocOfGooHEA39    = agreedLocationOfGoods(movementDetails, goodsSummary.goodSummaryDetails),
+        agrLocOfGooCodHEA38 = agreedLocationOfGoodsCode(goodsSummary.goodSummaryDetails), // Not required
+        agrLocOfGooHEA39    = agreedLocationOfGoods(goodsSummary.goodSummaryDetails),
         autLocOfGooCodHEA41 = goodsSummarySimplifiedDetails(goodsSummary.goodSummaryDetails).map(_.authorisedLocationCode),
         plaOfLoaCodHEA46    = goodsSummary.loadingPlace,
         couOfDisCodHEA55    = Some(routeDetails.countryOfDispatch.country.code),
-        cusSubPlaHEA66      = customsSubPlace(movementDetails, goodsSummary),
+        cusSubPlaHEA66      = customsSubPlace(goodsSummary),
         transportDetails = Transport(
           inlTraModHEA75        = Some(transportDetails.inlandMode.code),
           traModAtBorHEA76      = Some(detailsAtBorderMode(transportDetails.detailsAtBorder, transportDetails.inlandMode.code)),

@@ -16,17 +16,15 @@
 
 package forms
 
-import models.{Index, Mode, UserAnswers}
-import pages.safetyAndSecurity.CircumstanceIndicatorPage
+import javax.inject.Inject
 
-object Constants {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  lazy val maxLengthEoriNumber: Int       = 17
-  lazy val vehicleIdMaxLength             = 27
-  lazy val consigneeNameMaxLength: Int    = 35
-  lazy val addressMaxLength: Int          = 35
-  lazy val loadingPlaceMaxLength: Int     = 35
-  lazy val maxLengthAgreedLocationOfGoods = 35
-  lazy val addressRegex: String           = "^[a-zA-Z0-9/@?%,.\\- ]*$"
+class AddAgreedLocationOfGoodsFormProvider @Inject() extends Mappings {
 
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("addAgreedLocationOfGoods.error.required")
+    )
 }

@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import models.{Index, Mode, UserAnswers}
-import pages.safetyAndSecurity.CircumstanceIndicatorPage
+import pages.behaviours.PageBehaviours
 
-object Constants {
+class AgreedLocationOfGoodsPageSpec extends PageBehaviours {
 
-  lazy val maxLengthEoriNumber: Int       = 17
-  lazy val vehicleIdMaxLength             = 27
-  lazy val consigneeNameMaxLength: Int    = 35
-  lazy val addressMaxLength: Int          = 35
-  lazy val loadingPlaceMaxLength: Int     = 35
-  lazy val maxLengthAgreedLocationOfGoods = 35
-  lazy val addressRegex: String           = "^[a-zA-Z0-9/@?%,.\\- ]*$"
+  "AgreedLocationOfGoodsPage" - {
 
+    beRetrievable[String](AgreedLocationOfGoodsPage)
+
+    beSettable[String](AgreedLocationOfGoodsPage)
+
+    beRemovable[String](AgreedLocationOfGoodsPage)
+  }
 }
