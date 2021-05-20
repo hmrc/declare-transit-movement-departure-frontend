@@ -33,18 +33,18 @@ class CommonAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("commonAddress.error.AddressLine1.required", Seq(name))
         .verifying(StopOnFirstFail[String](
-          maxLength(buildingAndStreetLength, "commonAddress.error.AddressLine1.length", name),
-          regexp(stringFieldRegex, "commonAddress.error.AddressLine1.invalidCharacters", Seq(name))
+          regexp(stringFieldRegex, "commonAddress.error.AddressLine1.invalidCharacters", Seq(name)),
+          maxLength(buildingAndStreetLength, "commonAddress.error.AddressLine1.length", name)
         )),
       "AddressLine2" -> text("commonAddress.error.AddressLine2.required", Seq(name))
         .verifying(StopOnFirstFail[String](
+          regexp(stringFieldRegex, "commonAddress.error.AddressLine2.invalidCharacters", Seq(name)),
           maxLength(cityLength, "commonAddress.error.AddressLine2.length", name),
-          regexp(stringFieldRegex, "commonAddress.error.AddressLine2.invalidCharacters", Seq(name))
         )),
       "AddressLine3" -> text("commonAddress.error.postalCode.required", Seq(name))
         .verifying(StopOnFirstFail[String](
-          maxLength(postcodeLength, "commonAddress.error.postalCode.length", name),
-          regexp(stringFieldRegex, "commonAddress.error.postalCode.invalidCharacters", Seq(name))
+          regexp(stringFieldRegex, "commonAddress.error.postalCode.invalidCharacters", Seq(name)),
+          maxLength(postcodeLength, "commonAddress.error.postalCode.length", name)
         )),
       "country" -> text("commonAddress.error.country.required", Seq(name))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)

@@ -120,7 +120,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
         .set(SafetyAndSecurityConsigneeNamePage, consigneeName)
         .success
         .value
-        .set(CommonAddressPage("safetyAndSecurityConsignorAddress"), consignorAddress)
+        .set(CommonAddressPage("safetyAndSecurityConsigneeAddress"), consignorAddress)
         .success
         .value
       dataRetrievalWithData(userAnswers)

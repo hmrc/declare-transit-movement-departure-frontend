@@ -37,7 +37,7 @@ case class AddSecurityConsignorsEoriPage(index: Index) extends QuestionPage[Bool
       case Some(true) =>
         userAnswers
           .remove(SecurityConsignorNamePage(index))
-          .flatMap(_.remove(CommonAddItemsAddressPage(index, "securityConsignAddress")))
+          .flatMap(_.remove(CommonAddItemsAddressPage(index, "securityConsignorAddress")))
       case _ => super.cleanup(value, userAnswers)
     }
 }

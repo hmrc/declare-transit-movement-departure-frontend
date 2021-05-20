@@ -32,9 +32,9 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
   ".AddressLine1" - {
 
     val fieldName   = "AddressLine1"
-    val requiredKey = "consignorAddress.error.AddressLine1.required"
-    val lengthKey   = "consignorAddress.error.AddressLine1.length"
-    val invalidKey  = "consignorAddress.error.AddressLine1.invalid"
+    val requiredKey = "commonAddress.error.AddressLine1.required"
+    val lengthKey   = "commonAddress.error.AddressLine1.length"
+    val invalidKey  = "commonAddress.error.AddressLine1.invalidCharacters"
 
     behave like fieldThatBindsValidData(
       form,
@@ -61,9 +61,9 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
   ".AddressLine2" - {
 
     val fieldName   = "AddressLine2"
-    val requiredKey = "consignorAddress.error.AddressLine2.required"
-    val lengthKey   = "consignorAddress.error.AddressLine2.length"
-    val invalidKey  = "consignorAddress.error.AddressLine2.invalid"
+    val requiredKey = "commonAddress.error.AddressLine2.required"
+    val lengthKey   = "commonAddress.error.AddressLine2.length"
+    val invalidKey  = "commonAddress.error.AddressLine2.invalidCharacters"
 
     behave like fieldThatBindsValidData(
       form,
@@ -90,9 +90,9 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
   ".AddressLine3" - {
 
     val fieldName   = "AddressLine3"
-    val requiredKey = "consignorAddress.error.postalCode.required"
-    val lengthKey   = "consignorAddress.error.postalCode.length"
-    val invalidKey  = "consignorAddress.error.postalCode.invalid"
+    val requiredKey = "commonAddress.error.postalCode.required"
+    val lengthKey   = "commonAddress.error.postalCode.length"
+    val invalidKey  = "commonAddress.error.postalCode.invalidCharacters"
     val maxLength   = 9
 
     behave like fieldThatBindsValidData(
