@@ -71,17 +71,18 @@ trait JourneyModelGenerators {
       goodsummarydetailsType = arbitrary[GoodSummarySimplifiedDetails]
       goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired)(Arbitrary(goodsummarydetailsType)).arbitrary
       guarantees   <- nonEmptyListOf[GuaranteeDetails](3)
-    } yield JourneyDomain(
-      simplifiedTaskList,
-      movementDetails,
-      routeDetails,
-      transportDetails,
-      traderDetails,
-      NonEmptyList(itemDetails, List(itemDetails)),
-      goodsSummary,
-      guarantees,
-      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
-    )
+    } yield
+      JourneyDomain(
+        simplifiedTaskList,
+        movementDetails,
+        routeDetails,
+        transportDetails,
+        traderDetails,
+        NonEmptyList(itemDetails, List(itemDetails)),
+        goodsSummary,
+        guarantees,
+        if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
+      )
 
   lazy val arbitraryNormalJourneyDomain: Gen[JourneyDomain] =
     for {
@@ -94,25 +95,25 @@ trait JourneyModelGenerators {
       traderDetails     <- genTraderDetailsNormal
       safetyAndSecurity <- arbitrary[SafetyAndSecurity]
       itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, movementDetails, routeDetails)
-      goodsummarydetailsType =
-        if (movementDetails.prelodge) {
-          arbitrary[GoodSummaryNormalDetailsWithPreLodge]
-        } else {
-          arbitrary[GoodSummaryNormalDetailsWithPreLodge]
-        }
+      goodsummarydetailsType = if (movementDetails.prelodge) {
+        arbitrary[GoodSummaryNormalDetailsWithPreLodge]
+      } else {
+        arbitrary[GoodSummaryNormalDetailsWithPreLodge]
+      }
       goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired)(Arbitrary(goodsummarydetailsType)).arbitrary
       guarantees   <- nonEmptyListOf[GuaranteeDetails](3)
-    } yield JourneyDomain(
-      simplifiedTaskList,
-      movementDetails,
-      routeDetails,
-      transportDetails,
-      traderDetails,
-      NonEmptyList(itemDetails, List(itemDetails)),
-      goodsSummary,
-      guarantees,
-      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
-    )
+    } yield
+      JourneyDomain(
+        simplifiedTaskList,
+        movementDetails,
+        routeDetails,
+        transportDetails,
+        traderDetails,
+        NonEmptyList(itemDetails, List(itemDetails)),
+        goodsSummary,
+        guarantees,
+        if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
+      )
 
   implicit lazy val arbitrarySecurityDetails: Arbitrary[SafetyAndSecurity] = {
 
@@ -251,10 +252,11 @@ trait JourneyModelGenerators {
       for {
         mode               <- genNumberString
         modeCrossingBorder <- arbitrary[ModeCrossingBorder]
-      } yield NewDetailsAtBorder(
-        mode,
-        modeCrossingBorder
-      )
+      } yield
+        NewDetailsAtBorder(
+          mode,
+          modeCrossingBorder
+        )
     }
 
   implicit lazy val arbitraryInlandMode: Arbitrary[InlandMode] =
@@ -287,11 +289,12 @@ trait JourneyModelGenerators {
         code                   <- Gen.const(42)
         nationalityAtDeparture <- arbitrary[CountryCode]
         departureId            <- Gen.some(stringsWithMaxLength(stringMaxLength))
-      } yield NonSpecialMode(
-        code,
-        Some(nationalityAtDeparture),
-        departureId
-      )
+      } yield
+        NonSpecialMode(
+          code,
+          Some(nationalityAtDeparture),
+          departureId
+        )
     }
 
   implicit lazy val arbitraryTransportDetails: Arbitrary[TransportDetails] =
@@ -299,10 +302,11 @@ trait JourneyModelGenerators {
       for {
         inlandMode      <- arbitrary[InlandMode]
         detailsAtBorder <- arbitrary[DetailsAtBorder]
-      } yield TransportDetails(
-        inlandMode,
-        detailsAtBorder
-      )
+      } yield
+        TransportDetails(
+          inlandMode,
+          detailsAtBorder
+        )
     }
 
   lazy val genTraderDetailsSimplified: Gen[TraderDetails] =
@@ -420,10 +424,8 @@ trait JourneyModelGenerators {
         isSecurityDetailsRequired <- arbitrary[Boolean]
         addDocument               <- arbitrary[Boolean]
         otherIndicator            <- nonEmptyString
-        circumstanceIndicator <-
-          if (isSecurityDetailsRequired) { Gen.oneOf(CircumstanceIndicator.conditionalIndicators :+ otherIndicator).map(Some(_)) }
-          else
-            Gen.const(None)
+        circumstanceIndicator <- if (isSecurityDetailsRequired) { Gen.oneOf(CircumstanceIndicator.conditionalIndicators :+ otherIndicator).map(Some(_)) } else
+          Gen.const(None)
         itemSection <- genItemSectionOld(containersUsed, addDocument, circumstanceIndicator)
       } yield itemSection
     }
@@ -446,51 +448,45 @@ trait JourneyModelGenerators {
     }
 
     for {
-      itemDetail    <- arbitrary[ItemDetails]
-      itemConsignor <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
-      itemConsignee <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
-      packages      <- nonEmptyListOf[Packages](1)
-      containers <-
-        if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) }
-        else Gen.const(None)
-      specialMentions <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
-      producedDocuments <-
-        if (isDocumentTypeMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) }
-        else Gen.const(None)
+      itemDetail                <- arbitrary[ItemDetails]
+      itemConsignor             <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
+      itemConsignee             <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
+      packages                  <- nonEmptyListOf[Packages](1)
+      containers                <- if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) } else Gen.const(None)
+      specialMentions           <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
+      producedDocuments         <- if (isDocumentTypeMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) } else Gen.const(None)
       methodOfPayment           <- arbitrary[String]
       commercialReferenceNumber <- arbitrary[String]
       previousReferences        <- Gen.some(nonEmptyListOf[PreviousReferences](1))
-      itemSecurityTraderDetails <-
-        if (addSafetyAndSecurity) arbitrary[ItemsSecurityTraderDetails].map {
-          itemsSecurityTraderDetails =>
-            val setMethodOfPayment = safetyAndSecurity.paymentMethod match {
-              case None    => Some(methodOfPayment)
-              case Some(_) => None
-            }
+      itemSecurityTraderDetails <- if (addSafetyAndSecurity) arbitrary[ItemsSecurityTraderDetails].map {
+        itemsSecurityTraderDetails =>
+          val setMethodOfPayment = safetyAndSecurity.paymentMethod match {
+            case None    => Some(methodOfPayment)
+            case Some(_) => None
+          }
 
-            val setCommercialReferenceNumber = safetyAndSecurity.commercialReferenceNumber match {
-              case None    => Some(commercialReferenceNumber)
-              case Some(_) => None
-            }
+          val setCommercialReferenceNumber = safetyAndSecurity.commercialReferenceNumber match {
+            case None    => Some(commercialReferenceNumber)
+            case Some(_) => None
+          }
 
-            Some(itemsSecurityTraderDetails.copy(methodOfPayment = setMethodOfPayment, commercialReferenceNumber = setCommercialReferenceNumber))
-        }
-        else Gen.const(None)
-    } yield ItemSection(itemDetail,
-                        itemConsignor,
-                        itemConsignee,
-                        packages,
-                        containers,
-                        specialMentions,
-                        producedDocuments,
-                        itemSecurityTraderDetails,
-                        previousReferences
-    )
+          Some(itemsSecurityTraderDetails.copy(methodOfPayment = setMethodOfPayment, commercialReferenceNumber = setCommercialReferenceNumber))
+      } else Gen.const(None)
+    } yield
+      ItemSection(itemDetail,
+                  itemConsignor,
+                  itemConsignee,
+                  packages,
+                  containers,
+                  specialMentions,
+                  producedDocuments,
+                  itemSecurityTraderDetails,
+                  previousReferences)
   }
 
   def genItemSectionOld(
-    containersUsed: Boolean = false,
-    addDocument: Boolean = false,
+    containersUsed: Boolean               = false,
+    addDocument: Boolean                  = false,
     circumstanceIndicator: Option[String] = None
   ): Gen[ItemSection] = {
 
@@ -499,32 +495,26 @@ trait JourneyModelGenerators {
     val documentTypeIsMandatory = circumstanceIndicator.fold(addDocument)(CircumstanceIndicator.conditionalIndicators.contains(_))
 
     for {
-      itemDetail    <- arbitrary[ItemDetails]
-      itemConsignor <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
-      itemConsignee <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
-      packages      <- nonEmptyListOf[Packages](1)
-      containers <-
-        if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) }
-        else Gen.const(None)
-      specialMentions <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
-      producedDocuments <-
-        if (documentTypeIsMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) }
-        else Gen.const(None)
-      previousReferences <- Gen.some(nonEmptyListOf[PreviousReferences](1))
-      itemSecurityTraderDetails <-
-        if (documentTypeIsMandatory) { Gen.some(arbitrary[ItemsSecurityTraderDetails]) }
-        else Gen.const(None)
+      itemDetail                <- arbitrary[ItemDetails]
+      itemConsignor             <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
+      itemConsignee             <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
+      packages                  <- nonEmptyListOf[Packages](1)
+      containers                <- if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) } else Gen.const(None)
+      specialMentions           <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
+      producedDocuments         <- if (documentTypeIsMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) } else Gen.const(None)
+      previousReferences        <- Gen.some(nonEmptyListOf[PreviousReferences](1))
+      itemSecurityTraderDetails <- if (documentTypeIsMandatory) { Gen.some(arbitrary[ItemsSecurityTraderDetails]) } else Gen.const(None)
 
-    } yield ItemSection(itemDetail,
-                        itemConsignor,
-                        itemConsignee,
-                        packages,
-                        containers,
-                        specialMentions,
-                        producedDocuments,
-                        itemSecurityTraderDetails,
-                        previousReferences
-    )
+    } yield
+      ItemSection(itemDetail,
+                  itemConsignor,
+                  itemConsignee,
+                  packages,
+                  containers,
+                  specialMentions,
+                  producedDocuments,
+                  itemSecurityTraderDetails,
+                  previousReferences)
   }
 
   implicit lazy val arbitraryPreTaskListDetails: Arbitrary[PreTaskListDetails] =
@@ -650,12 +640,13 @@ trait JourneyModelGenerators {
         containersUsed            <- arbitrary[Boolean]
         declarationPlacePage      <- stringsWithMaxLength(stringMaxLength)
         declarationForSomeoneElse <- arbitrary[DeclarationForSomeoneElseAnswer]
-      } yield SimplifiedMovementDetails(
-        declarationType,
-        containersUsed,
-        declarationPlacePage,
-        declarationForSomeoneElse
-      )
+      } yield
+        SimplifiedMovementDetails(
+          declarationType,
+          containersUsed,
+          declarationPlacePage,
+          declarationForSomeoneElse
+        )
     }
 
   implicit lazy val arbitraryNormalMovementDetails: Arbitrary[NormalMovementDetails] =
@@ -666,13 +657,14 @@ trait JourneyModelGenerators {
         containersUsed            <- arbitrary[Boolean]
         declarationPlacePage      <- stringsWithMaxLength(stringMaxLength)
         declarationForSomeoneElse <- arbitrary[DeclarationForSomeoneElseAnswer]
-      } yield MovementDetails.NormalMovementDetails(
-        declarationType,
-        preLodge,
-        containersUsed,
-        declarationPlacePage,
-        declarationForSomeoneElse
-      )
+      } yield
+        MovementDetails.NormalMovementDetails(
+          declarationType,
+          preLodge,
+          containersUsed,
+          declarationPlacePage,
+          declarationForSomeoneElse
+        )
     }
 
   implicit def arbitraryMovementDetails(procedureType: ProcedureType): Arbitrary[MovementDetails] =
@@ -685,19 +677,21 @@ trait JourneyModelGenerators {
   val genTransitInformationWithoutArrivalTime =
     for {
       transitOffice <- stringsWithMaxLength(stringMaxLength)
-    } yield TransitInformation(
-      transitOffice,
-      None
-    )
+    } yield
+      TransitInformation(
+        transitOffice,
+        None
+      )
 
   val genTransitInformationWithArrivalTime =
     for {
       transitOffice <- stringsWithMaxLength(stringMaxLength)
       arrivalTime   <- arbitrary[LocalDateTime]
-    } yield TransitInformation(
-      transitOffice,
-      Some(arrivalTime)
-    )
+    } yield
+      TransitInformation(
+        transitOffice,
+        Some(arrivalTime)
+      )
 
   implicit lazy val arbitraryTransitInformation: Arbitrary[TransitInformation] =
     Arbitrary(Gen.oneOf(genTransitInformationWithoutArrivalTime, genTransitInformationWithArrivalTime))
@@ -711,13 +705,14 @@ trait JourneyModelGenerators {
         destinationCountry <- arbitrary[CountryCode]
         destinationOffice  <- arbitrary[CustomsOffice]
         transitInformation <- transitInformation(safetyAndSecurityFlag)
-      } yield RouteDetails(
-        countryOfDispatch,
-        officeOfDeparture,
-        destinationCountry,
-        destinationOffice,
-        transitInformation
-      )
+      } yield
+        RouteDetails(
+          countryOfDispatch,
+          officeOfDeparture,
+          destinationCountry,
+          destinationOffice,
+          transitInformation
+        )
     }
 
   private def transitInformation(safetyAndSecurityFlag: Boolean): Gen[NonEmptyList[TransitInformation]] =
@@ -764,20 +759,19 @@ trait JourneyModelGenerators {
   implicit def arbitraryGoodsSummary(safetyAndSecurity: Boolean)(implicit arbitraryGoodSummaryDetails: Arbitrary[GoodSummaryDetails]): Arbitrary[GoodsSummary] =
     Arbitrary {
       for {
-        loadingPlace <-
-          if (safetyAndSecurity) { nonEmptyString.map(Some(_)) }
-          else { Gen.const(None) }
+        loadingPlace       <- if (safetyAndSecurity) { nonEmptyString.map(Some(_)) } else { Gen.const(None) }
         numberOfPackages   <- Gen.choose(1, 100)
         totalMass          <- Gen.choose(1, 100).map(_.toString)
         goodSummaryDetails <- arbitraryGoodSummaryDetails.arbitrary
         sealNumbers        <- listWithMaxLength[SealDomain](10)
-      } yield GoodsSummary(
-        numberOfPackages,
-        totalMass,
-        loadingPlace,
-        goodSummaryDetails,
-        sealNumbers
-      )
+      } yield
+        GoodsSummary(
+          numberOfPackages,
+          totalMass,
+          loadingPlace,
+          goodSummaryDetails,
+          sealNumbers
+        )
     }
 
   implicit lazy val arbitraryPreviousReference: Arbitrary[PreviousReferences] =
