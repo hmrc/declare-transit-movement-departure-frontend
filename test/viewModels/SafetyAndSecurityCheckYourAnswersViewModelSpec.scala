@@ -18,9 +18,10 @@ package viewModels
 
 import base.SpecBase
 import generators.Generators
-import models.{CircumstanceIndicatorList, ConsignorAddress, CountryList}
 import models.reference.{CircumstanceIndicator, Country, CountryCode}
+import models.{CircumstanceIndicatorList, CommonAddress, CountryList}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.CommonAddressPage
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import viewModels.sections.Section
@@ -69,7 +70,7 @@ class SafetyAndSecurityCheckYourAnswersViewModelSpec extends SpecBase with Gener
     .value
 
   private val setSafetyAndSecurityConsignor = {
-    val address = arbitrary[ConsignorAddress].sample.value
+    val address = arbitrary[CommonAddress].sample.value
     setSafetyAndSecurityCountriesOfRouting
       .set(AddSafetyAndSecurityConsignorPage, true)
       .success
@@ -80,7 +81,7 @@ class SafetyAndSecurityCheckYourAnswersViewModelSpec extends SpecBase with Gener
       .set(SafetyAndSecurityConsignorNamePage, "answer")
       .success
       .value
-      .set(SafetyAndSecurityConsignorAddressPage, address)
+      .set(CommonAddressPage("safetyAndSecurityConsignorAddress"), address)
       .success
       .value
   }

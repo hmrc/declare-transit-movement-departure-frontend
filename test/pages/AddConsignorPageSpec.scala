@@ -16,7 +16,7 @@
 
 package pages
 
-import models.{ConsignorAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -35,14 +35,14 @@ class AddConsignorPageSpec extends PageBehaviours {
 
     "must remove ConsignorAddressPage, ConsignorNamePage and ConsignorEoriPage when they exist in userAnswers" in {
 
-      val consignorAddress = arbitrary[ConsignorAddress].sample.value
+      val consignorAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
             .set(ConsignorNamePage, "answer")
             .success
             .value
-            .set(ConsignorAddressPage, consignorAddress)
+            .set(CommonAddressPage("consignorAddress"), consignorAddress)
             .success
             .value
             .set(ConsignorEoriPage, "GB123456")
@@ -53,7 +53,7 @@ class AddConsignorPageSpec extends PageBehaviours {
             .value
 
           result.get(ConsignorNamePage) must not be defined
-          result.get(ConsignorAddressPage) must not be defined
+          result.get(CommonAddressPage("consignorAddress")) must not be defined
           result.get(ConsignorEoriPage) must not be defined
 
       }

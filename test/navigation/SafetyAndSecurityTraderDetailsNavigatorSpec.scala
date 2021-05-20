@@ -19,9 +19,10 @@ package navigation
 import base.SpecBase
 import controllers.safetyAndSecurity.routes
 import generators.Generators
-import models.{CarrierAddress, CheckMode, ConsigneeAddress, ConsignorAddress, NormalMode, UserAnswers}
+import models.{CheckMode, CommonAddress, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.CommonAddressPage
 import pages.safetyAndSecurity._
 
 class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -440,11 +441,11 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
     }
 
     "Must go from SafetyAndSecurityConsignorNamePage to Check Your Answers page if answer exists for SafetyAndSecurityConsignorAddressPage" in {
-      val consignorAddress = arbitrary[ConsignorAddress].sample.value
+      val consignorAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
-            .set(SafetyAndSecurityConsignorAddressPage, consignorAddress)
+            .set(CommonAddressPage("safetyAndSecurityConsignorAddress"), consignorAddress)
             .success
             .value
           navigator
@@ -456,7 +457,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
-            .remove(SafetyAndSecurityConsignorAddressPage)
+            .remove(CommonAddressPage("safetyAndSecurityConsignorAddress"))
             .success
             .value
           navigator
@@ -469,7 +470,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       forAll(arbitrary[UserAnswers]) {
         answers =>
           navigator
-            .nextPage(SafetyAndSecurityConsignorAddressPage, CheckMode, answers)
+            .nextPage(CommonAddressPage("safetyAndSecurityConsignorAddress"), CheckMode, answers)
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
       }
     }
@@ -647,17 +648,17 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       forAll(arbitrary[UserAnswers]) {
         answers =>
           navigator
-            .nextPage(SafetyAndSecurityConsigneeAddressPage, CheckMode, answers)
+            .nextPage(CommonAddressPage("safetyAndSecurityConsigneeAddress"), CheckMode, answers)
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
       }
     }
     "Must go from SafetyAndSecurityConsigneeNamePage to Check Your Answers page if answer exists for SafetyAndSecurityConsigneeAddressPage" in {
 
-      val consigneeAddress = arbitrary[ConsigneeAddress].sample.value
+      val consigneeAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
-            .set(SafetyAndSecurityConsigneeAddressPage, consigneeAddress)
+            .set(CommonAddressPage("safetyAndSecurityConsigneeAddress"), consigneeAddress)
             .success
             .value
           navigator
@@ -669,7 +670,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
-            .remove(SafetyAndSecurityConsigneeAddressPage)
+            .remove(CommonAddressPage("safetyAndSecurityConsigneeAddress"))
             .success
             .value
           navigator
@@ -796,7 +797,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .remove(CarrierAddressPage)
+              .remove(CommonAddressPage("carrierAddress"))
               .success
               .value
             navigator
@@ -806,12 +807,12 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       }
 
       "to CheckYourAnswersPage when an answer exists for CarrierAddressPage" in {
-        val carrierAddress = arbitrary[CarrierAddress].sample.value
+        val carrierAddress = arbitrary[CommonAddress].sample.value
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(CarrierAddressPage, carrierAddress)
+              .set(CommonAddressPage("carrierAddress"), carrierAddress)
               .success
               .value
             navigator
@@ -834,7 +835,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       forAll(arbitrary[UserAnswers]) {
         answers =>
           navigator
-            .nextPage(CarrierAddressPage, CheckMode, answers)
+            .nextPage(CommonAddressPage("carrierAddress"), CheckMode, answers)
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
       }
     }

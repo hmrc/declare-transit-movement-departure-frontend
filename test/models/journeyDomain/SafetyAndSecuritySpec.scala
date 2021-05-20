@@ -28,7 +28,7 @@ import models.reference.{Country, CountryCode}
 import models.{EoriNumber, Index, UserAnswers}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
-import pages.ModeAtBorderPage
+import pages.{CommonAddressPage, ModeAtBorderPage}
 import pages.safetyAndSecurity._
 
 class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
@@ -178,9 +178,9 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
       .unsafeSetPFn(SafetyAndSecurityConsignorNamePage)(safetyAndSecurity.consignor)({
         case Some(PersonalInformation(name, _)) => name
       })
-      .unsafeSetPFn(SafetyAndSecurityConsignorAddressPage)(safetyAndSecurity.consignor)({
+      .unsafeSetPFn(CommonAddressPage("safetyAndSecurityConsignorAddress"))(safetyAndSecurity.consignor)({
         case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToConsignorAddress.getOption(address).get
+          Address.prismAddressToCommonAddress.getOption(address).get
       })
       // Set Consignee
       .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(safetyAndSecurity.consignee.isDefined)
@@ -194,7 +194,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
       .unsafeSetPFn(SafetyAndSecurityConsigneeNamePage)(safetyAndSecurity.consignee)({
         case Some(PersonalInformation(name, _)) => name
       })
-      .unsafeSetPFn(SafetyAndSecurityConsigneeAddressPage)(safetyAndSecurity.consignee)({
+      .unsafeSetPFn(CommonAddressPage("safetyAndSecurityConsigneeAddress"))(safetyAndSecurity.consignee)({
         case Some(PersonalInformation(_, address)) =>
           Address.prismAddressToCommonAddress.getOption(address).get
       })
@@ -210,9 +210,9 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
       .unsafeSetPFn(CarrierNamePage)(safetyAndSecurity.carrier)({
         case Some(PersonalInformation(name, _)) => name
       })
-      .unsafeSetPFn(CarrierAddressPage)(safetyAndSecurity.carrier)({
+      .unsafeSetPFn(CommonAddressPage("carrierAddress"))(safetyAndSecurity.carrier)({
         case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToCarrierAddress.getOption(address).get
+          Address.prismAddressToCommonAddress.getOption(address).get
       })
 
     val updatedUserAnswers = ua.get(ModeAtBorderPage) match {

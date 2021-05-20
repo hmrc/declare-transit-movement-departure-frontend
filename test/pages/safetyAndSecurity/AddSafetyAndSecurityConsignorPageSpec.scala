@@ -18,9 +18,10 @@ package pages.safetyAndSecurity
 
 import base.SpecBase
 import generators.Generators
-import models.{ConsignorAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.CommonAddressPage
 import pages.behaviours.PageBehaviours
 
 class AddSafetyAndSecurityConsignorPageSpec extends SpecBase with PageBehaviours with ScalaCheckPropertyChecks with Generators {
@@ -35,7 +36,7 @@ class AddSafetyAndSecurityConsignorPageSpec extends SpecBase with PageBehaviours
 
     "cleanup" - {
       "must clean up the consignor details on selecting option 'No' " in {
-        val consignorAddress = arbitrary[ConsignorAddress].sample.value
+        val consignorAddress = arbitrary[CommonAddress].sample.value
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -49,7 +50,7 @@ class AddSafetyAndSecurityConsignorPageSpec extends SpecBase with PageBehaviours
               .set(SafetyAndSecurityConsignorNamePage, "test name")
               .success
               .value
-              .set(SafetyAndSecurityConsignorAddressPage, consignorAddress)
+              .set(CommonAddressPage("safetyAndSecurityConsignorAddress"), consignorAddress)
               .success
               .value
               .set(AddSafetyAndSecurityConsignorPage, false)
@@ -59,7 +60,7 @@ class AddSafetyAndSecurityConsignorPageSpec extends SpecBase with PageBehaviours
             updatedAnswers.get(AddSafetyAndSecurityConsignorEoriPage) must not be defined
             updatedAnswers.get(SafetyAndSecurityConsignorEoriPage) must not be defined
             updatedAnswers.get(SafetyAndSecurityConsignorNamePage) must not be defined
-            updatedAnswers.get(SafetyAndSecurityConsignorAddressPage) must not be defined
+            updatedAnswers.get(CommonAddressPage("safetyAndSecurityConsignorAddress")) must not be defined
         }
       }
     }

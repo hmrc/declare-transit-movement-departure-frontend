@@ -17,8 +17,9 @@
 package pages.addItems.traderSecurityDetails
 
 import base.SpecBase
-import models.{ConsigneeAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.CommonAddItemsAddressPage
 import pages.behaviours.PageBehaviours
 
 class AddSecurityConsigneesEoriPageSpec extends SpecBase with PageBehaviours {
@@ -36,14 +37,14 @@ class AddSecurityConsigneesEoriPageSpec extends SpecBase with PageBehaviours {
 
     "must remove ConsigneeAddressPage and ConsigneeNamePage when there is a change of the answer to 'Yes'" in {
 
-      val consigneeAddress = arbitrary[ConsigneeAddress].sample.value
+      val consigneeAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
             .set(SecurityConsigneeNamePage(index), "answer")
             .success
             .value
-            .set(SecurityConsigneeAddressPage(index), consigneeAddress)
+            .set(CommonAddItemsAddressPage(index, "securityConsigneeAddress"), consigneeAddress)
             .success
             .value
             .set(AddSecurityConsigneesEoriPage(index), true)
@@ -51,7 +52,7 @@ class AddSecurityConsigneesEoriPageSpec extends SpecBase with PageBehaviours {
             .value
 
           result.get(SecurityConsigneeNamePage(index)) must not be defined
-          result.get(SecurityConsigneeAddressPage(index)) must not be defined
+          result.get(CommonAddItemsAddressPage(index, "securityConsigneeAddress")) must not be defined
       }
     }
 

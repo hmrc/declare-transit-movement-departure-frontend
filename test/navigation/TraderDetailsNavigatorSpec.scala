@@ -24,7 +24,7 @@ import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{_}
+import pages._
 
 class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
@@ -210,7 +210,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
         forAll(genUserAnswersWithProcedure) {
           answers =>
             navigator
-              .nextPage(ConsignorAddressPage, NormalMode, answers)
+              .nextPage(CommonAddressPage("consignorAddress"), NormalMode, answers)
               .mustBe(traderDetailsRoute.AddConsigneeController.onPageLoad(answers.id, NormalMode))
         }
       }
@@ -279,7 +279,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           forAll(genUserAnswersWithProcedure) {
             answers =>
               navigator
-                .nextPage(ConsigneeAddressPage, NormalMode, answers)
+                .nextPage(CommonAddressPage("consigneeAddress"), NormalMode, answers)
                 .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
           }
         }
@@ -534,10 +534,10 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       "must go from Consignor Name page" - {
         "to Check Your Answers page, when Consignor Address exists" in {
-          forAll(arbitrary[UserAnswers], arbitrary[ConsignorAddress]) {
+          forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
             (answers, address) =>
               val updatedAnswers = answers
-                .unsafeSetVal(ConsignorAddressPage)(address)
+                .unsafeSetVal(CommonAddressPage("consignorAddress"))(address)
 
               navigator
                 .nextPage(ConsignorNamePage, CheckMode, updatedAnswers)
@@ -549,7 +549,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           forAll(arbitrary[UserAnswers]) {
             answers =>
               val updatedAnswers = answers
-                .unsafeRemove(ConsignorAddressPage)
+                .unsafeRemove(CommonAddressPage("consignorAddress"))
 
               navigator
                 .nextPage(ConsignorNamePage, CheckMode, updatedAnswers)
@@ -565,7 +565,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             val updatedAnswers = answers
 
             navigator
-              .nextPage(ConsignorAddressPage, CheckMode, updatedAnswers)
+              .nextPage(CommonAddressPage("consignorAddress"), CheckMode, updatedAnswers)
               .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
         }
       }
@@ -701,10 +701,10 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       "must go from Consignee Name page to Check Your Answers page" - {
 
         "to Check Your Answers page, when Consignee Address exists" in {
-          forAll(arbitrary[UserAnswers], arbitrary[ConsigneeAddress]) {
+          forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
             (answers, address) =>
               val updatedAnswers = answers
-                .unsafeSetVal(ConsigneeAddressPage)(address)
+                .unsafeSetVal(CommonAddressPage("consigneeAddress"))(address)
 
               navigator
                 .nextPage(ConsigneeNamePage, CheckMode, updatedAnswers)
@@ -717,7 +717,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           forAll(arbitrary[UserAnswers]) {
             answers =>
               val updatedAnswers = answers
-                .unsafeRemove(ConsigneeAddressPage)
+                .unsafeRemove(CommonAddressPage("consigneeAddress"))
 
               navigator
                 .nextPage(ConsigneeNamePage, CheckMode, updatedAnswers)
@@ -734,7 +734,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             val updatedAnswers = answers
 
             navigator
-              .nextPage(ConsigneeAddressPage, CheckMode, updatedAnswers)
+              .nextPage(CommonAddressPage("consigneeAddress"), CheckMode, updatedAnswers)
               .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
         }
       }

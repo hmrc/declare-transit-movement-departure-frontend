@@ -126,11 +126,11 @@ trait UserAnswersEntryGenerators {
       } yield (CarrierEoriPage, value)
     }
 
-  implicit lazy val arbitraryCarrierAddressUserAnswersEntry: Arbitrary[(CarrierAddressPage.type, JsValue)] =
+  implicit lazy val arbitraryCommonAddressUserAnswersEntry: Arbitrary[(CommonAddressPage, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[CarrierAddress].map(Json.toJson(_))
-      } yield (CarrierAddressPage, value)
+        value <- arbitrary[CommonAddress].map(Json.toJson(_))
+      } yield (CommonAddressPage(""), value)
     }
 
   implicit lazy val arbitraryAddCarrierUserAnswersEntry: Arbitrary[(AddCarrierPage.type, JsValue)] =
@@ -161,13 +161,6 @@ trait UserAnswersEntryGenerators {
       } yield (SafetyAndSecurityConsigneeEoriPage, value)
     }
 
-  implicit lazy val arbitrarySafetyAndSecurityConsigneeAddressUserAnswersEntry: Arbitrary[(SafetyAndSecurityConsigneeAddressPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[SafetyAndSecurityConsigneeAddressPage.type#Data].map(Json.toJson(_))
-      } yield (SafetyAndSecurityConsigneeAddressPage, value)
-    }
-
   implicit lazy val arbitraryAddSafetyAndSecurityConsigneeEoriUserAnswersEntry: Arbitrary[(AddSafetyAndSecurityConsigneeEoriPage.type, JsValue)] =
     Arbitrary {
       for {
@@ -194,13 +187,6 @@ trait UserAnswersEntryGenerators {
       for {
         value <- arbitrary[SafetyAndSecurityConsignorEoriPage.type#Data].map(Json.toJson(_))
       } yield (SafetyAndSecurityConsignorEoriPage, value)
-    }
-
-  implicit lazy val arbitrarySafetyAndSecurityConsignorAddressUserAnswersEntry: Arbitrary[(SafetyAndSecurityConsignorAddressPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[SafetyAndSecurityConsignorAddressPage.type#Data].map(Json.toJson(_))
-      } yield (SafetyAndSecurityConsignorAddressPage, value)
     }
 
   implicit lazy val arbitraryAddSafetyAndSecurityConsignorEoriUserAnswersEntry: Arbitrary[(AddSafetyAndSecurityConsignorEoriPage.type, JsValue)] =
@@ -322,18 +308,11 @@ trait UserAnswersEntryGenerators {
       } yield (SecurityConsignorNamePage(Index(0)), value)
     }
 
-  implicit lazy val arbitrarySecurityConsigneeAddressUserAnswersEntry: Arbitrary[(SecurityConsigneeAddressPage, JsValue)] =
+  implicit lazy val arbitraryCommonAddItemsAddressUserAnswersEntry: Arbitrary[(CommonAddItemsAddressPage, JsValue)] =
     Arbitrary {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
-      } yield (SecurityConsigneeAddressPage(Index(0)), value)
-    }
-
-  implicit lazy val arbitrarySecurityConsignorAddressUserAnswersEntry: Arbitrary[(SecurityConsignorAddressPage, JsValue)] =
-    Arbitrary {
-      for {
-        value <- nonEmptyString.map(Json.toJson(_))
-      } yield (SecurityConsignorAddressPage(Index(0)), value)
+      } yield (CommonAddItemsAddressPage(Index(0), ""), value)
     }
 
   implicit lazy val arbitrarySecurityConsigneeEoriUserAnswersEntry: Arbitrary[(SecurityConsigneeEoriPage, JsValue)] =
@@ -631,13 +610,6 @@ trait UserAnswersEntryGenerators {
       } yield (TraderDetailsConsignorEoriKnownPage(Index(0)), value)
     }
 
-  implicit lazy val arbitraryTraderDetailsConsignorAddressUserAnswersEntry: Arbitrary[(TraderDetailsConsignorAddressPage, JsValue)] =
-    Arbitrary {
-      for {
-        value <- nonEmptyString.map(Json.toJson(_))
-      } yield (TraderDetailsConsignorAddressPage(Index(0)), value)
-    }
-
   implicit lazy val arbitraryTraderDetailsConsigneeNameUserAnswersEntry: Arbitrary[(TraderDetailsConsigneeNamePage, JsValue)] =
     Arbitrary {
       for {
@@ -657,13 +629,6 @@ trait UserAnswersEntryGenerators {
       for {
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (TraderDetailsConsigneeEoriKnownPage(Index(0)), value)
-    }
-
-  implicit lazy val arbitraryTraderDetailsConsigneeAddressUserAnswersEntry: Arbitrary[(TraderDetailsConsigneeAddressPage, JsValue)] =
-    Arbitrary {
-      for {
-        value <- nonEmptyString.map(Json.toJson(_))
-      } yield (TraderDetailsConsigneeAddressPage(Index(0)), value)
     }
 
   implicit lazy val arbitraryPreLodgeDeclarationUserAnswersEntry: Arbitrary[(PreLodgeDeclarationPage.type, JsValue)] =
@@ -932,25 +897,11 @@ trait UserAnswersEntryGenerators {
       } yield (PrincipalAddressPage, value)
     }
 
-  implicit lazy val arbitraryConsignorAddressUserAnswersEntry: Arbitrary[(ConsignorAddressPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[ConsignorAddress].map(Json.toJson(_))
-      } yield (ConsignorAddressPage, value)
-    }
-
   implicit lazy val arbitraryOfficeOfDepartureUserAnswersEntry: Arbitrary[(OfficeOfDeparturePage.type, JsValue)] =
     Arbitrary {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
       } yield (OfficeOfDeparturePage, value)
-    }
-
-  implicit lazy val arbitraryConsigneeAddressUserAnswersEntry: Arbitrary[(ConsigneeAddressPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[ConsigneeAddress].map(Json.toJson(_))
-      } yield (ConsigneeAddressPage, value)
     }
 
   implicit lazy val arbitraryCountryOfDispatchUserAnswersEntry: Arbitrary[(CountryOfDispatchPage.type, JsValue)] =

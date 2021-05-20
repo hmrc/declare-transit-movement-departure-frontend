@@ -19,10 +19,10 @@ package navigation
 import base.SpecBase
 import controllers.addItems.traderSecurityDetails.routes
 import generators.Generators
-import models.reference.{Country, CountryCode}
-import models.{CheckMode, ConsigneeAddress, ConsignorAddress, NormalMode, UserAnswers}
+import models.{CheckMode, CommonAddress, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.CommonAddItemsAddressPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
 
@@ -75,7 +75,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .success
             .value
           navigator
-            .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+            .nextPage(CommonAddItemsAddressPage(index, "securityConsignorAddress"), NormalMode, updatedAnswers)
             .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
       }
     }
@@ -90,7 +90,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .success
               .value
             navigator
-              .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+              .nextPage(CommonAddItemsAddressPage(index, "securityConsignorAddress"), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
         }
       }
@@ -106,7 +106,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .success
               .value
             navigator
-              .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+              .nextPage(CommonAddItemsAddressPage(index, "securityConsignorAddress"), NormalMode, updatedAnswers)
               .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
         }
       }
@@ -122,7 +122,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .success
               .value
             navigator
-              .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+              .nextPage(CommonAddItemsAddressPage(index, "securityConsignorAddress"), NormalMode, updatedAnswers)
               .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
         }
       }
@@ -138,7 +138,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .success
               .value
             navigator
-              .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
+              .nextPage(CommonAddItemsAddressPage(index, "securityConsignorAddress"), NormalMode, updatedAnswers)
               .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
         }
       }
@@ -233,7 +233,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
       forAll(arbitrary[UserAnswers]) {
         answers =>
           navigator
-            .nextPage(SecurityConsigneeAddressPage(index), NormalMode, answers)
+            .nextPage(CommonAddItemsAddressPage(index, "securityConsigneeAddress"), NormalMode, answers)
             .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
       }
     }
@@ -328,9 +328,9 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
     "From SecurityConsignorNamePage to AddItemsCheckYourAnswer when an answer already exists for SecurityConsignorAddress page" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
-          val consignorAddress = arbitrary[ConsignorAddress].sample.value
+          val consignorAddress = arbitrary[CommonAddress].sample.value
           val updatedAnswers = answers
-            .set(SecurityConsignorAddressPage(index), consignorAddress)
+            .set(CommonAddItemsAddressPage(index, "securityConsignorAddress"), consignorAddress)
             .success
             .value
           navigator
@@ -343,7 +343,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
-            .remove(SecurityConsignorAddressPage(index))
+            .remove(CommonAddItemsAddressPage(index, "securityConsignorAddress"))
             .success
             .value
           navigator
@@ -357,7 +357,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
     forAll(arbitrary[UserAnswers]) {
       answers =>
         navigator
-          .nextPage(SecurityConsignorAddressPage(index), CheckMode, answers)
+          .nextPage(CommonAddItemsAddressPage(index, "securityConsignorAddress"), CheckMode, answers)
           .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
     }
   }
@@ -439,7 +439,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
     forAll(arbitrary[UserAnswers]) {
       answers =>
         navigator
-          .nextPage(SecurityConsigneeAddressPage(index), CheckMode, answers)
+          .nextPage(CommonAddItemsAddressPage(index, "securityConsigneeAddress"), CheckMode, answers)
           .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
     }
   }

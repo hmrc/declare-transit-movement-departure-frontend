@@ -19,15 +19,17 @@ package controllers.addItems.traderSecurityDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
+import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
-import models.{ConsignorAddress, CountryList, NormalMode}
+import models.{CommonAddress, CountryList, NormalMode}
 import navigation.annotations.TradersSecurityDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.CommonAddItemsAddressPage
 import pages.addItems.traderSecurityDetails.SecurityConsignorNamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -46,8 +48,8 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with MockNunjucksR
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val formProvider                                       = new SecurityConsignorAddressFormProvider()
-  private val form                                               = formProvider(countries, "Test", index)
+  private val formProvider                                       = new CommonAddressFormProvider()
+  private val form                                               = formProvider(countries, "Test")
 
   lazy val securityConsignorAddressRoute = routes.SecurityConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
   private val template                   = "addItems/traderSecurityDetails/securityConsignorAddress.njk"
@@ -99,13 +101,13 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with MockNunjucksR
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val tradersDetailsConsignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Code", country)
+      val tradersDetailsConsignorAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(SecurityConsignorNamePage(index), "ConsignorName")
         .success
         .value
-        .set(SecurityConsignorAddressPage(index), tradersDetailsConsignorAddress)
+        .set(CommonAddItemsAddressPage(index, "securityConsignorAddress"), tradersDetailsConsignorAddress)
         .success
         .value
       dataRetrievalWithData(userAnswers)

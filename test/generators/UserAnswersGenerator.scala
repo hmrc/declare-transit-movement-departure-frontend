@@ -48,17 +48,16 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryConfirmRemoveCountryUserAnswersEntry.arbitrary ::
       arbitraryCarrierNameUserAnswersEntry.arbitrary ::
       arbitraryCarrierEoriUserAnswersEntry.arbitrary ::
-      arbitraryCarrierAddressUserAnswersEntry.arbitrary ::
+      arbitraryCommonAddressUserAnswersEntry.arbitrary ::
+      arbitraryCommonAddItemsAddressUserAnswersEntry.arbitrary ::
       arbitraryAddCarrierUserAnswersEntry.arbitrary ::
       arbitraryAddCarrierEoriUserAnswersEntry.arbitrary ::
       arbitrarySafetyAndSecurityConsigneeNameUserAnswersEntry.arbitrary ::
       arbitrarySafetyAndSecurityConsigneeEoriUserAnswersEntry.arbitrary ::
-      arbitrarySafetyAndSecurityConsigneeAddressUserAnswersEntry.arbitrary ::
       arbitraryAddSafetyAndSecurityConsigneeEoriUserAnswersEntry.arbitrary ::
       arbitraryAddSafetyAndSecurityConsigneeUserAnswersEntry.arbitrary ::
       arbitrarySafetyAndSecurityConsignorNameUserAnswersEntry.arbitrary ::
       arbitrarySafetyAndSecurityConsignorEoriUserAnswersEntry.arbitrary ::
-      arbitrarySafetyAndSecurityConsignorAddressUserAnswersEntry.arbitrary ::
       arbitraryAddSafetyAndSecurityConsignorEoriUserAnswersEntry.arbitrary ::
       arbitraryAddSafetyAndSecurityConsignorUserAnswersEntry.arbitrary ::
       arbitraryAddAnotherCountryOfRoutingUserAnswersEntry.arbitrary ::
@@ -76,9 +75,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryAddCircumstanceIndicatorUserAnswersEntry.arbitrary ::
       arbitrarySecurityConsigneeNameUserAnswersEntry.arbitrary ::
       arbitrarySecurityConsignorNameUserAnswersEntry.arbitrary ::
-      arbitrarySecurityConsigneeAddressUserAnswersEntry.arbitrary ::
       arbitrarySecurityConsigneeEoriUserAnswersEntry.arbitrary ::
-      arbitrarySecurityConsignorAddressUserAnswersEntry.arbitrary ::
       arbitrarySecurityConsigneeEoriUserAnswersEntry.arbitrary ::
       arbitrarySecurityConsignorEoriUserAnswersEntry.arbitrary ::
       arbitraryAddSecurityConsigneesEoriUserAnswersEntry.arbitrary ::
@@ -131,11 +128,9 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryTraderDetailsConsignorNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignorEoriNumberUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsignorEoriKnownUserAnswersEntry.arbitrary ::
-      arbitraryTraderDetailsConsignorAddressUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsigneeNameUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsigneeEoriNumberUserAnswersEntry.arbitrary ::
       arbitraryTraderDetailsConsigneeEoriKnownUserAnswersEntry.arbitrary ::
-      arbitraryTraderDetailsConsigneeAddressUserAnswersEntry.arbitrary ::
       arbitraryTotalNetMassUserAnswersEntry.arbitrary ::
       arbitraryAddTotalNetMassUserAnswersEntry.arbitrary ::
       arbitraryIsCommodityCodeKnownUserAnswersEntry.arbitrary ::
@@ -172,9 +167,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryChangeAtBorderUserAnswersEntry.arbitrary ::
       arbitraryNationalityAtDepartureUserAnswersEntry.arbitrary ::
       arbitraryIdAtDepartureUserAnswersEntry.arbitrary ::
-      arbitraryConsigneeAddressUserAnswersEntry.arbitrary ::
       arbitraryPrincipalAddressUserAnswersEntry.arbitrary ::
-      arbitraryConsignorAddressUserAnswersEntry.arbitrary ::
       arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
       arbitraryConsigneeNameUserAnswersEntry.arbitrary ::
       arbitraryWhatIsConsigneeEoriUserAnswersEntry.arbitrary ::
@@ -224,9 +217,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryChangeAtBorderUserAnswersEntry.arbitrary ::
       arbitraryNationalityAtDepartureUserAnswersEntry.arbitrary ::
       arbitraryIdAtDepartureUserAnswersEntry.arbitrary ::
-      arbitraryConsigneeAddressUserAnswersEntry.arbitrary ::
       arbitraryPrincipalAddressUserAnswersEntry.arbitrary ::
-      arbitraryConsignorAddressUserAnswersEntry.arbitrary ::
       arbitraryOfficeOfDepartureUserAnswersEntry.arbitrary ::
       arbitraryConsigneeNameUserAnswersEntry.arbitrary ::
       arbitraryWhatIsConsigneeEoriUserAnswersEntry.arbitrary ::

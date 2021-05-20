@@ -16,7 +16,6 @@
 
 package generators
 
-import java.time.{LocalDate, LocalDateTime}
 import cats.data.NonEmptyList
 import models.DeclarationType.Option2
 import models._
@@ -33,18 +32,18 @@ import models.journeyDomain.MovementDetails.{
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
-import models.journeyDomain.traderDetails._
-import models.journeyDomain.traderDetails.TraderDetails._
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
 import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPersonalInformation, SecurityTraderEori}
+import models.journeyDomain.traderDetails.{TraderDetails, _}
 import models.journeyDomain.{traderDetails, _}
-import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.{SpecialMention => _, _}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+
+import java.time.{LocalDate, LocalDateTime}
 
 trait JourneyModelGenerators {
   self: Generators =>
@@ -109,9 +108,7 @@ trait JourneyModelGenerators {
 
   implicit lazy val arbitrarySecurityDetails: Arbitrary[SafetyAndSecurity] = {
 
-    val carrierAddress   = Arbitrary(arbitrary[CarrierAddress].map(Address.prismAddressToCarrierAddress.reverseGet))
-    val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
+    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     Arbitrary {
       for {
@@ -120,9 +117,9 @@ trait JourneyModelGenerators {
         commercialReference        <- Gen.some(nonEmptyString)
         convenyanceReferenceNumber <- Gen.some(nonEmptyString)
         placeOfUnloading           <- Gen.some(nonEmptyString)
-        consignorAddress           <- Gen.some(arbitrarySecurityTraderDetails(consignorAddress).arbitrary)
-        consigneeAddress           <- Gen.some(arbitrarySecurityTraderDetails(consigneeAddress).arbitrary)
-        carrierAddress             <- Gen.some(arbitrarySecurityTraderDetails(carrierAddress).arbitrary)
+        consignorAddress           <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
+        consigneeAddress           <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
+        carrierAddress             <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
         itineraries                <- nonEmptyListOf[Itinerary](5)
       } yield {
         val placeOfUnloadingData = addCircumstanceIndicator match {
@@ -153,9 +150,7 @@ trait JourneyModelGenerators {
 
   def genSecurityDetails(modeAtBorder: Gen[String]): Gen[SafetyAndSecurity] = {
 
-    val carrierAddress   = Arbitrary(arbitrary[CarrierAddress].map(Address.prismAddressToCarrierAddress.reverseGet))
-    val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
+    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     val genConvenyanceReferenceNumber: Gen[Option[String]] = modeAtBorder.flatMap {
       case "4" | "40" => nonEmptyString.map(Some(_))
@@ -168,9 +163,9 @@ trait JourneyModelGenerators {
       commercialReference        <- Gen.some(nonEmptyString)
       convenyanceReferenceNumber <- genConvenyanceReferenceNumber
       placeOfUnloading           <- Gen.some(nonEmptyString)
-      consignorAddress           <- Gen.some(arbitrarySecurityTraderDetails(consignorAddress).arbitrary)
-      consigneeAddress           <- Gen.some(arbitrarySecurityTraderDetails(consigneeAddress).arbitrary)
-      carrierAddress             <- Gen.some(arbitrarySecurityTraderDetails(carrierAddress).arbitrary)
+      consignorAddress           <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
+      consigneeAddress           <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
+      carrierAddress             <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
       itineraries                <- nonEmptyListOf[Itinerary](5)
     } yield {
       val placeOfUnloadingData = addCircumstanceIndicator match {
@@ -322,16 +317,15 @@ trait JourneyModelGenerators {
     } yield TraderDetails(principalTraderDetails, consignor, consignee)
 
   implicit val arbitraryItemSecurityTraderDetails: Arbitrary[ItemsSecurityTraderDetails] = {
-    val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
+    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     Arbitrary {
       for {
         methodOfPayment           <- Gen.some(nonEmptyString)
         commercialReferenceNumber <- Gen.some(nonEmptyString)
         dangerousGoodsCode        <- Gen.some(nonEmptyString)
-        consignor                 <- Gen.some(arbitraryItemsSecurityTraderDetails(consignorAddress).arbitrary)
-        consignee                 <- Gen.some(arbitraryItemsSecurityTraderDetails(consigneeAddress).arbitrary)
+        consignor                 <- Gen.some(arbitraryItemsSecurityTraderDetails(commonAddress).arbitrary)
+        consignee                 <- Gen.some(arbitraryItemsSecurityTraderDetails(commonAddress).arbitrary)
       } yield ItemsSecurityTraderDetails(methodOfPayment, commercialReferenceNumber, dangerousGoodsCode, consignor, consignee)
     }
   }
@@ -369,17 +363,17 @@ trait JourneyModelGenerators {
 
   val genConsignorDetailsWithEori: Gen[ConsignorDetails] =
     for {
-      name             <- stringsWithMaxLength(stringMaxLength)
-      consignorAddress <- arbitrary[ConsignorAddress]
-      eori             <- arbitrary[EoriNumber]
-      address = Address.prismAddressToConsignorAddress.reverseGet(consignorAddress)
+      name          <- stringsWithMaxLength(stringMaxLength)
+      commonAddress <- arbitrary[CommonAddress]
+      eori          <- arbitrary[EoriNumber]
+      address = Address.prismAddressToCommonAddress.reverseGet(commonAddress)
     } yield ConsignorDetails(name, address, Some(eori))
 
   val genConsignorDetailsWithoutEori: Gen[ConsignorDetails] =
     for {
-      name             <- stringsWithMaxLength(stringMaxLength)
-      consignorAddress <- arbitrary[ConsignorAddress]
-      address = Address.prismAddressToConsignorAddress.reverseGet(consignorAddress)
+      name          <- stringsWithMaxLength(stringMaxLength)
+      commonAddress <- arbitrary[CommonAddress]
+      address = Address.prismAddressToCommonAddress.reverseGet(commonAddress)
     } yield ConsignorDetails(name, address, None)
 
   implicit def arbitraryConsignorDetails: Arbitrary[ConsignorDetails] =
@@ -389,17 +383,17 @@ trait JourneyModelGenerators {
 
   val genConsigneeDetailsWithEori: Gen[ConsigneeDetails] =
     for {
-      name             <- stringsWithMaxLength(stringMaxLength)
-      consigneeAddress <- arbitrary[ConsigneeAddress]
-      eori             <- arbitrary[EoriNumber]
-      address = Address.prismAddressToCommonAddress.reverseGet(consigneeAddress)
+      name          <- stringsWithMaxLength(stringMaxLength)
+      commonAddress <- arbitrary[CommonAddress]
+      eori          <- arbitrary[EoriNumber]
+      address = Address.prismAddressToCommonAddress.reverseGet(commonAddress)
     } yield ConsigneeDetails(name, address, Some(eori))
 
   val genConsigneeDetailsWithoutEori: Gen[ConsigneeDetails] =
     for {
-      name             <- stringsWithMaxLength(stringMaxLength)
-      consigneeAddress <- arbitrary[ConsigneeAddress]
-      address = Address.prismAddressToCommonAddress.reverseGet(consigneeAddress)
+      name          <- stringsWithMaxLength(stringMaxLength)
+      commonAddress <- arbitrary[CommonAddress]
+      address = Address.prismAddressToCommonAddress.reverseGet(commonAddress)
     } yield ConsigneeDetails(name, address, None)
 
   implicit lazy val arbitraryConsigneeDetails: Arbitrary[ConsigneeDetails] =
@@ -436,8 +430,7 @@ trait JourneyModelGenerators {
     movementDetails: MovementDetails,
     routeDetails: RouteDetails
   ): Gen[ItemSection] = {
-    val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
+    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     val isDocumentTypeMandatory = addSafetyAndSecurity &&
       safetyAndSecurity.commercialReferenceNumber.isDefined
@@ -449,8 +442,8 @@ trait JourneyModelGenerators {
 
     for {
       itemDetail                <- arbitrary[ItemDetails]
-      itemConsignor             <- Gen.some(arbitraryItemRequiredDetails(consignorAddress).arbitrary)
-      itemConsignee             <- Gen.some(arbitraryItemRequiredDetails(consigneeAddress).arbitrary)
+      itemConsignor             <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
+      itemConsignee             <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
       packages                  <- nonEmptyListOf[Packages](1)
       containers                <- if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) } else Gen.const(None)
       specialMentions           <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
@@ -490,15 +483,14 @@ trait JourneyModelGenerators {
     circumstanceIndicator: Option[String] = None
   ): Gen[ItemSection] = {
 
-    val consignorAddress = Arbitrary(arbitrary[ConsignorAddress].map(Address.prismAddressToConsignorAddress.reverseGet))
-    val consigneeAddress = Arbitrary(arbitrary[ConsigneeAddress].map(Address.prismAddressToCommonAddress.reverseGet))
+    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     val documentTypeIsMandatory = circumstanceIndicator.fold(addDocument)(CircumstanceIndicator.conditionalIndicators.contains(_))
 
     for {
       itemDetail                <- arbitrary[ItemDetails]
-      itemConsignor             <- Gen.some(arbitraryItemRequiredDetails(consignorAddress).arbitrary)
-      itemConsignee             <- Gen.some(arbitraryItemRequiredDetails(consigneeAddress).arbitrary)
+      itemConsignor             <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
+      itemConsignee             <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
       packages                  <- nonEmptyListOf[Packages](1)
       containers                <- if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) } else Gen.const(None)
       specialMentions           <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))

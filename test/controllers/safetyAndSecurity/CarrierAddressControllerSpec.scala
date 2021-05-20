@@ -19,17 +19,17 @@ package controllers.safetyAndSecurity
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
+import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
+import models.{CommonAddress, CountryList, NormalMode}
 import models.reference.{Country, CountryCode}
-import models.{CarrierAddress, CountryList, NormalMode}
-import navigation.annotations.SafetyAndSecurity
-import models.NormalMode
-import navigation.annotations.SafetyAndSecurityTraderDetails
+import navigation.annotations.{SafetyAndSecurity, SafetyAndSecurityTraderDetails}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.CommonAddressPage
 import pages.safetyAndSecurity.CarrierNamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -51,7 +51,7 @@ class CarrierAddressControllerSpec extends SpecBase with MockNunjucksRendererApp
   private val countries                                          = CountryList(Seq(country))
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  private val formProvider = new CarrierAddressFormProvider()
+  private val formProvider = new CommonAddressFormProvider()
   private val form         = formProvider(countries, carrierName)
   private val template     = "safetyAndSecurity/carrierAddress.njk"
 
@@ -111,13 +111,13 @@ class CarrierAddressControllerSpec extends SpecBase with MockNunjucksRendererApp
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val carrierAddress: CarrierAddress = CarrierAddress("Address line 1", "Address line 2", "Code", country)
+      val carrierAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(CarrierNamePage, "carrierName")
         .success
         .value
-        .set(CarrierAddressPage, carrierAddress)
+        .set(CommonAddressPage("carrierAddress"), carrierAddress)
         .success
         .value
 

@@ -16,8 +16,9 @@
 
 package pages.safetyAndSecurity
 
-import models.{CarrierAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.CommonAddressPage
 import pages.behaviours.PageBehaviours
 
 class AddCarrierEoriPageSpec extends PageBehaviours {
@@ -33,7 +34,7 @@ class AddCarrierEoriPageSpec extends PageBehaviours {
     "cleanup" - {
 
       "must remove Carrier name and address details when they exist in userAnswers and AddCarrierEori is set to true" in {
-        val carrierAddress = arbitrary[CarrierAddress].sample.value
+        val carrierAddress = arbitrary[CommonAddress].sample.value
 
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
@@ -41,7 +42,7 @@ class AddCarrierEoriPageSpec extends PageBehaviours {
               .set(CarrierNamePage, "test name")
               .success
               .value
-              .set(CarrierAddressPage, carrierAddress)
+              .set(CommonAddressPage("carrierAddress"), carrierAddress)
               .success
               .value
               .set(AddCarrierEoriPage, true)
@@ -49,7 +50,7 @@ class AddCarrierEoriPageSpec extends PageBehaviours {
               .value
 
             result.get(CarrierNamePage) must not be defined
-            result.get(CarrierAddressPage) must not be defined
+            result.get(CommonAddressPage("carrierAddress")) must not be defined
         }
       }
 

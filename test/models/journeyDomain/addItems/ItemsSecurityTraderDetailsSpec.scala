@@ -21,9 +21,9 @@ import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.reference.{Country, CountryCode}
-import models.{ConsignorAddress, EoriNumber, Index, UserAnswers}
+import models.{CommonAddress, EoriNumber, Index, UserAnswers}
 import org.scalatest.TryValues
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, CommonAddItemsAddressPage}
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, _}
@@ -69,7 +69,10 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
           .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
           .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
           .unsafeSetVal(SecurityConsignorNamePage(index))("Bob")
-          .unsafeSetVal(SecurityConsignorAddressPage(index))(ConsignorAddress("First line", "Second line", "Postcode", Country(CountryCode("FR"), "France")))
+          .unsafeSetVal(CommonAddItemsAddressPage(index, "securityConsignorAddress"))(CommonAddress("First line",
+                                                                                                    "Second line",
+                                                                                                    "Postcode",
+                                                                                                    Country(CountryCode("FR"), "France")))
           .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
           .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
           .unsafeSetVal(CircumstanceIndicatorPage)("A")
@@ -117,8 +120,8 @@ object ItemsSecurityTraderDetailsSpec {
       .unsafeSetPFn(SecurityConsignorNamePage(index))(itemsSecurityTraderDetails.consignor)({
         case Some(SecurityPersonalInformation(name, _)) => name
       })
-      .unsafeSetPFn(SecurityConsignorAddressPage(index))(itemsSecurityTraderDetails.consignor)({
-        case Some(SecurityPersonalInformation(_, address)) => Address.prismAddressToConsignorAddress.getOption(address).get
+      .unsafeSetPFn(CommonAddItemsAddressPage(index, "securityConsignorAddress"))(itemsSecurityTraderDetails.consignor)({
+        case Some(SecurityPersonalInformation(_, address)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
 
       //     Set Consignee
@@ -132,7 +135,7 @@ object ItemsSecurityTraderDetailsSpec {
       .unsafeSetPFn(SecurityConsigneeNamePage(index))(itemsSecurityTraderDetails.consignee)({
         case Some(SecurityPersonalInformation(name, _)) => name
       })
-      .unsafeSetPFn(SecurityConsigneeAddressPage(index))(itemsSecurityTraderDetails.consignee)({
+      .unsafeSetPFn(CommonAddItemsAddressPage(index, "securityConsigneeAddress"))(itemsSecurityTraderDetails.consignee)({
         case Some(SecurityPersonalInformation(_, address)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
 

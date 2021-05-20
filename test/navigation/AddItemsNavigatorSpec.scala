@@ -26,7 +26,7 @@ import controllers.addItems.traderDetails.{routes => traderRoutes}
 import controllers.{routes => mainRoutes}
 import generators.Generators
 import models.reference.PackageType
-import models.{CheckMode, ConsigneeAddress, ConsignorAddress, Index, NormalMode, UserAnswers}
+import models.{CheckMode, CommonAddress, Index, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
@@ -248,7 +248,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .unsafeSetVal(AddConsigneePage)(false)
 
                 navigator
-                  .nextPage(TraderDetailsConsignorAddressPage(index), NormalMode, updatedAnswers)
+                  .nextPage(CommonAddItemsAddressPage(index, "traderDetailsConsignorAddress"), NormalMode, updatedAnswers)
                   .mustBe(traderRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(answers.id, index, NormalMode))
             }
           }
@@ -260,7 +260,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .unsafeSetVal(AddConsigneePage)(true)
 
                 navigator
-                  .nextPage(TraderDetailsConsignorAddressPage(index), NormalMode, updatedAnswers)
+                  .nextPage(CommonAddItemsAddressPage(index, "traderDetailsConsignorAddress"), NormalMode, updatedAnswers)
                   .mustBe(routes.PackageTypeController.onPageLoad(answers.id, index, Index(0), NormalMode))
             }
           }
@@ -314,7 +314,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           forAll(arbitrary[UserAnswers]) {
             answers =>
               navigator
-                .nextPage(TraderDetailsConsigneeAddressPage(index), NormalMode, answers)
+                .nextPage(CommonAddItemsAddressPage(index, "traderDetailsConsigneeAddress"), NormalMode, answers)
                 .mustBe(routes.PackageTypeController.onPageLoad(answers.id, index, Index(0), NormalMode))
           }
         }
@@ -1172,7 +1172,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val userAnswers = answers
-                  .remove(TraderDetailsConsignorAddressPage(index)).success.value
+                  .remove(CommonAddItemsAddressPage(index, "traderDetailsConsignorAddress")).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorNamePage(index), CheckMode, userAnswers)
                   .mustBe(traderRoutes.TraderDetailsConsignorAddressController.onPageLoad(userAnswers.id, index, CheckMode))
@@ -1180,10 +1180,10 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           }
 
           "Items CYA when Address is Populated" in {
-            forAll(arbitrary[UserAnswers], arbitrary[ConsignorAddress]) {
+            forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
               (answers, address) =>
                 val userAnswers = answers
-                  .set(TraderDetailsConsignorAddressPage(index), address).success.value
+                  .set(CommonAddItemsAddressPage(index, "traderDetailsConsignorAddress"), address).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorNamePage(index), CheckMode, userAnswers)
                   .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
@@ -1196,7 +1196,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 navigator
-                  .nextPage(TraderDetailsConsignorAddressPage(index), CheckMode, answers)
+                  .nextPage(CommonAddItemsAddressPage(index, "traderDetailsConsignorAddress"), CheckMode, answers)
                   .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
             }
           }
@@ -1285,7 +1285,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val userAnswers = answers
-                  .remove(TraderDetailsConsigneeAddressPage(index)).success.value
+                  .remove(CommonAddItemsAddressPage(index, "traderDetailsConsigneeAddress")).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeNamePage(index), CheckMode, userAnswers)
                   .mustBe(traderRoutes.TraderDetailsConsigneeAddressController.onPageLoad(userAnswers.id, index, CheckMode))
@@ -1293,10 +1293,10 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           }
           
           "Items CYA when address is populated" in {
-            forAll(arbitrary[UserAnswers], arbitrary[ConsigneeAddress]) {
+            forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
               (answers, address) =>
                 val userAnswers = answers
-                  .set(TraderDetailsConsigneeAddressPage(index), address).success.value
+                  .set(CommonAddItemsAddressPage(index, "traderDetailsConsigneeAddress"), address).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeNamePage(index), CheckMode, userAnswers)
                   .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
@@ -1309,7 +1309,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 navigator
-                  .nextPage(TraderDetailsConsigneeAddressPage(index), CheckMode, answers)
+                  .nextPage(CommonAddItemsAddressPage(index, "traderDetailsConsigneeAddress"), CheckMode, answers)
                   .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
             }
           }

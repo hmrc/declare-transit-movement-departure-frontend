@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.UserAnswersReader
-import models.{ConsignorAddress, EoriNumber, UserAnswers}
+import models.{CommonAddress, EoriNumber, UserAnswers}
 import org.scalatest.TryValues
 import pages.{ConsignorEoriPage, _}
 
@@ -31,18 +31,18 @@ class ConsignorDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
     "when the eori is known" - {
       "when name, address and eori are answered" in {
-        forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength), arb[ConsignorAddress]) {
+        forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
           case (baseUserAnswers, EoriNumber(eoriNumber), name, address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsignorPage)(true)
               .unsafeSetVal(IsConsignorEoriKnownPage)(true)
               .unsafeSetVal(ConsignorEoriPage)(eoriNumber)
               .unsafeSetVal(ConsignorNamePage)(name)
-              .unsafeSetVal(ConsignorAddressPage)(address)
+              .unsafeSetVal(CommonAddressPage("consignorAddress"))(address)
 
             val result = UserAnswersReader[ConsignorDetails].run(userAnswers).right.value
 
-            val expectedAddress: Address = Address.prismAddressToConsignorAddress(address)
+            val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
             result mustEqual ConsignorDetails(name, expectedAddress, Some(EoriNumber(eoriNumber)))
 
@@ -57,22 +57,22 @@ class ConsignorDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(IsConsignorEoriKnownPage)(true)
               .unsafeSetVal(ConsignorEoriPage)(eoriNumber)
               .unsafeSetVal(ConsignorNamePage)(name)
-              .unsafeRemove(ConsignorAddressPage)
+              .unsafeRemove(CommonAddressPage("consignorAddress"))
 
             val result = UserAnswersReader[ConsignorDetails].run(userAnswers).left.value
 
-            result.page mustBe ConsignorAddressPage
+            result.page mustBe CommonAddressPage("consignorAddress")
         }
       }
 
       "when address and eori are answered but name is missing" in {
-        forAll(arb[UserAnswers], arb[EoriNumber], arb[ConsignorAddress]) {
+        forAll(arb[UserAnswers], arb[EoriNumber], arb[CommonAddress]) {
           case (baseUserAnswers, EoriNumber(eoriNumber), address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsignorPage)(true)
               .unsafeSetVal(IsConsignorEoriKnownPage)(true)
               .unsafeSetVal(ConsignorEoriPage)(eoriNumber)
-              .unsafeSetVal(ConsignorAddressPage)(address)
+              .unsafeSetVal(CommonAddressPage("consignorAddress"))(address)
               .unsafeRemove(ConsignorNamePage)
 
             val result = UserAnswersReader[ConsignorDetails].run(userAnswers).left.value
@@ -82,13 +82,13 @@ class ConsignorDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
       }
 
       "when name and address are answered but eori is missing" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[ConsignorAddress]) {
+        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
           case (baseUserAnswers, name, address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsignorPage)(true)
               .unsafeSetVal(IsConsignorEoriKnownPage)(true)
               .unsafeSetVal(ConsignorNamePage)(name)
-              .unsafeSetVal(ConsignorAddressPage)(address)
+              .unsafeSetVal(CommonAddressPage("consignorAddress"))(address)
               .unsafeRemove(ConsignorEoriPage)
 
             val result = UserAnswersReader[ConsignorDetails].run(userAnswers).left.value
@@ -100,17 +100,17 @@ class ConsignorDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
     "when the eori is not known" - {
       "when name, address are answered" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[ConsignorAddress]) {
+        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
           case (baseUserAnswers, name, address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsignorPage)(true)
               .unsafeSetVal(IsConsignorEoriKnownPage)(false)
               .unsafeSetVal(ConsignorNamePage)(name)
-              .unsafeSetVal(ConsignorAddressPage)(address)
+              .unsafeSetVal(CommonAddressPage("consignorAddress"))(address)
 
             val result = UserAnswersReader[ConsignorDetails].run(userAnswers).right.value
 
-            val expectedAddress: Address = Address.prismAddressToConsignorAddress(address)
+            val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
             result mustEqual ConsignorDetails(name, expectedAddress, None)
         }
@@ -123,21 +123,21 @@ class ConsignorDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(AddConsignorPage)(true)
               .unsafeSetVal(IsConsignorEoriKnownPage)(false)
               .unsafeSetVal(ConsignorNamePage)(name)
-              .unsafeRemove(ConsignorAddressPage)
+              .unsafeRemove(CommonAddressPage("consignorAddress"))
 
             val result = UserAnswersReader[ConsignorDetails].run(userAnswers).left.value
 
-            result.page mustBe ConsignorAddressPage
+            result.page mustBe CommonAddressPage("consignorAddress")
         }
       }
 
       "when address is answered but name is missing" in {
-        forAll(arb[UserAnswers], arb[ConsignorAddress]) {
+        forAll(arb[UserAnswers], arb[CommonAddress]) {
           case (baseUserAnswers, address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsignorPage)(true)
               .unsafeSetVal(IsConsignorEoriKnownPage)(false)
-              .unsafeSetVal(ConsignorAddressPage)(address)
+              .unsafeSetVal(CommonAddressPage("consignorAddress"))(address)
               .unsafeRemove(ConsignorNamePage)
 
             val result = UserAnswersReader[ConsignorDetails].run(userAnswers).left.value

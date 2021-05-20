@@ -19,10 +19,10 @@ package models.journeyDomain.addItems
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
+import models.{CommonAddress, EoriNumber}
 import models.domain.Address
 import models.reference._
-import models.{ConsigneeAddress, ConsignorAddress, EoriNumber}
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, CommonAddItemsAddressPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
@@ -103,7 +103,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
           "when the eori is not known" - {
 
             "when the user selects 'No' for add circumstance indicator page then the consignee is read" in {
-              val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+              val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
               val ua = emptyUserAnswers
                 .unsafeSetVal(AddSecurityDetailsPage)(true)
@@ -111,7 +111,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
                 .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
                 .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
-                .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
+                .unsafeSetVal(CommonAddItemsAddressPage(index, "securityConsigneeAddress"))(consigneeAddress)
 
               val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
               val expected = SecurityPersonalInformation("testName", address)
@@ -122,7 +122,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
 
             "when the user selects 'Yes' for add circumstance indicator page but does  not select 'E' for circumstance indicator then the consignee is read" in {
 
-              val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+              val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
               val ua = emptyUserAnswers
                 .unsafeSetVal(AddSecurityDetailsPage)(true)
@@ -131,7 +131,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(CircumstanceIndicatorPage)("A")
                 .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(false)
                 .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
-                .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
+                .unsafeSetVal(CommonAddItemsAddressPage(index, "securityConsigneeAddress"))(consigneeAddress)
 
               val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
               val expected = SecurityPersonalInformation("testName", address)
@@ -207,14 +207,14 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
         "when the eori is not known" - {
 
           "when the user selects 'No' for add circumstance indicator page then the consignee is read" in {
-            val consigneeAddress = ConsignorAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+            val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
             val ua = emptyUserAnswers
               .unsafeSetVal(AddSecurityDetailsPage)(true)
               .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
               .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
               .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
-              .unsafeSetVal(SecurityConsignorAddressPage(index))(consigneeAddress)
+              .unsafeSetVal(CommonAddItemsAddressPage(index, "securityConsignorAddress"))(consigneeAddress)
 
             val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
             val expected = SecurityPersonalInformation("testName", address)

@@ -19,16 +19,17 @@ package controllers.traderDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
+import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
-import models.{ConsigneeAddress, CountryList, NormalMode}
+import models.{CommonAddress, CountryList, NormalMode}
 import navigation.annotations.TraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.ConsigneeNamePage
+import pages.{CommonAddressPage, ConsigneeNamePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -46,7 +47,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererA
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
   private val consigneeName                                      = "consigneeName"
-  private val form                                               = new ConsigneeAddressFormProvider()(countries, consigneeName)
+  private val form                                               = new CommonAddressFormProvider()(countries, consigneeName)
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private lazy val consigneeAddressRoute                         = routes.ConsigneeAddressController.onPageLoad(lrn, NormalMode).url
 
@@ -99,13 +100,13 @@ class ConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererA
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val consigneeAddress: ConsigneeAddress = ConsigneeAddress("Address line 1", "Address line 2", "Code", country)
+      val consigneeAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(ConsigneeNamePage, "consigneeName")
         .success
         .value
-        .set(ConsigneeAddressPage, consigneeAddress)
+        .set(CommonAddressPage("consigneeAddress"), consigneeAddress)
         .success
         .value
       dataRetrievalWithData(userAnswers)
