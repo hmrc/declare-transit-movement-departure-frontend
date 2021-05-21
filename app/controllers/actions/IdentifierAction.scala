@@ -27,6 +27,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Results._
 import play.api.mvc._
 import renderer.Renderer
+import services.BetaAuthorizationService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
@@ -43,7 +44,7 @@ class AuthenticatedIdentifierAction @Inject()(
   config: FrontendAppConfig,
   val parser: BodyParsers.Default,
   enrolmentStoreConnector: EnrolmentStoreConnector,
-  betaAuthorizationConnector: BetaAuthorizationConnector,
+  betaAuthorizationService: BetaAuthorizationService,
   renderer: Renderer
 )(implicit val executionContext: ExecutionContext)
     extends IdentifierAction
@@ -62,13 +63,9 @@ class AuthenticatedIdentifierAction @Inject()(
           } yield
             enrolment.getIdentifier(config.enrolmentIdentifierKey) match {
               case Some(eoriNumber) =>
-                if (config.privateBetaToggle) {
-                  betaAuthorizationConnector.getBetaUser(BetaEoriNumber(eoriNumber.value)).flatMap {
-                    case true  => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
-                    case false => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
-                  }
-                } else {
-                  block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
+                betaAuthorizationService.authorizedUser(BetaEoriNumber(eoriNumber.value)).flatMap {
+                  case true  => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
+                  case false => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
                 }
               case _ => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
             }).getOrElse(checkForGroupEnrolment(maybeGroupId, config)(hc, request))

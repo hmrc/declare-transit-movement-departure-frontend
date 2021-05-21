@@ -34,6 +34,7 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import renderer.Renderer
+import services.BetaAuthorizationService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
@@ -53,18 +54,17 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
   }
 
-  val mockAuthConnector: AuthConnector                           = mock[AuthConnector]
-  val mockEnrolmentStoreConnector: EnrolmentStoreConnector       = mock[EnrolmentStoreConnector]
-  val mockBetaAuthorizationConnector: BetaAuthorizationConnector = mock[BetaAuthorizationConnector]
-  val mockUIRender: Renderer                                     = mock[Renderer]
+  val mockAuthConnector: AuthConnector                       = mock[AuthConnector]
+  val mockEnrolmentStoreConnector: EnrolmentStoreConnector   = mock[EnrolmentStoreConnector]
+  val mockBetaAuthorizationService: BetaAuthorizationService = mock[BetaAuthorizationService]
+  val mockUIRender: Renderer                                 = mock[Renderer]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .configure(Configuration("privateBetaToggle" -> false))
       .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
       .overrides(bind[EnrolmentStoreConnector].toInstance(mockEnrolmentStoreConnector))
-      .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
+      .overrides(bind[BetaAuthorizationService].toInstance(mockBetaAuthorizationService))
       .overrides(bind[Renderer].toInstance(mockUIRender))
 
   val enrolmentsWithoutEori: Enrolments = Enrolments(
@@ -173,7 +173,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           frontendAppConfig,
           bodyParsers,
           mockEnrolmentStoreConnector,
-          mockBetaAuthorizationConnector,
+          mockBetaAuthorizationService,
           mockUIRender
         )
 
@@ -200,7 +200,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           frontendAppConfig,
           bodyParsers,
           mockEnrolmentStoreConnector,
-          mockBetaAuthorizationConnector,
+          mockBetaAuthorizationService,
           mockUIRender
         )
         val controller             = new Harness(authAction)
@@ -226,7 +226,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           frontendAppConfig,
           bodyParsers,
           mockEnrolmentStoreConnector,
-          mockBetaAuthorizationConnector,
+          mockBetaAuthorizationService,
           mockUIRender
         )
 
@@ -253,7 +253,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           frontendAppConfig,
           bodyParsers,
           mockEnrolmentStoreConnector,
-          mockBetaAuthorizationConnector,
+          mockBetaAuthorizationService,
           mockUIRender
         )
 
@@ -280,7 +280,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           frontendAppConfig,
           bodyParsers,
           mockEnrolmentStoreConnector,
-          mockBetaAuthorizationConnector,
+          mockBetaAuthorizationService,
           mockUIRender
         )
 
@@ -307,7 +307,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           frontendAppConfig,
           bodyParsers,
           mockEnrolmentStoreConnector,
-          mockBetaAuthorizationConnector,
+          mockBetaAuthorizationService,
           mockUIRender
         )
 
@@ -334,7 +334,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
           frontendAppConfig,
           bodyParsers,
           mockEnrolmentStoreConnector,
-          mockBetaAuthorizationConnector,
+          mockBetaAuthorizationService,
           mockUIRender
         )
 
@@ -348,35 +348,13 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
 
     "AuthAction" - {
-      "must return Ok when given enrolments with eori and beta toggle is false" in {
+
+      "must return Ok when given enrolments with eori and when BetaAuthorizationService returns true" in {
 
         when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
           .thenReturn(Future.successful(enrolmentsWithEori ~ Some("testName")))
 
-        setNoExistingUserAnswers()
-
-        val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
-        val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-
-        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector,
-                                                           frontendAppConfig,
-                                                           bodyParsers,
-                                                           mockEnrolmentStoreConnector,
-                                                           mockBetaAuthorizationConnector,
-                                                           mockUIRender)
-
-        val controller = new Harness(authAction)
-        val result     = controller.onPageLoad()(fakeRequest)
-
-        status(result) mustBe OK
-      }
-
-      "must return Ok when given enrolments with eori, when the beta toggle is true and user is registered for beta " in {
-
-        when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
-          .thenReturn(Future.successful(enrolmentsWithEori ~ Some("testName")))
-
-        when(mockBetaAuthorizationConnector.getBetaUser(any())(any()))
+        when(mockBetaAuthorizationService.authorizedUser(any())(any()))
           .thenReturn(Future.successful(true))
 
         val app: Application = new GuiceApplicationBuilder()
@@ -392,7 +370,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
                                                            frontendAppConfig,
                                                            bodyParsers,
                                                            mockEnrolmentStoreConnector,
-                                                           mockBetaAuthorizationConnector,
+                                                           mockBetaAuthorizationService,
                                                            mockUIRender)
 
         val controller = new Harness(authAction)
@@ -401,12 +379,12 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         status(result) mustBe OK
       }
 
-      "must redirect to unauthorised when given enrolments with eori, when the beta toggle is true and user is not registered for beta " in {
+      "must redirect to unauthorised when given enrolments with eori and when BetaAuthorizationService returns false" in {
 
         when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
           .thenReturn(Future.successful(enrolmentsWithEori ~ Some("testName")))
 
-        when(mockBetaAuthorizationConnector.getBetaUser(any())(any()))
+        when(mockBetaAuthorizationService.authorizedUser(any())(any()))
           .thenReturn(Future.successful(false))
 
         val app: Application = new GuiceApplicationBuilder()
@@ -422,7 +400,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
                                                            frontendAppConfig,
                                                            bodyParsers,
                                                            mockEnrolmentStoreConnector,
-                                                           mockBetaAuthorizationConnector,
+                                                           mockBetaAuthorizationService,
                                                            mockUIRender)
 
         val controller = new Harness(authAction)
@@ -444,7 +422,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
                                                            frontendAppConfig,
                                                            bodyParsers,
                                                            mockEnrolmentStoreConnector,
-                                                           mockBetaAuthorizationConnector,
+                                                           mockBetaAuthorizationService,
                                                            mockUIRender)
 
         val controller = new Harness(authAction)
@@ -470,7 +448,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
                                                            frontendAppConfig,
                                                            bodyParsers,
                                                            mockEnrolmentStoreConnector,
-                                                           mockBetaAuthorizationConnector,
+                                                           mockBetaAuthorizationService,
                                                            mockUIRender)
         val controller = new Harness(authAction)
 
@@ -497,7 +475,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
                                                            frontendAppConfig,
                                                            bodyParsers,
                                                            mockEnrolmentStoreConnector,
-                                                           mockBetaAuthorizationConnector,
+                                                           mockBetaAuthorizationService,
                                                            mockUIRender)
         val controller = new Harness(authAction)
 
@@ -525,7 +503,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
                                                            frontendAppConfig,
                                                            bodyParsers,
                                                            mockEnrolmentStoreConnector,
-                                                           mockBetaAuthorizationConnector,
+                                                           mockBetaAuthorizationService,
                                                            mockUIRender)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
@@ -556,7 +534,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
                                                            frontendAppConfig,
                                                            bodyParsers,
                                                            mockEnrolmentStoreConnector,
-                                                           mockBetaAuthorizationConnector,
+                                                           mockBetaAuthorizationService,
                                                            mockUIRender)
         val controller = new Harness(authAction)
         val result     = controller.onPageLoad()(fakeRequest)
