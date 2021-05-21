@@ -85,11 +85,6 @@ object Packages {
       }
   }
 
-  private def readHowManyPackages(itemIndex: Index, referenceIndex: Index): UserAnswersReader[Option[Int]] =
-    DeclareNumberOfPackagesPage(itemIndex, referenceIndex).filterOptionalDependent(identity) {
-      HowManyPackagesPage(itemIndex, referenceIndex).reader
-    }
-
   private def readMarkOrNumber(itemIndex: Index, referenceIndex: Index): UserAnswersReader[Option[String]] =
     AddMarkPage(itemIndex, referenceIndex).filterOptionalDependent(identity) {
       DeclareMarkPage(itemIndex, referenceIndex).reader

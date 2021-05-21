@@ -41,9 +41,6 @@ class PackageTypePageSpec extends PageBehaviours with SpecBase {
           userAnswers =>
             val result =
               userAnswers
-                .set(DeclareNumberOfPackagesPage(index, index), true)
-                .success
-                .value
                 .set(HowManyPackagesPage(index, index), 123)
                 .success
                 .value
@@ -60,7 +57,6 @@ class PackageTypePageSpec extends PageBehaviours with SpecBase {
                 .success
                 .value
 
-            result.get(DeclareNumberOfPackagesPage(index, index)) must not be defined
             result.get(HowManyPackagesPage(index, index)) must not be defined
             result.get(TotalPiecesPage(index, index)) must not be defined
             result.get(AddMarkPage(index, index)) must not be defined

@@ -25,11 +25,6 @@ POST       /:lrn/add-items/:itemIndex/packages/:packageIndex/package-type       
 GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/change-package-type                       controllers.addItems.PackageTypeController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)
 POST       /:lrn/add-items/:itemIndex/packages/:packageIndex/change-package-type                      controllers.addItems.PackageTypeController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)
 
-GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/declare-number-of-package                        controllers.addItems.DeclareNumberOfPackagesController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = NormalMode)
-POST       /:lrn/add-items/:itemIndex/packages/:packageIndex/declare-number-of-package                        controllers.addItems.DeclareNumberOfPackagesController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = NormalMode)
-GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/change-declare-number-of-package                  controllers.addItems.DeclareNumberOfPackagesController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)
-POST       /:lrn/add-items/:itemIndex/packages/:packageIndex/change-declare-number-of-package                  controllers.addItems.DeclareNumberOfPackagesController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)
-
 GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/total-pieces                  controllers.addItems.TotalPiecesController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = NormalMode)
 POST       /:lrn/add-items/:itemIndex/packages/:packageIndex/total-pieces                  controllers.addItems.TotalPiecesController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = NormalMode)
 GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/change-total-pieces                        controllers.addItems.TotalPiecesController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)

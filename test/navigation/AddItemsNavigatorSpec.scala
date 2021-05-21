@@ -407,45 +407,6 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
         }
 
-        "DeclareNumberOfPackages" - {
-          "must go to HowManyPackages if answer is 'Yes'" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val updatedAnswers = answers
-                  .set(DeclareNumberOfPackagesPage(index, index), true).success.value
-
-                navigator
-                  .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.id, index, index, NormalMode))
-            }
-          }
-          "must go to AddMark if answer is 'No' and PackageType is bulk" in {
-            forAll(arbitrary[UserAnswers], arbitraryBulkPackageType.arbitrary) {
-              (answers, packageType) =>
-                val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
-                  .set(DeclareNumberOfPackagesPage(index, index), false).success.value
-
-                navigator
-                  .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, NormalMode))
-            }
-          }
-          "must go to TotalPieces if answer is 'No' and PackageType is unpacked" in {
-            forAll(arbitrary[UserAnswers], arbitraryUnPackedPackageType.arbitrary) {
-              (answers, packageType) =>
-                val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
-                  .set(DeclareNumberOfPackagesPage(index, index), false).success.value
-
-                navigator
-                  .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, NormalMode))
-            }
-          }
-
-        }
-
         "TotalPieces" - {
           "must go to AddMark" in {
             forAll(arbitrary[UserAnswers], arbitrary[Int]) {
@@ -1396,45 +1357,6 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, CheckMode))
-            }
-          }
-
-        }
-
-        "DeclareNumberOfPackages" - {
-          "must go to HowManyPackages if answer is 'Yes'" in {
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val updatedAnswers = answers
-                  .set(DeclareNumberOfPackagesPage(index, index), true).success.value
-
-                navigator
-                  .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.id, index, index, CheckMode))
-            }
-          }
-          "must go to AddMark if answer is 'No' and PackageType is bulk" in {
-            forAll(arbitrary[UserAnswers], arbitraryBulkPackageType.arbitrary) {
-              (answers, packageType) =>
-                val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
-                  .set(DeclareNumberOfPackagesPage(index, index), false).success.value
-
-                navigator
-                  .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, CheckMode))
-            }
-          }
-          "must go to TotalPieces if answer is 'No' and PackageType is unpacked" in {
-            forAll(arbitrary[UserAnswers], arbitraryUnPackedPackageType.arbitrary) {
-              (answers, packageType) =>
-                val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
-                  .set(DeclareNumberOfPackagesPage(index, index), false).success.value
-
-                navigator
-                  .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
                   .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, CheckMode))
             }
           }
