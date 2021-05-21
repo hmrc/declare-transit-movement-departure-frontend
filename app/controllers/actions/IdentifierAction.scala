@@ -18,16 +18,16 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.{BetaAuthorizationConnector, EnrolmentStoreConnector}
+import connectors.EnrolmentStoreConnector
 import controllers.routes
-import models.{BetaEoriNumber, EoriNumber}
+import models.EoriNumber
 import models.EoriNumber.prefixGBIfMissing
 import models.requests.IdentifierRequest
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Results._
 import play.api.mvc._
 import renderer.Renderer
-import services.BetaAuthorizationService
+import services.IsDeparturesEnabledService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
@@ -44,7 +44,7 @@ class AuthenticatedIdentifierAction @Inject()(
   config: FrontendAppConfig,
   val parser: BodyParsers.Default,
   enrolmentStoreConnector: EnrolmentStoreConnector,
-  betaAuthorizationService: BetaAuthorizationService,
+  isDeparturesEnabledService: IsDeparturesEnabledService,
   renderer: Renderer
 )(implicit val executionContext: ExecutionContext)
     extends IdentifierAction
@@ -63,7 +63,7 @@ class AuthenticatedIdentifierAction @Inject()(
           } yield
             enrolment.getIdentifier(config.enrolmentIdentifierKey) match {
               case Some(eoriNumber) =>
-                betaAuthorizationService.authorizedUser(BetaEoriNumber(eoriNumber.value)).flatMap {
+                isDeparturesEnabledService.isDeparturesEnabled(eoriNumber.value).flatMap {
                   case true  => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
                   case false => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
                 }

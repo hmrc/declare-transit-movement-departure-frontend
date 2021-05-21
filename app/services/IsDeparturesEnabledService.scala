@@ -24,15 +24,17 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class BetaAuthorizationService @Inject()(
+class IsDeparturesEnabledService @Inject()(
   betaAuthorizationConnector: BetaAuthorizationConnector,
   appConfig: FrontendAppConfig
 ) {
 
-  def authorizedUser(eori: BetaEoriNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
-    if (appConfig.isPrivateBetaEnabled) {
-      betaAuthorizationConnector.getBetaUser(eori)
-    } else {
+  def isDeparturesEnabled(eori: String)(implicit hc: HeaderCarrier): Future[Boolean] =
+    if (appConfig.isDeparturesEnabled) {
       Future.successful(true)
+    } else if (appConfig.isPrivateBetaEnabled) {
+      betaAuthorizationConnector.getBetaUser(BetaEoriNumber(eori))
+    } else {
+      Future.successful(false)
     }
 }
