@@ -1110,7 +1110,7 @@ guaranteeNotValid.reasonCode = Invalid guarantee reason code
 guaranteeNotValid.reason = Invalid guarantee reason
 guaranteeNotValid.contact = contact the New Computerised Transit System helpdesk to get this fixed (opens in a new window)
 guaranteeNotValid.you.must = You must
-guaranteeNotValid.lrn = Local reference number
+guaranteeNotValid.mrn = Movement reference number
 guaranteeNotValid.guaranteeRefNumber = Guarantee Reference number
 
 usingSameMethodOfPayment.title = Are you using the same payment method for all items?
