@@ -39,7 +39,7 @@ class BetaAuthorizationServiceSpec extends SpecBase with MockServiceApp with Bef
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .configure(Configuration("privateBetaToggle" -> true))
+      .configure(Configuration("isPrivateBetaEnabled" -> true))
       .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
 
   override def beforeEach(): Unit = {

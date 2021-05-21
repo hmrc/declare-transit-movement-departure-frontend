@@ -30,7 +30,7 @@ class BetaAuthorizationService @Inject()(
 ) {
 
   def authorizedUser(eori: BetaEoriNumber)(implicit hc: HeaderCarrier): Future[Boolean] =
-    if (appConfig.privateBetaToggle) {
+    if (appConfig.isPrivateBetaEnabled) {
       betaAuthorizationConnector.getBetaUser(eori)
     } else {
       Future.successful(true)
