@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class BetaEoriNumber(eoriNumber: String)
+case class BetaEoriNumber(eori: String)
 
 object BetaEoriNumber {
   implicit val format: OFormat[BetaEoriNumber] = Json.format[BetaEoriNumber]
