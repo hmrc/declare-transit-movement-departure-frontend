@@ -43,26 +43,31 @@ class IsDeparturesEnabledServiceSpec extends SpecBase with MockServiceApp with B
 
     "must return true" - {
 
-      "when departures toggle is true" in {
+      "when departures toggle is true and private beta has been enabled and the user is beta registered" in {
 
         val app: Application =
           super
             .guiceApplicationBuilder()
             .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> true))
+            .configure(Configuration("microservice.services.features.isPrivateBetaEnabled" -> true))
+            .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
             .build()
 
         val isDeparturesEnabledService: IsDeparturesEnabledService = app.injector.instanceOf[IsDeparturesEnabledService]
 
+        when(mockBetaAuthorizationConnector.getBetaUser(any())(any()))
+          .thenReturn(Future.successful(true))
+
         isDeparturesEnabledService.isDeparturesEnabled("test").futureValue mustBe true
       }
 
-      "when departures toggle is false and private beta has been enabled and user is beta registered" in {
+      "when departures toggle is true and private beta has been disabled" in {
 
         val app: Application =
           super
             .guiceApplicationBuilder()
-            .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> false))
-            .configure(Configuration("microservice.services.features.isPrivateBetaEnabled" -> true))
+            .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> true))
+            .configure(Configuration("microservice.services.features.isPrivateBetaEnabled" -> false))
             .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
             .build()
 
@@ -77,13 +82,12 @@ class IsDeparturesEnabledServiceSpec extends SpecBase with MockServiceApp with B
 
     "must return false" - {
 
-      "when departures toggle is false and private beta has been disabled" in {
+      "when departures toggle is false" in {
 
         val app: Application =
           super
             .guiceApplicationBuilder()
             .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> false))
-            .configure(Configuration("microservice.services.features.isPrivateBetaEnabled" -> false))
             .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
             .build()
 
@@ -92,12 +96,12 @@ class IsDeparturesEnabledServiceSpec extends SpecBase with MockServiceApp with B
         isDeparturesEnabledService.isDeparturesEnabled("test").futureValue mustBe false
       }
 
-      "when departures toggle is false and private beta has been enabled and user is not beta registered" in {
+      "when departures toggle is true and private beta has been enabled and user is not beta registered" in {
 
         val app: Application =
           super
             .guiceApplicationBuilder()
-            .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> false))
+            .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> true))
             .configure(Configuration("microservice.services.features.isPrivateBetaEnabled" -> true))
             .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
             .build()

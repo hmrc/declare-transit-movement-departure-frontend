@@ -30,11 +30,9 @@ class IsDeparturesEnabledService @Inject()(
 ) {
 
   def isDeparturesEnabled(eori: String)(implicit hc: HeaderCarrier): Future[Boolean] =
-    if (appConfig.isDeparturesEnabled) {
-      Future.successful(true)
-    } else if (appConfig.isPrivateBetaEnabled) {
+    if (appConfig.isDeparturesEnabled && appConfig.isPrivateBetaEnabled) {
       betaAuthorizationConnector.getBetaUser(BetaEoriNumber(eori))
     } else {
-      Future.successful(false)
+      Future.successful(appConfig.isDeparturesEnabled)
     }
 }
