@@ -19,21 +19,23 @@ package connectors
 import config.FrontendAppConfig
 import controllers.Assets.NO_CONTENT
 import javax.inject.Inject
-import logging.Logging
+import models.BetaEoriNumber
 import play.api.http.HeaderNames
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import play.api.libs.json.Json
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BetaAuthorizationConnector @Inject()(config: FrontendAppConfig, http: HttpClient)(implicit ec: ExecutionContext) extends Logging {
+class BetaAuthorizationConnector @Inject()(val appConfig: FrontendAppConfig, http: HttpClient)(implicit ec: ExecutionContext) {
 
-  def getBetaUser(eori: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def getBetaUser(eori: BetaEoriNumber)(implicit hc: HeaderCarrier): Future[Boolean] = {
 
-    val serviceUrl: String = s"${config.betaAuthorizationUrl}/features/private-beta"
+    val serviceUrl: String = s"${appConfig.betaAuthorizationUrl}/features/private-beta"
     val headers            = Seq(ContentTypeHeader("application/json"))
 
     http
-      .POSTString[HttpResponse](serviceUrl, s"{eori: $eori}", headers)
+      .POSTString[HttpResponse](serviceUrl, Json.toJsObject(eori).toString, headers)
       .map {
         response =>
           response.status match {

@@ -16,9 +16,10 @@
 
 package connectors
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
 import helper.WireMockServerHandler
+import models.BetaEoriNumber
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
 import play.api.http.Status._
@@ -28,9 +29,6 @@ import scala.concurrent.Future
 
 class BetaAuthorizationConnectorSpec extends SpecBase with WireMockServerHandler with ScalaCheckPropertyChecks {
 
-  private lazy val connector: BetaAuthorizationConnector =
-    app.injector.instanceOf[BetaAuthorizationConnector]
-
   private val startUrl = "/transit-movements-trader-authorization"
 
   lazy val app: Application = new GuiceApplicationBuilder()
@@ -38,6 +36,9 @@ class BetaAuthorizationConnectorSpec extends SpecBase with WireMockServerHandler
       conf = "microservice.services.transit-movements-trader-authorization.port" -> server.port()
     )
     .build()
+
+  private lazy val connector: BetaAuthorizationConnector =
+    app.injector.instanceOf[BetaAuthorizationConnector]
 
   "BetaAuthorizationConnector" - {
 
@@ -53,7 +54,7 @@ class BetaAuthorizationConnectorSpec extends SpecBase with WireMockServerHandler
             )
         )
 
-        val result: Future[Boolean] = connector.getBetaUser("eoriNumber")
+        val result: Future[Boolean] = connector.getBetaUser(BetaEoriNumber("eoriNumber"))
         result.futureValue mustBe true
       }
 
@@ -68,7 +69,7 @@ class BetaAuthorizationConnectorSpec extends SpecBase with WireMockServerHandler
             )
         )
 
-        val result: Future[Boolean] = connector.getBetaUser("eoriNumber")
+        val result: Future[Boolean] = connector.getBetaUser(BetaEoriNumber("eoriNumber"))
         result.futureValue mustBe false
       }
     }

@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import connectors.{BetaAuthorizationConnector, EnrolmentStoreConnector}
 import controllers.routes
-import models.EoriNumber
+import models.{BetaEoriNumber, EoriNumber}
 import models.EoriNumber.prefixGBIfMissing
 import models.requests.IdentifierRequest
 import play.api.libs.json.{JsObject, Json}
@@ -63,7 +63,7 @@ class AuthenticatedIdentifierAction @Inject()(
             enrolment.getIdentifier(config.enrolmentIdentifierKey) match {
               case Some(eoriNumber) =>
                 if (config.privateBetaToggle) {
-                  betaAuthorizationConnector.getBetaUser(eoriNumber.value).flatMap {
+                  betaAuthorizationConnector.getBetaUser(BetaEoriNumber(eoriNumber.value)).flatMap {
                     case true  => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
                     case false => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
                   }

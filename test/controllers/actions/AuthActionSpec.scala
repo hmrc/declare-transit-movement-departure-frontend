@@ -26,6 +26,7 @@ import matchers.JsonMatchers.containJson
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
+import play.api.{Application, Configuration}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -60,6 +61,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
+      .configure(Configuration("privateBetaToggle" -> false))
       .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
       .overrides(bind[EnrolmentStoreConnector].toInstance(mockEnrolmentStoreConnector))
       .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
@@ -346,7 +348,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
 
     "AuthAction" - {
-      "must return Ok when given enrolments with eori" in {
+      "must return Ok when given enrolments with eori and beta toggle is false" in {
 
         when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
           .thenReturn(Future.successful(enrolmentsWithEori ~ Some("testName")))
@@ -367,6 +369,68 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         val result     = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe OK
+      }
+
+      "must return Ok when given enrolments with eori, when the beta toggle is true and user is registered for beta " in {
+
+        when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
+          .thenReturn(Future.successful(enrolmentsWithEori ~ Some("testName")))
+
+        when(mockBetaAuthorizationConnector.getBetaUser(any())(any()))
+          .thenReturn(Future.successful(true))
+
+        val app: Application = new GuiceApplicationBuilder()
+          .configure(Configuration("privateBetaToggle" -> true))
+          .build()
+
+        setNoExistingUserAnswers()
+
+        val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
+        val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector,
+                                                           frontendAppConfig,
+                                                           bodyParsers,
+                                                           mockEnrolmentStoreConnector,
+                                                           mockBetaAuthorizationConnector,
+                                                           mockUIRender)
+
+        val controller = new Harness(authAction)
+        val result     = controller.onPageLoad()(fakeRequest)
+
+        status(result) mustBe OK
+      }
+
+      "must redirect to unauthorised when given enrolments with eori, when the beta toggle is true and user is not registered for beta " in {
+
+        when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any(), any())(any(), any()))
+          .thenReturn(Future.successful(enrolmentsWithEori ~ Some("testName")))
+
+        when(mockBetaAuthorizationConnector.getBetaUser(any())(any()))
+          .thenReturn(Future.successful(false))
+
+        val app: Application = new GuiceApplicationBuilder()
+          .configure(Configuration("privateBetaToggle" -> true))
+          .build()
+
+        setNoExistingUserAnswers()
+
+        val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
+        val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new AuthenticatedIdentifierAction(mockAuthConnector,
+                                                           frontendAppConfig,
+                                                           bodyParsers,
+                                                           mockEnrolmentStoreConnector,
+                                                           mockBetaAuthorizationConnector,
+                                                           mockUIRender)
+
+        val controller = new Harness(authAction)
+        val result     = controller.onPageLoad()(fakeRequest)
+
+        status(result) mustBe SEE_OTHER
+
+        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
       }
 
       "must redirect to unauthorised page when given enrolments without eori" in {
