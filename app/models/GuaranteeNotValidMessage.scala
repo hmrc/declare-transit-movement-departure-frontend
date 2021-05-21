@@ -21,7 +21,7 @@ import com.lucidchart.open.xtract.XmlReader.strictReadSeq
 import com.lucidchart.open.xtract.{__, XmlReader}
 import play.api.libs.json.{Json, OWrites}
 
-case class GuaranteeNotValidMessage(mrn: String, reasonCodes: Seq[InvalidGuaranteeReasonCode])
+case class GuaranteeNotValidMessage(lrn: String, reasonCodes: Seq[InvalidGuaranteeReasonCode])
 
 object GuaranteeNotValidMessage {
 
