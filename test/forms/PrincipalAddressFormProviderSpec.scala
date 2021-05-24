@@ -31,7 +31,7 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
     val fieldName   = "numberAndStreet"
     val requiredKey = "principalAddress.error.numberAndStreet.required"
     val lengthKey   = "principalAddress.error.numberAndStreet.length"
-    val invalidKey  = "principalAddress.error.numberAndStreet.invalid"
+    val invalidKey  = "principalAddress.error.numberAndStreet.invalidCharacters"
     val maxLength   = 35
 
     behave like fieldThatBindsValidData(
@@ -44,7 +44,7 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(principalName))
     )
 
     behave like mandatoryField(
@@ -61,7 +61,7 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
     val fieldName   = "town"
     val requiredKey = "principalAddress.error.town.required"
     val lengthKey   = "principalAddress.error.town.length"
-    val invalidKey  = "principalAddress.error.town.invalid"
+    val invalidKey  = "principalAddress.error.town.invalidCharacters"
     val maxLength   = 35
 
     behave like fieldThatBindsValidData(
@@ -74,7 +74,7 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(principalName))
     )
 
     behave like mandatoryField(
@@ -92,6 +92,7 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
     val requiredKey          = "principalAddress.error.postcode.required"
     val lengthKey            = "principalAddress.error.postcode.length"
     val invalidCharactersKey = "principalAddress.error.postcode.invalidCharacters"
+    val invalidFormat        = "principalAddress.error.postcode.invalidFormat"
     val maxLength            = 9
 
     behave like fieldThatBindsValidData(
@@ -108,15 +109,6 @@ class PrincipalAddressFormProviderSpec extends StringFieldBehaviours {
 
     behave like fieldWithInvalidCharacters(form, fieldName, invalidCharactersKey, maxLength, principalName)
 
-    "must not bind strings longer than max length" in {
-
-      val expectedError = List(FormError(fieldName, lengthKey, Seq(maxLength)))
-
-      forAll(stringsLongerThan(maxLength + 1)) {
-        string =>
-          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-          result.errors mustBe expectedError
-      }
-    }
+    behave like postcodeWithInvalidFormat(form, fieldName, invalidFormat, maxLength, principalName)
   }
 }
