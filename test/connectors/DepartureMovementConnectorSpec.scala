@@ -27,7 +27,6 @@ import models.messages.DeclarationRequest
 import models.{
   CancellationDecisionUpdateMessage,
   DeclarationRejectionMessage,
-  DepartureId,
   GuaranteeNotValidMessage,
   InvalidGuaranteeCode,
   InvalidGuaranteeReasonCode,
