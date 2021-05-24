@@ -19,8 +19,8 @@ package models
 import models.reference.Country
 import play.api.libs.json.Json
 
-case class CarrierAddress(AddressLine1: String, AddressLine2: String, postalCode: String, country: Country)
+case class CommonAddress(AddressLine1: String, AddressLine2: String, postalCode: String, country: Country)
 
-object CarrierAddress {
-  implicit val format = Json.format[CarrierAddress]
+object CommonAddress {
+  implicit val format = Json.format[CommonAddress]
 }

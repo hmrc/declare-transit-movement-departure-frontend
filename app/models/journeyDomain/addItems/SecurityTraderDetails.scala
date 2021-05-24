@@ -53,7 +53,7 @@ object SecurityTraderDetails {
         ).tupled
           .map {
             case (name, consignorAddress) =>
-              val address = Address.prismAddressToConsignorAddress(consignorAddress)
+              val address = Address.prismAddressToCommonAddress(consignorAddress)
               SecurityTraderDetails(name, address)
           }
       }
@@ -94,7 +94,7 @@ object SecurityTraderDetails {
         ).tupled
           .map {
             case (name, consigneeAddress) =>
-              val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
+              val address = Address.prismAddressToCommonAddress(consigneeAddress)
               SecurityTraderDetails(name, address)
           }
       }

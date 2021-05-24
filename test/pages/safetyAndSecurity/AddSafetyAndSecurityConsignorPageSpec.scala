@@ -18,7 +18,7 @@ package pages.safetyAndSecurity
 
 import base.SpecBase
 import generators.Generators
-import models.{ConsignorAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.behaviours.PageBehaviours
@@ -35,7 +35,7 @@ class AddSafetyAndSecurityConsignorPageSpec extends SpecBase with PageBehaviours
 
     "cleanup" - {
       "must clean up the consignor details on selecting option 'No' " in {
-        val consignorAddress = arbitrary[ConsignorAddress].sample.value
+        val consignorAddress = arbitrary[CommonAddress].sample.value
 
         forAll(arbitrary[UserAnswers]) {
           answers =>

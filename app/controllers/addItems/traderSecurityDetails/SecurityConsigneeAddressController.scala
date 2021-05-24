@@ -18,7 +18,7 @@ package controllers.addItems.traderSecurityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.addItems.traderSecurityDetails.SecurityConsigneeAddressFormProvider
+import forms.addItems.AddItemsCommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -45,7 +45,7 @@ class SecurityConsigneeAddressController @Inject()(
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: SecurityConsigneeAddressFormProvider,
+  formProvider: AddItemsCommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)

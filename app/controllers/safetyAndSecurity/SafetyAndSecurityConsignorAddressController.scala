@@ -19,7 +19,7 @@ package controllers.safetyAndSecurity
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.safetyAndSecurity.SafetyAndSecurityConsignorAddressFormProvider
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -46,7 +46,7 @@ class SafetyAndSecurityConsignorAddressController @Inject()(
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: SafetyAndSecurityConsignorAddressFormProvider,
+  formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)

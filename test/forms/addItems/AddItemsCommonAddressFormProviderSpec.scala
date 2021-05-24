@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.addItems.traderDetails
+package forms.addItems
 
 import forms.Constants.addressMaxLength
 import forms.behaviours.StringFieldBehaviours
@@ -22,12 +22,12 @@ import models.reference.{Country, CountryCode}
 import models.{CountryList, Index}
 import play.api.data.FormError
 
-class TraderDetailsConsigneeAddressFormProviderSpec extends StringFieldBehaviours {
+class AddItemsCommonAddressFormProviderSpec extends StringFieldBehaviours {
 
   private val country       = Country(CountryCode("GB"), "United Kingdom")
   private val countries     = CountryList(Seq(country))
   private val consigneeName = "consigneeName"
-  private val formProvider  = new TraderDetailsConsigneeAddressFormProvider()
+  private val formProvider  = new AddItemsCommonAddressFormProvider()
   private val form          = formProvider(countries, consigneeName, Index(0))
 
   ".AddressLine1" - {

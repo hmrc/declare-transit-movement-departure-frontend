@@ -16,18 +16,18 @@
 
 package pages.safetyAndSecurity
 
-import models.ConsigneeAddress
+import models.CommonAddress
 import pages.behaviours.PageBehaviours
 
 class SafetyAndSecurityConsigneeAddressPageSpec extends PageBehaviours {
 
   "SafetyAndSecurityConsigneeAddressPage" - {
 
-    beRetrievable[ConsigneeAddress](SafetyAndSecurityConsigneeAddressPage)
+    beRetrievable[CommonAddress](SafetyAndSecurityConsigneeAddressPage)
 
-    beSettable[ConsigneeAddress](SafetyAndSecurityConsigneeAddressPage)
+    beSettable[CommonAddress](SafetyAndSecurityConsigneeAddressPage)
 
-    beRemovable[ConsigneeAddress](SafetyAndSecurityConsigneeAddressPage)
+    beRemovable[CommonAddress](SafetyAndSecurityConsigneeAddressPage)
 
   }
 }

@@ -16,11 +16,10 @@
 
 package generators
 
-import java.time.LocalDateTime
 import models._
 import models.domain.SealDomain
 import models.domain.SealDomain.Constants
-import models.reference.{Country, CountryCode, CountryOfDispatch, CustomsOffice, PackageType}
+import models.reference._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -79,14 +78,14 @@ trait ModelGenerators {
       } yield SealDomain(sealNumber)
     }
 
-  implicit lazy val arbitraryConsigneeAddress: Arbitrary[ConsigneeAddress] =
+  implicit lazy val arbitraryCommonAddress: Arbitrary[CommonAddress] =
     Arbitrary {
       for {
         addressLine1 <- stringsWithMaxLength(stringMaxLength)
         addressLine2 <- stringsWithMaxLength(stringMaxLength)
         addressLine3 <- stringsWithMaxLength(stringMaxLength)
         addressLine4 <- arbitrary[Country]
-      } yield ConsigneeAddress(addressLine1, addressLine2, addressLine3, addressLine4)
+      } yield CommonAddress(addressLine1, addressLine2, addressLine3, addressLine4)
     }
 
   implicit lazy val arbitraryPrincipalAddress: Arbitrary[PrincipalAddress] =
@@ -132,26 +131,6 @@ trait ModelGenerators {
         code <- arbitrary[CountryCode]
         name <- stringsWithMaxLength(stringMaxLength)
       } yield Country(code, name)
-    }
-
-  implicit lazy val arbitraryConsignorAddress: Arbitrary[ConsignorAddress] =
-    Arbitrary {
-      for {
-        addressLine1 <- stringsWithMaxLength(stringMaxLength)
-        addressLine2 <- stringsWithMaxLength(stringMaxLength)
-        addressLine3 <- stringsWithMaxLength(stringMaxLength)
-        addressLine4 <- arbitrary[Country]
-      } yield ConsignorAddress(addressLine1, addressLine2, addressLine3, addressLine4)
-    }
-
-  implicit lazy val arbitraryCarrierAddress: Arbitrary[CarrierAddress] =
-    Arbitrary {
-      for {
-        addressLine1 <- stringsWithMaxLength(stringMaxLength)
-        addressLine2 <- stringsWithMaxLength(stringMaxLength)
-        addressLine3 <- stringsWithMaxLength(stringMaxLength)
-        addressLine4 <- arbitrary[Country]
-      } yield CarrierAddress(addressLine1, addressLine2, addressLine3, addressLine4)
     }
 
   implicit lazy val arbitraryRepresentativeCapacity: Arbitrary[RepresentativeCapacity] =

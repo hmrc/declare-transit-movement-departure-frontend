@@ -148,7 +148,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryCarrierAddressUserAnswersEntry: Arbitrary[(CarrierAddressPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[CarrierAddress].map(Json.toJson(_))
+        value <- arbitrary[CommonAddress].map(Json.toJson(_))
       } yield (CarrierAddressPage, value)
     }
 
@@ -954,7 +954,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryConsignorAddressUserAnswersEntry: Arbitrary[(ConsignorAddressPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[ConsignorAddress].map(Json.toJson(_))
+        value <- arbitrary[CommonAddress].map(Json.toJson(_))
       } yield (ConsignorAddressPage, value)
     }
 
@@ -968,7 +968,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryConsigneeAddressUserAnswersEntry: Arbitrary[(ConsigneeAddressPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[ConsigneeAddress].map(Json.toJson(_))
+        value <- arbitrary[CommonAddress].map(Json.toJson(_))
       } yield (ConsigneeAddressPage, value)
     }
 

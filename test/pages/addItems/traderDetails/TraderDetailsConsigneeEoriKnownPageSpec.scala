@@ -17,7 +17,7 @@
 package pages.addItems.traderDetails
 
 import base.SpecBase
-import models.{ConsigneeAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -36,7 +36,7 @@ class TraderDetailsConsigneeEoriKnownPageSpec extends PageBehaviours with SpecBa
 
     "must remove TraderDetailsConsigneeEoriNumberPage when EORI not known in in userAnswers" in {
 
-      val consigneeAddress = arbitrary[ConsigneeAddress].sample.value
+      val consigneeAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers

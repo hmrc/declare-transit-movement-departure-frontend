@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.safetyAndSecurity.routes
 import generators.Generators
-import models.{CarrierAddress, CheckMode, ConsigneeAddress, ConsignorAddress, NormalMode, UserAnswers}
+import models.{CheckMode, CommonAddress, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.safetyAndSecurity._
@@ -440,7 +440,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
     }
 
     "Must go from SafetyAndSecurityConsignorNamePage to Check Your Answers page if answer exists for SafetyAndSecurityConsignorAddressPage" in {
-      val consignorAddress = arbitrary[ConsignorAddress].sample.value
+      val consignorAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
@@ -653,7 +653,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
     }
     "Must go from SafetyAndSecurityConsigneeNamePage to Check Your Answers page if answer exists for SafetyAndSecurityConsigneeAddressPage" in {
 
-      val consigneeAddress = arbitrary[ConsigneeAddress].sample.value
+      val consigneeAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
@@ -806,7 +806,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       }
 
       "to CheckYourAnswersPage when an answer exists for CarrierAddressPage" in {
-        val carrierAddress = arbitrary[CarrierAddress].sample.value
+        val carrierAddress = arbitrary[CommonAddress].sample.value
 
         forAll(arbitrary[UserAnswers]) {
           answers =>

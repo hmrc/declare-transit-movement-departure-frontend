@@ -19,7 +19,7 @@ package controllers.addItems.traderDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.addItems.traderDetails.TraderDetailsConsignorAddressFormProvider
+import forms.addItems.AddItemsCommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -46,7 +46,7 @@ class TraderDetailsConsignorAddressController @Inject()(
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: TraderDetailsConsignorAddressFormProvider,
+  formProvider: AddItemsCommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)

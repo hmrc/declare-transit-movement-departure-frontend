@@ -38,7 +38,7 @@ object ConsignorDetails {
     ).tupled
       .map {
         case (eori, name, consignorAddress) =>
-          val address = Address.prismAddressToConsignorAddress(consignorAddress)
+          val address = Address.prismAddressToCommonAddress(consignorAddress)
           ConsignorDetails(name, address, eori)
       }
   }

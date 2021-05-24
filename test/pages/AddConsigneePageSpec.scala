@@ -16,7 +16,7 @@
 
 package pages
 
-import models.{ConsigneeAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -35,7 +35,7 @@ class AddConsigneePageSpec extends PageBehaviours {
 
     "must remove ConsigneeAddressPage, ConsigneeNamePage and WhatIsConsigneeEoriPage when they exist in userAnswers" in {
 
-      val consigneeAddress = arbitrary[ConsigneeAddress].sample.value
+      val consigneeAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers

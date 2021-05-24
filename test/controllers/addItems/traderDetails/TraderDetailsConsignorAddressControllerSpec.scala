@@ -19,10 +19,10 @@ package controllers.addItems.traderDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.addItems.traderDetails.TraderDetailsConsignorAddressFormProvider
+import forms.addItems.AddItemsCommonAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
-import models.{ConsignorAddress, CountryList, NormalMode}
+import models.{CommonAddress, CountryList, NormalMode}
 import navigation.annotations.AddItems
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -30,7 +30,6 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.addItems.traderDetails.{TraderDetailsConsignorAddressPage, TraderDetailsConsignorNamePage}
-import pages.addItems.traderSecurityDetails.SecurityConsignorNamePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -50,7 +49,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
   private val consignorName                                      = "consignorName"
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  private val formProvider = new TraderDetailsConsignorAddressFormProvider()
+  private val formProvider = new AddItemsCommonAddressFormProvider()
   private val form         = formProvider(countries, consignorName, index)
 
   lazy val traderDetailsConsignorAddressRoute = routes.TraderDetailsConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
@@ -105,7 +104,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val tradersDetailsConsignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Code", country)
+      val tradersDetailsConsignorAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(TraderDetailsConsignorNamePage(index), "ConsignorName")

@@ -16,17 +16,17 @@
 
 package pages
 
-import models.ConsignorAddress
+import models.CommonAddress
 import pages.behaviours.PageBehaviours
 
 class ConsignorAddressPageSpec extends PageBehaviours {
 
   "ConsignorAddressPage" - {
 
-    beRetrievable[ConsignorAddress](ConsignorAddressPage)
+    beRetrievable[CommonAddress](ConsignorAddressPage)
 
-    beSettable[ConsignorAddress](ConsignorAddressPage)
+    beSettable[CommonAddress](ConsignorAddressPage)
 
-    beRemovable[ConsignorAddress](ConsignorAddressPage)
+    beRemovable[CommonAddress](ConsignorAddressPage)
   }
 }

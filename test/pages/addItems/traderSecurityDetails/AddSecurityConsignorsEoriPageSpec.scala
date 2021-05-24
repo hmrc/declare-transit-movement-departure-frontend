@@ -17,7 +17,7 @@
 package pages.addItems.traderSecurityDetails
 
 import base.SpecBase
-import models.{ConsignorAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -36,7 +36,7 @@ class AddSecurityConsignorsEoriPageSpec extends SpecBase with PageBehaviours {
 
     "must remove ConsignorAddressPage and ConsignorNamePage when there is a change of the answer to 'Yes'" in {
 
-      val consignorAddress = arbitrary[ConsignorAddress].sample.value
+      val consignorAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
