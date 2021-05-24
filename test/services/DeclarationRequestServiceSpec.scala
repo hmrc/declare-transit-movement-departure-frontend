@@ -18,7 +18,7 @@ package services
 
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import generators.{JourneyModelGenerators, ModelGenerators}
-import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetailsWithPreLodge, GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
+import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
 import models.journeyDomain.MovementDetails.NormalMovementDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.InlandMode.{NonSpecialMode, Rail}
