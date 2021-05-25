@@ -409,7 +409,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         previousDocumentType.getPreviousReferencesDocumentType(answer) map {
           referenceType =>
             Row(
-              key   = Key(lit"(${referenceType.code}) ${referenceType.description}"),
+              key   = Key(lit"(${referenceType.code}) ${referenceType.description.getOrElse("")}"),
               value = Value(lit""),
               actions = List(
                 Action(
@@ -432,7 +432,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         previousDocumentType.getPreviousReferencesDocumentType(answer) map {
           referenceType =>
             Row(
-              key   = Key(lit"(${referenceType.code}) ${referenceType.description}"),
+              key   = Key(lit"(${referenceType.code}) ${referenceType.description.getOrElse("")}"),
               value = Value(lit""),
               actions = List(
                 Action(
