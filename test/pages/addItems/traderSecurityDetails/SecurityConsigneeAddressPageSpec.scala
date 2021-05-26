@@ -17,17 +17,17 @@
 package pages.addItems.traderSecurityDetails
 
 import base.SpecBase
-import models.ConsigneeAddress
+import models.CommonAddress
 import pages.behaviours.PageBehaviours
 
 class SecurityConsigneeAddressPageSpec extends SpecBase with PageBehaviours {
 
   "SecurityConsigneeAddressPage" - {
 
-    beRetrievable[ConsigneeAddress](SecurityConsigneeAddressPage(index))
+    beRetrievable[CommonAddress](SecurityConsigneeAddressPage(index))
 
-    beSettable[ConsigneeAddress](SecurityConsigneeAddressPage(index))
+    beSettable[CommonAddress](SecurityConsigneeAddressPage(index))
 
-    beRemovable[ConsigneeAddress](SecurityConsigneeAddressPage(index))
+    beRemovable[CommonAddress](SecurityConsigneeAddressPage(index))
   }
 }

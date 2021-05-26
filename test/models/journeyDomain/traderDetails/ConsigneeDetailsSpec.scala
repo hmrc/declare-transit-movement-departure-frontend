@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.UserAnswersReader
-import models.{ConsigneeAddress, EoriNumber, UserAnswers}
+import models.{CommonAddress, EoriNumber, UserAnswers}
 import org.scalatest.TryValues
 import pages._
 
@@ -30,7 +30,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
   "Parsing ConsigneeDetails from UserAnswers" - {
     "when the eori is known" - {
       "when there is consignee name, address and eori" in {
-        forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength), arb[ConsigneeAddress]) {
+        forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
           case (baseUserAnswers, EoriNumber(eoriNumber), name, address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsigneePage)(true)
@@ -41,7 +41,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
             val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
 
-            val expectedAddress: Address = Address.prismAddressToConsigneeAddress(address)
+            val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
             result mustEqual ConsigneeDetails(name, expectedAddress, Some(EoriNumber(eoriNumber)))
 
@@ -65,7 +65,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
       }
 
       "when address and eori are answered but name is missing" in {
-        forAll(arb[UserAnswers], arb[EoriNumber], arb[ConsigneeAddress]) {
+        forAll(arb[UserAnswers], arb[EoriNumber], arb[CommonAddress]) {
           case (baseUserAnswers, EoriNumber(eoriNumber), address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsigneePage)(true)
@@ -82,7 +82,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
       }
 
       "when name and address are answered but eori is missing" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[ConsigneeAddress]) {
+        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
           case (baseUserAnswers, name, address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsigneePage)(true)
@@ -101,7 +101,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
     "when the eori is not known" - {
       "when there is consignee nameaddress" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[ConsigneeAddress]) {
+        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
           case (baseUserAnswers, name, address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsigneePage)(true)
@@ -111,7 +111,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
             val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
 
-            val expectedAddress: Address = Address.prismAddressToConsigneeAddress(address)
+            val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
             result mustEqual ConsigneeDetails(name, expectedAddress, None)
 
@@ -134,7 +134,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
       }
 
       "when address is answered but name is missing" in {
-        forAll(arb[UserAnswers], arb[ConsigneeAddress]) {
+        forAll(arb[UserAnswers], arb[CommonAddress]) {
           case (baseUserAnswers, address) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(AddConsigneePage)(true)

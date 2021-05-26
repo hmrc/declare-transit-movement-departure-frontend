@@ -92,7 +92,7 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(ConsignorDetails(name, _, _)) => name
       })
       .unsafeSetPFn(ConsignorAddressPage)(traderDetails.consignor)({
-        case Some(ConsignorDetails(_, address, _)) => Address.prismAddressToConsignorAddress.getOption(address).get
+        case Some(ConsignorDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
       // Set Consignee details
       .unsafeSetVal(AddConsigneePage)(traderDetails.consignee.isDefined)
@@ -106,7 +106,7 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(ConsigneeDetails(name, _, _)) => name
       })
       .unsafeSetPFn(ConsigneeAddressPage)(traderDetails.consignee)({
-        case Some(ConsigneeDetails(_, address, _)) => Address.prismAddressToConsigneeAddress.getOption(address).get
+        case Some(ConsigneeDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
 
 }

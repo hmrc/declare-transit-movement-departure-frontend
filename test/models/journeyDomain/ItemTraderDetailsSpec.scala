@@ -22,7 +22,7 @@ import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.{ConsigneeAddress, ConsignorAddress, EoriNumber, Index, UserAnswers}
+import models.{CommonAddress, EoriNumber, Index, UserAnswers}
 import org.scalatest.TryValues
 import pages._
 import pages.addItems.traderDetails._
@@ -32,7 +32,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
   "ItemTraderDetail can be parsed from UserAnswers" - {
 
     "when there is no consignor eoriNumber but only name and address" in {
-      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[ConsignorAddress]) {
+      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
         case (baseUserAnswers, name, address) =>
           val userAnswers = baseUserAnswers
             .unsafeSetVal(AddConsignorPage)(false)
@@ -41,7 +41,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(TraderDetailsConsignorNamePage(index))(name)
             .unsafeSetVal(TraderDetailsConsignorAddressPage(index))(address)
 
-          val expectedAddress: Address = Address.prismAddressToConsignorAddress(address)
+          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
           val result                   = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
           result.consignor.value mustEqual RequiredDetails(name, expectedAddress, None)
@@ -49,7 +49,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
     }
 
     "when there is consignor name, address and eori" in {
-      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[ConsignorAddress], arb[EoriNumber]) {
+      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress], arb[EoriNumber]) {
         case (baseUserAnswers, name, address, eori @ EoriNumber(eoriNumber1)) =>
           val userAnswers = baseUserAnswers
             .unsafeSetVal(AddConsignorPage)(false)
@@ -61,14 +61,14 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
 
           val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
-          val expectedAddress: Address = Address.prismAddressToConsignorAddress(address)
+          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
           result.consignor.value mustEqual RequiredDetails(name, expectedAddress, Some(eori))
       }
     }
 
     "when there is no consignee eori only name and address" in {
-      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[ConsigneeAddress]) {
+      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
         case (baseUserAnswers, name, address) =>
           val userAnswers = baseUserAnswers
             .unsafeSetVal(AddConsignorPage)(true)
@@ -78,7 +78,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(false)
 
           val result                   = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
-          val expectedAddress: Address = Address.prismAddressToConsigneeAddress(address)
+          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
           result.consignee.value mustEqual RequiredDetails(name, expectedAddress, None)
 
@@ -86,7 +86,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
     }
 
     "when there is consignee name, address and eori" in {
-      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[ConsigneeAddress], arb[EoriNumber]) {
+      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress], arb[EoriNumber]) {
         case (baseUserAnswers, name, address, eori @ EoriNumber(eoriNumber1)) =>
           val userAnswers = baseUserAnswers
             .unsafeSetVal(AddConsignorPage)(true)
@@ -98,7 +98,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
 
           val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
-          val expectedAddress: Address = Address.prismAddressToConsigneeAddress(address)
+          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
 
           result.consignee.value mustEqual RequiredDetails(name, expectedAddress, Some(eori))
       }
@@ -153,7 +153,7 @@ object ItemTraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(RequiredDetails(name, _, _)) => name
       })
       .unsafeSetPFn(TraderDetailsConsignorAddressPage(index))(itemTraderDetails.consignor)({
-        case Some(RequiredDetails(_, address, _)) => Address.prismAddressToConsignorAddress.getOption(address).get
+        case Some(RequiredDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
       // Set Consignee
       .unsafeSetPFn(TraderDetailsConsigneeEoriKnownPage(index))(itemTraderDetails.consignee)({
@@ -167,7 +167,7 @@ object ItemTraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(RequiredDetails(name, _, _)) => name
       })
       .unsafeSetPFn(TraderDetailsConsigneeAddressPage(index))(itemTraderDetails.consignee)({
-        case Some(RequiredDetails(_, address, _)) => Address.prismAddressToConsigneeAddress.getOption(address).get
+        case Some(RequiredDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
 
 }

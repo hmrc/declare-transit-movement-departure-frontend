@@ -39,7 +39,7 @@ object ConsigneeDetails {
     ).tupled
       .map {
         case (eori, name, consigneeAddress) =>
-          val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
+          val address = Address.prismAddressToCommonAddress(consigneeAddress)
           ConsigneeDetails(name, address, eori)
       }
   }

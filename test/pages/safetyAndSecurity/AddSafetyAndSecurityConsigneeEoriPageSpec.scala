@@ -16,7 +16,7 @@
 
 package pages.safetyAndSecurity
 
-import models.{ConsigneeAddress, UserAnswers}
+import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -48,7 +48,7 @@ class AddSafetyAndSecurityConsigneeEoriPageSpec extends PageBehaviours {
     }
     "cleanup" - {
       "must clean up the consignee name and address details on selecting option 'No' " in {
-        val consigneeAddress = arbitrary[ConsigneeAddress].sample.value
+        val consigneeAddress = arbitrary[CommonAddress].sample.value
 
         forAll(arbitrary[UserAnswers]) {
           answers =>

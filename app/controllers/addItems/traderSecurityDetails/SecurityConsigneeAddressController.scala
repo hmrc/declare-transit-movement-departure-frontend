@@ -18,7 +18,7 @@ package controllers.addItems.traderSecurityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.addItems.traderSecurityDetails.SecurityConsigneeAddressFormProvider
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -45,7 +45,7 @@ class SecurityConsigneeAddressController @Inject()(
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: SecurityConsigneeAddressFormProvider,
+  formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -66,8 +66,8 @@ class SecurityConsigneeAddressController @Inject()(
             request.userAnswers.get(SecurityConsigneeNamePage(index)) match {
               case Some(consigneeName) =>
                 val preparedForm = request.userAnswers.get(SecurityConsigneeAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consigneeName, index).fill(value)
-                  case None        => formProvider(countries, consigneeName, index)
+                  case Some(value) => formProvider(countries, consigneeName).fill(value)
+                  case None        => formProvider(countries, consigneeName)
                 }
 
                 val json = Json.obj(
@@ -94,7 +94,7 @@ class SecurityConsigneeAddressController @Inject()(
           case Some(consigneeName) =>
             referenceDataConnector.getCountryList() flatMap {
               countries =>
-                formProvider(countries, consigneeName, index)
+                formProvider(countries, consigneeName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {

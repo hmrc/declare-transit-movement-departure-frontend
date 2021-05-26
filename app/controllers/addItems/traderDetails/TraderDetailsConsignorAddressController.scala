@@ -19,7 +19,7 @@ package controllers.addItems.traderDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.addItems.traderDetails.TraderDetailsConsignorAddressFormProvider
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -46,7 +46,7 @@ class TraderDetailsConsignorAddressController @Inject()(
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: TraderDetailsConsignorAddressFormProvider,
+  formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -67,8 +67,8 @@ class TraderDetailsConsignorAddressController @Inject()(
             request.userAnswers.get(TraderDetailsConsignorNamePage(index)) match {
               case Some(consignorName) =>
                 val preparedForm = request.userAnswers.get(TraderDetailsConsignorAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consignorName, index).fill(value)
-                  case None        => formProvider(countries, consignorName, index)
+                  case Some(value) => formProvider(countries, consignorName).fill(value)
+                  case None        => formProvider(countries, consignorName)
                 }
 
                 val json = Json.obj(
@@ -97,7 +97,7 @@ class TraderDetailsConsignorAddressController @Inject()(
           case Some(consignorName) =>
             referenceDataConnector.getCountryList() flatMap {
               countries =>
-                formProvider(countries, consignorName, index)
+                formProvider(countries, consignorName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {

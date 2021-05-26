@@ -534,7 +534,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       "must go from Consignor Name page" - {
         "to Check Your Answers page, when Consignor Address exists" in {
-          forAll(arbitrary[UserAnswers], arbitrary[ConsignorAddress]) {
+          forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
             (answers, address) =>
               val updatedAnswers = answers
                 .unsafeSetVal(ConsignorAddressPage)(address)
@@ -701,7 +701,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       "must go from Consignee Name page to Check Your Answers page" - {
 
         "to Check Your Answers page, when Consignee Address exists" in {
-          forAll(arbitrary[UserAnswers], arbitrary[ConsigneeAddress]) {
+          forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
             (answers, address) =>
               val updatedAnswers = answers
                 .unsafeSetVal(ConsigneeAddressPage)(address)

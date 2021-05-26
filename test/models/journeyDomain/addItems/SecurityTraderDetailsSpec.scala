@@ -19,9 +19,9 @@ package models.journeyDomain.addItems
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
+import models.{CommonAddress, EoriNumber}
 import models.domain.Address
 import models.reference._
-import models.{ConsigneeAddress, ConsignorAddress, EoriNumber}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
@@ -103,7 +103,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
           "when the eori is not known" - {
 
             "when the user selects 'No' for add circumstance indicator page then the consignee is read" in {
-              val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+              val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
               val ua = emptyUserAnswers
                 .unsafeSetVal(AddSecurityDetailsPage)(true)
@@ -122,7 +122,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
 
             "when the user selects 'Yes' for add circumstance indicator page but does  not select 'E' for circumstance indicator then the consignee is read" in {
 
-              val consigneeAddress = ConsigneeAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+              val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
               val ua = emptyUserAnswers
                 .unsafeSetVal(AddSecurityDetailsPage)(true)
@@ -207,7 +207,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
         "when the eori is not known" - {
 
           "when the user selects 'No' for add circumstance indicator page then the consignee is read" in {
-            val consigneeAddress = ConsignorAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
+            val consigneeAddress = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
 
             val ua = emptyUserAnswers
               .unsafeSetVal(AddSecurityDetailsPage)(true)

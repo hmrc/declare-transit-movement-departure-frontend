@@ -16,11 +16,11 @@
 
 package pages.safetyAndSecurity
 
-import models.CarrierAddress
+import models.CommonAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object CarrierAddressPage extends QuestionPage[CarrierAddress] {
+case object CarrierAddressPage extends QuestionPage[CommonAddress] {
 
   override def path: JsPath = JsPath \ toString
 

@@ -180,7 +180,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
       })
       .unsafeSetPFn(SafetyAndSecurityConsignorAddressPage)(safetyAndSecurity.consignor)({
         case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToConsignorAddress.getOption(address).get
+          Address.prismAddressToCommonAddress.getOption(address).get
       })
       // Set Consignee
       .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(safetyAndSecurity.consignee.isDefined)
@@ -196,7 +196,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
       })
       .unsafeSetPFn(SafetyAndSecurityConsigneeAddressPage)(safetyAndSecurity.consignee)({
         case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToConsigneeAddress.getOption(address).get
+          Address.prismAddressToCommonAddress.getOption(address).get
       })
       // Set Carrier
       .unsafeSetVal(AddCarrierPage)(safetyAndSecurity.carrier.isDefined)
@@ -212,7 +212,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
       })
       .unsafeSetPFn(CarrierAddressPage)(safetyAndSecurity.carrier)({
         case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToCarrierAddress.getOption(address).get
+          Address.prismAddressToCommonAddress.getOption(address).get
       })
 
     val updatedUserAnswers = ua.get(ModeAtBorderPage) match {

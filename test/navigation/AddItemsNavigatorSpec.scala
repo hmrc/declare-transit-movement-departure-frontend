@@ -26,7 +26,7 @@ import controllers.addItems.traderDetails.{routes => traderRoutes}
 import controllers.{routes => mainRoutes}
 import generators.Generators
 import models.reference.PackageType
-import models.{CheckMode, ConsigneeAddress, ConsignorAddress, Index, NormalMode, UserAnswers}
+import models.{CheckMode, CommonAddress, Index, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
@@ -1180,7 +1180,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           }
 
           "Items CYA when Address is Populated" in {
-            forAll(arbitrary[UserAnswers], arbitrary[ConsignorAddress]) {
+            forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
               (answers, address) =>
                 val userAnswers = answers
                   .set(TraderDetailsConsignorAddressPage(index), address).success.value
@@ -1293,7 +1293,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           }
           
           "Items CYA when address is populated" in {
-            forAll(arbitrary[UserAnswers], arbitrary[ConsigneeAddress]) {
+            forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
               (answers, address) =>
                 val userAnswers = answers
                   .set(TraderDetailsConsigneeAddressPage(index), address).success.value

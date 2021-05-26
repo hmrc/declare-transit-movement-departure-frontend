@@ -25,7 +25,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
   def fieldWithMaxLength(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError, withoutExtendedAscii: Boolean = false): Unit =
     s"must not bind strings longer than $maxLength characters" in {
 
-      forAll(stringsLongerThan(maxLength, withoutExtendedAscii) -> "longString") {
+      forAll(stringsLongerThan(maxLength, withOnlyPrintableAscii = true) -> "longString") {
         string =>
           val result = form.bind(Map(fieldName -> string)).apply(fieldName)
           result.errors mustEqual Seq(lengthError)
@@ -60,6 +60,19 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
       val expectedError          = Seq(FormError(fieldName, invalidKey, args.toList))
       val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~<>,±üçñèé@]{$length}")
+
+      forAll(generator) {
+        invalidString =>
+          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+          result.errors must equal(expectedError)
+      }
+    }
+
+  def postcodeWithInvalidFormat(form: Form[_], fieldName: String, invalidKey: String, length: Int, args: Any*) =
+    s"must not bind postcode with invalid format" in {
+
+      val expectedError          = Seq(FormError(fieldName, invalidKey, args.toList))
+      val generator: Gen[String] = RegexpGen.from("^[a-zA-Z]{1,2}([10-12]{1,2}|[10-12][a-zA-Z])\\s*[10-12][a-zA-Z]{4}$")
 
       forAll(generator) {
         invalidString =>

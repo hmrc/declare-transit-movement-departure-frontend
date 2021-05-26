@@ -44,7 +44,7 @@ object ItemTraderDetails {
       ).tupled
         .map {
           case (name, consignorAddress, eori) =>
-            val address = Address.prismAddressToConsignorAddress(consignorAddress)
+            val address = Address.prismAddressToCommonAddress(consignorAddress)
             RequiredDetails(name, address, eori)
         }
 
@@ -66,7 +66,7 @@ object ItemTraderDetails {
       ).tupled
         .map {
           case (name, consigneeAddress, eori) =>
-            val address = Address.prismAddressToConsigneeAddress(consigneeAddress)
+            val address = Address.prismAddressToCommonAddress(consigneeAddress)
             RequiredDetails(name, address, eori)
         }
 

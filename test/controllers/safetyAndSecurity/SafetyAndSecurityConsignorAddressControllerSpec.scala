@@ -19,13 +19,11 @@ package controllers.safetyAndSecurity
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
-import forms.safetyAndSecurity.SafetyAndSecurityConsignorAddressFormProvider
+import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
+import models.{CommonAddress, CountryList, NormalMode}
 import models.reference.{Country, CountryCode}
-import models.{ConsignorAddress, CountryList, NormalMode}
-import navigation.annotations.SafetyAndSecurity
-import models.NormalMode
-import navigation.annotations.SafetyAndSecurityTraderDetails
+import navigation.annotations.{SafetyAndSecurity, SafetyAndSecurityTraderDetails}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -52,7 +50,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
   private val consignorName                                      = "consignorName"
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  private val formProvider = new SafetyAndSecurityConsignorAddressFormProvider()
+  private val formProvider = new CommonAddressFormProvider()
   private val form         = formProvider(countries, consignorName)
   private val template     = "safetyAndSecurity/safetyAndSecurityConsignorAddress.njk"
 
@@ -115,7 +113,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec extends SpecBase with Mock
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
-      val consignorAddress: ConsignorAddress = ConsignorAddress("Address line 1", "Address line 2", "Code", country)
+      val consignorAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
         .set(SafetyAndSecurityConsignorNamePage, consignorName)
