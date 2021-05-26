@@ -19,7 +19,7 @@ package controllers.addItems.traderSecurityDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddItemsCommonAddressFormProvider
+import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, CountryList, NormalMode}
@@ -47,8 +47,8 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with MockNunjucksR
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val formProvider                                       = new AddItemsCommonAddressFormProvider()
-  private val form                                               = formProvider(countries, "Test", index)
+  private val formProvider                                       = new CommonAddressFormProvider()
+  private val form                                               = formProvider(countries, "Test")
 
   lazy val securityConsignorAddressRoute = routes.SecurityConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
   private val template                   = "addItems/traderSecurityDetails/securityConsignorAddress.njk"

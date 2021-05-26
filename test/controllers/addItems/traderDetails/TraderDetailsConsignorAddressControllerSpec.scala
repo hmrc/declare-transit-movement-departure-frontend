@@ -19,7 +19,7 @@ package controllers.addItems.traderDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddItemsCommonAddressFormProvider
+import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, CountryList, NormalMode}
@@ -49,8 +49,8 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
   private val consignorName                                      = "consignorName"
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  private val formProvider = new AddItemsCommonAddressFormProvider()
-  private val form         = formProvider(countries, consignorName, index)
+  private val formProvider = new CommonAddressFormProvider()
+  private val form         = formProvider(countries, consignorName)
 
   lazy val traderDetailsConsignorAddressRoute = routes.TraderDetailsConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
 
