@@ -69,7 +69,7 @@ trait JourneyModelGenerators {
       safetyAndSecurity <- arbitrary[SafetyAndSecurity]
       itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, movementDetails, routeDetails)
       goodsummarydetailsType = arbitrary[GoodSummarySimplifiedDetails]
-      goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired)(Arbitrary(goodsummarydetailsType)).arbitrary
+      goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired, ProcedureType.Simplified).arbitrary
       guarantees   <- nonEmptyListOf[GuaranteeDetails](3)
     } yield
       JourneyDomain(
@@ -100,7 +100,7 @@ trait JourneyModelGenerators {
       } else {
         arbitrary[GoodSummaryNormalDetailsWithPreLodge]
       }
-      goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired)(Arbitrary(goodsummarydetailsType)).arbitrary
+      goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired, ProcedureType.Normal).arbitrary
       guarantees   <- nonEmptyListOf[GuaranteeDetails](3)
     } yield
       JourneyDomain(
@@ -751,18 +751,22 @@ trait JourneyModelGenerators {
       } yield GoodSummaryNormalDetailsWithPreLodge(customsApprovedLocation)
     }
 
-  implicit lazy val arbitraryGoodSummaryDetails: Arbitrary[GoodSummaryDetails] =
+  implicit def arbitraryGoodSummaryDetails(procedureType: ProcedureType): Arbitrary[GoodSummaryDetails] =
     Arbitrary {
-      Gen.oneOf(arbitrary[GoodSummaryNormalDetailsWithPreLodge], arbitrary[GoodSummarySimplifiedDetails], arbitrary[GoodSummaryNormalDetailsWithoutPreLodge])
+      if (procedureType == ProcedureType.Normal) {
+        Gen.oneOf(arbitrary[GoodSummaryNormalDetailsWithPreLodge], arbitrary[GoodSummaryNormalDetailsWithoutPreLodge])
+      } else {
+        arbitrary[GoodSummarySimplifiedDetails]
+      }
     }
 
-  implicit def arbitraryGoodsSummary(safetyAndSecurity: Boolean)(implicit arbitraryGoodSummaryDetails: Arbitrary[GoodSummaryDetails]): Arbitrary[GoodsSummary] =
+  implicit def arbitraryGoodsSummary(safetyAndSecurity: Boolean, procedureType: ProcedureType): Arbitrary[GoodsSummary] =
     Arbitrary {
       for {
         loadingPlace       <- if (safetyAndSecurity) { nonEmptyString.map(Some(_)) } else { Gen.const(None) }
         numberOfPackages   <- Gen.choose(1, 100)
         totalMass          <- Gen.choose(1, 100).map(_.toString)
-        goodSummaryDetails <- arbitraryGoodSummaryDetails.arbitrary
+        goodSummaryDetails <- arbitraryGoodSummaryDetails(procedureType).arbitrary
         sealNumbers        <- listWithMaxLength[SealDomain](10)
       } yield
         GoodsSummary(

@@ -217,6 +217,7 @@ declarationSummary.section.transport = {0} transport
 declarationSummary.section.transport.cannotStart = Transport
 declarationSummary.section.tradersDetails = {0} trader’s details
 declarationSummary.section.goodsSummary = {0} goods summary
+declarationSummary.section.goodsSummary.cannotStart = Goods summary
 declarationSummary.section.guarantee = {0} guarantee
 declarationSummary.section.guarantee.cannotStart = Guarantee
 declarationSummary.section.safetyAndSecurity = {0} safety and security details
