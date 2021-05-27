@@ -794,7 +794,10 @@ traderDetailsConsigneeAddress.error.required = Enter the {0} of {1}’s address
 traderDetailsConsigneeAddress.error.max_length = The {0} of {1}’s address must be 35 characters or less
 
 
-
+traderDetailsConsigneeAddress.AddressLine1 = Address line 1
+traderDetailsConsigneeAddress.AddressLine2 = Address line 2
+traderDetailsConsigneeAddress.postalCode = Postal code
+traderDetailsConsigneeAddress.AddressLine4 = Country
 traderDetailsConsigneeEoriKnown.title = Do you know the consignee’s EORI number for item {0}?
 traderDetailsConsigneeEoriKnown.heading = Do you know the consignee’s EORI number for item {0}?
 traderDetailsConsigneeEoriKnown.checkYourAnswersLabel = Know the consignee’s EORI number for item {0}?
