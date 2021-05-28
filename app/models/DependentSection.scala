@@ -28,6 +28,7 @@ object DependentSection {
   case object TransportDetails extends DependentSection
   case object GuaranteeDetails extends DependentSection
   case object SafetyAndSecurity extends DependentSection
+  case object GoodsSummary extends DependentSection
   case object ItemDetails extends DependentSection
 
   private def itemsDependentSections(userAnswers: UserAnswers): UserAnswersReader[_] = {
@@ -50,6 +51,7 @@ object DependentSection {
   def dependentSectionReader(section: DependentSection, userAnswers: UserAnswers): UserAnswersReader[_] =
     section match {
       case TransportDetails  => UserAnswersReader[MovementDetails]
+      case GoodsSummary      => UserAnswersReader[MovementDetails]
       case SafetyAndSecurity => UserAnswersReader[TransportDetails]
       case GuaranteeDetails  => UserAnswersReader[RouteDetails]
       case ItemDetails       => itemsDependentSections(userAnswers)

@@ -19,9 +19,10 @@ package viewModels
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.{JourneyModelGenerators, ModelGenerators, UserAnswersGenerator}
+import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
 import models.journeyDomain._
 import models.journeyDomain.traderDetails.{TraderDetails, TraderDetailsSpec}
-import models.reference.{CountryCode, CountryOfDispatch}
+import models.reference.CountryOfDispatch
 import models.{DeclarationType, EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -30,6 +31,8 @@ import pages.guaranteeDetails.GuaranteeTypePage
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
 import play.api.libs.json.{JsObject, Json}
+
+import java.time.LocalDate
 
 class TaskListViewModelSpec
     extends SpecBase
@@ -866,15 +869,25 @@ class TaskListViewModelSpec
 
       "status" - {
         "is Not started when there are no answers for the section" in {
-          val viewModel = TaskListViewModel(emptyUserAnswers)
+          val updatedUserAnswers = emptyUserAnswers.set(ProcedureTypePage, ProcedureType.Simplified).success.value
+          val viewModel          = TaskListViewModel(updatedUserAnswers)
 
           viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.NotStarted
+        }
+
+        "is Cannot start yet when there are no answers for the section" in {
+          val updatedUserAnswers = emptyUserAnswers.set(ProcedureTypePage, ProcedureType.Normal).success.value
+          val viewModel          = TaskListViewModel(updatedUserAnswers)
+
+          viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.CannotStartYet
         }
 
         "is InProgress when the first question for the section has been answered" in {
           forAll(arb[Int]) {
             pageAnswer =>
-              val userAnswers = emptyUserAnswers.unsafeSetVal(TotalPackagesPage)(pageAnswer)
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(TotalPackagesPage)(pageAnswer)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
 
               val viewModel = TaskListViewModel(userAnswers)
 
@@ -882,19 +895,38 @@ class TaskListViewModelSpec
           }
         }
 
-        "is Completed when all the answers are completed" in {
+        "is Completed and procedure type is 'Normal' when all the answers are completed" in {
 
-          val isSecurityDefined = arb[Boolean].sample.value
+          val isSecurityDefined           = arb[Boolean].sample.value
+          val procedureType               = ProcedureType.Normal
+          val movementDetails             = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+          val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
 
-          forAll(arb(arbitraryGoodsSummary(isSecurityDefined)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
+          forAll(arb(arbitraryGoodsSummary(isSecurityDefined, procedureType)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
             (goodsSummary, detailsWithPrelodge) =>
               val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = detailsWithPrelodge)
 
               val userAnswers = GoodsSummarySpec
-                .setGoodsSummary(updatedGoodsSummary)(emptyUserAnswers)
+                .setGoodsSummary(updatedGoodsSummary)(userAnswersWithMovementDtls)
                 .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
                 .unsafeSetVal(PreLodgeDeclarationPage)(true)
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                .unsafeSetVal(ProcedureTypePage)(procedureType)
+
+              val viewModel = TaskListViewModel(userAnswers)
+
+              viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.Completed
+          }
+        }
+
+        "is Completed and procedure type is 'Simplified' when all the answers are completed" in {
+          val isSecurityDefined = arb[Boolean].sample.value
+          forAll(arb(arbitraryGoodsSummary(isSecurityDefined, ProcedureType.Simplified))) {
+            (goodsSummary) =>
+              val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = GoodSummarySimplifiedDetails("location", LocalDate.now()))
+              val userAnswers = GoodsSummarySpec
+                .setGoodsSummary(updatedGoodsSummary)(emptyUserAnswers)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+                .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
 
               val viewModel = TaskListViewModel(userAnswers)
 
@@ -926,16 +958,19 @@ class TaskListViewModelSpec
         }
 
         "when the status is Completed, links to the Check your answers page for the section" in {
-          val isSecurityDefined = arb[Boolean].sample.value
+          val isSecurityDefined           = arb[Boolean].sample.value
+          val procedureType               = ProcedureType.Normal
+          val movementDetails             = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+          val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
 
-          forAll(arb(arbitraryGoodsSummary(isSecurityDefined)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
+          forAll(arb(arbitraryGoodsSummary(isSecurityDefined, procedureType)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
             (goodsSummary, detailsWithPrelodge) =>
               val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = detailsWithPrelodge)
               val userAnswers = GoodsSummarySpec
-                .setGoodsSummary(updatedGoodsSummary)(emptyUserAnswers)
+                .setGoodsSummary(updatedGoodsSummary)(userAnswersWithMovementDtls)
                 .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
                 .unsafeSetVal(PreLodgeDeclarationPage)(true)
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                .unsafeSetVal(ProcedureTypePage)(procedureType)
 
               val viewModel = TaskListViewModel(userAnswers)
 

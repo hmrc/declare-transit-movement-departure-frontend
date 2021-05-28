@@ -37,6 +37,14 @@ private[viewModels] class TaskListDslSectionNameStage(userAnswers: UserAnswers)(
   def ifDependentSectionCompleted[A, B](readerIfDependentSectionCompleted: UserAnswersReader[A]): TaskListDslIfDependentSectionStage[A] =
     new TaskListDslIfDependentSectionStage[A](userAnswers)(sectionName, Some(readerIfDependentSectionCompleted))
 
+  def conditionalDependencyOnSection[A, B](readerIfDependentSectionCompleted: UserAnswersReader[A])(
+    isDependent: Boolean): TaskListDslIfDependentSectionStage[A] =
+    if (isDependent) {
+      ifDependentSectionCompleted(readerIfDependentSectionCompleted)
+    } else {
+      ifNoDependencyOnOtherSection
+    }
+
 }
 
 private[viewModels] class TaskListDslIfDependentSectionStage[A](userAnswers: UserAnswers)(sectionName: String,

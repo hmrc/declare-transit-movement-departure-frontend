@@ -176,6 +176,7 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
     userAnswers
       .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
       .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
+      .unsafeSetVal(AddSealsPage)(goodsSummary.sealNumbers.nonEmpty)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
         case GoodSummaryNormalDetailsWithoutPreLodge(_, Some(_)) => true

@@ -124,7 +124,8 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
   private val goodsSummaryDetails =
     taskListDsl
       .sectionName("declarationSummary.section.goodsSummary")
-      .ifNoDependencyOnOtherSection
+      .conditionalDependencyOnSection(dependentSectionReader(DependentSection.GoodsSummary, userAnswers))(
+        userAnswers.get(ProcedureTypePage).contains(ProcedureType.Normal))
       .ifCompleted(
         UserAnswersReader[GoodsSummary],
         controllers.goodsSummary.routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url
