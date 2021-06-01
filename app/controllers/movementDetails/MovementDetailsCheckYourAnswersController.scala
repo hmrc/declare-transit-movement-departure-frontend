@@ -18,7 +18,9 @@ package controllers.movementDetails
 
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import models.{LocalReferenceNumber, UserAnswers}
+import javax.inject.Inject
+import models.journeyDomain.MovementDetails
+import models.{LocalReferenceNumber, UserAnswers, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -27,7 +29,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.MovementDetailsCheckYourAnswersHelper
 import viewModels.sections.Section
 
-import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class MovementDetailsCheckYourAnswersController @Inject()(
@@ -39,6 +40,7 @@ class MovementDetailsCheckYourAnswersController @Inject()(
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with ValidateReaderLogger
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -49,6 +51,8 @@ class MovementDetailsCheckYourAnswersController @Inject()(
         "sections"    -> Json.toJson(sections),
         "nextPageUrl" -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
       )
+
+      ValidateReaderLogger[MovementDetails](request.userAnswers)
 
       renderer.render("movementDetailsCheckYourAnswers.njk", json).map(Ok(_))
   }
@@ -67,6 +71,7 @@ class MovementDetailsCheckYourAnswersController @Inject()(
           checkYourAnswersHelper.representativeName,
           checkYourAnswersHelper.representativeCapacity
         ).flatten
-      ))
+      )
+    )
   }
 }

@@ -16,9 +16,12 @@
 
 package controllers.addItems
 
+import cats.data.NonEmptyList
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import models.{DependentSection, Index, LocalReferenceNumber}
+import javax.inject.Inject
+import models.journeyDomain.ItemSection
+import models.{DependentSection, Index, LocalReferenceNumber, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -27,7 +30,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.AddItemsCheckYourAnswersViewModel
 import viewModels.sections.Section
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ItemsCheckYourAnswersController @Inject()(
@@ -41,6 +43,7 @@ class ItemsCheckYourAnswersController @Inject()(
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with ValidateReaderLogger
     with I18nSupport {
 
   private val template = "addItems/itemsCheckYourAnswers.njk"
@@ -75,6 +78,8 @@ class ItemsCheckYourAnswersController @Inject()(
               "nextPageUrl" -> routes.AddAnotherItemController.onPageLoad(lrn).url
             )
           }
+
+        ValidateReaderLogger[NonEmptyList[ItemSection]](request.userAnswers)
 
         buildJson.flatMap(renderer.render(template, _).map(Ok(_)))
     }

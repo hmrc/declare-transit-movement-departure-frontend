@@ -18,7 +18,9 @@ package controllers.goodsSummary
 
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import models.LocalReferenceNumber
+import javax.inject.Inject
+import models.journeyDomain.GoodsSummary
+import models.{LocalReferenceNumber, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -27,7 +29,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.GoodsSummaryCheckYourAnswersViewModel
 import viewModels.sections.Section
 
-import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class GoodsSummaryCheckYourAnswersController @Inject()(
@@ -39,6 +40,7 @@ class GoodsSummaryCheckYourAnswersController @Inject()(
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with ValidateReaderLogger
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -50,6 +52,8 @@ class GoodsSummaryCheckYourAnswersController @Inject()(
         "sections"    -> Json.toJson(sections),
         "nextPageUrl" -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
       )
+
+      ValidateReaderLogger[GoodsSummary](request.userAnswers)
 
       renderer.render("goodsSummaryCheckYourAnswers.njk", json).map(Ok(_))
   }

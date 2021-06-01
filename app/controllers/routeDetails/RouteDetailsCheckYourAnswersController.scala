@@ -20,9 +20,11 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import derivable.DeriveNumberOfOfficeOfTransits
+import javax.inject.Inject
+import models.journeyDomain.RouteDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, NormalMode}
+import models.{Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
 import pages.MovementDestinationCountryPage
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -35,7 +37,6 @@ import uk.gov.hmrc.viewmodels.MessageInterpolators
 import utils.RouteDetailsCheckYourAnswersHelper
 import viewModels.sections.Section
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RouteDetailsCheckYourAnswersController @Inject()(
@@ -48,6 +49,7 @@ class RouteDetailsCheckYourAnswersController @Inject()(
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with ValidateReaderLogger
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -62,6 +64,9 @@ class RouteDetailsCheckYourAnswersController @Inject()(
                 "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url,
                 "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
               )
+
+              ValidateReaderLogger[RouteDetails](request.userAnswers)
+
               renderer.render("routeDetailsCheckYourAnswers.njk", json).map(Ok(_))
           }
         case _ =>
