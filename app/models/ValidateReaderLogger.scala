@@ -23,16 +23,15 @@ trait ValidateReaderLogger extends Logging {
 
   object ValidateReaderLogger {
 
-    def apply[A: UserAnswersReader](ua: UserAnswers): Either[Unit, A] =
-      UserAnswersReader[A].run(ua).left.map {
-        readerError =>
-          val message = readerError.message match {
-            case Some(value) => s" with message: $value"
-            case None        => ""
-          }
+    def apply[A: UserAnswersReader](ua: UserAnswers): Unit =
+      for (readerError <- UserAnswersReader[A].run(ua).left) {
 
-          logger.info(s"[AnswersCheck][CYA] Failed on `${readerError.page.path}`" + message)
+        val message = readerError.message match {
+          case Some(value) => s" with message: $value"
+          case None        => ""
+        }
+
+        logger.info(s"[AnswersCheck][CYA] Failed on `${readerError.page.path}`" + message)
       }
   }
-
 }
