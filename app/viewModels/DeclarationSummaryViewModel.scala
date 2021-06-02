@@ -16,7 +16,7 @@
 
 package viewModels
 
-import models.journeyDomain.{EitherType, JourneyDomain, UserAnswersReader}
+import models.journeyDomain.{EitherType, JourneyDomain, ReaderError, UserAnswersReader}
 import models.{LocalReferenceNumber, UserAnswers}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -39,6 +39,7 @@ class DeclarationSummaryViewModel(serviceUrl: String, userAnswers: UserAnswers) 
     None
   }
 
+  val sectionErrors: Seq[(String, ReaderError)] = sections.sectionErrors
 }
 
 object DeclarationSummaryViewModel {

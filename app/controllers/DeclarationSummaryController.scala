@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import handlers.ErrorHandler
-import models.LocalReferenceNumber
+import models.{LocalReferenceNumber, ValidateTaskListViewLogger}
 import pages.TechnicalDifficultiesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -28,8 +28,8 @@ import services.DeclarationSubmissionService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.DeclarationSummaryViewModel
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationSummaryController @Inject()(
@@ -45,12 +45,17 @@ class DeclarationSummaryController @Inject()(
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
+    with ValidateTaskListViewLogger
     with TechnicalDifficultiesPage {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
+      val declarationSummaryViewModel = DeclarationSummaryViewModel(appConfig.manageTransitMovementsViewDeparturesUrl, request.userAnswers)
+
+      ValidateTaskListViewLogger(declarationSummaryViewModel.sectionErrors)
+
       renderer
-        .render("declarationSummary.njk", DeclarationSummaryViewModel(appConfig.manageTransitMovementsViewDeparturesUrl, request.userAnswers))
+        .render("declarationSummary.njk", declarationSummaryViewModel)
         .map(Ok(_))
   }
 

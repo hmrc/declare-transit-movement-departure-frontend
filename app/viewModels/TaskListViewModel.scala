@@ -18,12 +18,11 @@ package viewModels
 
 import cats.data.NonEmptyList
 import cats.implicits._
-import logging.Logging
 import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
-import models.{DependentSection, Index, NormalMode, ProcedureType, SectionDetails, UserAnswers, ValidateTaskListViewLogger}
+import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
 import pages._
 import pages.guaranteeDetails.GuaranteeTypePage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
@@ -181,24 +180,17 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
     guaranteeDetails
   ))
 
-  private val sectionDetails      = sections.map(_.section)
-  private val collectReaderErrors = sections.flatMap(_.collectReaderErrors)
-
+  private val sectionDetails                    = sections.map(_.section)
+  val sectionErrors: Seq[(String, ReaderError)] = sections.flatMap(_.collectReaderErrors)
 }
 
-object TaskListViewModel extends ValidateTaskListViewLogger {
+object TaskListViewModel {
 
   object Constants {
     val sections: String = "sections"
   }
 
-  def apply(userAnswers: UserAnswers): TaskListViewModel = {
-    val taskListViewModel = new TaskListViewModel(userAnswers)
-
-    ValidateTaskListViewLogger(taskListViewModel.collectReaderErrors)
-
-    taskListViewModel
-  }
+  def apply(userAnswers: UserAnswers): TaskListViewModel = new TaskListViewModel(userAnswers)
 
   implicit val writes: Writes[TaskListViewModel] =
     taskListViewModel => Json.toJson(taskListViewModel.sectionDetails)
