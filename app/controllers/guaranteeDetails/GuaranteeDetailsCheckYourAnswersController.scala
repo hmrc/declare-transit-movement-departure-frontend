@@ -16,8 +16,11 @@
 
 package controllers.guaranteeDetails
 
+import cats.data.NonEmptyList
 import controllers.actions._
-import models.{DependentSection, Index, LocalReferenceNumber}
+import javax.inject.Inject
+import models.journeyDomain.{GuaranteeDetails, MovementDetails}
+import models.{DependentSection, Index, LocalReferenceNumber, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -26,7 +29,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.GuaranteeDetailsCheckYourAnswersViewModel
 import viewModels.sections.Section
 
-import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class GuaranteeDetailsCheckYourAnswersController @Inject()(
@@ -39,6 +41,7 @@ class GuaranteeDetailsCheckYourAnswersController @Inject()(
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with ValidateReaderLogger
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] =
@@ -53,6 +56,8 @@ class GuaranteeDetailsCheckYourAnswersController @Inject()(
           "sections" -> Json.toJson(sections),
           "nextPage" -> routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
         )
+
+        ValidateReaderLogger[NonEmptyList[GuaranteeDetails]](request.userAnswers)
 
         renderer.render("guaranteeDetailsCheckYourAnswers.njk", json).map(Ok(_))
     }

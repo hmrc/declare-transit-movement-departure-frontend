@@ -18,7 +18,7 @@ package controllers.traderDetails
 
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import models.{LocalReferenceNumber, UserAnswers}
+import models.{LocalReferenceNumber, UserAnswers, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -27,8 +27,10 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import utils.TraderDetailsCheckYourAnswersHelper
 import viewModels.sections.Section
-
 import javax.inject.Inject
+import models.journeyDomain.SafetyAndSecurity
+import models.journeyDomain.traderDetails.TraderDetails
+
 import scala.concurrent.ExecutionContext
 
 class TraderDetailsCheckYourAnswersController @Inject()(
@@ -40,6 +42,7 @@ class TraderDetailsCheckYourAnswersController @Inject()(
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with ValidateReaderLogger
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -50,6 +53,8 @@ class TraderDetailsCheckYourAnswersController @Inject()(
         "sections"    -> Json.toJson(sections),
         "nextPageUrl" -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
       )
+
+      ValidateReaderLogger[TraderDetails](request.userAnswers)
 
       renderer.render("traderDetailsCheckYourAnswers.njk", json).map(Ok(_))
   }

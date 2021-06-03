@@ -22,7 +22,7 @@ import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
-import models.{DependentSection, Index, NormalMode, ProcedureType, SectionDetails, UserAnswers}
+import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
 import pages._
 import pages.guaranteeDetails.GuaranteeTypePage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
@@ -46,7 +46,6 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.movementDetails.routes.DeclarationTypeController.onPageLoad(userAnswers.id, NormalMode).url
       )
       .ifNotStarted(controllers.movementDetails.routes.DeclarationTypeController.onPageLoad(userAnswers.id, NormalMode).url)
-      .section
 
   private val routeDetails =
     taskListDsl
@@ -61,7 +60,6 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.routeDetails.routes.CountryOfDispatchController.onPageLoad(lrn, NormalMode).url
       )
       .ifNotStarted(controllers.routeDetails.routes.CountryOfDispatchController.onPageLoad(lrn, NormalMode).url)
-      .section
 
   private val transportDetails =
     taskListDsl
@@ -76,7 +74,6 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.transportDetails.routes.InlandModeController.onPageLoad(lrn, NormalMode).url
       )
       .ifNotStarted(controllers.transportDetails.routes.InlandModeController.onPageLoad(lrn, NormalMode).url)
-      .section
 
   private def traderDetailsStartPage(procedureType: Option[ProcedureType]): String =
     procedureType match {
@@ -104,7 +101,6 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         traderDetailsStartPage(userAnswers.get(ProcedureTypePage))
       )
       .ifNotStarted(traderDetailsStartPage(userAnswers.get(ProcedureTypePage)))
-      .section
 
   private val itemDetails =
     taskListDsl
@@ -119,7 +115,6 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.id, Index(0), NormalMode).url
       )
       .ifNotStarted(controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.id, Index(0), NormalMode).url)
-      .section
 
   private val goodsSummaryDetails =
     taskListDsl
@@ -135,7 +130,6 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.goodsSummary.routes.TotalPackagesController.onPageLoad(lrn, NormalMode).url
       )
       .ifNotStarted(controllers.goodsSummary.routes.TotalPackagesController.onPageLoad(lrn, NormalMode).url)
-      .section
 
   private val guaranteeDetails =
     taskListDsl
@@ -150,9 +144,8 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(lrn, Index(0), NormalMode).url
       )
       .ifNotStarted(controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(lrn, Index(0), NormalMode).url)
-      .section
 
-  private val safetyAndSecurityDetails: Seq[SectionDetails] =
+  private val safetyAndSecurityDetails =
     userAnswers
       .get(AddSecurityDetailsPage)
       .map({
@@ -170,24 +163,25 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
                 controllers.safetyAndSecurity.routes.AddCircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url
               )
               .ifNotStarted(controllers.safetyAndSecurity.routes.AddCircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url)
-              .section
           )
 
         case _ => Seq.empty
       })
       .getOrElse(Seq.empty)
 
-  private val sections: Seq[SectionDetails] =
-    Seq(
-      movementDetails,
-      routeDetails,
-      traderDetails,
-      transportDetails
-    ) ++ safetyAndSecurityDetails ++ Seq(
-      itemDetails,
-      goodsSummaryDetails,
-      guaranteeDetails
-    )
+  private val sections = (Seq(
+    movementDetails,
+    routeDetails,
+    traderDetails,
+    transportDetails
+  ) ++ safetyAndSecurityDetails ++ Seq(
+    itemDetails,
+    goodsSummaryDetails,
+    guaranteeDetails
+  ))
+
+  private val sectionDetails                    = sections.map(_.section)
+  val sectionErrors: Seq[(String, ReaderError)] = sections.flatMap(_.collectReaderErrors)
 }
 
 object TaskListViewModel {
@@ -199,6 +193,6 @@ object TaskListViewModel {
   def apply(userAnswers: UserAnswers): TaskListViewModel = new TaskListViewModel(userAnswers)
 
   implicit val writes: Writes[TaskListViewModel] =
-    taskListViewModel => Json.toJson(taskListViewModel.sections)
+    taskListViewModel => Json.toJson(taskListViewModel.sectionDetails)
 
 }

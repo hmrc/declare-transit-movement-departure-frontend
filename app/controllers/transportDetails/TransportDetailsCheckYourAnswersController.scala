@@ -19,7 +19,7 @@ package controllers.transportDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import models.{DependentSection, LocalReferenceNumber}
+import models.{DependentSection, LocalReferenceNumber, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -27,8 +27,10 @@ import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.TransportDetailsCheckYourAnswersViewModel
 import viewModels.sections.Section
-
 import javax.inject.Inject
+import models.journeyDomain.TransportDetails
+import models.journeyDomain.traderDetails.TraderDetails
+
 import scala.concurrent.ExecutionContext
 
 class TransportDetailsCheckYourAnswersController @Inject()(
@@ -42,6 +44,7 @@ class TransportDetailsCheckYourAnswersController @Inject()(
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with ValidateReaderLogger
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] =
@@ -61,8 +64,9 @@ class TransportDetailsCheckYourAnswersController @Inject()(
                   "nextPageUrl" -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
                 )
 
-                renderer.render("transportDetailsCheckYourAnswers.njk", json).map(Ok(_))
+                ValidateReaderLogger[TransportDetails](request.userAnswers)
 
+                renderer.render("transportDetailsCheckYourAnswers.njk", json).map(Ok(_))
             }
         }
     }

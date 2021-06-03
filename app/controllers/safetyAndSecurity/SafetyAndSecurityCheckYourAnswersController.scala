@@ -19,7 +19,7 @@ package controllers.safetyAndSecurity
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import models.{DependentSection, LocalReferenceNumber, NormalMode}
+import models.{DependentSection, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -27,8 +27,9 @@ import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.SafetyAndSecurityCheckYourAnswersViewModel
 import viewModels.sections.Section
-
 import javax.inject.Inject
+import models.journeyDomain.SafetyAndSecurity
+
 import scala.concurrent.ExecutionContext
 
 class SafetyAndSecurityCheckYourAnswersController @Inject()(
@@ -42,6 +43,7 @@ class SafetyAndSecurityCheckYourAnswersController @Inject()(
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with ValidateReaderLogger
     with I18nSupport {
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] =
@@ -62,6 +64,8 @@ class SafetyAndSecurityCheckYourAnswersController @Inject()(
                   "addAnotherCountryOfRoutingUrl" -> routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url,
                   "nextPageUrl"                   -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
                 )
+
+                ValidateReaderLogger[SafetyAndSecurity](request.userAnswers)
 
                 renderer.render("safetyAndSecurity/SafetyAndSecurityCheckYourAnswers.njk", json).map(Ok(_))
             }
