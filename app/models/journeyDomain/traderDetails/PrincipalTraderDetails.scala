@@ -59,22 +59,24 @@ object PrincipalTraderDetails {
       }
     }
 
-    val normalEoriNameAndAddress = {
+    val normalEoriNameAndAddress: UserAnswersReader[PrincipalTraderDetails] = {
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
 
         IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
           WhatIsPrincipalEoriPage.reader match {
-            case eori if eori.startsWith("GB") =>
-              PrincipalTraderDetails(EoriNumber(eori))
-            case eori => (
-              PrincipalNamePage.reader,
-              PrincipalAddressPage.reader
+            case eori if eori.toString.startsWith("GB") =>
+              WhatIsPrincipalEoriPage.reader
+                .map(EoriNumber(_))
+                .map(PrincipalTraderDetails(_))
+            case eori =>
+              (
+                PrincipalNamePage.reader,
+                PrincipalAddressPage.reader
               ).tupled.map {
-              case (name, principalAddress) =>
-                val address = Address.prismAddressToPrincipalAddress(principalAddress)
-                PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address)
-            }
-
+                case (name, principalAddress) =>
+                  val address = Address.prismAddressToPrincipalAddress(principalAddress)
+                  PrincipalTraderEoriPersonalInfo(EoriNumber(eori.toString), name, address)
+              }
           }
         }
       }
@@ -86,7 +88,7 @@ object PrincipalTraderDetails {
           (
             PrincipalNamePage.reader,
             PrincipalAddressPage.reader
-            ).tupled.map {
+          ).tupled.map {
             case (name, principalAddress) =>
               val address = Address.prismAddressToPrincipalAddress(principalAddress)
               PrincipalTraderDetails(name, address)
@@ -99,4 +101,3 @@ object PrincipalTraderDetails {
     normalEori orElse normalNameAddress orElse simplified orElse normalEoriNameAndAddress
   }
 }
-
