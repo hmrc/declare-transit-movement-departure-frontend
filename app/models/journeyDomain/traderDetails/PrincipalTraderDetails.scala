@@ -25,12 +25,19 @@ import models.{EoriNumber, UserAnswers}
 import pages._
 
 sealed trait PrincipalTraderDetails
+
 final case class PrincipalTraderPersonalInfo(name: String, address: Address) extends PrincipalTraderDetails
+
 final case class PrincipalTraderEoriInfo(eori: EoriNumber) extends PrincipalTraderDetails
 
+final case class PrincipalTraderEoriPersonalInfo(eori: EoriNumber, name: String, address: Address) extends PrincipalTraderDetails
+
 object PrincipalTraderDetails {
-  def apply(eori: EoriNumber): PrincipalTraderDetails               = PrincipalTraderEoriInfo(eori)
+  def apply(eori: EoriNumber): PrincipalTraderDetails = PrincipalTraderEoriInfo(eori)
+
   def apply(name: String, address: Address): PrincipalTraderDetails = PrincipalTraderPersonalInfo(name, address)
+
+  def apply(eori: EoriNumber, name: String, address: Address): PrincipalTraderDetails = PrincipalTraderEoriPersonalInfo(eori, name, address)
 
   implicit val principalTraderDetails: UserAnswersReader[PrincipalTraderDetails] = {
 
@@ -52,22 +59,44 @@ object PrincipalTraderDetails {
       }
     }
 
-    val normalNameAddress: UserAnswersReader[PrincipalTraderDetails] =
+    val normalEoriNameAndAddress = {
+      ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
+
+        IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
+          WhatIsPrincipalEoriPage.reader match {
+            case eori if eori.startsWith("GB") =>
+              PrincipalTraderDetails(EoriNumber(eori))
+            case eori => (
+              PrincipalNamePage.reader,
+              PrincipalAddressPage.reader
+              ).tupled.map {
+              case (name, principalAddress) =>
+                val address = Address.prismAddressToPrincipalAddress(principalAddress)
+                PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address)
+            }
+
+          }
+        }
+      }
+    }
+
+    val normalNameAddress: UserAnswersReader[PrincipalTraderDetails] = {
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
         IsPrincipalEoriKnownPage.filterMandatoryDependent(_ == false) {
           (
             PrincipalNamePage.reader,
             PrincipalAddressPage.reader
-          ).tupled.map {
+            ).tupled.map {
             case (name, principalAddress) =>
               val address = Address.prismAddressToPrincipalAddress(principalAddress)
               PrincipalTraderDetails(name, address)
           }
         }
       }
+    }
 
     // TODO need to investigate the error handling here as it will only retrieve the last left (due to orElse)
-    normalEori orElse normalNameAddress orElse simplified
+    normalEori orElse normalNameAddress orElse simplified orElse normalEoriNameAndAddress
   }
-
 }
+
