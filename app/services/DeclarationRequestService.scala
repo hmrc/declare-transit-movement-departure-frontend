@@ -48,19 +48,19 @@ import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import logging.Logging
 
 trait DeclarationRequestServiceInt {
   def convert(userAnswers: UserAnswers): Future[EitherType[DeclarationRequest]]
 }
 
 @deprecated("Merge with DeclarationRequestService", "")
-class DeclarationRequestService @Inject()(
+class DeclarationRequestService @Inject() (
   icrRepository: InterchangeControlReferenceIdRepository,
   dateTimeService: DateTimeService
 )(implicit ec: ExecutionContext)
-    extends DeclarationRequestServiceInt {
-
-  val logger: Logger = Logger(getClass)
+    extends DeclarationRequestServiceInt
+    with Logging {
 
   override def convert(userAnswers: UserAnswers): Future[EitherType[DeclarationRequest]] =
     icrRepository
@@ -115,25 +115,25 @@ class DeclarationRequestService @Inject()(
       goodsItems.zipWithIndex.map {
         case (itemSection, index) =>
           GoodsItem(
-            itemNumber                       = index + 1,
-            commodityCode                    = itemSection.itemDetails.commodityCode,
-            declarationType                  = None, // Clarify with policy
-            description                      = itemSection.itemDetails.itemDescription,
-            grossMass                        = Some(BigDecimal(itemSection.itemDetails.totalGrossMass)),
-            netMass                          = itemSection.itemDetails.totalNetMass.map(BigDecimal(_)),
-            countryOfDispatch                = None, // Not required, defined at header level
-            countryOfDestination             = None, // Not required, defined at header level
-            methodOfPayment                  = itemSection.itemSecurityTraderDetails.flatMap(_.methodOfPayment),
-            commercialReferenceNumber        = itemSection.itemSecurityTraderDetails.flatMap(_.commercialReferenceNumber),
-            dangerousGoodsCode               = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
+            itemNumber = index + 1,
+            commodityCode = itemSection.itemDetails.commodityCode,
+            declarationType = None, // Clarify with policy
+            description = itemSection.itemDetails.itemDescription,
+            grossMass = Some(BigDecimal(itemSection.itemDetails.totalGrossMass)),
+            netMass = itemSection.itemDetails.totalNetMass.map(BigDecimal(_)),
+            countryOfDispatch = None, // Not required, defined at header level
+            countryOfDestination = None, // Not required, defined at header level
+            methodOfPayment = itemSection.itemSecurityTraderDetails.flatMap(_.methodOfPayment),
+            commercialReferenceNumber = itemSection.itemSecurityTraderDetails.flatMap(_.commercialReferenceNumber),
+            dangerousGoodsCode = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
-            producedDocuments                = producedDocuments(itemSection.producedDocuments),
-            specialMention                   = SpecialMentionConversion(itemSection.specialMentions, guaranteeDetails, index),
-            traderConsignorGoodsItem         = traderConsignor(itemSection.consignor),
-            traderConsigneeGoodsItem         = traderConsignee(itemSection.consignee),
-            containers                       = containers(itemSection.containers),
-            packages                         = packages(itemSection.packages).toList,
-            sensitiveGoodsInformation        = Seq.empty, // Not required, defined at security level
+            producedDocuments = producedDocuments(itemSection.producedDocuments),
+            specialMention = SpecialMentionConversion(itemSection.specialMentions, guaranteeDetails, index),
+            traderConsignorGoodsItem = traderConsignor(itemSection.consignor),
+            traderConsigneeGoodsItem = traderConsignee(itemSection.consignee),
+            containers = containers(itemSection.containers),
+            packages = packages(itemSection.packages).toList,
+            sensitiveGoodsInformation = Seq.empty, // Not required, defined at security level
             GoodsItemSafetyAndSecurityConsignor(itemSection.itemSecurityTraderDetails),
             GoodsItemSafetyAndSecurityConsignee(itemSection.itemSecurityTraderDetails)
           )
@@ -186,11 +186,11 @@ class DeclarationRequestService @Inject()(
       traderDetails.principalTraderDetails match {
         case PrincipalTraderPersonalInfo(name, Address(buildingAndStreet, city, postcode, _)) =>
           TraderPrincipalWithoutEori(
-            name            = name,
+            name = name,
             streetAndNumber = buildingAndStreet,
-            postCode        = postcode,
-            city            = city,
-            countryCode     = Constants.principalTraderCountryCode.code
+            postCode = postcode,
+            city = city,
+            countryCode = Constants.principalTraderCountryCode.code
           )
         case PrincipalTraderEoriInfo(traderEori) =>
           TraderPrincipalWithEori(eori = traderEori.value, None, None, None, None, None)
@@ -362,43 +362,43 @@ class DeclarationRequestService @Inject()(
     DeclarationRequest(
       Meta(
         interchangeControlReference = icr,
-        dateOfPreparation           = dateTimeOfPrep.toLocalDate,
-        timeOfPreparation           = dateTimeOfPrep.toLocalTime
+        dateOfPreparation = dateTimeOfPrep.toLocalDate,
+        timeOfPreparation = dateTimeOfPrep.toLocalTime
       ),
       Header(
-        refNumHEA4          = preTaskList.lrn.value,
-        typOfDecHEA24       = movementDetails.declarationType.code,
-        couOfDesCodHEA30    = Some(routeDetails.destinationCountry.code),
+        refNumHEA4 = preTaskList.lrn.value,
+        typOfDecHEA24 = movementDetails.declarationType.code,
+        couOfDesCodHEA30 = Some(routeDetails.destinationCountry.code),
         agrLocOfGooCodHEA38 = agreedLocationOfGoodsCode(goodsSummary.goodSummaryDetails), // Not required
-        agrLocOfGooHEA39    = agreedLocationOfGoods(goodsSummary.goodSummaryDetails),
+        agrLocOfGooHEA39 = agreedLocationOfGoods(goodsSummary.goodSummaryDetails),
         autLocOfGooCodHEA41 = goodsSummarySimplifiedDetails(goodsSummary.goodSummaryDetails).map(_.authorisedLocationCode),
-        plaOfLoaCodHEA46    = goodsSummary.loadingPlace,
-        couOfDisCodHEA55    = Some(routeDetails.countryOfDispatch.country.code),
-        cusSubPlaHEA66      = customsSubPlace(goodsSummary),
+        plaOfLoaCodHEA46 = goodsSummary.loadingPlace,
+        couOfDisCodHEA55 = Some(routeDetails.countryOfDispatch.country.code),
+        cusSubPlaHEA66 = customsSubPlace(goodsSummary),
         transportDetails = Transport(
-          inlTraModHEA75        = Some(transportDetails.inlandMode.code),
-          traModAtBorHEA76      = Some(detailsAtBorderMode(transportDetails.detailsAtBorder, transportDetails.inlandMode.code)),
+          inlTraModHEA75 = Some(transportDetails.inlandMode.code),
+          traModAtBorHEA76 = Some(detailsAtBorderMode(transportDetails.detailsAtBorder, transportDetails.inlandMode.code)),
           ideOfMeaOfTraAtDHEA78 = identityOfTransportAtDeparture(transportDetails.inlandMode),
           natOfMeaOfTraAtDHEA80 = nationalityAtDeparture(transportDetails.inlandMode),
           ideOfMeaOfTraCroHEA85 = identityOfTransportAtCrossing(transportDetails.detailsAtBorder, transportDetails.inlandMode),
           natOfMeaOfTraCroHEA87 = nationalityAtCrossing(transportDetails.detailsAtBorder, transportDetails.inlandMode),
           typOfMeaOfTraCroHEA88 = Some(modeAtCrossing(transportDetails.detailsAtBorder, transportDetails.inlandMode))
         ),
-        conIndHEA96        = booleanToInt(movementDetails.containersUsed),
-        totNumOfIteHEA305  = itemDetails.size,
-        totNumOfPacHEA306  = goodsSummary.numberOfPackages,
-        totGroMasHEA307    = goodsSummary.totalMass,
-        decDatHEA383       = dateTimeOfPrep.toLocalDate,
-        decPlaHEA394       = movementDetails.declarationPlacePage,
-        speCirIndHEA1      = safetyAndSecurity.flatMap(_.circumstanceIndicator),
+        conIndHEA96 = booleanToInt(movementDetails.containersUsed),
+        totNumOfIteHEA305 = itemDetails.size,
+        totNumOfPacHEA306 = goodsSummary.numberOfPackages,
+        totGroMasHEA307 = goodsSummary.totalMass,
+        decDatHEA383 = dateTimeOfPrep.toLocalDate,
+        decPlaHEA394 = movementDetails.declarationPlacePage,
+        speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
         traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod),
-        comRefNumHEA       = safetyAndSecurity.flatMap(_.commercialReferenceNumber),
+        comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber),
         secHEA358 = if (preTaskList.addSecurityDetails) {
           Some(safetyAndSecurityFlag(preTaskList.addSecurityDetails))
         } else {
           None
         },
-        conRefNumHEA  = safetyAndSecurity.flatMap(_.conveyanceReferenceNumber),
+        conRefNumHEA = safetyAndSecurity.flatMap(_.conveyanceReferenceNumber),
         codPlUnHEA357 = safetyAndSecurity.flatMap(_.placeOfUnloading)
       ),
       principalTrader(traderDetails),

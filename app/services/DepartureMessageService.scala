@@ -23,9 +23,9 @@ import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
+import logging.Logging
 
-class DepartureMessageService @Inject()(connectors: DepartureMovementConnector) {
-  val logger: Logger = Logger(getClass)
+class DepartureMessageService @Inject() (connectors: DepartureMovementConnector) extends Logging {
 
   def guaranteeNotValidMessage(departureId: DepartureId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[GuaranteeNotValidMessage]] =
     connectors.getSummary(departureId) flatMap {
@@ -46,9 +46,8 @@ class DepartureMessageService @Inject()(connectors: DepartureMovementConnector) 
     connectors.getSummary(departureId) flatMap {
       case Some(summary) =>
         summary.messagesLocation.declarationRejection match {
-          case Some(location) => {
+          case Some(location) =>
             connectors.getDeclarationRejectionMessage(location)
-          }
           case _ =>
             logger.error(s"Get Summary failed to get declaration rejection location")
             Future.successful(None)
@@ -58,14 +57,14 @@ class DepartureMessageService @Inject()(connectors: DepartureMovementConnector) 
         Future.successful(None)
     }
 
-  def cancellationDecisionUpdateMessage(departureId: DepartureId)(implicit hc: HeaderCarrier,
-                                                                  ec: ExecutionContext): Future[Option[CancellationDecisionUpdateMessage]] =
+  def cancellationDecisionUpdateMessage(
+    departureId: DepartureId
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[CancellationDecisionUpdateMessage]] =
     connectors.getSummary(departureId) flatMap {
       case Some(summary) =>
         summary.messagesLocation.cancellationDecisionUpdate match {
-          case Some(location) => {
+          case Some(location) =>
             connectors.getCancellationDecisionUpdateMessage(location)
-          }
           case _ =>
             logger.error(s"Get Summary failed to get cancellation decision update location")
             Future.successful(None)
