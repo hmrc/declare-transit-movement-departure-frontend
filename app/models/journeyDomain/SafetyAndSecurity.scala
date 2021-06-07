@@ -192,6 +192,7 @@ object SafetyAndSecurity {
       isEoriKnown
     }
   }
+
   private def readConsigneeEori: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
     SafetyAndSecurityConsigneeEoriPage.reader
       .map(EoriNumber(_))

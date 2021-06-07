@@ -44,7 +44,7 @@ class WhatIsConsigneeEoriFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLengthEoriNumber,
+      maxLength = maxLengthEoriNumber,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLengthEoriNumber))
     )
 

@@ -43,7 +43,7 @@ class SealIdDetailsFormProviderSpec extends StringFieldBehaviours with SpecBase 
     behave like fieldWithMaxLength(
       form(sealIndex),
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 

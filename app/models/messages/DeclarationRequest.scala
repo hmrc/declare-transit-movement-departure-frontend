@@ -49,7 +49,8 @@ case class DeclarationRequest(meta: Meta,
                               itinerary: Seq[Itinerary],
                               safetyAndSecurityCarrier: Option[SafetyAndSecurityCarrier],
                               safetyAndSecurityConsignor: Option[SafetyAndSecurityConsignor],
-                              safetyAndSecurityConsignee: Option[SafetyAndSecurityConsignee])
+                              safetyAndSecurityConsignee: Option[SafetyAndSecurityConsignee]
+)
 
 object DeclarationRequest {
 
@@ -122,5 +123,6 @@ object DeclarationRequest {
      (__ \ "ITI").read(strictReadSeq[Itinerary]),
      (__ \ "CARTRA100").read[SafetyAndSecurityCarrier].optional,
      (__ \ "TRACORSEC037").read[SafetyAndSecurityConsignor].optional,
-     (__ \ "TRACONSEC029").read[SafetyAndSecurityConsignee].optional) mapN apply
+     (__ \ "TRACONSEC029").read[SafetyAndSecurityConsignee].optional
+    ) mapN apply
 }

@@ -38,7 +38,8 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
 
     actionProvider(reader)
       .invokeBlock(
-        DataRequest(FakeRequest(GET, "/").asInstanceOf[Request[AnyContent]], EoriNumber(""), userAnswers), {
+        DataRequest(FakeRequest(GET, "/").asInstanceOf[Request[AnyContent]], EoriNumber(""), userAnswers),
+        {
           request: DataRequest[AnyContent] =>
             f(request)
             Future.successful(Results.Ok)

@@ -26,6 +26,7 @@ class InlandModeFormProviderSpec extends StringFieldBehaviours {
   private val requiredKey = "inlandMode.error.required"
   private val lengthKey   = "inlandMode.error.length"
   private val maxLength   = 100
+
   private val transportModeList: TransportModeList = TransportModeList(
     Seq(
       TransportMode("1", "Sea transport"),

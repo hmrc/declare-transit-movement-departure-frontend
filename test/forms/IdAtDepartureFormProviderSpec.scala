@@ -42,7 +42,7 @@ class IdAtDepartureFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = vehicleIdMaxLength,
+      maxLength = vehicleIdMaxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(vehicleIdMaxLength))
     )
 

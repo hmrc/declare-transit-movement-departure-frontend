@@ -25,7 +25,8 @@ import pages.movementDetails.PreLodgeDeclarationPage
 import play.api.mvc.Call
 
 @Singleton
-class MovementDetailsNavigator @Inject()() extends Navigator {
+class MovementDetailsNavigator @Inject() () extends Navigator {
+
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case DeclarationTypePage           => ua => declarationType(ua, NormalMode)

@@ -29,9 +29,12 @@ class WhatIsPrincipalEoriFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("whatIsPrincipalEori.error.required")
-        .verifying(StopOnFirstFail[String](
-          maxLength(maxLengthEoriNumber, "whatIsPrincipalEori.error.length"),
-          regexp(alphaNumericRegex, "whatIsPrincipalEori.error.invalidCharacters"),
-          regexp(eoriNumberRegex, "whatIsPrincipalEori.error.invalidFormat")
-        )))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxLengthEoriNumber, "whatIsPrincipalEori.error.length"),
+            regexp(alphaNumericRegex, "whatIsPrincipalEori.error.invalidCharacters"),
+            regexp(eoriNumberRegex, "whatIsPrincipalEori.error.invalidFormat")
+          )
+        )
+    )
 }

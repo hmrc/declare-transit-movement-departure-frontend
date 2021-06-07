@@ -27,16 +27,16 @@ class ArrivalTimesAtOfficeFormProvider @Inject() extends Mappings {
   def apply(officeOfTransit: String): Form[LocalDateTime] =
     Form(
       "value" -> localDateTime(
-        invalidDateKey     = "arrivalTimesAtOffice.error.invalid.date",
-        invalidTimeKey     = "arrivalTimesAtOffice.error.invalid.time",
-        invalidHourKey     = "arrivalTimesAtOffice.error.invalid.hour",
-        allRequiredKey     = "arrivalTimesAtOffice.error.required.all",
-        timeRequiredKey    = "arrivalTimesAtOffice.error.required.time",
-        dateRequiredKey    = "arrivalTimesAtOffice.error.required.date",
-        amOrPmRequired     = "arrivalTimesAtOffice.amOrPm.error.required",
-        pastDateErrorKey   = "arrivalTimesAtOffice.error.past.date",
+        invalidDateKey = "arrivalTimesAtOffice.error.invalid.date",
+        invalidTimeKey = "arrivalTimesAtOffice.error.invalid.time",
+        invalidHourKey = "arrivalTimesAtOffice.error.invalid.hour",
+        allRequiredKey = "arrivalTimesAtOffice.error.required.all",
+        timeRequiredKey = "arrivalTimesAtOffice.error.required.time",
+        dateRequiredKey = "arrivalTimesAtOffice.error.required.date",
+        amOrPmRequired = "arrivalTimesAtOffice.amOrPm.error.required",
+        pastDateErrorKey = "arrivalTimesAtOffice.error.past.date",
         futureDateErrorKey = "arrivalTimesAtOffice.error.future.date",
-        args               = Seq(officeOfTransit)
+        args = Seq(officeOfTransit)
       )
     )
 }

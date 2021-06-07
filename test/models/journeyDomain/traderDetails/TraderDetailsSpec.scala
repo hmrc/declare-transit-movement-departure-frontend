@@ -62,7 +62,7 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
 
   def setTraderDetails(traderDetails: TraderDetails)(startUserAnswers: UserAnswers): UserAnswers =
     startUserAnswers
-    // Set Principal Trader details
+      // Set Principal Trader details
       .unsafeSetVal(IsPrincipalEoriKnownPage)(traderDetails.principalTraderDetails.isInstanceOf[PrincipalTraderEoriInfo])
       .unsafeSetPFn(WhatIsPrincipalEoriPage)(traderDetails.principalTraderDetails)({
         case PrincipalTraderEoriInfo(eori) => eori.value

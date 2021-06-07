@@ -46,7 +46,7 @@ class TraderDetailsConsignorEoriNumberFormProviderSpec extends StringFieldBehavi
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLengthEoriNumber,
+      maxLength = maxLengthEoriNumber,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLengthEoriNumber))
     )
 

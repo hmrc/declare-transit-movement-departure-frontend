@@ -31,10 +31,10 @@ class ControlResultDateLimitFormProvider @Inject() extends Mappings {
   def apply(): Form[LocalDate] =
     Form(
       "value" -> localDate(
-        invalidKey     = "controlResultDateLimit.error.invalid",
+        invalidKey = "controlResultDateLimit.error.invalid",
         allRequiredKey = "controlResultDateLimit.error.required.all",
         twoRequiredKey = "controlResultDateLimit.error.required.two",
-        requiredKey    = "controlResultDateLimit.error.required"
+        requiredKey = "controlResultDateLimit.error.required"
       ).verifying(
         maxDate(dateIn14Days, "controlResultDateLimit.error.max.date", dateFormatter.format(dateIn14Days)),
         minDate(LocalDate.now, "controlResultDateLimit.error.min.date")

@@ -31,8 +31,11 @@ class TraderDetailsConsignorNameFormProvider @Inject() extends Mappings {
   def apply(index: Index): Form[String] =
     Form(
       "value" -> text("traderDetailsConsignorName.error.required", Seq(index.display))
-        .verifying(StopOnFirstFail[String](
-          maxLength(maxLengthConsignorName, "traderDetailsConsignorName.error.length"),
-          regexp(alphaNumericWithSpaceRegex, "traderDetailsConsignorName.error.invalid")
-        )))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxLengthConsignorName, "traderDetailsConsignorName.error.length"),
+            regexp(alphaNumericWithSpaceRegex, "traderDetailsConsignorName.error.invalid")
+          )
+        )
+    )
 }

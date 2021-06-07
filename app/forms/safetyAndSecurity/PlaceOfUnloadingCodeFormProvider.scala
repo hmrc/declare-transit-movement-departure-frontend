@@ -35,5 +35,6 @@ class PlaceOfUnloadingCodeFormProvider @Inject() extends Mappings {
             maxLength(maxLength, "placeOfUnloadingCode.error.length"),
             regexp(stringFieldRegex, "placeOfUnloadingCode.error.invalid")
           )
-        ))
+        )
+    )
 }

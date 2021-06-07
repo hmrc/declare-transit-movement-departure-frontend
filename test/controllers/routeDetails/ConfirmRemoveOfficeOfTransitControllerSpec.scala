@@ -177,7 +177,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
       redirectLocation(result).value mustEqual onwardRoute.url
 
       val newUserAnswers = UserAnswers(
-        id         = userAnswers.id,
+        id = userAnswers.id,
         eoriNumber = userAnswers.eoriNumber,
         userAnswers.remove(OfficeOfTransitQuery(index)).success.value.data,
         userAnswers.lastUpdated

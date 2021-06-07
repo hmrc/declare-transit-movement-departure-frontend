@@ -23,12 +23,11 @@ import pages._
 import play.api.mvc.Call
 
 @Singleton
-class TraderDetailsNavigator @Inject()() extends Navigator {
+class TraderDetailsNavigator @Inject() () extends Navigator {
 
   val normalRoutes: RouteMapping = {
     case IsPrincipalEoriKnownPage =>
-      ua =>
-        Some(isPrincipalEoriKnownRoute(ua, NormalMode))
+      ua => Some(isPrincipalEoriKnownRoute(ua, NormalMode))
     case PrincipalNamePage       => reverseRouteToCall(NormalMode)(routes.PrincipalAddressController.onPageLoad(_, _))
     case PrincipalAddressPage    => reverseRouteToCall(NormalMode)(routes.AddConsignorController.onPageLoad(_, _))
     case WhatIsPrincipalEoriPage => reverseRouteToCall(NormalMode)(routes.AddConsignorController.onPageLoad(_, _))
@@ -40,22 +39,18 @@ class TraderDetailsNavigator @Inject()() extends Navigator {
           case None        => Some(routes.AddConsignorController.onPageLoad(ua.id, NormalMode))
         }
     case IsConsignorEoriKnownPage =>
-      ua =>
-        Some(isConsignorEoriKnownRoute(ua, NormalMode))
+      ua => Some(isConsignorEoriKnownRoute(ua, NormalMode))
     case ConsignorEoriPage    => reverseRouteToCall(NormalMode)(routes.ConsignorNameController.onPageLoad(_, _))
     case ConsignorNamePage    => reverseRouteToCall(NormalMode)(routes.ConsignorAddressController.onPageLoad(_, _))
     case ConsignorAddressPage => reverseRouteToCall(NormalMode)(routes.AddConsigneeController.onPageLoad(_, _))
     case AddConsigneePage =>
-      ua =>
-        Some(addConsigneeRoute(ua, NormalMode))
+      ua => Some(addConsigneeRoute(ua, NormalMode))
     case IsConsigneeEoriKnownPage =>
-      ua =>
-        Some(isConsigneeEoriKnownRoute(ua, NormalMode))
+      ua => Some(isConsigneeEoriKnownRoute(ua, NormalMode))
     case ConsigneeNamePage       => reverseRouteToCall(NormalMode)(routes.ConsigneeAddressController.onPageLoad(_, _))
     case WhatIsConsigneeEoriPage => reverseRouteToCall(NormalMode)(routes.ConsigneeNameController.onPageLoad(_, _))
     case ConsigneeAddressPage =>
-      ua =>
-        Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
+      ua => Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
   }
 
   override def checkModeDefaultPage(userAnswers: UserAnswers): Call =

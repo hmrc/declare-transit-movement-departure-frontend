@@ -45,6 +45,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
   private def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new SpecialMentionTypeFormProvider()
+
   private val specialMentionList = SpecialMentionList(
     Seq(
       SpecialMention("10600", "Negotiable Bill of lading 'to order blank endorsed'"),
@@ -88,7 +89,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
       val expectedSpecialMentionJson = Seq(
         Json.obj("value" -> "", "text"      -> ""),
         Json.obj("value" -> "10600", "text" -> "(10600) Negotiable Bill of lading 'to order blank endorsed'", "selected" -> false),
-        Json.obj("value" -> "30400", "text" -> "(30400) RET-EXP – Copy 3 to be returned", "selected" -> false)
+        Json.obj("value" -> "30400", "text" -> "(30400) RET-EXP – Copy 3 to be returned", "selected"                     -> false)
       )
 
       val expectedJson = Json.obj(
@@ -131,7 +132,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
       val expectedSpecialMentionJson = Seq(
         Json.obj("value" -> "", "text"      -> ""),
         Json.obj("value" -> "10600", "text" -> "(10600) Negotiable Bill of lading 'to order blank endorsed'", "selected" -> true),
-        Json.obj("value" -> "30400", "text" -> "(30400) RET-EXP – Copy 3 to be returned", "selected" -> false)
+        Json.obj("value" -> "30400", "text" -> "(30400) RET-EXP – Copy 3 to be returned", "selected"                     -> false)
       )
 
       val expectedJson = Json.obj(

@@ -37,7 +37,7 @@ import utils.countryJsonList
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SecurityConsignorAddressController @Inject()(
+class SecurityConsignorAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @TradersSecurityDetails navigator: Navigator,

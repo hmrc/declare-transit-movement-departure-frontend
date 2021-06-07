@@ -48,6 +48,7 @@ class ExtraInformationControllerSpec extends SpecBase with MockNunjucksRendererA
   private val template     = "addItems/extraInformation.njk"
 
   lazy val extraInformationRoute = routes.ExtraInformationController.onPageLoad(lrn, index, referenceIndex, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

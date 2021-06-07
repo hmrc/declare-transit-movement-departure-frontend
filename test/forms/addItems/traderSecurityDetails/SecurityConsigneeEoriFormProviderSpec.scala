@@ -45,7 +45,7 @@ class SecurityConsigneeEoriFormProviderSpec extends SpecBase with StringFieldBeh
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLengthEoriNumber,
+      maxLength = maxLengthEoriNumber,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLengthEoriNumber))
     )
 

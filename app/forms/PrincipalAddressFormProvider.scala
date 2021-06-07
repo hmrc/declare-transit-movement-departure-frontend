@@ -31,21 +31,27 @@ class PrincipalAddressFormProvider @Inject() extends Mappings {
   def apply(principalName: String): Form[PrincipalAddress] = Form(
     mapping(
       "numberAndStreet" -> text("principalAddress.error.numberAndStreet.required", Seq(principalName))
-        .verifying(StopOnFirstFail[String](
-          regexp(stringFieldRegex, "principalAddress.error.numberAndStreet.invalidCharacters", Seq(principalName)),
-          maxLength(numberAndStreetLength, "principalAddress.error.numberAndStreet.length", principalName)
-        )),
+        .verifying(
+          StopOnFirstFail[String](
+            regexp(stringFieldRegex, "principalAddress.error.numberAndStreet.invalidCharacters", Seq(principalName)),
+            maxLength(numberAndStreetLength, "principalAddress.error.numberAndStreet.length", principalName)
+          )
+        ),
       "town" -> text("principalAddress.error.town.required", Seq(principalName))
-        .verifying(StopOnFirstFail[String](
-          regexp(stringFieldRegex, "principalAddress.error.town.invalidCharacters", Seq(principalName)),
-          maxLength(townLength, "principalAddress.error.town.length", principalName),
-        )),
+        .verifying(
+          StopOnFirstFail[String](
+            regexp(stringFieldRegex, "principalAddress.error.town.invalidCharacters", Seq(principalName)),
+            maxLength(townLength, "principalAddress.error.town.length", principalName)
+          )
+        ),
       "postcode" -> text("principalAddress.error.postcode.required", Seq(principalName))
-        .verifying(StopOnFirstFail[String](
-          regexp(validPostcodeCharactersRegex, "principalAddress.error.postcode.invalidCharacters", principalName),
-          regexp(postCodeRegex, "principalAddress.error.postcode.invalidFormat", principalName),
-          maxLength(postcodeLength, "principalAddress.error.postcode.length", principalName)
-        ))
+        .verifying(
+          StopOnFirstFail[String](
+            regexp(validPostcodeCharactersRegex, "principalAddress.error.postcode.invalidCharacters", principalName),
+            regexp(postCodeRegex, "principalAddress.error.postcode.invalidFormat", principalName),
+            maxLength(postcodeLength, "principalAddress.error.postcode.length", principalName)
+          )
+        )
     )(PrincipalAddress.apply)(PrincipalAddress.unapply)
   )
 }

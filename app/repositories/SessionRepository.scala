@@ -25,7 +25,7 @@ import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-private[repositories] class DefaultSessionRepository @Inject()(
+private[repositories] class DefaultSessionRepository @Inject() (
   sessionCollection: SessionCollection
 )(implicit ec: ExecutionContext)
     extends SessionRepository {
@@ -69,7 +69,9 @@ private[repositories] class DefaultSessionRepository @Inject()(
 
   override def remove(id: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Unit] = sessionCollection().flatMap {
     _.findAndRemove(Json.obj("_id" -> id.toString, "eoriNumber" -> eoriNumber.value))
-      .map(_ => ())
+      .map(
+        _ => ()
+      )
   }
 
 }

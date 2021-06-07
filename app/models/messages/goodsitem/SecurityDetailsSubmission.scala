@@ -40,7 +40,7 @@ object SecurityDetailsSubmission {
         value => <UNDanGooCodGDI>{value}</UNDanGooCodGDI>
       )
 
-      { comRefNumHEA } ++ { metOfPayGDI12 } ++ { uNDanGooCodGDI }
+      comRefNumHEA ++ metOfPayGDI12 ++ uNDanGooCodGDI
 
   }
 }

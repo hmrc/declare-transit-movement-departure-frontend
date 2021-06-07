@@ -26,7 +26,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class InterchangeControlReferenceIdRepository @Inject()(
+class InterchangeControlReferenceIdRepository @Inject() (
   collection: InterchangeControlReferenceCollection,
   dateTimeService: DateTimeService
 ) {

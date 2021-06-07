@@ -37,7 +37,7 @@ import utils.GuaranteeDetailsCheckYourAnswersHelper
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddAnotherGuaranteeController @Inject()(
+class AddAnotherGuaranteeController @Inject() (
   override val messagesApi: MessagesApi,
   @GuaranteeDetails navigator: Navigator,
   identify: IdentifierAction,

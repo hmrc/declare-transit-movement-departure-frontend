@@ -34,6 +34,7 @@ class ConsigneeNameFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(maxLengthConsigneeName, "consigneeName.error.length"),
             regexp(alphaNumericWithSpaceRegex, "consigneeName.error.invalid")
-          ))
+          )
+        )
     )
 }

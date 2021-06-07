@@ -76,9 +76,9 @@ private[mappings] class LocalDateTimeFormatter(
   private def formatDateTime(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDateTime] = {
 
     val int = intFormatter(
-      requiredKey    = invalidDateKey,
+      requiredKey = invalidDateKey,
       wholeNumberKey = invalidDateKey,
-      nonNumericKey  = invalidDateKey,
+      nonNumericKey = invalidDateKey,
       args
     )
     val string = stringFormatter(

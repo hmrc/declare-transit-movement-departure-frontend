@@ -33,7 +33,7 @@ import models.journeyDomain.traderDetails.TraderDetails
 
 import scala.concurrent.ExecutionContext
 
-class TraderDetailsCheckYourAnswersController @Inject()(
+class TraderDetailsCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,

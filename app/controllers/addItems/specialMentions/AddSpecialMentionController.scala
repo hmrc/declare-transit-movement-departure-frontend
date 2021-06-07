@@ -33,7 +33,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddSpecialMentionController @Inject()(
+class AddSpecialMentionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SpecialMentions navigator: Navigator,

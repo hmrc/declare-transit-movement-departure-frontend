@@ -82,7 +82,8 @@ object GoodsItem {
                                                   (__ \ "PACGS2").read(strictReadSeq[Package]),
                                                   (__ \ "SGICODSD2").read(strictReadSeq[SensitiveGoodsInformation]),
                                                   (__ \ "TRACORSECGOO021").read[GoodsItemSecurityConsignor].optional,
-                                                  (__ \ "TRACONSECGOO013").read[GoodsItemSecurityConsignee].optional).mapN(apply)
+                                                  (__ \ "TRACONSECGOO013").read[GoodsItemSecurityConsignee].optional
+  ).mapN(apply)
 
   implicit def writes: XMLWrites[GoodsItem] = XMLWrites[GoodsItem] {
     goodsItem =>

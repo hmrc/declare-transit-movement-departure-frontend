@@ -25,6 +25,7 @@ import models.journeyDomain.ProducedDocument.deriveProducedDocuments
 import models.journeyDomain.addItems.ItemsSecurityTraderDetails
 import pages.ContainersUsedPage
 import pages.addItems.specialMentions.AddSpecialMentionPage
+
 case class ItemSection(
   itemDetails: ItemDetails,
   consignor: Option[RequiredDetails],

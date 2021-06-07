@@ -43,7 +43,7 @@ class SecurityConsignorNameFormProviderSpec extends SpecBase with StringFieldBeh
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = consigneeNameMaxLength,
+      maxLength = consigneeNameMaxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(consigneeNameMaxLength))
     )
 

@@ -26,6 +26,7 @@ class ModeCrossingBorderFormProviderSpec extends StringFieldBehaviours {
   private val requiredKey = "modeCrossingBorder.error.required"
   private val lengthKey   = "modeCrossingBorder.error.length"
   private val maxLength   = 100
+
   private val transportModeList = TransportModeList(
     Seq(
       TransportMode("1", "Sea transport"),
@@ -63,7 +64,7 @@ class ModeCrossingBorderFormProviderSpec extends StringFieldBehaviours {
       val boundForm = form.bind(Map("value" -> "1"))
       val field     = boundForm("value")
 
-      field.errors mustBe (empty)
+      field.errors mustBe empty
     }
   }
 }

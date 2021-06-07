@@ -29,7 +29,7 @@ import pages.{AddSecurityDetailsPage, Page}
 import play.api.mvc.Call
 
 @Singleton
-class SpecialMentionsNavigator @Inject()() extends Navigator {
+class SpecialMentionsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] =
     Seq(
@@ -50,11 +50,9 @@ class SpecialMentionsNavigator @Inject()() extends Navigator {
           case _               => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.id, itemIndex))
         }
     case SpecialMentionTypePage(itemIndex, referenceIndex) =>
-      userAnswers =>
-        Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, CheckMode))
+      userAnswers => Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, CheckMode))
     case SpecialMentionAdditionalInfoPage(itemIndex, _) =>
-      userAnswers =>
-        Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, CheckMode))
+      userAnswers => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, CheckMode))
     case AddAnotherSpecialMentionPage(itemIndex) =>
       userAnswers =>
         userAnswers.get(AddAnotherSpecialMentionPage(itemIndex)) match {
@@ -81,14 +79,12 @@ class SpecialMentionsNavigator @Inject()() extends Navigator {
 
   private def specialMentionTypePage: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case SpecialMentionTypePage(itemIndex, referenceIndex) =>
-      userAnswers =>
-        Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, NormalMode))
+      userAnswers => Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, NormalMode))
   }
 
   private def specialMentionAdditionalInfoPage: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case SpecialMentionAdditionalInfoPage(itemIndex, _) =>
-      userAnswers =>
-        Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
+      userAnswers => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
   }
 
   private def addAnotherSpecialMentionPage: PartialFunction[Page, UserAnswers => Option[Call]] = {
@@ -112,7 +108,8 @@ class SpecialMentionsNavigator @Inject()() extends Navigator {
     (userAnswers.get(AddSecurityDetailsPage),
      userAnswers.get(AddCircumstanceIndicatorPage),
      userAnswers.get(AddCommercialReferenceNumberPage),
-     itemIndex.position == 0) match {
+     itemIndex.position == 0
+    ) match {
       case (Some(true), Some(false), Some(false), true) => Some(true)
       case (Some(true), Some(true), Some(false), true) =>
         userAnswers.get(CircumstanceIndicatorPage) map (CircumstanceIndicator.conditionalIndicators.contains(_))

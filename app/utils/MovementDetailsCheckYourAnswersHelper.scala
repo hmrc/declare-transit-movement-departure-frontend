@@ -28,14 +28,14 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def preLodgeDeclarationPage: Option[Row] = userAnswers.get(PreLodgeDeclarationPage) map {
     answer =>
       Row(
-        key   = Key(msg"preLodgeDeclaration.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"preLodgeDeclaration.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.PreLodgeDeclarationController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.PreLodgeDeclarationController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"preLodgeDeclaration.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-pre-lodge-declaration""")
+            attributes = Map("id" -> s"""change-pre-lodge-declaration""")
           )
         )
       )
@@ -44,14 +44,14 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def representativeCapacity: Option[Row] = userAnswers.get(RepresentativeCapacityPage) map {
     answer =>
       Row(
-        key   = Key(msg"representativeCapacity.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"representativeCapacity.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(msg"representativeCapacity.$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.RepresentativeCapacityController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.RepresentativeCapacityController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"representativeCapacity.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-representative-capacity""")
+            attributes = Map("id" -> s"""change-representative-capacity""")
           )
         )
       )
@@ -60,14 +60,14 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def representativeName: Option[Row] = userAnswers.get(RepresentativeNamePage) map {
     answer =>
       Row(
-        key   = Key(msg"representativeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"representativeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.RepresentativeNameController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.RepresentativeNameController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"representativeName.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-representative-name""")
+            attributes = Map("id" -> s"""change-representative-name""")
           )
         )
       )
@@ -76,14 +76,14 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def containersUsedPage: Option[Row] = userAnswers.get(ContainersUsedPage) map {
     answer =>
       Row(
-        key   = Key(msg"containersUsed.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"containersUsed.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ContainersUsedPageController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ContainersUsedPageController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"containersUsed.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-containers-used""")
+            attributes = Map("id" -> s"""change-containers-used""")
           )
         )
       )
@@ -92,14 +92,14 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def declarationForSomeoneElse: Option[Row] = userAnswers.get(DeclarationForSomeoneElsePage) map {
     answer =>
       Row(
-        key   = Key(msg"declarationForSomeoneElse.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"declarationForSomeoneElse.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declarationForSomeoneElse.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-declaration-for-someone-else""")
+            attributes = Map("id" -> s"""change-declaration-for-someone-else""")
           )
         )
       )
@@ -108,14 +108,14 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def declarationPlace: Option[Row] = userAnswers.get(DeclarationPlacePage) map {
     answer =>
       Row(
-        key   = Key(msg"declarationPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"declarationPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.DeclarationPlaceController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.DeclarationPlaceController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declarationPlace.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-declaration-place""")
+            attributes = Map("id" -> s"""change-declaration-place""")
           )
         )
       )
@@ -124,14 +124,14 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def declarationType: Option[Row] = userAnswers.get(DeclarationTypePage) map {
     answer =>
       Row(
-        key   = Key(msg"declarationType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"declarationType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(msg"declarationType.$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.DeclarationTypeController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.DeclarationTypeController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declarationType.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-declaration-type""")
+            attributes = Map("id" -> s"""change-declaration-type""")
           )
         )
       )

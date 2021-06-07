@@ -33,7 +33,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclareMarkController @Inject()(
+class DeclareMarkController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItems navigator: Navigator,
@@ -67,7 +67,7 @@ class DeclareMarkController @Inject()(
           "form"         -> preparedForm,
           "lrn"          -> lrn,
           "mode"         -> mode,
-          "displayIndex" -> packageIndex.display,
+          "displayIndex" -> packageIndex.display
         )
 
         renderer.render("addItems/declareMark.njk", json).map(Ok(_))

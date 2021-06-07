@@ -36,6 +36,7 @@ class SealIdDetailsFormProvider @Inject() extends Mappings {
             maxLength(maxSealsNumberLength, "sealIdDetails.error.length"),
             regexp(stringFieldRegex, "sealIdDetails.error.invalidCharacters"),
             doesNotExistIn(seals, index, "sealIdentity.error.duplicate")
-          ))
+          )
+        )
     )
 }

@@ -24,13 +24,11 @@ class FakeNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends Navigat
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case _ =>
-      _ =>
-        Some(desiredRoute)
+      _ => Some(desiredRoute)
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case _ =>
-      _ =>
-        Some(desiredRoute)
+      _ => Some(desiredRoute)
   }
 }

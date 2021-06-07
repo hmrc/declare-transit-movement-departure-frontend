@@ -35,7 +35,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControlResultDateLimitController @Inject()(
+class ControlResultDateLimitController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @GoodsSummary navigator: Navigator,

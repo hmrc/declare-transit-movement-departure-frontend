@@ -34,33 +34,33 @@ class SpecialMentionGuaranteeLiabilityConversionSpec extends SpecBase with Gener
       "with a GuaranteeType of 0, 1, 2, 4 or 9 " +
       "and a default liability amount" in {
 
-      val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", DefaultLiabilityAmount, "****")
+        val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", DefaultLiabilityAmount, "****")
 
-      val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
+        val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
 
-      val expectedAdditionalInformationFormat =
-        s"10000EURAB123"
+        val expectedAdditionalInformationFormat =
+          s"10000EURAB123"
 
-      val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
+        val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
 
-      SpecialMentionGuaranteeLiabilityConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
-    }
+        SpecialMentionGuaranteeLiabilityConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
+      }
 
     "must return SpecialMentionGuaranteeLiabilityAmount with GBP formatting " +
       "when given a GuaranteeReference " +
       "with a GuaranteeType of 0, 1, 2, 4 or 9 " +
       "and liability amount is not the default liability" in {
 
-      val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", OtherLiabilityAmount("1234", CurrencyCode.GBP), "****")
+        val guaranteeReference1 = GuaranteeReference(GuaranteeWaiver, "AB123", OtherLiabilityAmount("1234", CurrencyCode.GBP), "****")
 
-      val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
+        val guaranteeReferenceNonEmptyList = NonEmptyList(guaranteeReference1, List.empty)
 
-      val expectedAdditionalInformationFormat = "1234GBPAB123"
+        val expectedAdditionalInformationFormat = "1234GBPAB123"
 
-      val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
+        val expectedResult = SpecialMentionGuaranteeLiabilityAmount("CAL", expectedAdditionalInformationFormat)
 
-      SpecialMentionGuaranteeLiabilityConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
-    }
+        SpecialMentionGuaranteeLiabilityConversion(guaranteeReferenceNonEmptyList) mustBe Seq(expectedResult)
+      }
 
     "must return multiple SpecialMentionGuaranteeLiabilityAmount if there are multiple valid GuaranteeReference" in {
       val liabilityAmount           = OtherLiabilityAmount("1234", CurrencyCode.GBP)

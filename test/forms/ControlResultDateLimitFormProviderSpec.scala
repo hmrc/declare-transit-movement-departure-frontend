@@ -43,7 +43,8 @@ class ControlResultDateLimitFormProviderSpec extends DateBehaviours {
     behave like dateFieldWithMax(form,
                                  "value",
                                  max = dateIn15Days,
-                                 FormError("value", "controlResultDateLimit.error.max.date", Seq(dateFormatter.format(dateIn14Days))))
+                                 FormError("value", "controlResultDateLimit.error.max.date", Seq(dateFormatter.format(dateIn14Days)))
+    )
 
     behave like dateFieldWithMin(form, "value", min = LocalDate.now.minusDays(1), FormError("value", "controlResultDateLimit.error.min.date"))
 

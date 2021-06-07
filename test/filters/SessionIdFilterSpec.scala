@@ -38,7 +38,7 @@ object SessionIdFilterSpec {
 
   val sessionId = "28836767-a008-46be-ac18-695ab140e705"
 
-  class TestSessionIdFilter @Inject()(override val mat: Materializer, sessionCookieBaker: SessionCookieBaker, ec: ExecutionContext)
+  class TestSessionIdFilter @Inject() (override val mat: Materializer, sessionCookieBaker: SessionCookieBaker, ec: ExecutionContext)
       extends SessionIdFilter(
         mat,
         UUID.fromString(sessionId),

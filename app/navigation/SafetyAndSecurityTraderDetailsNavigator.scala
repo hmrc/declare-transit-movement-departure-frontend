@@ -42,7 +42,7 @@ import pages.safetyAndSecurity.{
 import play.api.mvc.Call
 
 @Singleton
-class SafetyAndSecurityTraderDetailsNavigator @Inject()() extends Navigator {
+class SafetyAndSecurityTraderDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
 

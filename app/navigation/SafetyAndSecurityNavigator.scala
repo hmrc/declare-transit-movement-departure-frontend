@@ -25,7 +25,7 @@ import pages.{ModeAtBorderPage, Page}
 import play.api.mvc.Call
 
 @Singleton
-class SafetyAndSecurityNavigator @Inject()() extends Navigator {
+class SafetyAndSecurityNavigator @Inject() () extends Navigator {
 
   // format: off
 

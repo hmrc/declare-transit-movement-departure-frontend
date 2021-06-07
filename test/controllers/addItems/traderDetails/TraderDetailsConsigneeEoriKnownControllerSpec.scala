@@ -47,6 +47,7 @@ class TraderDetailsConsigneeEoriKnownControllerSpec extends SpecBase with MockNu
   private val template     = "addItems/traderDetails/traderDetailsConsigneeEoriKnown.njk"
 
   lazy val traderDetailsConsigneeEoriKnownRoute = routes.TraderDetailsConsigneeEoriKnownController.onPageLoad(lrn, index, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

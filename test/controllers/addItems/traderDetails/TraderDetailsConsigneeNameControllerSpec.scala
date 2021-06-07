@@ -47,6 +47,7 @@ class TraderDetailsConsigneeNameControllerSpec extends SpecBase with MockNunjuck
   private val template     = "addItems/traderDetails/traderDetailsConsigneeName.njk"
 
   lazy val traderDetailsConsigneeNameRoute = routes.TraderDetailsConsigneeNameController.onPageLoad(lrn, index, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

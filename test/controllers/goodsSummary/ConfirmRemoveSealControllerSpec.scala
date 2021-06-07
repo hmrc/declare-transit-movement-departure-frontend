@@ -101,7 +101,7 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with MockNunjucksRenderer
       redirectLocation(result).value mustEqual onwardRoute.url
 
       val newUserAnswers = UserAnswers(
-        id         = userAnswersWithSeal.id,
+        id = userAnswersWithSeal.id,
         eoriNumber = userAnswersWithSeal.eoriNumber,
         userAnswersWithSeal.remove(SealIdDetailsPage(sealIndex)).success.value.data,
         userAnswersWithSeal.lastUpdated

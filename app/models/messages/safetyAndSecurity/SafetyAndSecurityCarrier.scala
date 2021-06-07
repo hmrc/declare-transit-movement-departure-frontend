@@ -61,7 +61,7 @@ object SafetyAndSecurityCarrierWithoutEori {
     (__ \ "StrAndNumCARTRA254").read[String],
     (__ \ "PosCodCARTRA121").read[String],
     (__ \ "CitCARTRA789").read[String],
-    (__ \ "CouCodCARTRA587").read[String],
+    (__ \ "CouCodCARTRA587").read[String]
   ).mapN(apply)
 
   implicit def writes: XMLWrites[SafetyAndSecurityCarrierWithoutEori] = XMLWrites[SafetyAndSecurityCarrierWithoutEori] {

@@ -31,7 +31,7 @@ import viewModels.sections.Section
 
 import scala.concurrent.ExecutionContext
 
-class GoodsSummaryCheckYourAnswersController @Inject()(
+class GoodsSummaryCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,

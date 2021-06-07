@@ -94,45 +94,41 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
     } yield SafetyAndSecurityConsignorWithoutEori(name, streetAndNumber, postcode, city, countryCode)
   }
 
-  implicit lazy val arbitraryItinerary: Arbitrary[Itinerary] = {
+  implicit lazy val arbitraryItinerary: Arbitrary[Itinerary] =
     Arbitrary {
       for {
         country <- arbitrary[CountryCode]
       } yield Itinerary(country.code)
     }
-  }
 
-  implicit lazy val arbitraryInterchangeControlReference: Arbitrary[InterchangeControlReference] = {
+  implicit lazy val arbitraryInterchangeControlReference: Arbitrary[InterchangeControlReference] =
     Arbitrary {
       for {
         date  <- localDateGen
         index <- Gen.posNum[Int]
       } yield InterchangeControlReference(dateFormatted(date), index)
     }
-  }
 
-  implicit lazy val arbitraryMeta: Arbitrary[Meta] = {
+  implicit lazy val arbitraryMeta: Arbitrary[Meta] =
     Arbitrary {
       for {
         interchangeControlReference <- arbitrary[InterchangeControlReference]
         date                        <- arbitrary[LocalDate]
         time                        <- arbitrary[LocalTime]
-      } yield
-        Meta(
-          interchangeControlReference,
-          date,
-          LocalTime.of(time.getHour, time.getMinute),
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None
-        )
+      } yield Meta(
+        interchangeControlReference,
+        date,
+        LocalTime.of(time.getHour, time.getMinute),
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None
+      )
     }
-  }
 
   implicit lazy val arbitraryCustomsOfficeTransit: Arbitrary[CustomsOfficeTransit] =
     Arbitrary {
@@ -151,7 +147,7 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
       } yield SecurityDetailsSubmission(transportMethodOfPayment, commercialReferenceNumber, unDangerouGoodsCode)
     }
 
-  implicit lazy val arbitraryDeclarationRequest: Arbitrary[DeclarationRequest] = {
+  implicit lazy val arbitraryDeclarationRequest: Arbitrary[DeclarationRequest] =
     Arbitrary {
       for {
         meta                      <- arbitrary[Meta]
@@ -169,31 +165,29 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         guarantees                <- nonEmptyListWithMaxSize(10, arbitrary[Guarantee])
         goodsItems                <- nonEmptyListWithMaxSize(10, arbitrary[GoodsItem])
         itinerary                 <- listWithMaxLength[Itinerary](10)
-      } yield
-        DeclarationRequest(
-          meta,
-          header,
-          traderPrinciple,
-          traderConsignor,
-          traderConsignee,
-          traderAuthorisedConsignee,
-          CustomsOfficeDeparture(customsOfficeDeparture.mkString),
-          customsOfficeTransit,
-          CustomsOfficeDestination(customsOfficeDestination.mkString),
-          controlResult,
-          representative,
-          seals,
-          guarantees,
-          goodsItems,
-          itinerary,
-          None,
-          None,
-          None
-        )
+      } yield DeclarationRequest(
+        meta,
+        header,
+        traderPrinciple,
+        traderConsignor,
+        traderConsignee,
+        traderAuthorisedConsignee,
+        CustomsOfficeDeparture(customsOfficeDeparture.mkString),
+        customsOfficeTransit,
+        CustomsOfficeDestination(customsOfficeDestination.mkString),
+        controlResult,
+        representative,
+        seals,
+        guarantees,
+        goodsItems,
+        itinerary,
+        None,
+        None,
+        None
+      )
     }
-  }
 
-  implicit lazy val arbitraryTransport: Arbitrary[Transport] = {
+  implicit lazy val arbitraryTransport: Arbitrary[Transport] =
     Arbitrary {
       for {
         inlTraModHEA75        <- Gen.option(choose(min = 1: Int, 99: Int))
@@ -203,20 +197,18 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         ideOfMeaOfTraCroHEA85 <- Gen.option(stringsWithMaxLength(Transport.Constants.identityMeansOfTransport, alphaNumChar))
         natOfMeaOfTraCroHEA87 <- Gen.option(stringsWithMaxLength(Header.Constants.countryLength, alphaNumChar))
         typOfMeaOfTraCroHEA88 <- Gen.option(choose(min = 1: Int, 99: Int))
-      } yield
-        Transport(
-          inlTraModHEA75,
-          traModAtBorHEA76,
-          ideOfMeaOfTraAtDHEA78,
-          natOfMeaOfTraAtDHEA80.map(_.mkString),
-          ideOfMeaOfTraCroHEA85,
-          natOfMeaOfTraCroHEA87.map(_.mkString),
-          typOfMeaOfTraCroHEA88
-        )
+      } yield Transport(
+        inlTraModHEA75,
+        traModAtBorHEA76,
+        ideOfMeaOfTraAtDHEA78,
+        natOfMeaOfTraAtDHEA80.map(_.mkString),
+        ideOfMeaOfTraCroHEA85,
+        natOfMeaOfTraCroHEA87.map(_.mkString),
+        typOfMeaOfTraCroHEA88
+      )
     }
-  }
 
-  implicit lazy val arbitraryHeader: Arbitrary[Header] = {
+  implicit lazy val arbitraryHeader: Arbitrary[Header] =
     Arbitrary {
       for {
         refNumHEA4          <- arbitrary[LocalReferenceNumber].map(_.toString())
@@ -241,33 +233,31 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         secHEA358           <- Gen.option(choose(min = 0: Int, 9: Int))
         conRefNumHEA        <- Gen.option(stringsWithMaxLength(Header.Constants.conveyanceReferenceNumberLength, alphaNumChar))
         codPlUnHEA357       <- Gen.option(stringsWithMaxLength(Header.Constants.placeOfUnloadingCodeLength, alphaNumChar))
-      } yield
-        Header(
-          refNumHEA4,
-          typOfDecHEA24.mkString,
-          couOfDesCodHEA30.map(_.mkString),
-          agrLocOfGooCodHEA38,
-          agrLocOfGooHEA39,
-          autLocOfGooCodHEA41,
-          plaOfLoaCodHEA46,
-          couOfDisCodHEA55.map(_.mkString),
-          cusSubPlaHEA66,
-          transportDetails,
-          conIndHEA96,
-          totNumOfIteHEA305,
-          totNumOfPacHEA306,
-          grossMass.toString,
-          decDatHEA383,
-          decPlaHEA394,
-          speCirIndHEA1,
-          traChaMetOfPayHEA1,
-          comRefNumHEA,
-          secHEA358,
-          conRefNumHEA,
-          codPlUnHEA357
-        )
+      } yield Header(
+        refNumHEA4,
+        typOfDecHEA24.mkString,
+        couOfDesCodHEA30.map(_.mkString),
+        agrLocOfGooCodHEA38,
+        agrLocOfGooHEA39,
+        autLocOfGooCodHEA41,
+        plaOfLoaCodHEA46,
+        couOfDisCodHEA55.map(_.mkString),
+        cusSubPlaHEA66,
+        transportDetails,
+        conIndHEA96,
+        totNumOfIteHEA305,
+        totNumOfPacHEA306,
+        grossMass.toString,
+        decDatHEA383,
+        decPlaHEA394,
+        speCirIndHEA1,
+        traChaMetOfPayHEA1,
+        comRefNumHEA,
+        secHEA358,
+        conRefNumHEA,
+        codPlUnHEA357
+      )
     }
-  }
 
   implicit lazy val arbitraryTraderPrincipalWithEori: Arbitrary[TraderPrincipalWithEori] =
     Arbitrary {
@@ -358,30 +348,28 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
     Arbitrary {
       for {
         traderConsignor <- arbitrary[TraderConsignor]
-      } yield
-        TraderConsignorGoodsItem(
-          traderConsignor.name,
-          traderConsignor.streetAndNumber,
-          traderConsignor.postCode,
-          traderConsignor.city,
-          traderConsignor.countryCode.mkString,
-          traderConsignor.eori
-        )
+      } yield TraderConsignorGoodsItem(
+        traderConsignor.name,
+        traderConsignor.streetAndNumber,
+        traderConsignor.postCode,
+        traderConsignor.city,
+        traderConsignor.countryCode.mkString,
+        traderConsignor.eori
+      )
     }
 
   implicit lazy val arbitraryTraderConsigneeGoodsItem: Arbitrary[TraderConsigneeGoodsItem] =
     Arbitrary {
       for {
         traderConsignee <- arbitrary[TraderConsignee]
-      } yield
-        TraderConsigneeGoodsItem(
-          traderConsignee.name,
-          traderConsignee.streetAndNumber,
-          traderConsignee.postCode,
-          traderConsignee.city,
-          traderConsignee.countryCode.mkString,
-          traderConsignee.eori
-        )
+      } yield TraderConsigneeGoodsItem(
+        traderConsignee.name,
+        traderConsignee.streetAndNumber,
+        traderConsignee.postCode,
+        traderConsignee.city,
+        traderConsignee.countryCode.mkString,
+        traderConsignee.eori
+      )
     }
 
   implicit lazy val arbitraryAuthorisedConsigneeTrader: Arbitrary[TraderAuthorisedConsignee] =
@@ -458,7 +446,8 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         comRefNumGIM1        <- Gen.option(stringsWithMaxLength(Header.Constants.commercialReferenceNumberLength, alphaNumChar))
         uNDanGooCodGDI1      <- Gen.option(stringsWithMaxLength(GoodsItem.Constants.dangerousGoodsCodeLength, alphaNumChar))
         previousAdministrativeReference <- listWithMaxLength(PreviousAdministrativeReference.Constants.previousAdministrativeReferenceCount,
-                                                             arbitrary[PreviousAdministrativeReference])
+                                                             arbitrary[PreviousAdministrativeReference]
+        )
         producedDocuments          <- listWithMaxLength(ProducedDocument.Constants.producedDocumentCount, arbitrary[ProducedDocument])
         specialMentions            <- listWithMaxLength(SpecialMention.Constants.specialMentionCount, arbitrary[SpecialMention])
         traderConsignorGoodsItem   <- Gen.option(arbitrary[TraderConsignorGoodsItem])
@@ -469,30 +458,29 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         goodsItemSecurityConsignor <- Gen.option(arbitraryGoodsItemSecurityConsignor.arbitrary)
         goodsItemSecurityConsignee <- Gen.option(arbitraryGoodsItemSecurityConsignee.arbitrary)
 
-      } yield
-        GoodsItem(
-          itemNumber,
-          commodityCode,
-          declarationType.map(_.mkString),
-          description,
-          grossMass,
-          netMass,
-          countryOfDispatch,
-          countryOfDestination,
-          metOfPayGDI12,
-          comRefNumGIM1,
-          uNDanGooCodGDI1,
-          previousAdministrativeReference,
-          producedDocuments,
-          specialMentions,
-          traderConsignorGoodsItem,
-          traderConsigneeGoodsItem,
-          containers,
-          packages,
-          sensitiveGoodsInformation,
-          goodsItemSecurityConsignor,
-          goodsItemSecurityConsignee
-        )
+      } yield GoodsItem(
+        itemNumber,
+        commodityCode,
+        declarationType.map(_.mkString),
+        description,
+        grossMass,
+        netMass,
+        countryOfDispatch,
+        countryOfDestination,
+        metOfPayGDI12,
+        comRefNumGIM1,
+        uNDanGooCodGDI1,
+        previousAdministrativeReference,
+        producedDocuments,
+        specialMentions,
+        traderConsignorGoodsItem,
+        traderConsigneeGoodsItem,
+        containers,
+        packages,
+        sensitiveGoodsInformation,
+        goodsItemSecurityConsignor,
+        goodsItemSecurityConsignee
+      )
     }
 
   implicit lazy val arbitraryGoodsItemSecurityConsignor: Arbitrary[GoodsItemSecurityConsignor] = Arbitrary {
@@ -509,12 +497,11 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         preDocTypAR21 <- stringsWithMaxLength(PreviousAdministrativeReference.Constants.previousDocumentTypeLength, alphaNumChar)
         preDocRefAR26 <- stringsWithMaxLength(PreviousAdministrativeReference.Constants.previousDocumentReferenceLength, alphaNumChar)
         comOfInfAR29  <- Gen.option(stringsWithMaxLength(PreviousAdministrativeReference.Constants.complementOfInformationLength, alphaNumChar))
-      } yield
-        PreviousAdministrativeReference(
-          preDocTypAR21,
-          preDocRefAR26,
-          comOfInfAR29,
-        )
+      } yield PreviousAdministrativeReference(
+        preDocTypAR21,
+        preDocRefAR26,
+        comOfInfAR29
+      )
     }
 
   implicit lazy val arbitraryPreviousProducedDocument: Arbitrary[ProducedDocument] =
@@ -523,12 +510,11 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
         documentType            <- stringsWithMaxLength(ProducedDocument.Constants.documentTypeLength, alphaNumChar)
         reference               <- Gen.option(stringsWithMaxLength(ProducedDocument.Constants.reference, alphaNumChar))
         complementOfInformation <- Gen.option(stringsWithMaxLength(ProducedDocument.Constants.complementOfInformation, alphaNumChar))
-      } yield
-        ProducedDocument(
-          documentType,
-          reference,
-          complementOfInformation,
-        )
+      } yield ProducedDocument(
+        documentType,
+        reference,
+        complementOfInformation
+      )
     }
 
   protected val countrySpecificCodes      = Seq("DG0", "DG1")
@@ -597,7 +583,9 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
   implicit lazy val arbitraryRegularPackage: Arbitrary[RegularPackage] =
     Arbitrary {
       for {
-        kindOfPackage    <- stringsWithMaxLength(3, alphaNumChar).suchThat(x => !BulkPackage.validCodes.contains(x) && !UnpackedPackage.validCodes.contains(x))
+        kindOfPackage <- stringsWithMaxLength(3, alphaNumChar).suchThat(
+          x => !BulkPackage.validCodes.contains(x) && !UnpackedPackage.validCodes.contains(x)
+        )
         numberOfPackages <- Gen.choose(0, 99999)
         marksAndNumbers  <- stringsWithMaxLength(42, alphaNumChar)
       } yield RegularPackage(kindOfPackage, numberOfPackages, marksAndNumbers)
@@ -613,11 +601,10 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
       for {
         goodsCode <- Gen.option(Gen.choose(0, 99))
         quantity  <- Gen.choose(0, 99999)
-      } yield
-        SensitiveGoodsInformation(
-          goodsCode,
-          quantity
-        )
+      } yield SensitiveGoodsInformation(
+        goodsCode,
+        quantity
+      )
     }
 
   implicit lazy val arbitraryInvalidGuaranteeReasonCode: Arbitrary[InvalidGuaranteeReasonCode] =

@@ -25,11 +25,13 @@ class ModeAtBorderFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey = "modeAtBorder.error.required"
   private val maxLength   = 100
+
   private val transportModeList = TransportModeList(
     Seq(
       TransportMode("1", "Sea transport"),
       TransportMode("10", "Sea transport")
-    ))
+    )
+  )
   private val form = new ModeAtBorderFormProvider()(transportModeList)
 
   ".value" - {

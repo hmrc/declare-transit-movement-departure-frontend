@@ -47,6 +47,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with MockNunj
   def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new TransportChargesPaymentMethodFormProvider()
+
   private val methodOfPaymentList = MethodOfPaymentList(
     Seq(
       MethodOfPayment("A", "Payment in cash"),
@@ -94,7 +95,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with MockNunj
         "form"     -> form,
         "mode"     -> NormalMode,
         "lrn"      -> lrn,
-        "payments" -> getPaymentsAsJson(form.value, methodOfPaymentList.methodsOfPayment),
+        "payments" -> getPaymentsAsJson(form.value, methodOfPaymentList.methodsOfPayment)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -129,7 +130,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with MockNunj
         "form"     -> filledForm,
         "lrn"      -> lrn,
         "mode"     -> NormalMode,
-        "payments" -> getPaymentsAsJson(filledForm.value, methodOfPaymentList.methodsOfPayment),
+        "payments" -> getPaymentsAsJson(filledForm.value, methodOfPaymentList.methodsOfPayment)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey

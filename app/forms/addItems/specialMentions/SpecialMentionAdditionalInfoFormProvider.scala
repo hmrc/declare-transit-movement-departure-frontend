@@ -29,8 +29,11 @@ class SpecialMentionAdditionalInfoFormProvider @Inject() extends Mappings {
   def apply(itemIndex: Index, referenceIndex: Index): Form[String] =
     Form(
       "value" -> text("specialMentionAdditionalInfo.error.required", Seq(itemIndex.display, referenceIndex.display))
-        .verifying(StopOnFirstFail[String](
-          maxLength(70, "specialMentionAdditionalInfo.error.length", itemIndex.display, referenceIndex.display),
-          regexp(alphaNumericWithSpaceRegex, "specialMentionAdditionalInfo.error.invalid", Seq(itemIndex.display, referenceIndex.display))
-        )))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(70, "specialMentionAdditionalInfo.error.length", itemIndex.display, referenceIndex.display),
+            regexp(alphaNumericWithSpaceRegex, "specialMentionAdditionalInfo.error.invalid", Seq(itemIndex.display, referenceIndex.display))
+          )
+        )
+    )
 }

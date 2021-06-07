@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class AddIdAtDepartureLaterController @Inject()(
+class AddIdAtDepartureLaterController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,

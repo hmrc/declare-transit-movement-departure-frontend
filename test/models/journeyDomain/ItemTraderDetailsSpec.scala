@@ -141,7 +141,7 @@ object ItemTraderDetailsSpec extends UserAnswersSpecHelper {
 
   def setItemTraderDetails(itemTraderDetails: ItemTraderDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers =
     startUserAnswers
-    // Set Consignor
+      // Set Consignor
       .unsafeSetPFn(TraderDetailsConsignorEoriKnownPage(index))(itemTraderDetails.consignor)({
         case Some(RequiredDetails(_, _, Some(_))) => true
         case Some(_)                              => false

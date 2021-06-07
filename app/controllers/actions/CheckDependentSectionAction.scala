@@ -30,6 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckDependentSectionCompletionAction(val dependentSection: DependentSection, implicit val executionContext: ExecutionContext)
     extends ActionFilter[DataRequest]
     with Logging {
+
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] = {
     val reader: UserAnswersReader[_] = DependentSection.dependentSectionReader(dependentSection, request.userAnswers)
 
@@ -46,6 +47,6 @@ trait CheckDependentSectionAction {
   def apply(dependentSection: DependentSection): ActionFilter[DataRequest]
 }
 
-class CheckDependentSectionActionImpl @Inject()(ec: ExecutionContext) extends CheckDependentSectionAction {
+class CheckDependentSectionActionImpl @Inject() (ec: ExecutionContext) extends CheckDependentSectionAction {
   override def apply(dependentSection: DependentSection): ActionFilter[DataRequest] = new CheckDependentSectionCompletionAction(dependentSection, ec)
 }

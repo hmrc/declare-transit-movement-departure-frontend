@@ -61,18 +61,22 @@ object TransportDetails {
         val codes: Seq[Int]            = codesSingleDigit ++ codesDoubleDigit
       }
 
-      implicit val userAnswersReaderRail: UserAnswersReader[Rail] = {
+      implicit val userAnswersReaderRail: UserAnswersReader[Rail] =
         InlandModePage
-          .returnMandatoryDependent(code => Rail.Constants.codes.contains(code.toInt))
+          .returnMandatoryDependent(
+            code => Rail.Constants.codes.contains(code.toInt)
+          )
           .flatMap {
             code =>
               AddIdAtDeparturePage.optionalReader
                 .flatMap {
                   case Some(false) => Rail(code.toInt, None).pure[UserAnswersReader]
-                  case _           => IdAtDeparturePage.reader.map(x => Rail(code.toInt, Some(x)))
+                  case _ =>
+                    IdAtDeparturePage.reader.map(
+                      x => Rail(code.toInt, Some(x))
+                    )
                 }
           }
-      }
     }
 
     final case class Mode5or7(code: Int) extends InlandMode
@@ -86,10 +90,14 @@ object TransportDetails {
       }
 
       implicit val userAnswersReaderMode5or7: UserAnswersReader[Mode5or7] =
-        InlandModePage.returnMandatoryDependent(code => Mode5or7.Constants.codes.contains(code.toInt)).flatMap {
-          code =>
-            Mode5or7(code.toInt).pure[UserAnswersReader]
-        }
+        InlandModePage
+          .returnMandatoryDependent(
+            code => Mode5or7.Constants.codes.contains(code.toInt)
+          )
+          .flatMap {
+            code =>
+              Mode5or7(code.toInt).pure[UserAnswersReader]
+          }
     }
 
     final case class NonSpecialMode(code: Int, nationalityAtDeparture: Option[CountryCode], departureId: Option[String]) extends InlandMode
@@ -97,13 +105,17 @@ object TransportDetails {
     object NonSpecialMode {
 
       implicit val userAnswersReaderNonSpecialMode: UserAnswersReader[NonSpecialMode] =
-        InlandModePage.returnMandatoryDependent(code => !Mode5or7.Constants.codes.contains(code.toInt)).flatMap {
-          code =>
-            (
-              NationalityAtDeparturePage.optionalReader,
-              IdAtDeparturePage.optionalReader
-            ).tupled.map((NonSpecialMode(code.toInt, _, _)).tupled)
-        }
+        InlandModePage
+          .returnMandatoryDependent(
+            code => !Mode5or7.Constants.codes.contains(code.toInt)
+          )
+          .flatMap {
+            code =>
+              (
+                NationalityAtDeparturePage.optionalReader,
+                IdAtDeparturePage.optionalReader
+              ).tupled.map((NonSpecialMode(code.toInt, _, _)).tupled)
+          }
     }
 
   }
@@ -118,11 +130,10 @@ object TransportDetails {
 
     object SameDetailsAtBorder extends DetailsAtBorder {
 
-      implicit val userAnswersReader: UserAnswersReader[SameDetailsAtBorder.type] = {
+      implicit val userAnswersReader: UserAnswersReader[SameDetailsAtBorder.type] =
         ChangeAtBorderPage.filterMandatoryDependent(_ == false) {
           SameDetailsAtBorder.pure[UserAnswersReader]
         }
-      }
     }
 
     final case class NewDetailsAtBorder(
@@ -132,14 +143,13 @@ object TransportDetails {
 
     object NewDetailsAtBorder {
 
-      implicit val userAnswersReader: UserAnswersReader[NewDetailsAtBorder] = {
+      implicit val userAnswersReader: UserAnswersReader[NewDetailsAtBorder] =
         ChangeAtBorderPage.filterMandatoryDependent(identity) {
           (
             ModeAtBorderPage.reader,
             UserAnswersReader[ModeCrossingBorder]
           ).tupled.map((NewDetailsAtBorder.apply _).tupled)
         }
-      }
     }
 
   }
@@ -166,7 +176,7 @@ object TransportDetails {
               ).tupled.map {
                 case (nationality, id) => ModeWithNationality(nationality, modeCode, id)
               }
-          }
+            }
         )
     final case class ModeExemptNationality(modeCode: Int) extends ModeCrossingBorder
     final case class ModeWithNationality(nationalityCrossingBorder: CountryCode, modeCode: Int, idCrossing: String) extends ModeCrossingBorder

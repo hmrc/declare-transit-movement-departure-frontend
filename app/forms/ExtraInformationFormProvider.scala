@@ -33,6 +33,7 @@ class ExtraInformationFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(maxLength, "extraInformation.error.length"),
             regexp(stringFieldRegex, "extraInformation.error.invalid")
-          ))
+          )
+        )
     )
 }

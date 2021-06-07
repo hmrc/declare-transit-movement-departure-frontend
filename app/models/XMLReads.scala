@@ -30,37 +30,40 @@ object XMLReads {
 
   case class LocalDateParseFailure(message: String) extends ParseError
   case class LocalTimeParseFailure(message: String) extends ParseError
-  implicit val xmlDateReads: XmlReader[LocalDate] = {
+
+  implicit val xmlDateReads: XmlReader[LocalDate] =
     new XmlReader[LocalDate] {
+
       override def read(xml: NodeSeq): ParseResult[LocalDate] =
         Try(LocalDate.parse(xml.text, dateFormatter)) match {
           case Success(value) => ParseSuccess(value)
           case Failure(e)     => ParseFailure(LocalDateParseFailure(e.getMessage))
         }
     }
-  }
 
-  implicit val xmlTimeReads: XmlReader[LocalTime] = {
+  implicit val xmlTimeReads: XmlReader[LocalTime] =
     new XmlReader[LocalTime] {
+
       override def read(xml: NodeSeq): ParseResult[LocalTime] =
         Try(LocalTime.parse(xml.text, timeFormatter)) match {
           case Success(value) => ParseSuccess(value)
           case Failure(e)     => ParseFailure(LocalTimeParseFailure(e.getMessage))
         }
     }
-  }
 
-  implicit val xmlDateTimeReads: XmlReader[LocalDateTime] = {
+  implicit val xmlDateTimeReads: XmlReader[LocalDateTime] =
     new XmlReader[LocalDateTime] {
+
       override def read(xml: NodeSeq): ParseResult[LocalDateTime] =
         Try(LocalDateTime.parse(xml.text, dateTimeFormatterIE015)) match {
           case Success(value) => ParseSuccess(value)
           case Failure(e)     => ParseFailure(LocalTimeParseFailure(e.getMessage))
         }
     }
-  }
 
-  implicit val booleanFromIntReader: XmlReader[Boolean] = intReader.map(intValue => if (intValue == 1) true else false)
+  implicit val booleanFromIntReader: XmlReader[Boolean] = intReader.map(
+    intValue => if (intValue == 1) true else false
+  )
 
   implicit def strictReadOptionSeq[A](implicit reader: XmlReader[A]): XmlReader[Option[Seq[A]]] =
     XmlReader {

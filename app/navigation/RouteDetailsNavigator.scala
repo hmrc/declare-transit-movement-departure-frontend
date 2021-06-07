@@ -24,58 +24,43 @@ import pages._
 import play.api.mvc.Call
 
 @Singleton
-class RouteDetailsNavigator @Inject()() extends Navigator {
+class RouteDetailsNavigator @Inject() () extends Navigator {
 
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case CountryOfDispatchPage =>
-      ua =>
-        Some(routes.OfficeOfDepartureController.onPageLoad(ua.id, NormalMode))
+      ua => Some(routes.OfficeOfDepartureController.onPageLoad(ua.id, NormalMode))
     case OfficeOfDeparturePage =>
-      ua =>
-        Some(routes.DestinationCountryController.onPageLoad(ua.id, NormalMode))
+      ua => Some(routes.DestinationCountryController.onPageLoad(ua.id, NormalMode))
     case DestinationCountryPage =>
-      ua =>
-        Some(routes.MovementDestinationCountryController.onPageLoad(ua.id, NormalMode))
+      ua => Some(routes.MovementDestinationCountryController.onPageLoad(ua.id, NormalMode))
     case MovementDestinationCountryPage =>
-      ua =>
-        Some(routes.DestinationOfficeController.onPageLoad(ua.id, NormalMode))
+      ua => Some(routes.DestinationOfficeController.onPageLoad(ua.id, NormalMode))
     case DestinationOfficePage =>
-      ua =>
-        Some(routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), NormalMode))
+      ua => Some(routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), NormalMode))
     case OfficeOfTransitCountryPage(index) =>
-      ua =>
-        Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, NormalMode))
+      ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, NormalMode))
     case AddAnotherTransitOfficePage(index) =>
-      ua =>
-        Some(redirectToAddTransitOfficeNextPage(ua, index, NormalMode))
+      ua => Some(redirectToAddTransitOfficeNextPage(ua, index, NormalMode))
     case AddTransitOfficePage =>
-      ua =>
-        Some(addOfficeOfTransit(NormalMode, ua))
+      ua => Some(addOfficeOfTransit(NormalMode, ua))
     case ArrivalTimesAtOfficePage(_) =>
-      ua =>
-        Some(routes.AddTransitOfficeController.onPageLoad(ua.id, NormalMode))
+      ua => Some(routes.AddTransitOfficeController.onPageLoad(ua.id, NormalMode))
     case ConfirmRemoveOfficeOfTransitPage =>
-      ua =>
-        Some(removeOfficeOfTransit(NormalMode)(ua))
+      ua => Some(removeOfficeOfTransit(NormalMode)(ua))
 
   }
 
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case CountryOfDispatchPage =>
-      ua =>
-        Some(routes.OfficeOfDepartureController.onPageLoad(ua.id, CheckMode))
+      ua => Some(routes.OfficeOfDepartureController.onPageLoad(ua.id, CheckMode))
     case MovementDestinationCountryPage =>
-      ua =>
-        Some(routes.DestinationOfficeController.onPageLoad(ua.id, CheckMode))
+      ua => Some(routes.DestinationOfficeController.onPageLoad(ua.id, CheckMode))
     case OfficeOfTransitCountryPage(index) =>
-      ua =>
-        Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, CheckMode))
+      ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, CheckMode))
     case page if isRouteDetailsSectionPage(page) =>
-      ua =>
-        Some(routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id))
+      ua => Some(routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id))
     case _ =>
-      _ =>
-        None
+      _ => None
   }
 
   def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =

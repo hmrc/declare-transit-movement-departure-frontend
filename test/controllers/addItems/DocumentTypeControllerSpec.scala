@@ -46,6 +46,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
   def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new DocumentTypeFormProvider()
+
   private val documentTypeList = DocumentTypeList(
     Seq(
       DocumentType("955", "ATA carnet", true),
@@ -92,7 +93,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
       val expectedDocumentTypeJson = Seq(
         Json.obj("value" -> "", "text"    -> ""),
-        Json.obj("value" -> "955", "text" -> "(955) ATA carnet", "selected" -> false),
+        Json.obj("value" -> "955", "text" -> "(955) ATA carnet", "selected"  -> false),
         Json.obj("value" -> "740", "text" -> "(740) Air waybill", "selected" -> false)
       )
       val expectedJson = Json.obj(
@@ -134,7 +135,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
       val expectedDocumentTypeJson = Seq(
         Json.obj("value" -> "", "text"    -> ""),
-        Json.obj("value" -> "955", "text" -> "(955) ATA carnet", "selected" -> true),
+        Json.obj("value" -> "955", "text" -> "(955) ATA carnet", "selected"  -> true),
         Json.obj("value" -> "740", "text" -> "(740) Air waybill", "selected" -> false)
       )
       val expectedJson = Json.obj(

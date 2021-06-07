@@ -44,17 +44,21 @@ object TransportDetailsCheckYourAnswersViewModel {
 
     TransportDetailsCheckYourAnswersViewModel(
       Seq(
-        Section(Seq(
-          inlandMode,
-          addIdAtDeparture,
-          idAtDeparture,
-          addNationalityAtDeparture,
-          nationalityAtDeparture,
-          changeAtBorder,
-          modeAtBorder,
-          modeCrossingBorder,
-          idCrossingBorder,
-          nationalityCrossingBorder
-        ).flatten)))
+        Section(
+          Seq(
+            inlandMode,
+            addIdAtDeparture,
+            idAtDeparture,
+            addNationalityAtDeparture,
+            nationalityAtDeparture,
+            changeAtBorder,
+            modeAtBorder,
+            modeCrossingBorder,
+            idCrossingBorder,
+            nationalityCrossingBorder
+          ).flatten
+        )
+      )
+    )
   }
 }
