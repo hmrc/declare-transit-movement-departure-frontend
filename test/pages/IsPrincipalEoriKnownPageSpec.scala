@@ -29,7 +29,7 @@ class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
 
     beSettable[Boolean](IsPrincipalEoriKnownPage)
 
-    //   beRemovable[Boolean](IsPrincipalEoriKnownPage)
+    beRemovable[Boolean](IsPrincipalEoriKnownPage)
   }
 
   "cleanup" - {

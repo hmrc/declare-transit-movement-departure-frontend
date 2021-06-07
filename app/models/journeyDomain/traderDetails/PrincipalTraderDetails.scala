@@ -52,31 +52,28 @@ object PrincipalTraderDetails {
     val normalEori: ReaderT[EitherType, UserAnswers, PrincipalTraderDetails] = {
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
         IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
-          WhatIsPrincipalEoriPage.reader
-            .map(EoriNumber(_))
-            .map(PrincipalTraderDetails(_))
+          WhatIsPrincipalEoriPage.filterMandatoryDependent(_.startsWith("GB")) {
+            WhatIsPrincipalEoriPage.reader
+              .map(EoriNumber(_))
+              .map(PrincipalTraderDetails(_))
+          }
         }
       }
     }
 
     val normalEoriNameAndAddress: UserAnswersReader[PrincipalTraderDetails] = {
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
-
         IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
-          WhatIsPrincipalEoriPage.reader match {
-            case eori if eori.toString.startsWith("GB") =>
-              WhatIsPrincipalEoriPage.reader
-                .map(EoriNumber(_))
-                .map(PrincipalTraderDetails(_))
-            case eori =>
-              (
-                PrincipalNamePage.reader,
-                PrincipalAddressPage.reader
-              ).tupled.map {
-                case (name, principalAddress) =>
-                  val address = Address.prismAddressToPrincipalAddress(principalAddress)
-                  PrincipalTraderEoriPersonalInfo(EoriNumber(eori.toString), name, address)
-              }
+          WhatIsPrincipalEoriPage.filterMandatoryDependent(!_.startsWith("GB")) {
+            (
+              WhatIsPrincipalEoriPage.reader,
+              PrincipalNamePage.reader,
+              PrincipalAddressPage.reader
+            ).tupled.map {
+              case (eori, name, principalAddress) =>
+                val address = Address.prismAddressToPrincipalAddress(principalAddress)
+                PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address)
+            }
           }
         }
       }
