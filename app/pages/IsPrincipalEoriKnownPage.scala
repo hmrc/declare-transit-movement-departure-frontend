@@ -31,9 +31,13 @@ case object IsPrincipalEoriKnownPage extends QuestionPage[Boolean] {
     value match {
       case Some(false) => userAnswers.remove(WhatIsPrincipalEoriPage)
       case Some(true) =>
-        userAnswers
-          .remove(PrincipalNamePage)
-          .flatMap(_.remove(PrincipalAddressPage))
-      case _ => super.cleanup(value, userAnswers)
+        userAnswers.get(WhatIsPrincipalEoriPage) match {
+          case Some(x) if x.startsWith("GB") => {
+            userAnswers
+              .remove(PrincipalNamePage)
+              .flatMap(_.remove(PrincipalAddressPage))
+          }
+          case _ => super.cleanup(value, userAnswers)
+        }
     }
 }
