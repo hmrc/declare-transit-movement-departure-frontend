@@ -363,9 +363,21 @@ trait JourneyModelGenerators {
       } yield PrincipalTraderPersonalInfo(name, address)
     }
 
+  implicit lazy val arbitraryPrincipalEoriTraderPersonalInfo: Arbitrary[PrincipalTraderEoriPersonalInfo] =
+    Arbitrary {
+      for {
+        eori             <- arbitrary[EoriNumber]
+        name             <- stringsWithMaxLength(stringMaxLength)
+        principalAddress <- arbitrary[PrincipalAddress]
+        address = Address.prismAddressToPrincipalAddress.reverseGet(principalAddress)
+      } yield PrincipalTraderEoriPersonalInfo(eori, name, address)
+    }
+
   implicit lazy val arbitraryRequiredDetails: Arbitrary[PrincipalTraderDetails] =
     Arbitrary {
-      Gen.oneOf(Arbitrary.arbitrary[PrincipalTraderPersonalInfo], Arbitrary.arbitrary[PrincipalTraderEoriInfo])
+      Gen.oneOf(Arbitrary.arbitrary[PrincipalTraderPersonalInfo],
+                Arbitrary.arbitrary[PrincipalTraderEoriInfo],
+                Arbitrary.arbitrary[PrincipalTraderEoriPersonalInfo])
     }
 
   val genConsignorDetailsWithEori: Gen[ConsignorDetails] =

@@ -65,13 +65,16 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
     // Set Principal Trader details
       .unsafeSetVal(IsPrincipalEoriKnownPage)(traderDetails.principalTraderDetails.isInstanceOf[PrincipalTraderEoriInfo])
       .unsafeSetPFn(WhatIsPrincipalEoriPage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderEoriInfo(eori) => eori.value
+        case PrincipalTraderEoriInfo(eori)               => s"GB${eori.value}"
+        case PrincipalTraderEoriPersonalInfo(eori, _, _) => s"XY${eori.value}"
       })
       .unsafeSetPFn(PrincipalNamePage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderPersonalInfo(name, _) => name
+        case PrincipalTraderPersonalInfo(name, _)        => name
+        case PrincipalTraderEoriPersonalInfo(_, name, _) => name
       })
       .unsafeSetPFn(PrincipalAddressPage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderPersonalInfo(_, address) => Address.prismAddressToPrincipalAddress.getOption(address).get
+        case PrincipalTraderPersonalInfo(_, address)        => Address.prismAddressToPrincipalAddress.getOption(address).get
+        case PrincipalTraderEoriPersonalInfo(_, _, address) => Address.prismAddressToPrincipalAddress.getOption(address).get
       })
       .assert("Eori must be provided for Simplified procedure") {
         ua =>

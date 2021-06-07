@@ -72,6 +72,7 @@ object PrincipalTraderDetails {
             ).tupled.map {
               case (eori, name, principalAddress) =>
                 val address = Address.prismAddressToPrincipalAddress(principalAddress)
+                //TODO: when eori number starts with anything other than GB what we need to ass in as the Country Code (Luke)
                 PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address)
             }
           }

@@ -195,7 +195,7 @@ class DeclarationRequestService @Inject()(
         case PrincipalTraderEoriInfo(traderEori) =>
           TraderPrincipalWithEori(eori = traderEori.value, None, None, None, None, None)
 
-        case PrincipalTraderEoriPersonalInfo(eori, name,  Address(buildingAndStreet, city, postcode, Some(country))) =>
+        case PrincipalTraderEoriPersonalInfo(eori, name, Address(buildingAndStreet, city, postcode, Some(country))) =>
           TraderPrincipalWithEori(eori.value, Some(name), Some(buildingAndStreet), Some(city), Some(postcode), Some(country.code.code))
       }
 
