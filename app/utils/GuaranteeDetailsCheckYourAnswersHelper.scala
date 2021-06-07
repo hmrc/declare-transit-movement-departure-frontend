@@ -31,14 +31,14 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     userAnswers.get(DefaultAmountPage(index)) map {
       answer =>
         Row(
-          key   = Key(msg"defaultAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+          key = Key(msg"defaultAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
           value = Value(yesOrNo(answer)),
           actions = List(
             Action(
-              content            = msg"site.edit",
-              href               = routes.DefaultAmountController.onPageLoad(lrn, index, CheckMode).url,
+              content = msg"site.edit",
+              href = routes.DefaultAmountController.onPageLoad(lrn, index, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"defaultAmount.checkYourAnswersLabel")),
-              attributes         = Map("id" -> "change-default-amount")
+              attributes = Map("id" -> "change-default-amount")
             )
           )
         )
@@ -48,14 +48,14 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     answer =>
       val gtName = GuaranteeType.getId(answer.toString)
       Row(
-        key   = Key(msg"guaranteeType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"guaranteeType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(msg"guaranteeType.$gtName"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeType.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-guarantee-type")
+            attributes = Map("id" -> "change-guarantee-type")
           )
         )
       )
@@ -64,14 +64,14 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def accessCode(index: Index): Option[Row] = userAnswers.get(AccessCodePage(index)) map {
     _ =>
       Row(
-        key   = Key(msg"accessCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"accessCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"••••"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.AccessCodeController.onPageLoad(lrn, index, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.AccessCodeController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"accessCode.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-access-code")
+            attributes = Map("id" -> "change-access-code")
           )
         )
       )
@@ -80,14 +80,14 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def otherReference(index: Index): Option[Row] = userAnswers.get(OtherReferencePage(index)) map {
     answer =>
       Row(
-        key   = Key(msg"otherReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"otherReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.OtherReferenceController.onPageLoad(lrn, index, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.OtherReferenceController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"otherReference.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-other-reference")
+            attributes = Map("id" -> "change-other-reference")
           )
         )
       )
@@ -109,14 +109,14 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
         Some(
           Row(
-            key   = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+            key = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
             value = Value(displayAmount),
             actions = List(
               Action(
-                content            = msg"site.edit",
-                href               = href,
+                content = msg"site.edit",
+                href = href,
                 visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"liabilityAmount.checkYourAnswersLabel")),
-                attributes         = Map("id" -> "change-liability-amount")
+                attributes = Map("id" -> "change-liability-amount")
               )
             )
           )
@@ -127,14 +127,14 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def guaranteeReference(index: Index): Option[Row] = userAnswers.get(GuaranteeReferencePage(index)) map {
     answer =>
       Row(
-        key   = Key(msg"guaranteeReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"guaranteeReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.GuaranteeReferenceController.onPageLoad(lrn, index, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.GuaranteeReferenceController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeReference.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-guarantee-reference")
+            attributes = Map("id" -> "change-guarantee-reference")
           )
         )
       )
@@ -144,20 +144,20 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     userAnswers.get(GuaranteeTypePage(index)).map {
       answer =>
         Row(
-          key   = Key(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}"),
+          key = Key(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}"),
           value = Value(lit""),
           actions = List(
             Action(
-              content            = msg"site.change",
-              href               = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.id, index).url,
+              content = msg"site.change",
+              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.id, index).url,
               visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-              attributes         = Map("id" -> s"""change-guarantee-${index.display}""")
+              attributes = Map("id" -> s"""change-guarantee-${index.display}""")
             ),
             Action(
-              content            = msg"site.delete",
-              href               = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.id, index).url,
+              content = msg"site.delete",
+              href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.id, index).url,
               visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-              attributes         = Map("id" -> s"""remove-guarantee-${index.display}""")
+              attributes = Map("id" -> s"""remove-guarantee-${index.display}""")
             )
           )
         )

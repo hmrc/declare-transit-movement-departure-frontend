@@ -33,6 +33,7 @@ class AgreedLocationOfGoodsFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(maxLengthAgreedLocationOfGoods, "agreedLocationOfGoods.error.length"),
             regexp(alphaNumericWithSpaceRegex, "agreedLocationOfGoods.error.invalid")
-          ))
+          )
+        )
     )
 }

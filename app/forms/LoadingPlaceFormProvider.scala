@@ -33,5 +33,7 @@ class LoadingPlaceFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(placeOfLoadingGoodsCodeLength, "loadingPlace.error.length"),
             regexp(alphaNumericWithSpaceRegex, "loadingPlace.error.invalid")
-          )))
+          )
+        )
+    )
 }

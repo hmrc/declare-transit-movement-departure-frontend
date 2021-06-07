@@ -26,7 +26,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TradersSecurityDetailsNavigator @Inject()() extends Navigator {
+class TradersSecurityDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
   //todo -update when Security Trader Details section done

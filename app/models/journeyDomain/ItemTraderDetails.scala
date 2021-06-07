@@ -74,5 +74,7 @@ object ItemTraderDetails {
   }
 
   def userAnswersParser(index: Index): UserAnswersReader[ItemTraderDetails] =
-    (consignorDetails(index), consigneeDetails(index)).tupled.map(x => ItemTraderDetails(x._1, x._2))
+    (consignorDetails(index), consigneeDetails(index)).tupled.map(
+      x => ItemTraderDetails(x._1, x._2)
+    )
 }

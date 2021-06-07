@@ -40,7 +40,7 @@ class TotalNetMassFormProviderSpec extends StringFieldBehaviours with SpecBase {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLengthNetMass,
+      maxLength = maxLengthNetMass,
       lengthError = FormError(fieldName, lengthKeyNetMass, Seq(index.display))
     )
 

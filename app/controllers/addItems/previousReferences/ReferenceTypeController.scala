@@ -37,7 +37,7 @@ import utils.getPreviousDocumentsAsJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ReferenceTypeController @Inject()(
+class ReferenceTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItems navigator: Navigator,

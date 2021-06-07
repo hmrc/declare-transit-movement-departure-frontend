@@ -96,7 +96,7 @@ object ItemsSecurityTraderDetailsSpec {
 
   def setItemsSecurityTraderDetails(itemsSecurityTraderDetails: ItemsSecurityTraderDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers =
     startUserAnswers
-    // Set method of payment
+      // Set method of payment
       .unsafeSetOpt(TransportChargesPage(index))(itemsSecurityTraderDetails.methodOfPayment)
 
       // Set commercial reference number

@@ -31,10 +31,11 @@ trait Mappings extends Formatters with Constraints {
   protected def mandatoryIfBoolean(condition: Boolean, requiredKey: String = "error.required"): FieldMapping[Boolean] =
     if (condition) boolean(requiredKey) else of(ignoredFormat(true))
 
-  protected def int(requiredKey: String    = "error.required",
+  protected def int(requiredKey: String = "error.required",
                     wholeNumberKey: String = "error.wholeNumber",
-                    nonNumericKey: String  = "error.nonNumeric",
-                    args: Seq[String]      = Seq.empty[String]): FieldMapping[Int] =
+                    nonNumericKey: String = "error.nonNumeric",
+                    args: Seq[String] = Seq.empty[String]
+  ): FieldMapping[Int] =
     of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey, args))
 
   protected def boolean(requiredKey: String = "error.required", invalidKey: String = "error.boolean", args: Seq[Any] = Seq.empty): FieldMapping[Boolean] =
@@ -47,7 +48,8 @@ trait Mappings extends Formatters with Constraints {
                           allRequiredKey: String,
                           twoRequiredKey: String,
                           requiredKey: String,
-                          args: Seq[String] = Seq.empty): FieldMapping[LocalDate] =
+                          args: Seq[String] = Seq.empty
+  ): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
 
   //noinspection ScalaStyle
@@ -60,7 +62,8 @@ trait Mappings extends Formatters with Constraints {
                               amOrPmRequired: String,
                               pastDateErrorKey: String,
                               futureDateErrorKey: String,
-                              args: Seq[String] = Seq.empty): FieldMapping[LocalDateTime] =
+                              args: Seq[String] = Seq.empty
+  ): FieldMapping[LocalDateTime] =
     of(
       new LocalDateTimeFormatter(invalidDateKey,
                                  invalidTimeKey,
@@ -71,7 +74,9 @@ trait Mappings extends Formatters with Constraints {
                                  amOrPmRequired,
                                  pastDateErrorKey,
                                  futureDateErrorKey,
-                                 args))
+                                 args
+      )
+    )
 
   protected def lrn(requiredKey: String, lengthKey: String, invalidKey: String): FieldMapping[LocalReferenceNumber] =
     of(lrnFormatter(requiredKey, lengthKey, invalidKey))

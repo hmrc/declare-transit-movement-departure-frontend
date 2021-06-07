@@ -39,7 +39,7 @@ import utils._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DestinationOfficeController @Inject()(
+class DestinationOfficeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @RouteDetails navigator: Navigator,
@@ -65,7 +65,9 @@ class DestinationOfficeController @Inject()(
 
               val preparedForm: Form[CustomsOffice] = request.userAnswers
                 .get(DestinationOfficePage)
-                .flatMap(x => customsOffices.getCustomsOffice(x.id))
+                .flatMap(
+                  x => customsOffices.getCustomsOffice(x.id)
+                )
                 .map(form.fill)
                 .getOrElse(form)
 

@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
 
-class AuthenticatedIdentifierAction @Inject()(
+class AuthenticatedIdentifierAction @Inject() (
   override val authConnector: AuthConnector,
   config: FrontendAppConfig,
   val parser: BodyParsers.Default,
@@ -60,15 +60,14 @@ class AuthenticatedIdentifierAction @Inject()(
         case enrolments ~ maybeGroupId =>
           (for {
             enrolment <- enrolments.enrolments.filter(_.isActivated).find(_.key.equals(config.enrolmentKey))
-          } yield
-            enrolment.getIdentifier(config.enrolmentIdentifierKey) match {
-              case Some(eoriNumber) =>
-                isDeparturesEnabledService.isDeparturesEnabled(eoriNumber.value).flatMap {
-                  case true  => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
-                  case false => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
-                }
-              case _ => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
-            }).getOrElse(checkForGroupEnrolment(maybeGroupId, config)(hc, request))
+          } yield enrolment.getIdentifier(config.enrolmentIdentifierKey) match {
+            case Some(eoriNumber) =>
+              isDeparturesEnabledService.isDeparturesEnabled(eoriNumber.value).flatMap {
+                case true  => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
+                case false => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
+              }
+            case _ => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
+          }).getOrElse(checkForGroupEnrolment(maybeGroupId, config)(hc, request))
       }
   } recover {
     case _: NoActiveSession =>
@@ -78,8 +77,9 @@ class AuthenticatedIdentifierAction @Inject()(
   }
 
   private def checkForGroupEnrolment[A](maybeGroupId: Option[String], config: FrontendAppConfig)(implicit
-                                                                                                 hc: HeaderCarrier,
-                                                                                                 request: Request[A]): Future[Result] = {
+    hc: HeaderCarrier,
+    request: Request[A]
+  ): Future[Result] = {
     val nctsJson: JsObject = Json.obj("requestAccessToNCTSUrl" -> config.enrolmentManagementFrontendEnrolUrl)
 
     maybeGroupId match {

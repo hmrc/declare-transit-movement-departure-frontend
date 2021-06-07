@@ -27,12 +27,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def loadingPlace: Option[Row] = userAnswers.get(LoadingPlacePage) map {
     answer =>
       Row(
-        key   = Key(msg"loadingPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"loadingPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.LoadingPlaceController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.LoadingPlaceController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"loadingPlace.checkYourAnswersLabel"))
           )
         )
@@ -42,14 +42,14 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def addSecurityDetails: Option[Row] = userAnswers.get(AddSecurityDetailsPage) map {
     answer =>
       Row(
-        key   = Key(msg"addSecurityDetails.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"addSecurityDetails.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.AddSecurityDetailsController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.AddSecurityDetailsController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSecurityDetails.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-add-security-details""")
+            attributes = Map("id" -> s"""change-add-security-details""")
           )
         )
       )
@@ -58,14 +58,14 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def procedureType: Option[Row] = userAnswers.get(ProcedureTypePage) map {
     answer =>
       Row(
-        key   = Key(msg"procedureType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"procedureType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(msg"procedureType.$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ProcedureTypeController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ProcedureTypeController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"procedureType.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-procedure-type""")
+            attributes = Map("id" -> s"""change-procedure-type""")
           )
         )
       )

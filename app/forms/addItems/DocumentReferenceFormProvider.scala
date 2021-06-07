@@ -35,5 +35,6 @@ class DocumentReferenceFormProvider @Inject() extends Mappings {
             maxLength(maxLength, "documentReference.error.length"),
             regexp(stringFieldRegex, "documentReference.error.invalidCharacters")
           )
-        ))
+        )
+    )
 }

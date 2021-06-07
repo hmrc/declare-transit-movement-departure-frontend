@@ -27,7 +27,7 @@ import pages.guaranteeDetails._
 import play.api.mvc.Call
 
 @Singleton
-class GuaranteeDetailsNavigator @Inject()() extends Navigator {
+class GuaranteeDetailsNavigator @Inject() () extends Navigator {
 // format: off
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {

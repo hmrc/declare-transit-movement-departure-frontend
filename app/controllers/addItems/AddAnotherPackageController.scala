@@ -34,7 +34,7 @@ import viewModels.PackageViewModel
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddAnotherPackageController @Inject()(
+class AddAnotherPackageController @Inject() (
   override val messagesApi: MessagesApi,
   @AddItems navigator: Navigator,
   identify: IdentifierAction,
@@ -74,7 +74,7 @@ class AddAnotherPackageController @Inject()(
           "radios"      -> Radios.yesNo(preparedForm("value")),
           "pageTitle"   -> msg"addAnotherPackage.title.$singularOrPlural".withArgs(totalTypes),
           "heading"     -> msg"addAnotherPackage.heading.$singularOrPlural".withArgs(totalTypes),
-          "packageRows" -> packageRows,
+          "packageRows" -> packageRows
         )
 
         renderer.render("addItems/addAnotherPackage.njk", json).map(Ok(_))

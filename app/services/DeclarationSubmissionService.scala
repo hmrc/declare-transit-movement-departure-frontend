@@ -25,7 +25,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclarationSubmissionService @Inject()(
+class DeclarationSubmissionService @Inject() (
   connector: DepartureMovementConnector,
   declarationRequestService: DeclarationRequestService
 )(implicit ec: ExecutionContext) {

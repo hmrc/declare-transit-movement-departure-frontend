@@ -86,7 +86,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
       val expectedDangerousGoodsCodeJson = Seq(
         Json.obj("value" -> "", "text"     -> ""),
         Json.obj("value" -> "0004", "text" -> "(0004) AMMONIUM PICRATE dry or wetted with less than 10% water, by mass", "selected" -> false),
-        Json.obj("value" -> "0005", "text" -> "(0005) CARTRIDGES FOR WEAPONS with bursting charge", "selected" -> false),
+        Json.obj("value" -> "0005", "text" -> "(0005) CARTRIDGES FOR WEAPONS with bursting charge", "selected"                      -> false)
       )
 
       val expectedJson = Json.obj(
@@ -128,7 +128,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
       val expectedDangerousGoodsCodeJson = Seq(
         Json.obj("value" -> "", "text"     -> ""),
         Json.obj("value" -> "0004", "text" -> "(0004) AMMONIUM PICRATE dry or wetted with less than 10% water, by mass", "selected" -> true),
-        Json.obj("value" -> "0005", "text" -> "(0005) CARTRIDGES FOR WEAPONS with bursting charge", "selected" -> false),
+        Json.obj("value" -> "0005", "text" -> "(0005) CARTRIDGES FOR WEAPONS with bursting charge", "selected"                      -> false)
       )
 
       val expectedJson = Json.obj(

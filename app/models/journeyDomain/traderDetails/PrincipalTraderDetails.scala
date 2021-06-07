@@ -34,15 +34,14 @@ object PrincipalTraderDetails {
 
   implicit val principalTraderDetails: UserAnswersReader[PrincipalTraderDetails] = {
 
-    val simplified: UserAnswersReader[PrincipalTraderDetails] = {
+    val simplified: UserAnswersReader[PrincipalTraderDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == Simplified) {
         WhatIsPrincipalEoriPage.reader
           .map(EoriNumber(_))
           .map(PrincipalTraderDetails(_))
       }
-    }
 
-    val normalEori: ReaderT[EitherType, UserAnswers, PrincipalTraderDetails] = {
+    val normalEori: ReaderT[EitherType, UserAnswers, PrincipalTraderDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
         IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
           WhatIsPrincipalEoriPage.reader
@@ -50,7 +49,6 @@ object PrincipalTraderDetails {
             .map(PrincipalTraderDetails(_))
         }
       }
-    }
 
     val normalNameAddress: UserAnswersReader[PrincipalTraderDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {

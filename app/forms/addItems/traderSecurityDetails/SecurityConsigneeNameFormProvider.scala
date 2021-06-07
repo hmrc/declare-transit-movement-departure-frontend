@@ -34,6 +34,7 @@ class SecurityConsigneeNameFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(consigneeNameMaxLength, "securityConsigneeName.error.length"),
             regexp(consignorNameRegex, "securityConsigneeName.error.invalid")
-          ))
+          )
+        )
     )
 }

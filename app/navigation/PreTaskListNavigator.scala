@@ -23,7 +23,8 @@ import pages._
 import play.api.mvc.Call
 
 @Singleton
-class PreTaskListNavigator @Inject()() extends Navigator {
+class PreTaskListNavigator @Inject() () extends Navigator {
+
   // format: off
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case LocalReferenceNumberPage => ua => Some(routes.ProcedureTypeController.onPageLoad(ua.id, NormalMode))

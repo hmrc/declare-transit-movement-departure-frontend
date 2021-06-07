@@ -86,7 +86,7 @@ object SecurityTraderDetails {
       circumstanceIndicator orElse emptyCircumstanceIndicator
     }
 
-    val useNameAndAddress: UserAnswersReader[SecurityTraderDetails] = {
+    val useNameAndAddress: UserAnswersReader[SecurityTraderDetails] =
       AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(_ == false) {
         (
           SecurityConsigneeNamePage(index).reader,
@@ -98,7 +98,6 @@ object SecurityTraderDetails {
               SecurityTraderDetails(name, address)
           }
       }
-    }
 
     AddSecurityDetailsPage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {

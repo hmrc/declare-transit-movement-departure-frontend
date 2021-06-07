@@ -40,7 +40,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmRemoveOfficeOfTransitController @Inject()(
+class ConfirmRemoveOfficeOfTransitController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @RouteDetails navigator: Navigator,
@@ -88,15 +88,15 @@ class ConfirmRemoveOfficeOfTransitController @Inject()(
                   } yield Redirect(navigator.nextPage(ConfirmRemoveOfficeOfTransitPage, mode, updatedAnswers))
                 } else {
                   Future.successful(Redirect(navigator.nextPage(ConfirmRemoveOfficeOfTransitPage, mode, request.userAnswers)))
-              }
+                }
             )
         case _ => renderErrorPage(mode)
       }
   }
 
-  private def renderPage(lrn: LocalReferenceNumber, officeOfTransitId: String, mode: Mode, form: Form[Boolean])(
-    implicit
-    request: DataRequest[AnyContent]): Future[Html] =
+  private def renderPage(lrn: LocalReferenceNumber, officeOfTransitId: String, mode: Mode, form: Form[Boolean])(implicit
+    request: DataRequest[AnyContent]
+  ): Future[Html] =
     referenceDataConnector.getCustomsOffice(officeOfTransitId) flatMap {
       officeOfTransit =>
         val json = Json.obj(

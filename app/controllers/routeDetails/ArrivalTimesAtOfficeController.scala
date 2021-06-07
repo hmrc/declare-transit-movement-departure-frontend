@@ -40,7 +40,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ArrivalTimesAtOfficeController @Inject()(
+class ArrivalTimesAtOfficeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @RouteDetails navigator: Navigator,
@@ -80,8 +80,9 @@ class ArrivalTimesAtOfficeController @Inject()(
       }
   }
 
-  private def loadPage(lrn: LocalReferenceNumber, mode: Mode, selectAMPMValue: Option[String], form: Form[LocalDateTime],
-  )(implicit request: Request[AnyContent]): Future[Html] = {
+  private def loadPage(lrn: LocalReferenceNumber, mode: Mode, selectAMPMValue: Option[String], form: Form[LocalDateTime])(implicit
+    request: Request[AnyContent]
+  ): Future[Html] = {
     val viewModel = DateTimeInput.localDateTime(form("value"))
 
     val json = Json.obj(
@@ -106,9 +107,7 @@ class ArrivalTimesAtOfficeController @Inject()(
               form
                 .bindFromRequest()
                 .fold(
-                  formWithErrors => {
-                    loadPage(lrn, mode, formWithErrors.data.get("value.amOrPm"), formWithErrors).map(BadRequest(_))
-                  },
+                  formWithErrors => loadPage(lrn, mode, formWithErrors.data.get("value.amOrPm"), formWithErrors).map(BadRequest(_)),
                   value =>
                     for {
                       updatedAnswers <- Future.fromTry(request.userAnswers.set(ArrivalTimesAtOfficePage(index), value))

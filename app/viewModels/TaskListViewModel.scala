@@ -120,7 +120,8 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
     taskListDsl
       .sectionName("declarationSummary.section.goodsSummary")
       .conditionalDependencyOnSection(dependentSectionReader(DependentSection.GoodsSummary, userAnswers))(
-        userAnswers.get(ProcedureTypePage).contains(ProcedureType.Normal))
+        userAnswers.get(ProcedureTypePage).contains(ProcedureType.Normal)
+      )
       .ifCompleted(
         UserAnswersReader[GoodsSummary],
         controllers.goodsSummary.routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url
@@ -169,7 +170,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       })
       .getOrElse(Seq.empty)
 
-  private val sections = (Seq(
+  private val sections = Seq(
     movementDetails,
     routeDetails,
     traderDetails,
@@ -178,7 +179,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
     itemDetails,
     goodsSummaryDetails,
     guaranteeDetails
-  ))
+  )
 
   private val sectionDetails                    = sections.map(_.section)
   val sectionErrors: Seq[(String, ReaderError)] = sections.flatMap(_.collectReaderErrors)

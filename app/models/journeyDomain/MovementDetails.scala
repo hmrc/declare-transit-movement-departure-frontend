@@ -44,7 +44,7 @@ object MovementDetails {
           UserAnswersReader[DeclarationForSomeoneElse].widen[DeclarationForSomeoneElseAnswer]
         } else {
           UserAnswersReader[DeclarationForSelf.type].widen[DeclarationForSomeoneElseAnswer]
-      }
+        }
     )
 
   final case class NormalMovementDetails(

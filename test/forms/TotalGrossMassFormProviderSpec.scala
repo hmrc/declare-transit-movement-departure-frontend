@@ -39,7 +39,7 @@ class TotalGrossMassFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLengthGrossMass,
+      maxLength = maxLengthGrossMass,
       lengthError = FormError(fieldName, lengthKeyTotalGrossMass, Seq(maxLengthGrossMass))
     )
 

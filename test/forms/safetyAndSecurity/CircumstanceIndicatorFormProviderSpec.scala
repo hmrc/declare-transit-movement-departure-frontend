@@ -26,6 +26,7 @@ class CircumstanceIndicatorFormProviderSpec extends StringFieldBehaviours {
   private val requiredKey = "circumstanceIndicator.error.required"
   private val lengthKey   = "circumstanceIndicator.error.length"
   private val maxLength   = 2
+
   private val circumstanceIndicatorList: CircumstanceIndicatorList = CircumstanceIndicatorList(
     Seq(
       CircumstanceIndicator("A", "Data1"),

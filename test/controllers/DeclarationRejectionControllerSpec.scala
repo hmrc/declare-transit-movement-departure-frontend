@@ -58,10 +58,10 @@ class DeclarationRejectionControllerSpec extends SpecBase with MockNunjucksRende
         val rejectionErrors = Seq(RejectionError("type1", "pointer", Some("reason")), RejectionError("type1", "pointer", None))
 
         val message = DeclarationRejectionMessage(
-          reference     = "123456",
+          reference = "123456",
           rejectionDate = LocalDate.parse("2010-10-10"),
-          reason        = Some("rejected"),
-          errors        = rejectionErrors
+          reason = Some("rejected"),
+          errors = rejectionErrors
         )
 
         when(mockDepartureMessageService.declarationRejectionMessage(any())(any(), any()))
@@ -95,10 +95,10 @@ class DeclarationRejectionControllerSpec extends SpecBase with MockNunjucksRende
         val rejectionErrors = Seq(RejectionError("type1", "pointer", Some("reason")), RejectionError("type1", "pointer", None))
 
         val message = DeclarationRejectionMessage(
-          reference     = "123456",
+          reference = "123456",
           rejectionDate = LocalDate.parse("2010-10-10"),
-          reason        = None,
-          errors        = rejectionErrors
+          reason = None,
+          errors = rejectionErrors
         )
 
         when(mockDepartureMessageService.declarationRejectionMessage(any())(any(), any()))

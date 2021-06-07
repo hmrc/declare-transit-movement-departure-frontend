@@ -60,17 +60,16 @@ object JourneyDomain {
       goodsSummary      <- UserAnswersReader[GoodsSummary]
       guarantee         <- UserAnswersReader[NonEmptyList[GuaranteeDetails]]
       safetyAndSecurity <- safetyAndSecurityReader
-    } yield
-      JourneyDomain(
-        preTaskList,
-        movementDetails,
-        routeDetails,
-        transportDetails,
-        traderDetails,
-        itemDetails,
-        goodsSummary,
-        guarantee,
-        safetyAndSecurity
-      )
+    } yield JourneyDomain(
+      preTaskList,
+      movementDetails,
+      routeDetails,
+      transportDetails,
+      traderDetails,
+      itemDetails,
+      goodsSummary,
+      guarantee,
+      safetyAndSecurity
+    )
   }
 }

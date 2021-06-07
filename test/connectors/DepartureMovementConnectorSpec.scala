@@ -302,7 +302,8 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
                                               0,
                                               Some(1),
                                               LocalDate.parse("2019-09-12"),
-                                              Some("ok thats fine"))
+                                              Some("ok thats fine")
+            )
           )
 
         connector.getCancellationDecisionUpdateMessage(location).futureValue mustBe expectedResult
@@ -349,7 +350,8 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
         .willReturn(
           aResponse()
             .withStatus(errorResponseCode)
-        ))
+        )
+    )
 
   private def stubResponse(expectedStatus: Int): StubMapping =
     server.stubFor(

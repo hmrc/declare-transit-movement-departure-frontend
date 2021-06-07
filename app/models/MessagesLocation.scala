@@ -22,17 +22,17 @@ case class MessagesLocation(departureMessage: String,
                             guaranteeNotValid: Option[String] = None,
                             declarationRejection: Option[String],
                             cancellationDecisionUpdate: Option[String],
-                            declarationCancellation: Option[String])
+                            declarationCancellation: Option[String]
+)
 
 object MessagesLocation {
 
   import play.api.libs.functional.syntax._
 
-  implicit val reads: Reads[MessagesLocation] = {
+  implicit val reads: Reads[MessagesLocation] =
     ((__ \ "IE015").read[String] and
       (__ \ "IE055").readNullable[String] and
       (__ \ "IE016").readNullable[String] and
       (__ \ "IE009").readNullable[String] and
       (__ \ "IE014").readNullable[String])(MessagesLocation.apply _)
-  }
 }

@@ -25,6 +25,7 @@ class ReferenceTypeFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey = "referenceType.error.required"
   private val maxLength   = 12
+
   private val documentList = PreviousReferencesDocumentTypeList(
     Seq(
       PreviousReferencesDocumentType("T1", Some("Description T1")),

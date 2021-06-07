@@ -25,8 +25,10 @@ class OfficeOfDepartureFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey = "officeOfDeparture.error.required"
   private val maxLength   = 8
+
   private val customsOffices = CustomsOfficeList(
-    Seq(CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None), CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)))
+    Seq(CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None), CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None))
+  )
   private val form = new OfficeOfDepartureFormProvider()(customsOffices)
 
   ".value" - {

@@ -37,7 +37,7 @@ import utils.packageTypeList
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PackageTypeController @Inject()(
+class PackageTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   identify: IdentifierAction,
@@ -66,7 +66,9 @@ class PackageTypeController @Inject()(
 
             val preparedForm: Form[PackageType] = request.userAnswers
               .get(PackageTypePage(itemIndex, packageIndex))
-              .flatMap(packageType => packageTypes.getPackageType(packageType.code))
+              .flatMap(
+                packageType => packageTypes.getPackageType(packageType.code)
+              )
               .map(form.fill)
               .getOrElse(form)
 

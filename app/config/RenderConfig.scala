@@ -20,7 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-class RenderConfigImpl @Inject()(configuration: Configuration) extends RenderConfig {
+class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderConfig {
 
   val contactHost                  = configuration.get[String]("contact-frontend.host")
   val contactFormServiceIdentifier = "CTCTrader"

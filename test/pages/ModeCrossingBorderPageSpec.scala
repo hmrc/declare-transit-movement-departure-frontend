@@ -58,7 +58,11 @@ class ModeCrossingBorderPageSpec extends PageBehaviours with TryValues with Opti
 
     "must not clear IdCrossingBorder and Nationality Crossing Border Page if any other mode is selected" in {
 
-      forAll(Gen.numStr.suchThat(num => !ModeCrossingBorder.isExemptFromNationality(num))) {
+      forAll(
+        Gen.numStr.suchThat(
+          num => !ModeCrossingBorder.isExemptFromNationality(num)
+        )
+      ) {
         crossingMode =>
           val userAnswers = new UserAnswers(LocalReferenceNumber("AB123").get, EoriNumber("3242343"))
 

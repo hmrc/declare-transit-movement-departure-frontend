@@ -32,7 +32,7 @@ class RepresentativeCapacityFormProviderSpec extends OptionFieldBehaviours {
     behave like optionsField[RepresentativeCapacity](
       form,
       fieldName,
-      validValues  = RepresentativeCapacity.values,
+      validValues = RepresentativeCapacity.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

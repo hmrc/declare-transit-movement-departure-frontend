@@ -46,6 +46,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
   def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new TransportChargesFormProvider()
+
   private val methodOfPaymentList = MethodOfPaymentList(
     Seq(
       MethodOfPayment("A", "Payment in cash"),
@@ -92,7 +93,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val expectedMethodOfPaymentJson = Seq(
         Json.obj("value" -> "", "text"  -> ""),
-        Json.obj("value" -> "A", "text" -> "(A) Payment in cash", "selected" -> false),
+        Json.obj("value" -> "A", "text" -> "(A) Payment in cash", "selected"        -> false),
         Json.obj("value" -> "B", "text" -> "(B) Payment by credit card", "selected" -> false)
       )
 
@@ -134,7 +135,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val expectedMethodOfPaymentJson = Seq(
         Json.obj("value" -> "", "text"  -> ""),
-        Json.obj("value" -> "A", "text" -> "(A) Payment in cash", "selected" -> true),
+        Json.obj("value" -> "A", "text" -> "(A) Payment in cash", "selected"        -> true),
         Json.obj("value" -> "B", "text" -> "(B) Payment by credit card", "selected" -> false)
       )
 

@@ -37,7 +37,7 @@ import utils.AddSealHelper
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SealsInformationController @Inject()(
+class SealsInformationController @Inject() (
   override val messagesApi: MessagesApi,
   @GoodsSummary navigator: Navigator,
   identify: IdentifierAction,

@@ -48,6 +48,7 @@ class PreviousReferenceControllerSpec extends SpecBase with MockNunjucksRenderer
   private val template     = "addItems/previousReference.njk"
 
   lazy val previousReferenceRoute = routes.PreviousReferenceController.onPageLoad(lrn, index, referenceIndex, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

@@ -54,11 +54,13 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
   private val form                 = formProvider()
   private val template             = "addItems/addAnotherPreviousAdministrativeReference.njk"
   private val mockRefDataConnector = mock[ReferenceDataConnector]
+
   private val documentTypeList = PreviousReferencesDocumentTypeList(
     Seq(
       PreviousReferencesDocumentType("T1", Some("Description T1")),
       PreviousReferencesDocumentType("T2F", None)
-    ))
+    )
+  )
 
   lazy val addAnotherPreviousAdministrativeReferenceRoute =
     routes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, index, NormalMode).url
@@ -97,7 +99,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
         "form"      -> form,
         "lrn"       -> lrn,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
-        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1),
+        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -129,7 +131,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
         "form"      -> form,
         "lrn"       -> lrn,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
-        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1),
+        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -177,7 +179,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
         "form"      -> boundForm,
         "lrn"       -> lrn,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
-        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1),
+        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey

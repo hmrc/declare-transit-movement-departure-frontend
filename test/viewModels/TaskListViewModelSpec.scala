@@ -921,7 +921,7 @@ class TaskListViewModelSpec
         "is Completed and procedure type is 'Simplified' when all the answers are completed" in {
           val isSecurityDefined = arb[Boolean].sample.value
           forAll(arb(arbitraryGoodsSummary(isSecurityDefined, ProcedureType.Simplified))) {
-            (goodsSummary) =>
+            goodsSummary =>
               val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = GoodSummarySimplifiedDetails("location", LocalDate.now()))
               val userAnswers = GoodsSummarySpec
                 .setGoodsSummary(updatedGoodsSummary)(emptyUserAnswers)

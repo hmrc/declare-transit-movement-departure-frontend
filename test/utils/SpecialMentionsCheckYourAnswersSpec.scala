@@ -33,7 +33,11 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
 
       "display row if answer exists in reference data" in {
 
-        forAll(arb[UserAnswers], arb[SpecialMentionList].suchThat(x => x.list.nonEmpty)) {
+        forAll(arb[UserAnswers],
+               arb[SpecialMentionList].suchThat(
+                 x => x.list.nonEmpty
+               )
+        ) {
           (userAnswers, specialMentionList) =>
             val updatedAnswers = userAnswers
               .set(SpecialMentionTypePage(itemIndex, referenceIndex), specialMentionList.list.head.code)
@@ -74,7 +78,11 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
 
       "display row if answer exists in reference data" in {
 
-        forAll(arb[UserAnswers], arb[SpecialMentionList].suchThat(x => x.list.nonEmpty)) {
+        forAll(arb[UserAnswers],
+               arb[SpecialMentionList].suchThat(
+                 x => x.list.nonEmpty
+               )
+        ) {
           (userAnswers, specialMentionList) =>
             val updatedAnswers = userAnswers
               .set(SpecialMentionTypePage(itemIndex, referenceIndex), specialMentionList.list.head.code)

@@ -32,7 +32,8 @@ class SafetyAndSecurityConsigneeNameFormProvider @Inject() extends Mappings {
       "value" -> text("safetyAndSecurityConsigneeName.error.required")
         .verifying(
           StopOnFirstFail(maxLength(maxLength, "safetyAndSecurityConsigneeName.error.length"),
-                          regexp(stringFieldRegex, "safetyAndSecurityConsigneeName.error.invalid"))
+                          regexp(stringFieldRegex, "safetyAndSecurityConsigneeName.error.invalid")
+          )
         )
     )
 }

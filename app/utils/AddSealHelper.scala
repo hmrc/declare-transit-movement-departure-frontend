@@ -30,20 +30,20 @@ class AddSealHelper(userAnswers: UserAnswers) {
     userAnswers.get(SealIdDetailsPage(sealIndex)).map {
       answer =>
         Row(
-          key   = Key(msg"sealsInformation.sealList.label".withArgs(sealIndex.display)),
+          key = Key(msg"sealsInformation.sealList.label".withArgs(sealIndex.display)),
           value = Value(lit"${answer.numberOrMark}"),
           actions = List(
             Action(
-              content            = msg"site.edit",
-              href               = SealIdDetailsController.onPageLoad(lrn, sealIndex, CheckMode).url,
+              content = msg"site.edit",
+              href = SealIdDetailsController.onPageLoad(lrn, sealIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"sealsInformation.sealList.change.hidden".withArgs(answer.numberOrMark)),
-              attributes         = Map("id" -> s"""change-seal-${sealIndex.display}""")
+              attributes = Map("id" -> s"""change-seal-${sealIndex.display}""")
             ),
             Action(
-              content            = msg"site.delete",
-              href               = ConfirmRemoveSealController.onPageLoad(userAnswers.id, sealIndex, mode).url,
+              content = msg"site.delete",
+              href = ConfirmRemoveSealController.onPageLoad(userAnswers.id, sealIndex, mode).url,
               visuallyHiddenText = Some(msg"sealsInformation.sealList.delete.hidden".withArgs(answer.numberOrMark)),
-              attributes         = Map("id" -> s"""remove-seal-${sealIndex.display}""")
+              attributes = Map("id" -> s"""remove-seal-${sealIndex.display}""")
             )
           )
         )
@@ -58,14 +58,14 @@ class AddSealHelper(userAnswers: UserAnswers) {
       val html             = Html((answer.map(_.numberOrMark)).mkString("<br>"))
 
       Row(
-        key   = Key(msg"sealIdDetails.checkYourAnswersLabel.$singularOrPlural"),
+        key = Key(msg"sealIdDetails.checkYourAnswersLabel.$singularOrPlural"),
         value = Value(html),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = SealsInformationController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = SealsInformationController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"change-sealIdDetails.checkYourAnswersLabel$singularOrPlural"),
-            attributes         = Map("id" -> idPluralisation)
+            attributes = Map("id" -> idPluralisation)
           )
         )
       )

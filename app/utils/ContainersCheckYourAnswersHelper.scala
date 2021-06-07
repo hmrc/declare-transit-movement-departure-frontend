@@ -28,20 +28,20 @@ class ContainersCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def containerNumber(itemIndex: Index, containerIndex: Index): Option[Row] = userAnswers.get(ContainerNumberPage(itemIndex, containerIndex)) map {
     answer =>
       Row(
-        key   = Key(msg"containerNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"containerNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = containerRoutes.ContainerNumberController.onPageLoad(userAnswers.id, itemIndex, containerIndex, CheckMode).url,
+            content = msg"site.edit",
+            href = containerRoutes.ContainerNumberController.onPageLoad(userAnswers.id, itemIndex, containerIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"containerNumber.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""edit-container-number-${itemIndex.display}""")
+            attributes = Map("id" -> s"""edit-container-number-${itemIndex.display}""")
           ),
           Action(
-            content            = msg"site.delete",
-            href               = containerRoutes.ConfirmRemoveContainerController.onPageLoad(userAnswers.id, itemIndex, containerIndex, CheckMode).url,
+            content = msg"site.delete",
+            href = containerRoutes.ConfirmRemoveContainerController.onPageLoad(userAnswers.id, itemIndex, containerIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
-            attributes         = Map("id" -> s"""remove-container-number-${itemIndex.display}""")
+            attributes = Map("id" -> s"""remove-container-number-${itemIndex.display}""")
           )
         )
       )

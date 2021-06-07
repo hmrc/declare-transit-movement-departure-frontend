@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
 import javax.inject.Inject
 
-class OtherReferenceFormProvider @Inject()() extends Mappings {
+class OtherReferenceFormProvider @Inject() () extends Mappings {
 
   def apply(): Form[String] =
     Form(
@@ -33,5 +33,7 @@ class OtherReferenceFormProvider @Inject()() extends Mappings {
           StopOnFirstFail[String](
             maxLength(otherReferenceNumberLength, "otherReference.error.length"),
             regexp(alphaNumericRegex, "otherReference.error.invalid")
-          )))
+          )
+        )
+    )
 }

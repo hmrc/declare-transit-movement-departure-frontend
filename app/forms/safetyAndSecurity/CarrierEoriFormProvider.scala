@@ -29,9 +29,12 @@ class CarrierEoriFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("carrierEori.error.required")
-        .verifying(StopOnFirstFail[String](
-          maxLength(maxLengthEoriNumber, "carrierEori.error.length"),
-          regexp(alphaNumericRegex, "carrierEori.error.invalidCharacters"),
-          regexp(eoriNumberRegex, "carrierEori.error.invalidFormat")
-        )))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxLengthEoriNumber, "carrierEori.error.length"),
+            regexp(alphaNumericRegex, "carrierEori.error.invalidCharacters"),
+            regexp(eoriNumberRegex, "carrierEori.error.invalidFormat")
+          )
+        )
+    )
 }

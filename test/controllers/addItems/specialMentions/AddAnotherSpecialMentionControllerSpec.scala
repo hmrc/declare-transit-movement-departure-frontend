@@ -166,7 +166,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
         "form"      -> boundForm,
         "lrn"       -> lrn,
         "pageTitle" -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
-        "heading"   -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
+        "heading"   -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey

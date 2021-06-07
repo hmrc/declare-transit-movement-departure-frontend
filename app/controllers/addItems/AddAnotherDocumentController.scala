@@ -39,7 +39,7 @@ import utils.AddItemsCheckYourAnswersHelper
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddAnotherDocumentController @Inject()(
+class AddAnotherDocumentController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @Document navigator: Navigator,

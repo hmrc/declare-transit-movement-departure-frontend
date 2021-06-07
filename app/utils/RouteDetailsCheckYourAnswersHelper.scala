@@ -31,14 +31,14 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     answer =>
       val dateTime: String = s"${Format.dateTimeFormattedAMPM(answer).toLowerCase}"
       Row(
-        key   = Key(msg"arrivalTimesAtOffice.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"arrivalTimesAtOffice.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
         value = Value(Literal(dateTime)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"arrivalTimesAtOffice.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-arrival-times-at-office-of-transit")
+            attributes = Map("id" -> "change-arrival-times-at-office-of-transit")
           )
         )
       )
@@ -49,14 +49,14 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       customsOfficeList.getCustomsOffice(answer.id) map {
         customsOffice =>
           Row(
-            key   = Key(msg"destinationOffice.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+            key = Key(msg"destinationOffice.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
             value = Value(lit"${customsOffice.name} (${customsOffice.id})"),
             actions = List(
               Action(
-                content            = msg"site.edit",
-                href               = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode).url,
+                content = msg"site.edit",
+                href = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode).url,
                 visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"destinationOffice.checkYourAnswersLabel")),
-                attributes         = Map("id" -> "change-destination-office")
+                attributes = Map("id" -> "change-destination-office")
               )
             )
           )
@@ -66,12 +66,12 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def addTransitOffice(): Option[Row] = userAnswers.get(AddTransitOfficePage) map {
     answer =>
       Row(
-        key   = Key(msg"addTransitOffice.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"addTransitOffice.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.AddTransitOfficeController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.AddTransitOfficeController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addTransitOffice.checkYourAnswersLabel"))
           )
         )
@@ -83,14 +83,14 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       customsOfficeList.getCustomsOffice(answer.id) map {
         customsOffice =>
           Row(
-            key   = Key(msg"officeOfDeparture.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+            key = Key(msg"officeOfDeparture.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
             value = Value(lit"${customsOffice.name} (${customsOffice.id})"),
             actions = List(
               Action(
-                content            = msg"site.edit",
-                href               = routes.OfficeOfDepartureController.onPageLoad(lrn, CheckMode).url,
+                content = msg"site.edit",
+                href = routes.OfficeOfDepartureController.onPageLoad(lrn, CheckMode).url,
                 visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"officeOfDeparture.checkYourAnswersLabel")),
-                attributes         = Map("id" -> "change-office-of-departure")
+                attributes = Map("id" -> "change-office-of-departure")
               )
             )
           )
@@ -103,14 +103,14 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         customsOfficeList.getCustomsOffice(answer) map {
           officeOfTransit =>
             Row(
-              key   = Key(msg"addAnotherTransitOffice.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(msg"addAnotherTransitOffice.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"${officeOfTransit.name} (${officeOfTransit.id})"),
               actions = List(
                 Action(
-                  content            = msg"site.edit",
-                  href               = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode).url,
+                  content = msg"site.edit",
+                  href = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAnotherTransitOffice.checkYourAnswersLabel")),
-                  attributes         = Map("id" -> "change-office-of-transit")
+                  attributes = Map("id" -> "change-office-of-transit")
                 )
               )
             )
@@ -122,14 +122,14 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       val countryName = codeList.getCountry(answer.country).map(_.description).getOrElse(answer.country.code)
 
       Row(
-        key   = Key(msg"countryOfDispatch.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"countryOfDispatch.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$countryName"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"countryOfDispatch.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-country-of-dispatch")
+            attributes = Map("id" -> "change-country-of-dispatch")
           )
         )
       )
@@ -140,14 +140,14 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       val countryName = codeList.getCountry(answer).map(_.description).getOrElse(answer.code)
 
       Row(
-        key   = Key(msg"destinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"destinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$countryName"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.DestinationCountryController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.DestinationCountryController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"destinationCountry.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-destination-country")
+            attributes = Map("id" -> "change-destination-country")
           )
         )
       )
@@ -167,20 +167,20 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
                 .getOrElse("")
 
             Row(
-              key   = Key(lit"${office.name} (${office.id})"),
+              key = Key(lit"${office.name} (${office.id})"),
               value = Value(lit"$arrivalTime"),
               actions = List(
                 Action(
-                  content            = msg"site.change",
-                  href               = routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, index, mode).url,
+                  content = msg"site.change",
+                  href = routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, index, mode).url,
                   visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.change.hidden".withArgs(answer)),
-                  attributes         = Map("id" -> s"""change-office-of-transit-${index.display}""")
+                  attributes = Map("id" -> s"""change-office-of-transit-${index.display}""")
                 ),
                 Action(
-                  content            = msg"site.delete",
-                  href               = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.id, index, mode).url,
+                  content = msg"site.delete",
+                  href = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.id, index, mode).url,
                   visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.delete.hidden".withArgs(answer)),
-                  attributes         = Map("id" -> s"""remove-office-of-transit-${index.display}""")
+                  attributes = Map("id" -> s"""remove-office-of-transit-${index.display}""")
                 )
               )
             )
@@ -191,14 +191,14 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     answer =>
       val countryName = countryList.getCountry(answer).map(_.description).getOrElse(answer.code)
       Row(
-        key   = Key(msg"movementDestinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"movementDestinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$countryName"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"movementDestinationCountry.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-movement-destination-country")
+            attributes = Map("id" -> "change-movement-destination-country")
           )
         )
       )
@@ -207,12 +207,12 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def officeOfTransitCountry(index: Index): Option[Row] = userAnswers.get(OfficeOfTransitCountryPage(index)) map {
     answer =>
       Row(
-        key   = Key(msg"officeOfTransitCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"officeOfTransitCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"officeOfTransitCountry.checkYourAnswersLabel"))
           )
         )

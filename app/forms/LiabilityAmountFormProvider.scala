@@ -27,9 +27,12 @@ class LiabilityAmountFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("liabilityAmount.error.required")
-        .verifying(StopOnFirstFail[String](
-          regexp(liabilityAmountCharactersRegex, "liabilityAmount.error.characters"),
-          regexp(liabilityAmountFormatRegex, "liabilityAmount.error.invalidFormat"),
-          regexp(greaterThanZeroRegex, "liabilityAmount.error.greaterThanZero"),
-        )))
+        .verifying(
+          StopOnFirstFail[String](
+            regexp(liabilityAmountCharactersRegex, "liabilityAmount.error.characters"),
+            regexp(liabilityAmountFormatRegex, "liabilityAmount.error.invalidFormat"),
+            regexp(greaterThanZeroRegex, "liabilityAmount.error.greaterThanZero")
+          )
+        )
+    )
 }

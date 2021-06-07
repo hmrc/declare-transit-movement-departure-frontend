@@ -33,7 +33,7 @@ class GuaranteeTypeFormProviderSpec extends OptionFieldBehaviours {
     behave like optionsField[GuaranteeType](
       form,
       fieldName,
-      validValues  = GuaranteeType.values,
+      validValues = GuaranteeType.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

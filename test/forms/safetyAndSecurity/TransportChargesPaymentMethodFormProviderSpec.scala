@@ -25,6 +25,7 @@ class TransportChargesPaymentMethodFormProviderSpec extends StringFieldBehaviour
 
   private val requiredKey = "transportChargesPaymentMethod.error.required"
   private val maxLength   = 2
+
   private val methodOfPaymentList = MethodOfPaymentList(
     Seq(
       MethodOfPayment("A", "Payment in cash"),

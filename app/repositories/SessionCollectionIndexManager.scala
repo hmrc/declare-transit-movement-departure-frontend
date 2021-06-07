@@ -26,7 +26,7 @@ import reactivemongo.bson.BSONDocument
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-private[repositories] class SessionCollectionIndexManagerImpl @Inject()(
+private[repositories] class SessionCollectionIndexManagerImpl @Inject() (
   sessionCollection: SessionCollection,
   config: Configuration
 )(implicit ec: ExecutionContext)
@@ -36,13 +36,13 @@ private[repositories] class SessionCollectionIndexManagerImpl @Inject()(
   private val cacheTtl = config.get[Int]("mongodb.timeToLiveInSeconds")
 
   private val lastUpdatedIndex = SimpleMongoIndexConfig(
-    key     = Seq("lastUpdated" -> IndexType.Ascending),
-    name    = Some("user-answers-last-updated-index"),
+    key = Seq("lastUpdated" -> IndexType.Ascending),
+    name = Some("user-answers-last-updated-index"),
     options = BSONDocument("expireAfterSeconds" -> cacheTtl)
   )
 
   private val eoriIndex = SimpleMongoIndexConfig(
-    key  = Seq("eoriNumber" -> IndexType.Ascending),
+    key = Seq("eoriNumber" -> IndexType.Ascending),
     name = Some("eoriNumber-index")
   )
 
@@ -55,14 +55,13 @@ private[repositories] class SessionCollectionIndexManagerImpl @Inject()(
       logger.info(IndexLogMessages.indexManagerResultLogMessage(sessionCollection.collectionName, lastUpdatedIndex.name.get, lastUpdatedIndexResult))
       logger.info(IndexLogMessages.indexManagerResultLogMessage(sessionCollection.collectionName, eoriIndex.name.get, eoriIndexResult))
     }).map(
-        _ => ()
-      )
-      .recover {
-        case e: Throwable =>
-          val message = IndexLogMessages.indexManagerFailedKey(sessionCollection.collectionName) + " failed with exception"
-          logger.error(message, e)
-          throw e
-      }
+      _ => ()
+    ).recover {
+      case e: Throwable =>
+        val message = IndexLogMessages.indexManagerFailedKey(sessionCollection.collectionName) + " failed with exception"
+        logger.error(message, e)
+        throw e
+    }
 }
 
 private[repositories] trait SessionCollectionIndexManager {

@@ -86,7 +86,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
       val expectedCustomsOfficeJson = Seq(
         Json.obj("value" -> "", "text"         -> ""),
         Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> false),
-        Json.obj("value" -> "id", "text"       -> "name (id)", "selected" -> false)
+        Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
       )
 
       val expectedJson = Json.obj(

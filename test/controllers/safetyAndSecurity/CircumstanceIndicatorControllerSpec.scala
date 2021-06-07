@@ -56,6 +56,7 @@ class CircumstanceIndicatorControllerSpec
   private val formProvider               = new CircumstanceIndicatorFormProvider()
   private val template                   = "safetyAndSecurity/circumstanceIndicator.njk"
   private val mockReferenceDataConnector = mock[ReferenceDataConnector]
+
   private val circumstanceIndicatorList: CircumstanceIndicatorList = CircumstanceIndicatorList(
     Seq(
       CircumstanceIndicator("A", "Data1"),

@@ -51,7 +51,7 @@ package object journeyDomain {
                   Right(NonEmptyList.fromListUnsafe(x))
                 } else {
                   Left(ReaderError(a, Some(s"Empty list for $a")))
-              }
+                }
             )
         }
 
@@ -113,7 +113,7 @@ package object journeyDomain {
                   Right(x)
                 } else {
                   Left(ReaderError(a))
-              }
+                }
             )
         }
 
@@ -127,7 +127,7 @@ package object journeyDomain {
                   Right(Some(x))
                 } else {
                   Right(None)
-              }
+                }
             )
         }
   }
@@ -158,7 +158,7 @@ package object journeyDomain {
           x.get(a) match {
             case Some(value) => Right(value)
             case None        => Left(ReaderError(a))
-        }
+          }
       )
 
     def reader(message: String)(implicit reads: Reads[A]): UserAnswersReader[A] =
@@ -167,7 +167,7 @@ package object journeyDomain {
           x.get(a) match {
             case Some(value) => Right(value)
             case None        => Left(ReaderError(a, Some(message)))
-        }
+          }
       )
   }
 

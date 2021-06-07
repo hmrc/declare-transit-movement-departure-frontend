@@ -61,7 +61,7 @@ object SafetyAndSecurityConsigneeWithoutEori {
     (__ \ "StrNumTRACONSEC035").read[String],
     (__ \ "PosCodTRACONSEC034").read[String],
     (__ \ "CitTRACONSEC030").read[String],
-    (__ \ "CouCodTRACONSEC031").read[String],
+    (__ \ "CouCodTRACONSEC031").read[String]
   ).mapN(apply)
 
   implicit def writes: XMLWrites[SafetyAndSecurityConsigneeWithoutEori] = XMLWrites[SafetyAndSecurityConsigneeWithoutEori] {

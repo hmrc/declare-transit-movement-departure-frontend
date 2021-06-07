@@ -38,7 +38,7 @@ import utils.countryJsonList
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfRoutingController @Inject()(
+class CountryOfRoutingController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SafetyAndSecurity navigator: Navigator,
@@ -98,8 +98,9 @@ class CountryOfRoutingController @Inject()(
         }
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country])(
-    implicit request: Request[AnyContent]): Future[Html] = {
+  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country])(implicit
+    request: Request[AnyContent]
+  ): Future[Html] = {
     val json = Json.obj(
       "form"      -> form,
       "lrn"       -> lrn,

@@ -29,9 +29,12 @@ class ConsignorEoriFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("consignorEori.error.required")
-        .verifying(StopOnFirstFail[String](
-          maxLength(maxLengthEoriNumber, "consignorEori.error.length"),
-          regexp(stringFieldRegex, "consignorEori.error.invalidCharacters"),
-          regexp(eoriNumberRegex, "consignorEori.error.invalidFormat")
-        )))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxLengthEoriNumber, "consignorEori.error.length"),
+            regexp(stringFieldRegex, "consignorEori.error.invalidCharacters"),
+            regexp(eoriNumberRegex, "consignorEori.error.invalidFormat")
+          )
+        )
+    )
 }

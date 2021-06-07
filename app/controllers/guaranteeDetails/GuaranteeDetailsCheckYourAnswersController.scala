@@ -31,7 +31,7 @@ import viewModels.sections.Section
 
 import scala.concurrent.ExecutionContext
 
-class GuaranteeDetailsCheckYourAnswersController @Inject()(
+class GuaranteeDetailsCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,

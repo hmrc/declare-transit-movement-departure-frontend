@@ -116,14 +116,13 @@ trait ModelGenerators {
       code <- arbitrary[CountryCode]
     } yield CountryOfDispatch(code, true)
 
-  implicit lazy val arbitraryCountryOfDispatch: Arbitrary[CountryOfDispatch] = {
+  implicit lazy val arbitraryCountryOfDispatch: Arbitrary[CountryOfDispatch] =
     Arbitrary {
       for {
         code <- arbitrary[CountryCode]
         isEu <- arbitrary[Boolean]
       } yield CountryOfDispatch(code, isEu)
     }
-  }
 
   implicit lazy val arbitraryCountry: Arbitrary[Country] =
     Arbitrary {

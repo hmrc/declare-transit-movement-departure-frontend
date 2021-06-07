@@ -45,6 +45,7 @@ object ItemsSecurityConsigneeWithEori {
   implicit val xmlReader: XmlReader[ItemsSecurityConsigneeWithEori] = (__ \ "TINTRACONSECGOO020").read[String].map(apply)
 
 }
+
 final case class ItemsSecurityConsigneeWithoutEori(
   name: String,
   streetAndNumber: String,

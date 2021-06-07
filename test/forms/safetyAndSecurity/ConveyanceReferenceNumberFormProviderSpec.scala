@@ -45,14 +45,14 @@ class ConveyanceReferenceNumberFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, maxLengthKey, Seq(maxLength))
     )
 
     behave like fieldWithMinLength(
       form,
       fieldName,
-      minLength   = minLength,
+      minLength = minLength,
       lengthError = FormError(fieldName, minLengthKey, Seq(minLength))
     )
 

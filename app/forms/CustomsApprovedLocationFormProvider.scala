@@ -29,8 +29,11 @@ class CustomsApprovedLocationFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("customsApprovedLocation.error.required")
-        .verifying(StopOnFirstFail[String](
-          maxLength(maxLengthCustomsApprovedLocation, "customsApprovedLocation.error.length"),
-          regexp(stringFieldRegex, "customsApprovedLocation.error.invalidCharacters")
-        )))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxLengthCustomsApprovedLocation, "customsApprovedLocation.error.length"),
+            regexp(stringFieldRegex, "customsApprovedLocation.error.invalidCharacters")
+          )
+        )
+    )
 }

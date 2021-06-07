@@ -42,6 +42,7 @@ case class RejectionError(errorType: String, pointer: String, reason: Option[Str
 object RejectionError {
 
   implicit val writes: OWrites[RejectionError] = Json.writes[RejectionError]
+
   implicit val xmlReader: XmlReader[RejectionError] = (
     (__ \ "ErrTypER11").read[String],
     (__ \ "ErrPoiER12").read[String],

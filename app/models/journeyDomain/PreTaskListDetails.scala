@@ -30,7 +30,9 @@ case class PreTaskListDetails(
 object PreTaskListDetails {
 
   val localReferenceNumber: UserAnswersReader[LocalReferenceNumber] =
-    ReaderT[EitherType, UserAnswers, LocalReferenceNumber](ua => Right(ua.id))
+    ReaderT[EitherType, UserAnswers, LocalReferenceNumber](
+      ua => Right(ua.id)
+    )
 
   implicit val reader: UserAnswersReader[PreTaskListDetails] =
     (

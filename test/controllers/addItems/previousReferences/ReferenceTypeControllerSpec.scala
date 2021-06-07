@@ -46,6 +46,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
   def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new ReferenceTypeFormProvider()
+
   private val documentTypeList = PreviousReferencesDocumentTypeList(
     Seq(
       PreviousReferencesDocumentType("T1", Some("Description T1")),
@@ -60,6 +61,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   lazy val referenceTypeRoute = routes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
@@ -93,8 +95,8 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
       val expectedPreviousDocumentTypeJson = Seq(
         Json.obj("value" -> "", "text"    -> ""),
         Json.obj("value" -> "T1", "text"  -> "(T1) Description T1", "selected" -> false),
-        Json.obj("value" -> "T2F", "text" -> "T2F", "selected" -> false),
-        Json.obj("value" -> "CO", "text"  -> "CO", "selected" -> false)
+        Json.obj("value" -> "T2F", "text" -> "T2F", "selected"                 -> false),
+        Json.obj("value" -> "CO", "text"  -> "CO", "selected"                  -> false)
       )
 
       val expectedJson = Json.obj(
@@ -137,8 +139,8 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
       val expectedPreviousDocumentTypeJson = Seq(
         Json.obj("value" -> "", "text"    -> ""),
         Json.obj("value" -> "T1", "text"  -> "(T1) Description T1", "selected" -> true),
-        Json.obj("value" -> "T2F", "text" -> "T2F", "selected" -> false),
-        Json.obj("value" -> "CO", "text"  -> "CO", "selected" -> false)
+        Json.obj("value" -> "T2F", "text" -> "T2F", "selected"                 -> false),
+        Json.obj("value" -> "CO", "text"  -> "CO", "selected"                  -> false)
       )
 
       val expectedJson = Json.obj(

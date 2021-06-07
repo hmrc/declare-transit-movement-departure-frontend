@@ -87,7 +87,7 @@ object SafetyAndSecurityCheckYourAnswersViewModel {
           cyah.carrierAddress
         ).flatten,
         None
-      ),
+      )
     )
 
   }

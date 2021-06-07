@@ -40,7 +40,7 @@ class ItemTotalGrossMassFormProviderSpec extends StringFieldBehaviours with Spec
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLengthGrossMass,
+      maxLength = maxLengthGrossMass,
       lengthError = FormError(fieldName, lengthKeyGrossMass, Seq(index.display))
     )
 
