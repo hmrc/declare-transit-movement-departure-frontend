@@ -16,6 +16,7 @@
 
 package pages
 
+import models.ProcedureType.Normal
 import models.{PrincipalAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
@@ -28,7 +29,7 @@ class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
 
     beSettable[Boolean](IsPrincipalEoriKnownPage)
 
-    beRemovable[Boolean](IsPrincipalEoriKnownPage)
+    //   beRemovable[Boolean](IsPrincipalEoriKnownPage)
   }
 
   "cleanup" - {
@@ -39,6 +40,12 @@ class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(ProcedureTypePage, Normal)
+            .success
+            .value
+            .set(WhatIsPrincipalEoriPage, "GB223445")
+            .success
+            .value
             .set(PrincipalNamePage, "answer")
             .success
             .value
@@ -59,6 +66,9 @@ class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(ProcedureTypePage, Normal)
+            .success
+            .value
             .set(WhatIsPrincipalEoriPage, "GB123456")
             .success
             .value
