@@ -352,7 +352,7 @@ trait JourneyModelGenerators {
     }
 
   implicit lazy val arbitraryTraderEori: Arbitrary[PrincipalTraderEoriInfo] =
-    Arbitrary(arbitrary[EoriNumber].map(PrincipalTraderEoriInfo(_)))
+    Arbitrary(arbitrary[EoriNumber].map(x => PrincipalTraderEoriInfo(EoriNumber(s"GB${x.value}"))))
 
   implicit lazy val arbitraryPrincipalTraderPersonalInfo: Arbitrary[PrincipalTraderPersonalInfo] =
     Arbitrary {

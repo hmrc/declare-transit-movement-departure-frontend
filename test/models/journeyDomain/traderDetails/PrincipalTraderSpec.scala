@@ -33,17 +33,39 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
 
       "when Eori is known has been answered" - {
 
-        "when Eori is answered" in {
-          forAll(arb[UserAnswers], arb[EoriNumber]) {
-            (baseUserAnswers, eori) =>
+        "when Eori is answered in prefix is GB" in {
+
+          val eoriNumber = EoriNumber("GB123456")
+          forAll(arb[UserAnswers]) {
+            (baseUserAnswers) =>
               val userAnswers = baseUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
-                .unsafeSetVal(WhatIsPrincipalEoriPage)(eori.value)
+                .unsafeSetVal(WhatIsPrincipalEoriPage)(eoriNumber.value)
 
               val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-              result mustEqual PrincipalTraderEoriInfo(eori)
+              result mustEqual PrincipalTraderEoriInfo(eoriNumber)
+
+          }
+        }
+        "when Eori is answered in prefix is not GB" in {
+
+          val eoriNumber = EoriNumber("AD123456")
+          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[PrincipalAddress]) {
+            (baseUserAnswers, name, address) =>
+              val userAnswers = baseUserAnswers
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+                .unsafeSetVal(WhatIsPrincipalEoriPage)(eoriNumber.value)
+                .unsafeSetVal(PrincipalNamePage)(name)
+                .unsafeSetVal(PrincipalAddressPage)(principalAddress)
+
+              val expectedAddress = Address.prismAddressToPrincipalAddress(principalAddress)
+
+              val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+
+              result mustEqual PrincipalTraderEoriPersonalInfo(eoriNumber, name, expectedAddress)
 
           }
         }

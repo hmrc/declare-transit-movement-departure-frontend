@@ -60,13 +60,16 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
 
 object TraderDetailsSpec extends UserAnswersSpecHelper {
 
-  def setTraderDetails(traderDetails: TraderDetails)(startUserAnswers: UserAnswers): UserAnswers =
+  def setTraderDetails(traderDetails: TraderDetails)(startUserAnswers: UserAnswers): UserAnswers = {
+    val isPrincipalEoriKnown: Boolean = traderDetails.principalTraderDetails.isInstanceOf[PrincipalTraderEoriInfo] | traderDetails.principalTraderDetails
+      .isInstanceOf[PrincipalTraderEoriPersonalInfo]
+
     startUserAnswers
     // Set Principal Trader details
-      .unsafeSetVal(IsPrincipalEoriKnownPage)(traderDetails.principalTraderDetails.isInstanceOf[PrincipalTraderEoriInfo])
+      .unsafeSetVal(IsPrincipalEoriKnownPage)(isPrincipalEoriKnown)
       .unsafeSetPFn(WhatIsPrincipalEoriPage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderEoriInfo(eori)               => s"GB${eori.value}"
-        case PrincipalTraderEoriPersonalInfo(eori, _, _) => s"XY${eori.value}"
+        case PrincipalTraderEoriInfo(eori)               => eori.value
+        case PrincipalTraderEoriPersonalInfo(eori, _, _) => eori.value
       })
       .unsafeSetPFn(PrincipalNamePage)(traderDetails.principalTraderDetails)({
         case PrincipalTraderPersonalInfo(name, _)        => name
@@ -111,5 +114,6 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
       .unsafeSetPFn(ConsigneeAddressPage)(traderDetails.consignee)({
         case Some(ConsigneeDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
       })
+  }
 
 }
