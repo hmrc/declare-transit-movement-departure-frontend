@@ -442,7 +442,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       "must go from Principal name page" - {
         "to Check Your Answers page if Principal's Address previously answered" in {
 
-          forAll(arbitrary[UserAnswers], arbitrary[PrincipalAddress]) {
+          forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
 
             (answers, principalAddress) =>
               val updatedAnswers =

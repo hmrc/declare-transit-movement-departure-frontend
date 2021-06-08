@@ -21,11 +21,15 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.UserAnswersReader
-import models.{EoriNumber, PrincipalAddress, ProcedureType, UserAnswers}
+import models.reference.{Country, CountryCode}
+import models.{CommonAddress, EoriNumber, PrincipalAddress, ProcedureType, UserAnswers}
 import org.scalatest.TryValues
 import pages._
 
 class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
+  private val country = Country(CountryCode("GB"), "United Kingdom")
+
+  val principalsAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
   "Parsing PrincipalTrader from UserAnswers" - {
 
@@ -52,16 +56,16 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
         "when Eori is answered in prefix is not GB" in {
 
           val eoriNumber = EoriNumber("AD123456")
-          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[PrincipalAddress]) {
+          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
             (baseUserAnswers, name, address) =>
               val userAnswers = baseUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
                 .unsafeSetVal(WhatIsPrincipalEoriPage)(eoriNumber.value)
                 .unsafeSetVal(PrincipalNamePage)(name)
-                .unsafeSetVal(PrincipalAddressPage)(principalAddress)
+                .unsafeSetVal(PrincipalAddressPage)(principalsAddress)
 
-              val expectedAddress = Address.prismAddressToPrincipalAddress(principalAddress)
+              val expectedAddress = Address.prismAddressToCommonAddress(principalsAddress)
 
               val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
@@ -88,7 +92,7 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
       "when Eori is not known" - {
 
         "when principal trader name and address are answered" in {
-          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[PrincipalAddress]) {
+          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
             case (baseUserAnswers, name, principalAddress) =>
               val userAnswers = baseUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
@@ -98,7 +102,7 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
 
               val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-              val expectedAddress = Address.prismAddressToPrincipalAddress(principalAddress)
+              val expectedAddress = Address.prismAddressToCommonAddress(principalAddress)
 
               result mustEqual PrincipalTraderDetails(name, expectedAddress)
 
@@ -121,7 +125,7 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
         }
 
         "when name is missing" in {
-          forAll(arb[UserAnswers], arb[PrincipalAddress]) {
+          forAll(arb[UserAnswers], arb[CommonAddress]) {
             case (baseUserAnswers, principalAddress) =>
               val userAnswers = baseUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
@@ -137,7 +141,7 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
       }
 
       "when Principal Eori known page is missing" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[EoriNumber], arb[PrincipalAddress]) {
+        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[EoriNumber], arb[CommonAddress]) {
           case (baseUserAnswers, name, eori, principalAddress) =>
             val userAnswers = baseUserAnswers
               .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
@@ -186,7 +190,7 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
     }
 
     "when procedure type is missing" in {
-      forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength), arb[PrincipalAddress]) {
+      forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
         (baseUserAnswers, eori, name, principalAddress) =>
           val userAnswers = baseUserAnswers
             .unsafeSetVal(IsPrincipalEoriKnownPage)(true)

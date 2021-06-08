@@ -76,8 +76,8 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case PrincipalTraderEoriPersonalInfo(_, name, _) => name
       })
       .unsafeSetPFn(PrincipalAddressPage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderPersonalInfo(_, address)        => Address.prismAddressToPrincipalAddress.getOption(address).get
-        case PrincipalTraderEoriPersonalInfo(_, _, address) => Address.prismAddressToPrincipalAddress.getOption(address).get
+        case PrincipalTraderPersonalInfo(_, address)        => Address.prismAddressToCommonAddress.getOption(address).get
+        case PrincipalTraderEoriPersonalInfo(_, _, address) => Address.prismAddressToCommonAddress.getOption(address).get
       })
       .assert("Eori must be provided for Simplified procedure") {
         ua =>

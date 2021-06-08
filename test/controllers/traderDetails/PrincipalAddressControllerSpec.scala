@@ -20,7 +20,8 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.PrincipalAddressFormProvider
 import matchers.JsonMatchers
-import models.NormalMode
+import models.reference.{Country, CountryCode}
+import models.{CommonAddress, NormalMode}
 import navigation.annotations.TraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -45,6 +46,7 @@ class PrincipalAddressControllerSpec extends SpecBase with MockNunjucksRendererA
 
   private val formProvider = new PrincipalAddressFormProvider()
   private val form         = formProvider(principalName)
+  private val country      = Country(CountryCode("GB"), "United Kingdom")
 
   private lazy val principalAddressRoute = routes.PrincipalAddressController.onPageLoad(lrn, NormalMode).url
 
@@ -84,6 +86,7 @@ class PrincipalAddressControllerSpec extends SpecBase with MockNunjucksRendererA
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
+      val principalAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -109,9 +112,10 @@ class PrincipalAddressControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val filledForm = form.bind(
         Map(
-          "numberAndStreet" -> principalAddress.numberAndStreet,
-          "town"            -> principalAddress.town,
-          "postcode"        -> principalAddress.postcode
+          "AddressLine1" -> "Address line 1",
+          "AddressLine2" -> "Address line 2",
+          "AddressLine3" -> "Code",
+          "country"      -> "GB"
         )
       )
 
@@ -135,11 +139,7 @@ class PrincipalAddressControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val request =
         FakeRequest(POST, principalAddressRoute)
-          .withFormUrlEncodedBody(
-            ("numberAndStreet", principalAddress.numberAndStreet),
-            ("town", principalAddress.town),
-            ("postcode", principalAddress.postcode)
-          )
+          .withFormUrlEncodedBody(("AddressLine1", "value 1"), ("AddressLine2", "value 2"), ("AddressLine3", "value 3"), ("country", "GB"))
 
       val result = route(app, request).value
 
@@ -195,7 +195,7 @@ class PrincipalAddressControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val request =
         FakeRequest(POST, principalAddressRoute)
-          .withFormUrlEncodedBody(("Number and street", "value 1"), ("Town", "value 2"))
+          .withFormUrlEncodedBody(("Address line 1", "value 1"), ("Address line 2", "value 2"))
 
       val result = route(app, request).value
 
