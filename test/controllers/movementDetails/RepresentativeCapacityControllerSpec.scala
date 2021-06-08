@@ -48,6 +48,7 @@ class RepresentativeCapacityControllerSpec extends SpecBase with MockNunjucksRen
 
   val formProvider = new RepresentativeCapacityFormProvider()
   val form         = formProvider()
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

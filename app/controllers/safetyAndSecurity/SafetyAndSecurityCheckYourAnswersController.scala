@@ -32,7 +32,7 @@ import models.journeyDomain.SafetyAndSecurity
 
 import scala.concurrent.ExecutionContext
 
-class SafetyAndSecurityCheckYourAnswersController @Inject()(
+class SafetyAndSecurityCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,

@@ -26,7 +26,7 @@ import play.api.mvc.{ActionFilter, Result}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TraderDetailsOfficesOfTransitProvider @Inject()()(implicit ec: ExecutionContext) {
+class TraderDetailsOfficesOfTransitProvider @Inject() ()(implicit ec: ExecutionContext) {
 
   def apply(index: Index): ActionFilter[DataRequest] = new TraderDetailsOfficesOfTransitFilter(index)
 

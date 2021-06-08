@@ -28,6 +28,7 @@ object DateTimeInput {
   final case class Item(label: Text, name: String, id: String, value: String, classes: String, isDropDown: Boolean = false)
 
   object ViewModel {
+
     implicit def writes(implicit messages: Messages): OWrites[ViewModel] =
       OWrites {
         viewmodel =>
@@ -50,9 +51,12 @@ object DateTimeInput {
   def localDateTime(field: Field): ViewModel = {
 
     val error =
-      (field.error orElse field("day").error orElse field("month").error orElse field("year").error orElse field("hour").error orElse field("minute").error orElse field(
-        "amOrPm").error)
-        .map(formError => Text.Message(formError.message, formError.args: _*))
+      (field.error orElse field("day").error orElse field("month").error orElse field("year").error orElse field("hour").error orElse field(
+        "minute"
+      ).error orElse field("amOrPm").error)
+        .map(
+          formError => Text.Message(formError.message, formError.args: _*)
+        )
 
     def classes(classes: String*): String = {
       val allClasses = if (error.isDefined) "govuk-input--error" :: classes.toList else classes.toList
@@ -61,46 +65,46 @@ object DateTimeInput {
 
     val items = Seq(
       Item(
-        label   = msg"site.day.capitalized",
-        name    = field("day").name,
-        id      = field.id,
-        value   = field("day").value.getOrElse(""),
+        label = msg"site.day.capitalized",
+        name = field("day").name,
+        id = field.id,
+        value = field("day").value.getOrElse(""),
         classes = classes("govuk-input--width-2")
       ),
       Item(
-        label   = msg"site.month.capitalized",
-        name    = field("month").name,
-        id      = field("month").id,
-        value   = field("month").value.getOrElse(""),
+        label = msg"site.month.capitalized",
+        name = field("month").name,
+        id = field("month").id,
+        value = field("month").value.getOrElse(""),
         classes = classes("govuk-input--width-2")
       ),
       Item(
-        label   = msg"site.year.capitalized",
-        name    = field("year").name,
-        id      = field("year").id,
-        value   = field("year").value.getOrElse(""),
+        label = msg"site.year.capitalized",
+        name = field("year").name,
+        id = field("year").id,
+        value = field("year").value.getOrElse(""),
         classes = classes("govuk-input--width-4")
       ),
       Item(
-        label   = msg"site.hour.capitalized",
-        name    = field("hour").name,
-        id      = field("hour").id,
-        value   = field("hour").value.getOrElse(""),
+        label = msg"site.hour.capitalized",
+        name = field("hour").name,
+        id = field("hour").id,
+        value = field("hour").value.getOrElse(""),
         classes = classes("govuk-input--width-2")
       ),
       Item(
-        label   = msg"site.minute.capitalized",
-        name    = field("minute").name,
-        id      = field("minute").id,
-        value   = field("minute").value.getOrElse(""),
+        label = msg"site.minute.capitalized",
+        name = field("minute").name,
+        id = field("minute").id,
+        value = field("minute").value.getOrElse(""),
         classes = classes("govuk-input--width-2")
       ),
       Item(
-        label      = msg"site.amOrPm.capitalized",
-        name       = field("amOrPm").name,
-        id         = field("amOrPm").id,
-        value      = field("amOrPm").value.getOrElse(""),
-        classes    = if (error.isDefined) "govuk-select--error" else "",
+        label = msg"site.amOrPm.capitalized",
+        name = field("amOrPm").name,
+        id = field("amOrPm").id,
+        value = field("amOrPm").value.getOrElse(""),
+        classes = if (error.isDefined) "govuk-select--error" else "",
         isDropDown = true
       )
     )

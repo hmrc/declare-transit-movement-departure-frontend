@@ -37,7 +37,7 @@ import utils.getPaymentsAsJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TransportChargesController @Inject()(
+class TransportChargesController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SecurityDetails navigator: Navigator,

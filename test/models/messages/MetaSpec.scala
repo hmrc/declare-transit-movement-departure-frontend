@@ -84,26 +84,26 @@ class MetaSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks w
 
             <SynIdeMES1>{syntaxIdentifier}</SynIdeMES1> ++
               <SynVerNumMES2>{syntaxVersionNumber}</SynVerNumMES2> ++ {
-              senderIdentificationCodeQualifier ++
-                recipientIdentificationCodeQualifier
-            } ++
+                senderIdentificationCodeQualifier ++
+                  recipientIdentificationCodeQualifier
+              } ++
               <MesRecMES6>{messageRecipient}</MesRecMES6> ++
               <DatOfPreMES9>{Format.dateFormatted(meta.dateOfPreparation)}</DatOfPreMES9> ++
               <TimOfPreMES10>{Format.timeFormatted(meta.timeOfPreparation)}</TimOfPreMES10> ++ {
-              meta.interchangeControlReference.toXml ++
-                recipientsReferencePassword ++
-                recipientsReferencePasswordQualifier
-            } ++
+                meta.interchangeControlReference.toXml ++
+                  recipientsReferencePassword ++
+                  recipientsReferencePasswordQualifier
+              } ++
               <AppRefMES14>{applicationReference}</AppRefMES14> ++ {
-              priority ++
-                acknowledgementRequest ++
-                communicationsAgreementId
-            } ++
+                priority ++
+                  acknowledgementRequest ++
+                  communicationsAgreementId
+              } ++
               <TesIndMES18>{testIndicator}</TesIndMES18> ++
               <MesIdeMES19>{messageIndication}</MesIdeMES19> ++ {
-              <MesTypMES20>{messageCode}</MesTypMES20> ++
-                commonAccessReference
-            }
+                <MesTypMES20>{messageCode}</MesTypMES20> ++
+                  commonAccessReference
+              }
           }
 
           meta.toXml mustEqual expectedResult

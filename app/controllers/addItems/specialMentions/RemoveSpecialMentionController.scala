@@ -34,7 +34,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveSpecialMentionController @Inject()(
+class RemoveSpecialMentionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SpecialMentions navigator: Navigator,
@@ -102,7 +102,7 @@ class RemoveSpecialMentionController @Inject()(
                 } yield Redirect(navigator.nextPage(RemoveSpecialMentionPage(itemIndex, referenceIndex), mode, updatedAnswers))
               } else {
                 Future.successful(Redirect(navigator.nextPage(RemoveSpecialMentionPage(itemIndex, referenceIndex), mode, request.userAnswers)))
-            }
+              }
           )
     }
 }

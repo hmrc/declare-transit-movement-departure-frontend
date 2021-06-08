@@ -34,7 +34,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmRemoveGuaranteeController @Inject()(
+class ConfirmRemoveGuaranteeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @GuaranteeDetails navigator: Navigator,
@@ -100,7 +100,7 @@ class ConfirmRemoveGuaranteeController @Inject()(
                   } else {
                     Future.successful(Redirect(navigator.nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)))
                   }
-            }
+              }
           )
     }
 }

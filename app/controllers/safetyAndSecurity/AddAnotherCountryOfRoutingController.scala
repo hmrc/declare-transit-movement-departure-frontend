@@ -39,7 +39,7 @@ import utils.SafetyAndSecurityCheckYourAnswerHelper
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddAnotherCountryOfRoutingController @Inject()(
+class AddAnotherCountryOfRoutingController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SafetyAndSecurity navigator: Navigator,
@@ -105,7 +105,7 @@ class AddAnotherCountryOfRoutingController @Inject()(
           "heading"     -> msg"addAnotherCountryOfRouting.heading.$singularOrPlural".withArgs(numberOfRoutingCountries),
           "countryRows" -> countryRows,
           "lrn"         -> lrn,
-          "radios"      -> Radios.yesNo(form("value")),
+          "radios"      -> Radios.yesNo(form("value"))
         )
 
         renderer.render(template, json)

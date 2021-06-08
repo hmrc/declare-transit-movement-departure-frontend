@@ -33,7 +33,7 @@ import navigation.annotations.GoodsSummary
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AgreedLocationOfGoodsController @Inject()(
+class AgreedLocationOfGoodsController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @GoodsSummary navigator: Navigator,

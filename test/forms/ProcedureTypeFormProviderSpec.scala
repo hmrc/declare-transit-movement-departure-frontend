@@ -32,7 +32,7 @@ class ProcedureTypeFormProviderSpec extends OptionFieldBehaviours {
     behave like optionsField[ProcedureType](
       form,
       fieldName,
-      validValues  = ProcedureType.values,
+      validValues = ProcedureType.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

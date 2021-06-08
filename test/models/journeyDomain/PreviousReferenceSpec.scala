@@ -100,72 +100,72 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with JourneyMode
         "and DeclarationTypePage is either 'T2' or 'T2F'" +
         "and CountryOfDispatchPage is a none EU Country" in {
 
-        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genT2DeclarationType, genCountryOfDispatchNonEu) {
+          forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genT2DeclarationType, genCountryOfDispatchNonEu) {
 
-          case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
-            val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
-            val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
+            case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
+              val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
+              val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
 
-            val updatedUserAnswers = setPreviousReferences2
-              .unsafeSetVal(DeclarationTypePage)(declarationType)
-              .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
+              val updatedUserAnswers = setPreviousReferences2
+                .unsafeSetVal(DeclarationTypePage)(declarationType)
+                .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
 
-            val userAnswerReader: UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
-              PreviousReferences.derivePreviousReferences(index)
+              val userAnswerReader: UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
+                PreviousReferences.derivePreviousReferences(index)
 
-            val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](userAnswerReader).run(updatedUserAnswers)
+              val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](userAnswerReader).run(updatedUserAnswers)
 
-            result.right.value.value mustEqual NonEmptyList(previousReferences, List(previousReferences))
+              result.right.value.value mustEqual NonEmptyList(previousReferences, List(previousReferences))
+          }
         }
-      }
 
       "when all mandatory pages have been answered " +
         "and DeclarationTypePage is either 'T1' or 'T-' " +
         "and CountryOfDispatchPage is an EU Country " +
         "and AddAdministrativeReferencePage is true" in {
 
-        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
-          case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
-            val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
-            val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
+          forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
+            case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
+              val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
+              val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
 
-            val updatedUserAnswers = setPreviousReferences2
-              .unsafeSetVal(AddAdministrativeReferencePage(index))(true)
-              .unsafeSetVal(DeclarationTypePage)(declarationType)
-              .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
+              val updatedUserAnswers = setPreviousReferences2
+                .unsafeSetVal(AddAdministrativeReferencePage(index))(true)
+                .unsafeSetVal(DeclarationTypePage)(declarationType)
+                .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
 
-            val userAnswerReader: UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
-              PreviousReferences.derivePreviousReferences(index)
+              val userAnswerReader: UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
+                PreviousReferences.derivePreviousReferences(index)
 
-            val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](userAnswerReader).run(updatedUserAnswers)
+              val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](userAnswerReader).run(updatedUserAnswers)
 
-            result.right.value.value mustEqual NonEmptyList(previousReferences, List(previousReferences))
+              result.right.value.value mustEqual NonEmptyList(previousReferences, List(previousReferences))
+          }
         }
-      }
 
       "when all mandatory pages have been answered " +
         "and DeclarationTypePage is either 'T1' or 'T-' " +
         "and CountryOfDispatchPage is an EU Country " +
         "and AddAdministrativeReferencePage is false" in {
 
-        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
-          case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
-            val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
-            val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
+          forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
+            case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
+              val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
+              val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
 
-            val updatedUserAnswers = setPreviousReferences2
-              .unsafeSetVal(DeclarationTypePage)(declarationType)
-              .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
-              .unsafeSetVal(AddAdministrativeReferencePage(index))(false)
+              val updatedUserAnswers = setPreviousReferences2
+                .unsafeSetVal(DeclarationTypePage)(declarationType)
+                .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
+                .unsafeSetVal(AddAdministrativeReferencePage(index))(false)
 
-            val userAnswerReader: UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
-              PreviousReferences.derivePreviousReferences(index)
+              val userAnswerReader: UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
+                PreviousReferences.derivePreviousReferences(index)
 
-            val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](userAnswerReader).run(updatedUserAnswers)
+              val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](userAnswerReader).run(updatedUserAnswers)
 
-            result.right.value must be(None)
+              result.right.value must be(None)
+          }
         }
-      }
     }
 
     "cannot be parsed from UserAnswers when" - {
@@ -202,24 +202,24 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with JourneyMode
         "and CountryOfDispatchPage is an EU Country " +
         "and AddAdministrativeReferencePage is missing" in {
 
-        forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
-          case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
-            val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
-            val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
+          forAll(arbitrary[PreviousReferences], arbitrary[UserAnswers], genOtherDeclarationType, genCountryOfDispatchIsEu) {
+            case (previousReferences, userAnswers, declarationType, countryOfDispatch) =>
+              val setPreviousReferences1: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, referenceIndex)(userAnswers)
+              val setPreviousReferences2: UserAnswers = setPreviousReferenceUserAnswers(previousReferences, index, Index(1))(setPreviousReferences1)
 
-            val updatedUserAnswers = setPreviousReferences2
-              .unsafeSetVal(DeclarationTypePage)(declarationType)
-              .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
-              .unsafeRemove(AddAdministrativeReferencePage(index))
+              val updatedUserAnswers = setPreviousReferences2
+                .unsafeSetVal(DeclarationTypePage)(declarationType)
+                .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
+                .unsafeRemove(AddAdministrativeReferencePage(index))
 
-            val userAnswerReader: UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
-              PreviousReferences.derivePreviousReferences(index)
+              val userAnswerReader: UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
+                PreviousReferences.derivePreviousReferences(index)
 
-            val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](userAnswerReader).run(updatedUserAnswers)
+              val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](userAnswerReader).run(updatedUserAnswers)
 
-            result.left.value.page mustEqual AddAdministrativeReferencePage(index)
+              result.left.value.page mustEqual AddAdministrativeReferencePage(index)
+          }
         }
-      }
     }
   }
 }

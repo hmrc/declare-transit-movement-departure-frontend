@@ -34,7 +34,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmRemoveItemController @Inject()(
+class ConfirmRemoveItemController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItems navigator: Navigator,
@@ -100,7 +100,7 @@ class ConfirmRemoveItemController @Inject()(
                 } yield Redirect(navigator.nextPage(ConfirmRemoveItemPage, mode, updatedAnswers))
               } else {
                 Future.successful(Redirect(navigator.nextPage(ConfirmRemoveItemPage, mode, request.userAnswers)))
-            }
+              }
           )
     }
 }

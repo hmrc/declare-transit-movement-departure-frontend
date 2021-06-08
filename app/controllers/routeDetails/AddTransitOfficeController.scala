@@ -38,7 +38,7 @@ import utils.RouteDetailsCheckYourAnswersHelper
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddTransitOfficeController @Inject()(
+class AddTransitOfficeController @Inject() (
   override val messagesApi: MessagesApi,
   @RouteDetails navigator: Navigator,
   identify: IdentifierAction,

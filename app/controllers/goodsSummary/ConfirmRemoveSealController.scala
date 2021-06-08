@@ -39,7 +39,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmRemoveSealController @Inject()(
+class ConfirmRemoveSealController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @GoodsSummary navigator: Navigator,
@@ -86,16 +86,16 @@ class ConfirmRemoveSealController @Inject()(
                     } yield Redirect(navigator.nextPage(ConfirmRemoveSealPage(), mode, updatedAnswers))
                   } else {
                     Future.successful(Redirect(navigator.nextPage(ConfirmRemoveSealPage(), mode, request.userAnswers)))
-                }
+                  }
               )
           case _ =>
             renderErrorPage(mode)
         }
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, sealIndex: Index, mode: Mode, form: Form[Boolean], seal: SealDomain)(
-    implicit
-    request: DataRequest[AnyContent]): Future[Html] = {
+  private def renderPage(lrn: LocalReferenceNumber, sealIndex: Index, mode: Mode, form: Form[Boolean], seal: SealDomain)(implicit
+    request: DataRequest[AnyContent]
+  ): Future[Html] = {
     val json = Json.obj(
       "form"        -> form,
       "mode"        -> mode,

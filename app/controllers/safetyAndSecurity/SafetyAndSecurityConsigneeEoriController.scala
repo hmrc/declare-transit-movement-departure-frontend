@@ -33,7 +33,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SafetyAndSecurityConsigneeEoriController @Inject()(
+class SafetyAndSecurityConsigneeEoriController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SafetyAndSecurityTraderDetails navigator: Navigator,

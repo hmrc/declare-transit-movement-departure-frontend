@@ -33,5 +33,7 @@ class PrincipalNameFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(maxLengthPrincipalName, "principalName.error.length"),
             regexp(alphaNumericWithSpaceRegex, "principalName.error.invalidCharacters")
-          )))
+          )
+        )
+    )
 }

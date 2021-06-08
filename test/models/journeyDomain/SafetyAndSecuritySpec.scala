@@ -50,7 +50,8 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
                                              None,
                                              None,
                                              None,
-                                             NonEmptyList.fromListUnsafe(List(Itinerary(CountryCode("GB")))))
+                                             NonEmptyList.fromListUnsafe(List(Itinerary(CountryCode("GB"))))
+          )
       }
     }
 
@@ -79,7 +80,8 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
              arb[SafetyAndSecurity],
              arb[String].suchThat(
                mode => mode != "4" | mode != "40"
-             )) {
+             )
+      ) {
         (baseUserAnswers, safetyAndSecurity, mode) =>
           val updatedSafetyAndSecurity = safetyAndSecurity.copy(circumstanceIndicator = None)
 
@@ -116,7 +118,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
         (baseUserAnswers, safetyAndSecurity, mode) =>
           val updatedSafetyAndSecurity = safetyAndSecurity.copy(
             circumstanceIndicator = Some("B"),
-            consignee             = Some(SecurityTraderDetails("Bob", Address("line 1", "line 2", "line 3", Some(Country(CountryCode("FR"), "France")))))
+            consignee = Some(SecurityTraderDetails("Bob", Address("line 1", "line 2", "line 3", Some(Country(CountryCode("FR"), "France")))))
           )
 
           val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
@@ -156,7 +158,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
 
   def setSafetyAndSecurity(safetyAndSecurity: SafetyAndSecurity)(startUserAnswers: UserAnswers): UserAnswers = {
     val ua = startUserAnswers
-    // Set summary details
+      // Set summary details
       .unsafeSetVal(AddCircumstanceIndicatorPage)(safetyAndSecurity.circumstanceIndicator.isDefined)
       .unsafeSetOpt(CircumstanceIndicatorPage)(safetyAndSecurity.circumstanceIndicator)
       .unsafeSetVal(AddTransportChargesPaymentMethodPage)(safetyAndSecurity.paymentMethod.isDefined)

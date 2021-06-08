@@ -27,7 +27,8 @@ case class CancellationDecisionUpdateMessage(mrn: String,
                                              cancellationInitiatedBy: Int,
                                              cancellationDecision: Option[Int],
                                              cancellationDecisionDate: LocalDate,
-                                             cancellationJustification: Option[String])
+                                             cancellationJustification: Option[String]
+)
 
 object CancellationDecisionUpdateMessage {
 

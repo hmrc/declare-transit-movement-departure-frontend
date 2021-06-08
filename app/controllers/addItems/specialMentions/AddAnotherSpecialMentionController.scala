@@ -39,7 +39,7 @@ import utils.SpecialMentionsCheckYourAnswers
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddAnotherSpecialMentionController @Inject()(
+class AddAnotherSpecialMentionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SpecialMentions navigator: Navigator,
@@ -86,8 +86,9 @@ class AddAnotherSpecialMentionController @Inject()(
           )
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, itemIndex: Index, form: Form[Boolean], mode: Mode)(
-    implicit request: DataRequest[AnyContent]): Future[Html] = {
+  private def renderPage(lrn: LocalReferenceNumber, itemIndex: Index, form: Form[Boolean], mode: Mode)(implicit
+    request: DataRequest[AnyContent]
+  ): Future[Html] = {
 
     val cya                   = new SpecialMentionsCheckYourAnswers(request.userAnswers)
     val numberOfReferences    = request.userAnswers.get(DeriveNumberOfSpecialMentions(itemIndex)).getOrElse(0)

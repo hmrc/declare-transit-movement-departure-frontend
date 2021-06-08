@@ -32,20 +32,20 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
           specialMention =>
             val updatedAnswer = s"(${specialMention.code}) ${specialMention.description}"
             Row(
-              key   = Key(msg"$updatedAnswer"),
+              key = Key(msg"$updatedAnswer"),
               value = Value(lit""),
               actions = List(
                 Action(
-                  content            = msg"site.change",
-                  href               = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode).url,
+                  content = msg"site.change",
+                  href = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$updatedAnswer")),
-                  attributes         = Map("id" -> s"""change-special-mentions-${itemIndex.display}""")
+                  attributes = Map("id" -> s"""change-special-mentions-${itemIndex.display}""")
                 ),
                 Action(
-                  content            = msg"site.delete",
-                  href               = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, mode).url,
+                  content = msg"site.delete",
+                  href = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, mode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
-                  attributes         = Map("id" -> s"""remove-special-mentions-${itemIndex.display}""")
+                  attributes = Map("id" -> s"""remove-special-mentions-${itemIndex.display}""")
                 )
               )
             )
@@ -59,14 +59,14 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
           specialMention =>
             val updatedAnswer = s"(${specialMention.code}) ${specialMention.description}"
             Row(
-              key   = Key(msg"$updatedAnswer"),
+              key = Key(msg"$updatedAnswer"),
               value = Value(lit""),
               actions = List(
                 Action(
-                  content            = msg"site.change",
-                  href               = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode).url,
+                  content = msg"site.change",
+                  href = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$updatedAnswer")),
-                  attributes         = Map("id" -> s"""change-special-mentions-${itemIndex.display}""")
+                  attributes = Map("id" -> s"""change-special-mentions-${itemIndex.display}""")
                 )
               )
             )
@@ -76,12 +76,12 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
   def addSpecialMention(itemIndex: Index): Option[Row] = userAnswers.get(AddSpecialMentionPage(itemIndex)) map {
     answer =>
       Row(
-        key   = Key(msg"addSpecialMention.title".withArgs(msg"${itemIndex.display}"), classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"addSpecialMention.title".withArgs(msg"${itemIndex.display}"), classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            content = msg"site.edit",
+            href = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"addSpecialMention.title".withArgs(msg"${itemIndex.display}"))
           )
         )

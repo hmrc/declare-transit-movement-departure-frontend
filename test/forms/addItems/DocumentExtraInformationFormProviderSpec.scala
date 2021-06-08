@@ -44,7 +44,7 @@ class DocumentExtraInformationFormProviderSpec extends SpecBase with StringField
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(index.display))
     )
 

@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class CancellationDecisionUpdateController @Inject()(
+class CancellationDecisionUpdateController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   val controllerComponents: MessagesControllerComponents,
@@ -47,7 +47,7 @@ class CancellationDecisionUpdateController @Inject()(
     with I18nSupport
     with TechnicalDifficultiesPage {
 
-  def onPageLoad(departureId: DepartureId): Action[AnyContent] = (identify).async {
+  def onPageLoad(departureId: DepartureId): Action[AnyContent] = identify.async {
     implicit request =>
       departureMessageService.cancellationDecisionUpdateMessage(departureId).flatMap {
         case Some(message) =>
@@ -94,7 +94,8 @@ class CancellationDecisionUpdateController @Inject()(
       if (message.cancellationJustification.nonEmpty) {
         rowsWithDecisionDate :+ Row(Key(msg"cancellationDecisionUpdate.cancellationJustification"),
                                     Value(lit"${message.cancellationJustification.get}"),
-                                    Seq.empty)
+                                    Seq.empty
+        )
       } else {
         rowsWithDecisionDate
       }

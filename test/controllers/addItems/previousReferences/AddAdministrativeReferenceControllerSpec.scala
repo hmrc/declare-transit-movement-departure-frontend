@@ -48,6 +48,7 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
   private val template     = "addItems/addAdministrativeReference.njk"
 
   lazy val addAdministrativeReferenceRoute = routes.AddAdministrativeReferenceController.onPageLoad(lrn, index, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

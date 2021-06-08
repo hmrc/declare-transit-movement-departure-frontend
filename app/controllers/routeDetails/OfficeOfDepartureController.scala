@@ -37,7 +37,7 @@ import utils._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OfficeOfDepartureController @Inject()(
+class OfficeOfDepartureController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @RouteDetails navigator: Navigator,

@@ -37,7 +37,8 @@ class CancellationDecisionUpdateMessageSpec extends AnyFreeSpec with Generators 
                                           0,
                                           Some(1),
                                           LocalDate.parse("2019-09-12"),
-                                          Some("ok thats fine"))
+                                          Some("ok thats fine")
+        )
       XmlReader.of[CancellationDecisionUpdateMessage].read(validXml).toOption.value mustBe expected
     }
   }

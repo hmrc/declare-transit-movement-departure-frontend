@@ -32,7 +32,7 @@ class DeclarationTypeFormProviderSpec extends OptionFieldBehaviours {
     behave like optionsField[DeclarationType](
       form,
       fieldName,
-      validValues  = DeclarationType.values,
+      validValues = DeclarationType.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class IndexController @Inject()(
+class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)

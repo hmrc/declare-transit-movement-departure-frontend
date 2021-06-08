@@ -37,7 +37,7 @@ import utils._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class NationalityAtDepartureController @Inject()(
+class NationalityAtDepartureController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @TransportDetails navigator: Navigator,
@@ -95,8 +95,9 @@ class NationalityAtDepartureController @Inject()(
         }
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(
-    implicit request: Request[AnyContent]): Future[Result] = {
+  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] = {
     val json = Json.obj(
       "form"        -> form,
       "lrn"         -> lrn,

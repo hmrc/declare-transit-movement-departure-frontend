@@ -37,7 +37,7 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
 
           val eoriNumber = EoriNumber("GB123456")
           forAll(arb[UserAnswers]) {
-            (baseUserAnswers) =>
+            baseUserAnswers =>
               val userAnswers = baseUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
@@ -72,7 +72,7 @@ class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues wit
 
         "when Eori is missing" in {
           forAll(arb[UserAnswers]) {
-            (baseUserAnswers) =>
+            baseUserAnswers =>
               val userAnswers = baseUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(IsPrincipalEoriKnownPage)(true)

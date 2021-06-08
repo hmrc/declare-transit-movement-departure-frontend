@@ -65,7 +65,7 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
       .isInstanceOf[PrincipalTraderEoriPersonalInfo]
 
     startUserAnswers
-    // Set Principal Trader details
+      // Set Principal Trader details
       .unsafeSetVal(IsPrincipalEoriKnownPage)(isPrincipalEoriKnown)
       .unsafeSetPFn(WhatIsPrincipalEoriPage)(traderDetails.principalTraderDetails)({
         case PrincipalTraderEoriInfo(eori)               => eori.value

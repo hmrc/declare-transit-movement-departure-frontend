@@ -40,7 +40,7 @@ import utils.getCustomsOfficesAsJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddAnotherTransitOfficeController @Inject()(
+class AddAnotherTransitOfficeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @RouteDetails navigator: Navigator,

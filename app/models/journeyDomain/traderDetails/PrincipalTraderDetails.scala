@@ -41,15 +41,14 @@ object PrincipalTraderDetails {
 
   implicit val principalTraderDetails: UserAnswersReader[PrincipalTraderDetails] = {
 
-    val simplified: UserAnswersReader[PrincipalTraderDetails] = {
+    val simplified: UserAnswersReader[PrincipalTraderDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == Simplified) {
         WhatIsPrincipalEoriPage.reader
           .map(EoriNumber(_))
           .map(PrincipalTraderDetails(_))
       }
-    }
 
-    val normalEori: ReaderT[EitherType, UserAnswers, PrincipalTraderDetails] = {
+    val normalEori: ReaderT[EitherType, UserAnswers, PrincipalTraderDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
         IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
           WhatIsPrincipalEoriPage.filterMandatoryDependent(_.startsWith("GB")) {
@@ -59,9 +58,8 @@ object PrincipalTraderDetails {
           }
         }
       }
-    }
 
-    val normalEoriNameAndAddress: UserAnswersReader[PrincipalTraderDetails] = {
+    val normalEoriNameAndAddress: UserAnswersReader[PrincipalTraderDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
         IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
           WhatIsPrincipalEoriPage.filterMandatoryDependent(!_.startsWith("GB")) {
@@ -78,9 +76,8 @@ object PrincipalTraderDetails {
           }
         }
       }
-    }
 
-    val normalNameAddress: UserAnswersReader[PrincipalTraderDetails] = {
+    val normalNameAddress: UserAnswersReader[PrincipalTraderDetails] =
       ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
         IsPrincipalEoriKnownPage.filterMandatoryDependent(_ == false) {
           (
@@ -93,7 +90,6 @@ object PrincipalTraderDetails {
           }
         }
       }
-    }
 
     // TODO need to investigate the error handling here as it will only retrieve the last left (due to orElse)
     normalEori orElse normalNameAddress orElse simplified orElse normalEoriNameAndAddress

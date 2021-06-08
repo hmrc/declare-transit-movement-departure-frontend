@@ -37,7 +37,7 @@ import utils._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConsignorAddressController @Inject()(
+class ConsignorAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @TraderDetails navigator: Navigator,

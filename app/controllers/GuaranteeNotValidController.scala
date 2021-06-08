@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class GuaranteeNotValidController @Inject()(
+class GuaranteeNotValidController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   val controllerComponents: MessagesControllerComponents,

@@ -29,7 +29,8 @@ object AddItemsCheckYourAnswersViewModel {
             documentTypeList: DocumentTypeList,
             previousDocumentTypes: PreviousReferencesDocumentTypeList,
             specialMentionList: SpecialMentionList,
-            countryList: CountryList): AddItemsCheckYourAnswersViewModel = {
+            countryList: CountryList
+  ): AddItemsCheckYourAnswersViewModel = {
 
     val checkYourAnswersHelper = new AddItemsCheckYourAnswersHelper(userAnswers)
 
@@ -94,7 +95,7 @@ object AddItemsCheckYourAnswersViewModel {
       checkYourAnswersHelper.traderDetailsConsignorEoriKnown(index),
       checkYourAnswersHelper.traderDetailsConsignorEoriNumber(index),
       checkYourAnswersHelper.traderDetailsConsignorName(index),
-      checkYourAnswersHelper.traderDetailsConsignorAddress(index),
+      checkYourAnswersHelper.traderDetailsConsignorAddress(index)
     ).flatten
   )
 
@@ -126,7 +127,8 @@ object AddItemsCheckYourAnswersViewModel {
 
   private def referencesSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper,
                                 index: Index,
-                                previousDocumentTypes: PreviousReferencesDocumentTypeList)(implicit userAnswers: UserAnswers) = {
+                                previousDocumentTypes: PreviousReferencesDocumentTypeList
+  )(implicit userAnswers: UserAnswers) = {
     val referencesRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)).flatMap {
         position =>
@@ -140,8 +142,9 @@ object AddItemsCheckYourAnswersViewModel {
     )
   }
 
-  private def documentsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index, documentTypeList: DocumentTypeList)(
-    implicit userAnswers: UserAnswers) = {
+  private def documentsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index, documentTypeList: DocumentTypeList)(implicit
+    userAnswers: UserAnswers
+  ) = {
     val documentRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfDocuments(index)).getOrElse(0)).flatMap {
         documentPosition =>
@@ -169,8 +172,9 @@ object AddItemsCheckYourAnswersViewModel {
     )
   }
 
-  private def specialMentionsSection(checkYourAnswersHelper: SpecialMentionsCheckYourAnswers, index: Index, specialMentionList: SpecialMentionList)(
-    implicit userAnswers: UserAnswers): Section = {
+  private def specialMentionsSection(checkYourAnswersHelper: SpecialMentionsCheckYourAnswers, index: Index, specialMentionList: SpecialMentionList)(implicit
+    userAnswers: UserAnswers
+  ): Section = {
     val containerRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfSpecialMentions(index)).getOrElse(0)).flatMap {
         containerPosition =>

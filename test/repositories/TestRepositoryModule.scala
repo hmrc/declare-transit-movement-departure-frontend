@@ -33,7 +33,7 @@ class TestRepositoryModule
           bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]),
           bind[InterchangeControlReferenceCollection].toInstance(TestRepositoryModule.mockInterchangeControlReferenceCollection),
           bind[SessionCollectionIndexManager].toInstance(FakeSessionCollectionIndexManager)
-      )
+        )
     )
 
 object TestRepositoryModule extends MockitoSugar {

@@ -23,7 +23,7 @@ import reactivemongo.play.json.collection.JSONCollection
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-private[repositories] class InterchangeControlReferenceCollection @Inject()(mongo: ReactiveMongoApi)(implicit ec: ExecutionContext)
+private[repositories] class InterchangeControlReferenceCollection @Inject() (mongo: ReactiveMongoApi)(implicit ec: ExecutionContext)
     extends (() => Future[JSONCollection]) {
   import InterchangeControlReferenceCollection._
 

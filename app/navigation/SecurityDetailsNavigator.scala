@@ -31,7 +31,7 @@ import pages.safetyAndSecurity.{
 import play.api.mvc.Call
 
 @Singleton
-class SecurityDetailsNavigator @Inject()() extends Navigator {
+class SecurityDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
   //todo -update when Safety and Security section built

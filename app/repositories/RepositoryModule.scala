@@ -24,5 +24,5 @@ class RepositoryModule
         Seq(
           bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]),
           bind(classOf[SessionCollectionIndexManager]).to(classOf[SessionCollectionIndexManagerImpl]).eagerly()
-      )
+        )
     )

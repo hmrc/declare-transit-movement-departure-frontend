@@ -37,7 +37,7 @@ import utils._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfDispatchController @Inject()(
+class CountryOfDispatchController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @RouteDetails navigator: Navigator,
@@ -61,7 +61,9 @@ class CountryOfDispatchController @Inject()(
 
           val preparedForm = request.userAnswers
             .get(CountryOfDispatchPage)
-            .flatMap(x => countries.getCountry(x.country))
+            .flatMap(
+              x => countries.getCountry(x.country)
+            )
             .map(form.fill)
             .getOrElse(form)
 
@@ -88,8 +90,9 @@ class CountryOfDispatchController @Inject()(
       }
   }
 
-  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(
-    implicit request: Request[AnyContent]): Future[Result] = {
+  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] = {
     val json = Json.obj(
       "form"        -> form,
       "lrn"         -> lrn,

@@ -51,7 +51,8 @@ object GoodsSummary {
       extends GoodSummaryDetails
 
   object GoodSummaryNormalDetailsWithoutPreLodge {
-    implicit val goodSummaryNormalDetailsWithoutPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge] = {
+
+    implicit val goodSummaryNormalDetailsWithoutPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge] =
       ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
         PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
           (
@@ -68,12 +69,12 @@ object GoodsSummary {
           ).tupled.map((GoodSummaryNormalDetailsWithoutPreLodge.apply _).tupled)
         }
       }
-    }
   }
 
   final case class GoodSummaryNormalDetailsWithPreLodge(agreedLocationOfGoods: Option[String]) extends GoodSummaryDetails
 
   object GoodSummaryNormalDetailsWithPreLodge {
+
     implicit val goodSummaryNormalDetailsWithPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithPreLodge] =
       ProcedureTypePage
         .filterMandatoryDependent(_ == ProcedureType.Normal) {

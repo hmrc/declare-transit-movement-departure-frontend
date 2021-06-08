@@ -30,9 +30,12 @@ class TraderDetailsConsignorEoriNumberFormProvider @Inject() extends Mappings {
   def apply(index: Index): Form[String] =
     Form(
       "value" -> text("traderDetailsConsignorEoriNumber.error.required", Seq(index.display))
-        .verifying(StopOnFirstFail[String](
-          maxLength(maxLengthEoriNumber, "traderDetailsConsignorEoriNumber.error.length"),
-          regexp(stringFieldRegex, "traderDetailsConsignorEoriNumber.error.invalid"),
-          regexp(eoriNumberRegex, "traderDetailsConsignorEoriNumber.error.invalidFormat")
-        )))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(maxLengthEoriNumber, "traderDetailsConsignorEoriNumber.error.length"),
+            regexp(stringFieldRegex, "traderDetailsConsignorEoriNumber.error.invalid"),
+            regexp(eoriNumberRegex, "traderDetailsConsignorEoriNumber.error.invalidFormat")
+          )
+        )
+    )
 }

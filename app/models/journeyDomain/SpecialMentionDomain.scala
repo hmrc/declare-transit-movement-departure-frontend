@@ -27,6 +27,6 @@ object SpecialMentionDomain {
   def specialMentionsReader(index: Index, referenceIndex: Index): UserAnswersReader[SpecialMentionDomain] =
     (
       SpecialMentionTypePage(index, referenceIndex).reader,
-      SpecialMentionAdditionalInfoPage(index, referenceIndex).reader,
+      SpecialMentionAdditionalInfoPage(index, referenceIndex).reader
     ).tupled.map((SpecialMentionDomain.apply _).tupled)
 }

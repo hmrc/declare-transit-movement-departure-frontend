@@ -49,6 +49,7 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
   val validAnswer = 1
 
   lazy val howManyPackagesRoute = routes.HowManyPackagesController.onPageLoad(lrn, index, index, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

@@ -43,7 +43,7 @@ class SafetyAndSecurityConsigneeEoriFormProviderSpec extends StringFieldBehaviou
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 

@@ -37,7 +37,7 @@ import utils.transportModesAsJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class InlandModeController @Inject()(
+class InlandModeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @TransportDetails navigator: Navigator,
@@ -95,8 +95,9 @@ class InlandModeController @Inject()(
         }
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[TransportMode], transportModes: Seq[TransportMode], status: Results.Status)(
-    implicit request: Request[AnyContent]): Future[Result] = {
+  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[TransportMode], transportModes: Seq[TransportMode], status: Results.Status)(implicit
+    request: Request[AnyContent]
+  ): Future[Result] = {
     val json = Json.obj(
       "form"           -> form,
       "lrn"            -> lrn,

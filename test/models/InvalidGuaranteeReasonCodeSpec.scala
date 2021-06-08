@@ -31,7 +31,9 @@ class InvalidGuaranteeReasonCodeSpec extends SpecBase with MessagesModelGenerato
     "must read xml" in {
       forAll(arbitrary[InvalidGuaranteeReasonCode]) {
         reasonCode =>
-          val reasonOptXml = reasonCode.reason.fold[NodeSeq](NodeSeq.Empty)(x => <InvGuaReaRNS12>{x}</InvGuaReaRNS12>)
+          val reasonOptXml = reasonCode.reason.fold[NodeSeq](NodeSeq.Empty)(
+            x => <InvGuaReaRNS12>{x}</InvGuaReaRNS12>
+          )
           val xml: NodeSeq =
             <GUAREF2>
               <GuaRefNumGRNREF21>{reasonCode.guaranteeRefNumber}</GuaRefNumGRNREF21>

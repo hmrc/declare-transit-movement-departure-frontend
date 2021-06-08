@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class IsDeparturesEnabledService @Inject()(
+class IsDeparturesEnabledService @Inject() (
   betaAuthorizationConnector: BetaAuthorizationConnector,
   appConfig: FrontendAppConfig
 ) {

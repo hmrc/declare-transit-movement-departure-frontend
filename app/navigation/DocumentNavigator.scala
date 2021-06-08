@@ -40,7 +40,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DocumentNavigator @Inject()() extends Navigator {
+class DocumentNavigator @Inject() () extends Navigator {
+
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case AddDocumentsPage(index) => ua => addDocumentRoute(ua, index, NormalMode)

@@ -31,12 +31,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           .mkString("<br>")
       )
       Row(
-        key   = Key(msg"consigneeAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"consigneeAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(address),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ConsigneeAddressController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ConsigneeAddressController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consigneeAddress.checkYourAnswersLabel"))
           )
         )
@@ -50,12 +50,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           .mkString("<br>")
       )
       Row(
-        key   = Key(msg"principalAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"principalAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(address),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.PrincipalAddressController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.PrincipalAddressController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalAddress.checkYourAnswersLabel"))
           )
         )
@@ -65,12 +65,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def consigneeName: Option[Row] = userAnswers.get(ConsigneeNamePage) map {
     answer =>
       Row(
-        key   = Key(msg"consigneeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"consigneeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ConsigneeNameController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ConsigneeNameController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consigneeName.checkYourAnswersLabel"))
           )
         )
@@ -80,12 +80,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def whatIsConsigneeEori: Option[Row] = userAnswers.get(WhatIsConsigneeEoriPage) map {
     answer =>
       Row(
-        key   = Key(msg"whatIsConsigneeEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"whatIsConsigneeEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.WhatIsConsigneeEoriController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.WhatIsConsigneeEoriController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"whatIsConsigneeEori.checkYourAnswersLabel"))
           )
         )
@@ -95,12 +95,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def isConsigneeEoriKnown: Option[Row] = userAnswers.get(IsConsigneeEoriKnownPage) map {
     answer =>
       Row(
-        key   = Key(msg"isConsigneeEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"isConsigneeEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.IsConsigneeEoriKnownController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.IsConsigneeEoriKnownController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isConsigneeEoriKnown.checkYourAnswersLabel"))
           )
         )
@@ -110,12 +110,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def consignorName: Option[Row] = userAnswers.get(ConsignorNamePage) map {
     answer =>
       Row(
-        key   = Key(msg"consignorName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"consignorName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ConsignorNameController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ConsignorNameController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorName.checkYourAnswersLabel"))
           )
         )
@@ -125,14 +125,14 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def addConsignee: Option[Row] = userAnswers.get(AddConsigneePage) map {
     answer =>
       Row(
-        key   = Key(msg"addConsignee.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"addConsignee.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.AddConsigneeController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.AddConsigneeController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addConsignee.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-consignee-same-for-all-items")
+            attributes = Map("id" -> "change-consignee-same-for-all-items")
           )
         )
       )
@@ -146,12 +146,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
 
       Row(
-        key   = Key(msg"consignorAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"consignorAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(address),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ConsignorAddressController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ConsignorAddressController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorAddress.checkYourAnswersLabel"))
           )
         )
@@ -161,12 +161,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def consignorEori: Option[Row] = userAnswers.get(ConsignorEoriPage) map {
     answer =>
       Row(
-        key   = Key(msg"consignorEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"consignorEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ConsignorEoriController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ConsignorEoriController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorEori.checkYourAnswersLabel"))
           )
         )
@@ -176,14 +176,14 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def addConsignor: Option[Row] = userAnswers.get(AddConsignorPage) map {
     answer =>
       Row(
-        key   = Key(msg"addConsignor.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"addConsignor.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.AddConsignorController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.AddConsignorController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addConsignor.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-consignor-same-for-all-items")
+            attributes = Map("id" -> "change-consignor-same-for-all-items")
           )
         )
       )
@@ -192,12 +192,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def isConsignorEoriKnown: Option[Row] = userAnswers.get(IsConsignorEoriKnownPage) map {
     answer =>
       Row(
-        key   = Key(msg"isConsignorEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"isConsignorEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.IsConsignorEoriKnownController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.IsConsignorEoriKnownController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isConsignorEoriKnown.checkYourAnswersLabel"))
           )
         )
@@ -207,12 +207,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def principalName: Option[Row] = userAnswers.get(PrincipalNamePage) map {
     answer =>
       Row(
-        key   = Key(msg"principalName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"principalName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.PrincipalNameController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.PrincipalNameController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalName.checkYourAnswersLabel"))
           )
         )
@@ -222,14 +222,14 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def isPrincipalEoriKnown: Option[Row] = userAnswers.get(IsPrincipalEoriKnownPage) map {
     answer =>
       Row(
-        key   = Key(msg"isPrincipalEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"isPrincipalEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.IsPrincipalEoriKnownController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.IsPrincipalEoriKnownController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isPrincipalEoriKnown.checkYourAnswersLabel")),
-            attributes         = Map("id" -> s"""change-is-principal-eori-known""")
+            attributes = Map("id" -> s"""change-is-principal-eori-known""")
           )
         )
       )
@@ -238,12 +238,12 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def whatIsPrincipalEori: Option[Row] = userAnswers.get(WhatIsPrincipalEoriPage) map {
     answer =>
       Row(
-        key   = Key(msg"whatIsPrincipalEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"whatIsPrincipalEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.WhatIsPrincipalEoriController.onPageLoad(lrn, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.WhatIsPrincipalEoriController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"whatIsPrincipalEori.checkYourAnswersLabel"))
           )
         )

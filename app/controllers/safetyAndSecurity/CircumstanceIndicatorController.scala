@@ -38,7 +38,7 @@ import utils.getCircumstanceIndicatorsAsJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CircumstanceIndicatorController @Inject()(
+class CircumstanceIndicatorController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SafetyAndSecurity navigator: Navigator,
@@ -99,7 +99,8 @@ class CircumstanceIndicatorController @Inject()(
     }
 
   private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[CircumstanceIndicator], circumstanceIndicatorList: CircumstanceIndicatorList)(
-    implicit request: Request[AnyContent]): Future[Html] = {
+    implicit request: Request[AnyContent]
+  ): Future[Html] = {
     val json = Json.obj(
       "form"                   -> form,
       "lrn"                    -> lrn,

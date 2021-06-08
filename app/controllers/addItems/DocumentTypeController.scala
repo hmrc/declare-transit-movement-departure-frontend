@@ -37,7 +37,7 @@ import utils.getDocumentsAsJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DocumentTypeController @Inject()(
+class DocumentTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @Document navigator: Navigator,

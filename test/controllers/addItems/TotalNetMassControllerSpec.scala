@@ -47,6 +47,7 @@ class TotalNetMassControllerSpec extends SpecBase with MockNunjucksRendererApp w
   val form         = formProvider(index)
 
   lazy val totalNetMassRoute = routes.TotalNetMassController.onPageLoad(lrn, index, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

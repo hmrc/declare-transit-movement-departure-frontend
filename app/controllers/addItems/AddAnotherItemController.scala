@@ -38,7 +38,7 @@ import utils.AddItemsCheckYourAnswersHelper
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddAnotherItemController @Inject()(
+class AddAnotherItemController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItems navigator: Navigator,

@@ -33,7 +33,8 @@ class DocumentExtraInformationFormProvider @Inject() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxLength, "documentExtraInformation.error.length", index.display),
-            regexp(stringFieldRegex, "documentExtraInformation.error.invalid"),
-          ))
+            regexp(stringFieldRegex, "documentExtraInformation.error.invalid")
+          )
+        )
     )
 }

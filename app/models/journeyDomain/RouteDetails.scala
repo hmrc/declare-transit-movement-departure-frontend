@@ -43,7 +43,7 @@ object RouteDetails {
 
   object TransitInformation {
 
-    implicit val readSeqTransitInformation: UserAnswersReader[NonEmptyList[TransitInformation]] = {
+    implicit val readSeqTransitInformation: UserAnswersReader[NonEmptyList[TransitInformation]] =
       AddSecurityDetailsPage.reader
         .flatMap {
           addSecurityDetailsFlag =>
@@ -68,7 +68,6 @@ object RouteDetails {
               }
             }
         }
-    }
   }
 
   implicit val makeSimplifiedMovementDetails: UserAnswersReader[RouteDetails] =

@@ -45,7 +45,7 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = addressMaxLength,
+      maxLength = addressMaxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(name))
     )
 
@@ -74,7 +74,7 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = addressMaxLength,
+      maxLength = addressMaxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(name))
     )
 
@@ -104,7 +104,7 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(name))
     )
 

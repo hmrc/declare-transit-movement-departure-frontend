@@ -52,10 +52,16 @@ object GuaranteeDetails {
 
     private def liabilityAmount(index: Index): UserAnswersReader[LiabilityAmount] = DefaultAmountPage(index).optionalReader.flatMap {
       case Some(defaultAmountPage) =>
-        if (defaultAmountPage) { UserAnswersReader[DefaultLiabilityAmount.type].widen[LiabilityAmount] } else {
-          LiabilityAmountPage(index).reader.map(amount => OtherLiabilityAmount(amount, CurrencyCode.GBP))
+        if (defaultAmountPage) { UserAnswersReader[DefaultLiabilityAmount.type].widen[LiabilityAmount] }
+        else {
+          LiabilityAmountPage(index).reader.map(
+            amount => OtherLiabilityAmount(amount, CurrencyCode.GBP)
+          )
         }
-      case None => LiabilityAmountPage(index).reader.map(amount => OtherLiabilityAmount(amount, CurrencyCode.GBP))
+      case None =>
+        LiabilityAmountPage(index).reader.map(
+          amount => OtherLiabilityAmount(amount, CurrencyCode.GBP)
+        )
     }
 
     def parseGuaranteeReference(index: Index): UserAnswersReader[GuaranteeReference] =

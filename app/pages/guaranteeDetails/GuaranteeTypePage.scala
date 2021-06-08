@@ -39,13 +39,15 @@ case class GuaranteeTypePage(index: Index) extends QuestionPage[GuaranteeType] {
 
       case (Some(GuaranteeWaiver) | Some(ComprehensiveGuarantee) | Some(IndividualGuarantee) | Some(FlatRateVoucher) | Some(IndividualGuaranteeMultiple),
             Some(_),
-            _) =>
+            _
+          ) =>
         userAnswers.remove(OtherReferencePage(index))
 
-      case (Some(CashDepositGuarantee) | Some(GuaranteeNotRequired) | Some(GuaranteeWaivedRedirect) | Some(GuaranteeWaiverByAgreement) | Some(
-              GuaranteeWaiverSecured),
+      case (Some(CashDepositGuarantee) | Some(GuaranteeNotRequired) | Some(GuaranteeWaivedRedirect) | Some(GuaranteeWaiverByAgreement) |
+            Some(GuaranteeWaiverSecured),
             None,
-            _) =>
+            _
+          ) =>
         userAnswers
           .remove(GuaranteeReferencePage(index))
           .flatMap(_.remove(LiabilityAmountPage(index)))

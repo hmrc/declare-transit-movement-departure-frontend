@@ -44,7 +44,7 @@ class SpecialMentionAdditionalInfoFormProviderSpec extends StringFieldBehaviours
     behave like fieldWithMaxLength(
       form,
       fieldName,
-      maxLength   = maxLength,
+      maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(itemIndex.display, referenceIndex.display))
     )
 

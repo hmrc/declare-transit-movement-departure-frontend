@@ -37,7 +37,7 @@ import utils.countryJsonList
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CarrierAddressController @Inject()(
+class CarrierAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SafetyAndSecurityTraderDetails navigator: Navigator,

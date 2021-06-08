@@ -35,7 +35,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class DeclarationRejectionController @Inject()(
+class DeclarationRejectionController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   val controllerComponents: MessagesControllerComponents,
@@ -81,7 +81,7 @@ class DeclarationRejectionController @Inject()(
     Seq(Section(msg"declarationRejection.declarationDetails", completedRows))
   }
 
-  def onPageLoad(departureId: DepartureId): Action[AnyContent] = (identify).async {
+  def onPageLoad(departureId: DepartureId): Action[AnyContent] = identify.async {
     implicit request =>
       departureMessageService.declarationRejectionMessage(departureId).flatMap {
         case Some(message) =>

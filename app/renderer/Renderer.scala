@@ -25,7 +25,7 @@ import uk.gov.hmrc.nunjucks.NunjucksRenderer
 
 import scala.concurrent.Future
 
-class Renderer @Inject()(frontendAppConfig: FrontendAppConfig, appConfig: RenderConfig, renderer: NunjucksRenderer) {
+class Renderer @Inject() (frontendAppConfig: FrontendAppConfig, appConfig: RenderConfig, renderer: NunjucksRenderer) {
 
   def render(template: String)(implicit request: RequestHeader): Future[Html] =
     renderTemplate(template, Json.obj())

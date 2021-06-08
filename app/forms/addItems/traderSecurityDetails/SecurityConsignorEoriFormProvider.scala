@@ -35,6 +35,7 @@ class SecurityConsignorEoriFormProvider @Inject() extends Mappings {
             maxLength(maxLengthEoriNumber, "securityConsignorEori.error.length"),
             regexp(stringFieldRegex, "securityConsignorEori.error.invalid"),
             regexp(eoriNumberRegex, "securityConsignorEori.error.invalidFormat")
-          ))
+          )
+        )
     )
 }

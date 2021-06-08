@@ -39,11 +39,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       forAll(arb[UserAnswers]) {
         ua =>
           val goodsSummary = GoodsSummary(
-            numberOfPackages   = 1,
-            totalMass          = "11.1",
-            loadingPlace       = None,
+            numberOfPackages = 1,
+            totalMass = "11.1",
+            loadingPlace = None,
             goodSummaryDetails = GoodSummarySimplifiedDetails("Auth Location Code", LocalDate.now()),
-            sealNumbers        = Seq.empty
+            sealNumbers = Seq.empty
           )
 
           val userAnswers =
@@ -62,11 +62,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         forAll(arb[UserAnswers]) {
           ua =>
             val goodsSummary = GoodsSummary(
-              numberOfPackages   = 1,
-              totalMass          = "11.1",
-              loadingPlace       = Some("loadingPlaceValue"),
+              numberOfPackages = 1,
+              totalMass = "11.1",
+              loadingPlace = Some("loadingPlaceValue"),
               goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, Some("Approved location")),
-              sealNumbers        = Seq.empty
+              sealNumbers = Seq.empty
             )
             val userAnswers =
               GoodsSummarySpec
@@ -82,11 +82,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         forAll(arb[UserAnswers]) {
           ua =>
             val goodsSummary = GoodsSummary(
-              numberOfPackages   = 1,
-              totalMass          = "11.1",
-              loadingPlace       = None,
+              numberOfPackages = 1,
+              totalMass = "11.1",
+              loadingPlace = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(Some("Agreed location of goods"), None),
-              sealNumbers        = Seq.empty
+              sealNumbers = Seq.empty
             )
             val userAnswers =
               GoodsSummarySpec
@@ -102,11 +102,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         forAll(arb[UserAnswers]) {
           ua =>
             val goodsSummary = GoodsSummary(
-              numberOfPackages   = 1,
-              totalMass          = "11.1",
-              loadingPlace       = None,
+              numberOfPackages = 1,
+              totalMass = "11.1",
+              loadingPlace = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, None),
-              sealNumbers        = Seq.empty
+              sealNumbers = Seq.empty
             )
             val userAnswers =
               GoodsSummarySpec
@@ -123,11 +123,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         forAll(arb[UserAnswers]) {
           ua =>
             val goodsSummary = GoodsSummary(
-              numberOfPackages   = 1,
-              totalMass          = "11.1",
-              loadingPlace       = None,
+              numberOfPackages = 1,
+              totalMass = "11.1",
+              loadingPlace = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(Some("Agreed location of goods")),
-              sealNumbers        = Seq.empty
+              sealNumbers = Seq.empty
             )
             val userAnswers =
               GoodsSummarySpec
@@ -145,11 +145,11 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         forAll(arb[UserAnswers]) {
           ua =>
             val goodsSummary = GoodsSummary(
-              numberOfPackages   = 1,
-              totalMass          = "11.1",
-              loadingPlace       = None,
+              numberOfPackages = 1,
+              totalMass = "11.1",
+              loadingPlace = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
-              sealNumbers        = Seq.empty
+              sealNumbers = Seq.empty
             )
             val userAnswers =
               GoodsSummarySpec

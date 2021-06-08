@@ -32,5 +32,7 @@ class GuaranteeReferenceFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(grnMaxLength, "guaranteeReference.error.length"),
             regexp(alphaNumericRegex, "guaranteeReference.error.invalid")
-          )))
+          )
+        )
+    )
 }

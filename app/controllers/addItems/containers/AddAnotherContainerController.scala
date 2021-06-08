@@ -37,7 +37,7 @@ import utils.ContainersCheckYourAnswersHelper
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddAnotherContainerController @Inject()(
+class AddAnotherContainerController @Inject() (
   override val messagesApi: MessagesApi,
   @AddItems navigator: Navigator,
   identify: IdentifierAction,

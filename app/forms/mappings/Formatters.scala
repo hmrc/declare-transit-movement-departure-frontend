@@ -25,6 +25,7 @@ import scala.util.control.Exception.nonFatalCatch
 trait Formatters {
 
   private[mappings] def stringFormatter(errorKey: String, args: Seq[Any] = Seq.empty): Formatter[String] = new Formatter[String] {
+
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       data.get(key) match {
         case None | Some("") => Left(Seq(FormError(key, errorKey, args)))
@@ -73,7 +74,9 @@ trait Formatters {
               nonFatalCatch
                 .either(s.toInt)
                 .left
-                .map(_ => Seq(FormError(key, nonNumericKey, args)))
+                .map(
+                  _ => Seq(FormError(key, nonNumericKey, args))
+                )
           }
 
       override def unbind(key: String, value: Int) =
@@ -97,6 +100,7 @@ trait Formatters {
 
   private[mappings] def lrnFormatter(requiredKey: String, lengthKey: String, invalidKey: String): Formatter[LocalReferenceNumber] =
     new Formatter[LocalReferenceNumber] {
+
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalReferenceNumber] =
         stringFormatter(requiredKey)
           .bind(key, data)

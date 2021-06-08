@@ -28,7 +28,7 @@ import controllers.LoadingPlaceController
 import pages.movementDetails.PreLodgeDeclarationPage
 
 @Singleton
-class GoodsSummaryNavigator @Inject()() extends Navigator {
+class GoodsSummaryNavigator @Inject() () extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {

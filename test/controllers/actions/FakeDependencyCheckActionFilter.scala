@@ -23,8 +23,9 @@ import play.api.mvc._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeDependencyCheckActionFilter @Inject()() extends CheckDependentSectionAction {
+class FakeDependencyCheckActionFilter @Inject() () extends CheckDependentSectionAction {
   val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+
   override def apply(dependentSection: DependentSection): ActionFilter[DataRequest] =
     new FakeCheckDependentSectionFilter(dependentSection, executionContext)
 }

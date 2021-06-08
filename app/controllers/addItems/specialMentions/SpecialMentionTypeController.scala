@@ -37,7 +37,7 @@ import utils.getSpecialMentionAsJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SpecialMentionTypeController @Inject()(
+class SpecialMentionTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SpecialMentions navigator: Navigator,

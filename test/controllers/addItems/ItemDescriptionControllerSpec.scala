@@ -47,6 +47,7 @@ class ItemDescriptionControllerSpec extends SpecBase with MockNunjucksRendererAp
   val form         = formProvider(index)
 
   lazy val itemDescriptionRoute = routes.ItemDescriptionController.onPageLoad(lrn, index, NormalMode).url
+
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()

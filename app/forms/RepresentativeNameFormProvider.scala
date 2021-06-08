@@ -33,6 +33,7 @@ class RepresentativeNameFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             maxLength(maxLengthRepresentativeName, "representativeName.error.length"),
             regexp(alphaNumericWithSpaceRegex, "representativeName.error.invalid")
-          ))
+          )
+        )
     )
 }

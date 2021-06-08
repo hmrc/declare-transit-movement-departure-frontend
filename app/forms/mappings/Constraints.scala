@@ -177,9 +177,8 @@ trait Constraints {
   protected def doesNotExistIn[A](values: Seq[A], index: Index, errorKey: String, args: Any*)(implicit ev: StringEquivalence[A]): Constraint[String] = {
     import StringEquivalence._
 
-    val valuesFilterWithoutCurrentIndex: Seq[A] = {
+    val valuesFilterWithoutCurrentIndex: Seq[A] =
       values.zipWithIndex.filterNot(_._2 == index.position).map(_._1)
-    }
     Constraint {
       x =>
         if (valuesFilterWithoutCurrentIndex.exists(_.equalsString(x))) {

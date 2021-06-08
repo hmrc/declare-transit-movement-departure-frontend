@@ -37,7 +37,7 @@ import utils.getDangerousGoodsCodeAsJson
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DangerousGoodsCodeController @Inject()(
+class DangerousGoodsCodeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @SecurityDetails navigator: Navigator,
