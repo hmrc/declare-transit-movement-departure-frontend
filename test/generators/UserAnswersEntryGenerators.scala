@@ -947,7 +947,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryPrincipalAddressUserAnswersEntry: Arbitrary[(PrincipalAddressPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[PrincipalAddress].map(Json.toJson(_))
+        value <- arbitrary[CommonAddress].map(Json.toJson(_))
       } yield (PrincipalAddressPage, value)
     }
 

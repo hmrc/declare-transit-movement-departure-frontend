@@ -19,7 +19,7 @@ package controllers.traderDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.{CommonAddressFormProvider, PrincipalAddressFormProvider}
+import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
