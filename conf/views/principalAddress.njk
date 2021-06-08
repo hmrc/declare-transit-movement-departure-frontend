@@ -11,6 +11,12 @@
   {{ title(messages("principalAddress.title"), form.errors) }}
 {% endblock %}
 
+{% block pageHead %}
+  <!--[if gt IE 8]><!-->
+  <link href="{{ routes.controllers.Assets.versioned("stylesheets/accessible-autocomplete.min.css").url }}" media="screen" rel="stylesheet" type="text/css" />
+  <!--<![endif]-->
+{% endblock %}
+
 {% block mainContent %}
 
   {{ govukBackLink({
@@ -41,35 +47,48 @@
           {{ govukInput({
             classes: "govuk-!-width-two-thirds",
             label: {
-              text: messages('principalAddress.numberAndStreet')
+              text: messages('commonAddress.AddressLine1')
             },
-            id: "numberAndStreet",
-            name: "numberAndStreet",
-            value: form.numberAndStreet.value,
-            errorMessage: form.numberAndStreet.error
-          }) }}
+             id: "AddressLine1",
+                       name: "AddressLine1",
+                       value: form.AddressLine1.value,
+                       errorMessage: form.AddressLine1.error
+                     }) }}
 
           {{ govukInput({
             classes: "govuk-!-width-two-thirds",
             label: {
-              text: messages('principalAddress.town')
+              text: messages('commonAddress.AddressLine2')
             },
-            id: "town",
-            name: "town",
-            value: form.town.value,
-            errorMessage: form.town.error
-          }) }}
+              id: "AddressLine2",
+                       name: "AddressLine2",
+                       value: form.AddressLine2.value,
+                       errorMessage: form.AddressLine2.error
+                     }) }}
 
           {{ govukInput({
             classes: "govuk-!-width-two-thirds",
             label: {
-              text: messages('principalAddress.postcode')
+              text: messages('commonAddress.postalCode')
             },
-            id: "postcode",
-            name: "postcode",
-            value: form.postcode.value,
-            errorMessage: form.postcode.error
-          }) }}
+           id: "AddressLine3",
+                      name: "AddressLine3",
+                      value: form.AddressLine3.value,
+                      errorMessage: form.AddressLine3.error
+                    }) }}
+
+         {{ govukSelect({
+                         classes: "govuk-input--width-20 autocomplete",
+                         label: {
+                         text: messages('commonAddress.AddressLine4')
+                                },
+                         id: "country",
+                         name: "country",
+                         errorMessage: form.value.error,
+                         items: countries,
+                         value: form.country.value,
+                         errorMessage: form.country.error
+                        }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
@@ -82,4 +101,8 @@
     </div>
   </div>
 
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="{{ routes.controllers.Assets.versioned("javascripts/accessible-autocomplete.js").url }}"></script>
 {% endblock %}
