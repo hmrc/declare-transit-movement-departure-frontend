@@ -20,6 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.traderDetails.{routes => traderDetailsRoute}
 import generators.Generators
+import models.ProcedureType.{Normal, Simplified}
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
@@ -79,15 +80,31 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Add consignor page" in {
+          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'GB' " in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
-                val ua = answers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
                   .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Add Principal's Name page if principals EORI does not start with prefix 'GB' " in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("AD123456")
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
             }
           }
 
@@ -364,20 +381,68 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       }
 
-      "must go from What is Principal's Eori page to Check Your Answers Page" in {
+      "must go from What is Principal's Eori page" - {
+        "on a Normal Journey" - {
+          "to Check Your Answers Page if Prefix is 'GB' " in {
 
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(WhatIsPrincipalEoriPage, CheckMode, answers)
-              .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
+                  .unsafeSetVal(ProcedureTypePage)(Normal)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
+                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            }
+          }
+
+          "to Principal Page if Prefix is not 'GB' and there is no data for Principal Name" in {
+
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("AD123456")
+                  .unsafeRemove(PrincipalNamePage)
+                  .unsafeSetVal(ProcedureTypePage)(Normal)
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
+            }
+          }
+
+          "to Check Your Answers Page if Prefix is not 'GB' and there is  data for Principal Name" in {
+
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("AD123456")
+                  .unsafeSetVal(PrincipalNamePage)("TestName")
+                  .unsafeSetVal(ProcedureTypePage)(Normal)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
+                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            }
+          }
+        }
+        "on a Simplified journey" - {
+          "to Check your answers page" in {
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers.unsafeSetVal(ProcedureTypePage)(Simplified)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
+                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            }
+          }
         }
       }
-
       "must go from Principal name page" - {
         "to Check Your Answers page if Principal's Address previously answered" in {
 
-          forAll(arbitrary[UserAnswers], arbitrary[PrincipalAddress]) {
+          forAll(arbitrary[UserAnswers], arbitrary[CommonAddress]) {
 
             (answers, principalAddress) =>
               val updatedAnswers =

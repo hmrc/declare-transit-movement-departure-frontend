@@ -348,20 +348,37 @@ trait JourneyModelGenerators {
     }
 
   implicit lazy val arbitraryTraderEori: Arbitrary[PrincipalTraderEoriInfo] =
-    Arbitrary(arbitrary[EoriNumber].map(PrincipalTraderEoriInfo(_)))
+    Arbitrary(
+      arbitrary[EoriNumber].map(
+        x => PrincipalTraderEoriInfo(EoriNumber(s"GB${x.value}"))
+      )
+    )
 
   implicit lazy val arbitraryPrincipalTraderPersonalInfo: Arbitrary[PrincipalTraderPersonalInfo] =
     Arbitrary {
       for {
         name             <- stringsWithMaxLength(stringMaxLength)
-        principalAddress <- arbitrary[PrincipalAddress]
-        address = Address.prismAddressToPrincipalAddress.reverseGet(principalAddress)
+        principalAddress <- arbitrary[CommonAddress]
+        address = Address.prismAddressToCommonAddress.reverseGet(principalAddress)
       } yield PrincipalTraderPersonalInfo(name, address)
+    }
+
+  implicit lazy val arbitraryPrincipalEoriTraderPersonalInfo: Arbitrary[PrincipalTraderEoriPersonalInfo] =
+    Arbitrary {
+      for {
+        eori             <- arbitrary[EoriNumber]
+        name             <- stringsWithMaxLength(stringMaxLength)
+        principalAddress <- arbitrary[CommonAddress]
+        address = Address.prismAddressToCommonAddress.reverseGet(principalAddress)
+      } yield PrincipalTraderEoriPersonalInfo(eori, name, address)
     }
 
   implicit lazy val arbitraryRequiredDetails: Arbitrary[PrincipalTraderDetails] =
     Arbitrary {
-      Gen.oneOf(Arbitrary.arbitrary[PrincipalTraderPersonalInfo], Arbitrary.arbitrary[PrincipalTraderEoriInfo])
+      Gen.oneOf(Arbitrary.arbitrary[PrincipalTraderPersonalInfo],
+                Arbitrary.arbitrary[PrincipalTraderEoriInfo],
+                Arbitrary.arbitrary[PrincipalTraderEoriPersonalInfo]
+      )
     }
 
   val genConsignorDetailsWithEori: Gen[ConsignorDetails] =

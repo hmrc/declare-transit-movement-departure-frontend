@@ -16,17 +16,17 @@
 
 package pages
 
-import models.PrincipalAddress
+import models.CommonAddress
 import pages.behaviours.PageBehaviours
 
 class PrincipalAddressPageSpec extends PageBehaviours {
 
   "PrincipalAddressPage" - {
 
-    beRetrievable[PrincipalAddress](PrincipalAddressPage)
+    beRetrievable[CommonAddress](PrincipalAddressPage)
 
-    beSettable[PrincipalAddress](PrincipalAddressPage)
+    beSettable[CommonAddress](PrincipalAddressPage)
 
-    beRemovable[PrincipalAddress](PrincipalAddressPage)
+    beRemovable[CommonAddress](PrincipalAddressPage)
   }
 }

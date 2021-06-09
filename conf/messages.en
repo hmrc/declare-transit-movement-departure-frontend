@@ -303,20 +303,7 @@ whatIsPrincipalEori.error.invalidFormat = Enter the principal’s EORI number in
 
 principalAddress.title = What is the principal’s address?
 principalAddress.heading = What is {0}’s address?
-principalAddress.numberAndStreet = Number and street
-principalAddress.town = Town
-principalAddress.postcode = Postcode
 principalAddress.checkYourAnswersLabel =  Principal’s address
-principalAddress.error.numberAndStreet.required = Enter the number and street for {0}’s address
-principalAddress.error.town.required = Enter the town for {0}’s address
-principalAddress.error.postcode.required = Enter the postcode for {0}’s address
-principalAddress.error.numberAndStreet.length = The number and street for {0}’s address must be 35 characters or less
-principalAddress.error.town.length = The town for {0}’s address must be 35 characters or less
-principalAddress.error.numberAndStreet.invalidCharacters = The number and street for {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-principalAddress.error.town.invalidCharacters = The town for {0}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-principalAddress.error.postcode.length = The postcode for {0}’s address must be 9 characters or less
-principalAddress.error.postcode.invalidFormat = Enter the postcode for {0}’s address in the right format, like AB1 1AB
-principalAddress.error.postcode.invalidCharacters = The postcode for {0}’s address must only include letters a to z, numbers 0 to 9 and spaces
 
 addConsignor.title = Is there a consignor for all items?
 addConsignor.heading = Is there a consignor for all items?

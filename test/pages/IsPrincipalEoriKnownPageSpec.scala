@@ -16,7 +16,8 @@
 
 package pages
 
-import models.{PrincipalAddress, UserAnswers}
+import models.ProcedureType.Normal
+import models.{CommonAddress, PrincipalAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -35,10 +36,16 @@ class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
 
     "must remove PrincipalAddressPage and PrincipalNamePage when there is a change of the answer to 'Yes'" in {
 
-      val principalAddress = arbitrary[PrincipalAddress].sample.value
+      val principalAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(ProcedureTypePage, Normal)
+            .success
+            .value
+            .set(WhatIsPrincipalEoriPage, "GB223445")
+            .success
+            .value
             .set(PrincipalNamePage, "answer")
             .success
             .value
@@ -59,6 +66,9 @@ class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(ProcedureTypePage, Normal)
+            .success
+            .value
             .set(WhatIsPrincipalEoriPage, "GB123456")
             .success
             .value
