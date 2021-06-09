@@ -46,7 +46,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def principalAddress: Option[Row] = userAnswers.get(PrincipalAddressPage) map {
     answer =>
       val address = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country)
+        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
           .mkString("<br>")
       )
       Row(
