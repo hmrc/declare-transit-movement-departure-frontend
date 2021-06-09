@@ -30,8 +30,8 @@ case object IsPrincipalEoriKnownPage extends QuestionPage[Boolean] {
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) => userAnswers.remove(WhatIsPrincipalEoriPage)
-      case Some(true) if userAnswers.get(WhatIsPrincipalEoriPage).isDefined =>
-        userAnswers.get(WhatIsPrincipalEoriPage) match {
+      case Some(true)  =>
+        userAnswers.get(WhatIsPrincipalEoriPage) match{
           case Some(x) if x.startsWith("GB") =>
             userAnswers
               .remove(PrincipalNamePage)

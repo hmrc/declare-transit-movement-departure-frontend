@@ -197,7 +197,7 @@ class DeclarationRequestService @Inject() (
 
         case PrincipalTraderEoriPersonalInfo(eori, name, Address(buildingAndStreet, city, postcode, _)) =>
           TraderPrincipalWithEori(eori.value, Some(name), Some(buildingAndStreet), Some(city), Some(postcode), Some("GB"))
-      } //todo -consider address is country required awaiting feedback
+      }
 
     def detailsAtBorderMode(detailsAtBorder: DetailsAtBorder, inlandCode: Int): String =
       detailsAtBorder match {
