@@ -17,11 +17,12 @@
 package controllers.traderDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.PrincipalAddressFormProvider
+import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, NormalMode}
+import models.{CommonAddress, CountryList, NormalMode}
 import navigation.annotations.TraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -44,16 +45,21 @@ class PrincipalAddressControllerSpec extends SpecBase with MockNunjucksRendererA
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new PrincipalAddressFormProvider()
-  private val form         = formProvider(principalName)
-  private val country      = Country(CountryCode("GB"), "United Kingdom")
+  private val country                                            = Country(CountryCode("GB"), "United Kingdom")
+  private val countries                                          = CountryList(Seq(country))
+  private val formProvider                                       = new CommonAddressFormProvider()
+  private val form                                               = formProvider(countries, principalName)
+  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   private lazy val principalAddressRoute = routes.PrincipalAddressController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(
+        bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(new FakeNavigator(onwardRoute)),
+        bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector)
+      )
 
   "PrincipalAddress Controller" - {
 
@@ -61,6 +67,9 @@ class PrincipalAddressControllerSpec extends SpecBase with MockNunjucksRendererA
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+        .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(PrincipalNamePage, "foo").success.value
       dataRetrievalWithData(userAnswers)
@@ -90,6 +99,9 @@ class PrincipalAddressControllerSpec extends SpecBase with MockNunjucksRendererA
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+        .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers
         .set(PrincipalNamePage, principalName)

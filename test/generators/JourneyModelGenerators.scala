@@ -358,8 +358,8 @@ trait JourneyModelGenerators {
     Arbitrary {
       for {
         name             <- stringsWithMaxLength(stringMaxLength)
-        principalAddress <- arbitrary[PrincipalAddress]
-        address = Address.prismAddressToPrincipalAddress.reverseGet(principalAddress)
+        principalAddress <- arbitrary[CommonAddress]
+        address = Address.prismAddressToCommonAddress.reverseGet(principalAddress)
       } yield PrincipalTraderPersonalInfo(name, address)
     }
 
@@ -368,8 +368,8 @@ trait JourneyModelGenerators {
       for {
         eori             <- arbitrary[EoriNumber]
         name             <- stringsWithMaxLength(stringMaxLength)
-        principalAddress <- arbitrary[PrincipalAddress]
-        address = Address.prismAddressToPrincipalAddress.reverseGet(principalAddress)
+        principalAddress <- arbitrary[CommonAddress]
+        address = Address.prismAddressToCommonAddress.reverseGet(principalAddress)
       } yield PrincipalTraderEoriPersonalInfo(eori, name, address)
     }
 
