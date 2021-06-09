@@ -114,7 +114,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * */
         .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
         .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(pages.PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
+        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France") ))
         .unsafeSetVal(pages.AddConsignorPage)(false)
         .unsafeSetVal(pages.AddConsigneePage)(false)
         /*
@@ -774,7 +774,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * */
         .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
         .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(pages.PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
+        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France") ))
         .unsafeSetVal(pages.AddConsignorPage)(true)
         .unsafeSetVal(pages.IsConsignorEoriKnownPage)(true)
         .unsafeSetVal(pages.ConsignorEoriPage)("ConorEori")
@@ -1111,7 +1111,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * */
         .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
         .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(pages.PrincipalAddressPage)(PrincipalAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA"))
+        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France") ))
         .unsafeSetVal(pages.AddConsignorPage)(false)
         .unsafeSetVal(pages.AddConsigneePage)(false)
         /*
