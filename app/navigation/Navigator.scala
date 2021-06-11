@@ -29,12 +29,12 @@ trait Navigator {
   protected def checkRoutes: RouteMapping
 
   protected def checkModeDefaultPage(userAnswers: UserAnswers): Call =
-    routes.IndexController.onPageLoad()
+    routes.SessionExpiredController.onPageLoad()
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
       normalRoutes.lift(page) match {
-        case None       => routes.IndexController.onPageLoad()
+        case None       => routes.LocalReferenceNumberController.onPageLoad()
         case Some(call) => handleCall(userAnswers, call)
       }
     case CheckMode =>
