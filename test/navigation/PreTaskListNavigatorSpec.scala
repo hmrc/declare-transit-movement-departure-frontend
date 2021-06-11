@@ -38,7 +38,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           answers =>
             navigator
               .nextPage(UnknownPage, NormalMode, answers)
-              .mustBe(routes.IndexController.onPageLoad())
+              .mustBe(routes.LocalReferenceNumberController.onPageLoad())
         }
       }
 
