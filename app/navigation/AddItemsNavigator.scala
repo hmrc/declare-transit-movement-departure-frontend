@@ -307,7 +307,7 @@ class AddItemsNavigator @Inject() () extends Navigator {
           case Some(true) => controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(ua.id, itemIndex, NormalMode)
           case Some(false) => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.id, itemIndex, NormalMode)
         }
-        case (Some(false), _) => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex)
+        case _ => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex)
       }
     }
   }
@@ -331,8 +331,9 @@ class AddItemsNavigator @Inject() () extends Navigator {
         case (Some(true), Some(true)) => ua.get(AddCommercialReferenceNumberAllItemsPage) match {
           case Some(true) => controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(ua.id, itemIndex, NormalMode)
           case Some(false) => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.id, itemIndex, NormalMode)
+          case _ => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.id, itemIndex, NormalMode)
         }
-        case (Some(false), _) => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex)
+        case _ => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.id, itemIndex)
       }
     }
   }

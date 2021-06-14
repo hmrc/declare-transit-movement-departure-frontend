@@ -27,7 +27,25 @@ import pages.movementDetails.PreLodgeDeclarationPage
 
 class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
+  private val normalMandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+    ProcedureTypePage,
+    DeclarationTypePage,
+    PreLodgeDeclarationPage,
+    ContainersUsedPage,
+    DeclarationPlacePage,
+    DeclarationForSomeoneElsePage
+  )
+
+  private val simplifiedMandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+    ProcedureTypePage,
+    DeclarationTypePage,
+    ContainersUsedPage,
+    DeclarationPlacePage,
+    DeclarationForSomeoneElsePage
+  )
+
   "MovementDetails" - {
+
     "can be parsed UserAnswers" - {
       "when all details for section have been answered" in {
         forAll(movementUserAnswers) {
@@ -38,18 +56,33 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
         }
       }
     }
+
+    "cannot parse UserAnswers" - {
+      "when a mandatory page for NormalMovementDetails" in {
+        forAll(normalMovementUserAnswers, normalMandatoryPages) {
+          case ((_, ua), mandatoryPage) =>
+            val userAnswers = ua.remove(mandatoryPage).success.value
+
+            val result = UserAnswersReader[MovementDetails].run(userAnswers).left.value
+
+            result mustBe ReaderError(mandatoryPage)
+        }
+      }
+
+      "when a mandatory page for SimplifiedMovementDetails" in {
+        forAll(simpleMovementUserAnswers, simplifiedMandatoryPages) {
+          case ((_, ua), mandatoryPage) =>
+            val userAnswers = ua.remove(mandatoryPage).success.value
+
+            val result = UserAnswersReader[MovementDetails].run(userAnswers).left.value
+
+            result mustBe ReaderError(mandatoryPage)
+        }
+      }
+    }
   }
 
   "NormalMovementDetails" - {
-
-    val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-      ProcedureTypePage,
-      DeclarationTypePage,
-      PreLodgeDeclarationPage,
-      ContainersUsedPage,
-      DeclarationPlacePage,
-      DeclarationForSomeoneElsePage
-    )
 
     "can be parsed" - {
       "when all details for section have been answered" in {
@@ -65,7 +98,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
 
     "cannot be parsed from UserAnswers" - {
       "when an answer is missing" in {
-        forAll(normalMovementUserAnswers, mandatoryPages) {
+        forAll(normalMovementUserAnswers, normalMandatoryPages) {
           case ((_, ua), mandatoryPage) =>
             val userAnswers = ua.remove(mandatoryPage).success.value
 
@@ -88,14 +121,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
 
   "SimplifiedMovementDetails" - {
 
-    val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-      ProcedureTypePage,
-      DeclarationTypePage,
-      ContainersUsedPage,
-      DeclarationPlacePage,
-      DeclarationForSomeoneElsePage
-    )
-
     "can be parsed from UserAnswers" - {
       "when all the answers have been answered" in {
         forAll(simpleMovementUserAnswers) {
@@ -109,7 +134,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
 
     "cannot be parsed from UserAnswers" - {
       "when a mandatory answer is missing" in {
-        forAll(simpleMovementUserAnswers, mandatoryPages) {
+        forAll(simpleMovementUserAnswers, simplifiedMandatoryPages) {
           case ((_, ua), mandatoryPage) =>
             val userAnswers = ua.remove(mandatoryPage).success.value
 
