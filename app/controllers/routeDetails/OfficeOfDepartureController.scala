@@ -56,7 +56,7 @@ class OfficeOfDepartureController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  def getNICustomsOffices(implicit hc: HeaderCarrier) = if (frontendAppConfig.isNIJourneyEnabled) {
+  private def getNICustomsOffices(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = if (frontendAppConfig.isNIJourneyEnabled) {
     referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("XI"))
   } else {
     Future.successful(CustomsOfficeList(Nil))
