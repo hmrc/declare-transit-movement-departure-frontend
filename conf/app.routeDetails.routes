@@ -3,11 +3,6 @@ POST       /:lrn/route/dispatch-country                            controllers.r
 GET        /:lrn/route/change-dispatch-country                            controllers.routeDetails.CountryOfDispatchController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/route/change-dispatch-country                            controllers.routeDetails.CountryOfDispatchController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:lrn/route/office-of-departure                         controllers.routeDetails.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/route/office-of-departure                         controllers.routeDetails.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/route/change-office-of-departure                  controllers.routeDetails.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/route/change-office-of-departure                  controllers.routeDetails.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
 GET        /:lrn/route/destination-country                         controllers.routeDetails.DestinationCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/route/destination-country                         controllers.routeDetails.DestinationCountryController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/route/change-destination-country                  controllers.routeDetails.DestinationCountryController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

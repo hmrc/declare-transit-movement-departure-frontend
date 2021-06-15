@@ -14,28 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails
+package controllers
 
-import config.FrontendAppConfig
-import connectors.ReferenceDataConnector
 import controllers.actions._
-import controllers.{routes => mainRoutes}
 import forms.OfficeOfDepartureFormProvider
-import models.reference.{CountryCode, CustomsOffice}
-import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
+import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.RouteDetails
-import pages.{CountryOfDispatchPage, OfficeOfDeparturePage}
+import pages.OfficeOfDeparturePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import navigation.annotations.PreTaskListDetails
 import repositories.SessionRepository
-import uk.gov.hmrc.http.HeaderCarrier
+import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
-import services.CustomsOfficesService
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class OfficeOfDepartureController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @RouteDetails navigator: Navigator,
+  @PreTaskListDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

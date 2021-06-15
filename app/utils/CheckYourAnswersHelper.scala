@@ -39,38 +39,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def addSecurityDetails: Option[Row] = userAnswers.get(AddSecurityDetailsPage) map {
-    answer =>
-      Row(
-        key = Key(msg"addSecurityDetails.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddSecurityDetailsController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSecurityDetails.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-add-security-details""")
-          )
-        )
-      )
-  }
-
-  def procedureType: Option[Row] = userAnswers.get(ProcedureTypePage) map {
-    answer =>
-      Row(
-        key = Key(msg"procedureType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(msg"procedureType.$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ProcedureTypeController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"procedureType.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-procedure-type""")
-          )
-        )
-      )
-  }
-
   def lrn: LocalReferenceNumber = userAnswers.id
 
 }

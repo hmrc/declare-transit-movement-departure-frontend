@@ -27,7 +27,8 @@ class PreTaskListNavigator @Inject() () extends Navigator {
 
   // format: off
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case LocalReferenceNumberPage => ua => Some(routes.ProcedureTypeController.onPageLoad(ua.id, NormalMode))
+    case LocalReferenceNumberPage => ua => Some(routes.OfficeOfDepartureController.onPageLoad(ua.id, NormalMode))
+    case OfficeOfDeparturePage => ua => Some(routes.ProcedureTypeController.onPageLoad(ua.id, NormalMode))
     case ProcedureTypePage        => ua => Some(routes.AddSecurityDetailsController.onPageLoad(ua.id, NormalMode))
     case AddSecurityDetailsPage   => ua => Some(routes.DeclarationSummaryController.onPageLoad(ua.id))
   }

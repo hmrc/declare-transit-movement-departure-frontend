@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails
+package controllers
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import config.FrontendAppConfig
@@ -22,12 +22,12 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.OfficeOfDepartureFormProvider
 import matchers.JsonMatchers
+import navigation.annotations.PreTaskListDetails
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CustomsOfficeList, NormalMode}
-import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.OfficeOfDeparturePage
@@ -68,7 +68,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[RouteDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfDeparture Controller" - {
