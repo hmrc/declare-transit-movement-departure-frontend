@@ -47,18 +47,18 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
 
   def onwardRoute = Call("GET", "/foo")
 
-  val customsOffice1: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  val customsOffice2: CustomsOffice = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
-  val xiCustomsOffice1: CustomsOffice = CustomsOffice("xi", "ni", CountryCode("XI"), Seq.empty, None)
-  val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
+  val customsOffice1: CustomsOffice       = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
+  val customsOffice2: CustomsOffice       = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("xi", "ni", CountryCode("XI"), Seq.empty, None)
+  val customsOffices: CustomsOfficeList   = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
-  val gbForm = new OfficeOfDepartureFormProvider()(customsOffices)
-  val xiForm = new OfficeOfDepartureFormProvider()(xiCustomsOffices)
+  val gbForm                              = new OfficeOfDepartureFormProvider()(customsOffices)
+  val xiForm                              = new OfficeOfDepartureFormProvider()(xiCustomsOffices)
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val mockFrontendAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+  private val mockRefDataConnector: ReferenceDataConnector     = mock[ReferenceDataConnector]
+  private val mockFrontendAppConfig: FrontendAppConfig         = mock[FrontendAppConfig]
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
-  lazy val officeOfDepartureRoute: String = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
+  lazy val officeOfDepartureRoute: String                      = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
 
   override def beforeEach = {
     reset(mockFrontendAppConfig, mockRefDataConnector)
@@ -79,9 +79,9 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
         .thenReturn(Future.successful(Html("")))
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
-      val request = FakeRequest(GET, officeOfDepartureRoute)
+      val request        = FakeRequest(GET, officeOfDepartureRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor = ArgumentCaptor.forClass(classOf[JsObject])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -90,15 +90,15 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text" -> ""),
+        Json.obj("value" -> "", "text"         -> ""),
         Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> false),
-        Json.obj("value" -> "id", "text" -> "name (id)", "selected" -> false)
+        Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
       )
 
       val expectedJson = Json.obj(
-        "form" -> gbForm,
-        "mode" -> NormalMode,
-        "lrn" -> lrn,
+        "form"           -> gbForm,
+        "mode"           -> NormalMode,
+        "lrn"            -> lrn,
         "customsOffices" -> expectedCustomsOfficeJson
       )
 
@@ -116,9 +116,9 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
         .thenReturn(Future.successful(Html("")))
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
-      val request = FakeRequest(GET, officeOfDepartureRoute)
+      val request        = FakeRequest(GET, officeOfDepartureRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor = ArgumentCaptor.forClass(classOf[JsObject])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -129,15 +129,15 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       val filledForm = gbForm.bind(Map("value" -> "officeId"))
 
       val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text" -> ""),
+        Json.obj("value" -> "", "text"         -> ""),
         Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> true),
-        Json.obj("value" -> "id", "text" -> "name (id)", "selected" -> false)
+        Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
       )
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn" -> lrn,
-        "mode" -> NormalMode,
+        "form"           -> filledForm,
+        "lrn"            -> lrn,
+        "mode"           -> NormalMode,
         "customsOffices" -> expectedCustomsOfficeJson
       )
 
@@ -166,10 +166,10 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
         .thenReturn(Future.successful(Html("")))
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
-      val request = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm = gbForm.bind(Map("value" -> ""))
+      val request        = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm      = gbForm.bind(Map("value" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor = ArgumentCaptor.forClass(classOf[JsObject])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -179,7 +179,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
 
       val expectedJson = Json.obj(
         "form" -> boundForm,
-        "lrn" -> lrn,
+        "lrn"  -> lrn,
         "mode" -> NormalMode
       )
 

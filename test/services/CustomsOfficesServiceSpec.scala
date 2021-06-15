@@ -30,14 +30,14 @@ import scala.concurrent.Future
 
 class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
-  val mockRefDataConnector = mock[ReferenceDataConnector]
-  val mockFrontendAppConfig = mock[FrontendAppConfig]
-  val gbCustomsOffice1: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  val gbCustomsOffice2: CustomsOffice = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
-  val xiCustomsOffice1: CustomsOffice = CustomsOffice("xi", "ni", CountryCode("XI"), Seq.empty, None)
+  val mockRefDataConnector                = mock[ReferenceDataConnector]
+  val mockFrontendAppConfig               = mock[FrontendAppConfig]
+  val gbCustomsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
+  val gbCustomsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("xi", "ni", CountryCode("XI"), Seq.empty, None)
   val gbCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(gbCustomsOffice1, gbCustomsOffice2))
   val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
-  val customsOffices: CustomsOfficeList = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)
+  val customsOffices: CustomsOfficeList   = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)
 
   val service = new CustomsOfficesService(mockFrontendAppConfig, mockRefDataConnector)
 
