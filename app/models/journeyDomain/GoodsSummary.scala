@@ -16,15 +16,15 @@
 
 package models.journeyDomain
 
+import java.time.LocalDate
+
 import cats.implicits._
 import derivable.DeriveNumberOfSeals
-import models.ProcedureType
+import models.ProcedureType.{Normal, Simplified}
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
-
-import java.time.LocalDate
 
 case class GoodsSummary(
   numberOfPackages: Int,
@@ -53,22 +53,18 @@ object GoodsSummary {
   object GoodSummaryNormalDetailsWithoutPreLodge {
 
     implicit val goodSummaryNormalDetailsWithoutPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge] =
-      ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Normal) {
-        PreLodgeDeclarationPage.filterMandatoryDependent(_ == false) {
-          (
-            AddCustomsApprovedLocationPage
-              .filterOptionalDependent(_ == false) {
-                AddAgreedLocationOfGoodsPage.filterOptionalDependent(_ == true) {
-                  AgreedLocationOfGoodsPage.reader
-                }
-              }
-              .map(_.flatten),
-            AddCustomsApprovedLocationPage.filterOptionalDependent(_ == true) {
-              CustomsApprovedLocationPage.reader
+      (
+        AddCustomsApprovedLocationPage
+          .filterOptionalDependent(_ equals false) {
+            AddAgreedLocationOfGoodsPage.filterOptionalDependent(identity) {
+              AgreedLocationOfGoodsPage.reader
             }
-          ).tupled.map((GoodSummaryNormalDetailsWithoutPreLodge.apply _).tupled)
+          }
+          .map(_.flatten),
+        AddCustomsApprovedLocationPage.filterOptionalDependent(identity) {
+          CustomsApprovedLocationPage.reader
         }
-      }
+      ).tupled.map((GoodSummaryNormalDetailsWithoutPreLodge.apply _).tupled)
   }
 
   final case class GoodSummaryNormalDetailsWithPreLodge(agreedLocationOfGoods: Option[String]) extends GoodSummaryDetails
@@ -76,13 +72,9 @@ object GoodsSummary {
   object GoodSummaryNormalDetailsWithPreLodge {
 
     implicit val goodSummaryNormalDetailsWithPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithPreLodge] =
-      ProcedureTypePage
-        .filterMandatoryDependent(_ == ProcedureType.Normal) {
-          PreLodgeDeclarationPage.filterMandatoryDependent(_ == true) {
-            AddAgreedLocationOfGoodsPage.filterOptionalDependent(_ == true) {
-              AgreedLocationOfGoodsPage.reader
-            }
-          }
+      AddAgreedLocationOfGoodsPage
+        .filterOptionalDependent(identity) {
+          AgreedLocationOfGoodsPage.reader
         }
         .map(GoodSummaryNormalDetailsWithPreLodge.apply)
   }
@@ -92,20 +84,23 @@ object GoodsSummary {
   object GoodSummarySimplifiedDetails {
 
     implicit val goodSummarySimplifiedDetailsReader: UserAnswersReader[GoodSummarySimplifiedDetails] =
-      ProcedureTypePage.filterMandatoryDependent(_ == ProcedureType.Simplified) {
-        (
-          AuthorisedLocationCodePage.reader,
-          ControlResultDateLimitPage.reader
-        ).tupled.map((GoodSummarySimplifiedDetails.apply _).tupled)
-      }
+      (
+        AuthorisedLocationCodePage.reader,
+        ControlResultDateLimitPage.reader
+      ).tupled.map((GoodSummarySimplifiedDetails.apply _).tupled)
   }
 
   object GoodSummaryDetails {
 
     implicit val goodSummaryDetailsReader: UserAnswersReader[GoodSummaryDetails] =
-      UserAnswersReader[GoodSummaryNormalDetailsWithPreLodge].widen[GoodSummaryDetails] orElse
-        UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge].widen[GoodSummaryDetails] orElse
-        UserAnswersReader[GoodSummarySimplifiedDetails].widen[GoodSummaryDetails]
+      ProcedureTypePage.reader.flatMap {
+        case Normal =>
+          PreLodgeDeclarationPage.reader.flatMap {
+            case true  => UserAnswersReader[GoodSummaryNormalDetailsWithPreLodge].widen[GoodSummaryDetails]
+            case false => UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge].widen[GoodSummaryDetails]
+          }
+        case Simplified => UserAnswersReader[GoodSummarySimplifiedDetails].widen[GoodSummaryDetails]
+      }
   }
 
 }
