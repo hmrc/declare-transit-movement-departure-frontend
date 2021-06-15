@@ -60,7 +60,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
   lazy val officeOfDepartureRoute: String = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
 
   override def beforeEach = {
-    reset(mockFrontendAppConfig)
+    reset(mockFrontendAppConfig, mockRefDataConnector)
     super.beforeEach
   }
 
@@ -102,7 +102,8 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
         "lrn"            -> lrn,
         "customsOffices" -> expectedCustomsOfficeJson
       )
-
+      verify(mockRefDataConnector, times(0)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
       templateCaptor.getValue mustEqual "officeOfDeparture.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
@@ -138,12 +139,13 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
         "lrn"            -> lrn,
         "customsOffices" -> expectedCustomsOfficeJson
       )
-
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
       templateCaptor.getValue mustEqual "officeOfDeparture.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly on a GET when the question has previously been answered when  NI journey is disabled" in {
       val userAnswers = emptyUserAnswers
         .set(OfficeOfDeparturePage, customsOffice1)
         .success
@@ -152,6 +154,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockFrontendAppConfig.isNIJourneyEnabled).thenReturn(false)
 
       val request        = FakeRequest(GET, officeOfDepartureRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -177,15 +180,18 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
         "mode"           -> NormalMode,
         "customsOffices" -> expectedCustomsOfficeJson
       )
-
+      verify(mockRefDataConnector, times(0)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
       templateCaptor.getValue mustEqual "officeOfDeparture.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must redirect to the next page when valid data is submitted when NI Journey" in {
       dataRetrievalWithData(emptyUserAnswers)
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())).thenReturn(Future.successful(xiCustomsOffices))
+      when(mockFrontendAppConfig.isNIJourneyEnabled).thenReturn(true)
 
       val request =
         FakeRequest(POST, officeOfDepartureRoute)
@@ -194,15 +200,36 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       val result: Future[Result] = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
 
       redirectLocation(result).value mustEqual onwardRoute.url
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must redirect to the next page when valid data is submitted when not an NI Journey" in {
+      dataRetrievalWithData(emptyUserAnswers)
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockFrontendAppConfig.isNIJourneyEnabled).thenReturn(false)
+
+      val request =
+        FakeRequest(POST, officeOfDepartureRoute)
+          .withFormUrlEncodedBody(("value", "id"))
+
+      val result: Future[Result] = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+      verify(mockRefDataConnector, times(0)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
+      redirectLocation(result).value mustEqual onwardRoute.url
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted when it is an NI journey" in {
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockFrontendAppConfig.isNIJourneyEnabled).thenReturn(true)
 
       val request        = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = gbForm.bind(Map("value" -> ""))
@@ -212,7 +239,37 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       val result = route(app, request).value
 
       status(result) mustEqual BAD_REQUEST
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
+      val expectedJson = Json.obj(
+        "form" -> boundForm,
+        "lrn"  -> lrn,
+        "mode" -> NormalMode
+      )
+
+      templateCaptor.getValue mustEqual "officeOfDeparture.njk"
+      jsonCaptor.getValue must containJson(expectedJson)
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted when it is not an NI journey" in {
+      dataRetrievalWithData(emptyUserAnswers)
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockFrontendAppConfig.isNIJourneyEnabled).thenReturn(false)
+
+      val request        = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm      = gbForm.bind(Map("value" -> ""))
+      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual BAD_REQUEST
+      verify(mockRefDataConnector, times(0)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
