@@ -16,12 +16,11 @@
 
 package models.journeyDomain.traderDetails
 
-import cats.data.ReaderT
 import cats.implicits._
+import models.EoriNumber
 import models.ProcedureType.{Normal, Simplified}
 import models.domain.Address
 import models.journeyDomain.{UserAnswersReader, _}
-import models.{EoriNumber, UserAnswers}
 import pages._
 
 sealed trait PrincipalTraderDetails
@@ -41,56 +40,39 @@ object PrincipalTraderDetails {
 
   implicit val principalTraderDetails: UserAnswersReader[PrincipalTraderDetails] = {
 
-    val simplified: UserAnswersReader[PrincipalTraderDetails] =
-      ProcedureTypePage.filterMandatoryDependent(_ == Simplified) {
-        WhatIsPrincipalEoriPage.reader
-          .map(EoriNumber(_))
-          .map(PrincipalTraderDetails(_))
+    val readEori = WhatIsPrincipalEoriPage.reader
+      .map(EoriNumber(_))
+      .map(PrincipalTraderDetails(_))
+
+    val readNameAndAddress =
+      (
+        PrincipalNamePage.reader,
+        PrincipalAddressPage.reader
+      ).tupled.map {
+        case (name, principalAddress) =>
+          val address = Address.prismAddressToCommonAddress(principalAddress)
+          PrincipalTraderDetails(name, address)
       }
 
-    val normalEori: ReaderT[EitherType, UserAnswers, PrincipalTraderDetails] =
-      ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
-        IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
-          WhatIsPrincipalEoriPage.filterMandatoryDependent(_.startsWith("GB")) {
-            WhatIsPrincipalEoriPage.reader
-              .map(EoriNumber(_))
-              .map(PrincipalTraderDetails(_))
-          }
+    val readAllDetails: UserAnswersReader[PrincipalTraderDetails] =
+      (
+        WhatIsPrincipalEoriPage.reader,
+        PrincipalNamePage.reader,
+        PrincipalAddressPage.reader
+      ).tupled.map {
+        case (eori, name, principalAddress) =>
+          val address = Address.prismAddressToCommonAddress(principalAddress)
+          PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address)
+      }
+
+    ProcedureTypePage.reader.flatMap {
+      case Normal =>
+        (IsPrincipalEoriKnownPage.reader, WhatIsPrincipalEoriPage.optionalReader).tupled.flatMap {
+          case (true, Some(principleEori)) if principleEori.startsWith("GB") => readEori
+          case (true, _)                                                     => readAllDetails
+          case (false, _)                                                    => readNameAndAddress
         }
-      }
-
-    val normalEoriNameAndAddress: UserAnswersReader[PrincipalTraderDetails] =
-      ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
-        IsPrincipalEoriKnownPage.filterMandatoryDependent(identity) {
-          WhatIsPrincipalEoriPage.filterMandatoryDependent(!_.startsWith("GB")) {
-            (
-              WhatIsPrincipalEoriPage.reader,
-              PrincipalNamePage.reader,
-              PrincipalAddressPage.reader
-            ).tupled.map {
-              case (eori, name, principalAddress) =>
-                val address = Address.prismAddressToCommonAddress(principalAddress)
-                PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address)
-            }
-          }
-        }
-      }
-
-    val normalNameAddress: UserAnswersReader[PrincipalTraderDetails] =
-      ProcedureTypePage.filterMandatoryDependent(_ == Normal) {
-        IsPrincipalEoriKnownPage.filterMandatoryDependent(_ == false) {
-          (
-            PrincipalNamePage.reader,
-            PrincipalAddressPage.reader
-          ).tupled.map {
-            case (name, principalAddress) =>
-              val address = Address.prismAddressToCommonAddress(principalAddress)
-              PrincipalTraderDetails(name, address)
-          }
-        }
-      }
-
-    // TODO need to investigate the error handling here as it will only retrieve the last left (due to orElse)
-    normalEori orElse normalNameAddress orElse simplified orElse normalEoriNameAndAddress
+      case Simplified => readEori
+    }
   }
 }
