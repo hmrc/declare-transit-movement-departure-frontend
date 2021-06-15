@@ -25,10 +25,10 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CustomsOfficesService @Inject() (
-  frontendAppConfig: FrontendAppConfig,
-  referenceDataConnector: ReferenceDataConnector
-)(implicit ec: ExecutionContext) {
+class CustomsOfficesService @Inject()(
+                                       frontendAppConfig: FrontendAppConfig,
+                                       referenceDataConnector: ReferenceDataConnector
+                                     )(implicit ec: ExecutionContext) {
 
   private def getNICustomsOffices(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = if (frontendAppConfig.isNIJourneyEnabled) {
     referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("XI"))

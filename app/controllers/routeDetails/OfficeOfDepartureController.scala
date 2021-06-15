@@ -40,19 +40,19 @@ import services.CustomsOfficesService
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OfficeOfDepartureController @Inject() (
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  @RouteDetails navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalActionProvider,
-  requireData: DataRequiredAction,
-  formProvider: OfficeOfDepartureFormProvider,
-  customsOfficesService: CustomsOfficesService,
-  val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+class OfficeOfDepartureController @Inject()(
+                                             override val messagesApi: MessagesApi,
+                                             sessionRepository: SessionRepository,
+                                             @RouteDetails navigator: Navigator,
+                                             identify: IdentifierAction,
+                                             getData: DataRetrievalActionProvider,
+                                             requireData: DataRequiredAction,
+                                             formProvider: OfficeOfDepartureFormProvider,
+                                             customsOfficesService: CustomsOfficesService,
+                                             val controllerComponents: MessagesControllerComponents,
+                                             renderer: Renderer
+                                           )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
@@ -70,10 +70,10 @@ class OfficeOfDepartureController @Inject() (
             .getOrElse(form)
 
           val json = Json.obj(
-            "form"           -> preparedForm,
-            "lrn"            -> lrn,
+            "form" -> preparedForm,
+            "lrn" -> lrn,
             "customsOffices" -> getCustomsOfficesAsJson(preparedForm.value, customsOffices.getAll),
-            "mode"           -> mode
+            "mode" -> mode
           )
 
           renderer.render("officeOfDeparture.njk", json).map(Ok(_))
@@ -90,10 +90,10 @@ class OfficeOfDepartureController @Inject() (
             .fold(
               formWithErrors => {
                 val json = Json.obj(
-                  "form"           -> formWithErrors,
-                  "lrn"            -> lrn,
+                  "form" -> formWithErrors,
+                  "lrn" -> lrn,
                   "customsOffices" -> getCustomsOfficesAsJson(form.value, customsOffices.getAll),
-                  "mode"           -> mode
+                  "mode" -> mode
                 )
 
                 renderer.render("officeOfDeparture.njk", json).map(BadRequest(_))
@@ -101,7 +101,7 @@ class OfficeOfDepartureController @Inject() (
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
-                  _              <- sessionRepository.set(updatedAnswers)
+                  _ <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, updatedAnswers))
             )
       }

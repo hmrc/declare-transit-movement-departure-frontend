@@ -30,14 +30,14 @@ import scala.concurrent.Future
 
 class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
-  val mockRefDataConnector                = mock[ReferenceDataConnector]
-  val mockFrontendAppConfig               = mock[FrontendAppConfig]
-  val gbCustomsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  val gbCustomsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
-  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("xi", "ni", CountryCode("XI"), Seq.empty, None)
+  val mockRefDataConnector = mock[ReferenceDataConnector]
+  val mockFrontendAppConfig = mock[FrontendAppConfig]
+  val gbCustomsOffice1: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
+  val gbCustomsOffice2: CustomsOffice = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+  val xiCustomsOffice1: CustomsOffice = CustomsOffice("xi", "ni", CountryCode("XI"), Seq.empty, None)
   val gbCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(gbCustomsOffice1, gbCustomsOffice2))
   val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
-  val customsOffices: CustomsOfficeList   = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)
+  val customsOffices: CustomsOfficeList = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)
 
   val service = new CustomsOfficesService(mockFrontendAppConfig, mockRefDataConnector)
 
@@ -45,6 +45,7 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
     reset(mockFrontendAppConfig, mockRefDataConnector)
     super.beforeEach
   }
+
   "CustomsOfficesService" - {
 
     "must return a list of GB and NI customs offices" in {
@@ -59,8 +60,8 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
       verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
 
     }
-    
-    "must return a list of GB  customs offices" in {
+
+    "must return a list of GB customs offices" in {
 
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())).thenReturn(Future.successful(xiCustomsOffices))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())).thenReturn(Future.successful(gbCustomsOffices))
