@@ -35,7 +35,8 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with JourneyModel
       "when all details for section have been answered" in {
         forAll(nonEmptyListOf[GuaranteeDetails](1), arbitrary[UserAnswers]) {
           case (guarantees, userAnswers) =>
-            val updatedUserAnswer                    = GuaranteeDetailsSpec.setGuaranteeDetails(guarantees)(userAnswers)
+            val updatedUserAnswer = GuaranteeDetailsSpec.setGuaranteeDetails(guarantees)(userAnswers)
+
             val result: EitherType[GuaranteeDetails] = UserAnswersReader[GuaranteeDetails](GuaranteeDetails.parseGuaranteeDetails(index)).run(updatedUserAnswer)
 
             result.right.value mustEqual guarantees.head
