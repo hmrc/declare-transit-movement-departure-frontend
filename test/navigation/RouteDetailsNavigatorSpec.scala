@@ -35,22 +35,12 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
     "in Normal mode" - {
 
       "Route Details section" - {
-        "must go from Country of dispatch page to Office of departure page" in {
+        "must go from Country of dispatch page to Destination Country page" in {
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
               navigator
                 .nextPage(CountryOfDispatchPage, NormalMode, answers)
-                .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.id, NormalMode))
-          }
-        }
-
-        "must go from Office of departure page to destination country page" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              navigator
-                .nextPage(OfficeOfDeparturePage, NormalMode, answers)
                 .mustBe(routes.DestinationCountryController.onPageLoad(answers.id, NormalMode))
           }
         }
@@ -248,28 +238,14 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "Must go from Country of dispatch to Office of Departure" in {
+      "Must go from Country of dispatch to Route Details Check Your Answers" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
               .nextPage(CountryOfDispatchPage, CheckMode, answers)
-              .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.id, CheckMode))
-
-        }
-
-      }
-
-      "Must go from Office Of Departure to Router Details Check Your Answers" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(OfficeOfDeparturePage, CheckMode, answers)
               .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
-
         }
-
       }
 
       "Must go from Destination Country to Router Details Check Your Answers" in {
@@ -279,9 +255,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(DestinationCountryPage, CheckMode, answers)
               .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
-
         }
-
       }
 
       "Must go from Movement Destination Country to Destination Office" in {
