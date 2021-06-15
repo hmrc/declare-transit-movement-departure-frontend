@@ -19,8 +19,9 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import handlers.ErrorHandler
-import models.{LocalReferenceNumber, ValidateTaskListViewLogger}
-import pages.TechnicalDifficultiesPage
+import models.reference.CustomsOffice
+import models.{LocalReferenceNumber, NormalMode, ValidateTaskListViewLogger}
+import pages.{OfficeOfDeparturePage, TechnicalDifficultiesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
@@ -28,8 +29,8 @@ import services.DeclarationSubmissionService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.DeclarationSummaryViewModel
-import javax.inject.Inject
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationSummaryController @Inject() (
@@ -50,13 +51,20 @@ class DeclarationSummaryController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
+      val officeOfDepartureAnswer: Option[CustomsOffice] = request.userAnswers.get(OfficeOfDeparturePage)
+
       val declarationSummaryViewModel = DeclarationSummaryViewModel(appConfig.manageTransitMovementsViewDeparturesUrl, request.userAnswers)
 
       ValidateTaskListViewLogger(declarationSummaryViewModel.sectionErrors)
 
-      renderer
-        .render("declarationSummary.njk", declarationSummaryViewModel)
-        .map(Ok(_))
+      //TODO To be removed when confident all users have completed their journey following 2309 deployment
+      if (officeOfDepartureAnswer.isDefined) {
+        renderer
+          .render("declarationSummary.njk", declarationSummaryViewModel)
+          .map(Ok(_))
+      } else {
+        Future.successful(Redirect(routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode)))
+      }
   }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] =
