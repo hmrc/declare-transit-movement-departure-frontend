@@ -262,7 +262,7 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryRail: Arbitrary[Rail] =
     Arbitrary {
       for {
-        code        <- Gen.oneOf(Rail.Constants.codes).map(_.toInt)
+        code        <- Gen.oneOf(Rail.Constants.codes)
         departureId <- Gen.some(stringsWithMaxLength(stringMaxLength))
       } yield Rail(code, departureId)
     }
@@ -270,7 +270,7 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryMode5or7: Arbitrary[Mode5or7] =
     Arbitrary {
       for {
-        code <- Gen.oneOf(Mode5or7.Constants.codes).map(_.toInt)
+        code <- Gen.oneOf(Mode5or7.Constants.codes)
       } yield Mode5or7(code)
     }
 
