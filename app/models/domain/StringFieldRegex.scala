@@ -22,7 +22,7 @@ object StringFieldRegex {
   val alphaNumericRegex                    = "^[a-zA-Z0-9]*$".r
   val alphaNumericWithSpaceRegex           = "^[a-zA-Z0-9 ]*$".r
   val commodityCodeCharactersRegex         = "^[0-9]*$"
-  val commodityCodeFormatRegex             = "^([0-9]{6}|[0-9]{8}|[0-9]{10})$"
+  val commodityCodeFormatRegex             = "^([0-9]{6}|[0-9]{8})$"
   val liabilityAmountCharactersRegex       = "^$|^[0-9.]*$"
   val liabilityAmountFormatRegex           = "^$|([0-9]*(?:\\.[0-9]{1,2})?)$"
   val greaterThanZeroRegex                 = "^$|([1-9]{1}[0-9.]*)$"
