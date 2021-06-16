@@ -741,9 +741,9 @@ commodityCode.heading = What is the commodity code for item {0}?
 commodityCode.checkYourAnswersLabel = Commodity code for item {0}
 commodityCode.error.required = Enter the commodity code for item {0}
 commodityCode.error.length = Commodity Code must be 10 characters or less
-commodityCode.hintText = Commodity codes are 6, 8 or 10 numbers.
+commodityCode.hintText = Only enter the first 6 or 8 numbers.
 commodityCode.errors.invalidCharacters = The commodity code for item {0} must only include numbers 0 to 9
-commodityCode.errors.invalidFormat =  Enter the commodity code for item {0} in the right format, like 123456, 12345678 or 1234567890
+commodityCode.errors.invalidFormat =  Enter the commodity code for item {0} in the right format, like 000000 or 00000000
 
 isCommodityCodeKnown.title = Do you know the commodity code for item {0}?
 isCommodityCodeKnown.heading = Do you know the commodity code for item {0}?
