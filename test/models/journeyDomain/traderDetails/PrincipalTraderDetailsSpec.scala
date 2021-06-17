@@ -26,7 +26,7 @@ import models.{CommonAddress, EoriNumber, PrincipalAddress, ProcedureType, UserA
 import org.scalatest.TryValues
 import pages._
 
-class PrincipalTraderSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
+class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
   private val country = Country(CountryCode("GB"), "United Kingdom")
 
   val principalsAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)

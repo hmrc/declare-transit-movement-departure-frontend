@@ -21,6 +21,7 @@ import cats.implicits._
 import derivable.DeriveNumberOfGuarantees
 import models.{GuaranteeType, Index}
 import DefaultLiabilityAmount._
+import models.GuaranteeType.guaranteeReferenceRoute
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
 
@@ -37,9 +38,14 @@ object GuaranteeDetails {
     }
 
   def parseGuaranteeDetails(index: Index): UserAnswersReader[GuaranteeDetails] =
-    UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index))
-      .widen[GuaranteeDetails]
-      .orElse(UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).widen[GuaranteeDetails])
+    GuaranteeTypePage(index).reader.flatMap {
+      guaranteeType =>
+        if (guaranteeReferenceRoute.contains(guaranteeType)) {
+          UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).widen[GuaranteeDetails]
+        } else {
+          UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).widen[GuaranteeDetails]
+        }
+    }
 
   final case class GuaranteeReference(
     guaranteeType: GuaranteeType,

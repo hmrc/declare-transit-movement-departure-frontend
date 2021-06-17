@@ -68,9 +68,8 @@ trait JourneyModelGenerators {
       traderDetails     <- genTraderDetailsSimplified
       safetyAndSecurity <- arbitrary[SafetyAndSecurity]
       itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, movementDetails, routeDetails)
-      goodsummarydetailsType = arbitrary[GoodSummarySimplifiedDetails]
-      goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired, ProcedureType.Simplified).arbitrary
-      guarantees   <- nonEmptyListOf[GuaranteeDetails](3)
+      goodsSummary      <- arbitraryGoodsSummary(isSecurityDetailsRequired, ProcedureType.Simplified).arbitrary
+      guarantees        <- nonEmptyListOf[GuaranteeDetails](3)
     } yield JourneyDomain(
       simplifiedTaskList,
       movementDetails,
@@ -94,14 +93,8 @@ trait JourneyModelGenerators {
       traderDetails     <- genTraderDetailsNormal
       safetyAndSecurity <- arbitrary[SafetyAndSecurity]
       itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, movementDetails, routeDetails)
-      goodsummarydetailsType =
-        if (movementDetails.prelodge) {
-          arbitrary[GoodSummaryNormalDetailsWithPreLodge]
-        } else {
-          arbitrary[GoodSummaryNormalDetailsWithPreLodge]
-        }
-      goodsSummary <- arbitraryGoodsSummary(isSecurityDetailsRequired, ProcedureType.Normal).arbitrary
-      guarantees   <- nonEmptyListOf[GuaranteeDetails](3)
+      goodsSummary      <- arbitraryGoodsSummary(isSecurityDetailsRequired, ProcedureType.Normal).arbitrary
+      guarantees        <- nonEmptyListOf[GuaranteeDetails](3)
     } yield JourneyDomain(
       simplifiedTaskList,
       movementDetails,
@@ -269,7 +262,7 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryRail: Arbitrary[Rail] =
     Arbitrary {
       for {
-        code        <- Gen.oneOf(Rail.Constants.codes).map(_.toInt)
+        code        <- Gen.oneOf(Rail.Constants.codes)
         departureId <- Gen.some(stringsWithMaxLength(stringMaxLength))
       } yield Rail(code, departureId)
     }
@@ -277,7 +270,7 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryMode5or7: Arbitrary[Mode5or7] =
     Arbitrary {
       for {
-        code <- Gen.oneOf(Mode5or7.Constants.codes).map(_.toInt)
+        code <- Gen.oneOf(Mode5or7.Constants.codes)
       } yield Mode5or7(code)
     }
 
@@ -559,7 +552,7 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryGuaranteeOther: Arbitrary[GuaranteeOther] =
     Arbitrary {
       for {
-        guaranteeType  <- Arbitrary.arbitrary[GuaranteeType]
+        guaranteeType  <- Gen.oneOf(GuaranteeType.nonGuaranteeReferenceRoute)
         otherReference <- nonEmptyString
       } yield GuaranteeOther(guaranteeType, otherReference)
     }
@@ -575,7 +568,7 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryGuaranteeReference: Arbitrary[GuaranteeReference] =
     Arbitrary {
       for {
-        guaranteeType            <- Arbitrary.arbitrary[GuaranteeType]
+        guaranteeType            <- Gen.oneOf(GuaranteeType.guaranteeReferenceRoute)
         guaranteeReferenceNumber <- nonEmptyString
         liabilityAmount          <- Arbitrary.arbitrary[LiabilityAmount]
         accessCode               <- nonEmptyString

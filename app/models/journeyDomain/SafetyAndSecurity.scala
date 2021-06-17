@@ -101,12 +101,12 @@ object SafetyAndSecurity {
 
   private def consignorDetails: UserAnswersReader[Option[SecurityTraderDetails]] = {
 
-    val useEori: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
-      SafetyAndSecurityConsignorEoriPage.reader.map(
-        eori => SecurityTraderDetails(EoriNumber(eori))
-      )
+    val readEori: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
+      SafetyAndSecurityConsignorEoriPage.reader
+        .map(EoriNumber(_))
+        .map(SecurityTraderDetails(_))
 
-    val useAddress =
+    val readAddress: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
       (
         SafetyAndSecurityConsignorNamePage.reader,
         SafetyAndSecurityConsignorAddressPage.reader
@@ -114,40 +114,25 @@ object SafetyAndSecurity {
         .map {
           case (name, consignorAddress) =>
             val address = Address.prismAddressToCommonAddress(consignorAddress)
-
             SecurityTraderDetails(name, address)
         }
 
-    val isEoriKnown: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
-      AddSafetyAndSecurityConsignorEoriPage.reader.flatMap(
-        isEoriKnown => if (isEoriKnown) useEori else useAddress
-      )
-
     AddSafetyAndSecurityConsignorPage.filterOptionalDependent(identity) {
-      isEoriKnown
+      AddSafetyAndSecurityConsignorEoriPage.reader.flatMap {
+        case true  => readEori
+        case false => readAddress
+      }
     }
   }
 
   private def consigneeDetails: UserAnswersReader[Option[SecurityTraderDetails]] = {
 
-    val useEori: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] = {
-      AddCircumstanceIndicatorPage.reader flatMap {
-        case true =>
-          CircumstanceIndicatorPage.reader flatMap {
-            case "E" => readConsigneeEori
-            case _ =>
-              AddSafetyAndSecurityConsigneeEoriPage.filterMandatoryDependent(identity) {
-                readConsigneeEori
-              }
-          }
-        case false =>
-          AddSafetyAndSecurityConsigneeEoriPage.filterMandatoryDependent(identity) {
-            readConsigneeEori
-          }
-      }
-    }
+    val readEori: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
+      SafetyAndSecurityConsigneeEoriPage.reader
+        .map(EoriNumber(_))
+        .map(SecurityTraderDetails(_))
 
-    val useAddress: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
+    val readAddress: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
       (
         SafetyAndSecurityConsigneeNamePage.reader,
         SafetyAndSecurityConsigneeAddressPage.reader
@@ -160,18 +145,25 @@ object SafetyAndSecurity {
         }
 
     AddSafetyAndSecurityConsigneePage.filterOptionalDependent(identity) {
-      useEori orElse useAddress
+      (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader).tupled.flatMap {
+        case (true, Some("E")) => readEori
+        case _ =>
+          AddSafetyAndSecurityConsigneeEoriPage.reader.flatMap {
+            case true  => readEori
+            case false => readAddress
+          }
+      }
     }
   }
 
   private def carrierDetails: UserAnswersReader[Option[SecurityTraderDetails]] = {
 
-    val useEori: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
-      CarrierEoriPage.reader.map(
-        eori => SecurityTraderDetails(EoriNumber(eori))
-      )
+    val readEori: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
+      CarrierEoriPage.reader
+        .map(EoriNumber(_))
+        .map(SecurityTraderDetails(_))
 
-    val useAddress =
+    val readAddress =
       (
         CarrierNamePage.reader,
         CarrierAddressPage.reader
@@ -183,18 +175,11 @@ object SafetyAndSecurity {
             SecurityTraderDetails(name, address)
         }
 
-    val isEoriKnown: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
-      AddCarrierEoriPage.reader.flatMap(
-        isEoriKnown => if (isEoriKnown) useEori else useAddress
-      )
-
     AddCarrierPage.filterOptionalDependent(identity) {
-      isEoriKnown
+      AddCarrierEoriPage.reader.flatMap {
+        case true  => readEori
+        case false => readAddress
+      }
     }
   }
-
-  private def readConsigneeEori: ReaderT[EitherType, UserAnswers, SecurityTraderDetails] =
-    SafetyAndSecurityConsigneeEoriPage.reader
-      .map(EoriNumber(_))
-      .map(SecurityTraderDetails(_))
 }

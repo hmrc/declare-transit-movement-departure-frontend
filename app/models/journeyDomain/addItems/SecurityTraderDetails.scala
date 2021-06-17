@@ -16,11 +16,10 @@
 
 package models.journeyDomain.addItems
 
-import cats.data.Kleisli
 import cats.implicits._
 import models.domain.Address
 import models.journeyDomain._
-import models.{EoriNumber, Index, UserAnswers}
+import models.{EoriNumber, Index}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
@@ -38,77 +37,65 @@ object SecurityTraderDetails {
 
   def consignorDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
 
-    val useEori =
-      AddSecurityConsignorsEoriPage(index).filterMandatoryDependent(identity) {
-        SecurityConsignorEoriPage(index).reader.map(
-          eori => SecurityTraderDetails(EoriNumber(eori))
-        )
-      }
-    val useNameAndAddress =
-      AddSecurityConsignorsEoriPage(index).filterMandatoryDependent(_ == false) {
+    val readEori = SecurityConsignorEoriPage(index).reader.map(
+      eori => SecurityTraderDetails(EoriNumber(eori))
+    )
 
-        (
-          SecurityConsignorNamePage(index).reader,
-          SecurityConsignorAddressPage(index).reader
-        ).tupled
-          .map {
-            case (name, consignorAddress) =>
-              val address = Address.prismAddressToCommonAddress(consignorAddress)
-              SecurityTraderDetails(name, address)
-          }
-      }
+    val readNameAndAddress =
+      (
+        SecurityConsignorNamePage(index).reader,
+        SecurityConsignorAddressPage(index).reader
+      ).tupled
+        .map {
+          case (name, consignorAddress) =>
+            val address = Address.prismAddressToCommonAddress(consignorAddress)
+            SecurityTraderDetails(name, address)
+        }
 
     AddSecurityDetailsPage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
-        AddSafetyAndSecurityConsignorPage
-          .filterOptionalDependent(_ == false)(useEori orElse useNameAndAddress)
+        AddSafetyAndSecurityConsignorPage.filterOptionalDependent(_ == false) {
+          AddSecurityConsignorsEoriPage(index).reader.flatMap {
+            case true  => readEori
+            case false => readNameAndAddress
+          }
+        }
       }
       .map(_.flatten)
   }
 
   def consigneeDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
-    val useEori: UserAnswersReader[SecurityTraderDetails] = {
-      val circumstanceIndicator: UserAnswersReader[SecurityTraderDetails] = AddCircumstanceIndicatorPage.filterMandatoryDependent(identity) {
-        CircumstanceIndicatorPage.reader flatMap {
-          case "E" =>
-            readConsigneeEori(index)
 
-          case _ =>
-            AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(identity) {
-              readConsigneeEori(index)
-            }
+    val readEori: UserAnswersReader[SecurityTraderDetails] =
+      SecurityConsigneeEoriPage(index).reader
+        .map(EoriNumber(_))
+        .map(SecurityTraderDetails(_))
+
+    val readNameAndAddress: UserAnswersReader[SecurityTraderDetails] =
+      (
+        SecurityConsigneeNamePage(index).reader,
+        SecurityConsigneeAddressPage(index).reader
+      ).tupled
+        .map {
+          case (name, consigneeAddress) =>
+            val address = Address.prismAddressToCommonAddress(consigneeAddress)
+            SecurityTraderDetails(name, address)
         }
-      }
-
-      val emptyCircumstanceIndicator: UserAnswersReader[SecurityTraderDetails] = AddCircumstanceIndicatorPage.filterMandatoryDependent(_ == false) {
-        readConsigneeEori(index)
-      }
-      circumstanceIndicator orElse emptyCircumstanceIndicator
-    }
-
-    val useNameAndAddress: UserAnswersReader[SecurityTraderDetails] =
-      AddSecurityConsigneesEoriPage(index).filterMandatoryDependent(_ == false) {
-        (
-          SecurityConsigneeNamePage(index).reader,
-          SecurityConsigneeAddressPage(index).reader
-        ).tupled
-          .map {
-            case (name, consigneeAddress) =>
-              val address = Address.prismAddressToCommonAddress(consigneeAddress)
-              SecurityTraderDetails(name, address)
-          }
-      }
 
     AddSecurityDetailsPage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
         AddSafetyAndSecurityConsigneePage
-          .filterOptionalDependent(_ == false)(useEori orElse useNameAndAddress)
+          .filterOptionalDependent(_ == false) {
+            (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader).tupled.flatMap {
+              case (true, Some("E")) => readEori
+              case _ =>
+                AddSecurityConsigneesEoriPage(index).reader.flatMap {
+                  case true  => readEori
+                  case false => readNameAndAddress
+                }
+            }
+          }
       }
       .map(_.flatten)
   }
-
-  private def readConsigneeEori(index: Index) =
-    SecurityConsigneeEoriPage(index).reader
-      .map(EoriNumber(_))
-      .map(SecurityTraderDetails(_))
 }

@@ -34,8 +34,10 @@ sealed trait MovementDetails {
 object MovementDetails {
 
   implicit val parserMovementDetails: UserAnswersReader[MovementDetails] =
-    UserAnswersReader[NormalMovementDetails].widen[MovementDetails] orElse
-      UserAnswersReader[SimplifiedMovementDetails].widen[MovementDetails]
+    ProcedureTypePage.reader.flatMap {
+      case Normal     => UserAnswersReader[NormalMovementDetails].widen[MovementDetails]
+      case Simplified => UserAnswersReader[SimplifiedMovementDetails].widen[MovementDetails]
+    }
 
   private val declarationForSomeoneElseAnswer: UserAnswersReader[DeclarationForSomeoneElseAnswer] =
     DeclarationForSomeoneElsePage.reader.flatMap(

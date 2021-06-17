@@ -27,9 +27,14 @@ sealed trait Packages
 object Packages {
 
   def packagesReader(itemIndex: Index, referenceIndex: Index): UserAnswersReader[Packages] =
-    UnpackedPackages.unpackedPackagesReader(itemIndex, referenceIndex).widen[Packages] orElse
-      BulkPackages.bulkPackageReader(itemIndex, referenceIndex).widen[Packages] orElse
-      OtherPackages.otherPackageReader(itemIndex, referenceIndex).widen[Packages]
+    PackageTypePage(itemIndex, referenceIndex).reader.flatMap {
+      case packageType if PackageType.unpackedCodes.contains(packageType.code) =>
+        UnpackedPackages.unpackedPackagesReader(itemIndex, referenceIndex).widen[Packages]
+      case packageType if PackageType.bulkCodes.contains(packageType.code) =>
+        BulkPackages.bulkPackageReader(itemIndex, referenceIndex).widen[Packages]
+      case _ =>
+        OtherPackages.otherPackageReader(itemIndex, referenceIndex).widen[Packages]
+    }
 
   final case class UnpackedPackages(
     packageType: PackageType,
@@ -40,15 +45,13 @@ object Packages {
   object UnpackedPackages {
 
     def unpackedPackagesReader(itemIndex: Index, referenceIndex: Index): UserAnswersReader[UnpackedPackages] =
-      PackageTypePage(itemIndex, referenceIndex).filterMandatoryDependent(
-        packageType => PackageType.unpackedCodes.contains(packageType.code)
-      ) {
-        (
-          PackageTypePage(itemIndex, referenceIndex).reader,
-          TotalPiecesPage(itemIndex, referenceIndex).reader,
-          readMarkOrNumber(itemIndex, referenceIndex)
-        ).tupled.map((UnpackedPackages.apply _).tupled)
-      }
+      (
+        PackageTypePage(itemIndex, referenceIndex).reader,
+        TotalPiecesPage(itemIndex, referenceIndex).reader,
+        AddMarkPage(itemIndex, referenceIndex).filterOptionalDependent(identity) {
+          DeclareMarkPage(itemIndex, referenceIndex).reader
+        }
+      ).tupled.map((UnpackedPackages.apply _).tupled)
   }
 
   final case class BulkPackages(
@@ -59,14 +62,12 @@ object Packages {
   object BulkPackages {
 
     def bulkPackageReader(itemIndex: Index, referenceIndex: Index): UserAnswersReader[BulkPackages] =
-      PackageTypePage(itemIndex, referenceIndex).filterMandatoryDependent(
-        packageType => PackageType.bulkCodes.contains(packageType.code)
-      ) {
-        (
-          PackageTypePage(itemIndex, referenceIndex).reader,
-          readMarkOrNumber(itemIndex, referenceIndex)
-        ).tupled.map((BulkPackages.apply _).tupled)
-      }
+      (
+        PackageTypePage(itemIndex, referenceIndex).reader,
+        AddMarkPage(itemIndex, referenceIndex).filterOptionalDependent(identity) {
+          DeclareMarkPage(itemIndex, referenceIndex).reader
+        }
+      ).tupled.map((BulkPackages.apply _).tupled)
   }
 
   final case class OtherPackages(packageType: PackageType, howManyPackagesPage: Int, markOrNumber: String) extends Packages
@@ -74,24 +75,10 @@ object Packages {
   object OtherPackages {
 
     def otherPackageReader(itemIndex: Index, referenceIndex: Index): UserAnswersReader[OtherPackages] =
-      PackageTypePage(itemIndex, referenceIndex).filterMandatoryDependent(
-        packageType => !PackageType.bulkAndUnpackedCodes.contains(packageType.code)
-      ) {
-        (
-          PackageTypePage(itemIndex, referenceIndex).reader,
-          HowManyPackagesPage(itemIndex, referenceIndex).reader,
-          DeclareMarkPage(itemIndex, referenceIndex).reader
-        ).tupled.map((OtherPackages.apply _).tupled)
-      }
+      (
+        PackageTypePage(itemIndex, referenceIndex).reader,
+        HowManyPackagesPage(itemIndex, referenceIndex).reader,
+        DeclareMarkPage(itemIndex, referenceIndex).reader
+      ).tupled.map((OtherPackages.apply _).tupled)
   }
-
-  private def readHowManyPackages(itemIndex: Index, referenceIndex: Index): UserAnswersReader[Option[Int]] =
-    DeclareNumberOfPackagesPage(itemIndex, referenceIndex).filterOptionalDependent(identity) {
-      HowManyPackagesPage(itemIndex, referenceIndex).reader
-    }
-
-  private def readMarkOrNumber(itemIndex: Index, referenceIndex: Index): UserAnswersReader[Option[String]] =
-    AddMarkPage(itemIndex, referenceIndex).filterOptionalDependent(identity) {
-      DeclareMarkPage(itemIndex, referenceIndex).reader
-    }
 }
