@@ -34,6 +34,78 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
   "TransportDetails" - {
 
+    "can be parsed for UserAnswers" - {
+
+      "when InlandModePage is a Rail code" in {
+
+        val railInlandModeCode = Gen.oneOf(Rail.Constants.codes)
+
+        forAll(railInlandModeCode) {
+          code =>
+            val expectedResult = TransportDetails(Rail(code, None), SameDetailsAtBorder)
+
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(InlandModePage)(code.toString)
+              .unsafeSetVal(AddIdAtDeparturePage)(false)
+              .unsafeSetVal(ChangeAtBorderPage)(false)
+
+            val result = UserAnswersReader[TransportDetails].run(userAnswers).right.value
+
+            result mustBe expectedResult
+        }
+      }
+
+      "when InlandModePage is a Mode5or7 code" in {
+
+        val mode5or7Code = Gen.oneOf(Mode5or7.Constants.codes)
+
+        forAll(mode5or7Code) {
+          code =>
+            val expectedResult = TransportDetails(Mode5or7(code), SameDetailsAtBorder)
+
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(InlandModePage)(code.toString)
+              .unsafeSetVal(AddIdAtDeparturePage)(false)
+              .unsafeSetVal(ChangeAtBorderPage)(false)
+
+            val result = UserAnswersReader[TransportDetails].run(userAnswers).right.value
+
+            result mustBe expectedResult
+        }
+      }
+
+      "when InlandModePage is any other code" in {
+
+        val otherCode = arb[Int].suchThat(
+          value => !Mode5or7.Constants.codes.contains(value) && !Rail.Constants.codes.contains(value)
+        )
+
+        forAll(otherCode) {
+          code =>
+            val expectedResult = TransportDetails(NonSpecialMode(code, None, None), SameDetailsAtBorder)
+
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(InlandModePage)(code.toString)
+              .unsafeSetVal(AddIdAtDeparturePage)(false)
+              .unsafeSetVal(ChangeAtBorderPage)(false)
+
+            val result = UserAnswersReader[TransportDetails].run(userAnswers).right.value
+
+            result mustBe expectedResult
+        }
+      }
+    }
+
+    "cannot be parsed from UserAnswers" - {
+
+      "when InlandModePage is empty" in {
+
+        val result = UserAnswersReader[TransportDetails].run(emptyUserAnswers).left.value
+
+        result.page mustBe InlandModePage
+      }
+    }
+
     "InlandMode" - {
 
       "Rail" - {
