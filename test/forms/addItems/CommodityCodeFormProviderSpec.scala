@@ -45,7 +45,7 @@ class CommodityCodeFormProviderSpec extends StringFieldBehaviours with SpecBase 
       form,
       fieldName,
       maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(index.display))
     )
 
     behave like mandatoryField(
