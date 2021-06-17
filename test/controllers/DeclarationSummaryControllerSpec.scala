@@ -19,15 +19,12 @@ package controllers
 import base.{MockNunjucksRendererApp, SpecBase}
 import config.FrontendAppConfig
 import matchers.JsonMatchers
-import models.NormalMode
-import models.reference.{CountryCode, CustomsOffice}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import pages.OfficeOfDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -36,7 +33,6 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.DeclarationSubmissionService
 import uk.gov.hmrc.http.HttpResponse
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 
 import scala.concurrent.Future
 
@@ -58,10 +54,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
     "return OK and the correct view for a GET" in {
 
-      val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
-
-      val updatedUserAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
-      dataRetrievalWithData(updatedUserAnswers)
+      dataRetrievalWithData(emptyUserAnswers)
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -86,19 +79,6 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
       templateCaptor.getValue mustEqual "declarationSummary.njk"
       jsonCaptor.getValue must containJson(expectedJson)
-    }
-
-    "redirect to the Office of Departure page if not completed" in {
-
-      dataRetrievalWithData(emptyUserAnswers)
-
-      val request = FakeRequest(GET, routes.DeclarationSummaryController.onPageLoad(lrn).url)
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
     }
 
     "must redirect to 'Departure declaration sent' page on valid submission" in {
