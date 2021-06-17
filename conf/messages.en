@@ -1153,17 +1153,17 @@ addCircumstanceIndicator.checkYourAnswersLabel = Add specific circumstance indic
 addCircumstanceIndicator.checkYourAnswersLabel.visuallyHidden = change if you need to add a specific circumstance indicator
 addCircumstanceIndicator.error.required = Select yes if you need to add a specific circumstance indicator
 
-addTransportChargesPaymentMethod.title =  Do you need to add a payment method for the transport charges for all items?
-addTransportChargesPaymentMethod.heading =  Do you need to add a payment method for the transport charges for all items?
-addTransportChargesPaymentMethod.checkYourAnswersLabel = Add payment method for transport charges?
-addTransportChargesPaymentMethod.checkYourAnswersLabel.visuallyHidden =  change if you are adding a payment method for the transport charges
-addTransportChargesPaymentMethod.error.required = Select yes if you need to add a payment method for the transport charges
+addTransportChargesPaymentMethod.title =  Is there more than one payment method for the transport charges?
+addTransportChargesPaymentMethod.heading =  Is there more than one payment method for the transport charges?
+addTransportChargesPaymentMethod.checkYourAnswersLabel = Is there more than one payment method for the transport charges?
+addTransportChargesPaymentMethod.checkYourAnswersLabel.visuallyHidden =  Change if there is more than one payment method for the transport charges
+addTransportChargesPaymentMethod.error.required = Select yes if there is more than one payment method for the transport charges
 
-addCommercialReferenceNumber.title =  Does this movement have a commercial reference number?
-addCommercialReferenceNumber.heading = Does this movement have a commercial reference number?
-addCommercialReferenceNumber.checkYourAnswersLabel = Add commercial reference number?
-addCommercialReferenceNumber.checkYourAnswersLabel.visuallyHidden = change if you need to add a commercial reference number
-addCommercialReferenceNumber.error.required = Select yes if you need to add a commercial reference number
+addCommercialReferenceNumber.title =  Is there more than one commercial reference number?
+addCommercialReferenceNumber.heading = Is there more than one commercial reference number?
+addCommercialReferenceNumber.checkYourAnswersLabel = Is there more than one commercial reference number?
+addCommercialReferenceNumber.checkYourAnswersLabel.visuallyHidden = Change if there is more than one commercial reference number
+addCommercialReferenceNumber.error.required = Select yes if there is more than one commercial reference number
 
 circumstanceIndicator.title = What specific circumstances indicator do you want to add?
 circumstanceIndicator.heading = What specific circumstances indicator do you want to add?
@@ -1239,11 +1239,11 @@ addAnotherCountryOfRouting.checkYourAnswersLabel.change.visuallyHidden = Change 
 addAnotherCountryOfRouting.checkYourAnswersLabel.remove.visuallyHidden = Remove {0} country of routing
 addAnotherCountryOfRouting.error.required = Select yes if you need to add another country of routing
 
-addSafetyAndSecurityConsignor.title = Is there a security consignor for all items?
-addSafetyAndSecurityConsignor.heading = Is there a security consignor for all items?
-addSafetyAndSecurityConsignor.checkYourAnswersLabel = Security consignor for all items?
-addSafetyAndSecurityConsignor.checkYourAnswersLabel.visuallyHidden = change if there is a security consignor for all items
-addSafetyAndSecurityConsignor.error.required = Select yes if there is a security consignor for all items
+addSafetyAndSecurityConsignor.title = Is there more than one security consignor?
+addSafetyAndSecurityConsignor.heading = Is there more than one security consignor?
+addSafetyAndSecurityConsignor.checkYourAnswersLabel = Is there more than one security consignor?
+addSafetyAndSecurityConsignor.checkYourAnswersLabel.visuallyHidden = Change if there is more than one security consignor
+addSafetyAndSecurityConsignor.error.required = Select yes if there is more than one security consignor
 
 addSafetyAndSecurityConsignorEori.title = Do you know the security consignor’s EORI number?
 addSafetyAndSecurityConsignorEori.heading = Do you know the security consignor’s EORI number?
@@ -1277,11 +1277,11 @@ safetyAndSecurityConsignorName.error.required = Enter the security consignor’s
 safetyAndSecurityConsignorName.error.length = The security consignor’s name must be 35 characters or less
 safetyAndSecurityConsignorName.error.invalid = The security consignor’s name must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 
-addSafetyAndSecurityConsignee.title =  Is this the security consignee for all items?
-addSafetyAndSecurityConsignee.heading = Is this the security consignee for all items?
-addSafetyAndSecurityConsignee.checkYourAnswersLabel = Security consignee for all items?
-addSafetyAndSecurityConsignee.checkYourAnswersLabel.visuallyHidden = change security consignee for all items
-addSafetyAndSecurityConsignee.error.required = Select yes if this is the security consignee for all items
+addSafetyAndSecurityConsignee.title =  Is there more than one security consignee?
+addSafetyAndSecurityConsignee.heading = Is there more than one security consignee?
+addSafetyAndSecurityConsignee.checkYourAnswersLabel = Is there more than one security consignee?
+addSafetyAndSecurityConsignee.checkYourAnswersLabel.visuallyHidden = Change if there is more than one security consignee
+addSafetyAndSecurityConsignee.error.required = Select yes if there is more than one security consignee
 
 addSafetyAndSecurityConsigneeEori.title =  Do you know the security consignee’s EORI number?
 addSafetyAndSecurityConsigneeEori.heading =  Do you know the security consignee’s EORI number?

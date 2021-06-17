@@ -76,13 +76,13 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddTransportChargesPaymentMethod to TransportChargesPaymentMethod if 'true'" in {
+      "must go from AddTransportChargesPaymentMethod to TransportChargesPaymentMethod if 'false'" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
 
             val updatedAnswers = answers
-              .set(AddTransportChargesPaymentMethodPage, true).success.value
+              .set(AddTransportChargesPaymentMethodPage, false).success.value
 
             navigator
               .nextPage(AddTransportChargesPaymentMethodPage, NormalMode, updatedAnswers)
@@ -90,13 +90,13 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddTransportChargesPaymentMethod to AddCommercialReferenceNumber if 'false'" in {
+      "must go from AddTransportChargesPaymentMethod to AddCommercialReferenceNumber if 'true'" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
 
             val updatedAnswers = answers
-              .set(AddTransportChargesPaymentMethodPage, false).success.value
+              .set(AddTransportChargesPaymentMethodPage, true).success.value
 
             navigator
               .nextPage(AddTransportChargesPaymentMethodPage, NormalMode, updatedAnswers)
@@ -115,13 +115,13 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumber to AddCommercialReferenceNumberAllItems if 'true'" in {
+      "must go from AddCommercialReferenceNumber to AddCommercialReferenceNumberAllItems if 'false'" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberPage, true).success.value
+              .set(AddCommercialReferenceNumberPage, false).success.value
 
             navigator
               .nextPage(AddCommercialReferenceNumberPage, NormalMode, updatedAnswers)
@@ -129,13 +129,13 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumber to AddConveyanceReferenceNumber if 'false' and if transport mode at border is not 4 or 40" in {
+      "must go from AddCommercialReferenceNumber to AddConveyanceReferenceNumber if 'true' and if transport mode at border is not 4 or 40" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberPage, false).success.value
+              .set(AddCommercialReferenceNumberPage, true).success.value
               .set(ModeAtBorderPage, "1").success.value
 
             navigator
@@ -144,7 +144,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumber to ConveyanceReferenceNumber if 'false' and if transport mode at border 4 or 40" in {
+      "must go from AddCommercialReferenceNumber to ConveyanceReferenceNumber if 'true' and if transport mode at border 4 or 40" in {
 
         val genTransportMode: Gen[String] = Gen.oneOf(Seq("4", "40"))
 
@@ -152,7 +152,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           (answers, transportMode) =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberPage, false).success.value
+              .set(AddCommercialReferenceNumberPage, true).success.value
               .set(ModeAtBorderPage, transportMode).success.value
 
             navigator
@@ -509,10 +509,10 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "must go from AddTransportChargesPaymentMethod page to" - {
-        "TransportChargesPaymentMethod page if 'true'" in {
+        "TransportChargesPaymentMethod page if 'false'" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(AddTransportChargesPaymentMethodPage, true).success.value
+            .set(AddTransportChargesPaymentMethodPage, false).success.value
 
           navigator
             .nextPage(AddTransportChargesPaymentMethodPage, CheckMode, updatedAnswers)
@@ -530,10 +530,10 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
         }
 
-        "CheckYourAnswers if 'false'" in {
+        "CheckYourAnswers if 'true'" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(AddTransportChargesPaymentMethodPage, false).success.value
+            .set(AddTransportChargesPaymentMethodPage, true).success.value
 
           navigator
             .nextPage(AddTransportChargesPaymentMethodPage, CheckMode, updatedAnswers)
@@ -549,10 +549,10 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "must go from AddCommercialReferenceNumber page to" - {
-        "AddCommercialReferenceNumberAllItems page if 'true'" in {
+        "AddCommercialReferenceNumberAllItems page if 'false'" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(AddCommercialReferenceNumberPage, true).success.value
+            .set(AddCommercialReferenceNumberPage, false).success.value
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
@@ -581,10 +581,10 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
         }
 
-        "CheckYourAnswers if 'false'" in {
+        "CheckYourAnswers if 'true'" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(AddCommercialReferenceNumberPage, false).success.value
+            .set(AddCommercialReferenceNumberPage, true).success.value
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)

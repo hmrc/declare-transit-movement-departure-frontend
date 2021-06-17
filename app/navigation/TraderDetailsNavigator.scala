@@ -37,8 +37,8 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
     case AddConsignorPage =>
       ua =>
         ua.get(AddConsignorPage) match {
-          case Some(false)  => Some(routes.IsConsignorEoriKnownController.onPageLoad(ua.id, NormalMode))
-          case Some(true) => Some(routes.AddConsigneeController.onPageLoad(ua.id, NormalMode))
+          case Some(false) => Some(routes.IsConsignorEoriKnownController.onPageLoad(ua.id, NormalMode))
+          case Some(true)  => Some(routes.AddConsigneeController.onPageLoad(ua.id, NormalMode))
           case None        => Some(routes.AddConsignorController.onPageLoad(ua.id, NormalMode))
         }
     case IsConsignorEoriKnownPage =>
@@ -82,7 +82,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
       ua =>
         (ua.get(AddConsignorPage), ua.get(IsConsignorEoriKnownPage)) match {
           case (Some(false), None) => Some(routes.IsConsignorEoriKnownController.onPageLoad(ua.id, CheckMode))
-          case (_, _)             => Some(checkModeDefaultPage(ua))
+          case (_, _)              => Some(checkModeDefaultPage(ua))
         }
 
     case IsConsignorEoriKnownPage =>
@@ -111,7 +111,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
       ua =>
         (ua.get(AddConsigneePage), ua.get(IsConsigneeEoriKnownPage)) match {
           case (Some(false), None) => Some(routes.IsConsigneeEoriKnownController.onPageLoad(ua.id, CheckMode))
-          case (_, _)             => Some(checkModeDefaultPage(ua))
+          case (_, _)              => Some(checkModeDefaultPage(ua))
         }
 
     case IsConsigneeEoriKnownPage =>
@@ -167,9 +167,9 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
 
   private def addConsigneeRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(AddConsigneePage), mode) match {
-      case (Some(false), NormalMode)  => routes.IsConsigneeEoriKnownController.onPageLoad(ua.id, NormalMode)
-      case (Some(false), CheckMode)   => routes.IsConsigneeEoriKnownController.onPageLoad(ua.id, CheckMode)
-      case (Some(true), NormalMode) => routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case (Some(false), NormalMode) => routes.IsConsigneeEoriKnownController.onPageLoad(ua.id, NormalMode)
+      case (Some(false), CheckMode)  => routes.IsConsigneeEoriKnownController.onPageLoad(ua.id, CheckMode)
+      case (Some(true), NormalMode)  => routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id)
       case _                         => routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id)
     }
 
