@@ -305,10 +305,10 @@ principalAddress.title = What is the principal’s address?
 principalAddress.heading = What is {0}’s address?
 principalAddress.checkYourAnswersLabel =  Principal’s address
 
-addConsignor.title = Is there a consignor for all items?
-addConsignor.heading = Is there a consignor for all items?
-addConsignor.checkYourAnswersLabel = Consignor for all the items?
-addConsignor.error.required = Select yes if you need to add a consignor for all items
+addConsignor.title = Is there more than one consignor?
+addConsignor.heading = Is there more than one consignor?
+addConsignor.checkYourAnswersLabel = Is there more than one consignor?
+addConsignor.error.required = Select yes if there is more than one consignor
 
 isConsignorEoriKnown.title = Do you know the consignor’s EORI number?
 isConsignorEoriKnown.heading = Do you know the consignor’s EORI number?
@@ -335,10 +335,10 @@ isConsigneeEoriKnown.heading = Do you know the consignee’s EORI number?
 isConsigneeEoriKnown.checkYourAnswersLabel = Know consignee’s EORI number?
 isConsigneeEoriKnown.error.required = Select yes if you know the consignee’s EORI number
 
-addConsignee.title = Is there a consignee for all items?
-addConsignee.heading = Is there a consignee for all items?
-addConsignee.checkYourAnswersLabel = Consignee for all the items?
-addConsignee.error.required = Select yes if you need to add a consignee for all items
+addConsignee.title = Is there more than one consignee?
+addConsignee.heading = Is there more than one consignee?
+addConsignee.checkYourAnswersLabel = Is there more than one consignee?
+addConsignee.error.required = Select yes if there is more than one consignee
 
 consigneeName.title = What is the consignee’s name?
 consigneeName.heading = What is the consignee’s name?
