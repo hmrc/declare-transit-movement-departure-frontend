@@ -196,14 +196,12 @@ compliant.nine.p3=This page was prepared on [date when it was first published]. 
 
 localReferenceNumber.title = What is the local reference number (LRN)?
 localReferenceNumber.heading = What is the local reference number (LRN)?
-localReferenceNumber.checkYourAnswersLabel = Local reference number
 localReferenceNumber.error.required = Enter the local reference number
 localReferenceNumber.error.length = Local reference number must be 22 characters or less
 localReferenceNumber.error.invalidCharacters = Local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 
 addSecurityDetails.title = Do you need to add safety and security details?
 addSecurityDetails.heading = Do you need to add safety and security details?
-addSecurityDetails.checkYourAnswersLabel = Do you need to add safety and security details?
 addSecurityDetails.paragraph = These details are usually sent as an entry summary declaration. Some countries will allow you to send these details as part of a departures declaration. You must check the countries the goods will be travelling through.
 addSecurityDetails.error.required = Select yes if you need to add safety and security details
 
@@ -247,7 +245,6 @@ procedureType.title = What type of procedure are you using?
 procedureType.heading = What type of procedure are you using?
 procedureType.normal = Normal (customs-approved location)
 procedureType.simplified = Simplified (authorised consignor’s location)
-procedureType.checkYourAnswersLabel = Procedure type
 procedureType.error.required = Select which type of procedure you are using
 
 declarationPlace.title = What is the postcode for the place of declaration?
@@ -390,7 +387,6 @@ countryOfDispatch.error.required = Enter the country of dispatch
 
 officeOfDeparture.title = Where is the office of departure?
 officeOfDeparture.heading = Where is the office of departure?
-officeOfDeparture.checkYourAnswersLabel = Office of departure
 officeOfDeparture.error.required = Select the office of departure
 officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
 officeOfDeparture.label = This is the Customs office where the transit movement starts.

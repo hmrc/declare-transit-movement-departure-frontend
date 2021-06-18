@@ -89,7 +89,6 @@ class RouteDetailsCheckYourAnswersController @Inject() (
       val section: Section = Section(
         Seq(
           checkYourAnswersHelper.countryOfDispatch(countryList),
-          checkYourAnswersHelper.officeOfDeparture(customsOfficeList),
           checkYourAnswersHelper.destinationCountry(destCountryList),
           checkYourAnswersHelper.movementDestinationCountry(movementCountryList),
           checkYourAnswersHelper.destinationOffice(destOfficeList)

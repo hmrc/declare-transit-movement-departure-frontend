@@ -25,6 +25,11 @@ POST       /:lrn/change-add-security-details              controllers.AddSecurit
 GET        /:lrn/task-list                                controllers.DeclarationSummaryController.onPageLoad(lrn: LocalReferenceNumber)
 POST       /:lrn/task-list                                controllers.DeclarationSummaryController.onSubmit(lrn: LocalReferenceNumber)
 
+GET        /:lrn/office-of-departure                controllers.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/office-of-departure                controllers.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/change-office-of-departure         controllers.OfficeOfDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/change-office-of-departure         controllers.OfficeOfDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+
 GET        /:lrn/procedure-type                           controllers.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/procedure-type                           controllers.ProcedureTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/change-procedure-type                    controllers.ProcedureTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

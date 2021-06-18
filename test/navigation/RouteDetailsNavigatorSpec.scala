@@ -17,16 +17,18 @@
 package navigation
 
 import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
 import controllers.routeDetails.routes
 import controllers.{routes => mainRoutes}
 import generators.Generators
 import models._
+import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import queries.OfficeOfTransitQuery
 
-class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
   val navigator = new RouteDetailsNavigator
 
@@ -35,23 +37,24 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
     "in Normal mode" - {
 
       "Route Details section" - {
-        "must go from Country of dispatch page to Office of departure page" in {
-
+        "must go from Country of dispatch page to Destination Country page when office of destination has be answered" in {
+          val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
           forAll(arbitrary[UserAnswers]) {
             answers =>
+              val updatedUserAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
               navigator
-                .nextPage(CountryOfDispatchPage, NormalMode, answers)
-                .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.id, NormalMode))
+                .nextPage(CountryOfDispatchPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.DestinationCountryController.onPageLoad(updatedUserAnswers.id, NormalMode))
           }
         }
 
-        "must go from Office of departure page to destination country page" in {
-
+        "must go from Country of dispatch page to office of departure page when it has not been previously been answered" in {
           forAll(arbitrary[UserAnswers]) {
             answers =>
+              val updatedUserAnswers = answers.unsafeRemove(OfficeOfDeparturePage)
               navigator
-                .nextPage(OfficeOfDeparturePage, NormalMode, answers)
-                .mustBe(routes.DestinationCountryController.onPageLoad(answers.id, NormalMode))
+                .nextPage(CountryOfDispatchPage, NormalMode, updatedUserAnswers)
+                .mustBe(controllers.routes.OfficeOfDepartureController.onPageLoad(updatedUserAnswers.id, NormalMode))
           }
         }
 
@@ -248,28 +251,14 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "Must go from Country of dispatch to Office of Departure" in {
+      "Must go from Country of dispatch to Route Details Check Your Answers" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
               .nextPage(CountryOfDispatchPage, CheckMode, answers)
-              .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.id, CheckMode))
-
-        }
-
-      }
-
-      "Must go from Office Of Departure to Router Details Check Your Answers" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(OfficeOfDeparturePage, CheckMode, answers)
               .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
-
         }
-
       }
 
       "Must go from Destination Country to Router Details Check Your Answers" in {
@@ -279,9 +268,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(DestinationCountryPage, CheckMode, answers)
               .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
-
         }
-
       }
 
       "Must go from Movement Destination Country to Destination Office" in {
