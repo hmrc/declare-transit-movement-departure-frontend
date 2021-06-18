@@ -53,24 +53,12 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from Office of Departure page to Procedure Type page when Country of Dispatch has not been answered" in {
+      "must go from Office of Departure page to Procedure Type page" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.unsafeRemove(CountryOfDispatchPage)
             navigator
-              .nextPage(OfficeOfDeparturePage, NormalMode, updatedAnswers)
-              .mustBe(routes.ProcedureTypeController.onPageLoad(updatedAnswers.id, NormalMode))
-        }
-      }
-
-      "must go from Office of Departure page to Destination Country page when Country of Dispatch has been answered" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val countryOfDispatch = CountryOfDispatch(CountryCode("GB"), false)
-            val updatedAnswers    = answers.unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
-            navigator
-              .nextPage(OfficeOfDeparturePage, NormalMode, updatedAnswers)
-              .mustBe(controllers.routeDetails.routes.DestinationCountryController.onPageLoad(updatedAnswers.id, NormalMode))
+              .nextPage(OfficeOfDeparturePage, NormalMode, answers)
+              .mustBe(routes.ProcedureTypeController.onPageLoad(answers.id, NormalMode))
         }
       }
 
