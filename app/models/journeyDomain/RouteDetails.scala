@@ -28,7 +28,6 @@ import java.time.LocalDateTime
 
 final case class RouteDetails(
   countryOfDispatch: CountryOfDispatch,
-  officeOfDeparture: CustomsOffice,
   destinationCountry: CountryCode,
   destinationOffice: CustomsOffice,
   transitInformation: NonEmptyList[TransitInformation]
@@ -73,7 +72,6 @@ object RouteDetails {
   implicit val makeSimplifiedMovementDetails: UserAnswersReader[RouteDetails] =
     (
       CountryOfDispatchPage.reader,
-      OfficeOfDeparturePage.reader,
       DestinationCountryPage.reader,
       DestinationOfficePage.reader,
       UserAnswersReader[NonEmptyList[TransitInformation]]

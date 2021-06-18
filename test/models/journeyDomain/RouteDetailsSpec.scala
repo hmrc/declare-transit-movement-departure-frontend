@@ -64,7 +64,6 @@ object RouteDetailsSpec extends UserAnswersSpecHelper {
     val interstitialUserAnswers =
       startUserAnswers
         .unsafeSetVal(CountryOfDispatchPage)(routeDetails.countryOfDispatch)
-        .unsafeSetVal(OfficeOfDeparturePage)(routeDetails.officeOfDeparture)
         .unsafeSetVal(DestinationCountryPage)(routeDetails.destinationCountry)
         .unsafeSetVal(DestinationOfficePage)(routeDetails.destinationOffice)
 

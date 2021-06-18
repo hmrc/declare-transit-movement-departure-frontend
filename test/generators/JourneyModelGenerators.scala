@@ -549,8 +549,9 @@ trait JourneyModelGenerators {
       for {
         lrn                <- arbitrary[LocalReferenceNumber]
         procedureType      <- arbitrary[ProcedureType]
+        officeOfDeparture  <- arbitrary[CustomsOffice]
         addSecurityDetails <- arbitrary[Boolean]
-      } yield PreTaskListDetails(lrn, procedureType, addSecurityDetails)
+      } yield PreTaskListDetails(lrn, procedureType, officeOfDeparture, addSecurityDetails)
     }
 
   implicit lazy val arbitraryGuaranteeDetails: Arbitrary[GuaranteeDetails] =
@@ -724,13 +725,11 @@ trait JourneyModelGenerators {
     Arbitrary {
       for {
         countryOfDispatch  <- arbitrary[CountryOfDispatch]
-        officeOfDeparture  <- arbitrary[CustomsOffice]
         destinationCountry <- arbitrary[CountryCode]
         destinationOffice  <- arbitrary[CustomsOffice]
         transitInformation <- transitInformation(safetyAndSecurityFlag)
       } yield RouteDetails(
         countryOfDispatch,
-        officeOfDeparture,
         destinationCountry,
         destinationOffice,
         transitInformation

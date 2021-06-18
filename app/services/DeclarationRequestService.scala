@@ -409,7 +409,7 @@ class DeclarationRequestService @Inject() (
       traderDetails.consignee.map(headerConsignee),
       None, // not required
       CustomsOfficeDeparture(
-        referenceNumber = routeDetails.officeOfDeparture.id
+        referenceNumber = preTaskList.officeOfDeparture.id
       ),
       customsOfficeTransit(routeDetails.transitInformation),
       CustomsOfficeDestination(

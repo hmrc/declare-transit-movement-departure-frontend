@@ -22,7 +22,7 @@ import generators.JourneyModelGenerators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import pages.{AddSecurityDetailsPage, ProcedureTypePage, QuestionPage}
+import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage, ProcedureTypePage, QuestionPage}
 
 class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
   "PreTaskListDetails" - {
@@ -42,6 +42,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with JourneyMod
     "cannot be parsed" - {
       val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
         ProcedureTypePage,
+        OfficeOfDeparturePage,
         AddSecurityDetailsPage
       )
 
@@ -64,5 +65,6 @@ object PreTaskListDetailsSpec extends UserAnswersSpecHelper {
     startUserAnswers
       .copy(id = preTaskListDetails.lrn)
       .unsafeSetVal(ProcedureTypePage)(preTaskListDetails.procedureType)
+      .unsafeSetVal(OfficeOfDeparturePage)(preTaskListDetails.officeOfDeparture)
       .unsafeSetVal(AddSecurityDetailsPage)(preTaskListDetails.addSecurityDetails)
 }
