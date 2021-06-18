@@ -70,14 +70,14 @@ object SafetyAndSecurity {
     }
 
   private def paymentMethod: UserAnswersReader[Option[String]] =
-    AddTransportChargesPaymentMethodPage.filterOptionalDependent(identity) {
+    AddTransportChargesPaymentMethodPage.filterOptionalDependent(_ == false) {
       TransportChargesPaymentMethodPage.reader
     }
 
   private def commercialReferenceNumber: UserAnswersReader[Option[String]] =
     (AddCommercialReferenceNumberPage.reader, AddCommercialReferenceNumberAllItemsPage.optionalReader).tupled.flatMap {
-      case (true, Some(true)) => CommercialReferenceNumberAllItemsPage.optionalReader
-      case _                  => none[String].pure[UserAnswersReader]
+      case (true, Some(false)) => CommercialReferenceNumberAllItemsPage.optionalReader
+      case _                   => none[String].pure[UserAnswersReader]
     }
 
   private def conveyanceReferenceNumber: UserAnswersReader[Option[String]] =
@@ -123,7 +123,7 @@ object SafetyAndSecurity {
         isEoriKnown => if (isEoriKnown) useEori else useAddress
       )
 
-    AddSafetyAndSecurityConsignorPage.filterOptionalDependent(identity) {
+    AddSafetyAndSecurityConsignorPage.filterOptionalDependent(_ == false) {
       isEoriKnown
     }
   }
@@ -159,7 +159,7 @@ object SafetyAndSecurity {
             SecurityTraderDetails(name, address)
         }
 
-    AddSafetyAndSecurityConsigneePage.filterOptionalDependent(identity) {
+    AddSafetyAndSecurityConsigneePage.filterOptionalDependent(_ == false) {
       useEori orElse useAddress
     }
   }

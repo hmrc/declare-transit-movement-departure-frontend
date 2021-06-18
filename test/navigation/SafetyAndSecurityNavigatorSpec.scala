@@ -115,13 +115,13 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumber to AddCommercialReferenceNumberAllItems if 'false'" in {
+      "must go from AddCommercialReferenceNumber to AddCommercialReferenceNumberAllItems if 'true'" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberPage, false).success.value
+              .set(AddCommercialReferenceNumberPage, true).success.value
 
             navigator
               .nextPage(AddCommercialReferenceNumberPage, NormalMode, updatedAnswers)
@@ -129,13 +129,13 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumber to AddConveyanceReferenceNumber if 'true' and if transport mode at border is not 4 or 40" in {
+      "must go from AddCommercialReferenceNumber to AddConveyanceReferenceNumber if 'false' and if transport mode at border is not 4 or 40" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberPage, true).success.value
+              .set(AddCommercialReferenceNumberPage, false).success.value
               .set(ModeAtBorderPage, "1").success.value
 
             navigator
@@ -144,7 +144,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumber to ConveyanceReferenceNumber if 'true' and if transport mode at border 4 or 40" in {
+      "must go from AddCommercialReferenceNumber to ConveyanceReferenceNumber if 'false' and if transport mode at border 4 or 40" in {
 
         val genTransportMode: Gen[String] = Gen.oneOf(Seq("4", "40"))
 
@@ -152,7 +152,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           (answers, transportMode) =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberPage, true).success.value
+              .set(AddCommercialReferenceNumberPage, false).success.value
               .set(ModeAtBorderPage, transportMode).success.value
 
             navigator
@@ -161,13 +161,13 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumberAllItems to CommercialReferenceNumberAllItems when 'true'" in {
+      "must go from AddCommercialReferenceNumberAllItems to CommercialReferenceNumberAllItems when 'false'" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
+              .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
 
             navigator
               .nextPage(AddCommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
@@ -175,13 +175,13 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumberAllItems to AddConveyanceReferenceNumber when 'false' and if transport mode at border is not 4 or 40" in {
+      "must go from AddCommercialReferenceNumberAllItems to AddConveyanceReferenceNumber when 'true' and if transport mode at border is not 4 or 40" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
+              .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
               .set(ModeAtBorderPage, "1").success.value
 
             navigator
@@ -190,7 +190,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "must go from AddCommercialReferenceNumberAllItems to ConveyanceReferenceNumber when 'false' and if transport mode at border is 4 or 40" in {
+      "must go from AddCommercialReferenceNumberAllItems to ConveyanceReferenceNumber when 'true' and if transport mode at border is 4 or 40" in {
 
         val genTransportMode: Gen[String] = Gen.oneOf(Seq("4", "40"))
 
@@ -198,7 +198,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           (answers, transportMode) =>
 
             val updatedAnswers = answers
-              .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
+              .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
               .set(ModeAtBorderPage, transportMode).success.value
 
             navigator
@@ -549,42 +549,43 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "must go from AddCommercialReferenceNumber page to" - {
-        "AddCommercialReferenceNumberAllItems page if 'false'" in {
+        "AddCommercialReferenceNumberAllItems page if 'true'" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(AddCommercialReferenceNumberPage, false).success.value
+            .set(AddCommercialReferenceNumberPage, true).success.value
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
             .mustBe(routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(updatedAnswers.id, CheckMode))
         }
 
-        "CheckYourAnswers page if 'true' and AddCommercialReferenceNumberAllItems answer is 'true'" in {
+        "CheckYourAnswers page if AddCommercialReferenceNumberPage is 'true' and AddCommercialReferenceNumberAllItems answer is 'false'" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
             .set(AddCommercialReferenceNumberPage, true).success.value
-
-          navigator
-            .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
-        }
-
-        "CheckYourAnswers page if 'true' and AddCommercialReferenceNumberAllItems answer is 'false'" in {
-
-          val updatedAnswers = emptyUserAnswers
             .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
-            .set(AddCommercialReferenceNumberPage, true).success.value
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
         }
 
-        "CheckYourAnswers if 'true'" in {
+        "CheckYourAnswers page if AddCommercialReferenceNumberPage is 'true' and AddCommercialReferenceNumberAllItems answer is 'true'" in {
 
           val updatedAnswers = emptyUserAnswers
             .set(AddCommercialReferenceNumberPage, true).success.value
+            .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
+
+
+          navigator
+            .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+        }
+
+        "CheckYourAnswers if 'false'" in {
+
+          val updatedAnswers = emptyUserAnswers
+            .set(AddCommercialReferenceNumberPage, false).success.value
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
@@ -593,31 +594,31 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "must go from AddCommercialReferenceNumberAllItems page to" - {
-        "CommercialReferenceNumberAllItems page if 'true'" in {
+        "CommercialReferenceNumberAllItems page if 'false'" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
+            .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
 
           navigator
             .nextPage(AddCommercialReferenceNumberAllItemsPage, CheckMode, updatedAnswers)
             .mustBe(routes.CommercialReferenceNumberAllItemsController.onPageLoad(updatedAnswers.id, CheckMode))
         }
 
-        "CheckYourAnswers page if 'true' and CommercialReferenceNumberAllItems answer exists" in {
+        "CheckYourAnswers page if 'false' and CommercialReferenceNumberAllItems answer exists" in {
 
           val updatedAnswers = emptyUserAnswers
+            .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
             .set(CommercialReferenceNumberAllItemsPage, "value").success.value
-            .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
 
           navigator
             .nextPage(AddCommercialReferenceNumberAllItemsPage, CheckMode, updatedAnswers)
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
         }
 
-        "CheckYourAnswers if 'false'" in {
+        "CheckYourAnswers if 'true'" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
+            .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
 
           navigator
             .nextPage(AddCommercialReferenceNumberAllItemsPage, CheckMode, updatedAnswers)

@@ -31,8 +31,8 @@ object TraderDetails {
   implicit val userAnswersParser: UserAnswersReader[TraderDetails] =
     (
       UserAnswersReader[PrincipalTraderDetails],
-      AddConsignorPage.filterOptionalDependent(identity)(UserAnswersReader[ConsignorDetails]),
-      AddConsigneePage.filterOptionalDependent(identity)(UserAnswersReader[ConsigneeDetails])
+      AddConsignorPage.filterOptionalDependent(_ == false)(UserAnswersReader[ConsignorDetails]),
+      AddConsigneePage.filterOptionalDependent(_ == false)(UserAnswersReader[ConsigneeDetails])
     ).tupled.map(
       x => TraderDetails(x._1, x._2, x._3)
     )

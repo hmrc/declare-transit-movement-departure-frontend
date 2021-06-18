@@ -1159,11 +1159,11 @@ addTransportChargesPaymentMethod.checkYourAnswersLabel = Is there more than one 
 addTransportChargesPaymentMethod.checkYourAnswersLabel.visuallyHidden =  Change if there is more than one payment method for the transport charges
 addTransportChargesPaymentMethod.error.required = Select yes if there is more than one payment method for the transport charges
 
-addCommercialReferenceNumber.title =  Is there more than one commercial reference number?
-addCommercialReferenceNumber.heading = Is there more than one commercial reference number?
-addCommercialReferenceNumber.checkYourAnswersLabel = Is there more than one commercial reference number?
-addCommercialReferenceNumber.checkYourAnswersLabel.visuallyHidden = Change if there is more than one commercial reference number
-addCommercialReferenceNumber.error.required = Select yes if there is more than one commercial reference number
+addCommercialReferenceNumber.title =  Does this movement have a commercial reference number?
+addCommercialReferenceNumber.heading = Does this movement have a commercial reference number?
+addCommercialReferenceNumber.checkYourAnswersLabel = Add commercial reference number?
+addCommercialReferenceNumber.checkYourAnswersLabel.visuallyHidden = change if you need to add a commercial reference number
+addCommercialReferenceNumber.error.required = Select yes if you need to add a commercial reference number
 
 circumstanceIndicator.title = What specific circumstances indicator do you want to add?
 circumstanceIndicator.heading = What specific circumstances indicator do you want to add?
@@ -1179,11 +1179,11 @@ transportChargesPaymentMethod.checkYourAnswersLabel.visuallyHidden =  change the
 transportChargesPaymentMethod.error.required = Enter the payment method you are using for the transport charges
 transportChargesPaymentMethod.error.length = TransportChargesPaymentMethod must be 2 characters or less
 
-addCommercialReferenceNumberAllItems.title = Are you using the same commercial reference number for all the items?
-addCommercialReferenceNumberAllItems.heading = Are you using the same commercial reference number for all the items?
-addCommercialReferenceNumberAllItems.checkYourAnswersLabel = Same commercial reference number for all items?
-addCommercialReferenceNumberAllItems.checkYourAnswersLabel.visuallyHidden = change if you are using the same commercial reference for all the items
-addCommercialReferenceNumberAllItems.error.required = Select yes if you are using the same commercial reference number for all the items
+addCommercialReferenceNumberAllItems.title = Is there more than one commercial reference number?
+addCommercialReferenceNumberAllItems.heading = Is there more than one commercial reference number?
+addCommercialReferenceNumberAllItems.checkYourAnswersLabel = Is there more than one commercial reference number?
+addCommercialReferenceNumberAllItems.checkYourAnswersLabel.visuallyHidden = Change if there is more than one commercial reference number
+addCommercialReferenceNumberAllItems.error.required = Select yes if there is more than one commercial reference number
 
 commercialReferenceNumberAllItems.title =  What is the commercial reference number for all the items?
 commercialReferenceNumberAllItems.heading =  What is the commercial reference number for all the items?
