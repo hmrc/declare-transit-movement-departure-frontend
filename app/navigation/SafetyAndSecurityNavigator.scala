@@ -75,19 +75,19 @@ class SafetyAndSecurityNavigator @Inject() () extends Navigator {
 
   private def addTransportChargesPaymentMethod(ua: UserAnswers, mode: Mode): Option[Call] =
     (ua.get(AddTransportChargesPaymentMethodPage), mode) match {
-      case (Some(true), CheckMode) if ua.get(TransportChargesPaymentMethodPage).isDefined => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-      case (Some(true),_)   => Some(routes.TransportChargesPaymentMethodController.onPageLoad(ua.id, mode))
-      case (Some(false), NormalMode) => Some(routes.AddCommercialReferenceNumberController.onPageLoad(ua.id, NormalMode))
-      case (Some(false), CheckMode)  => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+      case (Some(false), CheckMode) if ua.get(TransportChargesPaymentMethodPage).isDefined => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+      case (Some(false),_)   => Some(routes.TransportChargesPaymentMethodController.onPageLoad(ua.id, mode))
+      case (Some(true), NormalMode) => Some(routes.AddCommercialReferenceNumberController.onPageLoad(ua.id, NormalMode))
+      case (Some(true), CheckMode)  => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
     }
 
   private def addCommercialReferenceNumber(ua: UserAnswers, mode: Mode): Option[Call] =
     (ua.get(AddCommercialReferenceNumberPage), ua.get(ModeAtBorderPage), mode) match {
-      case (Some(true), _, CheckMode) if ua.get(AddCommercialReferenceNumberAllItemsPage).isDefined => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-      case (Some(true), _, _)                        => Some(routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(ua.id, mode))
-      case (Some(false), _, CheckMode)  => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-      case (Some(false), Some("4") | Some("40"), NormalMode)  => Some(routes.ConveyanceReferenceNumberController.onPageLoad(ua.id, NormalMode))
-      case (Some(false), _, NormalMode)                       => Some(routes.AddConveyanceReferenceNumberController.onPageLoad(ua.id, NormalMode))
+      case (Some(false), _, CheckMode) if ua.get(AddCommercialReferenceNumberAllItemsPage).isDefined => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+      case (Some(false), _, _)                        => Some(routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(ua.id, mode))
+      case (Some(true), _, CheckMode)  => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+      case (Some(true), Some("4") | Some("40"), NormalMode)  => Some(routes.ConveyanceReferenceNumberController.onPageLoad(ua.id, NormalMode))
+      case (Some(true), _, NormalMode)                       => Some(routes.AddConveyanceReferenceNumberController.onPageLoad(ua.id, NormalMode))
       case _                                      => None
     }
 

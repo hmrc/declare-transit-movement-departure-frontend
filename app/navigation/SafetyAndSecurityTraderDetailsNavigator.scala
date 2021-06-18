@@ -96,11 +96,11 @@ class SafetyAndSecurityTraderDetailsNavigator @Inject() () extends Navigator {
 
     private def addSafetyAndSecurityConsignorRoute(ua: UserAnswers, mode:Mode): Call =
     (ua.get(AddSafetyAndSecurityConsignorPage), ua.get(AddSafetyAndSecurityConsignorEoriPage), mode) match {
-      case (Some(true), _,NormalMode)   => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, NormalMode)
-      case (Some(false),_, NormalMode)  => routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode)
-      case (Some(false), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
-      case (Some(true), None, CheckMode) => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, CheckMode)
-      case (Some(true), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
+      case (Some(false), _,NormalMode)   => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, NormalMode)
+      case (Some(true),_, NormalMode)  => routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode)
+      case (Some(true), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
+      case (Some(false), None, CheckMode) => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, CheckMode)
+      case (Some(false), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
     }
 
   private def addSafetyAndSecurityConsignorEoriRoute(ua: UserAnswers, mode:Mode): Call =
@@ -117,11 +117,11 @@ class SafetyAndSecurityTraderDetailsNavigator @Inject() () extends Navigator {
 
   private def addSafetyAndSecurityConsigneeRoute(ua: UserAnswers, mode:Mode): Call =
     (ua.get(AddSafetyAndSecurityConsigneePage), ua.get(AddSafetyAndSecurityConsigneeEoriPage), mode) match {
-      case (Some(true),_,NormalMode)   => circumstanceIndicatorCheck(ua, mode)
-      case (Some(false),_, NormalMode)  => routes.AddCarrierController.onPageLoad(ua.id, NormalMode)
-      case (Some(false), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
-      case (Some(true), None, CheckMode) => circumstanceIndicatorCheck(ua, mode)
-      case (Some(true), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
+      case (Some(false),_,NormalMode)   => circumstanceIndicatorCheck(ua, mode)
+      case (Some(true),_, NormalMode)  => routes.AddCarrierController.onPageLoad(ua.id, NormalMode)
+      case (Some(true), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
+      case (Some(false), None, CheckMode) => circumstanceIndicatorCheck(ua, mode)
+      case (Some(false), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
     }
 
   private def circumstanceIndicatorCheck(ua: UserAnswers, mode: Mode) =

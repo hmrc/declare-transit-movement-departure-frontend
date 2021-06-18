@@ -144,12 +144,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       }
 
-      "must go from Add consignor page to Is consignor eori known page when 'YES' is selected" in {
+      "must go from Add consignor page to Is consignor eori known page when 'No' is selected" in {
 
         forAll(genUserAnswersWithProcedure) {
           answers =>
             val updatedAnswers = answers
-              .unsafeSetVal(AddConsignorPage)(true)
+              .unsafeSetVal(AddConsignorPage)(false)
 
             navigator
               .nextPage(AddConsignorPage, NormalMode, updatedAnswers)
@@ -157,12 +157,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
         }
       }
 
-      "must go from Add consignor page to Add consignee page when 'NO' is selected" in {
+      "must go from Add consignor page to Add consignee page when 'Yes' is selected" in {
 
         forAll(genUserAnswersWithProcedure) {
           answers =>
             val updatedAnswers = answers
-              .unsafeSetVal(AddConsignorPage)(false)
+              .unsafeSetVal(AddConsignorPage)(true)
 
             navigator
               .nextPage(AddConsignorPage, NormalMode, updatedAnswers)
@@ -233,12 +233,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "when consignee eori is known" - {
-        "must go from Add consignee page to Is consignee eori known page when 'YES' is selected" in {
+        "must go from Add consignee page to Is consignee eori known page when 'No' is selected" in {
 
           forAll(genUserAnswersWithProcedure) {
             answers =>
               val updatedAnswers = answers
-                .unsafeSetVal(AddConsigneePage)(true)
+                .unsafeSetVal(AddConsigneePage)(false)
 
               navigator
                 .nextPage(AddConsigneePage, NormalMode, updatedAnswers)
@@ -304,12 +304,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "when consignee eori is not known" - {
-        "must go from Add consignee page to Trader details cya page when 'NO' is selected" in {
+        "must go from Add consignee page to Trader details cya page when 'Yes' is selected" in {
 
           forAll(genUserAnswersWithProcedure) {
             answers =>
               val updatedAnswers = answers
-                .unsafeSetVal(AddConsigneePage)(false)
+                .unsafeSetVal(AddConsigneePage)(true)
 
               navigator
                 .nextPage(AddConsigneePage, NormalMode, updatedAnswers)
@@ -469,12 +469,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must go from Add consignor page" - {
-        "to Is consignor eori known page when 'YES' is selected, if it was not previously answered" in {
+        "to Is consignor eori known page when 'No' is selected, if it was not previously answered" in {
 
           forAll(genUserAnswersWithProcedure) {
             answers =>
               val updatedAnswers = answers
-                .unsafeSetVal(AddConsignorPage)(true)
+                .unsafeSetVal(AddConsignorPage)(false)
                 .unsafeRemove(IsConsignorEoriKnownPage)
 
               navigator
@@ -498,12 +498,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           }
         }
 
-        "to Check Your Answers Page when 'NO' is selected" in {
+        "to Check Your Answers Page when 'Yes' is selected" in {
 
           forAll(genUserAnswersWithProcedure) {
             answers =>
               val updatedAnswers = answers
-                .unsafeSetVal(AddConsignorPage)(false)
+                .unsafeSetVal(AddConsignorPage)(true)
 
               navigator
                 .nextPage(AddConsignorPage, CheckMode, updatedAnswers)
@@ -636,12 +636,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
       }
 
       "must go from Add consignee page" - {
-        "to Is consignee eori known page when 'YES' is selected, if it was not previously answered" in {
+        "to Is consignee eori known page when 'No' is selected, if it was not previously answered" in {
 
           forAll(genUserAnswersWithProcedure) {
             answers =>
               val updatedAnswers = answers
-                .unsafeSetVal(AddConsigneePage)(true)
+                .unsafeSetVal(AddConsigneePage)(false)
                 .unsafeRemove(IsConsigneeEoriKnownPage)
 
               navigator
@@ -665,12 +665,12 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           }
         }
 
-        "to Check Your Answers Page when 'NO' is selected" in {
+        "to Check Your Answers Page when 'Yes' is selected" in {
 
           forAll(genUserAnswersWithProcedure) {
             answers =>
               val updatedAnswers = answers
-                .unsafeSetVal(AddConsigneePage)(false)
+                .unsafeSetVal(AddConsigneePage)(true)
 
               navigator
                 .nextPage(AddConsigneePage, CheckMode, updatedAnswers)
