@@ -33,8 +33,7 @@ class GoodsSummaryNavigator @Inject() () extends Navigator {
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case TotalPackagesPage              => ua => Some(routes.TotalGrossMassController.onPageLoad(ua.id, NormalMode))
-    case TotalGrossMassPage             => ua => Some(totalGrossMassRoute(ua))
+    case TotalPackagesPage              => ua => Some(totalPackagesRoute(ua))
     case AuthorisedLocationCodePage     => ua => Some(routes.ControlResultDateLimitController.onPageLoad(ua.id, NormalMode))
     case AddCustomsApprovedLocationPage => ua => Some(addCustomsApprovedLocationRoute(ua, NormalMode))
     case ControlResultDateLimitPage     => ua => Some(routes.AddSealsController.onPageLoad(ua.id, NormalMode))
@@ -85,7 +84,7 @@ class GoodsSummaryNavigator @Inject() () extends Navigator {
     }
   }
 
-  def totalGrossMassRoute(ua: UserAnswers): Call =
+  def totalPackagesRoute(ua: UserAnswers): Call =
     (ua.get(ProcedureTypePage), ua.get(AddSecurityDetailsPage), ua.get(PreLodgeDeclarationPage)) match {
       case (_, Some(true),_ )     => controllers.routes.LoadingPlaceController.onPageLoad(ua.id, NormalMode)
       case (Some(Normal), _, Some(false)) =>  routes.AddCustomsApprovedLocationController.onPageLoad(ua.id, NormalMode)
