@@ -31,7 +31,7 @@ site.youMust = You must
 error.title.prefix = Error:
 error.summary.title = There is a problem
 
-footer.links.support_links = Cysylltiadau cymorth
+footer.links.support_links = Support links
 footer.links.help = Help using GOV.UK
 footer.links.cookies = Cookies
 footer.links.accessibility = Accessibility statement
@@ -196,14 +196,12 @@ compliant.nine.p3=This page was prepared on [date when it was first published]. 
 
 localReferenceNumber.title = What is the local reference number (LRN)?
 localReferenceNumber.heading = What is the local reference number (LRN)?
-localReferenceNumber.checkYourAnswersLabel = Local reference number
 localReferenceNumber.error.required = Enter the local reference number
 localReferenceNumber.error.length = Local reference number must be 22 characters or less
 localReferenceNumber.error.invalidCharacters = Local reference number must only include letters a to z without accents, numbers 0 to 9, hyphens and underscores
 
 addSecurityDetails.title = Do you need to add safety and security details?
 addSecurityDetails.heading = Do you need to add safety and security details?
-addSecurityDetails.checkYourAnswersLabel = Do you need to add safety and security details?
 addSecurityDetails.paragraph = These details are usually sent as an entry summary declaration. Some countries will allow you to send these details as part of a departures declaration. You must check the countries the goods will be travelling through.
 addSecurityDetails.error.required = Select yes if you need to add safety and security details
 
@@ -247,7 +245,6 @@ procedureType.title = What type of procedure are you using?
 procedureType.heading = What type of procedure are you using?
 procedureType.normal = Normal (customs-approved location)
 procedureType.simplified = Simplified (authorised consignor’s location)
-procedureType.checkYourAnswersLabel = Procedure type
 procedureType.error.required = Select which type of procedure you are using
 
 declarationPlace.title = What is the postcode for the place of declaration?
@@ -390,7 +387,6 @@ countryOfDispatch.error.required = Enter the country of dispatch
 
 officeOfDeparture.title = Where is the office of departure?
 officeOfDeparture.heading = Where is the office of departure?
-officeOfDeparture.checkYourAnswersLabel = Office of departure
 officeOfDeparture.error.required = Select the office of departure
 officeOfDeparture.hintText = Give the office location or code. Like, Dover or GB000060.
 officeOfDeparture.label = This is the Customs office where the transit movement starts.
@@ -488,7 +484,7 @@ addOrRemoveOfficesOfTransit.checkYourAnswersLabel = Add or remove offices of tra
 addAnotherTransitOffice.title = What office of transit in {0} do you want to add?
 addAnotherTransitOffice.heading = What office of transit in {0} do you want to add?
 addAnotherTransitOffice.checkYourAnswersLabel = Office of transit {0}
-addAnotherTransitOffice.paragraph = If there is no office of transit, enter the office of destination.
+addAnotherTransitOffice.paragraph = If there is no office of transit, enter the office of destination or port of arrival.
 addAnotherTransitOffice.error.required = Enter the office of transit in {0} that you want to add
 
 totalPackages.title = How many packages are you declaring?
@@ -740,10 +736,10 @@ commodityCode.title = What is the commodity code for item {0}?
 commodityCode.heading = What is the commodity code for item {0}?
 commodityCode.checkYourAnswersLabel = Commodity code for item {0}
 commodityCode.error.required = Enter the commodity code for item {0}
-commodityCode.error.length = Commodity Code must be 10 characters or less
-commodityCode.hintText = Commodity codes are 6, 8 or 10 numbers.
+commodityCode.error.length = Enter the commodity code for item {0} in the right format, like 000000 or 00000000
+commodityCode.hintText = Only enter the first 6 or 8 numbers.
 commodityCode.errors.invalidCharacters = The commodity code for item {0} must only include numbers 0 to 9
-commodityCode.errors.invalidFormat =  Enter the commodity code for item {0} in the right format, like 123456, 12345678 or 1234567890
+commodityCode.errors.invalidFormat =  Enter the commodity code for item {0} in the right format, like 000000 or 00000000
 
 isCommodityCodeKnown.title = Do you know the commodity code for item {0}?
 isCommodityCodeKnown.heading = Do you know the commodity code for item {0}?
@@ -1419,7 +1415,7 @@ loadingPlace.paragraph = This is where the goods will be loaded onto the vehicle
 officeOfTransitCountry.title = Which country is the office of transit in?
 officeOfTransitCountry.heading = Which country is the office of transit in?
 officeOfTransitCountry.checkYourAnswersLabel = officeOfTransitCountry
-officeOfTransitCountry.paragraph = This is where the goods and accompanying documents are presented. If there is no office of transit, enter the office of destination.
+officeOfTransitCountry.paragraph = This is where the goods and accompanying documents are presented. If there is no office of transit, enter the office of destination or port of arrival.
 officeOfTransitCountry.error.required = Enter the country the office of transit is in
 
 addAgreedLocationOfGoods.title = Do you need to add an agreed location for the goods?

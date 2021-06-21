@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails
+package controllers
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.OfficeOfDepartureFormProvider
 import matchers.JsonMatchers
-import models.reference.{Country, CountryCode, CountryOfDispatch, CustomsOffice}
-import models.{CountryList, CustomsOfficeList, NormalMode}
-import navigation.annotations.RouteDetails
+import navigation.annotations.PreTaskListDetails
+import models.reference.{CountryCode, CustomsOffice}
+import models.{CustomsOfficeList, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CountryOfDispatchPage, OfficeOfDeparturePage}
+import pages.OfficeOfDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -37,6 +38,7 @@ import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CustomsOfficesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -45,20 +47,29 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
 
   def onwardRoute = Call("GET", "/foo")
 
-  val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
-  val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
-  val form                              = new OfficeOfDepartureFormProvider()(customsOffices)
+  val customsOffice1: CustomsOffice       = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
+  val customsOffice2: CustomsOffice       = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("xi", "ni", CountryCode("XI"), Seq.empty, None)
+  val customsOffices: CustomsOfficeList   = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
+  val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
+  val gbForm                              = new OfficeOfDepartureFormProvider()(customsOffices)
+  val xiForm                              = new OfficeOfDepartureFormProvider()(xiCustomsOffices)
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockRefDataConnector: ReferenceDataConnector     = mock[ReferenceDataConnector]
+  private val mockFrontendAppConfig: FrontendAppConfig         = mock[FrontendAppConfig]
+  private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
+  lazy val officeOfDepartureRoute: String                      = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
 
-  lazy val officeOfDepartureRoute: String = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
+  override def beforeEach = {
+    reset(mockFrontendAppConfig, mockRefDataConnector)
+    super.beforeEach
+  }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[RouteDetails]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfDeparture Controller" - {
 
@@ -66,7 +77,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
       val request        = FakeRequest(GET, officeOfDepartureRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -85,7 +96,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       )
 
       val expectedJson = Json.obj(
-        "form"           -> form,
+        "form"           -> gbForm,
         "mode"           -> NormalMode,
         "lrn"            -> lrn,
         "customsOffices" -> expectedCustomsOfficeJson
@@ -103,7 +114,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
       val request        = FakeRequest(GET, officeOfDepartureRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -115,7 +126,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "officeId"))
+      val filledForm = gbForm.bind(Map("value" -> "officeId"))
 
       val expectedCustomsOfficeJson = Seq(
         Json.obj("value" -> "", "text"         -> ""),
@@ -137,7 +148,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
     "must redirect to the next page when valid data is submitted" in {
       dataRetrievalWithData(emptyUserAnswers)
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
       val request =
         FakeRequest(POST, officeOfDepartureRoute)
@@ -146,7 +157,6 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       val result: Future[Result] = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual onwardRoute.url
     }
 
@@ -154,10 +164,10 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
 
       val request        = FakeRequest(POST, officeOfDepartureRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
+      val boundForm      = gbForm.bind(Map("value" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 

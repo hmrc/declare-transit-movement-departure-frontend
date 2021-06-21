@@ -39,7 +39,7 @@
           {{ messages("officeOfDeparture.heading") }}
         </h1>
 
-        <form action="{{ routes.controllers.routeDetails.OfficeOfDepartureController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.OfficeOfDepartureController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

@@ -26,7 +26,7 @@ class CommodityCodeFormProviderSpec extends StringFieldBehaviours with SpecBase 
 
   private val requiredKey                      = "commodityCode.error.required"
   private val lengthKey                        = "commodityCode.error.length"
-  private val maxLength                        = 10
+  private val maxLength                        = 8
   private val commodityCodeInvalidCharacterKey = "commodityCode.errors.invalidCharacters"
   private val commodityCodeInvalidFormatKey    = "commodityCode.errors.invalidFormat"
   private val form                             = new CommodityCodeFormProvider()(index)
@@ -45,7 +45,7 @@ class CommodityCodeFormProviderSpec extends StringFieldBehaviours with SpecBase 
       form,
       fieldName,
       maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, lengthKey, Seq(index.display))
     )
 
     behave like mandatoryField(

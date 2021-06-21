@@ -18,12 +18,14 @@ package models.journeyDomain
 
 import cats.data.ReaderT
 import cats.implicits._
+import models.reference.CustomsOffice
 import models.{LocalReferenceNumber, ProcedureType, UserAnswers}
-import pages.{AddSecurityDetailsPage, ProcedureTypePage}
+import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage, ProcedureTypePage}
 
 case class PreTaskListDetails(
   lrn: LocalReferenceNumber,
   procedureType: ProcedureType,
+  officeOfDeparture: CustomsOffice,
   addSecurityDetails: Boolean
 )
 
@@ -38,6 +40,7 @@ object PreTaskListDetails {
     (
       localReferenceNumber,
       ProcedureTypePage.reader,
+      OfficeOfDeparturePage.reader,
       AddSecurityDetailsPage.reader
     ).tupled.map((PreTaskListDetails.apply _).tupled)
 }

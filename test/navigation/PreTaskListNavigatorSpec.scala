@@ -17,14 +17,16 @@
 package navigation
 
 import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
 import controllers.routes
 import generators.Generators
 import models._
+import models.reference.{CountryCode, CountryOfDispatch}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 
-class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
   val navigator = new PreTaskListNavigator
 
@@ -42,11 +44,20 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from Local Reference Number page to Procedure Type page" in {
+      "must go from Local Reference Number page to Office of Departure page" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
               .nextPage(LocalReferenceNumberPage, NormalMode, answers)
+              .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.id, NormalMode))
+        }
+      }
+
+      "must go from Office of Departure page to Procedure Type page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(OfficeOfDeparturePage, NormalMode, answers)
               .mustBe(routes.ProcedureTypeController.onPageLoad(answers.id, NormalMode))
         }
       }

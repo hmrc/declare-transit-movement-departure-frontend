@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails
+package controllers
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
-import controllers.{routes => mainRoutes}
 import forms.OfficeOfDepartureFormProvider
-import models.reference.CountryCode
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.RouteDetails
-import pages.{CountryOfDispatchPage, OfficeOfDeparturePage}
+import pages.OfficeOfDeparturePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import navigation.annotations.PreTaskListDetails
 import repositories.SessionRepository
+import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
@@ -40,12 +38,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class OfficeOfDepartureController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @RouteDetails navigator: Navigator,
+  @PreTaskListDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: OfficeOfDepartureFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -55,7 +53,7 @@ class OfficeOfDepartureController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("GB")) flatMap {
+      customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
         customsOffices =>
           val form = formProvider(customsOffices)
           val preparedForm = request.userAnswers
@@ -75,12 +73,11 @@ class OfficeOfDepartureController @Inject() (
 
           renderer.render("officeOfDeparture.njk", json).map(Ok(_))
       }
-
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("GB")) flatMap {
+      customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
         customsOffices =>
           val form = formProvider(customsOffices)
           form
@@ -103,6 +100,6 @@ class OfficeOfDepartureController @Inject() (
                 } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, updatedAnswers))
             )
       }
-
   }
+
 }

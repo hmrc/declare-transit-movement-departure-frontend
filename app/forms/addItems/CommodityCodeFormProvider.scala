@@ -31,7 +31,7 @@ class CommodityCodeFormProvider @Inject() extends Mappings {
       "value" -> text("commodityCode.error.required", Seq(index.display))
         .verifying(
           StopOnFirstFail[String](
-            maxLength(10, "commodityCode.error.length"),
+            maxLength(8, "commodityCode.error.length", index.display),
             regexp(commodityCodeCharactersRegex, "commodityCode.errors.invalidCharacters", index.display),
             regexp(commodityCodeFormatRegex, "commodityCode.errors.invalidFormat", index.display)
           )
