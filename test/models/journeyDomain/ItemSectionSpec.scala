@@ -23,13 +23,13 @@ import generators.JourneyModelGenerators
 import models.DeclarationType.{Option1, Option2}
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, ItemsSecurityTraderDetailsSpec}
-import models.reference.{CircumstanceIndicator, CountryCode, CountryOfDispatch}
-import models.{DeclarationType, Index, UserAnswers}
+import models.reference.{CircumstanceIndicator, CountryOfDispatch}
+import models.{Index, UserAnswers}
 import org.scalacheck.Gen
-import pages.addItems.{AddAdministrativeReferencePage, AddDocumentsPage}
-import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
-import pages.safetyAndSecurity._
 import pages._
+import pages.addItems.specialMentions.AddSpecialMentionPage
+import pages.addItems.{AddAdministrativeReferencePage, AddDocumentsPage}
+import pages.safetyAndSecurity._
 
 class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
