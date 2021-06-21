@@ -561,7 +561,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
 
   def setSafetyAndSecurity(safetyAndSecurity: SafetyAndSecurity)(startUserAnswers: UserAnswers): UserAnswers = {
     val ua = startUserAnswers
-    // Set summary details
+      // Set summary details
       .unsafeSetVal(AddCircumstanceIndicatorPage)(safetyAndSecurity.circumstanceIndicator.isDefined)
       .unsafeSetOpt(CircumstanceIndicatorPage)(safetyAndSecurity.circumstanceIndicator)
       .unsafeSetVal(AddTransportChargesPaymentMethodPage)(safetyAndSecurity.paymentMethod.isDefined)
