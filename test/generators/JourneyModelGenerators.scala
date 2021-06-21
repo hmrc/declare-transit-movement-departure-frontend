@@ -786,7 +786,6 @@ trait JourneyModelGenerators {
         sealNumbers        <- listWithMaxLength[SealDomain](10)
       } yield GoodsSummary(
         numberOfPackages,
-        totalMass,
         loadingPlace,
         goodSummaryDetails,
         sealNumbers

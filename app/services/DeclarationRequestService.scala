@@ -390,7 +390,11 @@ class DeclarationRequestService @Inject() (
         conIndHEA96 = booleanToInt(movementDetails.containersUsed),
         totNumOfIteHEA305 = itemDetails.size,
         totNumOfPacHEA306 = goodsSummary.numberOfPackages,
-        totGroMasHEA307 = goodsSummary.totalMass,
+        totGroMasHEA307 = itemDetails
+          .foldLeft(0.0) {
+            (x, y) => y.itemDetails.totalGrossMass.toDouble + x
+          }
+          .toString,
         decDatHEA383 = dateTimeOfPrep.toLocalDate,
         decPlaHEA394 = movementDetails.declarationPlacePage,
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
