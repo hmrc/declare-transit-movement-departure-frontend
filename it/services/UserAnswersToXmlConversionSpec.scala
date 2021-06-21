@@ -263,7 +263,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
       * Goods Summary
       */
         .unsafeSetVal(pages.TotalPackagesPage)(1)
-        .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
         .unsafeSetVal(pages.AddCustomsApprovedLocationPage)(true)
         .unsafeSetVal(pages.CustomsApprovedLocationPage)("CUSAPPLOC")

@@ -52,7 +52,6 @@ class GoodsSummaryNavigator @Inject() () extends Navigator {
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
     case TotalPackagesPage              => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
-    case TotalGrossMassPage             => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
     case AuthorisedLocationCodePage     => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
     case ControlResultDateLimitPage     => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.id))
     case AddCustomsApprovedLocationPage => ua => Some(addCustomsApprovedLocationRoute(ua, CheckMode))

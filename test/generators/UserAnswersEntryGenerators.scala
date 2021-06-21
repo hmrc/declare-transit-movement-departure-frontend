@@ -832,13 +832,6 @@ trait UserAnswersEntryGenerators {
       } yield (AddCustomsApprovedLocationPage, value)
     }
 
-  implicit lazy val arbitraryTotalGrossMassUserAnswersEntry: Arbitrary[(TotalGrossMassPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- nonEmptyString.map(Json.toJson(_))
-      } yield (TotalGrossMassPage, value)
-    }
-
   implicit lazy val arbitraryAuthorisedLocationCodeUserAnswersEntry: Arbitrary[(AuthorisedLocationCodePage.type, JsValue)] =
     Arbitrary {
       for {

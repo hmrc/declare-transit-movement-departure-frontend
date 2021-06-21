@@ -351,25 +351,12 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
     "in Check Mode" - {
 
-      "must go from TotalGrossMage to CheckYourAnswersPage " in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers.set(TotalGrossMassPage, "100").success.value
-
-            navigator
-              .nextPage(TotalGrossMassPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
-        }
-      }
-
       "must go from Loading Place page to CheckYourAnswersPage " in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.set(TotalGrossMassPage, "TestPlace").success.value
-
-            navigator
-              .nextPage(LoadingPlacePage , CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                       navigator
+              .nextPage(LoadingPlacePage , CheckMode, answers)
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(answers.id))
         }
       }
 
