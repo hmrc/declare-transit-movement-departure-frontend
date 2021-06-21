@@ -22,7 +22,6 @@ import generators.{JourneyModelGenerators, ModelGenerators}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.reference.PackageType
 import models.{Index, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.addItems.{DeclareMarkPage, TotalPiecesPage, _}
 import pages.{PackageTypePage, QuestionPage}

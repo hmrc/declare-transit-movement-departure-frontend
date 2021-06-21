@@ -19,35 +19,32 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
-import models.journeyDomain.ContainerSpec.setContainerUserAnswers
+import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.{Index, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
 import pages.addItems.containers.ContainerNumberPage
 
 class ContainerSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
   "Container" - {
     "can be parsed from UserAnswers" - {
       "when all details for section have been answered" in {
-        forAll(arbitrary[Container], arbitrary[UserAnswers]) {
-          case (container, userAnswers) =>
-            val updatedUserAnswers = setContainerUserAnswers(container, index, referenceIndex)(userAnswers)
-            val result             = UserAnswersReader[Container](Container.containerReader(index, referenceIndex)).run(updatedUserAnswers)
 
-            result.right.value mustEqual container
-        }
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(ContainerNumberPage(index, referenceIndex))("123")
+
+        val expectedResult = Container("123")
+
+        val result = UserAnswersReader[Container](Container.containerReader(index, referenceIndex)).run(userAnswers)
+
+        result.right.value mustEqual expectedResult
       }
     }
 
     "cannot be parsed from UserAnswers" - {
       "when a mandatory answer is missing" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val updatedUserAnswers = userAnswers.remove(ContainerNumberPage(index, referenceIndex)).success.value
-            val result =
-              UserAnswersReader[Container](Container.containerReader(index, referenceIndex)).run(updatedUserAnswers).left.value
 
-            result.page mustBe ContainerNumberPage(index, referenceIndex)
-        }
+        val result = UserAnswersReader[Container](Container.containerReader(index, referenceIndex)).run(emptyUserAnswers)
+
+        result.left.value.page mustEqual ContainerNumberPage(index, referenceIndex)
       }
     }
   }
