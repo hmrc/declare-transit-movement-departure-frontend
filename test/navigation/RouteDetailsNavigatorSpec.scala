@@ -37,24 +37,13 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
     "in Normal mode" - {
 
       "Route Details section" - {
-        "must go from Country of dispatch page to Destination Country page when office of destination has be answered" in {
+        "must go from Country of dispatch page to Destination Country page" in {
           val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              val updatedUserAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
               navigator
-                .nextPage(CountryOfDispatchPage, NormalMode, updatedUserAnswers)
-                .mustBe(routes.DestinationCountryController.onPageLoad(updatedUserAnswers.id, NormalMode))
-          }
-        }
-
-        "must go from Country of dispatch page to office of departure page when it has not been previously been answered" in {
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val updatedUserAnswers = answers.unsafeRemove(OfficeOfDeparturePage)
-              navigator
-                .nextPage(CountryOfDispatchPage, NormalMode, updatedUserAnswers)
-                .mustBe(controllers.routes.OfficeOfDepartureController.onPageLoad(updatedUserAnswers.id, NormalMode))
+                .nextPage(CountryOfDispatchPage, NormalMode, answers)
+                .mustBe(routes.DestinationCountryController.onPageLoad(answers.id, NormalMode))
           }
         }
 
