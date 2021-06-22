@@ -91,20 +91,20 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with JourneyModel
         "AddCircumstanceIndicatorPage is false and " +
         "Index position is 0" in {
 
-        val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-        val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+          val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
+          val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
 
-        val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
+          val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
-        val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
-          .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-          .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+          val userAnswers = producedDocumentUa
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
 
-        val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
+          val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-        result.right.value.value mustBe expectedResult
-      }
+          result.right.value.value mustBe expectedResult
+        }
 
       "must return List of produced documents when " +
         "AddSecurityDetailsPage is true, " +
@@ -113,23 +113,23 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with JourneyModel
         "Index position is 0 and " +
         "CircumstanceIndicator is one of the conditional indicators" in {
 
-        val validCircumstanceIndicator = Gen.oneOf(CircumstanceIndicator.conditionalIndicators).sample.value
+          val validCircumstanceIndicator = Gen.oneOf(CircumstanceIndicator.conditionalIndicators).sample.value
 
-        val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-        val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+          val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
+          val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
 
-        val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
+          val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
-        val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
-          .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-          .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
-          .unsafeSetVal(CircumstanceIndicatorPage)(validCircumstanceIndicator)
+          val userAnswers = producedDocumentUa
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)(validCircumstanceIndicator)
 
-        val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
+          val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-        result.right.value.value mustBe expectedResult
-      }
+          result.right.value.value mustBe expectedResult
+        }
 
       "must return List of produced documents when AddSecurityDetailsPage is false and AddDocumentsPage is true" in {
 
@@ -193,29 +193,29 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with JourneyModel
         "CircumstanceIndicator is not one of the conditional indicators and " +
         "AddDocumentPage is true" in {
 
-        val invalidCircumstanceIndicator = arb[String]
-          .suchThat(
-            string => !CircumstanceIndicator.conditionalIndicators.forall(_.contains(string))
-          )
-          .sample
-          .value
+          val invalidCircumstanceIndicator = arb[String]
+            .suchThat(
+              string => !CircumstanceIndicator.conditionalIndicators.forall(_.contains(string))
+            )
+            .sample
+            .value
 
-        val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-        val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+          val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
+          val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
 
-        val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
+          val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
-        val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
-          .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-          .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
-          .unsafeSetVal(CircumstanceIndicatorPage)(invalidCircumstanceIndicator)
-          .unsafeSetVal(AddDocumentsPage(index))(true)
+          val userAnswers = producedDocumentUa
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)(invalidCircumstanceIndicator)
+            .unsafeSetVal(AddDocumentsPage(index))(true)
 
-        val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
+          val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-        result.right.value.value mustBe expectedResult
-      }
+          result.right.value.value mustBe expectedResult
+        }
 
       "must return None when " +
         "AddSecurityDetailsPage is true, " +
@@ -225,29 +225,27 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with JourneyModel
         "CircumstanceIndicator is not one of the conditional indicators and " +
         "AddDocumentPage is false" in {
 
-        val invalidCircumstanceIndicator = arb[String]
-          .suchThat(
-            string => !CircumstanceIndicator.conditionalIndicators.forall(_.contains(string))
-          )
-          .sample
-          .value
+          val invalidCircumstanceIndicator = arb[String]
+            .suchThat(
+              string => !CircumstanceIndicator.conditionalIndicators.forall(_.contains(string))
+            )
+            .sample
+            .value
 
-        val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-        val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+          val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
+          val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
 
-        val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
+          val userAnswers = producedDocumentUa
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)(invalidCircumstanceIndicator)
+            .unsafeSetVal(AddDocumentsPage(index))(false)
 
-        val userAnswers = producedDocumentUa
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
-          .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-          .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
-          .unsafeSetVal(CircumstanceIndicatorPage)(invalidCircumstanceIndicator)
-          .unsafeSetVal(AddDocumentsPage(index))(false)
+          val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-        val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
-
-        result.right.value mustBe None
-      }
+          result.right.value mustBe None
+        }
 
       "must return None when AddSecurityDetailsPage is false and AddDocumentsPage is false" in {
 

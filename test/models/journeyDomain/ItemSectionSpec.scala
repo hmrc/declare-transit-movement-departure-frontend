@@ -20,98 +20,163 @@ import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
-import models.DeclarationType.{Option1, Option2}
+import models.DeclarationType.Option1
+import models.journeyDomain.Packages.UnpackedPackages
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, ItemsSecurityTraderDetailsSpec}
-import models.reference.{CircumstanceIndicator, CountryOfDispatch}
+import models.reference.{CountryCode, CountryOfDispatch, PackageType}
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages._
-import pages.addItems.specialMentions.AddSpecialMentionPage
-import pages.addItems.{AddAdministrativeReferencePage, AddDocumentsPage}
+import pages.addItems.containers.ContainerNumberPage
+import pages.addItems.securityDetails.AddDangerousGoodsCodePage
+import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
+import pages.addItems._
 import pages.safetyAndSecurity._
 
 class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
-  private val genT2DeclarationType = Option2
-
-  private val genOtherDeclarationType = Option1
+  private val itemSectionUa = emptyUserAnswers
+    //ItemDetails
+    .unsafeSetVal(ItemDescriptionPage(index))("itemDescription")
+    .unsafeSetVal(ItemTotalGrossMassPage(index))("123")
+    .unsafeSetVal(AddTotalNetMassPage(index))(true)
+    .unsafeSetVal(TotalNetMassPage(index))("123")
+    .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
+    .unsafeSetVal(CommodityCodePage(index))("commodityCode")
+    //Consignor
+    .unsafeSetVal(AddConsignorPage)(true)
+    //Consignee
+    .unsafeSetVal(AddConsigneePage)(true)
+    //Packages
+    .unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(PackageType("NE", "description"))
+    .unsafeSetVal(TotalPiecesPage(itemIndex, packageIndex))(123)
+    .unsafeSetVal(AddMarkPage(itemIndex, packageIndex))(false)
+    //Containers
+    .unsafeSetVal(ContainersUsedPage)(false)
+    //SpecialMention
+    .unsafeSetVal(AddSpecialMentionPage(itemIndex))(false)
+    //ProducedDocuments
+    .unsafeSetVal(AddSecurityDetailsPage)(true)
+    .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
+    .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+    .unsafeSetVal(AddDocumentsPage(index))(false)
+    //ItemSecurityTraderDetails
+    .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
+    .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
+    .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
+    .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+    .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+    //PreviousReferences
+    .unsafeSetVal(AddAdministrativeReferencePage(index))(false)
+    .unsafeSetVal(DeclarationTypePage)(Option1)
+    .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("IT"), isNotEu = false))
 
   "ItemSection" - {
     "can be parsed UserAnswers" - {
-      "when all details for section have been answered" in {
-        forAll(genItemSectionOld(), arb[UserAnswers], arb[CountryOfDispatch]) {
-          case (itemSection, userAnswers, countryOfDispatch) =>
-            val indicator = CircumstanceIndicator.conditionalIndicators.head
+      "when all mandatory answers for section have been defined" in {
 
-            val updatedUserAnswer1 = {
-              itemSection.itemSecurityTraderDetails match {
-                case Some(value) =>
-                  userAnswers
-                    .unsafeSetVal(AddTransportChargesPaymentMethodPage)(value.methodOfPayment.isEmpty)
-                    .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(value.commercialReferenceNumber.isEmpty)
+        val expectedResult = ItemSection(
+          ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode")),
+          None,
+          None,
+          NonEmptyList(UnpackedPackages(PackageType("NE", "description"), 123, None), List.empty),
+          None,
+          None,
+          None,
+          Some(ItemsSecurityTraderDetails(None, None, None, None, None)),
+          None
+        )
 
-                case None => userAnswers
-              }
-            }.unsafeSetVal(AddSecurityDetailsPage)(itemSection.producedDocuments.isDefined)
-              .unsafeSetVal(AddCircumstanceIndicatorPage)(itemSection.producedDocuments.isDefined)
-              .unsafeSetVal(AddCommercialReferenceNumberPage)(itemSection.producedDocuments.isDefined)
-              .unsafeSetVal(AddDocumentsPage(itemIndex))(itemSection.producedDocuments.isDefined)
-              .unsafeSetVal(CircumstanceIndicatorPage)(indicator)
-              .unsafeSetVal(AddConsignorPage)(false)
-              .unsafeSetVal(AddConsigneePage)(false)
+        val result = ItemSection.readerItemSection(index).run(itemSectionUa)
 
-            val updatedUserAnswer2 = itemSection.previousReferences match {
-              case None =>
-                updatedUserAnswer1
-                  .unsafeSetVal(DeclarationTypePage)(genOtherDeclarationType)
-                  .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
-                  .unsafeSetVal(AddAdministrativeReferencePage(itemIndex))(false)
-              case Some(_) =>
-                updatedUserAnswer1
-                  .unsafeSetVal(DeclarationTypePage)(genT2DeclarationType)
-                  .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
-            }
+        result.right.value mustBe expectedResult
+      }
 
-            val setSectionUserAnswers = ItemSectionSpec.setItemSection(itemSection, index)(updatedUserAnswer2)
+      "when containers used is true and containers are defined" in {
 
-            val result: EitherType[ItemSection] = ItemSection.readerItemSection(index).run(setSectionUserAnswers)
+        val userAnswers = itemSectionUa
+          .unsafeSetVal(ContainersUsedPage)(true)
+          .unsafeSetVal(ContainerNumberPage(index, referenceIndex))("123")
+          .unsafeSetVal(ContainerNumberPage(index, Index(1)))("123")
 
-            result.right.value.itemDetails mustEqual itemSection.itemDetails
-            result.right.value.consignor mustEqual itemSection.consignor
-            result.right.value.consignee mustEqual itemSection.consignee
-            result.right.value.packages mustEqual itemSection.packages
-            result.right.value.containers mustEqual itemSection.containers
-            result.right.value.specialMentions mustEqual itemSection.specialMentions
-            result.right.value.producedDocuments mustEqual itemSection.producedDocuments
-            result.right.value.itemSecurityTraderDetails mustEqual itemSection.itemSecurityTraderDetails
-        }
+        val expectedResult = NonEmptyList(Container("123"), List(Container("123")))
+
+        val result = ItemSection.readerItemSection(index).run(userAnswers).right.value
+
+        result.containers.value mustBe expectedResult
+      }
+
+      "when add special mention is true and special mentions are defined" in {
+
+        val userAnswers = itemSectionUa
+          .unsafeSetVal(AddSpecialMentionPage(index))(true)
+          .unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))("specialMentionType")
+          .unsafeSetVal(SpecialMentionAdditionalInfoPage(index, referenceIndex))("additionalInfo")
+
+        val expectedResult = NonEmptyList(SpecialMentionDomain("specialMentionType", "additionalInfo"), List.empty)
+
+        val result = ItemSection.readerItemSection(index).run(userAnswers).right.value
+
+        result.specialMentions.value mustBe expectedResult
       }
     }
 
     "cannot be parsed" - {
 
       val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-        AddSecurityDetailsPage,
-        AddCircumstanceIndicatorPage,
-        AddCommercialReferenceNumberPage,
-        AddDocumentsPage(itemIndex),
-        CircumstanceIndicatorPage,
-        AddConsignorPage,
-        AddConsigneePage
+        AddSpecialMentionPage(itemIndex),
+        ContainersUsedPage
       )
 
-      "when an answer is missing" in {
-        forAll(arb[ItemSection], arb[UserAnswers], mandatoryPages) {
-          case (itemSection, ua, mandatoryPage) =>
-            val userAnswers = ItemDetailsSpec
-              .setItemDetailsUserAnswers(itemSection.itemDetails, index)(ua)
-              .unsafeRemove(mandatoryPage)
+      "when a mandatory answer is missing" in {
 
-            val result: EitherType[ItemSection] = ItemSection.readerItemSection(index).run(userAnswers)
+        forAll(mandatoryPages) {
+          mandatoryPage =>
+            val userAnswers = itemSectionUa.unsafeRemove(mandatoryPage)
 
-            result.isLeft mustBe true
+            val result = ItemSection.readerItemSection(index).run(userAnswers)
+
+            result.left.value.page mustBe mandatoryPage
         }
+      }
+
+      "when all packages cannot be derived" in {
+
+        val userAnswers = itemSectionUa
+          .unsafeSetVal(PackageTypePage(itemIndex, Index(1)))(PackageType("NE", "description"))
+          .unsafeSetVal(TotalPiecesPage(itemIndex, Index(1)))(123)
+          .unsafeSetVal(AddMarkPage(itemIndex, Index(1)))(false)
+          .unsafeRemove(PackageTypePage(itemIndex, packageIndex))
+
+        val result = ItemSection.readerItemSection(index).run(userAnswers).left.value
+
+        result.page mustBe PackageTypePage(itemIndex, packageIndex)
+
+      }
+
+      "when containers used is true and containers are not defined" in {
+
+        val userAnswers = itemSectionUa
+          .unsafeSetVal(ContainersUsedPage)(true)
+          .unsafeRemove(ContainerNumberPage(index, referenceIndex))
+          .unsafeRemove(ContainerNumberPage(index, Index(1)))
+
+        val result = ItemSection.readerItemSection(index).run(userAnswers).left.value
+
+        result.page mustBe ContainerNumberPage(index, referenceIndex)
+      }
+
+      "when add special mention is true and special mentions are not defined" in {
+
+        val userAnswers = itemSectionUa
+          .unsafeSetVal(AddSpecialMentionPage(index))(true)
+          .unsafeRemove(SpecialMentionTypePage(index, referenceIndex))
+          .unsafeRemove(SpecialMentionAdditionalInfoPage(index, referenceIndex))
+
+        val result = ItemSection.readerItemSection(index).run(userAnswers).left.value
+
+        result.page mustBe SpecialMentionTypePage(index, referenceIndex)
       }
     }
   }
@@ -119,44 +184,73 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
   "Seq of ItemSection" - {
     "can be parsed UserAnswers" - {
       "when all details for section have been answered" in {
-        forAll(genItemSectionOld(), arb[UserAnswers], arb[CountryOfDispatch]) {
-          case (itemSections, userAnswers, countryOfDispatch) =>
-            val indicator = CircumstanceIndicator.conditionalIndicators.head
 
-            val updatedUserAnswer1 = {
-              itemSections.itemSecurityTraderDetails match {
-                case Some(value) =>
-                  userAnswers
-                    .unsafeSetVal(AddTransportChargesPaymentMethodPage)(value.methodOfPayment.isEmpty)
-                    .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(value.commercialReferenceNumber.isEmpty)
-                case None => userAnswers
-              }
-            }.unsafeSetVal(AddSecurityDetailsPage)(itemSections.producedDocuments.isDefined)
-              .unsafeSetVal(AddCircumstanceIndicatorPage)(itemSections.producedDocuments.isDefined)
-              .unsafeSetVal(AddCommercialReferenceNumberPage)(itemSections.producedDocuments.isDefined)
-              .unsafeSetVal(CircumstanceIndicatorPage)(indicator)
-              .unsafeSetVal(AddConsignorPage)(false)
-              .unsafeSetVal(AddConsigneePage)(false)
+        val userAnswersWithSecondItem = itemSectionUa
+          //ItemDetails
+          .unsafeSetVal(ItemDescriptionPage(Index(1)))("itemDescription")
+          .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))("123")
+          .unsafeSetVal(AddTotalNetMassPage(Index(1)))(true)
+          .unsafeSetVal(TotalNetMassPage(Index(1)))("123")
+          .unsafeSetVal(IsCommodityCodeKnownPage(Index(1)))(true)
+          .unsafeSetVal(CommodityCodePage(Index(1)))("commodityCode")
+          //Consignor
+          .unsafeSetVal(AddConsignorPage)(true)
+          //Consignee
+          .unsafeSetVal(AddConsigneePage)(true)
+          //Packages
+          .unsafeSetVal(PackageTypePage(Index(1), packageIndex))(PackageType("NE", "description"))
+          .unsafeSetVal(TotalPiecesPage(Index(1), packageIndex))(123)
+          .unsafeSetVal(AddMarkPage(Index(1), packageIndex))(false)
+          //Containers
+          .unsafeSetVal(ContainersUsedPage)(false)
+          //SpecialMention
+          .unsafeSetVal(AddSpecialMentionPage(Index(1)))(false)
+          //ProducedDocuments
+          .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
+          .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+          .unsafeSetVal(AddDocumentsPage(Index(1)))(false)
+          //ItemSecurityTraderDetails
+          .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
+          .unsafeSetVal(AddDangerousGoodsCodePage(Index(1)))(false)
+          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
+          .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+          //PreviousReferences
+          .unsafeSetVal(AddAdministrativeReferencePage(Index(1)))(false)
+          .unsafeSetVal(DeclarationTypePage)(Option1)
+          .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("IT"), isNotEu = false))
 
-            val updatedUserAnswer2 = itemSections.previousReferences match {
-              case None =>
-                updatedUserAnswer1
-                  .unsafeSetVal(DeclarationTypePage)(genOtherDeclarationType)
-                  .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
-                  .unsafeSetVal(AddAdministrativeReferencePage(Index(0)))(false)
-                  .unsafeSetVal(AddAdministrativeReferencePage(Index(1)))(false)
-              case Some(_) =>
-                updatedUserAnswer1
-                  .unsafeSetVal(DeclarationTypePage)(genT2DeclarationType)
-                  .unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
-            }
+        val expectedResult = NonEmptyList(
+          ItemSection(
+            ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode")),
+            None,
+            None,
+            NonEmptyList(UnpackedPackages(PackageType("NE", "description"), 123, None), List.empty),
+            None,
+            None,
+            None,
+            Some(ItemsSecurityTraderDetails(None, None, None, None, None)),
+            None
+          ),
+          List(
+            ItemSection(
+              ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode")),
+              None,
+              None,
+              NonEmptyList(UnpackedPackages(PackageType("NE", "description"), 123, None), List.empty),
+              None,
+              None,
+              None,
+              Some(ItemsSecurityTraderDetails(None, None, None, None, None)),
+              None
+            )
+          )
+        )
 
-            val setItemSections = ItemSectionSpec.setItemSections(Seq(itemSections, itemSections).toList)(updatedUserAnswer2)
+        val result = ItemSection.readerItemSections.run(userAnswersWithSecondItem)
 
-            val result = ItemSection.readerItemSections.run(setItemSections)
-
-            result.right.value mustEqual NonEmptyList(itemSections, List(itemSections))
-        }
+        result.right.value mustEqual expectedResult
       }
     }
   }
