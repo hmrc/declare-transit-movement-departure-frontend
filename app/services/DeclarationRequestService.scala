@@ -16,7 +16,7 @@
 
 package services
 
-import cats.data.NonEmptyList
+import cats.data.{Kleisli, NonEmptyList}
 import cats.implicits._
 import models.domain.{Address, SealDomain}
 import models.journeyDomain.GoodsSummary.{
@@ -49,6 +49,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import logging.Logging
+import pages.TotalGrossMassPage
 
 trait DeclarationRequestServiceInt {
   def convert(userAnswers: UserAnswers): Future[EitherType[DeclarationRequest]]
@@ -88,7 +89,8 @@ class DeclarationRequestService @Inject() (
       itemDetails,
       goodsSummary,
       guarantee,
-      safetyAndSecurity
+      safetyAndSecurity,
+      grossMass
     ) = journeyDomain
 
     def guaranteeDetails(guaranteeDetails: NonEmptyList[GuaranteeDetails]): NonEmptyList[Guarantee] =
@@ -390,11 +392,15 @@ class DeclarationRequestService @Inject() (
         conIndHEA96 = booleanToInt(movementDetails.containersUsed),
         totNumOfIteHEA305 = itemDetails.size,
         totNumOfPacHEA306 = goodsSummary.numberOfPackages,
-        totGroMasHEA307 = itemDetails
-          .foldLeft(0.0) {
-            (x, y) => y.itemDetails.totalGrossMass.toDouble + x
-          }
-          .toString,
+        totGroMasHEA307 = grossMass match {
+          case Some(grossMass) => grossMass
+          case _ =>
+            itemDetails //TODO remove once deployed and journeys completed by current users
+              .foldLeft(0.0) {
+                (x, y) => y.itemDetails.totalGrossMass.toDouble + x
+              }
+              .toString
+        },
         decDatHEA383 = dateTimeOfPrep.toLocalDate,
         decPlaHEA394 = movementDetails.declarationPlacePage,
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),

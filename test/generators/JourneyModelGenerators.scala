@@ -19,7 +19,7 @@ package generators
 import cats.data.NonEmptyList
 import models.DeclarationType.Option2
 import models._
-import models.domain.{Address, SealDomain}
+import models.domain.{Address, GrossMass, SealDomain}
 import models.journeyDomain.GoodsSummary.{
   GoodSummaryDetails,
   GoodSummaryNormalDetailsWithPreLodge,
@@ -79,7 +79,8 @@ trait JourneyModelGenerators {
       NonEmptyList(itemDetails, List(itemDetails)),
       goodsSummary,
       guarantees,
-      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
+      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None,
+      None
     )
 
   lazy val arbitraryNormalJourneyDomain: Gen[JourneyDomain] =
@@ -104,7 +105,8 @@ trait JourneyModelGenerators {
       NonEmptyList(itemDetails, List(itemDetails)),
       goodsSummary,
       guarantees,
-      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
+      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None,
+      None
     )
 
   implicit lazy val arbitrarySecurityDetails: Arbitrary[SafetyAndSecurity] = {
