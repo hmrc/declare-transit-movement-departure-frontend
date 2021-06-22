@@ -56,8 +56,8 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
         "when Eori is answered in prefix is not GB" in {
 
           val eoriNumber = EoriNumber("AD123456")
-          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
-            (baseUserAnswers, name, address) =>
+          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength)) {
+            (baseUserAnswers, name) =>
               val userAnswers = baseUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                 .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
