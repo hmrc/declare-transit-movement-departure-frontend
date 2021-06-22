@@ -18,7 +18,7 @@ package services
 
 import cats.data.{Kleisli, NonEmptyList}
 import cats.implicits._
-import models.domain.{Address, SealDomain}
+import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
   GoodSummaryDetails,
   GoodSummaryNormalDetailsWithPreLodge,
@@ -166,8 +166,8 @@ class DeclarationRequestService @Inject() (
       itemSecurityTraderDetails.flatMap {
         x =>
           x.consignor.map {
-            case SecurityPersonalInformation(name, Address(buildingAndStreet, city, postcode, _)) =>
-              ItemsSecurityConsignorWithoutEori(name, buildingAndStreet, postcode, city, "GB")
+            case SecurityPersonalInformation(name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
+              ItemsSecurityConsignorWithoutEori(name, buildingAndStreet, postcode, city, country.code.code)
             case SecurityTraderEori(eori) =>
               ItemsSecurityConsignorWithEori(eori.value)
           }
@@ -177,8 +177,8 @@ class DeclarationRequestService @Inject() (
       itemSecurityTraderDetails.flatMap {
         x =>
           x.consignee.map {
-            case SecurityPersonalInformation(name, Address(buildingAndStreet, city, postcode, _)) =>
-              ItemsSecurityConsigneeWithoutEori(name, buildingAndStreet, postcode, city, "GB")
+            case SecurityPersonalInformation(name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
+              ItemsSecurityConsigneeWithoutEori(name, buildingAndStreet, postcode, city, country.code.code)
             case SecurityTraderEori(eori) =>
               ItemsSecurityConsigneeWithEori(eori.value)
           }
@@ -186,19 +186,19 @@ class DeclarationRequestService @Inject() (
 
     def principalTrader(traderDetails: TraderDetails): TraderPrincipal =
       traderDetails.principalTraderDetails match {
-        case PrincipalTraderPersonalInfo(name, Address(buildingAndStreet, city, postcode, _)) =>
+        case PrincipalTraderPersonalInfo(name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
           TraderPrincipalWithoutEori(
             name = name,
             streetAndNumber = buildingAndStreet,
             postCode = postcode,
             city = city,
-            countryCode = Constants.principalTraderCountryCode.code
+            countryCode = country.code.code
           )
         case PrincipalTraderEoriInfo(traderEori) =>
           TraderPrincipalWithEori(eori = traderEori.value, None, None, None, None, None)
 
-        case PrincipalTraderEoriPersonalInfo(eori, name, Address(buildingAndStreet, city, postcode, _)) =>
-          TraderPrincipalWithEori(eori.value, Some(name), Some(buildingAndStreet), Some(city), Some(postcode), Some("GB"))
+        case PrincipalTraderEoriPersonalInfo(eori, name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
+          TraderPrincipalWithEori(eori.value, Some(name), Some(buildingAndStreet), Some(postcode), Some(city), Some(country.code.code))
       }
 
     def detailsAtBorderMode(detailsAtBorder: DetailsAtBorder, inlandCode: Int): String =
@@ -229,11 +229,8 @@ class DeclarationRequestService @Inject() (
     def traderConsignor(requiredDetails: Option[RequiredDetails]): Option[TraderConsignorGoodsItem] =
       requiredDetails
         .flatMap {
-          case ItemTraderDetails.RequiredDetails(name, address, eori) =>
-            Address.prismAddressToCommonAddress.getOption(address).map {
-              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
-                TraderConsignorGoodsItem(name, addressLine1, addressLine3, addressLine2, country.code.code, eori.map(_.value))
-            }
+          case ItemTraderDetails.RequiredDetails(name, CommonAddress(addressLine1, addressLine2, postCode, country), eori) =>
+            Some(TraderConsignorGoodsItem(name, addressLine1, postCode, addressLine2, country.code.code, eori.map(_.value)))
           case _ =>
             logger.error(s"traderConsignor failed to get name and address")
             None
@@ -242,11 +239,8 @@ class DeclarationRequestService @Inject() (
     def traderConsignee(requiredDetails: Option[RequiredDetails]): Option[TraderConsigneeGoodsItem] =
       requiredDetails
         .flatMap {
-          case ItemTraderDetails.RequiredDetails(name, address, eori) =>
-            Address.prismAddressToCommonAddress.getOption(address).map {
-              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
-                TraderConsigneeGoodsItem(name, addressLine1, addressLine3, addressLine2, country.code.code, eori.map(_.value))
-            }
+          case ItemTraderDetails.RequiredDetails(name, CommonAddress(addressLine1, addressLine2, postCode, country), eori) =>
+            Some(TraderConsigneeGoodsItem(name, addressLine1, postCode, addressLine2, country.code.code, eori.map(_.value)))
           case _ =>
             logger.error(s"traderConsignee failed to get name and address")
             None
@@ -297,40 +291,29 @@ class DeclarationRequestService @Inject() (
 
     def safetyAndSecurityConsignee(securityTraderDetails: Option[SecurityTraderDetails]): Option[SafetyAndSecurityConsignee] =
       securityTraderDetails
-        .flatMap {
-          case SafetyAndSecurity.PersonalInformation(name, address) =>
-            Address.prismAddressToCommonAddress.getOption(address).map {
-              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
-                SafetyAndSecurityConsigneeWithoutEori(name, addressLine1, addressLine3, addressLine2, country.code.code)
-            }
-
+        .map {
+          case SafetyAndSecurity.PersonalInformation(name, CommonAddress(addressLine1, addressLine2, postCode, country)) =>
+            SafetyAndSecurityConsigneeWithoutEori(name, addressLine1, postCode, addressLine2, country.code.code)
           case SafetyAndSecurity.TraderEori(EoriNumber(eori)) =>
-            Some(SafetyAndSecurityConsigneeWithEori(eori))
+            SafetyAndSecurityConsigneeWithEori(eori)
         }
 
     def safetyAndSecurityConsignor(securityTraderDetails: Option[SecurityTraderDetails]): Option[SafetyAndSecurityConsignor] =
       securityTraderDetails
-        .flatMap {
-          case SafetyAndSecurity.PersonalInformation(name, address) =>
-            Address.prismAddressToCommonAddress.getOption(address).map {
-              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
-                SafetyAndSecurityConsignorWithoutEori(name, addressLine1, addressLine3, addressLine2, country.code.code)
-            }
-
+        .map {
+          case SafetyAndSecurity.PersonalInformation(name, CommonAddress(addressLine1, addressLine2, postCode, country)) =>
+            SafetyAndSecurityConsignorWithoutEori(name, addressLine1, postCode, addressLine2, country.code.code)
           case SafetyAndSecurity.TraderEori(EoriNumber(eori)) =>
-            Some(SafetyAndSecurityConsignorWithEori(eori))
+            SafetyAndSecurityConsignorWithEori(eori)
         }
 
     def carrier(securityTraderDetails: Option[SecurityTraderDetails]): Option[SafetyAndSecurityCarrier] =
       securityTraderDetails
-        .flatMap {
-          case SafetyAndSecurity.PersonalInformation(name, address) =>
-            Address.prismAddressToCommonAddress.getOption(address).map {
-              case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
-                SafetyAndSecurityCarrierWithoutEori(name, addressLine1, addressLine3, addressLine2, country.code.code)
-            }
+        .map {
+          case SafetyAndSecurity.PersonalInformation(name, CommonAddress(addressLine1, addressLine2, postCode, country)) =>
+            SafetyAndSecurityCarrierWithoutEori(name, addressLine1, postCode, addressLine2, country.code.code)
           case SafetyAndSecurity.TraderEori(EoriNumber(eori)) =>
-            Some(SafetyAndSecurityCarrierWithEori(eori))
+            SafetyAndSecurityCarrierWithEori(eori)
         }
 
     def identityOfTransportAtCrossing(detailsAtBorder: DetailsAtBorder, inlandMode: InlandMode): Option[String] =
@@ -451,26 +434,15 @@ class DeclarationRequestService @Inject() (
 
   // TODO: Improve by changing ConsignorDetails to have a Consignor Address instead
   private def headerConsignor(consignorDetails: ConsignorDetails): TraderConsignor = {
-    val ConsignorDetails(name, address, eori) = consignorDetails
+    val ConsignorDetails(name, CommonAddress(addressLine1, addressLine2, postCode, country), eori) = consignorDetails
 
-    Address.prismAddressToCommonAddress
-      .getOption(address)
-      .map {
-        case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
-          TraderConsignor(name, addressLine1, addressLine3, addressLine2, country.code.code, eori.map(_.value))
-      }
-      .get
+    TraderConsignor(name, addressLine1, postCode, addressLine2, country.code.code, eori.map(_.value))
   }
 
   // TODO: Improve by changing ConsigneeDetails to have a Consignee Address instead
   private def headerConsignee(consigneeDetails: ConsigneeDetails): TraderConsignee = {
-    val ConsigneeDetails(name, address, eori) = consigneeDetails
-    Address.prismAddressToCommonAddress
-      .getOption(address)
-      .map {
-        case CommonAddress(addressLine1, addressLine2, addressLine3, country) =>
-          TraderConsignee(name, addressLine1, addressLine3, addressLine2, country.code.code, eori.map(_.value))
-      }
-      .get
+    val ConsigneeDetails(name, CommonAddress(addressLine1, addressLine2, postCode, country), eori) = consigneeDetails
+
+    TraderConsignee(name, addressLine1, postCode, addressLine2, country.code.code, eori.map(_.value))
   }
 }

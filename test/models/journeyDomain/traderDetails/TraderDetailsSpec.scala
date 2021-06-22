@@ -20,7 +20,6 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.ProcedureType.Simplified
-import models.domain.Address
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber, ProcedureType, UserAnswers}
@@ -140,8 +139,8 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case PrincipalTraderEoriPersonalInfo(_, name, _) => name
       })
       .unsafeSetPFn(PrincipalAddressPage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderPersonalInfo(_, address)        => Address.prismAddressToCommonAddress.getOption(address).get
-        case PrincipalTraderEoriPersonalInfo(_, _, address) => Address.prismAddressToCommonAddress.getOption(address).get
+        case PrincipalTraderPersonalInfo(_, address)        => address
+        case PrincipalTraderEoriPersonalInfo(_, _, address) => address
       })
       .assert("Eori must be provided for Simplified procedure") {
         ua =>
@@ -162,7 +161,7 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(ConsignorDetails(name, _, _)) => name
       })
       .unsafeSetPFn(ConsignorAddressPage)(traderDetails.consignor)({
-        case Some(ConsignorDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(ConsignorDetails(_, address, _)) => address
       })
       // Set Consignee details
       .unsafeSetVal(AddConsigneePage)(traderDetails.consignee.isDefined)
@@ -176,7 +175,7 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(ConsigneeDetails(name, _, _)) => name
       })
       .unsafeSetPFn(ConsigneeAddressPage)(traderDetails.consignee)({
-        case Some(ConsigneeDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(ConsigneeDetails(_, address, _)) => address
       })
   }
 

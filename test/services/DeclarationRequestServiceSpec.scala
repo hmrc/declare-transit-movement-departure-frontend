@@ -27,8 +27,12 @@ import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNatio
 import models.journeyDomain.{JourneyDomain, JourneyDomainSpec}
 import models.messages.InterchangeControlReference
 import models.{EoriNumber, Index, LocalReferenceNumber, UserAnswers}
+import models.messages.trader.TraderPrincipalWithEori
+import models.reference.{Country, CountryCode}
+import models.{CommonAddress, EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
+import pages.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage}
 import pages.{ItemTotalGrossMassPage, TotalGrossMassPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -526,6 +530,34 @@ class DeclarationRequestServiceSpec
               result.controlResult must not be defined
               result.header.autLocOfGooCodHEA41 must not be defined
           }
+        }
+      }
+
+      "principalTraderDetails" - {
+        "has the postcode and city in the right field and the country is set to users answer" in {
+          val userAnswers   = arb[UserAnswers].sample.value
+          val journeyDomain = arbitraryNormalJourneyDomain.sample.value
+
+          when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+          val updatedUserAnswer: UserAnswers = JourneyDomainSpec.setJourneyDomain(journeyDomain)(userAnswers)
+
+          val userAnswersWithEoriAndAddress = updatedUserAnswer
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+            .unsafeSetVal(PrincipalNamePage)("Jimmy")
+            .unsafeSetVal(WhatIsPrincipalEoriPage)("xi123456789")
+            .unsafeSetVal(PrincipalAddressPage)(CommonAddress("Line 1", "city", "PostCode", Country(CountryCode("XI"), "SomeDescription")))
+
+          val result = service.convert(userAnswersWithEoriAndAddress).futureValue.right.value.traderPrincipal
+          result mustBe TraderPrincipalWithEori(
+            eori = "xi123456789",
+            name = Some("Jimmy"),
+            streetAndNumber = Some("Line 1"),
+            postCode = Some("PostCode"),
+            city = Some("city"),
+            countryCode = Some("XI")
+          )
         }
       }
 

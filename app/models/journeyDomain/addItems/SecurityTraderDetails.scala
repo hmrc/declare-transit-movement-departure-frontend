@@ -17,23 +17,22 @@
 package models.journeyDomain.addItems
 
 import cats.implicits._
-import models.domain.Address
 import models.journeyDomain._
-import models.{EoriNumber, Index}
+import models.{CommonAddress, EoriNumber, Index}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
 sealed trait SecurityTraderDetails
 
-final case class SecurityPersonalInformation(name: String, address: Address) extends SecurityTraderDetails
+final case class SecurityPersonalInformation(name: String, address: CommonAddress) extends SecurityTraderDetails
 
 final case class SecurityTraderEori(eori: EoriNumber) extends SecurityTraderDetails
 
 object SecurityTraderDetails {
   def apply(eori: EoriNumber): SecurityTraderDetails = SecurityTraderEori(eori)
 
-  def apply(name: String, address: Address): SecurityTraderDetails = SecurityPersonalInformation(name, address)
+  def apply(name: String, address: CommonAddress): SecurityTraderDetails = SecurityPersonalInformation(name, address)
 
   def consignorDetails(index: Index): UserAnswersReader[Option[SecurityTraderDetails]] = {
 
@@ -47,9 +46,7 @@ object SecurityTraderDetails {
         SecurityConsignorAddressPage(index).reader
       ).tupled
         .map {
-          case (name, consignorAddress) =>
-            val address = Address.prismAddressToCommonAddress(consignorAddress)
-            SecurityTraderDetails(name, address)
+          case (name, address) => SecurityTraderDetails(name, address)
         }
 
     AddSecurityDetailsPage
@@ -77,8 +74,7 @@ object SecurityTraderDetails {
         SecurityConsigneeAddressPage(index).reader
       ).tupled
         .map {
-          case (name, consigneeAddress) =>
-            val address = Address.prismAddressToCommonAddress(consigneeAddress)
+          case (name, address) =>
             SecurityTraderDetails(name, address)
         }
 
