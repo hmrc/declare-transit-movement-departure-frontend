@@ -28,103 +28,92 @@ import pages.{AddTotalNetMassPage, IsCommodityCodeKnownPage, ItemDescriptionPage
 
 class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
-  "ItemDetails" - {
+  val itemDetailsUa = emptyUserAnswers
+    .unsafeSetVal(ItemDescriptionPage(index))("itemDescription")
+    .unsafeSetVal(ItemTotalGrossMassPage(index))("123")
+    .unsafeSetVal(AddTotalNetMassPage(index))(true)
+    .unsafeSetVal(TotalNetMassPage(index))("123")
+    .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
+    .unsafeSetVal(CommodityCodePage(index))("commodityCode")
+
+  "can be parsed from UserAnswers" - {
+
+    "when all details for section have been answered" in {
+
+      val expectedResult = ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode"))
+
+      val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(itemDetailsUa)
+
+      result.right.value mustEqual expectedResult
+    }
+
+    "when add total net mass is false" in {
+
+      val userAnswers = itemDetailsUa.unsafeSetVal(AddTotalNetMassPage(index))(false)
+
+      val expectedResult = ItemDetails("itemDescription", "123", None, Some("commodityCode"))
+
+      val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
+
+      result.right.value mustEqual expectedResult
+    }
+
+    "when is commodity code known is false" in {
+
+      val userAnswers = itemDetailsUa.unsafeSetVal(IsCommodityCodeKnownPage(index))(false)
+
+      val expectedResult = ItemDetails("itemDescription", "123", Some("123"), None)
+
+      val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
+
+      result.right.value mustEqual expectedResult
+    }
+
+  }
+
+  "cannot be parsed from UserAnswers" - {
 
     val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
       ItemDescriptionPage(index),
-      ItemTotalGrossMassPage(index)
+      ItemTotalGrossMassPage(index),
+      AddTotalNetMassPage(index),
+      IsCommodityCodeKnownPage(index)
     )
 
-    "can be parsed from UserAnswers" - {
-      "when all details for section have been answered" in {
-        forAll(arbitrary[ItemDetails], arbitrary[UserAnswers]) {
-          case (itemDetails, userAnswers) =>
-            val updatedUserAnswers = setItemDetailsUserAnswers(itemDetails, index)(userAnswers)
-            val result             = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(updatedUserAnswers)
+    "when a mandatory answer is missing" in {
 
-            result.right.value mustEqual itemDetails
-        }
+      forAll(mandatoryPages) {
+        mandatoryPage =>
+          val userAnswers = itemDetailsUa.unsafeRemove(mandatoryPage)
+
+          val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
+
+          result.left.value.page mustBe mandatoryPage
       }
-
-      "when addTotalNetMass is false and totalNetMass has been answered, totNetMass should be none" in {
-        val genItemDetailsNetMassSet =
-          arbitrary[ItemDetails].map(_.copy(totalNetMass = Some("totalNetMassValue")))
-
-        forAll(arbitrary[UserAnswers], genItemDetailsNetMassSet) {
-          case (userAnswers, itemDetails) =>
-            val updatedUserAnswers = setItemDetailsUserAnswers(itemDetails, index)(userAnswers)
-              .unsafeSetVal(AddTotalNetMassPage(index))(false)
-              .unsafeSetVal(TotalNetMassPage(index))(itemDetails.totalNetMass.value)
-
-            val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(updatedUserAnswers)
-
-            result.right.value.totalNetMass mustEqual None
-        }
-      }
-
-      "when IsCommodityCodeKnownPage is false and CommodityCodePage has been answered, CommodityCodePage should be none" in {
-        val genItemDetailsNetMassSet =
-          arbitrary[ItemDetails].map(_.copy(commodityCode = Some("totalNetMassValue")))
-
-        forAll(arbitrary[UserAnswers], genItemDetailsNetMassSet) {
-          case (userAnswers, itemDetails) =>
-            val updatedUserAnswers = setItemDetailsUserAnswers(itemDetails, index)(userAnswers)
-              .unsafeSetVal(IsCommodityCodeKnownPage(index))(false)
-              .unsafeSetVal(CommodityCodePage(index))(itemDetails.commodityCode.value)
-
-            val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(updatedUserAnswers)
-
-            result.right.value.commodityCode mustEqual None
-        }
-      }
-
     }
 
-    "cannot be parsed from UserAnswers" - {
-      "when a mandatory answer is missing" in {
-        forAll(arbitrary[UserAnswers], mandatoryPages) {
-          case (userAnswers, mandatoryPage) =>
-            val updatedUserAnswers = userAnswers.remove(mandatoryPage).success.value
-            val result             = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(updatedUserAnswers)
+    "when add total net mass is true but total net mass is missing" in {
 
-            result.isLeft mustEqual true
-        }
-      }
+      val userAnswers = itemDetailsUa
+        .unsafeSetVal(AddTotalNetMassPage(index))(true)
+        .unsafeRemove(TotalNetMassPage(index))
 
-      "when addTotalNetMass is true but totalNetMass is missing " in {
-        val genItemDetailsNetMassSet =
-          arbitrary[ItemDetails].map(_.copy(totalNetMass = None))
+      val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
 
-        forAll(arbitrary[UserAnswers], genItemDetailsNetMassSet) {
-          case (userAnswers, itemDetails) =>
-            val updatedUserAnswers = setItemDetailsUserAnswers(itemDetails, index)(userAnswers)
-              .unsafeSetVal(AddTotalNetMassPage(index))(true)
-              .unsafeRemove(TotalNetMassPage(index))
+      result.left.value.page mustEqual TotalNetMassPage(index)
+    }
 
-            val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(updatedUserAnswers)
+    "when is commodity code known is true but commodity code is missing" in {
 
-            result.left.value.page mustEqual TotalNetMassPage(index)
-        }
-      }
+      val userAnswers = itemDetailsUa
+        .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
+        .unsafeRemove(CommodityCodePage(index))
 
-      "when IsCommodityCodeKnownPage is true but CommodityCodePage is missing " in {
-        val genItemDetailsNetMassSet =
-          arbitrary[ItemDetails].map(_.copy(commodityCode = None))
+      val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
 
-        forAll(arbitrary[UserAnswers], genItemDetailsNetMassSet) {
-          case (userAnswers, itemDetails) =>
-            val updatedUserAnswers = setItemDetailsUserAnswers(itemDetails, index)(userAnswers)
-              .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
-              .unsafeRemove(CommodityCodePage(index))
-
-            val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(updatedUserAnswers)
-
-            result.left.value.page mustEqual CommodityCodePage(index)
-        }
-      }
+      result.left.value.page mustEqual CommodityCodePage(index)
     }
   }
-
 }
 
 object ItemDetailsSpec {
