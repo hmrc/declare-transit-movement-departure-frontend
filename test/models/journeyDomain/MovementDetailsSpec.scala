@@ -38,7 +38,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
 
         val expectedResult = NormalMovementDetails(
           Option1,
-          prelodge       = false,
+          prelodge = false,
           containersUsed = false,
           "declarationPlace",
           DeclarationForSomeoneElse("repName", Direct)
@@ -102,7 +102,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
 
             val expectedResult = NormalMovementDetails(
               Option1,
-              prelodge       = false,
+              prelodge = false,
               containersUsed = false,
               "declarationPlace",
               DeclarationForSomeoneElse("repName", Direct)
@@ -129,7 +129,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
 
             val expectedResult = NormalMovementDetails(
               Option1,
-              prelodge       = false,
+              prelodge = false,
               containersUsed = false,
               "declarationPlace",
               DeclarationForSelf
