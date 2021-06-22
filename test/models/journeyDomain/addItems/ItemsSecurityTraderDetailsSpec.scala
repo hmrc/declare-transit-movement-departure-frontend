@@ -22,71 +22,126 @@ import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber, Index, UserAnswers}
+import org.scalacheck.Gen
 import org.scalatest.TryValues
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, QuestionPage}
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, _}
 
 class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
 
+  private val itemSecurityTraderDetailsUa = emptyUserAnswers
+    .unsafeSetVal(AddSecurityDetailsPage)(true)
+    .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
+    .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
+    .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
+    .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+    .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+
   "ItemsSecurityDetails" - {
-    "When user selects 'No' to add Safety and Security then item security trader details is not defined" in {
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(AddSecurityDetailsPage)(false)
 
-      val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
+    "can be parsed from UserAnswers" - {
 
-      result mustBe None
-    }
+      "when add security details is true and all mandatory answers are defined" in {
 
-    "When user selects 'Yes' to Add Safety and Security" - {
+        val expectedResult = ItemsSecurityTraderDetails(None, None, None, None, None)
 
-      "then item security details will be defined by user answers with no optional data" in {
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
-          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
-          .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
-          .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
+        val result = ItemsSecurityTraderDetails.parser(index).run(itemSecurityTraderDetailsUa).right.value.value
+
+        result mustBe expectedResult
+      }
+
+      "when add security details is true and all optional answers are defined without consignor and consignee" in {
+
+        val expectedResult = ItemsSecurityTraderDetails(
+          Some("methodOfPayment"),
+          Some("commercialReferenceNumber"),
+          Some("dangerousGoodsCode"),
+          None,
+          None
+        )
+
+        val userAnswers = itemSecurityTraderDetailsUa
+          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
+          .unsafeSetVal(TransportChargesPage(index))("methodOfPayment")
+          .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
+          .unsafeSetVal(CommercialReferenceNumberPage(index))("commercialReferenceNumber")
+          .unsafeSetVal(AddDangerousGoodsCodePage(index))(true)
+          .unsafeSetVal(DangerousGoodsCodePage(index))("dangerousGoodsCode")
           .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
           .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
 
-        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
+        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value.value
 
-        val expected =
-          ItemsSecurityTraderDetails(None, Some("111111"), None, None, None)
-        result.value mustBe expected
+        result mustBe expectedResult
       }
 
-      "then item security details will be defined by user answers with optional data" in {
-        val userAnswers = emptyUserAnswers
-          .unsafeSetVal(AddSecurityDetailsPage)(true)
-          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-          .unsafeSetVal(TransportChargesPage(index))("Payment in cash")
-          .unsafeSetVal(CommercialReferenceNumberPage(index))("111111")
-          .unsafeSetVal(AddDangerousGoodsCodePage(index))(true)
-          .unsafeSetVal(DangerousGoodsCodePage(index))("4")
+      "when add security details is true and all mandatory answers are defined with consignor and consignee" in {
+
+        val consignorAddress  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+        val expectedConsignor = SecurityPersonalInformation("testName", consignorAddress)
+        val expectedConsignee = SecurityTraderEori(EoriNumber("testEori"))
+
+        val userAnswers = itemSecurityTraderDetailsUa
+          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+          .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
+          .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+          .unsafeSetVal(CircumstanceIndicatorPage)("E")
+          .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
           .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
           .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
-          .unsafeSetVal(SecurityConsignorNamePage(index))("Bob")
-          .unsafeSetVal(SecurityConsignorAddressPage(index))(CommonAddress("First line", "Second line", "Postcode", Country(CountryCode("FR"), "France")))
-          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
-          .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
-          .unsafeSetVal(CircumstanceIndicatorPage)("A")
-          .unsafeSetVal(AddSecurityConsigneesEoriPage(index))(true)
-          .unsafeSetVal(SecurityConsigneeEoriPage(index))("GB123456")
+          .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
+          .unsafeSetVal(SecurityConsignorAddressPage(index))(CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), "")))
+
+        val expectedResult = ItemsSecurityTraderDetails(None, None, None, Some(expectedConsignor), Some(expectedConsignee))
+
+        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value.value
+
+        result mustBe expectedResult
+      }
+
+      "when add security details is false" in {
+        val userAnswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
 
         val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
 
-        val expected =
-          ItemsSecurityTraderDetails(
-            Some("Payment in cash"),
-            Some("111111"),
-            Some("4"),
-            Some(SecurityPersonalInformation("Bob", Address("First line", "Second line", "Postcode", Some(Country(CountryCode("FR"), "France"))))),
-            Some(SecurityTraderEori(EoriNumber("GB123456")))
-          )
-        result.value mustBe expected
+        result mustBe None
+      }
+    }
+
+    "cannot be parsed from UserAnswers" - {
+
+      "when a mandatory page is missing" in {
+
+        val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+          AddSecurityDetailsPage,
+          AddDangerousGoodsCodePage(index),
+          AddTransportChargesPaymentMethodPage,
+          AddSafetyAndSecurityConsignorPage,
+          AddSafetyAndSecurityConsigneePage
+        )
+
+        forAll(mandatoryPages) {
+          mandatoryPage =>
+            val userAnswers = itemSecurityTraderDetailsUa
+              .unsafeRemove(mandatoryPage)
+
+            val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).left.value
+
+            result.page mustBe mandatoryPage
+        }
+      }
+
+      "when AddCommercialReferenceNumberAllItemsPage is not true and CommercialReferenceNumberPage is not defined" in {
+
+        val userAnswers = itemSecurityTraderDetailsUa
+          .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
+          .unsafeRemove(CommercialReferenceNumberPage(index))
+
+        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).left.value
+
+        result.page mustBe CommercialReferenceNumberPage(index)
       }
     }
   }

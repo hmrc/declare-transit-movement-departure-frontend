@@ -22,116 +22,228 @@ import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
+import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber, Index, UserAnswers}
+import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages._
+import pages.addItems.{DeclareMarkPage, HowManyPackagesPage}
 import pages.addItems.traderDetails._
 
 class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
 
-  "ItemTraderDetail can be parsed from UserAnswers" - {
+  "ItemTraderDetail" - {
+    "Consignor" - {
+      "can be parsed" - {
 
-    "when there is no consignor eoriNumber but only name and address" in {
-      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
-        case (baseUserAnswers, name, address) =>
-          val userAnswers = baseUserAnswers
+        "when there is no eoriNumber but only name and address" in {
+
+          val commonAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddConsignorPage)(false)
             .unsafeSetVal(AddConsigneePage)(true)
             .unsafeSetVal(TraderDetailsConsignorEoriKnownPage(index))(false)
-            .unsafeSetVal(TraderDetailsConsignorNamePage(index))(name)
-            .unsafeSetVal(TraderDetailsConsignorAddressPage(index))(address)
+            .unsafeSetVal(TraderDetailsConsignorNamePage(index))("name")
+            .unsafeSetVal(TraderDetailsConsignorAddressPage(index))(commonAddress)
 
-          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
-          val result                   = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+          val expectedResult =
+            RequiredDetails("name", Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "description"))), None)
 
-          result.consignor.value mustEqual RequiredDetails(name, expectedAddress, None)
-      }
-    }
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
-    "when there is consignor name, address and eori" in {
-      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress], arb[EoriNumber]) {
-        case (baseUserAnswers, name, address, eori @ EoriNumber(eoriNumber1)) =>
-          val userAnswers = baseUserAnswers
+          result.consignor.value mustEqual expectedResult
+        }
+
+        "when there is a name, address and eori" in {
+
+          val commonAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddConsignorPage)(false)
             .unsafeSetVal(AddConsigneePage)(true)
-            .unsafeSetVal(TraderDetailsConsignorNamePage(index))(name)
-            .unsafeSetVal(TraderDetailsConsignorAddressPage(index))(address)
+            .unsafeSetVal(TraderDetailsConsignorNamePage(index))("name")
+            .unsafeSetVal(TraderDetailsConsignorAddressPage(index))(commonAddress)
             .unsafeSetVal(TraderDetailsConsignorEoriKnownPage(index))(true)
-            .unsafeSetVal(TraderDetailsConsignorEoriNumberPage(index))(eoriNumber1)
+            .unsafeSetVal(TraderDetailsConsignorEoriNumberPage(index))("eoriNumber1")
+
+          val expectedResult = RequiredDetails(
+            "name",
+            Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "description"))),
+            Some(EoriNumber("eoriNumber1"))
+          )
 
           val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
-          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
+          result.consignor.value mustEqual expectedResult
+        }
 
-          result.consignor.value mustEqual RequiredDetails(name, expectedAddress, Some(eori))
-      }
-    }
+        "when header level consignor has already been answered" in {
 
-    "when there is no consignee eori only name and address" in {
-      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
-        case (baseUserAnswers, name, address) =>
-          val userAnswers = baseUserAnswers
-            .unsafeSetVal(AddConsignorPage)(true)
-            .unsafeSetVal(AddConsigneePage)(false)
-            .unsafeSetVal(TraderDetailsConsigneeNamePage(index))(name)
-            .unsafeSetVal(TraderDetailsConsigneeAddressPage(index))(address)
-            .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(false)
-
-          val result                   = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
-          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
-
-          result.consignee.value mustEqual RequiredDetails(name, expectedAddress, None)
-
-      }
-    }
-
-    "when there is consignee name, address and eori" in {
-      forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress], arb[EoriNumber]) {
-        case (baseUserAnswers, name, address, eori @ EoriNumber(eoriNumber1)) =>
-          val userAnswers = baseUserAnswers
-            .unsafeSetVal(AddConsignorPage)(true)
-            .unsafeSetVal(AddConsigneePage)(false)
-            .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(true)
-            .unsafeSetVal(TraderDetailsConsigneeEoriNumberPage(index))(eoriNumber1)
-            .unsafeSetVal(TraderDetailsConsigneeNamePage(index))(name)
-            .unsafeSetVal(TraderDetailsConsigneeAddressPage(index))(address)
-
-          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
-
-          val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
-
-          result.consignee.value mustEqual RequiredDetails(name, expectedAddress, Some(eori))
-      }
-    }
-
-    "when header level consignor has already been answered" in {
-      forAll(arb[UserAnswers], arb[EoriNumber]) {
-        case (baseUserAnswers, _ @EoriNumber(eoriNumber1)) =>
-          val userAnswers = baseUserAnswers
+          val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddConsignorPage)(true)
             .unsafeSetVal(AddConsigneePage)(true)
             .unsafeSetVal(TraderDetailsConsignorEoriKnownPage(index))(true)
-            .unsafeSetVal(TraderDetailsConsignorEoriNumberPage(index))(eoriNumber1)
+            .unsafeSetVal(TraderDetailsConsignorEoriNumberPage(index))("eoriNumber1")
 
           val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
           result.consignor must be(None)
+        }
+      }
 
+      "cannot be parsed" - {
+
+        "when a mandatory page is missing" in {
+
+          val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+            AddConsignorPage,
+            TraderDetailsConsignorNamePage(index),
+            TraderDetailsConsignorAddressPage(index),
+            TraderDetailsConsignorEoriKnownPage(index)
+          )
+
+          forAll(mandatoryPages) {
+            mandatoryPage =>
+              val commonAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(AddConsignorPage)(false)
+                .unsafeSetVal(AddConsigneePage)(true)
+                .unsafeSetVal(TraderDetailsConsignorNamePage(index))("name")
+                .unsafeSetVal(TraderDetailsConsignorAddressPage(index))(commonAddress)
+                .unsafeSetVal(TraderDetailsConsignorEoriKnownPage(index))(true)
+                .unsafeSetVal(TraderDetailsConsignorEoriNumberPage(index))("eoriNumber1")
+                .unsafeRemove(mandatoryPage)
+
+              val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).left.value
+
+              result.page mustEqual mandatoryPage
+          }
+        }
+
+        "when eori known page is true and eori number page is not defined" in {
+
+          val commonAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddConsignorPage)(false)
+            .unsafeSetVal(AddConsigneePage)(true)
+            .unsafeSetVal(TraderDetailsConsignorNamePage(index))("name")
+            .unsafeSetVal(TraderDetailsConsignorAddressPage(index))(commonAddress)
+            .unsafeSetVal(TraderDetailsConsignorEoriKnownPage(index))(true)
+
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).left.value
+
+          result.page mustEqual TraderDetailsConsignorEoriNumberPage(index)
+        }
       }
     }
 
-    "when header level consignee has already been answered" in {
-      forAll(arb[UserAnswers], arb[EoriNumber]) {
-        case (baseUserAnswers, eori1 @ EoriNumber(eoriNumber1)) =>
-          val userAnswers = baseUserAnswers
+    "Consignee" - {
+
+      "can be parsed" - {
+
+        "when there is no eori only name and address" in {
+
+          val commonAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddConsignorPage)(true)
+            .unsafeSetVal(AddConsigneePage)(false)
+            .unsafeSetVal(TraderDetailsConsigneeNamePage(index))("name")
+            .unsafeSetVal(TraderDetailsConsigneeAddressPage(index))(commonAddress)
+            .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(false)
+
+          val expectedResult =
+            RequiredDetails("name", Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "description"))), None)
+
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+
+          result.consignee.value mustEqual expectedResult
+        }
+
+        "when there is name, address and eori" in {
+
+          val commonAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddConsignorPage)(true)
+            .unsafeSetVal(AddConsigneePage)(false)
+            .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(true)
+            .unsafeSetVal(TraderDetailsConsigneeEoriNumberPage(index))("eoriNumber1")
+            .unsafeSetVal(TraderDetailsConsigneeNamePage(index))("name")
+            .unsafeSetVal(TraderDetailsConsigneeAddressPage(index))(commonAddress)
+
+          val expectedResult = RequiredDetails(
+            "name",
+            Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "description"))),
+            Some(EoriNumber("eoriNumber1"))
+          )
+
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+
+          result.consignee.value mustEqual expectedResult
+        }
+
+        "when header level consignee has already been answered" in {
+
+          val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddConsignorPage)(true)
             .unsafeSetVal(AddConsigneePage)(true)
             .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(true)
-            .unsafeSetVal(TraderDetailsConsigneeEoriNumberPage(index))(eoriNumber1)
+            .unsafeSetVal(TraderDetailsConsigneeEoriNumberPage(index))("eoriNumber1")
 
           val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
           result.consignee must be(None)
+        }
+      }
+
+      "cannot be parsed" - {
+
+        "when a mandatory page is missing" in {
+
+          val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+            AddConsigneePage,
+            TraderDetailsConsigneeNamePage(index),
+            TraderDetailsConsigneeAddressPage(index),
+            TraderDetailsConsigneeEoriKnownPage(index)
+          )
+
+          forAll(mandatoryPages) {
+            mandatoryPage =>
+              val commonAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(AddConsignorPage)(true)
+                .unsafeSetVal(AddConsigneePage)(false)
+                .unsafeSetVal(TraderDetailsConsigneeNamePage(index))("name")
+                .unsafeSetVal(TraderDetailsConsigneeAddressPage(index))(commonAddress)
+                .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(false)
+                .unsafeRemove(mandatoryPage)
+
+              val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).left.value
+
+              result.page mustEqual mandatoryPage
+          }
+        }
+
+        "when eori known page is true and eori number page is not defined" in {
+
+          val commonAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddConsignorPage)(true)
+            .unsafeSetVal(AddConsigneePage)(false)
+            .unsafeSetVal(TraderDetailsConsigneeNamePage(index))("name")
+            .unsafeSetVal(TraderDetailsConsigneeAddressPage(index))(commonAddress)
+            .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(true)
+
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).left.value
+
+          result.page mustEqual TraderDetailsConsigneeEoriNumberPage(index)
+        }
       }
     }
   }

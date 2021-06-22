@@ -22,136 +22,539 @@ import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, SecurityTraderDetails, TraderEori}
-import models.journeyDomain.SafetyAndSecuritySpec.{setSafetyAndSecurity, setSafetyAndSecurityMinimal}
+import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
 import models.reference.{Country, CountryCode}
-import models.{EoriNumber, Index, UserAnswers}
+import models.{CommonAddress, EoriNumber, Index, UserAnswers}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
-import pages.ModeAtBorderPage
+import pages.{ModeAtBorderPage, QuestionPage}
 import pages.safetyAndSecurity._
 
 class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
 
-  "SafetyAndSecurity can be parsed from UserAnswers" - {
+  private val fullSafetyAndSecurityUa = emptyUserAnswers
+    .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+    .unsafeSetVal(CircumstanceIndicatorPage)("circumstanceIndicator")
+    .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
+    .unsafeSetVal(TransportChargesPaymentMethodPage)("transportChargesPaymentMethod")
+    .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
+    .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
+    .unsafeSetVal(CommercialReferenceNumberAllItemsPage)("commercialRefNumber")
+    .unsafeSetVal(AddConveyanceReferenceNumberPage)(true)
+    .unsafeSetVal(ConveyanceReferenceNumberPage)("conveyanceRefNumber")
+    .unsafeSetVal(PlaceOfUnloadingCodePage)("placeOfUnloading")
+    .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
+    .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+    .unsafeSetVal(AddCarrierPage)(false)
+    .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("GB"))
 
-    "when the minimal UserAnswers has been answered" in {
-      forAll(arb[UserAnswers]) {
-        baseUserAnswers =>
-          val userAnswers = setSafetyAndSecurityMinimal(baseUserAnswers)
+  "SafetyAndSecurity" - {
+
+    "can parse from UserAnswers" - {
+
+      "when all mandatory answers are defined" in {
+
+        val expectedResult =
+          SafetyAndSecurity(None, None, None, None, Some("placeOfUnloading"), None, None, None, NonEmptyList.fromListUnsafe(List(Itinerary(CountryCode("GB")))))
+
+        val minimalSafetyAndSecurityUa = emptyUserAnswers
+          .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+          .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
+          .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+          .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
+          .unsafeSetVal(AddConveyanceReferenceNumberPage)(false)
+          .unsafeSetVal(PlaceOfUnloadingCodePage)("placeOfUnloading")
+          .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
+          .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+          .unsafeSetVal(AddCarrierPage)(false)
+          .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("GB"))
+
+        val result = UserAnswersReader[SafetyAndSecurity].run(minimalSafetyAndSecurityUa).right.value
+
+        result mustBe expectedResult
+      }
+
+      "when optional answers are defined" in {
+
+        val expectedResult = SafetyAndSecurity(
+          Some("circumstanceIndicator"),
+          Some("transportChargesPaymentMethod"),
+          Some("commercialRefNumber"),
+          Some("conveyanceRefNumber"),
+          Some("placeOfUnloading"),
+          None,
+          None,
+          None,
+          NonEmptyList.fromListUnsafe(List(Itinerary(CountryCode("GB"))))
+        )
+
+        val result = UserAnswersReader[SafetyAndSecurity].run(fullSafetyAndSecurityUa).right.value
+
+        result mustBe expectedResult
+      }
+
+      "commercialReferenceNumber" - {
+
+        "must be defined when AddCommercialReferenceNumberPage is true and AddCommercialReferenceNumberAllItemsPage is true" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
+            .unsafeSetVal(CommercialReferenceNumberAllItemsPage)("commercialRefNumber")
 
           val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
 
-          result mustEqual SafetyAndSecurity(None,
-                                             None,
-                                             None,
-                                             None,
-                                             Some("data"),
-                                             None,
-                                             None,
-                                             None,
-                                             NonEmptyList.fromListUnsafe(List(Itinerary(CountryCode("GB"))))
-          )
+          result.commercialReferenceNumber.value mustBe "commercialRefNumber"
+        }
+
+        "must not be defined when AddCommercialReferenceNumberPage is false and AddCommercialReferenceNumberAllItemsPage is true" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.commercialReferenceNumber mustBe None
+        }
+
+        "must not be defined when AddCommercialReferenceNumberPage is true and AddCommercialReferenceNumberAllItemsPage is false" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.commercialReferenceNumber mustBe None
+        }
+      }
+
+      "ConveyanceReferenceNumber" - {
+
+        "must be defined when modeAtBorder is 4 or 40" in {
+
+          val modeAtBorder = Gen.oneOf(Seq("4", "40")).sample.value
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(ModeAtBorderPage)(modeAtBorder)
+            .unsafeSetVal(ConveyanceReferenceNumberPage)("conveyanceReferenceNumber")
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.conveyanceReferenceNumber.value mustBe "conveyanceReferenceNumber"
+
+        }
+
+        "must not be defined when modeAtBorder is not 4 or 40 and AddConveyanceReferenceNumber is false" in {
+
+          val modeAtBorder = arb[String]
+            .suchThat(
+              mode => mode != "4" && mode != "40"
+            )
+            .sample
+            .value
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(ModeAtBorderPage)(modeAtBorder)
+            .unsafeSetVal(AddConveyanceReferenceNumberPage)(false)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.conveyanceReferenceNumber mustBe None
+        }
+      }
+
+      "PlaceOfUnloadingCode" - {
+
+        "must be defined when addCircumstanceIndicator is 'E' and AddPlaceOfUnloadingCodePage is true" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)("E")
+            .unsafeSetVal(AddPlaceOfUnloadingCodePage)(true)
+            .unsafeSetVal(PlaceOfUnloadingCodePage)("placeOfUnloading")
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.placeOfUnloading.value mustBe "placeOfUnloading"
+        }
+
+        "must be defined when addCircumstanceIndicator is not 'E' " in {
+
+          val circumstanceIndicator = arb[String].suchThat(_ != "E").sample.value
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)(circumstanceIndicator)
+            .unsafeSetVal(PlaceOfUnloadingCodePage)("placeOfUnloading")
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.placeOfUnloading.value mustBe "placeOfUnloading"
+        }
+
+        "must not defined when addCircumstanceIndicator is 'E' and AddPlaceOfUnloadingCodePage is false" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)("E")
+            .unsafeSetVal(AddPlaceOfUnloadingCodePage)(false)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.placeOfUnloading mustBe None
+        }
+      }
+
+      "consignorDetails" - {
+
+        "must be defined with Eori number when AddSafetyAndSecurityConsignorPage is true and AddSafetyAndSecurityConsignorEoriPage is true" in {
+
+          val expectedResult = TraderEori(EoriNumber("eoriNumber"))
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsignorEoriPage)(true)
+            .unsafeSetVal(SafetyAndSecurityConsignorEoriPage)("eoriNumber")
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.consignor.value mustBe expectedResult
+        }
+
+        "must be defined with Name and address when AddSafetyAndSecurityConsignorPage is true AddSafetyAndSecurityConsignorPage is false" in {
+
+          val expectedResult = PersonalInformation("consignorName", Address("line1", "line2", "postalCode", Some(Country(CountryCode("GB"), "description"))))
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsignorEoriPage)(false)
+            .unsafeSetVal(SafetyAndSecurityConsignorNamePage)("consignorName")
+            .unsafeSetVal(SafetyAndSecurityConsignorAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.consignor.value mustBe expectedResult
+        }
+
+        "must not be defined when AddSafetyAndSecurityConsignorPage is false" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.consignor mustBe None
+        }
+      }
+
+      "consigneeDetails" - {
+
+        "must be defined with Eori number when AddSafetyAndSecurityConsigneePage is true and AddSafetyAndSecurityConsigneeEoriPage is true" in {
+
+          val expectedResult = TraderEori(EoriNumber("eoriNumber"))
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(true)
+            .unsafeSetVal(SafetyAndSecurityConsigneeEoriPage)("eoriNumber")
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.consignee.value mustBe expectedResult
+        }
+
+        "must be defined with Name and address when AddSafetyAndSecurityConsigneePage is true AddSafetyAndSecurityConsigneePage is false" in {
+
+          val expectedResult = PersonalInformation("consigneeName", Address("line1", "line2", "postalCode", Some(Country(CountryCode("GB"), "description"))))
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(false)
+            .unsafeSetVal(SafetyAndSecurityConsigneeNamePage)("consigneeName")
+            .unsafeSetVal(SafetyAndSecurityConsigneeAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.consignee.value mustBe expectedResult
+        }
+
+        "must not be defined when AddSafetyAndSecurityConsigneePage is false" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.consignee mustBe None
+        }
+      }
+
+      "carrierDetails" - {
+
+        "must be defined with Eori number when AddCarrierPage is true and AddCarrierEoriPage is true" in {
+
+          val expectedResult = TraderEori(EoriNumber("eoriNumber"))
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCarrierPage)(true)
+            .unsafeSetVal(AddCarrierEoriPage)(true)
+            .unsafeSetVal(CarrierEoriPage)("eoriNumber")
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.carrier.value mustBe expectedResult
+        }
+
+        "must be defined with Name and address when AddCarrierPage is true AddCarrierEoriPage is false" in {
+
+          val expectedResult = PersonalInformation("carrierName", Address("line1", "line2", "postalCode", Some(Country(CountryCode("GB"), "description"))))
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCarrierPage)(true)
+            .unsafeSetVal(AddCarrierEoriPage)(false)
+            .unsafeSetVal(CarrierNamePage)("carrierName")
+            .unsafeSetVal(CarrierAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.carrier.value mustBe expectedResult
+        }
+
+        "must not be defined when AddCarrierPage is false" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCarrierPage)(false)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+          result.carrier mustBe None
+        }
       }
     }
 
-    "when the full UserAnswers has been answered and modeAtBorder is 4 or 40" in {
+    "cannot parse from UserAnswers" - {
 
-      val genModeAtBorder = Gen.oneOf(Seq(4, 40))
+      "when a mandatory page is missing" in {
 
-      forAll(arb[UserAnswers], arb[SafetyAndSecurity], genModeAtBorder) {
-        (baseUserAnswers, safetyAndSecurity, mode) =>
-          val updatedSafetyAndSecurity = safetyAndSecurity.copy(circumstanceIndicator = None)
+        val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+          AddCircumstanceIndicatorPage,
+          AddTransportChargesPaymentMethodPage,
+          AddCommercialReferenceNumberPage,
+          AddSafetyAndSecurityConsignorPage,
+          AddSafetyAndSecurityConsigneePage,
+          AddCarrierPage
+        )
 
-          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode.toString)
+        forAll(mandatoryPages) {
+          mandatoryPage =>
+            val invalidUa = fullSafetyAndSecurityUa.unsafeRemove(mandatoryPage)
+            val result    = UserAnswersReader[SafetyAndSecurity].run(invalidUa).left.value
 
-          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
-
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
-
-          result mustEqual updatedSafetyAndSecurity
-
-      }
-    }
-
-    "when the full UserAnswers has been answered and modeAtBorder is not 4 or 40" in {
-
-      forAll(arb[UserAnswers],
-             arb[SafetyAndSecurity],
-             arb[String].suchThat(
-               mode => mode != "4" | mode != "40"
-             )
-      ) {
-        (baseUserAnswers, safetyAndSecurity, mode) =>
-          val updatedSafetyAndSecurity = safetyAndSecurity.copy(circumstanceIndicator = None)
-
-          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
-
-          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
-
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
-
-          result mustEqual updatedSafetyAndSecurity
-      }
-    }
-
-    "when the full UserAnswers has been answered and the circumstance indicator is 'E'" in {
-
-      forAll(arb[UserAnswers], arb[SafetyAndSecurity], arb[String]) {
-        (baseUserAnswers, safetyAndSecurity, mode) =>
-          val updatedSafetyAndSecurity =
-            safetyAndSecurity.copy(circumstanceIndicator = Some("E"), consignee = Some(SecurityTraderDetails(eori = EoriNumber("1234567"))))
-
-          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
-
-          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
-
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
-
-          result mustEqual updatedSafetyAndSecurity
-      }
-    }
-
-    "when the full UserAnswers has been answered and the circumstance indicator is 'B'" in {
-
-      forAll(arb[UserAnswers], arb[SafetyAndSecurity], arb[String]) {
-        (baseUserAnswers, safetyAndSecurity, mode) =>
-          val updatedSafetyAndSecurity = safetyAndSecurity.copy(
-            circumstanceIndicator = Some("B"),
-            consignee = Some(SecurityTraderDetails("Bob", Address("line 1", "line 2", "line 3", Some(Country(CountryCode("FR"), "France")))))
-          )
-
-          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
-
-          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
-
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
-
-          result mustEqual updatedSafetyAndSecurity
+            result.page mustBe mandatoryPage
+        }
       }
 
-    }
+      "conveyanceReferenceNumber" - {
 
-    "when the full UserAnswers has been answered and the circumstance indicator is not provided" in {
+        "when ModeAtBorderPage is not '4' or '40' and AddConveyanceReferenceNumberPage is true and ConveyanceReferenceNumberPage is empty" in {
 
-      forAll(arb[UserAnswers], arb[SafetyAndSecurity], arb[String]) {
-        (baseUserAnswers, safetyAndSecurity, mode) =>
-          val updatedSafetyAndSecurity = safetyAndSecurity.copy(
-            circumstanceIndicator = None
-          )
+          val modeAtBorder = arb[String]
+            .suchThat(
+              mode => mode != "4" && mode != "40"
+            )
+            .sample
+            .value
 
-          val updatedUserAnswers = baseUserAnswers.unsafeSetVal(ModeAtBorderPage)(mode)
+          val invalidUa = fullSafetyAndSecurityUa
+            .unsafeSetVal(ModeAtBorderPage)(modeAtBorder)
+            .unsafeSetVal(AddConveyanceReferenceNumberPage)(true)
+            .unsafeRemove(ConveyanceReferenceNumberPage)
 
-          val userAnswers = setSafetyAndSecurity(updatedSafetyAndSecurity)(updatedUserAnswers)
+          val result = UserAnswersReader[SafetyAndSecurity].run(invalidUa).left.value
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          result.page mustBe ConveyanceReferenceNumberPage
+        }
 
-          result mustEqual updatedSafetyAndSecurity
+        "when ModeAtBorderPage is '4' or '40' and ConveyanceReferenceNumberPage is empty" in {
+
+          val modeAtBorder = Gen.oneOf(Seq("4", "40")).sample.value
+
+          val invalidUa = fullSafetyAndSecurityUa
+            .unsafeSetVal(ModeAtBorderPage)(modeAtBorder)
+            .unsafeRemove(ConveyanceReferenceNumberPage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(invalidUa).left.value
+
+          result.page mustBe ConveyanceReferenceNumberPage
+        }
       }
 
+      "placeOfUnloading" - {
+
+        "when addCircumstanceIndicator is 'E' and AddPlaceOfUnloadingCodePage is empty" in {
+
+          val invalidUa = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)("E")
+            .unsafeRemove(AddPlaceOfUnloadingCodePage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(invalidUa).left.value
+
+          result.page mustBe AddPlaceOfUnloadingCodePage
+        }
+
+        "when addCircumstanceIndicator is 'E' and AddPlaceOfUnloadingCodePage is true and PlaceOfUnloadingCodePage is empty" in {
+
+          val invalidUa = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)("E")
+            .unsafeSetVal(AddPlaceOfUnloadingCodePage)(true)
+            .unsafeRemove(PlaceOfUnloadingCodePage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(invalidUa).left.value
+
+          result.page mustBe PlaceOfUnloadingCodePage
+        }
+
+        "when addCircumstanceIndicator is not 'E' and PlaceOfUnloadingCodePage is empty" in {
+
+          val invalidUa = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)("A")
+            .unsafeRemove(PlaceOfUnloadingCodePage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(invalidUa).left.value
+
+          result.page mustBe PlaceOfUnloadingCodePage
+        }
+      }
+
+      "consignorDetails" - {
+
+        "when AddSafetyAndSecurityConsignorPage is true and AddSafetyAndSecurityConsignorEoriPage is true and SafetyAndSecurityConsignorEoriPage is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsignorEoriPage)(true)
+            .unsafeRemove(SafetyAndSecurityConsignorEoriPage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe SafetyAndSecurityConsignorEoriPage
+        }
+
+        "when AddSafetyAndSecurityConsignorPage is true and AddSafetyAndSecurityConsignorEoriPage is false and SafetyAndSecurityConsignorName is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsignorEoriPage)(false)
+            .unsafeSetVal(SafetyAndSecurityConsignorAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
+            .unsafeRemove(SafetyAndSecurityConsignorNamePage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe SafetyAndSecurityConsignorNamePage
+        }
+
+        "when AddSafetyAndSecurityConsignorPage is true and AddSafetyAndSecurityConsignorEoriPage is false and SafetyAndSecurityConsignorAddress is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsignorEoriPage)(false)
+            .unsafeSetVal(SafetyAndSecurityConsignorNamePage)("consignorName")
+            .unsafeRemove(SafetyAndSecurityConsignorAddressPage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe SafetyAndSecurityConsignorAddressPage
+        }
+      }
+
+      "consigneeDetails" - {
+
+        "when AddSafetyAndSecurityConsigneePage is true and AddSafetyAndSecurityConsigneeEoriPage is true and SafetyAndSecurityConsigneeEoriPage is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(true)
+            .unsafeRemove(SafetyAndSecurityConsigneeEoriPage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe SafetyAndSecurityConsigneeEoriPage
+        }
+
+        "when AddSafetyAndSecurityConsigneePage is true and AddSafetyAndSecurityConsigneeEoriPage is false and SafetyAndSecurityConsigneeName is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(false)
+            .unsafeSetVal(SafetyAndSecurityConsigneeAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
+            .unsafeRemove(SafetyAndSecurityConsigneeNamePage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe SafetyAndSecurityConsigneeNamePage
+        }
+
+        "when AddSafetyAndSecurityConsigneePage is true and AddSafetyAndSecurityConsigneeEoriPage is false and SafetyAndSecurityConsigneeAddress is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+            .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(false)
+            .unsafeSetVal(SafetyAndSecurityConsigneeNamePage)("consigneeName")
+            .unsafeRemove(SafetyAndSecurityConsigneeAddressPage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe SafetyAndSecurityConsigneeAddressPage
+        }
+      }
+
+      "carrierDetails" - {
+
+        "when AddCarrierPage is true and AddCarrierEoriPage is true and CarrierEoriPage is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCarrierPage)(true)
+            .unsafeSetVal(AddCarrierEoriPage)(true)
+            .unsafeRemove(CarrierEoriPage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe CarrierEoriPage
+        }
+
+        "when AddCarrierPage is true and AddCarrierEoriPage is false and CarrierName is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCarrierPage)(true)
+            .unsafeSetVal(AddCarrierEoriPage)(false)
+            .unsafeSetVal(CarrierAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
+            .unsafeRemove(CarrierNamePage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe CarrierNamePage
+        }
+
+        "when AddCarrierPage is true and AddCarrierEoriPage is false and CarrierAddressPage is empty" in {
+
+          val userAnswers = fullSafetyAndSecurityUa
+            .unsafeSetVal(AddCarrierPage)(true)
+            .unsafeSetVal(AddCarrierEoriPage)(false)
+            .unsafeSetVal(CarrierNamePage)("consigneeName")
+            .unsafeRemove(CarrierAddressPage)
+
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).left.value
+
+          result.page mustBe CarrierAddressPage
+        }
+      }
     }
   }
-
 }
 
 object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
@@ -228,20 +631,4 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
     ItinerarySpec.setItineraries(safetyAndSecurity.itineraryList.toList)(updatedUserAnswers)
 
   }
-
-  def setSafetyAndSecurityMinimal(startUserAnswers: UserAnswers): UserAnswers =
-    startUserAnswers
-      .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
-      .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-      .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-      .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
-      .unsafeSetVal(ModeAtBorderPage)("1")
-      .unsafeSetVal(AddConveyanceReferenceNumberPage)(false)
-      .unsafeSetVal(AddPlaceOfUnloadingCodePage)(false)
-      .unsafeSetVal(PlaceOfUnloadingCodePage)("data")
-      .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
-      .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
-      .unsafeSetVal(AddCarrierPage)(false)
-      .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("GB"))
-
 }

@@ -27,36 +27,45 @@ import org.scalacheck.Gen
 import pages._
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
 
-class SpecialMentionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class SpecialMentionDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
   "SpecialMention" - {
 
-    val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-      SpecialMentionTypePage(index, referenceIndex),
-      SpecialMentionAdditionalInfoPage(index, referenceIndex)
-    )
-
     "can be parsed from UserAnswers" - {
       "when all details for section have been answered" in {
-        forAll(arbitrary[SpecialMentionDomain], arbitrary[UserAnswers]) {
-          case (specialMention, userAnswers) =>
-            val updatedUserAnswers = setSpecialMentionsUserAnswers(specialMention, index, referenceIndex)(userAnswers)
-            val result             = UserAnswersReader[SpecialMentionDomain](SpecialMentionDomain.specialMentionsReader(index, referenceIndex)).run(updatedUserAnswers)
 
-            result.right.value mustEqual specialMention
-        }
+        val expectedResult = SpecialMentionDomain("specialMentionType", "additionalInfo")
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))("specialMentionType")
+          .unsafeSetVal(SpecialMentionAdditionalInfoPage(index, referenceIndex))("additionalInfo")
+
+        val result: EitherType[SpecialMentionDomain] =
+          UserAnswersReader[SpecialMentionDomain](SpecialMentionDomain.specialMentionsReader(index, referenceIndex)).run(userAnswers)
+
+        result.right.value mustBe expectedResult
+
       }
     }
 
     "cannot be parsed from UserAnswers" - {
+
       "when a mandatory answer is missing" in {
-        forAll(arbitrary[SpecialMentionDomain], arbitrary[UserAnswers], mandatoryPages) {
-          case (specialMention, userAnswers, mandatoryPage) =>
-            val updatedUserAnswers = setSpecialMentionsUserAnswers(specialMention, index, referenceIndex)(userAnswers)
+
+        val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+          SpecialMentionTypePage(index, referenceIndex),
+          SpecialMentionAdditionalInfoPage(index, referenceIndex)
+        )
+
+        forAll(mandatoryPages) {
+          mandatoryPage =>
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))("specialMentionType")
+              .unsafeSetVal(SpecialMentionAdditionalInfoPage(index, referenceIndex))("additionalInfo")
               .unsafeRemove(mandatoryPage)
 
             val result: EitherType[SpecialMentionDomain] =
-              UserAnswersReader[SpecialMentionDomain](SpecialMentionDomain.specialMentionsReader(index, referenceIndex)).run(updatedUserAnswers)
+              UserAnswersReader[SpecialMentionDomain](SpecialMentionDomain.specialMentionsReader(index, referenceIndex)).run(userAnswers)
 
             result.left.value.page mustBe mandatoryPage
         }

@@ -19,7 +19,6 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import handlers.ErrorHandler
-import models.journeyDomain.{JourneyDomain, UserAnswersReader}
 import models.{LocalReferenceNumber, ValidateTaskListViewLogger}
 import pages.TechnicalDifficultiesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
