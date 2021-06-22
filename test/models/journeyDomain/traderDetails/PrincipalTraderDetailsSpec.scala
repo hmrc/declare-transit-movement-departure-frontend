@@ -22,188 +22,170 @@ import generators.JourneyModelGenerators
 import models.domain.Address
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, PrincipalAddress, ProcedureType, UserAnswers}
+import models.{CommonAddress, EoriNumber, ProcedureType}
 import org.scalatest.TryValues
 import pages._
 
 class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
-  private val country = Country(CountryCode("GB"), "United Kingdom")
 
-  val principalsAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
+  "PrincipleTraderDetails" - {
 
-  "Parsing PrincipalTrader from UserAnswers" - {
+    "can be parsed from UserAnswers" - {
 
-    "when procedure type is Normal" - {
+      "when Procedure type in Normal" - {
 
-      "when Eori is known has been answered" - {
+        "and Eori is answered in prefix is GB" in {
 
-        "when Eori is answered in prefix is GB" in {
-
-          val eoriNumber = EoriNumber("GB123456")
-          forAll(arb[UserAnswers]) {
-            baseUserAnswers =>
-              val userAnswers = baseUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
-                .unsafeSetVal(WhatIsPrincipalEoriPage)(eoriNumber.value)
-
-              val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
-
-              result mustEqual PrincipalTraderEoriInfo(eoriNumber)
-
-          }
-        }
-        "when Eori is answered in prefix is not GB" in {
-
-          val eoriNumber = EoriNumber("AD123456")
-          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength)) {
-            (baseUserAnswers, name) =>
-              val userAnswers = baseUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
-                .unsafeSetVal(WhatIsPrincipalEoriPage)(eoriNumber.value)
-                .unsafeSetVal(PrincipalNamePage)(name)
-                .unsafeSetVal(PrincipalAddressPage)(principalsAddress)
-
-              val expectedAddress = Address.prismAddressToCommonAddress(principalsAddress)
-
-              val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
-
-              result mustEqual PrincipalTraderEoriPersonalInfo(eoriNumber, name, expectedAddress)
-
-          }
-        }
-
-        "when Eori is missing" in {
-          forAll(arb[UserAnswers]) {
-            baseUserAnswers =>
-              val userAnswers = baseUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
-                .unsafeRemove(WhatIsPrincipalEoriPage)
-
-              val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).isLeft
-
-              result mustEqual true
-          }
-        }
-      }
-
-      "when Eori is not known" - {
-
-        "when principal trader name and address are answered" in {
-          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
-            case (baseUserAnswers, name, principalAddress) =>
-              val userAnswers = baseUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
-                .unsafeSetVal(PrincipalNamePage)(name)
-                .unsafeSetVal(PrincipalAddressPage)(principalAddress)
-
-              val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
-
-              val expectedAddress = Address.prismAddressToCommonAddress(principalAddress)
-
-              result mustEqual PrincipalTraderDetails(name, expectedAddress)
-
-          }
-        }
-
-        "when address is missing" in {
-          forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength)) {
-            case (baseUserAnswers, name) =>
-              val userAnswers = baseUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
-                .unsafeSetVal(PrincipalNamePage)(name)
-                .unsafeRemove(PrincipalAddressPage)
-
-              val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).isLeft
-
-              result mustEqual true
-          }
-        }
-
-        "when name is missing" in {
-          forAll(arb[UserAnswers], arb[CommonAddress]) {
-            case (baseUserAnswers, principalAddress) =>
-              val userAnswers = baseUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
-                .unsafeSetVal(PrincipalAddressPage)(principalAddress)
-                .unsafeRemove(PrincipalNamePage)
-
-              val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).isLeft
-
-              result mustEqual true
-          }
-        }
-      }
-
-      "when Principal Eori known page is missing" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[EoriNumber], arb[CommonAddress]) {
-          case (baseUserAnswers, name, eori, principalAddress) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-              .unsafeSetVal(PrincipalNamePage)(name)
-              .unsafeSetVal(PrincipalAddressPage)(principalAddress)
-              .unsafeSetVal(WhatIsPrincipalEoriPage)(eori.value)
-              .unsafeRemove(IsPrincipalEoriKnownPage)
-
-            val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).isLeft
-
-            result mustEqual true
-        }
-      }
-    }
-
-    "when procedure type is Simplified" - {
-
-      "when Eori is answered" in {
-        forAll(arb[UserAnswers], arb[EoriNumber]) {
-          (baseUserAnswers, eori) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
-              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-              .unsafeSetVal(WhatIsPrincipalEoriPage)(eori.value)
-
-            val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
-
-            result mustEqual PrincipalTraderEoriInfo(eori)
-
-        }
-      }
-
-      "when Eori is missing" in {
-        forAll(arb[UserAnswers]) {
-          baseUserAnswers =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
-              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-              .unsafeRemove(WhatIsPrincipalEoriPage)
-
-            val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).isLeft
-
-            result mustEqual true
-        }
-      }
-    }
-
-    "when procedure type is missing" in {
-      forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
-        (baseUserAnswers, eori, name, principalAddress) =>
-          val userAnswers = baseUserAnswers
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
             .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
-            .unsafeSetVal(WhatIsPrincipalEoriPage)(eori.value)
-            .unsafeSetVal(PrincipalNamePage)(name)
-            .unsafeSetVal(PrincipalAddressPage)(principalAddress)
-            .unsafeRemove(ProcedureTypePage)
+            .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
 
-          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).isLeft
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-          result mustEqual true
+          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("GB123456"))
+
+          result mustEqual expectedResult
+
+        }
+
+        "and Eori is answered in prefix is not GB" in {
+
+          val address = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+            .unsafeSetVal(WhatIsPrincipalEoriPage)(eoriNumber.value)
+            .unsafeSetVal(PrincipalNamePage)("principleName")
+            .unsafeSetVal(PrincipalAddressPage)(address)
+
+          val expectedAddress = Address.prismAddressToCommonAddress(address)
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+
+          val expectedResult = PrincipalTraderEoriPersonalInfo(eoriNumber, "principleName", expectedAddress)
+
+          result mustBe expectedResult
+        }
+
+        "and principal trader name and address are answered without eori" in {
+
+          val address = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
+            .unsafeSetVal(PrincipalNamePage)("principleName")
+            .unsafeSetVal(PrincipalAddressPage)(address)
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+
+          val expectedAddress = Address.prismAddressToCommonAddress(address)
+
+          val expectedResult = PrincipalTraderDetails("principleName", expectedAddress)
+
+          result mustBe expectedResult
+        }
+      }
+
+      "when procedure type is Simplified" - {
+
+        "and Eori is answered" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+            .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+
+          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("GB123456"))
+
+          result mustBe expectedResult
+        }
+      }
+    }
+
+    "cannot be parsed from UserAnswers" - {
+
+      "when procedure type is missing" in {
+        val result = UserAnswersReader[PrincipalTraderDetails].run(emptyUserAnswers).left.value
+
+        result.page mustBe ProcedureTypePage
+      }
+
+      "when procedure type is Normal" - {
+
+        "and principle eori is know but eori is missing" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+            .unsafeRemove(WhatIsPrincipalEoriPage)
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).left.value
+
+          result.page mustEqual WhatIsPrincipalEoriPage
+        }
+
+        "and principle address is missing" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
+            .unsafeSetVal(PrincipalNamePage)("principleName")
+            .unsafeRemove(PrincipalAddressPage)
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).left.value
+
+          result.page mustBe PrincipalAddressPage
+        }
+
+        "and principle name is missing" in {
+
+          val address = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
+            .unsafeSetVal(PrincipalAddressPage)(address)
+            .unsafeRemove(PrincipalNamePage)
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).left.value
+
+          result.page mustBe PrincipalNamePage
+        }
+
+        "and Principal Eori known page is missing" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(PrincipalNamePage)("principleName")
+            .unsafeSetVal(PrincipalAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description")))
+            .unsafeSetVal(WhatIsPrincipalEoriPage)("principleEori")
+            .unsafeRemove(IsPrincipalEoriKnownPage)
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).left.value
+
+          result.page mustBe IsPrincipalEoriKnownPage
+        }
+      }
+
+      "when procedure type is Simplified" - {
+
+        "and Eori is missing" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+            .unsafeRemove(WhatIsPrincipalEoriPage)
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).left.value
+
+          result.page mustEqual WhatIsPrincipalEoriPage
+        }
       }
     }
   }
-
 }
