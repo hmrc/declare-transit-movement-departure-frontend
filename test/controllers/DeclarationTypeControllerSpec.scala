@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.movementDetails
+package controllers
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.DeclarationTypeFormProvider
 import matchers.JsonMatchers
 import models.{DeclarationType, NormalMode}
-import navigation.annotations.MovementDetails
+import navigation.annotations.PreTaskListDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -51,7 +51,7 @@ class DeclarationTypeControllerSpec extends SpecBase with MockNunjucksRendererAp
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[MovementDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "DeclarationType Controller" - {
 

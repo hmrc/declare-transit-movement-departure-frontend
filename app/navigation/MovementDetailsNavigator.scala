@@ -29,7 +29,6 @@ class MovementDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case DeclarationTypePage           => ua => declarationType(ua, NormalMode)
     case PreLodgeDeclarationPage       => ua => Some(routes.ContainersUsedPageController.onPageLoad(ua.id, NormalMode))
     case ContainersUsedPage            => ua => Some(routes.DeclarationPlaceController.onPageLoad(ua.id, NormalMode))
     case DeclarationPlacePage          => ua => Some(routes.DeclarationForSomeoneElseController.onPageLoad(ua.id, NormalMode))
@@ -39,18 +38,9 @@ class MovementDetailsNavigator @Inject() () extends Navigator {
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case DeclarationTypePage           => ua => declarationType(ua, CheckMode)
     case DeclarationForSomeoneElsePage => ua => Some(isDeclarationForSomeoneElse(ua, CheckMode))
     case _                             => ua => Some(routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.id))
   }
-
-  private def declarationType(ua: UserAnswers, mode: Mode): Option[Call] =
-    (ua.get(ProcedureTypePage), ua.get(PreLodgeDeclarationPage), mode) match {
-      case (Some(Simplified), _, NormalMode)  => Some(routes.ContainersUsedPageController.onPageLoad(ua.id, mode))
-      case (Some(Normal), _, NormalMode)      => Some(routes.PreLodgeDeclarationController.onPageLoad(ua.id, mode))
-      case (Some(Normal), None, CheckMode)    => Some(routes.PreLodgeDeclarationController.onPageLoad(ua.id, mode))
-      case _                                  => Some(routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.id))
-    }
 
   private def isDeclarationForSomeoneElse(ua: UserAnswers, mode: Mode): Call =
     (ua.get(DeclarationForSomeoneElsePage), ua.get(RepresentativeNamePage), mode) match {

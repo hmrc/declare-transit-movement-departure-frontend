@@ -1,8 +1,3 @@
-GET        /:lrn/movement-details/declaration-type                        controllers.movementDetails.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/movement-details/declaration-type                        controllers.movementDetails.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/movement-details/change-declaration-type                  controllers.movementDetails.DeclarationTypeController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/movement-details/change-declaration-type                  controllers.movementDetails.DeclarationTypeController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-
 GET        /:lrn/movement-details/containers-used                        controllers.movementDetails.ContainersUsedPageController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/movement-details/containers-used                        controllers.movementDetails.ContainersUsedPageController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 GET        /:lrn/movement-details/change-containers-used                  controllers.movementDetails.ContainersUsedPageController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

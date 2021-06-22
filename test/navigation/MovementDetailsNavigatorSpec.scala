@@ -33,34 +33,6 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
   "Movement Details Section" - {
     "Normal mode" - {
 
-      "must go from Declaration Type page to" - {
-        "containers Used page when Simplified is selected" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers
-                .set(ProcedureTypePage, Simplified).success.value
-
-              navigator
-                .nextPage(DeclarationTypePage, NormalMode, userAnswers)
-                .mustBe(movementDetailsRoute.ContainersUsedPageController.onPageLoad(answers.id, NormalMode))
-          }
-        }
-
-        "pre-lodge declaration when Normal is selected" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers
-                .set(ProcedureTypePage, Normal).success.value
-
-              navigator
-                .nextPage(DeclarationTypePage, NormalMode, userAnswers)
-                .mustBe(movementDetailsRoute.PreLodgeDeclarationController.onPageLoad(answers.id, NormalMode))
-          }
-        }
-      }
-
       "must go from PreLodge Declaration page to Containers Used page" in {
 
         forAll(arbitrary[UserAnswers]) {
@@ -137,52 +109,6 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
     }
 
     "Check mode" - {
-
-      "Must go from Declaration-Type to" - {
-        "Movement Details Check Your Answers when ProcedureType Normal and Prelodge is populated" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers
-                .set(ProcedureTypePage, Normal).success.value
-                .set(PreLodgeDeclarationPage, true).success.value
-
-              navigator
-                .nextPage(DeclarationTypePage, CheckMode, userAnswers)
-                .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.id))
-
-          }
-        }
-
-        "Movement Details Check Your Answers when ProcedureType Simplified" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers
-                .set(ProcedureTypePage, Simplified).success.value
-
-              navigator
-                .nextPage(DeclarationTypePage, CheckMode, userAnswers)
-                .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.id))
-
-          }
-        }
-
-        "PreLodgeDeclaration when ProcedureType Normal and Prelodge is NOT populated" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers
-                .set(ProcedureTypePage, Normal).success.value
-                .remove(PreLodgeDeclarationPage).success.value
-
-              navigator
-                .nextPage(DeclarationTypePage, CheckMode, userAnswers)
-                .mustBe(movementDetailsRoute.PreLodgeDeclarationController.onPageLoad(answers.id, CheckMode))
-
-          }
-        }
-      }
 
       "must go from PreLodge Declaration page to CYA page" in {
 
