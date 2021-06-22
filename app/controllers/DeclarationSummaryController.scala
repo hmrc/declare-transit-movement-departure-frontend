@@ -19,6 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import handlers.ErrorHandler
+import models.journeyDomain.{JourneyDomain, UserAnswersReader}
 import models.{LocalReferenceNumber, ValidateTaskListViewLogger}
 import pages.TechnicalDifficultiesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -28,8 +29,8 @@ import services.DeclarationSubmissionService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.DeclarationSummaryViewModel
-import javax.inject.Inject
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationSummaryController @Inject() (
@@ -53,7 +54,6 @@ class DeclarationSummaryController @Inject() (
       val declarationSummaryViewModel = DeclarationSummaryViewModel(appConfig.manageTransitMovementsViewDeparturesUrl, request.userAnswers)
 
       ValidateTaskListViewLogger(declarationSummaryViewModel.sectionErrors)
-
       renderer
         .render("declarationSummary.njk", declarationSummaryViewModel)
         .map(Ok(_))
