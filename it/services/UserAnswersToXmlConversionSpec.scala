@@ -311,7 +311,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>2</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>12131415</TotGroMasHEA307>
+          <TotGroMasHEA307>50001.0</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>A</SpeCirIndHEA1>
@@ -617,7 +617,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * Goods Summary
         */
         .unsafeSetVal(pages.TotalPackagesPage)(1)
-        .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.AuthorisedLocationCodePage)("AuthLocationCode")
         .unsafeSetVal(pages.ControlResultDateLimitPage)(LocalDate.of(2020, 12, 12))
         .unsafeSetVal(pages.AddSealsPage)(false)
@@ -657,7 +656,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>12131415</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
         </HEAHEA>
@@ -868,7 +867,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * Goods Summary
         */
         .unsafeSetVal(pages.TotalPackagesPage)(1)
-        .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
         .unsafeSetVal(pages.AddAgreedLocationOfGoodsPage)(false)
         .unsafeSetVal(pages.AddSealsPage)(true)
@@ -913,7 +911,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>12131415</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SecHEA358>1</SecHEA358>
@@ -1208,7 +1206,6 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * Goods Summary
         */
         .unsafeSetVal(pages.TotalPackagesPage)(1)
-        .unsafeSetVal(pages.TotalGrossMassPage)("12131415")
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
         .unsafeSetVal(pages.AddCustomsApprovedLocationPage)(true)
         .unsafeSetVal(pages.CustomsApprovedLocationPage)("CUSAPPLOC")
@@ -1255,7 +1252,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>12131415</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>E</SpeCirIndHEA1>
