@@ -334,7 +334,6 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
   def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
       .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
-      .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
       .unsafeSetVal(AddSealsPage)(goodsSummary.sealNumbers.nonEmpty)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {

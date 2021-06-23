@@ -26,6 +26,7 @@ import pages.addItems._
 import pages.addItems.specialMentions._
 import pages.addItems.containers.{AddAnotherContainerPage, ConfirmRemoveContainerPage, ContainerNumberPage}
 import pages.addItems.securityDetails._
+import pages.TotalGrossMassPage
 import pages.addItems.traderSecurityDetails.{
   AddSecurityConsigneesEoriPage,
   AddSecurityConsignorsEoriPage,
@@ -830,13 +831,6 @@ trait UserAnswersEntryGenerators {
       for {
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (AddCustomsApprovedLocationPage, value)
-    }
-
-  implicit lazy val arbitraryTotalGrossMassUserAnswersEntry: Arbitrary[(TotalGrossMassPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- nonEmptyString.map(Json.toJson(_))
-      } yield (TotalGrossMassPage, value)
     }
 
   implicit lazy val arbitraryAuthorisedLocationCodeUserAnswersEntry: Arbitrary[(AuthorisedLocationCodePage.type, JsValue)] =

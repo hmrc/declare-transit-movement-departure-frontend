@@ -18,8 +18,8 @@ package viewModels
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
 import base.SpecBase
+import models.Index
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
@@ -74,31 +74,11 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
       data.sections.head.rows.head.value.content mustEqual Literal("1000")
 
     }
-    "display Total gross mass declared" in {
-
-      val updatedAnswers = emptyUserAnswers
-        .set(TotalPackagesPage, 1000)
-        .success
-        .value
-        .set(TotalGrossMassPage, "1000.123")
-        .success
-        .value
-      val data = GoodsSummaryCheckYourAnswersViewModel(updatedAnswers)
-
-      data.sections.head.sectionTitle must not be defined
-      data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 2
-      data.sections.head.rows(1).value.content mustEqual Literal("1000.123")
-
-    }
 
     "display Authorised location" in {
 
       val updatedAnswers = emptyUserAnswers
         .set(TotalPackagesPage, 1000)
-        .success
-        .value
-        .set(TotalGrossMassPage, "1000.123")
         .success
         .value
         .set(AuthorisedLocationCodePage, "AuthCode")
@@ -108,17 +88,14 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
 
       data.sections.head.sectionTitle must not be defined
       data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 3
-      data.sections.head.rows(2).value.content mustEqual Literal("AuthCode")
+      data.sections.head.rows.length mustEqual 2
+      data.sections.head.rows(1).value.content mustEqual Literal("AuthCode")
 
     }
     "display Customs approve location" in {
 
       val updatedAnswers = emptyUserAnswers
         .set(TotalPackagesPage, 1000)
-        .success
-        .value
-        .set(TotalGrossMassPage, "1000.123")
         .success
         .value
         .set(CustomsApprovedLocationPage, "ApprovedCode")
@@ -128,8 +105,8 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
 
       data.sections.head.sectionTitle must not be defined
       data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 3
-      data.sections.head.rows(2).value.content mustEqual Literal("ApprovedCode")
+      data.sections.head.rows.length mustEqual 2
+      data.sections.head.rows(1).value.content mustEqual Literal("ApprovedCode")
 
     }
 
@@ -143,9 +120,6 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
         .set(TotalPackagesPage, 1000)
         .success
         .value
-        .set(TotalGrossMassPage, "1000.123")
-        .success
-        .value
         .set(AuthorisedLocationCodePage, "AuthCode")
         .success
         .value
@@ -156,8 +130,8 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
 
       data.sections.head.sectionTitle must not be defined
       data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 4
-      data.sections.head.rows(3).value.content mustEqual Literal(todaysDate)
+      data.sections.head.rows.length mustEqual 3
+      data.sections.head.rows(2).value.content mustEqual Literal(todaysDate)
 
     }
 
