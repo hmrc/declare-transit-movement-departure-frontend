@@ -57,6 +57,11 @@ trait JourneyModelGenerators {
 
   implicit def arbitraryJourneyDomain: Arbitrary[JourneyDomain] = Arbitrary(Gen.oneOf(arbitrarySimplifiedJourneyDomain, arbitraryNormalJourneyDomain))
 
+  implicit val arbitraryUserAnswerScenario: Arbitrary[UserAnswerScenario] =
+    Arbitrary {
+      Gen.oneOf(Seq(Scenario1, Scenario2, Scenario3, Scenario4))
+    }
+
   lazy val arbitrarySimplifiedJourneyDomain: Gen[JourneyDomain] =
     for {
       preTaskList <- arbitrary[PreTaskListDetails]
