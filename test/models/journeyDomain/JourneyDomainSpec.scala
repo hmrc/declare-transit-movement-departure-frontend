@@ -20,7 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.journeyDomain.traderDetails.TraderDetailsSpec
-import models.{UserAnswerScenario, UserAnswers}
+import models.{Scenario1, UserAnswerScenario, UserAnswers}
 import pages.AddSecurityDetailsPage
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
@@ -36,20 +36,27 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGen
             result mustBe true
         }
       }
-    }
 
-    "cannot be parsed from UserAnswers" - {
+      "this one is wrong" in {
 
-      "when a safety and security is missing" in {
+        val result = UserAnswersReader[JourneyDomain].run(Scenario1.userAnswers)
 
-        forAll(arb[UserAnswerScenario]) {
-          userAnswerScenario =>
-            val userAnswers = userAnswerScenario.userAnswers
-              .unsafeRemove(AddSecurityDetailsPage)
+        result.right.value mustBe Scenario1.toModel
+      }
 
-            val result = UserAnswersReader[JourneyDomain].run(userAnswers).left.value
+      "cannot be parsed from UserAnswers" - {
 
-            result.page mustBe AddSecurityDetailsPage
+        "when a safety and security is missing" in {
+
+          forAll(arb[UserAnswerScenario]) {
+            userAnswerScenario =>
+              val userAnswers = userAnswerScenario.userAnswers
+                .unsafeRemove(AddSecurityDetailsPage)
+
+              val result = UserAnswersReader[JourneyDomain].run(userAnswers).left.value
+
+              result.page mustBe AddSecurityDetailsPage
+          }
         }
       }
     }
