@@ -17,11 +17,13 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.journeyDomain.traderDetails.TraderDetailsSpec
 import models.{UserAnswerScenario, UserAnswers}
+import pages.AddSecurityDetailsPage
 
-class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
 
   "JourneyDomain" - {
     "can be parsed UserAnswers" - {
@@ -32,6 +34,22 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGen
             val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers).isRight
 
             result mustBe true
+        }
+      }
+    }
+
+    "cannot be parsed from UserAnswers" - {
+
+      "when a safety and security is missing" in {
+
+        forAll(arb[UserAnswerScenario]) {
+          userAnswerScenario =>
+            val userAnswers = userAnswerScenario.userAnswers
+              .unsafeRemove(AddSecurityDetailsPage)
+
+            val result = UserAnswersReader[JourneyDomain].run(userAnswers).left.value
+
+            result.page mustBe AddSecurityDetailsPage
         }
       }
     }
