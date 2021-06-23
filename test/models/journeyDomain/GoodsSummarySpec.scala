@@ -41,7 +41,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
         val expectedResult = GoodsSummary(
           numberOfPackages = 1,
-          totalMass = "11.1",
           loadingPlace = None,
           goodSummaryDetails = GoodSummarySimplifiedDetails("authLocation", dateNow),
           sealNumbers = Seq.empty
@@ -50,7 +49,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(ProcedureTypePage)(Simplified)
           .unsafeSetVal(TotalPackagesPage)(1)
-          .unsafeSetVal(TotalGrossMassPage)("11.1")
           .unsafeSetVal(AddSecurityDetailsPage)(false)
           .unsafeSetVal(AuthorisedLocationCodePage)("authLocation")
           .unsafeSetVal(ControlResultDateLimitPage)(dateNow)
@@ -66,7 +64,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val expectedResult = GoodsSummary(
             numberOfPackages = 1,
-            totalMass = "11.1",
             loadingPlace = Some("loadingPlace"),
             goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, Some("approvedLocation")),
             sealNumbers = Seq.empty
@@ -75,7 +72,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
@@ -92,7 +88,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val expectedResult = GoodsSummary(
             numberOfPackages = 1,
-            totalMass = "11.1",
             loadingPlace = None,
             goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(Some("agreedLocationOfGoods"), None),
             sealNumbers = Seq.empty
@@ -101,7 +96,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
@@ -119,7 +113,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val expectedResult = GoodsSummary(
             numberOfPackages = 1,
-            totalMass = "11.1",
             loadingPlace = None,
             goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, None),
             sealNumbers = Seq.empty
@@ -128,7 +121,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
@@ -145,7 +137,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val expectedResult = GoodsSummary(
             numberOfPackages = 1,
-            totalMass = "11.1",
             loadingPlace = None,
             goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(Some("agreedLocationOfGoods")),
             sealNumbers = Seq.empty
@@ -154,7 +145,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
@@ -170,7 +160,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val expectedResult = GoodsSummary(
             numberOfPackages = 1,
-            totalMass = "11.1",
             loadingPlace = None,
             goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
             sealNumbers = Seq(SealDomain("numberOrMark1"), SealDomain("numberOrMark1"))
@@ -179,7 +168,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(false)
@@ -200,7 +188,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
           TotalPackagesPage,
-          TotalGrossMassPage,
           AddSecurityDetailsPage
         )
 
@@ -209,7 +196,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(ProcedureTypePage)(Normal)
               .unsafeSetVal(TotalPackagesPage)(1)
-              .unsafeSetVal(TotalGrossMassPage)("11.1")
               .unsafeSetVal(PreLodgeDeclarationPage)(false)
               .unsafeSetVal(AddSecurityDetailsPage)(true)
               .unsafeSetVal(LoadingPlacePage)("loadingPlace")
@@ -231,7 +217,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
@@ -248,7 +233,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
@@ -265,7 +249,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AgreedLocationOfGoodsPage)("agreedLocationOfGoods")
@@ -281,7 +264,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
             .unsafeSetVal(TotalPackagesPage)(1)
-            .unsafeSetVal(TotalGrossMassPage)("11.1")
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
@@ -309,7 +291,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
               val userAnswers = emptyUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(Simplified)
                 .unsafeSetVal(TotalPackagesPage)(1)
-                .unsafeSetVal(TotalGrossMassPage)("11.1")
                 .unsafeSetVal(AddSecurityDetailsPage)(false)
                 .unsafeSetVal(AuthorisedLocationCodePage)("authLocation")
                 .unsafeSetVal(ControlResultDateLimitPage)(dateNow)
