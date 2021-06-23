@@ -18,10 +18,8 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import generators.JourneyModelGenerators
-import models.{UserAnswerScenario, UserAnswers}
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.traderDetails.TraderDetailsSpec
-import pages.movementDetails.PreLodgeDeclarationPage
+import models.{UserAnswerScenario, UserAnswers}
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
@@ -31,16 +29,9 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGen
 
         forAll(arb[UserAnswerScenario]) {
           userAnswerScenario =>
-            val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers)
+            val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers).isRight
 
-            result.right.value.preTaskList mustEqual "???"
-            result.right.value.movementDetails mustEqual "???"
-            result.right.value.routeDetails mustEqual "???"
-            result.right.value.transportDetails mustEqual "???"
-            result.right.value.traderDetails mustEqual "???"
-            result.right.value.goodsSummary mustEqual "???"
-            result.right.value.guarantee mustEqual "???"
-            result.right.value.safetyAndSecurity mustEqual "???"
+            result mustBe true
         }
       }
     }
