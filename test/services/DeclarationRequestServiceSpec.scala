@@ -120,8 +120,8 @@ class DeclarationRequestServiceSpec
 
               val updatedUserAnswer = JourneyDomainSpec
                 .setJourneyDomain(journeyDomain)(userAnswers)
-                .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))("100.123")
-                .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))("200.123")
+                .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))(100.123)
+                .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))(200.123)
 
               val result = service.convert(updatedUserAnswer).futureValue
 
