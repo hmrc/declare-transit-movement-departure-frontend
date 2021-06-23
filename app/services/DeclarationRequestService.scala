@@ -432,14 +432,12 @@ class DeclarationRequestService @Inject() (
     )
   }
 
-  // TODO: Improve by changing ConsignorDetails to have a Consignor Address instead
   private def headerConsignor(consignorDetails: ConsignorDetails): TraderConsignor = {
     val ConsignorDetails(name, CommonAddress(addressLine1, addressLine2, postCode, country), eori) = consignorDetails
 
     TraderConsignor(name, addressLine1, postCode, addressLine2, country.code.code, eori.map(_.value))
   }
 
-  // TODO: Improve by changing ConsigneeDetails to have a Consignee Address instead
   private def headerConsignee(consigneeDetails: ConsigneeDetails): TraderConsignee = {
     val ConsigneeDetails(name, CommonAddress(addressLine1, addressLine2, postCode, country), eori) = consigneeDetails
 

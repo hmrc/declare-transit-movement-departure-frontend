@@ -56,7 +56,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
 
         val expectedResult = TraderDetails(
           PrincipalTraderDetails(EoriNumber("eoriNumber")),
-          Some(ConsignorDetails("consignorName", Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "123"))), None)),
+          Some(ConsignorDetails("consignorName", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")), None)),
           None
         )
 
@@ -76,7 +76,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
         val expectedResult = TraderDetails(
           PrincipalTraderDetails(EoriNumber("eoriNumber")),
           None,
-          Some(ConsigneeDetails("consigneeName", Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "123"))), None))
+          Some(ConsigneeDetails("consigneeName", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")), None))
         )
 
         val userAnswers = traderDetailsUa
