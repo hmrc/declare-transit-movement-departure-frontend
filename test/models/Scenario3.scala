@@ -16,7 +16,39 @@
 
 package models
 
+import cats.data.NonEmptyList
+import models.DeclarationType.Option2
+import models.ProcedureType.Normal
+import models.RepresentativeCapacity.Direct
 import models.domain.SealDomain
+import models.journeyDomain.GoodsSummary.GoodSummaryNormalDetailsWithPreLodge
+import models.journeyDomain.GuaranteeDetails.GuaranteeReference
+import models.journeyDomain.MovementDetails.{DeclarationForSomeoneElse, NormalMovementDetails}
+import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
+import models.journeyDomain.RouteDetails.TransitInformation
+import models.journeyDomain.SafetyAndSecurity.PersonalInformation
+import models.journeyDomain.TransportDetails.DetailsAtBorder.SameDetailsAtBorder
+import models.journeyDomain.TransportDetails.InlandMode.Mode5or7
+import models.journeyDomain.addItems.ItemsSecurityTraderDetails
+import models.journeyDomain.traderDetails.{ConsigneeDetails, ConsignorDetails, PrincipalTraderPersonalInfo, TraderDetails}
+import models.journeyDomain.{
+  Container,
+  CurrencyCode,
+  DefaultLiabilityAmount,
+  GoodsSummary,
+  ItemDetails,
+  ItemSection,
+  Itinerary,
+  JourneyDomain,
+  OtherLiabilityAmount,
+  PreTaskListDetails,
+  PreviousReferences,
+  ProducedDocument,
+  RouteDetails,
+  SafetyAndSecurity,
+  SpecialMentionDomain,
+  TransportDetails
+}
 import models.reference._
 import play.api.libs.json.Json
 
@@ -186,5 +218,107 @@ object Scenario3 extends UserAnswerScenario {
     .unsafeSetVal(pages.guaranteeDetails.GuaranteeReferencePage(Index(1)))("GUA2Ref")
     .unsafeSetVal(pages.LiabilityAmountPage(Index(1)))("500")
     .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
+
+  private val routeDetails = RouteDetails(
+    CountryOfDispatch(CountryCode("SC"), false),
+    CountryCode("DC"),
+    CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), List.empty, None),
+    NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty)
+  )
+
+  private val movementDetails = NormalMovementDetails(
+    Option2,
+    true,
+    true,
+    "XX1 1XX",
+    DeclarationForSomeoneElse("John Doe", Direct)
+  )
+
+  private val transportDetails = TransportDetails(
+    Mode5or7(5),
+    SameDetailsAtBorder
+  )
+
+  private val traderDetails = TraderDetails(
+    PrincipalTraderPersonalInfo("PrincipalName",
+                                models.domain.Address("PrincipalStreet", "PrincipalTown", "AA1 1AA", Some(Country(CountryCode("FR"), "France")))
+    ),
+    Some(
+      ConsignorDetails(
+        "ConsignorName",
+        models.domain.Address("ConorLine1", "ConorLine2", "ConorL3", Some(Country(CountryCode("CN"), "SomethingCO"))),
+        Some(EoriNumber("ConorEori"))
+      )
+    ),
+    Some(
+      ConsigneeDetails(
+        "ConsigneeName",
+        models.domain.Address("ConeeLine1", "ConeeLine2", "ConeeL3", Some(Country(CountryCode("CN"), "SomethingCE"))),
+        Some(EoriNumber("ConeeEori"))
+      )
+    )
+  )
+
+  private val itemDetails = NonEmptyList(
+    ItemSection(
+      ItemDetails("ItemOnesDescription", "25000", Some("12342"), Some("ComoCode1")),
+      None,
+      None,
+      NonEmptyList(
+        BulkPackages(PackageType("VQ", "GD1PKG1"), None),
+        List(UnpackedPackages(PackageType("NE", "GD1PKG2"), 12, Some("GD1PK2MK")), OtherPackages(PackageType("BAG", "GD1PKG3"), 2, "GD1PK3MK"))
+      ),
+      Some(NonEmptyList(Container("GD1CN1NUM1"), List(Container("GD1CN2NUMS")))),
+      Some(NonEmptyList(SpecialMentionDomain("GD1S1", "GD1SPMT1Info"), List(SpecialMentionDomain("GD1S2", "GD1S2Info")))),
+      Some(NonEmptyList(ProducedDocument("G1D1", "G1D1Ref", Some("G1D1Info")), List(ProducedDocument("G1D2", "G1D2Ref", None)))),
+      Some(ItemsSecurityTraderDetails(Some("M"), Some("GD1CRN"), Some("GD1C"), None, None)),
+      Some(NonEmptyList(PreviousReferences("GD1PR1", "GD1PR1Ref", Some("GD1PR1Info")), List(PreviousReferences("GD1PR2", "GD1PR2Ref", None))))
+    ),
+    List.empty
+  )
+
+  private val goodsSummary = GoodsSummary(1, Some("LoadPLace"), GoodSummaryNormalDetailsWithPreLodge(None), List(SealDomain("SEAL1")))
+
+  private val guarantee = NonEmptyList(
+    GuaranteeReference(GuaranteeType.ComprehensiveGuarantee, "GUA1Ref", DefaultLiabilityAmount, "1234"),
+    List(GuaranteeReference(GuaranteeType.GuaranteeWaiver, "GUA2Ref", OtherLiabilityAmount("500", CurrencyCode.GBP), "4321"))
+  )
+
+  private val safetyAndSecurity = Some(
+    SafetyAndSecurity(
+      None,
+      None,
+      None,
+      None,
+      Some("PlaceOfUnloadingPage"),
+      Some(
+        PersonalInformation("SafeSecName",
+                            models.domain.Address("SecConorLine1", "SecConorLine2", "SecCorL3", Some(Country(CountryCode("CN"), "SomethingSecCO")))
+        )
+      ),
+      Some(
+        PersonalInformation("SafeSecName",
+                            models.domain.Address("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Some(Country(CountryCode("CN"), "SomethingSecCE")))
+        )
+      ),
+      None,
+      NonEmptyList(Itinerary(CountryCode("CA")), List.empty)
+    )
+  )
+
+  private val preTaskList = PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), List.empty, None), true)
+
+  val toModel = JourneyDomain(
+    preTaskList,
+    movementDetails,
+    routeDetails,
+    transportDetails,
+    traderDetails,
+    itemDetails,
+    goodsSummary,
+    guarantee,
+    safetyAndSecurity,
+    None
+  )
 
 }
