@@ -23,7 +23,7 @@ import pages.addItems.CommodityCodePage
 
 final case class ItemDetails(
   itemDescription: String,
-  totalGrossMass: String,
+  itemTotalGrossMass: String,
   totalNetMass: Option[String],
   commodityCode: Option[String]
 )

@@ -122,7 +122,7 @@ object ItemDetailsSpec {
   def setItemDetailsUserAnswers(itemDetails: ItemDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers = {
     val userAnswers =
       startUserAnswers
-        .unsafeSetVal(ItemTotalGrossMassPage(index))(itemDetails.totalGrossMass)
+        .unsafeSetVal(ItemTotalGrossMassPage(index))(itemDetails.itemTotalGrossMass)
         .unsafeSetVal(ItemDescriptionPage(index))(itemDetails.itemDescription)
 
     val totalNetMass = itemDetails.totalNetMass match {
