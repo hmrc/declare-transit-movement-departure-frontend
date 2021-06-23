@@ -128,9 +128,9 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       )
       .ifInProgress(
         TotalPackagesPage.reader,
-        controllers.goodsSummary.routes.TotalPackagesController.onPageLoad(lrn, NormalMode).url
+        controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
       )
-      .ifNotStarted(controllers.goodsSummary.routes.TotalPackagesController.onPageLoad(lrn, NormalMode).url)
+      .ifNotStarted(controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url)
 
   private val guaranteeDetails =
     taskListDsl
