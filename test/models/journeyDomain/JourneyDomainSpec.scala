@@ -20,7 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.journeyDomain.traderDetails.TraderDetailsSpec
-import models.{Scenario1, UserAnswerScenario, UserAnswers}
+import models.{Scenario1, Scenario2, Scenario3, UserAnswerScenario, UserAnswers}
 import pages.AddSecurityDetailsPage
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
@@ -37,11 +37,36 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGen
         }
       }
 
-      "this one is wrong" in {
+      "Scenario 1" in {
 
         val result = UserAnswersReader[JourneyDomain].run(Scenario1.userAnswers)
 
         result.right.value mustBe Scenario1.toModel
+      }
+
+      "Scenario 2" in {
+
+        val result = UserAnswersReader[JourneyDomain].run(Scenario2.userAnswers)
+
+        result.right.value mustBe Scenario2.toModel
+
+      }
+
+      "Scenario 3" in {
+
+        val result = UserAnswersReader[JourneyDomain].run(Scenario3.userAnswers)
+
+        result.right.value.routeDetails mustEqual "???"
+        result.right.value.movementDetails mustEqual "???"
+        result.right.value.transportDetails mustEqual "???"
+        result.right.value.traderDetails mustEqual "???"
+        result.right.value.itemDetails mustEqual "???"
+        result.right.value.goodsSummary mustEqual "???"
+        result.right.value.guarantee mustEqual "???"
+        result.right.value.grossMass mustEqual "???"
+        result.right.value.safetyAndSecurity mustEqual "???"
+        result.right.value.preTaskList mustEqual "???"
+
       }
 
       "cannot be parsed from UserAnswers" - {
