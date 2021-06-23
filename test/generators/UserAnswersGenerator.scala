@@ -159,7 +159,6 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryAddSealsUserAnswersEntry.arbitrary ::
       arbitraryCustomsApprovedLocationUserAnswersEntry.arbitrary ::
       arbitraryAddCustomsApprovedLocationUserAnswersEntry.arbitrary ::
-      arbitraryTotalGrossMassUserAnswersEntry.arbitrary ::
       arbitraryAuthorisedLocationCodeUserAnswersEntry.arbitrary ::
       arbitraryTotalPackagesUserAnswersEntry.arbitrary ::
       arbitraryAddTransitOfficeUserAnswersEntry.arbitrary ::
@@ -211,7 +210,6 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryAddSealsUserAnswersEntry.arbitrary ::
       arbitraryCustomsApprovedLocationUserAnswersEntry.arbitrary ::
       arbitraryAddCustomsApprovedLocationUserAnswersEntry.arbitrary ::
-      arbitraryTotalGrossMassUserAnswersEntry.arbitrary ::
       arbitraryAuthorisedLocationCodeUserAnswersEntry.arbitrary ::
       arbitraryTotalPackagesUserAnswersEntry.arbitrary ::
       arbitraryAddTransitOfficeUserAnswersEntry.arbitrary ::

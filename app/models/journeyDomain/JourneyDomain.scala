@@ -20,7 +20,7 @@ import cats.data._
 import cats.implicits._
 import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.CountryCode
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, TotalGrossMassPage}
 
 case class JourneyDomain(
   preTaskList: PreTaskListDetails,
@@ -31,7 +31,8 @@ case class JourneyDomain(
   itemDetails: NonEmptyList[ItemSection],
   goodsSummary: GoodsSummary,
   guarantee: NonEmptyList[GuaranteeDetails],
-  safetyAndSecurity: Option[SafetyAndSecurity]
+  safetyAndSecurity: Option[SafetyAndSecurity],
+  grossMass: Option[String] //TODO remove once deployed and journeys completed by current users
 )
 
 object JourneyDomain {
@@ -60,6 +61,7 @@ object JourneyDomain {
       goodsSummary      <- UserAnswersReader[GoodsSummary]
       guarantee         <- UserAnswersReader[NonEmptyList[GuaranteeDetails]]
       safetyAndSecurity <- safetyAndSecurityReader
+      grossMass         <- TotalGrossMassPage.optionalReader //TODO remove once deployed and journeys completed by current users
     } yield JourneyDomain(
       preTaskList,
       movementDetails,
@@ -69,7 +71,8 @@ object JourneyDomain {
       itemDetails,
       goodsSummary,
       guarantee,
-      safetyAndSecurity
+      safetyAndSecurity,
+      grossMass //TODO remove once deployed and journeys completed by current users
     )
   }
 }

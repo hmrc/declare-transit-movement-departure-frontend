@@ -40,7 +40,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         ua =>
           val goodsSummary = GoodsSummary(
             numberOfPackages = 1,
-            totalMass = "11.1",
             loadingPlace = None,
             goodSummaryDetails = GoodSummarySimplifiedDetails("Auth Location Code", LocalDate.now()),
             sealNumbers = Seq.empty
@@ -63,7 +62,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           ua =>
             val goodsSummary = GoodsSummary(
               numberOfPackages = 1,
-              totalMass = "11.1",
               loadingPlace = Some("loadingPlaceValue"),
               goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, Some("Approved location")),
               sealNumbers = Seq.empty
@@ -83,7 +81,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           ua =>
             val goodsSummary = GoodsSummary(
               numberOfPackages = 1,
-              totalMass = "11.1",
               loadingPlace = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(Some("Agreed location of goods"), None),
               sealNumbers = Seq.empty
@@ -103,7 +100,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           ua =>
             val goodsSummary = GoodsSummary(
               numberOfPackages = 1,
-              totalMass = "11.1",
               loadingPlace = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, None),
               sealNumbers = Seq.empty
@@ -124,7 +120,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           ua =>
             val goodsSummary = GoodsSummary(
               numberOfPackages = 1,
-              totalMass = "11.1",
               loadingPlace = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(Some("Agreed location of goods")),
               sealNumbers = Seq.empty
@@ -146,7 +141,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           ua =>
             val goodsSummary = GoodsSummary(
               numberOfPackages = 1,
-              totalMass = "11.1",
               loadingPlace = None,
               goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
               sealNumbers = Seq.empty
@@ -175,7 +169,6 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
   def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
       .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
-      .unsafeSetVal(TotalGrossMassPage)(goodsSummary.totalMass)
       .unsafeSetVal(AddSealsPage)(goodsSummary.sealNumbers.nonEmpty)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
