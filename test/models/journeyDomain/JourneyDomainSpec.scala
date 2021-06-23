@@ -64,16 +64,16 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGen
 
 //        result.right.value mustBe Scenario4.toModel
 
-        result.right.value.routeDetails mustEqual "Scenario3.toModel.routeDetails"
-        result.right.value.movementDetails mustEqual "Scenario3.toModel.movementDetails"
-        result.right.value.transportDetails mustEqual "Scenario3.toModel.transportDetails"
-        result.right.value.traderDetails mustEqual "Scenario3.toModel.traderDetails"
-        result.right.value.itemDetails mustEqual "Scenario3.toModel.itemDetails"
-        result.right.value.goodsSummary mustEqual "Scenario3.toModel.goodsSummary"
-        result.right.value.guarantee mustEqual "Scenario3.toModel.guarantee"
-        result.right.value.grossMass mustEqual "Scenario3.toModel.grossMass"
-        result.right.value.safetyAndSecurity mustEqual "Scenario3.toModel.safetyAndSecurity"
-        result.right.value.preTaskList mustEqual "Scenario3.toModel.preTaskList"
+        result.right.value.routeDetails mustEqual Scenario4.toModel.routeDetails
+        result.right.value.movementDetails mustEqual Scenario4.toModel.movementDetails
+        result.right.value.transportDetails mustEqual Scenario4.toModel.transportDetails
+        result.right.value.traderDetails mustEqual Scenario4.toModel.traderDetails
+        result.right.value.itemDetails mustEqual Scenario4.toModel.itemDetails
+        result.right.value.goodsSummary mustEqual Scenario4.toModel.goodsSummary
+        result.right.value.guarantee mustEqual Scenario4.toModel.guarantee
+        result.right.value.grossMass mustEqual Scenario4.toModel.grossMass
+        result.right.value.safetyAndSecurity mustEqual Scenario4.toModel.safetyAndSecurity
+        result.right.value.preTaskList mustEqual Scenario4.toModel.preTaskList
       }
 
       "cannot be parsed from UserAnswers" - {
