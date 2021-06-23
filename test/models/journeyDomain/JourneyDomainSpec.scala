@@ -20,7 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.journeyDomain.traderDetails.TraderDetailsSpec
-import models.{Scenario1, Scenario2, Scenario3, Scenario4, UserAnswerScenario, UserAnswers}
+import models.{UserAnswerScenario, UserAnswers}
 import pages.AddSecurityDetailsPage
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
@@ -31,49 +31,10 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGen
 
         forAll(arb[UserAnswerScenario]) {
           userAnswerScenario =>
-            val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers).isRight
+            val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers).right.value
 
-            result mustBe true
+            result mustBe userAnswerScenario.toModel
         }
-      }
-
-      "Scenario 1" in {
-
-        val result = UserAnswersReader[JourneyDomain].run(Scenario1.userAnswers)
-
-        result.right.value mustBe Scenario1.toModel
-      }
-
-      "Scenario 2" in {
-
-        val result = UserAnswersReader[JourneyDomain].run(Scenario2.userAnswers)
-
-        result.right.value mustBe Scenario2.toModel
-      }
-
-      "Scenario 3" in {
-
-        val result = UserAnswersReader[JourneyDomain].run(Scenario3.userAnswers)
-
-        result.right.value mustBe Scenario3.toModel
-      }
-
-      "Scenario 4" in {
-
-        val result = UserAnswersReader[JourneyDomain].run(Scenario4.userAnswers)
-
-//        result.right.value mustBe Scenario4.toModel
-
-        result.right.value.routeDetails mustEqual Scenario4.toModel.routeDetails
-        result.right.value.movementDetails mustEqual Scenario4.toModel.movementDetails
-        result.right.value.transportDetails mustEqual Scenario4.toModel.transportDetails
-        result.right.value.traderDetails mustEqual Scenario4.toModel.traderDetails
-        result.right.value.itemDetails mustEqual Scenario4.toModel.itemDetails
-        result.right.value.goodsSummary mustEqual Scenario4.toModel.goodsSummary
-        result.right.value.guarantee mustEqual Scenario4.toModel.guarantee
-        result.right.value.grossMass mustEqual Scenario4.toModel.grossMass
-        result.right.value.safetyAndSecurity mustEqual Scenario4.toModel.safetyAndSecurity
-        result.right.value.preTaskList mustEqual Scenario4.toModel.preTaskList
       }
 
       "cannot be parsed from UserAnswers" - {

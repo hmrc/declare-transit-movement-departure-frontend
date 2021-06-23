@@ -17,7 +17,9 @@
 package models
 
 import commonTestUtils.UserAnswersSpecHelper
+import models.journeyDomain.JourneyDomain
 
 trait UserAnswerScenario extends UserAnswersSpecHelper {
   val userAnswers: UserAnswers
+  val toModel: JourneyDomain
 }
