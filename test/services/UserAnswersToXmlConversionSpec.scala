@@ -18,9 +18,7 @@ package services
 
 import commonTestUtils.UserAnswersSpecHelper
 import models._
-import models.domain.SealDomain
 import models.messages.InterchangeControlReference
-import models.reference._
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.EitherValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -34,9 +32,8 @@ import repositories.{InterchangeControlReferenceIdRepository, MongoSuite}
 import utils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
 import xml.XMLWrites._
 
+import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
-
-import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.Future
 import scala.util.Success
 
@@ -63,11 +60,6 @@ class UserAnswersToXmlConversionSpec
     .build()
 
   class Setup {
-
-    val emptyUserAnswers: UserAnswers = UserAnswers(
-      LocalReferenceNumber("TestRefNumber").get,
-      EoriNumber("1234567890")
-    )
 
     val service: DeclarationRequestService = app.injector.instanceOf[DeclarationRequestService]
 
@@ -98,7 +90,7 @@ class UserAnswersToXmlConversionSpec
         <MesIdeMES19>1</MesIdeMES19>
         <MesTypMES20>GB015B</MesTypMES20>
         <HEAHEA>
-          <RefNumHEA4>TestRefNumber</RefNumHEA4>
+          <RefNumHEA4>ABCD1234567890123</RefNumHEA4>
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
@@ -339,7 +331,6 @@ class UserAnswersToXmlConversionSpec
       generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
     }
     "Scenario 2: " in new Setup {
-      val firstGoodItem: Index = Index(0)
 
       val expectedXml = <CC015B>
         <SynIdeMES1>UNOC</SynIdeMES1>
@@ -353,7 +344,7 @@ class UserAnswersToXmlConversionSpec
         <MesIdeMES19>1</MesIdeMES19>
         <MesTypMES20>GB015B</MesTypMES20>
         <HEAHEA>
-          <RefNumHEA4>TestRefNumber</RefNumHEA4>
+          <RefNumHEA4>ABCD1234567890123</RefNumHEA4>
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
           <AutLocOfGooCodHEA41>AuthLocationCode</AutLocOfGooCodHEA41>
@@ -440,7 +431,6 @@ class UserAnswersToXmlConversionSpec
       generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
     }
     "Scenario 3: " in new Setup {
-      val firstGoodItem: Index = Index(0)
 
       val expectedXml = <CC015B>
         <SynIdeMES1>UNOC</SynIdeMES1>
@@ -454,7 +444,7 @@ class UserAnswersToXmlConversionSpec
         <MesIdeMES19>1</MesIdeMES19>
         <MesTypMES20>GB015B</MesTypMES20>
         <HEAHEA>
-          <RefNumHEA4>TestRefNumber</RefNumHEA4>
+          <RefNumHEA4>ABCD1234567890123</RefNumHEA4>
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
           <AgrLocOfGooCodHEA38>Pre-lodge</AgrLocOfGooCodHEA38>
@@ -620,7 +610,6 @@ class UserAnswersToXmlConversionSpec
       generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
     }
     "Scenario 4: " in new Setup {
-      val firstGoodItem: Index = Index(0)
 
       val expectedXml = <CC015B>
         <SynIdeMES1>UNOC</SynIdeMES1>
@@ -634,7 +623,7 @@ class UserAnswersToXmlConversionSpec
         <MesIdeMES19>1</MesIdeMES19>
         <MesTypMES20>GB015B</MesTypMES20>
         <HEAHEA>
-          <RefNumHEA4>TestRefNumber</RefNumHEA4>
+          <RefNumHEA4>ABCD1234567890123</RefNumHEA4>
           <TypOfDecHEA24>T2</TypOfDecHEA24>
           <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
           <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
