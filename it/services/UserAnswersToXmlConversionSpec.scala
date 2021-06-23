@@ -141,7 +141,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * Item Details section - Item One
         * */
         .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))(25000.123)
         .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
         .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
@@ -209,7 +209,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           * Item Details section - Item Two
           * */
         .unsafeSetVal(pages.ItemDescriptionPage(secondGoodItem))("ItemTwosDescription")
-        .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))("25001")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))(25000.123)
         .unsafeSetVal(pages.AddTotalNetMassPage(secondGoodItem))(false)
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(secondGoodItem))(false)
@@ -311,7 +311,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>2</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>50001.0</TotGroMasHEA307>
+          <TotGroMasHEA307>50000.246</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>A</SpeCirIndHEA1>
@@ -371,7 +371,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GroMasGDS46>25000</GroMasGDS46>
+          <GroMasGDS46>25000.123</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>T</MetOfPayGDI12>
           <ComRefNumGIM1>GD1CRN</ComRefNumGIM1>
@@ -456,7 +456,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         <GOOITEGDS>
           <IteNumGDS7>2</IteNumGDS7>
           <GooDesGDS23>ItemTwosDescription</GooDesGDS23>
-          <GroMasGDS46>25001</GroMasGDS46>
+          <GroMasGDS46>25000.123</GroMasGDS46>
           <MetOfPayGDI12>U</MetOfPayGDI12>
           <ComRefNumGIM1>GD2CRN</ComRefNumGIM1>
           <PREADMREFAR2>
@@ -593,7 +593,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * Item Details section - Item One
         * */
         .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))(25000.123)
         .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(false)
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(false)
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
@@ -656,7 +656,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.123</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
         </HEAHEA>
@@ -702,7 +702,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         <GOOITEGDS>
           <IteNumGDS7>1</IteNumGDS7>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GroMasGDS46>25000</GroMasGDS46>
+          <GroMasGDS46>25000.123</GroMasGDS46>
           <PACGS2>
             <KinOfPacGS23>VQ</KinOfPacGS23>
           </PACGS2>
@@ -806,7 +806,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * Item Details section - Item One
         * */
         .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))(25000.123)
         .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
         .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
@@ -911,7 +911,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.123</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SecHEA358>1</SecHEA358>
@@ -978,7 +978,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GroMasGDS46>25000</GroMasGDS46>
+          <GroMasGDS46>25000.123</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>M</MetOfPayGDI12>
           <ComRefNumGIM1>GD1CRN</ComRefNumGIM1>
@@ -1138,7 +1138,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         * Item Details section - Item One
         * */
         .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+        .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))(25000.123)
         .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
         .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
@@ -1252,7 +1252,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.123</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>E</SpeCirIndHEA1>
@@ -1307,7 +1307,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GroMasGDS46>25000</GroMasGDS46>
+          <GroMasGDS46>25000.123</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>W</MetOfPayGDI12>
           <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>
