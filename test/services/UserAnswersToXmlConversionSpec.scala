@@ -16,11 +16,11 @@
 
 package services
 
-import itUtils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
 import commonTestUtils.UserAnswersSpecHelper
-import models.domain.SealDomain
-import models.reference.{Country, CountryCode, CountryOfDispatch, CustomsOffice, PackageType}
 import models._
+import models.domain.SealDomain
+import models.messages.InterchangeControlReference
+import models.reference._
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.EitherValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -30,29 +30,40 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import repositories.MongoSuite
+import repositories.{InterchangeControlReferenceIdRepository, MongoSuite}
+import utils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
 import xml.XMLWrites._
 
 import scala.concurrent.ExecutionContext.Implicits.global
+
 import java.time.{LocalDate, LocalDateTime}
+import scala.concurrent.Future
 import scala.util.Success
 
-class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with UserAnswersSpecHelper with XMLComparatorSpec
-  with XSDSchemaValidationSpec
-  with MongoSuite
-  with ScalaFutures
-  with GuiceOneAppPerSuite
-  with IntegrationPatience
-  with MockDateTimeService
-  with EitherValues {
+class UserAnswersToXmlConversionSpec
+    extends AnyFreeSpec
+    with Matchers
+    with UserAnswersSpecHelper
+    with XMLComparatorSpec
+    with XSDSchemaValidationSpec
+    with MongoSuite
+    with ScalaFutures
+    with GuiceOneAppPerSuite
+    with IntegrationPatience
+    with MockDateTimeService
+    with EitherValues {
+
+  private val mockInterchangeControlReference = mock[InterchangeControlReferenceIdRepository]
 
   implicit override lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(
-      bind[DateTimeService].toInstance(mockTimeService)
+      bind[DateTimeService].toInstance(mockTimeService),
+      bind[InterchangeControlReferenceIdRepository].toInstance(mockInterchangeControlReference)
     )
     .build()
 
   class Setup {
+
     val emptyUserAnswers: UserAnswers = UserAnswers(
       LocalReferenceNumber("TestRefNumber").get,
       EoriNumber("1234567890")
@@ -62,22 +73,27 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
 
     reset(mockTimeService)
 
+    when(mockInterchangeControlReference.nextInterchangeControlReferenceId())
+      .thenReturn(Future.successful(InterchangeControlReference("20201212", 1)))
+
     when(mockTimeService.currentDateTime).thenReturn(LocalDateTime.of(2020, 12, 12, 20, 30))
+
     when(mockTimeService.dateFormatted).thenReturn("20201212")
+
     database.flatMap(_.drop()).futureValue
   }
 
   "UserAnswers to XML conversion" - {
     "Scenario 1: " in new Setup {
-      val firstGoodItem: Index =  Index(0)
-      val secondGoodItem: Index =  Index(1)
+      val firstGoodItem: Index  = Index(0)
+      val secondGoodItem: Index = Index(1)
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
         .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
         /*
-        * General Information Section
-        * */
+         * General Information Section
+         * */
         .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
         .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(false)
         .unsafeSetVal(pages.ContainersUsedPage)(true)
@@ -86,8 +102,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
         .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
         /*
-        * RouteDetails
-        * */
+         * RouteDetails
+         * */
         .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
         .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
         .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
@@ -102,24 +118,24 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
         .unsafeSetVal(pages.AddTransitOfficePage)(false)
         /*
-        * Transport Details
-        * */
+         * Transport Details
+         * */
         .unsafeSetVal(pages.InlandModePage)("4")
         .unsafeSetVal(pages.AddIdAtDeparturePage)(false)
         .unsafeSetVal(pages.AddNationalityAtDeparturePage)(true)
         .unsafeSetVal(pages.NationalityAtDeparturePage)(CountryCode("ND"))
         .unsafeSetVal(pages.ChangeAtBorderPage)(false)
         /*
-        * Traders Details
-        * */
+         * Traders Details
+         * */
         .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
         .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France") ))
+        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
         .unsafeSetVal(pages.AddConsignorPage)(false)
         .unsafeSetVal(pages.AddConsigneePage)(false)
         /*
-        * Safety & Security Details
-        * */
+         * Safety & Security Details
+         * */
         .unsafeSetVal(pages.safetyAndSecurity.AddCircumstanceIndicatorPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.CircumstanceIndicatorPage)("A")
         .unsafeSetVal(pages.safetyAndSecurity.AddTransportChargesPaymentMethodPage)(false)
@@ -138,8 +154,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.safetyAndSecurity.AddCarrierEoriPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.CarrierEoriPage)("CarrierEori")
         /*
-        * Item Details section - Item One
-        * */
+         * Item Details section - Item One
+         * */
         .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
         .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
         .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
@@ -149,11 +165,15 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriNumberPage(firstGoodItem))("Conor123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(firstGoodItem))("ConorName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(firstGoodItem))(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")))
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(firstGoodItem))(
+          CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO"))
+        )
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriNumberPage(firstGoodItem))("Conee123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(firstGoodItem))("ConeeName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(firstGoodItem))(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")))
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(firstGoodItem))(
+          CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE"))
+        )
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
         .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(0)))(false)
         .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(0)))(false)
@@ -206,18 +226,22 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeEoriPage(firstGoodItem))("GD1SECCONEE")
         .unsafeSetVal(pages.addItems.AddAnotherItemPage)(true)
         /*
-          * Item Details section - Item Two
-          * */
+         * Item Details section - Item Two
+         * */
         .unsafeSetVal(pages.ItemDescriptionPage(secondGoodItem))("ItemTwosDescription")
         .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))("25001")
         .unsafeSetVal(pages.AddTotalNetMassPage(secondGoodItem))(false)
         .unsafeSetVal(pages.IsCommodityCodeKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(secondGoodItem))("ConorName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(secondGoodItem))(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GB"), "SomethingCO")))
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(secondGoodItem))(
+          CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GB"), "SomethingCO"))
+        )
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(secondGoodItem))("ConeeName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(secondGoodItem))(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE")))
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(secondGoodItem))(
+          CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE"))
+        )
         .unsafeSetVal(pages.PackageTypePage(secondGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD2PKG1"))
         .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(secondGoodItem, Index(0)))(false)
         .unsafeSetVal(pages.addItems.AddMarkPage(secondGoodItem, Index(0)))(false)
@@ -254,14 +278,18 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.securityDetails.AddDangerousGoodsCodePage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsignorsEoriPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsignorNamePage(secondGoodItem))("GD2SECCONORName")
-        .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsignorAddressPage(secondGoodItem))(CommonAddress("GD2CONORL1", "GD2CONORL2", "GD2CONL1", Country(CountryCode("GB"), "GD2CONNOR")))
+        .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsignorAddressPage(secondGoodItem))(
+          CommonAddress("GD2CONORL1", "GD2CONORL2", "GD2CONL1", Country(CountryCode("GB"), "GD2CONNOR"))
+        )
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsigneesEoriPage(secondGoodItem))(false)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeNamePage(secondGoodItem))("GD2SECCONEEName")
-        .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeAddressPage(secondGoodItem))(CommonAddress("GD2CONEEL1", "GD2CONEEL2", "GD2CEEL1", Country(CountryCode("GB"), "GD2CONNEE")))
+        .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeAddressPage(secondGoodItem))(
+          CommonAddress("GD2CONEEL1", "GD2CONEEL2", "GD2CEEL1", Country(CountryCode("GB"), "GD2CONNEE"))
+        )
         .unsafeSetVal(pages.addItems.AddAnotherItemPage)(false)
         /*
-      * Goods Summary
-      */
+         * Goods Summary
+         */
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
         .unsafeSetVal(pages.AddCustomsApprovedLocationPage)(true)
@@ -270,9 +298,9 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.SealIdDetailsPage(Index(0)))(SealDomain("SEAL1"))
         .unsafeSetVal(pages.SealsInformationPage)(true)
         .unsafeSetVal(pages.SealIdDetailsPage(Index(1)))(SealDomain("SEAL2"))
-      /*
-      * guarantee Details
-      */
+        /*
+         * guarantee Details
+         */
         .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(0)))(GuaranteeType.ComprehensiveGuarantee)
         .unsafeSetVal(pages.guaranteeDetails.GuaranteeReferencePage(Index(0)))("GUA1Ref")
         .unsafeSetVal(pages.DefaultAmountPage(Index(0)))(true)
@@ -529,30 +557,28 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         </CARTRA100>
       </CC015B>
 
-      val generatedXml = service.convert(userAnswers)
-        .futureValue
-        .right.value.toXml.map(scala.xml.Utility.trim)
+      val generatedXml = service.convert(userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
 
       validate(generatedXml.toString()) mustBe Success(())
 
       generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
     }
     "Scenario 2: " in new Setup {
-      val firstGoodItem: Index =  Index(0)
+      val firstGoodItem: Index = Index(0)
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Simplified)
         .unsafeSetVal(pages.AddSecurityDetailsPage)(false)
         /*
-        * General Information Section
-        * */
+         * General Information Section
+         * */
         .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
         .unsafeSetVal(pages.ContainersUsedPage)(false)
         .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
         .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(false)
         /*
-        * RouteDetails
-        * */
+         * RouteDetails
+         * */
         .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
         .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
         .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
@@ -567,8 +593,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
         .unsafeSetVal(pages.AddTransitOfficePage)(false)
         /*
-        * Transport Details
-        * */
+         * Transport Details
+         * */
         .unsafeSetVal(pages.InlandModePage)("3")
         .unsafeSetVal(pages.IdAtDeparturePage)("SomeIdAtDeparture")
         .unsafeSetVal(pages.NationalityAtDeparturePage)(CountryCode("ND"))
@@ -578,8 +604,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.IdCrossingBorderPage)("IDCBP")
         .unsafeSetVal(pages.NationalityCrossingBorderPage)(CountryCode("NC"))
         /*
-        * Traders Details
-        * */
+         * Traders Details
+         * */
         .unsafeSetVal(pages.WhatIsPrincipalEoriPage)("PRINCEORI")
         .unsafeSetVal(pages.AddConsignorPage)(true)
         .unsafeSetVal(pages.IsConsignorEoriKnownPage)(false)
@@ -590,8 +616,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.ConsigneeNamePage)("ConsigneeName")
         .unsafeSetVal(pages.ConsigneeAddressPage)(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
         /*
-        * Item Details section - Item One
-        * */
+         * Item Details section - Item One
+         * */
         .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
         .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
         .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(false)
@@ -614,15 +640,15 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.AddDocumentsPage(firstGoodItem))(false)
         .unsafeSetVal(pages.addItems.AddAdministrativeReferencePage(firstGoodItem))(false)
         /*
-        * Goods Summary
-        */
+         * Goods Summary
+         */
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.AuthorisedLocationCodePage)("AuthLocationCode")
         .unsafeSetVal(pages.ControlResultDateLimitPage)(LocalDate.of(2020, 12, 12))
         .unsafeSetVal(pages.AddSealsPage)(false)
         /*
-        * guarantee Details
-        */
+         * guarantee Details
+         */
         .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(0)))(GuaranteeType.CashDepositGuarantee)
         .unsafeSetVal(pages.OtherReferencePage(Index(0)))("GUA1Reference")
         .unsafeSetVal(pages.AddAnotherGuaranteePage)(false)
@@ -719,23 +745,21 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         </GOOITEGDS>
       </CC015B>
 
-      val generatedXml = service.convert(userAnswers)
-        .futureValue
-        .right.value.toXml.map(scala.xml.Utility.trim)
+      val generatedXml = service.convert(userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
 
       validate(generatedXml.toString()) mustBe Success(())
 
       generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
     }
     "Scenario 3: " in new Setup {
-      val firstGoodItem: Index =  Index(0)
+      val firstGoodItem: Index = Index(0)
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
         .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
         /*
-        * General Information Section
-        * */
+         * General Information Section
+         * */
         .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
         .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(true)
         .unsafeSetVal(pages.ContainersUsedPage)(true)
@@ -744,8 +768,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
         .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
         /*
-        * RouteDetails
-        * */
+         * RouteDetails
+         * */
         .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
         .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
         .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
@@ -760,19 +784,19 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
         .unsafeSetVal(pages.AddTransitOfficePage)(false)
         /*
-        * Transport Details
-        * */
+         * Transport Details
+         * */
         .unsafeSetVal(pages.InlandModePage)("5")
         .unsafeSetVal(pages.AddIdAtDeparturePage)(false)
         .unsafeSetVal(pages.AddNationalityAtDeparturePage)(true)
         .unsafeSetVal(pages.NationalityAtDeparturePage)(CountryCode("ND"))
         .unsafeSetVal(pages.ChangeAtBorderPage)(false)
         /*
-        * Traders Details
-        * */
+         * Traders Details
+         * */
         .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
         .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France") ))
+        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
         .unsafeSetVal(pages.AddConsignorPage)(true)
         .unsafeSetVal(pages.IsConsignorEoriKnownPage)(true)
         .unsafeSetVal(pages.ConsignorEoriPage)("ConorEori")
@@ -784,8 +808,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.ConsigneeNamePage)("ConsigneeName")
         .unsafeSetVal(pages.ConsigneeAddressPage)(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
         /*
-        * Safety & Security Details
-        * */
+         * Safety & Security Details
+         * */
         .unsafeSetVal(pages.safetyAndSecurity.AddCircumstanceIndicatorPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.AddTransportChargesPaymentMethodPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.AddCommercialReferenceNumberPage)(false)
@@ -796,15 +820,19 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorNamePage)("SafeSecName")
-        .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorAddressPage)(CommonAddress("SecConorLine1", "SecConorLine2", "SecCorL3", Country(CountryCode("CN"), "SomethingSecCO")))
+        .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsignorAddressPage)(
+          CommonAddress("SecConorLine1", "SecConorLine2", "SecCorL3", Country(CountryCode("CN"), "SomethingSecCO"))
+        )
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneePage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.AddSafetyAndSecurityConsigneeEoriPage)(false)
         .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeNamePage)("SafeSecName")
-        .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeAddressPage)(CommonAddress("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Country(CountryCode("CN"), "SomethingSecCE")))
+        .unsafeSetVal(pages.safetyAndSecurity.SafetyAndSecurityConsigneeAddressPage)(
+          CommonAddress("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Country(CountryCode("CN"), "SomethingSecCE"))
+        )
         .unsafeSetVal(pages.safetyAndSecurity.AddCarrierPage)(false)
         /*
-        * Item Details section - Item One
-        * */
+         * Item Details section - Item One
+         * */
         .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
         .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
         .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
@@ -864,8 +892,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeEoriPage(firstGoodItem))("GD1SECCONEE")
         .unsafeSetVal(pages.addItems.AddAnotherItemPage)(false)
         /*
-        * Goods Summary
-        */
+         * Goods Summary
+         */
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
         .unsafeSetVal(pages.AddAgreedLocationOfGoodsPage)(false)
@@ -873,8 +901,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.SealIdDetailsPage(Index(0)))(SealDomain("SEAL1"))
         .unsafeSetVal(pages.SealsInformationPage)(false)
         /*
-        * guarantee Details
-        */
+         * guarantee Details
+         */
         .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(0)))(GuaranteeType.ComprehensiveGuarantee)
         .unsafeSetVal(pages.guaranteeDetails.GuaranteeReferencePage(Index(0)))("GUA1Ref")
         .unsafeSetVal(pages.DefaultAmountPage(Index(0)))(true)
@@ -1056,23 +1084,21 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         </TRACONSEC029>
       </CC015B>
 
-      val generatedXml = service.convert(userAnswers)
-        .futureValue
-        .right.value.toXml.map(scala.xml.Utility.trim)
+      val generatedXml = service.convert(userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
 
       validate(generatedXml.toString()) mustBe Success(())
 
       generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
     }
     "Scenario 4: " in new Setup {
-      val firstGoodItem: Index =  Index(0)
+      val firstGoodItem: Index = Index(0)
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
         .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
         /*
-        * General Information Section
-        * */
+         * General Information Section
+         * */
         .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
         .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(false)
         .unsafeSetVal(pages.ContainersUsedPage)(true)
@@ -1081,8 +1107,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
         .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
         /*
-        * RouteDetails
-        * */
+         * RouteDetails
+         * */
         .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
         .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
         .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
@@ -1097,23 +1123,23 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
         .unsafeSetVal(pages.AddTransitOfficePage)(false)
         /*
-        * Transport Details
-        * */
+         * Transport Details
+         * */
         .unsafeSetVal(pages.InlandModePage)("2")
         .unsafeSetVal(pages.AddIdAtDeparturePage)(false)
         .unsafeSetVal(pages.IdAtDeparturePage)("IDADEP")
         .unsafeSetVal(pages.ChangeAtBorderPage)(false)
         /*
-        * Traders Details
-        * */
+         * Traders Details
+         * */
         .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
         .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France") ))
+        .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
         .unsafeSetVal(pages.AddConsignorPage)(false)
         .unsafeSetVal(pages.AddConsigneePage)(false)
         /*
-        * Safety & Security Details
-        * */
+         * Safety & Security Details
+         * */
         .unsafeSetVal(pages.safetyAndSecurity.AddCircumstanceIndicatorPage)(true)
         .unsafeSetVal(pages.safetyAndSecurity.CircumstanceIndicatorPage)("E")
         .unsafeSetVal(pages.safetyAndSecurity.AddTransportChargesPaymentMethodPage)(false)
@@ -1135,8 +1161,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.safetyAndSecurity.CarrierNamePage)("CarrierName")
         .unsafeSetVal(pages.safetyAndSecurity.CarrierAddressPage)(CommonAddress("CarAddL1", "CarAddL2", "CarAddL3", Country(CountryCode("CA"), "CARRDESC")))
         /*
-        * Item Details section - Item One
-        * */
+         * Item Details section - Item One
+         * */
         .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
         .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
         .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
@@ -1146,11 +1172,15 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriNumberPage(firstGoodItem))("Conor123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorNamePage(firstGoodItem))("ConorName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(firstGoodItem))(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")))
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorAddressPage(firstGoodItem))(
+          CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO"))
+        )
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriKnownPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeEoriNumberPage(firstGoodItem))("Conee123")
         .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeNamePage(firstGoodItem))("ConeeName")
-        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(firstGoodItem))(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")))
+        .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsigneeAddressPage(firstGoodItem))(
+          CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE"))
+        )
         .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
         .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(0)))(false)
         .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(0)))(false)
@@ -1203,8 +1233,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsigneesEoriPage(firstGoodItem))(true)
         .unsafeSetVal(pages.addItems.traderSecurityDetails.SecurityConsigneeEoriPage(firstGoodItem))("GD1SECCONEE")
         /*
-        * Goods Summary
-        */
+         * Goods Summary
+         */
         .unsafeSetVal(pages.TotalPackagesPage)(1)
         .unsafeSetVal(pages.LoadingPlacePage)("LoadPLace")
         .unsafeSetVal(pages.AddCustomsApprovedLocationPage)(true)
@@ -1214,8 +1244,8 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         .unsafeSetVal(pages.SealsInformationPage)(true)
         .unsafeSetVal(pages.SealIdDetailsPage(Index(1)))(SealDomain("SEAL2"))
         /*
-        * guarantee Details
-        */
+         * guarantee Details
+         */
         .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(0)))(GuaranteeType.ComprehensiveGuarantee)
         .unsafeSetVal(pages.guaranteeDetails.GuaranteeReferencePage(Index(0)))("GUA1Ref")
         .unsafeSetVal(pages.DefaultAmountPage(Index(0)))(true)
@@ -1399,9 +1429,7 @@ class UserAnswersToXmlConversionSpec extends AnyFreeSpec with Matchers with User
         </TRACONSEC029>
       </CC015B>
 
-      val generatedXml = service.convert(userAnswers)
-        .futureValue
-        .right.value.toXml.map(scala.xml.Utility.trim)
+      val generatedXml = service.convert(userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
 
       validate(generatedXml.toString()) mustBe Success(())
 

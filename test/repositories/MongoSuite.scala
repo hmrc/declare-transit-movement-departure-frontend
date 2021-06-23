@@ -19,10 +19,10 @@ package repositories
 import com.typesafe.config.ConfigFactory
 import org.scalatest.TestSuite
 import play.api.Configuration
-import reactivemongo.api.{AsyncDriver, DefaultDB, MongoConnection, MongoDriver}
+import reactivemongo.api.{AsyncDriver, DefaultDB, MongoConnection}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object MongoSuite {
 
