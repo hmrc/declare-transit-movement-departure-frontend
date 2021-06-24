@@ -20,39 +20,102 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.ProcedureType.Simplified
-import models.domain.Address
 import models.journeyDomain.UserAnswersReader
-import models.journeyDomain.traderDetails.TraderDetailsSpec.setTraderDetails
-import models.{ProcedureType, UserAnswers}
+import models.reference.{Country, CountryCode}
+import models.{CommonAddress, EoriNumber, ProcedureType, UserAnswers}
 import org.scalatest.TryValues
 import pages.{ConsignorEoriPage, _}
 
 class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
 
-  "Parsing TraderDetail from UserAnswers" - {
-    "for Normal" in {
-      forAll(arb[UserAnswers], genTraderDetailsNormal) {
-        (baseUserAnswers, traderDetails) =>
-          val userAnswers = setTraderDetails(traderDetails)(
-            baseUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-          )
+  private val traderDetailsUa = emptyUserAnswers
+    .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+    .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+    .unsafeSetVal(WhatIsPrincipalEoriPage)("eoriNumber")
+    .unsafeSetVal(AddConsignorPage)(false)
+    .unsafeSetVal(AddConsigneePage)(false)
 
-          val result = UserAnswersReader[TraderDetails].run(userAnswers).right.value
+  "TraderDetails" - {
 
-          result mustEqual traderDetails
+    "can be parsed from UserAnswers" - {
+
+      "when all mandatory answers have been defined" in {
+
+        val expectedResult = TraderDetails(
+          PrincipalTraderDetails(EoriNumber("eoriNumber")),
+          None,
+          None
+        )
+
+        val result = UserAnswersReader[TraderDetails].run(traderDetailsUa).right.value
+
+        result mustBe expectedResult
+      }
+
+      "when all mandatory answers have been defined with Consignor details" in {
+
+        val expectedResult = TraderDetails(
+          PrincipalTraderDetails(EoriNumber("eoriNumber")),
+          Some(ConsignorDetails("consignorName", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")), None)),
+          None
+        )
+
+        val userAnswers = traderDetailsUa
+          .unsafeSetVal(AddConsignorPage)(true)
+          .unsafeSetVal(IsConsignorEoriKnownPage)(false)
+          .unsafeSetVal(ConsignorNamePage)("consignorName")
+          .unsafeSetVal(ConsignorAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
+
+        val result = UserAnswersReader[TraderDetails].run(userAnswers).right.value
+
+        result mustBe expectedResult
+      }
+
+      "when all mandatory answers have been defined with Consignee details" in {
+
+        val expectedResult = TraderDetails(
+          PrincipalTraderDetails(EoriNumber("eoriNumber")),
+          None,
+          Some(ConsigneeDetails("consigneeName", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")), None))
+        )
+
+        val userAnswers = traderDetailsUa
+          .unsafeSetVal(AddConsigneePage)(true)
+          .unsafeSetVal(IsConsigneeEoriKnownPage)(false)
+          .unsafeSetVal(ConsigneeNamePage)("consigneeName")
+          .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
+
+        val result = UserAnswersReader[TraderDetails].run(userAnswers).right.value
+
+        result mustBe expectedResult
       }
     }
 
-    "for Simplified" in {
-      forAll(arb[UserAnswers], genTraderDetailsSimplified) {
-        (baseUserAnswers, traderDetails) =>
-          val userAnswers = setTraderDetails(traderDetails)(
-            baseUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-          )
+    "cannot be parsed from UserAnswers" - {
 
-          val result = UserAnswersReader[TraderDetails].run(userAnswers).right.value
+      "when add consignor page is true but consignor is not defined" in {
 
-          result mustEqual traderDetails
+        val userAnswers = traderDetailsUa
+          .unsafeSetVal(AddConsignorPage)(true)
+          .unsafeRemove(IsConsignorEoriKnownPage)
+          .unsafeRemove(ConsignorNamePage)
+          .unsafeRemove(ConsignorAddressPage)
+
+        val result = UserAnswersReader[TraderDetails].run(userAnswers).left.value
+
+        result.page mustBe IsConsignorEoriKnownPage
+      }
+
+      "when add consignee page is true but consignee is not defined" in {
+        val userAnswers = traderDetailsUa
+          .unsafeSetVal(AddConsigneePage)(true)
+          .unsafeRemove(IsConsigneeEoriKnownPage)
+          .unsafeRemove(ConsigneeNamePage)
+          .unsafeRemove(ConsigneeAddressPage)
+
+        val result = UserAnswersReader[TraderDetails].run(userAnswers).left.value
+
+        result.page mustBe IsConsigneeEoriKnownPage
       }
     }
   }
@@ -76,8 +139,8 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case PrincipalTraderEoriPersonalInfo(_, name, _) => name
       })
       .unsafeSetPFn(PrincipalAddressPage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderPersonalInfo(_, address)        => Address.prismAddressToCommonAddress.getOption(address).get
-        case PrincipalTraderEoriPersonalInfo(_, _, address) => Address.prismAddressToCommonAddress.getOption(address).get
+        case PrincipalTraderPersonalInfo(_, address)        => address
+        case PrincipalTraderEoriPersonalInfo(_, _, address) => address
       })
       .assert("Eori must be provided for Simplified procedure") {
         ua =>
@@ -98,7 +161,7 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(ConsignorDetails(name, _, _)) => name
       })
       .unsafeSetPFn(ConsignorAddressPage)(traderDetails.consignor)({
-        case Some(ConsignorDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(ConsignorDetails(_, address, _)) => address
       })
       // Set Consignee details
       .unsafeSetVal(AddConsigneePage)(traderDetails.consignee.isDefined)
@@ -112,7 +175,7 @@ object TraderDetailsSpec extends UserAnswersSpecHelper {
         case Some(ConsigneeDetails(name, _, _)) => name
       })
       .unsafeSetPFn(ConsigneeAddressPage)(traderDetails.consignee)({
-        case Some(ConsigneeDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(ConsigneeDetails(_, address, _)) => address
       })
   }
 

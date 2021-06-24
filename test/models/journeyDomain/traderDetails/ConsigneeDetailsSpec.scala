@@ -19,133 +19,97 @@ package models.journeyDomain.traderDetails
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
-import models.domain.Address
 import models.journeyDomain.UserAnswersReader
-import models.{CommonAddress, EoriNumber, UserAnswers}
+import models.reference.{Country, CountryCode}
+import models.{CommonAddress, EoriNumber}
 import org.scalatest.TryValues
 import pages._
 
 class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
 
   "Parsing ConsigneeDetails from UserAnswers" - {
-    "when the eori is known" - {
+
+    "can be parsed from UserAnswers" - {
+
       "when there is consignee name, address and eori" in {
-        forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
-          case (baseUserAnswers, EoriNumber(eoriNumber), name, address) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(AddConsigneePage)(true)
-              .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
-              .unsafeSetVal(WhatIsConsigneeEoriPage)(eoriNumber)
-              .unsafeSetVal(ConsigneeNamePage)(name)
-              .unsafeSetVal(ConsigneeAddressPage)(address)
 
-            val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddConsigneePage)(true)
+          .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
+          .unsafeSetVal(WhatIsConsigneeEoriPage)("eoriNumber")
+          .unsafeSetVal(ConsigneeNamePage)("consigneeName")
+          .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
 
-            val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
+        val expectedAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123"))
 
-            result mustEqual ConsigneeDetails(name, expectedAddress, Some(EoriNumber(eoriNumber)))
+        val expectedResult = ConsigneeDetails("consigneeName", expectedAddress, Some(EoriNumber("eoriNumber")))
 
-        }
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
+
+        result mustBe expectedResult
       }
 
-      "when name and eori are answered but address is missing" in {
-        forAll(arb[UserAnswers], arb[EoriNumber], stringsWithMaxLength(stringMaxLength)) {
-          case (baseUserAnswers, EoriNumber(eoriNumber), name) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(AddConsigneePage)(true)
-              .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
-              .unsafeSetVal(WhatIsConsigneeEoriPage)(eoriNumber)
-              .unsafeSetVal(ConsigneeNamePage)(name)
-              .unsafeRemove(ConsigneeAddressPage)
+      "when there is consignee name and address without eori" in {
 
-            val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).left.value
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddConsigneePage)(true)
+          .unsafeSetVal(IsConsigneeEoriKnownPage)(false)
+          .unsafeSetVal(ConsigneeNamePage)("consigneeName")
+          .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
 
-            result.page mustEqual ConsigneeAddressPage
-        }
-      }
+        val expectedAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123"))
 
-      "when address and eori are answered but name is missing" in {
-        forAll(arb[UserAnswers], arb[EoriNumber], arb[CommonAddress]) {
-          case (baseUserAnswers, EoriNumber(eoriNumber), address) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(AddConsigneePage)(true)
-              .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
-              .unsafeSetVal(WhatIsConsigneeEoriPage)(eoriNumber)
-              .unsafeSetVal(ConsigneeAddressPage)(address)
-              .unsafeRemove(ConsigneeNamePage)
+        val expectedResult = ConsigneeDetails("consigneeName", expectedAddress, None)
 
-            val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).left.value
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
 
-            result.page mustEqual ConsigneeNamePage
-        }
-
-      }
-
-      "when name and address are answered but eori is missing" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
-          case (baseUserAnswers, name, address) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(AddConsigneePage)(true)
-              .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
-              .unsafeSetVal(ConsigneeNamePage)(name)
-              .unsafeSetVal(ConsigneeAddressPage)(address)
-              .unsafeRemove(WhatIsConsigneeEoriPage)
-
-            val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).left.value
-
-            result.page mustEqual WhatIsConsigneeEoriPage
-        }
+        result mustBe expectedResult
 
       }
     }
 
-    "when the eori is not known" - {
-      "when there is consignee nameaddress" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength), arb[CommonAddress]) {
-          case (baseUserAnswers, name, address) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(AddConsigneePage)(true)
-              .unsafeSetVal(IsConsigneeEoriKnownPage)(false)
-              .unsafeSetVal(ConsigneeNamePage)(name)
-              .unsafeSetVal(ConsigneeAddressPage)(address)
+    "cannot be parsed from UserAnswers" - {
 
-            val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
+      "when name and eori are answered but address is missing" in {
 
-            val expectedAddress: Address = Address.prismAddressToCommonAddress(address)
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddConsigneePage)(true)
+          .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
+          .unsafeSetVal(WhatIsConsigneeEoriPage)("eoriNumber")
+          .unsafeSetVal(ConsigneeNamePage)("consigneeName")
+          .unsafeRemove(ConsigneeAddressPage)
 
-            result mustEqual ConsigneeDetails(name, expectedAddress, None)
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).left.value
 
-        }
+        result.page mustBe ConsigneeAddressPage
       }
 
-      "when name is answered but address is missing" in {
-        forAll(arb[UserAnswers], stringsWithMaxLength(stringMaxLength)) {
-          case (baseUserAnswers, name) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(AddConsigneePage)(true)
-              .unsafeSetVal(IsConsigneeEoriKnownPage)(false)
-              .unsafeSetVal(ConsigneeNamePage)(name)
-              .unsafeRemove(ConsigneeAddressPage)
+      "when address and eori are answered but name is missing" in {
 
-            val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).left.value
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddConsigneePage)(true)
+          .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
+          .unsafeSetVal(WhatIsConsigneeEoriPage)("eoriNumber")
+          .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
+          .unsafeRemove(ConsigneeNamePage)
 
-            result.page mustEqual ConsigneeAddressPage
-        }
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).left.value
+
+        result.page mustBe ConsigneeNamePage
       }
 
-      "when address is answered but name is missing" in {
-        forAll(arb[UserAnswers], arb[CommonAddress]) {
-          case (baseUserAnswers, address) =>
-            val userAnswers = baseUserAnswers
-              .unsafeSetVal(AddConsigneePage)(true)
-              .unsafeSetVal(IsConsigneeEoriKnownPage)(false)
-              .unsafeSetVal(ConsigneeAddressPage)(address)
-              .unsafeRemove(ConsigneeNamePage)
+      "when name and address are answered and IsConsigneeEoriKnownPage is true but eori is missing" in {
 
-            val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).left.value
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddConsigneePage)(true)
+          .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
+          .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
+          .unsafeSetVal(ConsigneeNamePage)("consigneeName")
+          .unsafeRemove(WhatIsConsigneeEoriPage)
 
-            result.page mustEqual ConsigneeNamePage
-        }
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).left.value
+
+        result.page mustBe WhatIsConsigneeEoriPage
       }
     }
   }

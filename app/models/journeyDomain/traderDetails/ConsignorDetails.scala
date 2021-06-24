@@ -17,12 +17,11 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
-import models.EoriNumber
-import models.domain.Address
+import models.{CommonAddress, EoriNumber}
 import models.journeyDomain.{UserAnswersReader, _}
 import pages.{ConsignorAddressPage, ConsignorEoriPage, ConsignorNamePage, IsConsignorEoriKnownPage}
 
-case class ConsignorDetails(name: String, address: Address, eori: Option[EoriNumber])
+case class ConsignorDetails(name: String, address: CommonAddress, eori: Option[EoriNumber])
 
 object ConsignorDetails {
 
@@ -37,8 +36,7 @@ object ConsignorDetails {
       ConsignorAddressPage.reader
     ).tupled
       .map {
-        case (eori, name, consignorAddress) =>
-          val address = Address.prismAddressToCommonAddress(consignorAddress)
+        case (eori, name, address) =>
           ConsignorDetails(name, address, eori)
       }
   }

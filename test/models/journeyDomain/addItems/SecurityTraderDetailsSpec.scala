@@ -20,7 +20,6 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.{CommonAddress, EoriNumber}
-import models.domain.Address
 import models.reference._
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
@@ -113,7 +112,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
                 .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
 
-              val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+              val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
               val expected = SecurityPersonalInformation("testName", address)
               val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
@@ -133,7 +132,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
                 .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
 
-              val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+              val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
               val expected = SecurityPersonalInformation("testName", address)
 
               val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
@@ -216,7 +215,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
               .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
               .unsafeSetVal(SecurityConsignorAddressPage(index))(consigneeAddress)
 
-            val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+            val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
             val expected = SecurityPersonalInformation("testName", address)
             val result   = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
 

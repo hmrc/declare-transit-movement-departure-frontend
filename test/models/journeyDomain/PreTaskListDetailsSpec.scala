@@ -23,19 +23,31 @@ import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage, ProcedureTypePage, QuestionPage}
+import models.ProcedureType.Normal
+import models.reference.{CountryCode, CustomsOffice}
 
-class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
+
+  private val preTaskListUa = emptyUserAnswers
+    .unsafeSetVal(ProcedureTypePage)(Normal)
+    .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), Seq.empty, None))
+    .unsafeSetVal(AddSecurityDetailsPage)(false)
+
   "PreTaskListDetails" - {
 
     "can be parsed UserAnswers" - {
       "when all details for section have been answered" in {
-        forAll(arbitrary[PreTaskListDetails], arbitrary[UserAnswers]) {
-          case (preTaskListDetails, userAnswers) =>
-            val updatedUserAnswer                      = PreTaskListDetailsSpec.setPreTaskListDetails(preTaskListDetails)(userAnswers)
-            val result: EitherType[PreTaskListDetails] = UserAnswersReader[PreTaskListDetails].run(updatedUserAnswer)
 
-            result.right.value mustEqual preTaskListDetails
-        }
+        val expectedResult = PreTaskListDetails(
+          lrn,
+          Normal,
+          CustomsOffice("id", "name", CountryCode("code"), Seq.empty, None),
+          false
+        )
+
+        val result: EitherType[PreTaskListDetails] = UserAnswersReader[PreTaskListDetails].run(preTaskListUa)
+
+        result.right.value mustEqual expectedResult
       }
     }
 
@@ -47,12 +59,14 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with JourneyMod
       )
 
       "when an answer is missing" in {
-        forAll(arbitrary[PreTaskListDetails], arbitrary[UserAnswers], mandatoryPages) {
-          case (preTaskListDetails, ua, mandatoryPage) =>
-            val userAnswers = PreTaskListDetailsSpec.setPreTaskListDetails(preTaskListDetails)(ua).remove(mandatoryPage).success.value
-            val result      = UserAnswersReader[PreTaskListDetails].run(userAnswers)
+        forAll(mandatoryPages) {
+          mandatoryPage =>
+            val userAnswers = preTaskListUa
+              .unsafeRemove(mandatoryPage)
 
-            result.left.value.page mustBe mandatoryPage
+            val result: EitherType[PreTaskListDetails] = UserAnswersReader[PreTaskListDetails].run(userAnswers)
+
+            result.left.value.page mustEqual mandatoryPage
         }
       }
     }

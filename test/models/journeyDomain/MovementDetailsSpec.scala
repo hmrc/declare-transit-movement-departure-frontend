@@ -18,166 +18,318 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import generators.JourneyModelGenerators
+import models.DeclarationType.Option1
+import models.ProcedureType.{Normal, Simplified}
+import models.RepresentativeCapacity.Direct
 import models.journeyDomain.MovementDetails.{DeclarationForSelf, DeclarationForSomeoneElse, NormalMovementDetails, SimplifiedMovementDetails}
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.{ProcedureType, UserAnswers}
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Gen
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
 class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
-  private val normalMandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-    ProcedureTypePage,
-    DeclarationTypePage,
-    PreLodgeDeclarationPage,
-    ContainersUsedPage,
-    DeclarationPlacePage,
-    DeclarationForSomeoneElsePage
-  )
-
-  private val simplifiedMandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-    ProcedureTypePage,
-    DeclarationTypePage,
-    ContainersUsedPage,
-    DeclarationPlacePage,
-    DeclarationForSomeoneElsePage
-  )
-
   "MovementDetails" - {
 
-    "can be parsed UserAnswers" - {
-      "when all details for section have been answered" in {
-        forAll(movementUserAnswers) {
-          case (movementDetails, userAnswers) =>
-            val result = UserAnswersReader[MovementDetails].run(userAnswers).right.value
+    "can be parsed from UserAnswers" - {
 
-            result mustBe movementDetails
-        }
+      "when procedure type is Normal" in {
+
+        val expectedResult = NormalMovementDetails(
+          Option1,
+          prelodge = false,
+          containersUsed = false,
+          "declarationPlace",
+          DeclarationForSomeoneElse("repName", Direct)
+        )
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(ProcedureTypePage)(Normal)
+          .unsafeSetVal(DeclarationTypePage)(Option1)
+          .unsafeSetVal(PreLodgeDeclarationPage)(false)
+          .unsafeSetVal(ContainersUsedPage)(false)
+          .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+          .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
+          .unsafeSetVal(RepresentativeNamePage)("repName")
+          .unsafeSetVal(RepresentativeCapacityPage)(Direct)
+
+        val result = UserAnswersReader[MovementDetails].run(userAnswers).right.value
+
+        result mustBe expectedResult
+      }
+
+      "when procedure type is Simplified" in {
+
+        val expectedResult = SimplifiedMovementDetails(
+          Option1,
+          containersUsed = false,
+          "declarationPlace",
+          DeclarationForSomeoneElse("repName", Direct)
+        )
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(ProcedureTypePage)(Simplified)
+          .unsafeSetVal(DeclarationTypePage)(Option1)
+          .unsafeSetVal(ContainersUsedPage)(false)
+          .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+          .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
+          .unsafeSetVal(RepresentativeNamePage)("repName")
+          .unsafeSetVal(RepresentativeCapacityPage)(Direct)
+
+        val result = UserAnswersReader[MovementDetails].run(userAnswers).right.value
+
+        result mustBe expectedResult
       }
     }
 
-    "cannot parse UserAnswers" - {
-      "when a mandatory page for NormalMovementDetails" in {
-        forAll(normalMovementUserAnswers, normalMandatoryPages) {
-          case ((_, ua), mandatoryPage) =>
-            val userAnswers = ua.remove(mandatoryPage).success.value
+    "cannot be parsed from UserAnswers" - {
 
-            val result = UserAnswersReader[MovementDetails].run(userAnswers).left.value
+      "when procedure type is not defined" in {
 
-            result mustBe ReaderError(mandatoryPage)
-        }
-      }
+        val result = UserAnswersReader[MovementDetails].run(emptyUserAnswers).left.value
 
-      "when a mandatory page for SimplifiedMovementDetails" in {
-        forAll(simpleMovementUserAnswers, simplifiedMandatoryPages) {
-          case ((_, ua), mandatoryPage) =>
-            val userAnswers = ua.remove(mandatoryPage).success.value
-
-            val result = UserAnswersReader[MovementDetails].run(userAnswers).left.value
-
-            result mustBe ReaderError(mandatoryPage)
-        }
+        result.page mustBe ProcedureTypePage
       }
     }
-  }
 
-  "NormalMovementDetails" - {
+    "NormalMovementDetails" - {
+      "can be parsed UserAnswers" - {
 
-    "can be parsed" - {
-      "when all details for section have been answered" in {
-        forAll(normalMovementUserAnswers) {
-          case (expected, userAnswers) =>
+        "when its a declaration for someone else" - {
+
+          "and all mandatory answers are defined" in {
+
+            val expectedResult = NormalMovementDetails(
+              Option1,
+              prelodge = false,
+              containersUsed = false,
+              "declarationPlace",
+              DeclarationForSomeoneElse("repName", Direct)
+            )
+
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(DeclarationTypePage)(Option1)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ContainersUsedPage)(false)
+              .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+              .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
+              .unsafeSetVal(RepresentativeNamePage)("repName")
+              .unsafeSetVal(RepresentativeCapacityPage)(Direct)
+
             val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).right.value
 
-            result mustEqual expected
+            result mustBe expectedResult
+          }
+        }
+
+        "when its a declaration for self" - {
+
+          "and all mandatory answers are defined" in {
+
+            val expectedResult = NormalMovementDetails(
+              Option1,
+              prelodge = false,
+              containersUsed = false,
+              "declarationPlace",
+              DeclarationForSelf
+            )
+
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(DeclarationTypePage)(Option1)
+              .unsafeSetVal(PreLodgeDeclarationPage)(false)
+              .unsafeSetVal(ContainersUsedPage)(false)
+              .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+              .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
+
+            val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).right.value
+
+            result mustBe expectedResult
+          }
         }
       }
 
+      "cannot be parse UserAnswers" - {
+
+        "when its a declaration for someone else" - {
+
+          "and a mandatory page is missing" in {
+
+            val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+              DeclarationTypePage,
+              PreLodgeDeclarationPage,
+              ContainersUsedPage,
+              DeclarationPlacePage,
+              DeclarationForSomeoneElsePage,
+              RepresentativeNamePage,
+              RepresentativeCapacityPage
+            )
+
+            forAll(mandatoryPages) {
+              mandatoryPage =>
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
+                  .unsafeSetVal(PreLodgeDeclarationPage)(false)
+                  .unsafeSetVal(ContainersUsedPage)(false)
+                  .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+                  .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
+                  .unsafeSetVal(RepresentativeNamePage)("repName")
+                  .unsafeSetVal(RepresentativeCapacityPage)(Direct)
+                  .unsafeRemove(mandatoryPage)
+
+                val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).left.value
+
+                result.page mustBe mandatoryPage
+            }
+          }
+        }
+
+        "when its a declaration for self" - {
+
+          "and a mandatory page is missing" in {
+
+            val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+              DeclarationTypePage,
+              PreLodgeDeclarationPage,
+              ContainersUsedPage,
+              DeclarationPlacePage,
+              DeclarationForSomeoneElsePage
+            )
+
+            forAll(mandatoryPages) {
+              mandatoryPage =>
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
+                  .unsafeSetVal(PreLodgeDeclarationPage)(false)
+                  .unsafeSetVal(ContainersUsedPage)(false)
+                  .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+                  .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
+                  .unsafeRemove(mandatoryPage)
+
+                val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).left.value
+
+                result.page mustBe mandatoryPage
+            }
+          }
+        }
+      }
     }
 
-    "cannot be parsed from UserAnswers" - {
-      "when an answer is missing" in {
-        forAll(normalMovementUserAnswers, normalMandatoryPages) {
-          case ((_, ua), mandatoryPage) =>
-            val userAnswers = ua.remove(mandatoryPage).success.value
+    "SimplifiedMovementDetails" - {
 
-            val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).isLeft
+      "can be parsed UserAnswers" - {
 
-            result mustEqual true
-        }
-      }
+        "when its a declaration for someone else" - {
 
-      "when the movement is a simplified" in {
-        forAll(simpleMovementUserAnswers) {
-          case (_, userAnswers) =>
-            val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).isLeft
+          "and all mandatory answers are defined" in {
 
-            result mustEqual true
-        }
-      }
-    }
-  }
+            val expectedResult = SimplifiedMovementDetails(
+              Option1,
+              containersUsed = false,
+              "declarationPlace",
+              DeclarationForSomeoneElse("repName", Direct)
+            )
 
-  "SimplifiedMovementDetails" - {
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(DeclarationTypePage)(Option1)
+              .unsafeSetVal(ContainersUsedPage)(false)
+              .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+              .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
+              .unsafeSetVal(RepresentativeNamePage)("repName")
+              .unsafeSetVal(RepresentativeCapacityPage)(Direct)
 
-    "can be parsed from UserAnswers" - {
-      "when all the answers have been answered" in {
-        forAll(simpleMovementUserAnswers) {
-          case (expected, userAnswers) =>
             val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).right.value
 
-            result mustEqual expected
+            result mustBe expectedResult
+          }
+        }
+
+        "when its a declaration for self" - {
+
+          "and all mandatory answers are defined" in {
+
+            val expectedResult = SimplifiedMovementDetails(
+              Option1,
+              containersUsed = false,
+              "declarationPlace",
+              DeclarationForSelf
+            )
+
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(DeclarationTypePage)(Option1)
+              .unsafeSetVal(ContainersUsedPage)(false)
+              .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+              .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
+
+            val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).right.value
+
+            result mustBe expectedResult
+          }
         }
       }
-    }
 
-    "cannot be parsed from UserAnswers" - {
-      "when a mandatory answer is missing" in {
-        forAll(simpleMovementUserAnswers, simplifiedMandatoryPages) {
-          case ((_, ua), mandatoryPage) =>
-            val userAnswers = ua.remove(mandatoryPage).success.value
+      "cannot be parse UserAnswers" - {
 
-            val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).isLeft
+        "when its a declaration for someone else" - {
 
-            result mustEqual true
+          "and a mandatory page is missing" in {
+
+            val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+              DeclarationTypePage,
+              ContainersUsedPage,
+              DeclarationPlacePage,
+              DeclarationForSomeoneElsePage,
+              RepresentativeNamePage,
+              RepresentativeCapacityPage
+            )
+
+            forAll(mandatoryPages) {
+              mandatoryPage =>
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
+                  .unsafeSetVal(ContainersUsedPage)(false)
+                  .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+                  .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
+                  .unsafeSetVal(RepresentativeNamePage)("repName")
+                  .unsafeSetVal(RepresentativeCapacityPage)(Direct)
+                  .unsafeRemove(mandatoryPage)
+
+                val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).left.value
+
+                result.page mustBe mandatoryPage
+            }
+          }
         }
-      }
 
-      "when the movement is a simplified movement" in {
-        forAll(normalMovementUserAnswers) {
-          case (_, userAnswers) =>
-            val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).isLeft
+        "when its a declaration for self" - {
 
-            result mustEqual true
+          "and a mandatory page is missing" in {
+
+            val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+              DeclarationTypePage,
+              ContainersUsedPage,
+              DeclarationPlacePage,
+              DeclarationForSomeoneElsePage
+            )
+
+            forAll(mandatoryPages) {
+              mandatoryPage =>
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
+                  .unsafeSetVal(ContainersUsedPage)(false)
+                  .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+                  .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
+                  .unsafeRemove(mandatoryPage)
+
+                val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).left.value
+
+                result.page mustBe mandatoryPage
+            }
+          }
         }
       }
     }
   }
-
-  val simpleMovementUserAnswers: Gen[(SimplifiedMovementDetails, UserAnswers)] =
-    for {
-      movementDetails <- Arbitrary.arbitrary[SimplifiedMovementDetails]
-      baseUserAnswers <- Arbitrary.arbitrary[UserAnswers]
-    } yield {
-      val userAnswers = MovementDetailsSpec.setSimplifiedMovement(movementDetails)(baseUserAnswers)
-
-      (movementDetails, userAnswers)
-    }
-
-  private val normalMovementUserAnswers: Gen[(NormalMovementDetails, UserAnswers)] =
-    for {
-      movementDetails <- Arbitrary.arbitrary[NormalMovementDetails]
-      baseUserAnswers <- Arbitrary.arbitrary[UserAnswers]
-    } yield {
-      val userAnswers = MovementDetailsSpec.setNormalMovement(movementDetails)(baseUserAnswers)
-
-      (movementDetails, userAnswers)
-    }
-
-  private val movementUserAnswers: Gen[(MovementDetails, UserAnswers)] =
-    Gen.oneOf(simpleMovementUserAnswers, normalMovementUserAnswers)
-
 }
 
 object MovementDetailsSpec {

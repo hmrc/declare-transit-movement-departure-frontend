@@ -20,7 +20,6 @@ import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
-import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
 import models.reference.{Country, CountryCode}
@@ -225,7 +224,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
 
         "must be defined with Name and address when AddSafetyAndSecurityConsignorPage is true AddSafetyAndSecurityConsignorPage is false" in {
 
-          val expectedResult = PersonalInformation("consignorName", Address("line1", "line2", "postalCode", Some(Country(CountryCode("GB"), "description"))))
+          val expectedResult = PersonalInformation("consignorName", CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
 
           val userAnswers = fullSafetyAndSecurityUa
             .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
@@ -267,7 +266,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
 
         "must be defined with Name and address when AddSafetyAndSecurityConsigneePage is true AddSafetyAndSecurityConsigneePage is false" in {
 
-          val expectedResult = PersonalInformation("consigneeName", Address("line1", "line2", "postalCode", Some(Country(CountryCode("GB"), "description"))))
+          val expectedResult = PersonalInformation("consigneeName", CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
 
           val userAnswers = fullSafetyAndSecurityUa
             .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
@@ -309,7 +308,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
 
         "must be defined with Name and address when AddCarrierPage is true AddCarrierEoriPage is false" in {
 
-          val expectedResult = PersonalInformation("carrierName", Address("line1", "line2", "postalCode", Some(Country(CountryCode("GB"), "description"))))
+          val expectedResult = PersonalInformation("carrierName", CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
 
           val userAnswers = fullSafetyAndSecurityUa
             .unsafeSetVal(AddCarrierPage)(true)
@@ -584,8 +583,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
         case Some(PersonalInformation(name, _)) => name
       })
       .unsafeSetPFn(SafetyAndSecurityConsignorAddressPage)(safetyAndSecurity.consignor)({
-        case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(PersonalInformation(_, address)) => address
       })
       // Set Consignee
       .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(safetyAndSecurity.consignee.isDefined)
@@ -600,8 +598,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
         case Some(PersonalInformation(name, _)) => name
       })
       .unsafeSetPFn(SafetyAndSecurityConsigneeAddressPage)(safetyAndSecurity.consignee)({
-        case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(PersonalInformation(_, address)) => address
       })
       // Set Carrier
       .unsafeSetVal(AddCarrierPage)(safetyAndSecurity.carrier.isDefined)
@@ -616,8 +613,7 @@ object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
         case Some(PersonalInformation(name, _)) => name
       })
       .unsafeSetPFn(CarrierAddressPage)(safetyAndSecurity.carrier)({
-        case Some(PersonalInformation(_, address)) =>
-          Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(PersonalInformation(_, address)) => address
       })
 
     val updatedUserAnswers = ua.get(ModeAtBorderPage) match {
