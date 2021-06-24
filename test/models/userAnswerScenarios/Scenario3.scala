@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models
+package models.userAnswerScenarios
 
 import cats.data.NonEmptyList
 import models.DeclarationType.Option2
@@ -50,6 +50,7 @@ import models.journeyDomain.{
   TransportDetails
 }
 import models.reference._
+import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
 
 import java.time.LocalDateTime

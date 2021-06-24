@@ -19,7 +19,7 @@ package generators
 import cats.data.NonEmptyList
 import models.DeclarationType.Option2
 import models._
-import models.domain.{Address, GrossMass, SealDomain}
+import models.domain.{Address, SealDomain}
 import models.journeyDomain.GoodsSummary.{
   GoodSummaryDetails,
   GoodSummaryNormalDetailsWithPreLodge,
@@ -56,11 +56,6 @@ trait JourneyModelGenerators {
   val maxNumberOfItemsLength = 2
 
   implicit def arbitraryJourneyDomain: Arbitrary[JourneyDomain] = Arbitrary(Gen.oneOf(arbitrarySimplifiedJourneyDomain, arbitraryNormalJourneyDomain))
-
-  implicit val arbitraryUserAnswerScenario: Arbitrary[UserAnswerScenario] =
-    Arbitrary {
-      Gen.oneOf(Seq(Scenario1, Scenario2, Scenario3, Scenario4))
-    }
 
   lazy val arbitrarySimplifiedJourneyDomain: Gen[JourneyDomain] =
     for {

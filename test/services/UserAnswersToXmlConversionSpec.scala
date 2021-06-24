@@ -17,7 +17,7 @@
 package services
 
 import commonTestUtils.UserAnswersSpecHelper
-import models._
+import models.userAnswerScenarios.{Scenario1, Scenario2, Scenario3, Scenario4}
 import models.messages.InterchangeControlReference
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.EitherValues

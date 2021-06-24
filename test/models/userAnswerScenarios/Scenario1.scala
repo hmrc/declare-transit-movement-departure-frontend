@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models
+package models.userAnswerScenarios
 
 import cats.data.NonEmptyList
 import models.DeclarationType.Option2
@@ -31,6 +31,7 @@ import models.journeyDomain.SafetyAndSecurity.TraderEori
 import models.journeyDomain.TransportDetails.DetailsAtBorder.SameDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.NonSpecialMode
 import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPersonalInformation, SecurityTraderEori}
+import models.journeyDomain.traderDetails.{PrincipalTraderPersonalInfo, TraderDetails}
 import models.journeyDomain.{
   Container,
   CurrencyCode,
@@ -49,8 +50,8 @@ import models.journeyDomain.{
   SpecialMentionDomain,
   TransportDetails
 }
-import models.journeyDomain.traderDetails.{PrincipalTraderPersonalInfo, TraderDetails}
 import models.reference._
+import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
 
 import java.time.LocalDateTime

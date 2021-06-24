@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package models.userAnswerScenarios
 
 import commonTestUtils.UserAnswersSpecHelper
+import models.UserAnswers
 import models.journeyDomain.JourneyDomain
 
 trait UserAnswerScenario extends UserAnswersSpecHelper {

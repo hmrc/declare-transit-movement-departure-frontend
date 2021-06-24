@@ -18,18 +18,18 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
+import generators.UserAnswersGenerator
 import models.journeyDomain.traderDetails.TraderDetailsSpec
-import models.{UserAnswerScenario, UserAnswers}
+import models.UserAnswers
 import pages.AddSecurityDetailsPage
 
-class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
+class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
 
   "JourneyDomain" - {
     "can be parsed UserAnswers" - {
       "when all details for section have been answered" in {
 
-        forAll(arb[UserAnswerScenario]) {
+        forAll(genUserAnswerScenario) {
           userAnswerScenario =>
             val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers).right.value
 
@@ -41,7 +41,7 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGen
 
         "when a safety and security is missing" in {
 
-          forAll(arb[UserAnswerScenario]) {
+          forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeRemove(AddSecurityDetailsPage)
