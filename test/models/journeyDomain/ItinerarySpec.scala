@@ -17,40 +17,58 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
+import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
 import models.journeyDomain.ItinerarySpec.setItineraryUserAnswers
+import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
+import models.reference.CountryCode
 import models.{Index, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.safetyAndSecurity.CountryOfRoutingPage
 
 class ItinerarySpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
+  private val itineraryUa = emptyUserAnswers
+    .unsafeSetVal(CountryOfRoutingPage(index))(CountryCode("GB"))
+
   "Itinerary" - {
     "can be parsed from UserAnswers" - {
-      "when all details for section have been answered" in {
-        forAll(arbitrary[Itinerary], arbitrary[UserAnswers]) {
-          case (itinerary, userAnswers) =>
-            val updatedUserAnswers = setItineraryUserAnswers(itinerary, index)(userAnswers)
-            val result             = UserAnswersReader[Itinerary](Itinerary.itineraryReader(index)).run(updatedUserAnswers)
+      "when all mandatory answer have been answered" in {
 
-            result.right.value mustEqual itinerary
-        }
+        val expectedResult = Itinerary(CountryCode("GB"))
+
+        val result = UserAnswersReader[Itinerary](Itinerary.itineraryReader(index)).run(itineraryUa)
+
+        result.right.value mustEqual expectedResult
+      }
+
+      "when there are multiple countries of routing" in {
+
+        val expectedResult = NonEmptyList(
+          Itinerary(CountryCode("GB")),
+          List(Itinerary(CountryCode("IT")))
+        )
+
+        val userAnswers = itineraryUa
+          .unsafeSetVal(CountryOfRoutingPage(Index(1)))(CountryCode("IT"))
+
+        val result = UserAnswersReader[NonEmptyList[Itinerary]](Itinerary.readItineraries).run(userAnswers)
+
+        result.right.value mustEqual expectedResult
       }
     }
 
     "cannot be parsed from UserAnswers" - {
       "when a mandatory answer is missing" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val updatedUserAnswers = userAnswers.remove(CountryOfRoutingPage(index)).success.value
-            val result: EitherType[Itinerary] =
-              UserAnswersReader[Itinerary](Itinerary.itineraryReader(index)).run(updatedUserAnswers)
 
-            result.left.value.page mustBe CountryOfRoutingPage(index)
-        }
+        val userAnswers = itineraryUa
+          .unsafeRemove(CountryOfRoutingPage(index))
+
+        val result = UserAnswersReader[Itinerary](Itinerary.itineraryReader(index)).run(userAnswers)
+
+        result.left.value.page mustEqual CountryOfRoutingPage(index)
       }
-
     }
   }
 }

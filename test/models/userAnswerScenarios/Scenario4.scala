@@ -237,9 +237,7 @@ object Scenario4 extends UserAnswerScenario {
   private val transportDetails = TransportDetails(Rail(2, None), SameDetailsAtBorder)
 
   private val traderDetails = TraderDetails(
-    PrincipalTraderPersonalInfo("PrincipalName",
-                                models.domain.Address("PrincipalStreet", "PrincipalTown", "AA1 1AA", Some(Country(CountryCode("FR"), "France")))
-    ),
+    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France"))),
     None,
     None
   )
@@ -249,13 +247,13 @@ object Scenario4 extends UserAnswerScenario {
       ItemDetails("ItemOnesDescription", "25000", Some("12342"), Some("ComoCode1")),
       Some(
         RequiredDetails("ConorName",
-                        models.domain.Address("ConorLine1", "ConorLine2", "ConorL3", Some(Country(CountryCode("GA"), "SomethingCO"))),
+                        CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")),
                         Some(EoriNumber("Conor123"))
         )
       ),
       Some(
         RequiredDetails("ConeeName",
-                        models.domain.Address("ConeeLine1", "ConeeLine2", "ConeeL3", Some(Country(CountryCode("GA"), "SomethingCE"))),
+                        CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")),
                         Some(EoriNumber("Conee123"))
         )
       ),
@@ -289,7 +287,7 @@ object Scenario4 extends UserAnswerScenario {
       None,
       Some(TraderEori(EoriNumber("SafeSecConorEori"))),
       Some(TraderEori(EoriNumber("SafeSecConeeEori"))),
-      Some(PersonalInformation("CarrierName", models.domain.Address("CarAddL1", "CarAddL2", "CarAddL3", Some(Country(CountryCode("CA"), "CARRDESC"))))),
+      Some(PersonalInformation("CarrierName", CommonAddress("CarAddL1", "CarAddL2", "CarAddL3", Country(CountryCode("CA"), "CARRDESC")))),
       NonEmptyList(Itinerary(CountryCode("CA")), List.empty)
     )
   )
