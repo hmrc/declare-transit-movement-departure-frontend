@@ -840,13 +840,6 @@ trait UserAnswersEntryGenerators {
       } yield (AuthorisedLocationCodePage, value)
     }
 
-  implicit lazy val arbitraryTotalPackagesUserAnswersEntry: Arbitrary[(TotalPackagesPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[Int].map(Json.toJson(_))
-      } yield (TotalPackagesPage, value)
-    }
-
   implicit lazy val arbitraryAddAnotherTransitOfficeUserAnswersEntry: Arbitrary[(AddAnotherTransitOfficePage, JsValue)] =
     Arbitrary {
       for {

@@ -25,6 +25,7 @@ import models.journeyDomain.{UserAnswersReader, _}
 import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
 import pages._
 import pages.guaranteeDetails.GuaranteeTypePage
+import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
 import play.api.libs.json._
 
@@ -116,6 +117,29 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       )
       .ifNotStarted(controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.id, Index(0), NormalMode).url)
 
+  private def goodsSummaryStartPage(procedureType: Option[ProcedureType], safetyAndSecurity: Option[Boolean], prelodgedDeclaration: Option[Boolean]): String =
+    (procedureType, safetyAndSecurity, prelodgedDeclaration) match {
+      case (_, Some(true), _) => controllers.routes.LoadingPlaceController.onPageLoad(userAnswers.id, NormalMode).url
+      case (Some(Normal), Some(false), Some(false)) =>
+        controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(userAnswers.id, NormalMode).url
+      case (Some(Normal), Some(false), Some(true)) =>
+        controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(userAnswers.id, NormalMode).url
+      case (Some(Simplified), Some(false), _) => controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(userAnswers.id, NormalMode).url
+      case _                                  => controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+  private def goodsSummaryInProgressReader(procedureType: Option[ProcedureType],
+                                           safetyAndSecurity: Option[Boolean],
+                                           prelodgedDeclaration: Option[Boolean]
+  ): UserAnswersReader[_] =
+    (procedureType, safetyAndSecurity, prelodgedDeclaration) match {
+      case (_, Some(true), _)                       => LoadingPlacePage.reader
+      case (Some(Normal), Some(false), Some(false)) => AddCustomsApprovedLocationPage.reader
+      case (Some(Normal), Some(false), Some(true))  => AddAgreedLocationOfGoodsPage.reader
+      case (Some(Simplified), Some(false), _)       => AuthorisedLocationCodePage.reader.map(_.nonEmpty)
+      case _                                        => AddSealsPage.reader
+    }
+
   private val goodsSummaryDetails =
     taskListDsl
       .sectionName("declarationSummary.section.goodsSummary")
@@ -127,8 +151,8 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.goodsSummary.routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url
       )
       .ifInProgress(
-        TotalPackagesPage.reader,
-        controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
+        goodsSummaryInProgressReader(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage)),
+        goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage))
       )
       .ifNotStarted(controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url)
 

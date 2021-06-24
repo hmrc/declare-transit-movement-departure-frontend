@@ -391,7 +391,8 @@ class DeclarationRequestService @Inject() (
         ),
         conIndHEA96 = booleanToInt(movementDetails.containersUsed),
         totNumOfIteHEA305 = itemDetails.size,
-        totNumOfPacHEA306 = goodsSummary.numberOfPackages,
+        //ToDo: calculation of total packages
+        totNumOfPacHEA306 = 0,
         totGroMasHEA307 = grossMass match {
           case Some(grossMass) => grossMass
           case _ =>

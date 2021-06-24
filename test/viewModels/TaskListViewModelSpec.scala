@@ -882,16 +882,71 @@ class TaskListViewModelSpec
           viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.CannotStartYet
         }
 
-        "is InProgress when the first question for the section has been answered" in {
-          forAll(arb[Boolean]) {
-            pageAnswer =>
-              val userAnswers = emptyUserAnswers
-                .unsafeSetVal(AddCustomsApprovedLocationPage)(pageAnswer)
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+        "is InProgress" - {
 
-              val viewModel = TaskListViewModel(userAnswers)
+          "when loading place page has been answered" in {
 
-              viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.InProgress
+            forAll(arb[String]) {
+              pageAnswer =>
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(AddSecurityDetailsPage)(true)
+                  .unsafeSetVal(LoadingPlacePage)(pageAnswer)
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+
+                val viewModel = TaskListViewModel(userAnswers)
+
+                viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.InProgress
+            }
+          }
+
+          "when add custom approved location page has been answered" in {
+            val isSecurityDefined           = false
+            val procedureType               = ProcedureType.Normal
+            val movementDetails             = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+
+            forAll(arb(arbitraryGoodsSummary(isSecurityDefined, procedureType)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
+              (goodsSummary, detailsWithPrelodge) =>
+                val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = detailsWithPrelodge)
+
+                val userAnswers = GoodsSummarySpec
+                  .setGoodsSummary(updatedGoodsSummary)(userAnswersWithMovementDtls)
+                  .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+                  .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                  .unsafeSetVal(ProcedureTypePage)(procedureType)
+
+                val viewModel = TaskListViewModel(userAnswers)
+
+                viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.InProgress
+            }
+          }
+
+          "when Add Agreed Location of Goods page has been answered" in {
+
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(AddSecurityDetailsPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+              .unsafeSetVal(PreLodgeDeclarationPage)(true)
+              .unsafeSetVal(AddAgreedLocationOfGoodsPage)(false)
+
+            val viewModel = TaskListViewModel(userAnswers)
+
+            viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.InProgress
+          }
+
+          "when authorised location code page has been answered" in {
+
+            forAll(arb[String]) {
+              pageAnswer =>
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(AddSecurityDetailsPage)(false)
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+                  .unsafeSetVal(AuthorisedLocationCodePage)(pageAnswer)
+
+                val viewModel = TaskListViewModel(userAnswers)
+
+                viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.InProgress
+            }
           }
         }
 
@@ -936,24 +991,121 @@ class TaskListViewModelSpec
       }
 
       "navigation" - {
-        "when the status is Not started, links to the first page" in {
-          val viewModel = TaskListViewModel(emptyUserAnswers)
+        "when the status is Not started, safety and security is yes, links to the loading place page" in {
+          val userAnswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(true)
+          val viewModel   = TaskListViewModel(userAnswers)
 
-          val expectedHref: String = controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
+          val expectedHref: String = controllers.routes.LoadingPlaceController.onPageLoad(lrn, NormalMode).url
 
           viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
         }
 
-        "when the status is InProgress, links to the first page" in {
-          forAll(arb[Int]) {
-            pageAnswer =>
-              val userAnswers = emptyUserAnswers.unsafeSetVal(TotalPackagesPage)(pageAnswer)
+        "when the status is Not started, safety and security is no" - {
 
+          "mode is simplified, links to the Authorised Location Code page" in {
+            val userAnswers = emptyUserAnswers
+              .unsafeSetVal(AddSecurityDetailsPage)(false)
+              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+            val viewModel = TaskListViewModel(userAnswers)
+
+            val expectedHref: String = controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(lrn, NormalMode).url
+
+            viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+          }
+
+          "mode is normal" - {
+            "pre-lodges is no, links to the Add Custom Approved Location page" in {
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(AddSecurityDetailsPage)(false)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                .unsafeSetVal(PreLodgeDeclarationPage)(false)
               val viewModel = TaskListViewModel(userAnswers)
 
               val expectedHref: String = controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
 
               viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+            }
+
+            "pre-lodges is yes, links to the Add Agreed Location of Goods page" in {
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(AddSecurityDetailsPage)(false)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                .unsafeSetVal(PreLodgeDeclarationPage)(true)
+              val viewModel = TaskListViewModel(userAnswers)
+
+              val expectedHref: String = controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, NormalMode).url
+
+              viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+            }
+          }
+
+        }
+        "when the status is InProgress" - {
+          "when the status is Not started, safety and security is yes, links to the loading place page" in {
+            forAll(arb[String]) {
+              pageAnswer =>
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(AddSecurityDetailsPage)(true)
+                  .unsafeSetVal(LoadingPlacePage)(pageAnswer)
+                val viewModel = TaskListViewModel(userAnswers)
+
+                val expectedHref: String = controllers.routes.LoadingPlaceController.onPageLoad(lrn, NormalMode).url
+
+                viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+            }
+          }
+
+          "when the status is Not started, safety and security is no" - {
+
+            "mode is simplified, links to the Authorised Location Code page" in {
+              forAll(arb[String]) {
+                pageAnswer =>
+                  val userAnswers = emptyUserAnswers
+                    .unsafeSetVal(AddSecurityDetailsPage)(false)
+                    .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+                    .unsafeSetVal(AuthorisedLocationCodePage)(pageAnswer)
+                  val viewModel = TaskListViewModel(userAnswers)
+
+                  val expectedHref: String = controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(lrn, NormalMode).url
+
+                  viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+              }
+            }
+
+            "mode is normal" - {
+              "pre-lodges is no, links to the Add Custom Approved Location page" in {
+                forAll(arb[Boolean]) {
+                  pageAnswer =>
+                    val userAnswers = emptyUserAnswers
+                      .unsafeSetVal(AddSecurityDetailsPage)(false)
+                      .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                      .unsafeSetVal(PreLodgeDeclarationPage)(false)
+                      .unsafeSetVal(AddCustomsApprovedLocationPage)(pageAnswer)
+                    val viewModel = TaskListViewModel(userAnswers)
+
+                    val expectedHref: String = controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
+
+                    viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+                }
+              }
+
+              "pre-lodges is yes, links to the Add Agreed Location of Goods page" in {
+                forAll(arb[Boolean]) {
+                  pageAnswer =>
+                    val userAnswers = emptyUserAnswers
+                      .unsafeSetVal(AddSecurityDetailsPage)(false)
+                      .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                      .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                      .unsafeSetVal(AddAgreedLocationOfGoodsPage)(pageAnswer)
+                    val viewModel = TaskListViewModel(userAnswers)
+
+                    val expectedHref: String = controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, NormalMode).url
+
+                    viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+                }
+              }
+            }
+
           }
         }
 
@@ -982,7 +1134,7 @@ class TaskListViewModelSpec
       }
     }
 
-    "GuranteeDetails" - {
+    "GuaranteeDetails" - {
 
       "section task is always included" in {
         val viewModel = TaskListViewModel(emptyUserAnswers)

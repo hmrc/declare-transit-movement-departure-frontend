@@ -40,7 +40,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         val dateNow = LocalDate.now()
 
         val expectedResult = GoodsSummary(
-          numberOfPackages = 1,
           loadingPlace = None,
           goodSummaryDetails = GoodSummarySimplifiedDetails("authLocation", dateNow),
           sealNumbers = Seq.empty
@@ -48,7 +47,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(ProcedureTypePage)(Simplified)
-          .unsafeSetVal(TotalPackagesPage)(1)
           .unsafeSetVal(AddSecurityDetailsPage)(false)
           .unsafeSetVal(AuthorisedLocationCodePage)("authLocation")
           .unsafeSetVal(ControlResultDateLimitPage)(dateNow)
@@ -63,7 +61,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         "When prelodge is false and user adds a Custom Approved Location" in {
 
           val expectedResult = GoodsSummary(
-            numberOfPackages = 1,
             loadingPlace = Some("loadingPlace"),
             goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, Some("approvedLocation")),
             sealNumbers = Seq.empty
@@ -71,7 +68,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
@@ -87,7 +83,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         "when prelodge is false an user does not add custom approved location and adds Agreed Location of Goods" in {
 
           val expectedResult = GoodsSummary(
-            numberOfPackages = 1,
             loadingPlace = None,
             goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(Some("agreedLocationOfGoods"), None),
             sealNumbers = Seq.empty
@@ -95,7 +90,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
@@ -112,7 +106,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         "when prelodge is false an user does not add custom approved location but does not add Agreed Location of Goods" in {
 
           val expectedResult = GoodsSummary(
-            numberOfPackages = 1,
             loadingPlace = None,
             goodSummaryDetails = GoodSummaryNormalDetailsWithoutPreLodge(None, None),
             sealNumbers = Seq.empty
@@ -120,7 +113,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddCustomsApprovedLocationPage)(false)
@@ -136,7 +128,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         "when prelodge is true and customer does add Agreed Location of Goods" in {
 
           val expectedResult = GoodsSummary(
-            numberOfPackages = 1,
             loadingPlace = None,
             goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(Some("agreedLocationOfGoods")),
             sealNumbers = Seq.empty
@@ -144,7 +135,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
@@ -159,7 +149,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
         "when prelodge is true and customer does not add Agreed Location of Goods and seals have been added" in {
 
           val expectedResult = GoodsSummary(
-            numberOfPackages = 1,
             loadingPlace = None,
             goodSummaryDetails = GoodSummaryNormalDetailsWithPreLodge(None),
             sealNumbers = Seq(SealDomain("numberOrMark1"), SealDomain("numberOrMark1"))
@@ -167,7 +156,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(false)
@@ -187,7 +175,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       "when a mandatory answers is not defined" in {
 
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          TotalPackagesPage,
+          ???,
           AddSecurityDetailsPage
         )
 
@@ -195,7 +183,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
           mandatoryPage =>
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(ProcedureTypePage)(Normal)
-              .unsafeSetVal(TotalPackagesPage)(1)
               .unsafeSetVal(PreLodgeDeclarationPage)(false)
               .unsafeSetVal(AddSecurityDetailsPage)(true)
               .unsafeSetVal(LoadingPlacePage)("loadingPlace")
@@ -216,7 +203,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
@@ -232,7 +218,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(LoadingPlacePage)("loadingPlace")
@@ -248,7 +233,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AgreedLocationOfGoodsPage)("agreedLocationOfGoods")
@@ -263,7 +247,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(TotalPackagesPage)(1)
             .unsafeSetVal(PreLodgeDeclarationPage)(true)
             .unsafeSetVal(AddSecurityDetailsPage)(false)
             .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
@@ -290,7 +273,6 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
 
               val userAnswers = emptyUserAnswers
                 .unsafeSetVal(ProcedureTypePage)(Simplified)
-                .unsafeSetVal(TotalPackagesPage)(1)
                 .unsafeSetVal(AddSecurityDetailsPage)(false)
                 .unsafeSetVal(AuthorisedLocationCodePage)("authLocation")
                 .unsafeSetVal(ControlResultDateLimitPage)(dateNow)
@@ -314,7 +296,6 @@ object GoodsSummarySpec extends UserAnswersSpecHelper {
 
   def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
     userAnswers
-      .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
       .unsafeSetVal(AddSealsPage)(goodsSummary.sealNumbers.nonEmpty)
       .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
       .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
