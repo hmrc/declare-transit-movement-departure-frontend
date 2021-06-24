@@ -18,9 +18,8 @@ package models.journeyDomain
 
 import cats.data._
 import cats.implicits._
-import models.domain.Address
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
-import models.{EoriNumber, Index, UserAnswers}
+import models.{CommonAddress, EoriNumber, Index, UserAnswers}
 import pages._
 import pages.addItems.traderDetails._
 
@@ -28,7 +27,7 @@ case class ItemTraderDetails(consignor: Option[RequiredDetails], consignee: Opti
 
 object ItemTraderDetails {
 
-  final case class RequiredDetails(name: String, address: Address, eori: Option[EoriNumber])
+  final case class RequiredDetails(name: String, address: CommonAddress, eori: Option[EoriNumber])
 
   def consignorDetails(index: Index): UserAnswersReader[Option[RequiredDetails]] = {
     def readConsignorEoriPage: UserAnswersReader[Option[EoriNumber]] =
@@ -43,8 +42,7 @@ object ItemTraderDetails {
         readConsignorEoriPage
       ).tupled
         .map {
-          case (name, consignorAddress, eori) =>
-            val address = Address.prismAddressToCommonAddress(consignorAddress)
+          case (name, address, eori) =>
             RequiredDetails(name, address, eori)
         }
 
@@ -65,8 +63,7 @@ object ItemTraderDetails {
         readConsigneeEoriPage
       ).tupled
         .map {
-          case (name, consigneeAddress, eori) =>
-            val address = Address.prismAddressToCommonAddress(consigneeAddress)
+          case (name, address, eori) =>
             RequiredDetails(name, address, eori)
         }
 
