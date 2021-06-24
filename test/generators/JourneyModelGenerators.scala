@@ -19,7 +19,7 @@ package generators
 import cats.data.NonEmptyList
 import models.DeclarationType.Option2
 import models._
-import models.domain.{Address, GrossMass, SealDomain}
+import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
   GoodSummaryDetails,
   GoodSummaryNormalDetailsWithPreLodge,
@@ -107,10 +107,7 @@ trait JourneyModelGenerators {
       if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
     )
 
-  implicit lazy val arbitrarySecurityDetails: Arbitrary[SafetyAndSecurity] = {
-
-    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
-
+  implicit lazy val arbitrarySecurityDetails: Arbitrary[SafetyAndSecurity] =
     Arbitrary {
       for {
         addCircumstanceIndicator   <- Gen.some(nonEmptyString)
@@ -118,9 +115,9 @@ trait JourneyModelGenerators {
         commercialReference        <- Gen.some(nonEmptyString)
         convenyanceReferenceNumber <- Gen.some(nonEmptyString)
         placeOfUnloading           <- Gen.some(nonEmptyString)
-        consignorAddress           <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
-        consigneeAddress           <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
-        carrierAddress             <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
+        consignorAddress           <- Gen.some(arbitrarySecurityTraderDetails.arbitrary)
+        consigneeAddress           <- Gen.some(arbitrarySecurityTraderDetails.arbitrary)
+        carrierAddress             <- Gen.some(arbitrarySecurityTraderDetails.arbitrary)
         itineraries                <- nonEmptyListOf[Itinerary](5)
       } yield {
         val placeOfUnloadingData = addCircumstanceIndicator match {
@@ -140,7 +137,6 @@ trait JourneyModelGenerators {
         )
       }
     }
-  }
 
   implicit lazy val arbitraryItinerary: Arbitrary[Itinerary] =
     Arbitrary {
@@ -150,8 +146,6 @@ trait JourneyModelGenerators {
     }
 
   def genSecurityDetails(modeAtBorder: Gen[String]): Gen[SafetyAndSecurity] = {
-
-    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
 
     val genConvenyanceReferenceNumber: Gen[Option[String]] = modeAtBorder.flatMap {
       case "4" | "40" => nonEmptyString.map(Some(_))
@@ -164,9 +158,9 @@ trait JourneyModelGenerators {
       commercialReference        <- Gen.some(nonEmptyString)
       convenyanceReferenceNumber <- genConvenyanceReferenceNumber
       placeOfUnloading           <- Gen.some(nonEmptyString)
-      consignorAddress           <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
-      consigneeAddress           <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
-      carrierAddress             <- Gen.some(arbitrarySecurityTraderDetails(commonAddress).arbitrary)
+      consignorAddress           <- Gen.some(arbitrarySecurityTraderDetails.arbitrary)
+      consigneeAddress           <- Gen.some(arbitrarySecurityTraderDetails.arbitrary)
+      carrierAddress             <- Gen.some(arbitrarySecurityTraderDetails.arbitrary)
       itineraries                <- nonEmptyListOf[Itinerary](5)
     } yield {
       val placeOfUnloadingData = addCircumstanceIndicator match {
@@ -188,18 +182,18 @@ trait JourneyModelGenerators {
     }
   }
 
-  implicit def arbitrarySecurityTraderDetails(implicit arbAddress: Arbitrary[Address]): Arbitrary[SecurityTraderDetails] =
+  implicit def arbitrarySecurityTraderDetails: Arbitrary[SecurityTraderDetails] =
     Arbitrary(Gen.oneOf(Arbitrary.arbitrary[SafetyAndSecurity.PersonalInformation], Arbitrary.arbitrary[SafetyAndSecurity.TraderEori]))
 
   implicit lazy val arbitrarySafetyAndSecurityTraderEori: Arbitrary[SafetyAndSecurity.TraderEori] =
     Arbitrary(Arbitrary.arbitrary[EoriNumber].map(SafetyAndSecurity.TraderEori))
 
-  implicit def arbitrarySafetyAndSecurityPersonalInformation(implicit arbAddress: Arbitrary[Address]): Arbitrary[SafetyAndSecurity.PersonalInformation] =
+  implicit def arbitrarySafetyAndSecurityPersonalInformation(implicit arbAddress: Arbitrary[CommonAddress]): Arbitrary[SafetyAndSecurity.PersonalInformation] =
     Arbitrary {
       for {
         name    <- stringsWithMaxLength(stringMaxLength)
         address <- arbAddress.arbitrary
-      } yield SafetyAndSecurity.PersonalInformation(name, Address(address.line1, "", "", Some(Country(CountryCode("GB"), ""))))
+      } yield SafetyAndSecurity.PersonalInformation(name, CommonAddress(address.AddressLine1, "", "", Country(CountryCode("GB"), "")))
     }
 
   implicit lazy val arbitraryModeCrossingBorder: Arbitrary[ModeCrossingBorder] =
@@ -312,27 +306,24 @@ trait JourneyModelGenerators {
       consignee              <- Gen.some(arbitrary[ConsigneeDetails])
     } yield TraderDetails(principalTraderDetails, consignor, consignee)
 
-  implicit val arbitraryItemSecurityTraderDetails: Arbitrary[ItemsSecurityTraderDetails] = {
-    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
-
+  implicit val arbitraryItemSecurityTraderDetails: Arbitrary[ItemsSecurityTraderDetails] =
     Arbitrary {
       for {
         methodOfPayment           <- Gen.some(nonEmptyString)
         commercialReferenceNumber <- Gen.some(nonEmptyString)
         dangerousGoodsCode        <- Gen.some(nonEmptyString)
-        consignor                 <- Gen.some(arbitraryItemsSecurityTraderDetails(commonAddress).arbitrary)
-        consignee                 <- Gen.some(arbitraryItemsSecurityTraderDetails(commonAddress).arbitrary)
+        consignor                 <- Gen.some(arbitraryItemsSecurityTraderDetails.arbitrary)
+        consignee                 <- Gen.some(arbitraryItemsSecurityTraderDetails.arbitrary)
       } yield ItemsSecurityTraderDetails(methodOfPayment, commercialReferenceNumber, dangerousGoodsCode, consignor, consignee)
     }
-  }
 
-  implicit def arbitraryItemsSecurityTraderDetails(implicit arbAddress: Arbitrary[Address]): Arbitrary[models.journeyDomain.addItems.SecurityTraderDetails] =
+  implicit def arbitraryItemsSecurityTraderDetails: Arbitrary[models.journeyDomain.addItems.SecurityTraderDetails] =
     Arbitrary(Gen.oneOf(Arbitrary.arbitrary[SecurityPersonalInformation], Arbitrary.arbitrary[SecurityTraderEori]))
 
   implicit lazy val arbitraryItemsSecurityTraderEori: Arbitrary[SecurityTraderEori] =
     Arbitrary(Arbitrary.arbitrary[EoriNumber].map(SecurityTraderEori(_)))
 
-  implicit def arbitraryItemsSecurityPersonalInformation(implicit arbAddress: Arbitrary[Address]): Arbitrary[SecurityPersonalInformation] =
+  implicit def arbitraryItemsSecurityPersonalInformation(implicit arbAddress: Arbitrary[CommonAddress]): Arbitrary[SecurityPersonalInformation] =
     Arbitrary {
       for {
         name    <- stringsWithMaxLength(stringMaxLength)
@@ -350,19 +341,17 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryPrincipalTraderPersonalInfo: Arbitrary[PrincipalTraderPersonalInfo] =
     Arbitrary {
       for {
-        name             <- stringsWithMaxLength(stringMaxLength)
-        principalAddress <- arbitrary[CommonAddress]
-        address = Address.prismAddressToCommonAddress.reverseGet(principalAddress)
+        name    <- stringsWithMaxLength(stringMaxLength)
+        address <- arbitrary[CommonAddress]
       } yield PrincipalTraderPersonalInfo(name, address)
     }
 
   implicit lazy val arbitraryPrincipalEoriTraderPersonalInfo: Arbitrary[PrincipalTraderEoriPersonalInfo] =
     Arbitrary {
       for {
-        eori             <- arbitrary[EoriNumber]
-        name             <- stringsWithMaxLength(stringMaxLength)
-        principalAddress <- arbitrary[CommonAddress]
-        address = Address.prismAddressToCommonAddress.reverseGet(principalAddress)
+        eori    <- arbitrary[EoriNumber]
+        name    <- stringsWithMaxLength(stringMaxLength)
+        address <- arbitrary[CommonAddress]
       } yield PrincipalTraderEoriPersonalInfo(eori, name, address)
     }
 
@@ -376,17 +365,15 @@ trait JourneyModelGenerators {
 
   val genConsignorDetailsWithEori: Gen[ConsignorDetails] =
     for {
-      name          <- stringsWithMaxLength(stringMaxLength)
-      commonAddress <- arbitrary[CommonAddress]
-      eori          <- arbitrary[EoriNumber]
-      address = Address.prismAddressToCommonAddress.reverseGet(commonAddress)
+      name    <- stringsWithMaxLength(stringMaxLength)
+      address <- arbitrary[CommonAddress]
+      eori    <- arbitrary[EoriNumber]
     } yield ConsignorDetails(name, address, Some(eori))
 
   val genConsignorDetailsWithoutEori: Gen[ConsignorDetails] =
     for {
-      name          <- stringsWithMaxLength(stringMaxLength)
-      commonAddress <- arbitrary[CommonAddress]
-      address = Address.prismAddressToCommonAddress.reverseGet(commonAddress)
+      name    <- stringsWithMaxLength(stringMaxLength)
+      address <- arbitrary[CommonAddress]
     } yield ConsignorDetails(name, address, None)
 
   implicit def arbitraryConsignorDetails: Arbitrary[ConsignorDetails] =
@@ -396,17 +383,15 @@ trait JourneyModelGenerators {
 
   val genConsigneeDetailsWithEori: Gen[ConsigneeDetails] =
     for {
-      name          <- stringsWithMaxLength(stringMaxLength)
-      commonAddress <- arbitrary[CommonAddress]
-      eori          <- arbitrary[EoriNumber]
-      address = Address.prismAddressToCommonAddress.reverseGet(commonAddress)
+      name    <- stringsWithMaxLength(stringMaxLength)
+      address <- arbitrary[CommonAddress]
+      eori    <- arbitrary[EoriNumber]
     } yield ConsigneeDetails(name, address, Some(eori))
 
   val genConsigneeDetailsWithoutEori: Gen[ConsigneeDetails] =
     for {
-      name          <- stringsWithMaxLength(stringMaxLength)
-      commonAddress <- arbitrary[CommonAddress]
-      address = Address.prismAddressToCommonAddress.reverseGet(commonAddress)
+      name    <- stringsWithMaxLength(stringMaxLength)
+      address <- arbitrary[CommonAddress]
     } yield ConsigneeDetails(name, address, None)
 
   implicit lazy val arbitraryConsigneeDetails: Arbitrary[ConsigneeDetails] =
@@ -414,7 +399,7 @@ trait JourneyModelGenerators {
       Gen.oneOf(genConsigneeDetailsWithEori, genConsigneeDetailsWithoutEori)
     }
 
-  implicit def arbitraryItemRequiredDetails(implicit arbAddress: Arbitrary[Address]): Arbitrary[models.journeyDomain.ItemTraderDetails.RequiredDetails] =
+  implicit def arbitraryItemRequiredDetails(implicit arbAddress: Arbitrary[CommonAddress]): Arbitrary[models.journeyDomain.ItemTraderDetails.RequiredDetails] =
     Arbitrary {
       for {
         name    <- stringsWithMaxLength(stringMaxLength)
@@ -445,7 +430,7 @@ trait JourneyModelGenerators {
     movementDetails: MovementDetails,
     routeDetails: RouteDetails
   ): Gen[ItemSection] = {
-    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
+    val commonAddress = Arbitrary(arbitrary[CommonAddress])
 
     val isDocumentTypeMandatory = addSafetyAndSecurity &&
       safetyAndSecurity.commercialReferenceNumber.isDefined
@@ -504,7 +489,7 @@ trait JourneyModelGenerators {
     circumstanceIndicator: Option[String] = None
   ): Gen[ItemSection] = {
 
-    val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
+    val commonAddress = Arbitrary(arbitrary[CommonAddress])
 
     val documentTypeIsMandatory = circumstanceIndicator.fold(addDocument)(CircumstanceIndicator.conditionalIndicators.contains(_))
 

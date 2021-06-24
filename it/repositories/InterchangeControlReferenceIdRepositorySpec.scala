@@ -16,13 +16,10 @@
 
 package repositories
 
-import itUtils.MockDateTimeService
 import itSpecBase.ItSpecBase
+import itUtils.MockDateTimeService
 import models.messages.InterchangeControlReference
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.bind
@@ -36,7 +33,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class InterchangeControlReferenceIdRepositorySpec
     extends ItSpecBase
-    with MongoSuite
+    with ItMongoSuite
     with BeforeAndAfterEach
     with GuiceOneAppPerSuite
     with MockDateTimeService

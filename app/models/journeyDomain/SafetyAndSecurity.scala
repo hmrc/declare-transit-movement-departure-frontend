@@ -18,10 +18,9 @@ package models.journeyDomain
 
 import cats.data._
 import cats.implicits._
-import models.domain.Address
 import models.journeyDomain.Itinerary.readItineraries
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
-import models.{EoriNumber, UserAnswers}
+import models.{CommonAddress, EoriNumber, UserAnswers}
 import pages.ModeAtBorderPage
 import pages.safetyAndSecurity._
 
@@ -57,10 +56,10 @@ object SafetyAndSecurity {
   object SecurityTraderDetails {
     def apply(eori: EoriNumber): SecurityTraderDetails = TraderEori(eori)
 
-    def apply(name: String, address: Address): SecurityTraderDetails = PersonalInformation(name, address)
+    def apply(name: String, address: CommonAddress): SecurityTraderDetails = PersonalInformation(name, address)
   }
 
-  final case class PersonalInformation(name: String, address: Address) extends SecurityTraderDetails
+  final case class PersonalInformation(name: String, address: CommonAddress) extends SecurityTraderDetails
 
   final case class TraderEori(eori: EoriNumber) extends SecurityTraderDetails
 
@@ -112,8 +111,7 @@ object SafetyAndSecurity {
         SafetyAndSecurityConsignorAddressPage.reader
       ).tupled
         .map {
-          case (name, consignorAddress) =>
-            val address = Address.prismAddressToCommonAddress(consignorAddress)
+          case (name, address) =>
             SecurityTraderDetails(name, address)
         }
 
@@ -138,9 +136,7 @@ object SafetyAndSecurity {
         SafetyAndSecurityConsigneeAddressPage.reader
       ).tupled
         .map {
-          case (name, consigneeAddress) =>
-            val address = Address.prismAddressToCommonAddress(consigneeAddress)
-
+          case (name, address) =>
             SecurityTraderDetails(name, address)
         }
 
@@ -169,9 +165,7 @@ object SafetyAndSecurity {
         CarrierAddressPage.reader
       ).tupled
         .map {
-          case (name, carrierAddress) =>
-            val address = Address.prismAddressToCommonAddress(carrierAddress)
-
+          case (name, address) =>
             SecurityTraderDetails(name, address)
         }
 

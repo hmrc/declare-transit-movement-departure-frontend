@@ -18,7 +18,6 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
 import generators.JourneyModelGenerators
-import models.domain.Address
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber, Index, UserAnswers}
@@ -79,7 +78,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
 
       "when add security details is true and all mandatory answers are defined with consignor and consignee" in {
 
-        val consignorAddress  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+        val consignorAddress  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
         val expectedConsignor = SecurityPersonalInformation("testName", consignorAddress)
         val expectedConsignee = SecurityTraderEori(EoriNumber("testEori"))
 
@@ -173,7 +172,7 @@ object ItemsSecurityTraderDetailsSpec {
         case Some(SecurityPersonalInformation(name, _)) => name
       })
       .unsafeSetPFn(SecurityConsignorAddressPage(index))(itemsSecurityTraderDetails.consignor)({
-        case Some(SecurityPersonalInformation(_, address)) => Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(SecurityPersonalInformation(_, address)) => address
       })
 
       //     Set Consignee
@@ -188,7 +187,7 @@ object ItemsSecurityTraderDetailsSpec {
         case Some(SecurityPersonalInformation(name, _)) => name
       })
       .unsafeSetPFn(SecurityConsigneeAddressPage(index))(itemsSecurityTraderDetails.consignee)({
-        case Some(SecurityPersonalInformation(_, address)) => Address.prismAddressToCommonAddress.getOption(address).get
+        case Some(SecurityPersonalInformation(_, address)) => address
       })
 
 }

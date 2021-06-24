@@ -142,10 +142,10 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
 
   private def whatIsPrincipalEoriRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(WhatIsPrincipalEoriPage), ua.get(ProcedureTypePage), mode) match {
-      case (_, Some(Simplified), NormalMode)              => routes.AddConsignorController.onPageLoad(ua.id, mode)
-      case (Some(x), _, NormalMode) if x.startsWith("GB") => routes.AddConsignorController.onPageLoad(ua.id, mode)
-      case (Some(_), _, NormalMode)                       => routes.PrincipalNameController.onPageLoad(ua.id, mode)
-      case (Some(x), Some(Normal), CheckMode) if !x.startsWith("GB") && ua.get(PrincipalNamePage).isEmpty =>
+      case (_, Some(Simplified), NormalMode)                          => routes.AddConsignorController.onPageLoad(ua.id, mode)
+      case (Some(x), _, NormalMode) if x.toUpperCase.startsWith("GB") => routes.AddConsignorController.onPageLoad(ua.id, mode)
+      case (Some(_), _, NormalMode)                                   => routes.PrincipalNameController.onPageLoad(ua.id, mode)
+      case (Some(x), Some(Normal), CheckMode) if !x.toUpperCase.startsWith("GB") && ua.get(PrincipalNamePage).isEmpty =>
         routes.PrincipalNameController.onPageLoad(ua.id, mode)
       case _ => routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id)
     }
