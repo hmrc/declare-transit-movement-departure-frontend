@@ -17,6 +17,7 @@
 package services
 
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import generators.{JourneyModelGenerators, ModelGenerators}
 import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
 import models.journeyDomain.MovementDetails.NormalMovementDetails
@@ -25,9 +26,10 @@ import models.journeyDomain.TransportDetails.InlandMode.{NonSpecialMode, Rail}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
 import models.journeyDomain.{JourneyDomain, JourneyDomainSpec}
 import models.messages.InterchangeControlReference
-import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
+import models.{EoriNumber, Index, LocalReferenceNumber, UserAnswers}
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
+import pages.{ItemTotalGrossMassPage, TotalGrossMassPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
@@ -42,7 +44,8 @@ class DeclarationRequestServiceSpec
     with GeneratorSpec
     with JourneyModelGenerators
     with ModelGenerators
-    with BeforeAndAfterEach {
+    with BeforeAndAfterEach
+    with UserAnswersSpecHelper {
 
   val mockIcrRepository: InterchangeControlReferenceIdRepository = mock[InterchangeControlReferenceIdRepository]
   val mockDateTimeService: DateTimeService                       = mock[DateTimeService]
@@ -106,7 +109,39 @@ class DeclarationRequestServiceSpec
           }
         }
       }
+      "TotGroMasHEA307" - {
+        "Pass the correct value when it has already been answers in Total Gross Mass Page" in {
+          forAll(arb[UserAnswers], arb[JourneyDomain]) {
+            (userAnswers, journeyDomain) =>
+              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
+              val updatedUserAnswer = JourneyDomainSpec
+                .setJourneyDomain(journeyDomain)(userAnswers)
+                .unsafeSetVal(TotalGrossMassPage)("100.123")
+              val result = service.convert(updatedUserAnswer).futureValue
+
+              result.right.value.header.totGroMasHEA307 mustBe "100.123"
+          }
+        }
+
+        "Pass the correct value when Total Gross Mass page is removed and using ItemTotalGrossMassPage answer(s) " in {
+
+          forAll(arb[UserAnswers], arb[JourneyDomain]) {
+            (userAnswers, journeyDomain) =>
+              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+              val updatedUserAnswer = JourneyDomainSpec
+                .setJourneyDomain(journeyDomain)(userAnswers.unsafeRemove(TotalGrossMassPage))
+                .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))("100.123")
+                .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))("500.123")
+              val result = service.convert(updatedUserAnswer).futureValue
+
+              result.right.value.header.totGroMasHEA307 mustBe "600.246"
+          }
+        }
+      }
       "Normal Journey without Prelodge" - {
 
         "cusSubPlaHEA66" - {
