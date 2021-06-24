@@ -24,7 +24,6 @@ import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
 sealed trait MovementDetails {
-  val declarationType: DeclarationType
   val containersUsed: Boolean
   val declarationPlacePage: String
   val declarationForSomeoneElse: DeclarationForSomeoneElseAnswer
@@ -49,7 +48,6 @@ object MovementDetails {
     )
 
   final case class NormalMovementDetails(
-    declarationType: DeclarationType,
     prelodge: Boolean,
     containersUsed: Boolean,
     declarationPlacePage: String,
@@ -60,7 +58,6 @@ object MovementDetails {
 
     implicit val parseNormalMovementDetails: UserAnswersReader[NormalMovementDetails] =
       (
-        DeclarationTypePage.reader,
         PreLodgeDeclarationPage.reader,
         ContainersUsedPage.reader,
         DeclarationPlacePage.reader,
@@ -69,7 +66,6 @@ object MovementDetails {
   }
 
   final case class SimplifiedMovementDetails(
-    declarationType: DeclarationType,
     containersUsed: Boolean,
     declarationPlacePage: String,
     declarationForSomeoneElse: DeclarationForSomeoneElseAnswer
@@ -79,7 +75,6 @@ object MovementDetails {
 
     implicit val parseSimplifiedMovementDetails: UserAnswersReader[SimplifiedMovementDetails] =
       (
-        DeclarationTypePage.reader,
         ContainersUsedPage.reader,
         DeclarationPlacePage.reader,
         declarationForSomeoneElseAnswer

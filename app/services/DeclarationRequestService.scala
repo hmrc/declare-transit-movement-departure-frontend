@@ -372,7 +372,7 @@ class DeclarationRequestService @Inject() (
       ),
       Header(
         refNumHEA4 = preTaskList.lrn.value,
-        typOfDecHEA24 = movementDetails.declarationType.code,
+        typOfDecHEA24 = preTaskList.declarationType.code,
         couOfDesCodHEA30 = Some(routeDetails.destinationCountry.code),
         agrLocOfGooCodHEA38 = agreedLocationOfGoodsCode(goodsSummary.goodSummaryDetails), // Not required
         agrLocOfGooHEA39 = agreedLocationOfGoods(goodsSummary.goodSummaryDetails),

@@ -67,7 +67,7 @@ trait JourneyModelGenerators {
       transportDetails  <- arbitrary[TransportDetails]
       traderDetails     <- genTraderDetailsSimplified
       safetyAndSecurity <- arbitrary[SafetyAndSecurity]
-      itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, movementDetails, routeDetails)
+      itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, preTaskList, routeDetails)
       goodsSummary      <- arbitraryGoodsSummary(isSecurityDetailsRequired, ProcedureType.Simplified).arbitrary
       guarantees        <- nonEmptyListOf[GuaranteeDetails](3)
     } yield JourneyDomain(
@@ -93,7 +93,7 @@ trait JourneyModelGenerators {
       transportDetails  <- arbitrary[TransportDetails]
       traderDetails     <- genTraderDetailsNormal
       safetyAndSecurity <- arbitrary[SafetyAndSecurity]
-      itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, movementDetails, routeDetails)
+      itemDetails       <- genItemSection(movementDetails.containersUsed, isSecurityDetailsRequired, safetyAndSecurity, preTaskList, routeDetails)
       goodsSummary      <- arbitraryGoodsSummary(isSecurityDetailsRequired, ProcedureType.Normal).arbitrary
       guarantees        <- nonEmptyListOf[GuaranteeDetails](3)
     } yield JourneyDomain(
@@ -433,8 +433,9 @@ trait JourneyModelGenerators {
         addDocument               <- arbitrary[Boolean]
         otherIndicator            <- nonEmptyString
         circumstanceIndicator <-
-          if (isSecurityDetailsRequired) { Gen.oneOf(CircumstanceIndicator.conditionalIndicators :+ otherIndicator).map(Some(_)) }
-          else
+          if (isSecurityDetailsRequired) {
+            Gen.oneOf(CircumstanceIndicator.conditionalIndicators :+ otherIndicator).map(Some(_))
+          } else
             Gen.const(None)
         itemSection <- genItemSectionOld(containersUsed, addDocument, circumstanceIndicator)
       } yield itemSection
@@ -444,7 +445,7 @@ trait JourneyModelGenerators {
     containersUsed: Boolean,
     addSafetyAndSecurity: Boolean,
     safetyAndSecurity: SafetyAndSecurity,
-    movementDetails: MovementDetails,
+    preTaskList: PreTaskListDetails,
     routeDetails: RouteDetails
   ): Gen[ItemSection] = {
     val commonAddress = Arbitrary(arbitrary[CommonAddress].map(Address.prismAddressToCommonAddress.reverseGet))
@@ -452,7 +453,7 @@ trait JourneyModelGenerators {
     val isDocumentTypeMandatory = addSafetyAndSecurity &&
       safetyAndSecurity.commercialReferenceNumber.isDefined
 
-    val isPreviousReferenceMandatory: Boolean = (movementDetails.declarationType, routeDetails.countryOfDispatch) match {
+    val isPreviousReferenceMandatory: Boolean = (preTaskList.declarationType, routeDetails.countryOfDispatch) match {
       case (Option2, CountryOfDispatch(_, true)) => true
       case _                                     => false
     }
@@ -463,12 +464,14 @@ trait JourneyModelGenerators {
       itemConsignee <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
       packages      <- nonEmptyListOf[Packages](1)
       containers <-
-        if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) }
-        else Gen.const(None)
+        if (containersUsed) {
+          nonEmptyListOf[Container](1).map(Some(_))
+        } else Gen.const(None)
       specialMentions <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
       producedDocuments <-
-        if (isDocumentTypeMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) }
-        else Gen.const(None)
+        if (isDocumentTypeMandatory) {
+          nonEmptyListOf[ProducedDocument](1).map(Some(_))
+        } else Gen.const(None)
       methodOfPayment           <- arbitrary[String]
       commercialReferenceNumber <- arbitrary[String]
       previousReferences        <- Gen.some(nonEmptyListOf[PreviousReferences](1))
@@ -516,16 +519,19 @@ trait JourneyModelGenerators {
       itemConsignee <- Gen.some(arbitraryItemRequiredDetails(commonAddress).arbitrary)
       packages      <- nonEmptyListOf[Packages](1)
       containers <-
-        if (containersUsed) { nonEmptyListOf[Container](1).map(Some(_)) }
-        else Gen.const(None)
+        if (containersUsed) {
+          nonEmptyListOf[Container](1).map(Some(_))
+        } else Gen.const(None)
       specialMentions <- Gen.some(nonEmptyListOf[SpecialMentionDomain](1))
       producedDocuments <-
-        if (documentTypeIsMandatory) { nonEmptyListOf[ProducedDocument](1).map(Some(_)) }
-        else Gen.const(None)
+        if (documentTypeIsMandatory) {
+          nonEmptyListOf[ProducedDocument](1).map(Some(_))
+        } else Gen.const(None)
       previousReferences <- Gen.some(nonEmptyListOf[PreviousReferences](1))
       itemSecurityTraderDetails <-
-        if (documentTypeIsMandatory) { Gen.some(arbitrary[ItemsSecurityTraderDetails]) }
-        else Gen.const(None)
+        if (documentTypeIsMandatory) {
+          Gen.some(arbitrary[ItemsSecurityTraderDetails])
+        } else Gen.const(None)
 
     } yield ItemSection(itemDetail,
                         itemConsignor,
@@ -546,7 +552,8 @@ trait JourneyModelGenerators {
         procedureType      <- arbitrary[ProcedureType]
         officeOfDeparture  <- arbitrary[CustomsOffice]
         addSecurityDetails <- arbitrary[Boolean]
-      } yield PreTaskListDetails(lrn, procedureType, officeOfDeparture, addSecurityDetails)
+        declarationType    <- arbitrary[DeclarationType]
+      } yield PreTaskListDetails(lrn, procedureType, officeOfDeparture, declarationType, addSecurityDetails)
     }
 
   implicit lazy val arbitraryGuaranteeDetails: Arbitrary[GuaranteeDetails] =
@@ -659,12 +666,10 @@ trait JourneyModelGenerators {
   implicit lazy val arbitrarySimplifiedMovementDetails: Arbitrary[SimplifiedMovementDetails] =
     Arbitrary {
       for {
-        declarationType           <- arbitrary[DeclarationType]
         containersUsed            <- arbitrary[Boolean]
         declarationPlacePage      <- stringsWithMaxLength(stringMaxLength)
         declarationForSomeoneElse <- arbitrary[DeclarationForSomeoneElseAnswer]
       } yield SimplifiedMovementDetails(
-        declarationType,
         containersUsed,
         declarationPlacePage,
         declarationForSomeoneElse
@@ -674,13 +679,11 @@ trait JourneyModelGenerators {
   implicit lazy val arbitraryNormalMovementDetails: Arbitrary[NormalMovementDetails] =
     Arbitrary {
       for {
-        declarationType           <- arbitrary[DeclarationType]
         preLodge                  <- arbitrary[Boolean]
         containersUsed            <- arbitrary[Boolean]
         declarationPlacePage      <- stringsWithMaxLength(stringMaxLength)
         declarationForSomeoneElse <- arbitrary[DeclarationForSomeoneElseAnswer]
       } yield MovementDetails.NormalMovementDetails(
-        declarationType,
         preLodge,
         containersUsed,
         declarationPlacePage,
@@ -780,8 +783,11 @@ trait JourneyModelGenerators {
     Arbitrary {
       for {
         loadingPlace <-
-          if (safetyAndSecurity) { nonEmptyString.map(Some(_)) }
-          else { Gen.const(None) }
+          if (safetyAndSecurity) {
+            nonEmptyString.map(Some(_))
+          } else {
+            Gen.const(None)
+          }
         numberOfPackages   <- Gen.choose(1, 100)
         totalMass          <- Gen.choose(1, 100).map(_.toString)
         goodSummaryDetails <- arbitraryGoodSummaryDetails(procedureType).arbitrary
