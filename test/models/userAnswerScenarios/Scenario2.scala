@@ -155,10 +155,10 @@ object Scenario2 extends UserAnswerScenario {
   private val traderDetails = TraderDetails(
     principalTraderDetails = PrincipalTraderEoriInfo(EoriNumber("PRINCEORI")),
     consignor = Some(
-      ConsignorDetails("ConsignorName", models.domain.Address("ConorLine1", "ConorLine2", "ConorL3", Some(Country(CountryCode("CN"), "SomethingCO"))), None)
+      ConsignorDetails("ConsignorName", CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")), None)
     ),
     consignee = Some(
-      ConsigneeDetails("ConsigneeName", models.domain.Address("ConeeLine1", "ConeeLine2", "ConeeL3", Some(Country(CountryCode("CN"), "SomethingCE"))), None)
+      ConsigneeDetails("ConsigneeName", CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")), None)
     )
   )
 

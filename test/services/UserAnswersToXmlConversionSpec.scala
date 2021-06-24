@@ -119,7 +119,7 @@ class UserAnswersToXmlConversionSpec
           <StrAndNumPC122>PrincipalStreet</StrAndNumPC122>
           <PosCodPC123>AA1 1AA</PosCodPC123>
           <CitPC124>PrincipalTown</CitPC124>
-          <CouPC125>GB</CouPC125>
+          <CouPC125>FR</CouPC125>
         </TRAPRIPC1>
         <CUSOFFDEPEPT>
           <RefNumEPT1>OOD1234A</RefNumEPT1>
@@ -469,7 +469,7 @@ class UserAnswersToXmlConversionSpec
           <StrAndNumPC122>PrincipalStreet</StrAndNumPC122>
           <PosCodPC123>AA1 1AA</PosCodPC123>
           <CitPC124>PrincipalTown</CitPC124>
-          <CouPC125>GB</CouPC125>
+          <CouPC125>FR</CouPC125>
         </TRAPRIPC1>
         <TRACONCO1>
           <NamCO17>ConsignorName</NamCO17>
@@ -649,7 +649,7 @@ class UserAnswersToXmlConversionSpec
           <StrAndNumPC122>PrincipalStreet</StrAndNumPC122>
           <PosCodPC123>AA1 1AA</PosCodPC123>
           <CitPC124>PrincipalTown</CitPC124>
-          <CouPC125>GB</CouPC125>
+          <CouPC125>FR</CouPC125>
         </TRAPRIPC1>
         <CUSOFFDEPEPT>
           <RefNumEPT1>OOD1234A</RefNumEPT1>

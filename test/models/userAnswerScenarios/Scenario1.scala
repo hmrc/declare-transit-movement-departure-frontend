@@ -302,9 +302,7 @@ object Scenario1 extends UserAnswerScenario {
   private val transportDetails = TransportDetails(NonSpecialMode(4, Some(CountryCode("ND")), None), SameDetailsAtBorder)
 
   private val traderDetails = TraderDetails(
-    PrincipalTraderPersonalInfo("PrincipalName",
-                                models.domain.Address("PrincipalStreet", "PrincipalTown", "AA1 1AA", Some(Country(CountryCode("FR"), "France")))
-    ),
+    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "description"))),
     None,
     None
   )
@@ -313,13 +311,13 @@ object Scenario1 extends UserAnswerScenario {
     itemDetails = ItemDetails("ItemOnesDescription", "25000", Some("12342"), Some("ComoCode1")),
     consignor = Some(
       RequiredDetails("ConorName",
-                      models.domain.Address("ConorLine1", "ConorLine2", "ConorL3", Some(Country(CountryCode("GA"), "SomethingCO"))),
+                      CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")),
                       Some(EoriNumber("Conor123"))
       )
     ),
     consignee = Some(
       RequiredDetails("ConeeName",
-                      models.domain.Address("ConeeLine1", "ConeeLine2", "ConeeL3", Some(Country(CountryCode("GA"), "SomethingCE"))),
+                      CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE")),
                       Some(EoriNumber("Conee123"))
       )
     ),
@@ -358,10 +356,8 @@ object Scenario1 extends UserAnswerScenario {
 
   val item2 = ItemSection(
     itemDetails = ItemDetails("ItemTwosDescription", "25001", None, None),
-    consignor =
-      Some(RequiredDetails("ConorName", models.domain.Address("ConorLine1", "ConorLine2", "ConorL3", Some(Country(CountryCode("GB"), "SomethingCO"))), None)),
-    consignee =
-      Some(RequiredDetails("ConeeName", models.domain.Address("ConeeLine1", "ConeeLine2", "ConeeL3", Some(Country(CountryCode("GB"), "SomethingCE"))), None)),
+    consignor = Some(RequiredDetails("ConorName", CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GB"), "SomethingCO")), None)),
+    consignee = Some(RequiredDetails("ConeeName", CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE")), None)),
     packages = NonEmptyList(
       BulkPackages(PackageType("VQ", "GD2PKG1"), None),
       List(UnpackedPackages(PackageType("NE", "GD2PKG2"), 12, Some("GD2PK2MK")), OtherPackages(PackageType("BAG", "GD2PKG3"), 2, "GD2PK3MK"))
@@ -375,14 +371,10 @@ object Scenario1 extends UserAnswerScenario {
         Some("GD2CRN"),
         None,
         Some(
-          SecurityPersonalInformation("GD2SECCONORName",
-                                      models.domain.Address("GD2CONORL1", "GD2CONORL2", "GD2CONL1", Some(Country(CountryCode("GB"), "GD2CONNOR")))
-          )
+          SecurityPersonalInformation("GD2SECCONORName", CommonAddress("GD2CONORL1", "GD2CONORL2", "GD2CONL1", Country(CountryCode("GB"), "GD2CONNOR")))
         ),
         Some(
-          SecurityPersonalInformation("GD2SECCONEEName",
-                                      models.domain.Address("GD2CONEEL1", "GD2CONEEL2", "GD2CEEL1", Some(Country(CountryCode("GB"), "GD2CONNEE")))
-          )
+          SecurityPersonalInformation("GD2SECCONEEName", CommonAddress("GD2CONEEL1", "GD2CONEEL2", "GD2CEEL1", Country(CountryCode("GB"), "GD2CONNEE")))
         )
       )
     ),

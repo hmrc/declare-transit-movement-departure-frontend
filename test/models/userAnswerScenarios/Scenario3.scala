@@ -241,20 +241,18 @@ object Scenario3 extends UserAnswerScenario {
   )
 
   private val traderDetails = TraderDetails(
-    PrincipalTraderPersonalInfo("PrincipalName",
-                                models.domain.Address("PrincipalStreet", "PrincipalTown", "AA1 1AA", Some(Country(CountryCode("FR"), "France")))
-    ),
+    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France"))),
     Some(
       ConsignorDetails(
         "ConsignorName",
-        models.domain.Address("ConorLine1", "ConorLine2", "ConorL3", Some(Country(CountryCode("CN"), "SomethingCO"))),
+        CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")),
         Some(EoriNumber("ConorEori"))
       )
     ),
     Some(
       ConsigneeDetails(
         "ConsigneeName",
-        models.domain.Address("ConeeLine1", "ConeeLine2", "ConeeL3", Some(Country(CountryCode("CN"), "SomethingCE"))),
+        CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")),
         Some(EoriNumber("ConeeEori"))
       )
     )
@@ -293,14 +291,10 @@ object Scenario3 extends UserAnswerScenario {
       None,
       Some("PlaceOfUnloadingPage"),
       Some(
-        PersonalInformation("SafeSecName",
-                            models.domain.Address("SecConorLine1", "SecConorLine2", "SecCorL3", Some(Country(CountryCode("CN"), "SomethingSecCO")))
-        )
+        PersonalInformation("SafeSecName", CommonAddress("SecConorLine1", "SecConorLine2", "SecCorL3", Country(CountryCode("CN"), "SomethingSecCO")))
       ),
       Some(
-        PersonalInformation("SafeSecName",
-                            models.domain.Address("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Some(Country(CountryCode("CN"), "SomethingSecCE")))
-        )
+        PersonalInformation("SafeSecName", CommonAddress("SecConeeLine1", "SecConeeLine2", "SecCeeL3", Country(CountryCode("CN"), "SomethingSecCE")))
       ),
       None,
       NonEmptyList(Itinerary(CountryCode("CA")), List.empty)
