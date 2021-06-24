@@ -35,7 +35,7 @@ import play.api.libs.json.Json
 
 import java.time.{LocalDate, LocalDateTime}
 
-object Scenario2 extends UserAnswerScenario {
+case object Scenario2 extends UserAnswerScenario {
 
   private val firstGoodItem: Index      = Index(0)
   private val eoriNumber: EoriNumber    = EoriNumber("EoriNumber")
