@@ -136,7 +136,7 @@ case object Scenario2 extends UserAnswerScenario {
 
   private val itemDetails = NonEmptyList(
     ItemSection(
-      itemDetails = ItemDetails("ItemOnesDescription", "25000", None, None),
+      itemDetails = ItemDetails("ItemOnesDescription", "25000.000", None, None),
       consignor = None,
       consignee = None,
       packages = NonEmptyList(

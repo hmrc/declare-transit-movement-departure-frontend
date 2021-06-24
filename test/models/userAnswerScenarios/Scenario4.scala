@@ -244,7 +244,7 @@ case object Scenario4 extends UserAnswerScenario {
 
   private val itemDetails = NonEmptyList(
     ItemSection(
-      ItemDetails("ItemOnesDescription", "25000", Some("12342"), Some("ComoCode1")),
+      ItemDetails("ItemOnesDescription", "25000.000", Some("12342"), Some("ComoCode1")),
       Some(
         RequiredDetails("ConorName",
                         CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")),

@@ -204,7 +204,7 @@ case object Scenario1 extends UserAnswerScenario {
      * Item Details section - Item Two
      * */
     .unsafeSetVal(pages.ItemDescriptionPage(secondGoodItem))("ItemTwosDescription")
-    .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))(25000)
+    .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))(25000.000)
     .unsafeSetVal(pages.AddTotalNetMassPage(secondGoodItem))(false)
     .unsafeSetVal(pages.IsCommodityCodeKnownPage(secondGoodItem))(false)
     .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(secondGoodItem))(false)
@@ -355,7 +355,7 @@ case object Scenario1 extends UserAnswerScenario {
   )
 
   val item2 = ItemSection(
-    itemDetails = ItemDetails("ItemTwosDescription", "25000", None, None),
+    itemDetails = ItemDetails("ItemTwosDescription", "25000.000", None, None),
     consignor = Some(RequiredDetails("ConorName", CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GB"), "SomethingCO")), None)),
     consignee = Some(RequiredDetails("ConeeName", CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE")), None)),
     packages = NonEmptyList(
