@@ -19,8 +19,6 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
-import models.journeyDomain.traderDetails.TraderDetailsSpec
-import models.UserAnswers
 import pages.AddSecurityDetailsPage
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
@@ -54,27 +52,4 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
       }
     }
   }
-}
-
-object JourneyDomainSpec {
-
-  def setJourneyDomain(journeyDomain: JourneyDomain)(startUserAnswers: UserAnswers): UserAnswers =
-    (
-      PreTaskListDetailsSpec.setPreTaskListDetails(journeyDomain.preTaskList) _ andThen
-        RouteDetailsSpec.setRouteDetails(journeyDomain.routeDetails) andThen
-        TransportDetailsSpec.setTransportDetail(journeyDomain.transportDetails) andThen
-        ItemSectionSpec.setItemSections(journeyDomain.itemDetails.toList) andThen
-        GoodsSummarySpec.setGoodsSummary(journeyDomain.goodsSummary) andThen
-        GuaranteeDetailsSpec.setGuaranteeDetails(journeyDomain.guarantee) andThen
-        TraderDetailsSpec.setTraderDetails(journeyDomain.traderDetails) andThen
-        MovementDetailsSpec.setMovementDetails(journeyDomain.movementDetails) andThen
-        safetyAndSecurity(journeyDomain.safetyAndSecurity)
-    )(startUserAnswers)
-
-  def safetyAndSecurity(safetyAndSecurity: Option[SafetyAndSecurity])(startUserAnswers: UserAnswers): UserAnswers =
-    safetyAndSecurity match {
-      case Some(value) => SafetyAndSecuritySpec.setSafetyAndSecurity(value)(startUserAnswers)
-      case None        => startUserAnswers
-    }
-
 }
