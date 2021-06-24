@@ -17,14 +17,30 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
+import cats.data.NonEmptyList
 import generators.JourneyModelGenerators
-import models.UserAnswers
+import models.{Index, UserAnswers}
 import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.traderDetails.TraderDetailsSpec
+import pages.ItemTotalGrossMassPage
 import pages.movementDetails.PreLodgeDeclarationPage
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
 
+  "ItemSections" - {
+    "Must submit the correct amount for total gross mass" in {
+      forAll(arb[ItemSection]) {
+        itemsSection =>
+          val itemDetailsSection = itemsSection.itemDetails
+          val itemSection1       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "100.123"))
+          val itemSection2       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "200.246"))
+
+          val result = ItemSections(NonEmptyList(itemSection1, List(itemSection2))).totalGrossMassFormatted
+
+          result mustBe "300.369"
+      }
+    }
+  }
 //  "JourneyDomain" - {
 //    "can be parsed UserAnswers" - {
 //      "when all details for section have been answered" in {

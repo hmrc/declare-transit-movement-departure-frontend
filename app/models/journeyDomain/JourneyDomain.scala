@@ -20,7 +20,17 @@ import cats.data._
 import cats.implicits._
 import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.CountryCode
-import pages.{AddSecurityDetailsPage}
+import pages.AddSecurityDetailsPage
+
+case class ItemSections(itemDetails: NonEmptyList[ItemSection]) {
+
+  val totalGrossMassDouble: Double = itemDetails.foldLeft(0.000) {
+    (x, y) => y.itemDetails.itemTotalGrossMass.toDouble + x
+  }
+
+  val totalGrossMassFormatted = f"$totalGrossMassDouble%.3f"
+
+}
 
 case class JourneyDomain(
   preTaskList: PreTaskListDetails,
