@@ -18,7 +18,6 @@ package viewModels
 
 import base.{GeneratorSpec, SpecBase}
 import generators.JourneyModelGenerators
-import models.journeyDomain.{JourneyDomain, JourneyDomainSpec}
 import org.scalatest.BeforeAndAfterEach
 import play.api.libs.json.Json
 
@@ -44,27 +43,26 @@ class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with J
       result mustEqual expectedJson
     }
 
-//    "returns lrn, sections, movement link and indicator for complete declaration" in {
-//      forAll(arb[JourneyDomain]) {
-//        journeyDomain =>
-//          val userAnswers = JourneyDomainSpec.setJourneyDomain(journeyDomain)(emptyUserAnswers)
-//
-//          val sut = DeclarationSummaryViewModel(serviceUrl, userAnswers)
-//
-//          val result = Json.toJsObject(sut)
-//
-//          val expectedJson =
-//            Json.obj(
-//              "lrn"                    -> journeyDomain.preTaskList.lrn,
-//              "sections"               -> TaskListViewModel(userAnswers),
-//              "backToTransitMovements" -> serviceUrl,
-//              "isDeclarationComplete"  -> true,
-//              "onSubmitUrl"            -> DeclarationSummaryViewModel.nextPage(journeyDomain.preTaskList.lrn).url
-//            )
-//
-//          result mustEqual expectedJson
-//      }
-//    }
+    "returns lrn, sections, movement link and indicator for complete declaration" in {
+
+      forAll(genUserAnswerScenario) {
+        userAnswerScenario =>
+          val sut = DeclarationSummaryViewModel(serviceUrl, userAnswerScenario.userAnswers)
+
+          val result = Json.toJsObject(sut)
+
+          val expectedJson =
+            Json.obj(
+              "lrn"                    -> userAnswerScenario.toModel.preTaskList.lrn,
+              "sections"               -> TaskListViewModel(userAnswerScenario.userAnswers),
+              "backToTransitMovements" -> serviceUrl,
+              "isDeclarationComplete"  -> true,
+              "onSubmitUrl"            -> DeclarationSummaryViewModel.nextPage(userAnswerScenario.toModel.preTaskList.lrn).url
+            )
+
+          result mustEqual expectedJson
+      }
+    }
 
   }
 

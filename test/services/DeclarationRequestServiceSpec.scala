@@ -19,23 +19,19 @@ package services
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
-import models.Index
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
 import models.journeyDomain.JourneyDomain
 import models.journeyDomain.TransportDetails.InlandMode.Rail
-import models.messages.InterchangeControlReference
-import models.{EoriNumber, Index, LocalReferenceNumber, UserAnswers}
-import models.messages.trader.TraderPrincipalWithEori
+import models.journeyDomain.traderDetails.ConsignorDetails
+import models.messages.{ControlResult, InterchangeControlReference}
+import models.messages.trader.{TraderConsignor, TraderPrincipalWithEori}
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, LocalReferenceNumber, UserAnswers}
-import models.reference.CountryCode
+import models.{CommonAddress, UserAnswers}
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
-import pages.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage}
-import pages.{ItemTotalGrossMassPage, TotalGrossMassPage}
-import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
+import pages.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, TotalGrossMassPage, WhatIsPrincipalEoriPage, _}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
@@ -523,114 +519,65 @@ class DeclarationRequestServiceSpec
       "goodsSummaryDetails" - {
         "must populate controlResult and authorisedLocationOfGoods when Simplified" in {
 
-
           forAll(genSimplifiedScenarios) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
               when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-
               val result = service.convert(userAnswerScenario.userAnswers).futureValue.right.value
 
-              val expectedModel = userAnswerScenario.toModel
+              val expectedGoodsSummary = userAnswerScenario.toModel.goodsSummary.goodSummaryDetails.asInstanceOf[GoodSummarySimplifiedDetails]
 
-              result.controlResult must expectedModel.goodsSummary.goodSummaryDetails.asInstanceOf[GoodSummarySimplifiedDetails].controlResultDateLimit
-              result.header.autLocOfGooCodHEA41 must be(defined)
-          }
+              val expectedControlResult                 = expectedGoodsSummary.controlResultDateLimit
+              val expectedAuthorisedLocationOfGoodsCode = expectedGoodsSummary.authorisedLocationCode
 
-
-          forAll(arb[UserAnswers], arbitrarySimplifiedJourneyDomain) {
-            (userAnswers, journeyDomain) =>
-              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
-
-              val updatedUserAnswer: UserAnswers = JourneyDomainSpec.setJourneyDomain(journeyDomain)(userAnswers)
-
-              val result = service.convert(updatedUserAnswer).futureValue.right.value
-
-              result.controlResult must be(defined)
-              result.header.autLocOfGooCodHEA41 must be(defined)
+              result.controlResult.value.datLimERS69 mustBe expectedControlResult
+              result.header.autLocOfGooCodHEA41.value mustBe expectedAuthorisedLocationOfGoodsCode
           }
         }
 
         "must not populate controlResult and authorisedLocationOfGoods when Normal" in {
 
-          forAll(arb[UserAnswers], arbitraryNormalJourneyDomain) {
-            (userAnswers, journeyDomain) =>
+          forAll(genNormalScenarios) {
+            userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
               when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-              val updatedUserAnswer: UserAnswers = JourneyDomainSpec.setJourneyDomain(journeyDomain)(userAnswers)
+              val result = service.convert(userAnswerScenario.userAnswers).futureValue.right.value
 
-              val result = service.convert(updatedUserAnswer).futureValue.right.value
-
-              result.controlResult must not be defined
-              result.header.autLocOfGooCodHEA41 must not be defined
+              result.controlResult mustBe None
+              result.header.autLocOfGooCodHEA41 mustBe None
           }
         }
       }
 
       "principalTraderDetails" - {
         "has the postcode and city in the right field and the country is set to users answer" in {
-          val userAnswers   = arb[UserAnswers].sample.value
-          val journeyDomain = arbitraryNormalJourneyDomain.sample.value
 
-          when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
-
-          val updatedUserAnswer: UserAnswers = JourneyDomainSpec.setJourneyDomain(journeyDomain)(userAnswers)
-
-          val userAnswersWithEoriAndAddress = updatedUserAnswer
-            .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
-            .unsafeSetVal(PrincipalNamePage)("Jimmy")
-            .unsafeSetVal(WhatIsPrincipalEoriPage)("xi123456789")
-            .unsafeSetVal(PrincipalAddressPage)(CommonAddress("Line 1", "city", "PostCode", Country(CountryCode("XI"), "SomeDescription")))
-
-          val result = service.convert(userAnswersWithEoriAndAddress).futureValue.right.value.traderPrincipal
-          result mustBe TraderPrincipalWithEori(
-            eori = "xi123456789",
-            name = Some("Jimmy"),
-            streetAndNumber = Some("Line 1"),
-            postCode = Some("PostCode"),
-            city = Some("city"),
-            countryCode = Some("XI")
-          )
-        }
-      }
-
-      "traderConsignor" - {
-        "is defined when the user has provided a consignor for all items" in {
-          forAll(arb[UserAnswers], arb[JourneyDomain]) {
-            (userAnswers, journeyDomain) =>
-              whenever(journeyDomain.traderDetails.consignor.isDefined) {
-                val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
-
-                when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
-
-                val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(journeyDomain)(userAnswers)
-                val result            = service.convert(updatedUserAnswer).futureValue.right.value
-                result.traderConsignor must be(defined)
-              }
-
-          }
-        }
-
-        "is not defined when the user has not provided a consignor for all items" in {
-          forAll(arb[UserAnswers], journeyDomainNoConignorForAllItems) {
-            (userAnswers, journeyDomain) =>
-              val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
-
+          forAll(genNormalScenarios) {
+            userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
               when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-              val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(journeyDomain)(userAnswers)
-              val result            = service.convert(updatedUserAnswer).futureValue.right.value
-              result.traderConsignor must not be defined
+              val userAnswers = userAnswerScenario.userAnswers
+                .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+                .unsafeSetVal(PrincipalNamePage)("Jimmy")
+                .unsafeSetVal(WhatIsPrincipalEoriPage)("xi123456789")
+                .unsafeSetVal(PrincipalAddressPage)(CommonAddress("Line 1", "city", "PostCode", Country(CountryCode("XI"), "SomeDescription")))
+
+              val result = service.convert(userAnswers).futureValue.right.value.traderPrincipal
+
+              result mustBe TraderPrincipalWithEori(
+                eori = "xi123456789",
+                name = Some("Jimmy"),
+                streetAndNumber = Some("Line 1"),
+                postCode = Some("PostCode"),
+                city = Some("city"),
+                countryCode = Some("XI")
+              )
           }
         }
       }
-
     }
 
     "must fail when there are missing answers from mandatory pages" in {
@@ -641,7 +588,5 @@ class DeclarationRequestServiceSpec
 
       service.convert(emptyUserAnswers).futureValue.isLeft mustBe true
     }
-
   }
-
 }
