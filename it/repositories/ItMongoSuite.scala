@@ -24,7 +24,7 @@ import reactivemongo.api.{AsyncDriver, DefaultDB, MongoConnection}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object itMongoSuite {
+object ItMongoSuite {
 
   private lazy val config = Configuration(
     ConfigFactory.load(
@@ -40,13 +40,13 @@ object itMongoSuite {
   lazy val connection: Future[MongoConnection] = parsedUri.flatMap(AsyncDriver().connect(_))
 }
 
-trait itMongoSuite {
+trait ItMongoSuite {
   self: TestSuite =>
 
   def database: Future[DefaultDB] =
     for {
-      uri        <- itMongoSuite.parsedUri
-      connection <- itMongoSuite.connection
+      uri        <- ItMongoSuite.parsedUri
+      connection <- ItMongoSuite.connection
       database   <- connection.database(uri.db.get)
     } yield database
 
