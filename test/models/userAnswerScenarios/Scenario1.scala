@@ -302,7 +302,7 @@ object Scenario1 extends UserAnswerScenario {
   private val transportDetails = TransportDetails(NonSpecialMode(4, Some(CountryCode("ND")), None), SameDetailsAtBorder)
 
   private val traderDetails = TraderDetails(
-    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "description"))),
+    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France"))),
     None,
     None
   )
