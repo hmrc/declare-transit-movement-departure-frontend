@@ -17,13 +17,14 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
+import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import generators.UserAnswersGenerator
-import models.journeyDomain.traderDetails.TraderDetailsSpec
+import generators.{JourneyModelGenerators, UserAnswersGenerator}
 import models.UserAnswers
+import models.journeyDomain.traderDetails.TraderDetailsSpec
 import pages.AddSecurityDetailsPage
 
-class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
+class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper with JourneyModelGenerators {
 
   "JourneyDomain" - {
     "can be parsed UserAnswers" - {
@@ -49,6 +50,21 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
               val result = UserAnswersReader[JourneyDomain].run(userAnswers).left.value
 
               result.page mustBe AddSecurityDetailsPage
+          }
+        }
+      }
+
+      "ItemSections" - {
+        "Must submit the correct amount for total gross mass" in {
+          forAll(arb[ItemSection]) {
+            itemsSection =>
+              val itemDetailsSection = itemsSection.itemDetails
+              val itemSection1       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "100.123"))
+              val itemSection2       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "200.246"))
+
+              val result = ItemSections(NonEmptyList(itemSection1, List(itemSection2))).totalGrossMassFormatted
+
+              result mustBe "300.369"
           }
         }
       }

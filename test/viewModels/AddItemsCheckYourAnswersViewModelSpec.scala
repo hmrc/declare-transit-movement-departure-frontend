@@ -39,7 +39,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
 
   private val updatedAnswers = emptyUserAnswers
     .set(ItemDescriptionPage(index), "test").success.value
-    .set(ItemTotalGrossMassPage(index), "100.00").success.value
+    .set(ItemTotalGrossMassPage(index), 100.00).success.value
     .set(AddTotalNetMassPage(index), true).success.value
     .set(TotalNetMassPage(index), "20").success.value
     .set(IsCommodityCodeKnownPage(index), true).success.value

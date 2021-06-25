@@ -106,7 +106,7 @@ class UserAnswersToXmlConversionSpec
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>2</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>50001.0</TotGroMasHEA307>
+          <TotGroMasHEA307>37345.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>A</SpeCirIndHEA1>
@@ -166,7 +166,7 @@ class UserAnswersToXmlConversionSpec
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GroMasGDS46>25000</GroMasGDS46>
+          <GroMasGDS46>25000.000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>T</MetOfPayGDI12>
           <ComRefNumGIM1>GD1CRN</ComRefNumGIM1>
@@ -251,7 +251,7 @@ class UserAnswersToXmlConversionSpec
         <GOOITEGDS>
           <IteNumGDS7>2</IteNumGDS7>
           <GooDesGDS23>ItemTwosDescription</GooDesGDS23>
-          <GroMasGDS46>25001</GroMasGDS46>
+          <GroMasGDS46>12345.000</GroMasGDS46>
           <MetOfPayGDI12>U</MetOfPayGDI12>
           <ComRefNumGIM1>GD2CRN</ComRefNumGIM1>
           <PREADMREFAR2>
@@ -361,7 +361,7 @@ class UserAnswersToXmlConversionSpec
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
         </HEAHEA>
@@ -407,7 +407,7 @@ class UserAnswersToXmlConversionSpec
         <GOOITEGDS>
           <IteNumGDS7>1</IteNumGDS7>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GroMasGDS46>25000</GroMasGDS46>
+          <GroMasGDS46>25000.000</GroMasGDS46>
           <PACGS2>
             <KinOfPacGS23>VQ</KinOfPacGS23>
           </PACGS2>
@@ -458,7 +458,7 @@ class UserAnswersToXmlConversionSpec
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SecHEA358>1</SecHEA358>
@@ -525,7 +525,7 @@ class UserAnswersToXmlConversionSpec
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GroMasGDS46>25000</GroMasGDS46>
+          <GroMasGDS46>25000.000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>M</MetOfPayGDI12>
           <ComRefNumGIM1>GD1CRN</ComRefNumGIM1>
@@ -637,7 +637,7 @@ class UserAnswersToXmlConversionSpec
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>25000.0</TotGroMasHEA307>
+          <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>E</SpeCirIndHEA1>
@@ -692,7 +692,7 @@ class UserAnswersToXmlConversionSpec
           <IteNumGDS7>1</IteNumGDS7>
           <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
-          <GroMasGDS46>25000</GroMasGDS46>
+          <GroMasGDS46>25000.000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
           <MetOfPayGDI12>W</MetOfPayGDI12>
           <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>

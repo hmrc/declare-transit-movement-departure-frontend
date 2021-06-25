@@ -79,8 +79,7 @@ trait JourneyModelGenerators {
       NonEmptyList(itemDetails, List(itemDetails)),
       goodsSummary,
       guarantees,
-      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None,
-      None
+      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
     )
 
   lazy val arbitraryNormalJourneyDomain: Gen[JourneyDomain] =
@@ -105,8 +104,7 @@ trait JourneyModelGenerators {
       NonEmptyList(itemDetails, List(itemDetails)),
       goodsSummary,
       guarantees,
-      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None,
-      None
+      if (isSecurityDetailsRequired) Some(safetyAndSecurity) else None
     )
 
   implicit lazy val arbitrarySecurityDetails: Arbitrary[SafetyAndSecurity] =

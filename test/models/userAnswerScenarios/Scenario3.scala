@@ -141,7 +141,7 @@ case object Scenario3 extends UserAnswerScenario {
      * Item Details section - Item One
      * */
     .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-    .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+    .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))(25000.000)
     .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
     .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
     .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
@@ -259,7 +259,7 @@ case object Scenario3 extends UserAnswerScenario {
 
   private val itemDetails = NonEmptyList(
     ItemSection(
-      ItemDetails("ItemOnesDescription", "25000", Some("12342"), Some("ComoCode1")),
+      ItemDetails("ItemOnesDescription", "25000.000", Some("12342"), Some("ComoCode1")),
       None,
       None,
       NonEmptyList(
@@ -312,8 +312,7 @@ case object Scenario3 extends UserAnswerScenario {
     itemDetails,
     goodsSummary,
     guarantee,
-    safetyAndSecurity,
-    None
+    safetyAndSecurity
   )
 
 }

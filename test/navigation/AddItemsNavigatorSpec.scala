@@ -987,7 +987,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
       "must go from total grass mass page to Check Your Answers" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.set(ItemTotalGrossMassPage(index), "100").success.value
+            val updatedAnswers = answers.set(ItemTotalGrossMassPage(index), 100.123).success.value
             navigator
               .nextPage(ItemTotalGrossMassPage(index), CheckMode, updatedAnswers)
               .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))

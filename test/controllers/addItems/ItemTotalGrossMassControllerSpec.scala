@@ -85,7 +85,7 @@ class ItemTotalGrossMassControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(ItemTotalGrossMassPage(index), "1.000").success.value
+      val userAnswers = emptyUserAnswers.set(ItemTotalGrossMassPage(index), 1.000).success.value
       dataRetrievalWithData(userAnswers)
       val request        = FakeRequest(GET, itemTotalGrossMassRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])

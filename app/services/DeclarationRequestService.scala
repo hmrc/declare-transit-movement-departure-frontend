@@ -49,7 +49,6 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import logging.Logging
-import pages.TotalGrossMassPage
 
 trait DeclarationRequestServiceInt {
   def convert(userAnswers: UserAnswers): Future[EitherType[DeclarationRequest]]
@@ -89,8 +88,7 @@ class DeclarationRequestService @Inject() (
       itemDetails,
       goodsSummary,
       guarantee,
-      safetyAndSecurity,
-      grossMass
+      safetyAndSecurity
     ) = journeyDomain
 
     def guaranteeDetails(guaranteeDetails: NonEmptyList[GuaranteeDetails]): NonEmptyList[Guarantee] =
@@ -121,7 +119,7 @@ class DeclarationRequestService @Inject() (
             commodityCode = itemSection.itemDetails.commodityCode,
             declarationType = None, // Clarify with policy
             description = itemSection.itemDetails.itemDescription,
-            grossMass = Some(BigDecimal(itemSection.itemDetails.totalGrossMass)),
+            grossMass = Some(BigDecimal(itemSection.itemDetails.itemTotalGrossMass)),
             netMass = itemSection.itemDetails.totalNetMass.map(BigDecimal(_)),
             countryOfDispatch = None, // Not required, defined at header level
             countryOfDestination = None, // Not required, defined at header level
@@ -375,15 +373,7 @@ class DeclarationRequestService @Inject() (
         conIndHEA96 = booleanToInt(movementDetails.containersUsed),
         totNumOfIteHEA305 = itemDetails.size,
         totNumOfPacHEA306 = goodsSummary.numberOfPackages,
-        totGroMasHEA307 = grossMass match {
-          case Some(grossMass) => grossMass
-          case _ =>
-            itemDetails //TODO remove once deployed and journeys completed by current users
-              .foldLeft(0.0) {
-                (x, y) => y.itemDetails.totalGrossMass.toDouble + x
-              }
-              .toString
-        },
+        totGroMasHEA307 = ItemSections(itemDetails).totalGrossMassFormatted,
         decDatHEA383 = dateTimeOfPrep.toLocalDate,
         decPlaHEA394 = movementDetails.declarationPlacePage,
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
