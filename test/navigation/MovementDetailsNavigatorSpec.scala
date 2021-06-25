@@ -17,8 +17,10 @@
 package navigation
 
 import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
 import controllers.movementDetails.{routes => movementDetailsRoute}
 import generators.Generators
+import models.DeclarationType.Option1
 import models._
 import models.ProcedureType._
 import org.scalacheck.Arbitrary.arbitrary
@@ -26,7 +28,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
-class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
   val navigator = new MovementDetailsNavigator
   // format: off
@@ -43,13 +45,25 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         }
       }
 
-      "must go from  Container Used page to Declaration Place page" in {
+      "must go from  Container Used page to Declaration Place page if Declaration Type has been answered" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
+            val userAnswers = answers.unsafeSetVal(DeclarationTypePage)(Option1)
             navigator
-              .nextPage(ContainersUsedPage, NormalMode, answers)
-              .mustBe(movementDetailsRoute.DeclarationPlaceController.onPageLoad(answers.id, NormalMode))
+              .nextPage(ContainersUsedPage, NormalMode, userAnswers)
+              .mustBe(movementDetailsRoute.DeclarationPlaceController.onPageLoad(userAnswers.id, NormalMode))
+        }
+      }
+
+      "must go from  Container Used page to Declaration Type page if Declaration Type has not been answered" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val userAnswers = answers.unsafeRemove(DeclarationTypePage)
+            navigator
+              .nextPage(ContainersUsedPage, NormalMode, userAnswers)
+              .mustBe(controllers.routes.DeclarationTypeController.onPageLoad(userAnswers.id, NormalMode))
         }
       }
 

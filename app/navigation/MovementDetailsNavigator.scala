@@ -30,7 +30,11 @@ class MovementDetailsNavigator @Inject() () extends Navigator {
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case PreLodgeDeclarationPage       => ua => Some(routes.ContainersUsedPageController.onPageLoad(ua.id, NormalMode))
-    case ContainersUsedPage            => ua => Some(routes.DeclarationPlaceController.onPageLoad(ua.id, NormalMode))
+    case ContainersUsedPage            => ua => //TODO: revert logic when 2410 deployed successfully
+      ua.get(DeclarationTypePage) match {
+        case Some(_) => Some(routes.DeclarationPlaceController.onPageLoad(ua.id, NormalMode))
+        case _ => Some(controllers.routes.DeclarationTypeController.onPageLoad(ua.id, NormalMode))
+      }
     case DeclarationPlacePage          => ua => Some(routes.DeclarationForSomeoneElseController.onPageLoad(ua.id, NormalMode))
     case DeclarationForSomeoneElsePage => ua => Some(isDeclarationForSomeoneElse(ua, NormalMode))
     case RepresentativeNamePage        => ua => Some(routes.RepresentativeCapacityController.onPageLoad(ua.id, NormalMode))
