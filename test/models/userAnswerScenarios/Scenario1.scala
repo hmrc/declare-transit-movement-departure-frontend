@@ -204,7 +204,7 @@ case object Scenario1 extends UserAnswerScenario {
      * Item Details section - Item Two
      * */
     .unsafeSetVal(pages.ItemDescriptionPage(secondGoodItem))("ItemTwosDescription")
-    .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))(25000.000)
+    .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))(12345.000)
     .unsafeSetVal(pages.AddTotalNetMassPage(secondGoodItem))(false)
     .unsafeSetVal(pages.IsCommodityCodeKnownPage(secondGoodItem))(false)
     .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(secondGoodItem))(false)

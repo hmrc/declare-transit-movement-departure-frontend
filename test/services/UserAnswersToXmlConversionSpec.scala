@@ -106,7 +106,7 @@ class UserAnswersToXmlConversionSpec
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>2</TotNumOfIteHEA305>
           <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
-          <TotGroMasHEA307>50000.000</TotGroMasHEA307>
+          <TotGroMasHEA307>37345.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>A</SpeCirIndHEA1>
@@ -251,7 +251,7 @@ class UserAnswersToXmlConversionSpec
         <GOOITEGDS>
           <IteNumGDS7>2</IteNumGDS7>
           <GooDesGDS23>ItemTwosDescription</GooDesGDS23>
-          <GroMasGDS46>25000.000</GroMasGDS46>
+          <GroMasGDS46>12345.000</GroMasGDS46>
           <MetOfPayGDI12>U</MetOfPayGDI12>
           <ComRefNumGIM1>GD2CRN</ComRefNumGIM1>
           <PREADMREFAR2>
