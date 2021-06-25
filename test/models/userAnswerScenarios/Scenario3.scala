@@ -228,7 +228,6 @@ case object Scenario3 extends UserAnswerScenario {
   )
 
   private val movementDetails = NormalMovementDetails(
-    Option2,
     true,
     true,
     "XX1 1XX",
@@ -301,7 +300,8 @@ case object Scenario3 extends UserAnswerScenario {
     )
   )
 
-  private val preTaskList = PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), List.empty, None), true)
+  private val preTaskList =
+    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), List.empty, None), Option2, true)
 
   val toModel = JourneyDomain(
     preTaskList,

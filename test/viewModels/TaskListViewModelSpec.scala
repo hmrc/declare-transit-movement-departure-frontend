@@ -799,7 +799,7 @@ class TaskListViewModelSpec
                   .unsafeSetVal(AddSecurityDetailsPage)(false)
               val preTaskList = arb[PreTaskListDetails].sample.value
 
-              forAll(genItemSection(containersUser, false, safetyAndSecurity, generalInformation, preTaskList, routeDetails)) {
+              forAll(genItemSection(containersUser, false, safetyAndSecurity, preTaskList, routeDetails)) {
                 sectionDetails =>
                   val updatedUserAnswers = ItemSectionSpec.setItemSection(sectionDetails, Index(0))(userAnswers)
                   val viewModel          = TaskListViewModel(updatedUserAnswers)
@@ -820,7 +820,7 @@ class TaskListViewModelSpec
                   .unsafeSetVal(AddSecurityDetailsPage)(false)
               val preTaskList = arb[PreTaskListDetails].sample.value
 
-              forAll(genItemSection(containersUser, false, safetyAndSecurity, generalInformation, preTaskList, routeDetails)) {
+              forAll(genItemSection(containersUser, false, safetyAndSecurity, preTaskList, routeDetails)) {
                 sectionDetails =>
                   val updatedUserAnswers = ItemSectionSpec.setItemSection(sectionDetails, Index(0))(userAnswers)
                   val viewModel          = TaskListViewModel(updatedUserAnswers)
@@ -902,7 +902,7 @@ class TaskListViewModelSpec
               val routerDetailsUserAnswers = RouteDetailsSpec.setRouteDetails(routeDetails)(traderDetailsUserAnswers)
               val preTaskList              = arb[PreTaskListDetails].sample.value
 
-              forAll(genItemSection(containersUser, false, safetyAndSecurity, generalInformation, preTaskList, routeDetails)) {
+              forAll(genItemSection(containersUser, false, safetyAndSecurity, preTaskList, routeDetails)) {
                 sectionDetails =>
                   val updatedUserAnswers = ItemSectionSpec.setItemSection(sectionDetails, zeroIndex)(routerDetailsUserAnswers)
 
@@ -930,7 +930,7 @@ class TaskListViewModelSpec
               val routerDetailsUserAnswers = RouteDetailsSpec.setRouteDetails(routeDetails)(traderDetailsUserAnswers)
               val preTaskList              = arb[PreTaskListDetails].sample.value
 
-              forAll(genItemSection(containersUser, false, safetyAndSecurity, generalInformation, preTaskList, routeDetails)) {
+              forAll(genItemSection(containersUser, false, safetyAndSecurity, preTaskList, routeDetails)) {
                 sectionDetails =>
                   val updatedUserAnswers = ItemSectionSpec.setItemSection(sectionDetails, zeroIndex)(routerDetailsUserAnswers)
 
