@@ -42,7 +42,6 @@ import models.messages.header.{Header, Transport}
 import models.messages.safetyAndSecurity._
 import models.messages.trader.{TraderConsignor, TraderPrincipal, TraderPrincipalWithEori, TraderPrincipalWithoutEori, _}
 import models.{CommonAddress, EoriNumber, UserAnswers}
-import play.api.Logger
 import repositories.InterchangeControlReferenceIdRepository
 
 import java.time.LocalDateTime
@@ -123,19 +122,19 @@ class DeclarationRequestService @Inject() (
             netMass = itemSection.itemDetails.totalNetMass.map(BigDecimal(_)),
             countryOfDispatch = None, // Not required, defined at header level
             countryOfDestination = None, // Not required, defined at header level
-            methodOfPayment = itemSection.itemSecurityTraderDetails.flatMap(_.methodOfPayment),
-            commercialReferenceNumber = itemSection.itemSecurityTraderDetails.flatMap(_.commercialReferenceNumber),
+            methodOfPayment = collectWhen(goodsItems.size > 1)(itemSection.itemSecurityTraderDetails.flatMap(_.methodOfPayment)),
+            commercialReferenceNumber = collectWhen(goodsItems.size > 1)(itemSection.itemSecurityTraderDetails.flatMap(_.commercialReferenceNumber)),
             dangerousGoodsCode = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
             producedDocuments = producedDocuments(itemSection.producedDocuments),
             specialMention = SpecialMentionConversion(itemSection.specialMentions, guaranteeDetails, index),
-            traderConsignorGoodsItem = traderConsignor(itemSection.consignor),
-            traderConsigneeGoodsItem = traderConsignee(itemSection.consignee),
+            traderConsignorGoodsItem = collectWhen(goodsItems.size > 1)(traderConsignor(itemSection.consignor)),
+            traderConsigneeGoodsItem = collectWhen(goodsItems.size > 1)(traderConsignee(itemSection.consignee)),
             containers = containers(itemSection.containers),
             packages = packages(itemSection.packages).toList,
             sensitiveGoodsInformation = Seq.empty, // Not required, defined at security level
-            GoodsItemSafetyAndSecurityConsignor(itemSection.itemSecurityTraderDetails),
-            GoodsItemSafetyAndSecurityConsignee(itemSection.itemSecurityTraderDetails)
+            collectWhen(goodsItems.size > 1)(GoodsItemSafetyAndSecurityConsignor(itemSection.itemSecurityTraderDetails)),
+            collectWhen(goodsItems.size > 1)(GoodsItemSafetyAndSecurityConsignee(itemSection.itemSecurityTraderDetails))
           )
       }
 
@@ -377,8 +376,8 @@ class DeclarationRequestService @Inject() (
         decDatHEA383 = dateTimeOfPrep.toLocalDate,
         decPlaHEA394 = movementDetails.declarationPlacePage,
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
-        traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod),
-        comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber),
+        traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
+        comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber) orElse headerCommercialReferenceNumberFromItemDetails(journeyDomain.itemDetails),
         secHEA358 = if (preTaskList.addSecurityDetails) {
           Some(safetyAndSecurityFlag(preTaskList.addSecurityDetails))
         } else {
@@ -388,8 +387,8 @@ class DeclarationRequestService @Inject() (
         codPlUnHEA357 = safetyAndSecurity.flatMap(_.placeOfUnloading)
       ),
       principalTrader(traderDetails),
-      traderDetails.consignor.map(headerConsignor),
-      traderDetails.consignee.map(headerConsignee),
+      traderDetails.consignor.map(headerConsignor) orElse headerConsignorFromItemDetails(journeyDomain.itemDetails),
+      traderDetails.consignee.map(headerConsignee) orElse headerConsigneeFromItemDetails(journeyDomain.itemDetails),
       None, // not required
       CustomsOfficeDeparture(
         referenceNumber = preTaskList.officeOfDeparture.id
@@ -414,10 +413,10 @@ class DeclarationRequestService @Inject() (
         sas => carrier(sas.carrier)
       ),
       safetyAndSecurity.flatMap(
-        sas => safetyAndSecurityConsignor(sas.consignor)
+        sas => safetyAndSecurityConsignor(sas.consignor) orElse headerSecurityDetailsFromConsignorItemDetails(journeyDomain.itemDetails)
       ),
       safetyAndSecurity.flatMap(
-        sas => safetyAndSecurityConsignee(sas.consignee)
+        sas => safetyAndSecurityConsignee(sas.consignee) orElse headerSecurityDetailsFromConsigneeItemDetails(journeyDomain.itemDetails)
       )
     )
   }
@@ -433,4 +432,98 @@ class DeclarationRequestService @Inject() (
 
     TraderConsignee(name, addressLine1, postCode, addressLine2, country.code.code, eori.map(_.value))
   }
+
+  private def headerConsignorFromItemDetails(itemSectionsDetails: NonEmptyList[ItemSection]): Option[TraderConsignor] =
+    collectWhen(itemSectionsDetails.size == 1) {
+      itemSectionsDetails.map {
+        _.consignor.map {
+          details =>
+            headerConsignor(ConsignorDetails(details.name, details.address, details.eori))
+        }
+      }.head
+    }
+
+  private def headerConsigneeFromItemDetails(itemSectionsDetails: NonEmptyList[ItemSection]): Option[TraderConsignee] =
+    collectWhen(itemSectionsDetails.size == 1) {
+      itemSectionsDetails.map {
+        _.consignee.map {
+          details =>
+            headerConsignee(ConsigneeDetails(details.name, details.address, details.eori))
+        }
+      }.head
+    }
+
+  private def headerSecurityDetailsFromConsigneeItemDetails(itemSectionsDetails: NonEmptyList[ItemSection]): Option[SafetyAndSecurityConsignee] =
+    collectWhen(itemSectionsDetails.size == 1) {
+      itemSectionsDetails.map {
+        _.itemSecurityTraderDetails.flatMap {
+          itemsSecurityTraderDetails =>
+            safetyAndSecurityItemConsignee(itemsSecurityTraderDetails)
+        }
+      }.head
+    }
+
+  private def headerSecurityDetailsFromConsignorItemDetails(itemSectionsDetails: NonEmptyList[ItemSection]): Option[SafetyAndSecurityConsignor] =
+    collectWhen(itemSectionsDetails.size == 1) {
+      itemSectionsDetails.map {
+        _.itemSecurityTraderDetails.flatMap {
+          itemsSecurityTraderDetails =>
+            safetyAndSecurityItemConsignor(itemsSecurityTraderDetails)
+        }
+      }.head
+    }
+
+  private def headerCommercialReferenceNumberFromItemDetails(itemSectionsDetails: NonEmptyList[ItemSection]): Option[String] =
+    collectWhen(itemSectionsDetails.size == 1) {
+      itemSectionsDetails.map {
+        _.itemSecurityTraderDetails.flatMap {
+          itemsSecurityTraderDetails =>
+            itemsSecurityTraderDetails.commercialReferenceNumber
+        }
+      }.head
+    }
+
+  private def headerPaymentMethodFromItemDetails(itemSectionsDetails: NonEmptyList[ItemSection]): Option[String] =
+    collectWhen(itemSectionsDetails.size == 1) {
+      itemSectionsDetails.map {
+        _.itemSecurityTraderDetails.flatMap {
+          itemsSecurityTraderDetails =>
+            itemsSecurityTraderDetails.methodOfPayment
+        }
+      }.head
+    }
+
+  private def safetyAndSecurityItemConsignor(itemsSecurityTraderDetails: ItemsSecurityTraderDetails): Option[SafetyAndSecurityConsignor] =
+    itemsSecurityTraderDetails.consignor
+      .map {
+        case SecurityPersonalInformation(name, CommonAddress(addressLine1, addressLine2, postCode, country)) =>
+          SafetyAndSecurityConsignorWithoutEori(name, addressLine1, postCode, addressLine2, country.code.code)
+
+        case SecurityTraderEori(EoriNumber(eori)) =>
+          SafetyAndSecurityConsignorWithEori(eori)
+      }
+
+  private def safetyAndSecurityItemConsignee(itemsSecurityTraderDetails: ItemsSecurityTraderDetails): Option[SafetyAndSecurityConsignee] =
+    itemsSecurityTraderDetails.consignee
+      .map {
+        case SecurityPersonalInformation(name, CommonAddress(addressLine1, addressLine2, postCode, country)) =>
+          SafetyAndSecurityConsigneeWithoutEori(name, addressLine1, postCode, addressLine2, country.code.code)
+        case SecurityTraderEori(EoriNumber(eori)) =>
+          SafetyAndSecurityConsigneeWithEori(eori)
+      }
+
+  /**
+    * Utility Function to collect when the condition is true
+    * @param condition
+    * @param func
+    * @tparam T
+    * @return Option[T]
+    */
+  private def collectWhen[T](condition: Boolean)(func: => Option[T]): Option[T] = {
+    val result = Option(condition) collect {
+      case true => func
+    }
+    result.flatten
+  }
+
 }

@@ -461,6 +461,8 @@ class UserAnswersToXmlConversionSpec
           <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
+          <TraChaMetOfPayHEA1>M</TraChaMetOfPayHEA1>
+          <ComRefNumHEA>GD1CRN</ComRefNumHEA>
           <SecHEA358>1</SecHEA358>
           <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
         </HEAHEA>
@@ -527,8 +529,6 @@ class UserAnswersToXmlConversionSpec
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
           <GroMasGDS46>25000.000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
-          <MetOfPayGDI12>M</MetOfPayGDI12>
-          <ComRefNumGIM1>GD1CRN</ComRefNumGIM1>
           <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR1</PreDocTypAR21>
@@ -641,6 +641,7 @@ class UserAnswersToXmlConversionSpec
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>E</SpeCirIndHEA1>
+          <TraChaMetOfPayHEA1>W</TraChaMetOfPayHEA1>
           <ComRefNumHEA>COMREFALL</ComRefNumHEA>
           <SecHEA358>1</SecHEA358>
         </HEAHEA>
@@ -651,6 +652,22 @@ class UserAnswersToXmlConversionSpec
           <CitPC124>PrincipalTown</CitPC124>
           <CouPC125>FR</CouPC125>
         </TRAPRIPC1>
+        <TRACONCO1>
+          <NamCO17>ConorName</NamCO17>
+          <StrAndNumCO122>ConorLine1</StrAndNumCO122>
+          <PosCodCO123>ConorL3</PosCodCO123>
+          <CitCO124>ConorLine2</CitCO124>
+          <CouCO125>GA</CouCO125>
+          <TINCO159>Conor123</TINCO159>
+        </TRACONCO1>
+        <TRACONCE1>
+          <NamCE17>ConeeName</NamCE17>
+          <StrAndNumCE122>ConeeLine1</StrAndNumCE122>
+          <PosCodCE123>ConeeL3</PosCodCE123>
+          <CitCE124>ConeeLine2</CitCE124>
+          <CouCE125>GA</CouCE125>
+          <TINCE159>Conee123</TINCE159>
+        </TRACONCE1>
         <CUSOFFDEPEPT>
           <RefNumEPT1>OOD1234A</RefNumEPT1>
         </CUSOFFDEPEPT>
@@ -694,7 +711,6 @@ class UserAnswersToXmlConversionSpec
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
           <GroMasGDS46>25000.000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
-          <MetOfPayGDI12>W</MetOfPayGDI12>
           <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR1</PreDocTypAR21>
@@ -730,22 +746,6 @@ class UserAnswersToXmlConversionSpec
             <AddInfMT21>GD1S2Info</AddInfMT21>
             <AddInfCodMT23>GD1S2</AddInfCodMT23>
           </SPEMENMT2>
-          <TRACONCO2>
-            <NamCO27>ConorName</NamCO27>
-            <StrAndNumCO222>ConorLine1</StrAndNumCO222>
-            <PosCodCO223>ConorL3</PosCodCO223>
-            <CitCO224>ConorLine2</CitCO224>
-            <CouCO225>GA</CouCO225>
-            <TINCO259>Conor123</TINCO259>
-          </TRACONCO2>
-          <TRACONCE2>
-            <NamCE27>ConeeName</NamCE27>
-            <StrAndNumCE222>ConeeLine1</StrAndNumCE222>
-            <PosCodCE223>ConeeL3</PosCodCE223>
-            <CitCE224>ConeeLine2</CitCE224>
-            <CouCE225>GA</CouCE225>
-            <TINCE259>Conee123</TINCE259>
-          </TRACONCE2>
           <CONNR2>
             <ConNumNR21>GD1CN1NUM1</ConNumNR21>
           </CONNR2>
