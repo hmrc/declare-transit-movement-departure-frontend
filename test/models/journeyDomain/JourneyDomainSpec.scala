@@ -38,53 +38,6 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
         }
       }
 
-      "ItemSections" - {
-        "Must submit the correct amount for total gross mass" in {
-          forAll(arb[ItemSection]) {
-            itemsSection =>
-              val itemDetailsSection = itemsSection.itemDetails
-              val itemSection1       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "100.123"))
-              val itemSection2       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "200.246"))
-
-              val result = ItemSections(NonEmptyList(itemSection1, List(itemSection2))).totalGrossMassFormatted
-
-              result mustBe "300.369"
-          }
-        }
-      }
-//  "JourneyDomain" - {
-//    "can be parsed UserAnswers" - {
-//      "when all details for section have been answered" in {
-//        forAll(arb[JourneyDomain]) {
-//          journeyDomain =>
-//            val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(journeyDomain)(emptyUserAnswers)
-//
-//            val result = UserAnswersReader[JourneyDomain].run(updatedUserAnswer)
-//
-//            result.right.value.preTaskList mustEqual journeyDomain.preTaskList
-//            result.right.value.movementDetails mustEqual journeyDomain.movementDetails
-//            result.right.value.routeDetails mustEqual journeyDomain.routeDetails
-//            result.right.value.transportDetails mustEqual journeyDomain.transportDetails
-//            result.right.value.traderDetails mustEqual journeyDomain.traderDetails
-//            result.right.value.goodsSummary mustEqual journeyDomain.goodsSummary
-//            result.right.value.guarantee mustEqual journeyDomain.guarantee
-//            result.right.value.safetyAndSecurity mustEqual journeyDomain.safetyAndSecurity
-//        }
-//      }
-//    }
-//
-//    "cannot be parsed" - {
-//      "when some answers is missing" in {
-//        forAll(arb[ItemSection], arb[UserAnswers]) {
-//          case (itemSection, ua) =>
-//            val userAnswers = ItemDetailsSpec.setItemDetailsUserAnswers(itemSection.itemDetails, index)(ua)
-//            val result      = ItemSection.readerItemSection(index).run(userAnswers).isLeft
-//
-//            result mustBe true
-//        }
-//      }
-//    }
-//  }
       "cannot be parsed from UserAnswers" - {
 
         "when a safety and security is missing" in {
@@ -97,6 +50,21 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
               val result = UserAnswersReader[JourneyDomain].run(userAnswers).left.value
 
               result.page mustBe AddSecurityDetailsPage
+          }
+        }
+      }
+
+      "ItemSections" - {
+        "Must submit the correct amount for total gross mass" in {
+          forAll(arb[ItemSection]) {
+            itemsSection =>
+              val itemDetailsSection = itemsSection.itemDetails
+              val itemSection1       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "100.123"))
+              val itemSection2       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "200.246"))
+
+              val result = ItemSections(NonEmptyList(itemSection1, List(itemSection2))).totalGrossMassFormatted
+
+              result mustBe "300.369"
           }
         }
       }
