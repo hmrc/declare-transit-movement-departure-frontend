@@ -57,7 +57,7 @@ class OfficeOfTransitCountryController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData andThen officeOfTransitFilter(index)).async {
       implicit request =>
-        referenceDataConnector.getTransitCountryList() flatMap {
+        referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) flatMap {
           countries =>
             val form = formProvider(countries)
 
@@ -73,7 +73,7 @@ class OfficeOfTransitCountryController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getTransitCountryList() flatMap {
+      referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) flatMap {
         countries =>
           formProvider(countries)
             .bindFromRequest()

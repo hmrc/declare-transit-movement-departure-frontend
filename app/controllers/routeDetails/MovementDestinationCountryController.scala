@@ -19,7 +19,7 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.MovementDestinationCountryFormProvider
-import models.reference.Country
+import models.reference.{Country, CountryCode}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
@@ -55,7 +55,7 @@ class MovementDestinationCountryController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getTransitCountryList() flatMap {
+      referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) flatMap {
         countries =>
           val form = formProvider(countries)
 
@@ -71,7 +71,7 @@ class MovementDestinationCountryController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getTransitCountryList() flatMap {
+      referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) flatMap {
         countries =>
           formProvider(countries)
             .bindFromRequest()

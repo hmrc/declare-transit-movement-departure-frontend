@@ -43,9 +43,14 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[Country]](serviceUrl).map(CountryList(_))
   }
 
-  def getTransitCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+  def getTransitCountryList(excludeCountries: Seq[CountryCode] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
     val serviceUrl = s"${config.referenceDataUrl}/transit-countries"
-    http.GET[Seq[Country]](serviceUrl).map(CountryList(_))
+
+    val excludeCountriesQueryParams = excludeCountries.map(
+      countryCode => "excludeCountries" -> countryCode.code
+    )
+
+    http.GET[Seq[Country]](serviceUrl, excludeCountriesQueryParams).map(CountryList(_))
   }
 
   def getNonEUTransitCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
