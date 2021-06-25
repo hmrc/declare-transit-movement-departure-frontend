@@ -131,14 +131,16 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
   private def goodsSummaryInProgressReader(procedureType: Option[ProcedureType],
                                            safetyAndSecurity: Option[Boolean],
                                            prelodgedDeclaration: Option[Boolean]
-  ): UserAnswersReader[_] =
-    (procedureType, safetyAndSecurity, prelodgedDeclaration) match {
-      case (_, Some(true), _)                       => LoadingPlacePage.reader
-      case (Some(Normal), Some(false), Some(false)) => AddCustomsApprovedLocationPage.reader
-      case (Some(Normal), Some(false), Some(true))  => AddAgreedLocationOfGoodsPage.reader
-      case (Some(Simplified), Some(false), _)       => AuthorisedLocationCodePage.reader.map(_.nonEmpty)
-      case _                                        => AddSealsPage.reader
-    }
+  ): UserAnswersReader[Any] =
+//    (procedureType, safetyAndSecurity, prelodgedDeclaration) match {
+//      case (_, Some(true), _)                       => LoadingPlacePage.reader
+//      case (Some(Normal), Some(false), Some(false)) => AddCustomsApprovedLocationPage.reader
+//      case (Some(Normal), Some(false), Some(true))  => AddAgreedLocationOfGoodsPage.reader
+//      case (Some(Simplified), Some(false), _)       => AuthorisedLocationCodePage.reader.map(_.nonEmpty)
+//      case _                                        => AddSealsPage.reader
+//    }
+    LoadingPlacePage.reader.widen[Any] orElse AddCustomsApprovedLocationPage.reader.widen[Any] orElse AddAgreedLocationOfGoodsPage.reader
+      .widen[Any] orElse AuthorisedLocationCodePage.reader.map(_.nonEmpty)
 
   private val goodsSummaryDetails =
     taskListDsl
@@ -154,7 +156,9 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         goodsSummaryInProgressReader(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage)),
         goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage))
       )
-      .ifNotStarted(controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url)
+      .ifNotStarted(
+        goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage))
+      )
 
   private val guaranteeDetails =
     taskListDsl

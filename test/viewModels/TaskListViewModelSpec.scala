@@ -900,22 +900,20 @@ class TaskListViewModelSpec
           }
 
           "when add custom approved location page has been answered" in {
-            val isSecurityDefined           = false
-            val procedureType               = ProcedureType.Normal
-            val movementDetails             = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-            val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+            val isSecurityDefined  = false
+            val procedureType      = ProcedureType.Normal
+            val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
 
-            forAll(arb(arbitraryGoodsSummary(isSecurityDefined, procedureType)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
-              (goodsSummary, detailsWithPrelodge) =>
-                val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = detailsWithPrelodge)
+            val userAnswers                   = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+            val generalInformationUserAnswers = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
 
-                val userAnswers = GoodsSummarySpec
-                  .setGoodsSummary(updatedGoodsSummary)(userAnswersWithMovementDtls)
-                  .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-                  .unsafeSetVal(PreLodgeDeclarationPage)(true)
-                  .unsafeSetVal(ProcedureTypePage)(procedureType)
+            forAll(arb[Boolean]) {
+              pageAnswer =>
+                val updatedUserAnswers = generalInformationUserAnswers
+                  .unsafeSetVal(PreLodgeDeclarationPage)(false)
+                  .unsafeSetVal(AddCustomsApprovedLocationPage)(pageAnswer)
 
-                val viewModel = TaskListViewModel(userAnswers)
+                val viewModel = TaskListViewModel(updatedUserAnswers)
 
                 viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.InProgress
             }
@@ -923,15 +921,23 @@ class TaskListViewModelSpec
 
           "when Add Agreed Location of Goods page has been answered" in {
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(false)
-              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-              .unsafeSetVal(PreLodgeDeclarationPage)(true)
-              .unsafeSetVal(AddAgreedLocationOfGoodsPage)(false)
+            val isSecurityDefined  = false
+            val procedureType      = ProcedureType.Normal
+            val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
 
-            val viewModel = TaskListViewModel(userAnswers)
+            val userAnswers                   = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+            val generalInformationUserAnswers = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+            forAll(arb[Boolean]) {
+              pageAnswer =>
+                //ToDo: Change AddAgreedLocationOfGoodsPage to arbitary when CTCTRADERS-2454 is completed
+                val updatedUserAnswers = generalInformationUserAnswers
+                  .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                  .unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
 
-            viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.InProgress
+                val viewModel = TaskListViewModel(updatedUserAnswers)
+
+                viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.InProgress
+            }
           }
 
           "when authorised location code page has been answered" in {
@@ -950,98 +956,122 @@ class TaskListViewModelSpec
           }
         }
 
-        "is Completed and procedure type is 'Normal' when all the answers are completed" in {
+        "is Completed" - {
 
-          val isSecurityDefined           = arb[Boolean].sample.value
-          val procedureType               = ProcedureType.Normal
-          val movementDetails             = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-          val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+          "procedure type is 'Normal' when all the answers are completed" in {
 
-          forAll(arb(arbitraryGoodsSummary(isSecurityDefined, procedureType)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
-            (goodsSummary, detailsWithPrelodge) =>
-              val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = detailsWithPrelodge)
+            val isSecurityDefined           = arb[Boolean].sample.value
+            val procedureType               = ProcedureType.Normal
+            val movementDetails             = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
 
-              val userAnswers = GoodsSummarySpec
-                .setGoodsSummary(updatedGoodsSummary)(userAnswersWithMovementDtls)
-                .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-                .unsafeSetVal(PreLodgeDeclarationPage)(true)
-                .unsafeSetVal(ProcedureTypePage)(procedureType)
+            forAll(arb(arbitraryGoodsSummary(isSecurityDefined, procedureType)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
+              (goodsSummary, detailsWithPrelodge) =>
+                val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = detailsWithPrelodge)
 
-              val viewModel = TaskListViewModel(userAnswers)
+                val userAnswers = GoodsSummarySpec
+                  .setGoodsSummary(updatedGoodsSummary)(userAnswersWithMovementDtls)
+                  .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+                  .unsafeSetVal(PreLodgeDeclarationPage)(true)
+                  .unsafeSetVal(ProcedureTypePage)(procedureType)
 
-              viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.Completed
+                val viewModel = TaskListViewModel(userAnswers)
+
+                viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.Completed
+            }
+          }
+
+          "procedure type is 'Simplified' when all the answers are completed" in {
+            val isSecurityDefined = arb[Boolean].sample.value
+            forAll(arb(arbitraryGoodsSummary(isSecurityDefined, ProcedureType.Simplified))) {
+              goodsSummary =>
+                val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = GoodSummarySimplifiedDetails("location", LocalDate.now()))
+                val userAnswers = GoodsSummarySpec
+                  .setGoodsSummary(updatedGoodsSummary)(emptyUserAnswers)
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+                  .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+
+                val viewModel = TaskListViewModel(userAnswers)
+
+                viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.Completed
+            }
           }
         }
 
-        "is Completed and procedure type is 'Simplified' when all the answers are completed" in {
-          val isSecurityDefined = arb[Boolean].sample.value
-          forAll(arb(arbitraryGoodsSummary(isSecurityDefined, ProcedureType.Simplified))) {
-            goodsSummary =>
-              val updatedGoodsSummary = goodsSummary.copy(goodSummaryDetails = GoodSummarySimplifiedDetails("location", LocalDate.now()))
-              val userAnswers = GoodsSummarySpec
-                .setGoodsSummary(updatedGoodsSummary)(emptyUserAnswers)
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-                .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
-
-              val viewModel = TaskListViewModel(userAnswers)
-
-              viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.Completed
-          }
-        }
       }
 
       "navigation" - {
-        "when the status is Not started, safety and security is yes, links to the loading place page" in {
-          val userAnswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(true)
-          val viewModel   = TaskListViewModel(userAnswers)
+        "when the status is not started" - {
+          "safety and security is yes, links to the loading place page" in {
+            val isSecurityDefined  = true
+            val procedureType      = ProcedureType.Normal
+            val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
 
-          val expectedHref: String = controllers.routes.LoadingPlaceController.onPageLoad(lrn, NormalMode).url
+            val userAnswers                   = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+            val generalInformationUserAnswers = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+            val viewModel                     = TaskListViewModel(generalInformationUserAnswers)
 
-          viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
-        }
-
-        "when the status is Not started, safety and security is no" - {
-
-          "mode is simplified, links to the Authorised Location Code page" in {
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(false)
-              .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-            val viewModel = TaskListViewModel(userAnswers)
-
-            val expectedHref: String = controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(lrn, NormalMode).url
+            val expectedHref: String = controllers.routes.LoadingPlaceController.onPageLoad(lrn, NormalMode).url
 
             viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
           }
 
-          "mode is normal" - {
-            "pre-lodges is no, links to the Add Custom Approved Location page" in {
+          "safety and security is no" - {
+
+            "mode is simplified, links to the Authorised Location Code page" in {
               val userAnswers = emptyUserAnswers
                 .unsafeSetVal(AddSecurityDetailsPage)(false)
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(PreLodgeDeclarationPage)(false)
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
               val viewModel = TaskListViewModel(userAnswers)
 
-              val expectedHref: String = controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
+              val expectedHref: String = controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(lrn, NormalMode).url
 
               viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
             }
 
-            "pre-lodges is yes, links to the Add Agreed Location of Goods page" in {
-              val userAnswers = emptyUserAnswers
-                .unsafeSetVal(AddSecurityDetailsPage)(false)
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(PreLodgeDeclarationPage)(true)
-              val viewModel = TaskListViewModel(userAnswers)
+            "mode is normal" - {
+              "pre-lodges is no, links to the Add Custom Approved Location page" in {
+                val isSecurityDefined  = false
+                val procedureType      = ProcedureType.Normal
+                val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
 
-              val expectedHref: String = controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, NormalMode).url
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
 
-              viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+                val generalInformationUserAnswers = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+
+                val updatedUserAnswers = generalInformationUserAnswers.unsafeSetVal(PreLodgeDeclarationPage)(false)
+                val viewModel          = TaskListViewModel(updatedUserAnswers)
+
+                val expectedHref: String = controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
+
+                viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+              }
+
+              "pre-lodges is yes, links to the Add Agreed Location of Goods page" in {
+                val isSecurityDefined  = false
+                val procedureType      = ProcedureType.Normal
+                val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+
+                val userAnswers = emptyUserAnswers
+                  .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+
+                val generalInformationUserAnswers = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+
+                val updatedUserAnswers = generalInformationUserAnswers.unsafeSetVal(PreLodgeDeclarationPage)(true)
+                val viewModel          = TaskListViewModel(updatedUserAnswers)
+
+                val expectedHref: String = controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, NormalMode).url
+
+                viewModel.getHref(goodsSummarySectionName).value mustEqual expectedHref
+              }
             }
+
           }
-
         }
+
         "when the status is InProgress" - {
-          "when the status is Not started, safety and security is yes, links to the loading place page" in {
+          "safety and security is yes, links to the loading place page" in {
             forAll(arb[String]) {
               pageAnswer =>
                 val userAnswers = emptyUserAnswers
@@ -1055,7 +1085,7 @@ class TaskListViewModelSpec
             }
           }
 
-          "when the status is Not started, safety and security is no" - {
+          "safety and security is no" - {
 
             "mode is simplified, links to the Authorised Location Code page" in {
               forAll(arb[String]) {
@@ -1076,12 +1106,19 @@ class TaskListViewModelSpec
               "pre-lodges is no, links to the Add Custom Approved Location page" in {
                 forAll(arb[Boolean]) {
                   pageAnswer =>
+                    val isSecurityDefined  = false
+                    val procedureType      = ProcedureType.Normal
+                    val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+
                     val userAnswers = emptyUserAnswers
-                      .unsafeSetVal(AddSecurityDetailsPage)(false)
-                      .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                      .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+
+                    val generalInformationUserAnswers = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+
+                    val updatedUserAnswers = generalInformationUserAnswers
                       .unsafeSetVal(PreLodgeDeclarationPage)(false)
                       .unsafeSetVal(AddCustomsApprovedLocationPage)(pageAnswer)
-                    val viewModel = TaskListViewModel(userAnswers)
+                    val viewModel = TaskListViewModel(updatedUserAnswers)
 
                     val expectedHref: String = controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
 
@@ -1090,14 +1127,21 @@ class TaskListViewModelSpec
               }
 
               "pre-lodges is yes, links to the Add Agreed Location of Goods page" in {
-                forAll(arb[Boolean]) {
+                forAll(arb[String]) {
                   pageAnswer =>
+                    val isSecurityDefined  = false
+                    val procedureType      = ProcedureType.Normal
+                    val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+
                     val userAnswers = emptyUserAnswers
-                      .unsafeSetVal(AddSecurityDetailsPage)(false)
-                      .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                      .unsafeSetVal(AddSecurityDetailsPage)(isSecurityDefined)
+
+                    val generalInformationUserAnswers = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+
+                    val updatedUserAnswers = generalInformationUserAnswers
                       .unsafeSetVal(PreLodgeDeclarationPage)(true)
-                      .unsafeSetVal(AddAgreedLocationOfGoodsPage)(pageAnswer)
-                    val viewModel = TaskListViewModel(userAnswers)
+                      .unsafeSetVal(AgreedLocationOfGoodsPage)(pageAnswer)
+                    val viewModel = TaskListViewModel(updatedUserAnswers)
 
                     val expectedHref: String = controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, NormalMode).url
 
