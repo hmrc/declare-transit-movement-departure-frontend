@@ -39,7 +39,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
   private val itemSectionUa = emptyUserAnswers
     //ItemDetails
     .unsafeSetVal(ItemDescriptionPage(index))("itemDescription")
-    .unsafeSetVal(ItemTotalGrossMassPage(index))("123")
+    .unsafeSetVal(ItemTotalGrossMassPage(index))(123)
     .unsafeSetVal(AddTotalNetMassPage(index))(true)
     .unsafeSetVal(TotalNetMassPage(index))("123")
     .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
@@ -77,7 +77,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
       "when all mandatory answers for section have been defined" in {
 
         val expectedResult = ItemSection(
-          ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode")),
+          ItemDetails("itemDescription", "123.000", Some("123"), Some("commodityCode")),
           None,
           None,
           NonEmptyList(UnpackedPackages(PackageType("NE", "description"), 123, None), List.empty),
@@ -188,7 +188,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
         val userAnswersWithSecondItem = itemSectionUa
           //ItemDetails
           .unsafeSetVal(ItemDescriptionPage(Index(1)))("itemDescription")
-          .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))("123")
+          .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))(123.000)
           .unsafeSetVal(AddTotalNetMassPage(Index(1)))(true)
           .unsafeSetVal(TotalNetMassPage(Index(1)))("123")
           .unsafeSetVal(IsCommodityCodeKnownPage(Index(1)))(true)
@@ -223,7 +223,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
 
         val expectedResult = NonEmptyList(
           ItemSection(
-            ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode")),
+            ItemDetails("itemDescription", "123.000", Some("123"), Some("commodityCode")),
             None,
             None,
             NonEmptyList(UnpackedPackages(PackageType("NE", "description"), 123, None), List.empty),
@@ -235,7 +235,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with JourneyModelGener
           ),
           List(
             ItemSection(
-              ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode")),
+              ItemDetails("itemDescription", "123.000", Some("123"), Some("commodityCode")),
               None,
               None,
               NonEmptyList(UnpackedPackages(PackageType("NE", "description"), 123, None), List.empty),

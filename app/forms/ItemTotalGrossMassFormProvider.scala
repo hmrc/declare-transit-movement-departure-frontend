@@ -17,15 +17,16 @@
 package forms
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.Index
-import play.api.data.Form
 import models.domain.GrossMass.Constants._
+import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
+import javax.inject.Inject
 
 class ItemTotalGrossMassFormProvider @Inject() extends Mappings {
 
-  def apply(index: Index): Form[String] =
+  def apply(index: Index): Form[Double] =
     Form(
       "value" -> text(requiredKeyGrossMass, Seq(index.display))
         .verifying(
@@ -36,5 +37,7 @@ class ItemTotalGrossMassFormProvider @Inject() extends Mappings {
             minGrossMass(0, invalidAmountKeyGrossMass, index.display)
           )
         )
+        .transform[Double](_.toDouble, x => f"$x%.3f")
     )
+
 }
