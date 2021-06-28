@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package controllers
 
-import play.api.libs.json.JsPath
+import models.reference.CountryCode
 
-case object TotalGrossMassPage extends QuestionPage[String] {
+package object routeDetails {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "totalGrossMass"
+  val excludedTransitCountries: Seq[CountryCode] = Seq(
+    CountryCode("JE")
+  )
 }

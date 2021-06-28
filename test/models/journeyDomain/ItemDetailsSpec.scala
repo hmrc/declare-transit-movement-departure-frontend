@@ -26,7 +26,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
   val itemDetailsUa = emptyUserAnswers
     .unsafeSetVal(ItemDescriptionPage(index))("itemDescription")
-    .unsafeSetVal(ItemTotalGrossMassPage(index))("123")
+    .unsafeSetVal(ItemTotalGrossMassPage(index))(123)
     .unsafeSetVal(AddTotalNetMassPage(index))(true)
     .unsafeSetVal(TotalNetMassPage(index))("123")
     .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
@@ -36,7 +36,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
     "when all details for section have been answered" in {
 
-      val expectedResult = ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode"))
+      val expectedResult = ItemDetails("itemDescription", "123.000", Some("123"), Some("commodityCode"))
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(itemDetailsUa)
 
@@ -47,7 +47,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
       val userAnswers = itemDetailsUa.unsafeSetVal(AddTotalNetMassPage(index))(false)
 
-      val expectedResult = ItemDetails("itemDescription", "123", None, Some("commodityCode"))
+      val expectedResult = ItemDetails("itemDescription", "123.000", None, Some("commodityCode"))
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
 
@@ -58,7 +58,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
       val userAnswers = itemDetailsUa.unsafeSetVal(IsCommodityCodeKnownPage(index))(false)
 
-      val expectedResult = ItemDetails("itemDescription", "123", Some("123"), None)
+      val expectedResult = ItemDetails("itemDescription", "123.000", Some("123"), None)
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
 

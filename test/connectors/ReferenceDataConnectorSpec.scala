@@ -17,7 +17,7 @@
 package connectors
 
 import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
 import models.reference._
 import models.{
@@ -334,6 +334,22 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
         )
 
         connector.getTransitCountryList().futureValue mustEqual expectedResult
+      }
+
+      "must return Seq of Country when passed with query parameters and is successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$startUrl/transit-countries?excludeCountries=JE&excludeCountries=AB"))
+            .willReturn(okJson(countryListResponseJson))
+        )
+
+        val expectedResult: CountryList = CountryList(
+          Seq(
+            Country(CountryCode("GB"), "United Kingdom"),
+            Country(CountryCode("AD"), "Andorra")
+          )
+        )
+
+        connector.getTransitCountryList(Seq(CountryCode("JE"), CountryCode("AB"))).futureValue mustEqual expectedResult
       }
 
       "must return an exception when an error response is returned" in {

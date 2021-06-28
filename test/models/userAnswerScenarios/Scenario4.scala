@@ -56,7 +56,7 @@ import play.api.libs.json.Json
 
 import java.time.LocalDateTime
 
-object Scenario4 extends UserAnswerScenario {
+case object Scenario4 extends UserAnswerScenario {
 
   private val firstGoodItem: Index      = Index(0)
   private val eoriNumber: EoriNumber    = EoriNumber("EoriNumber")
@@ -133,7 +133,7 @@ object Scenario4 extends UserAnswerScenario {
      * Item Details section - Item One
      * */
     .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-    .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+    .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))(25000.000)
     .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
     .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
     .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
@@ -244,7 +244,7 @@ object Scenario4 extends UserAnswerScenario {
 
   private val itemDetails = NonEmptyList(
     ItemSection(
-      ItemDetails("ItemOnesDescription", "25000", Some("12342"), Some("ComoCode1")),
+      ItemDetails("ItemOnesDescription", "25000.000", Some("12342"), Some("ComoCode1")),
       Some(
         RequiredDetails("ConorName",
                         CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")),
@@ -303,8 +303,7 @@ object Scenario4 extends UserAnswerScenario {
     itemDetails,
     goodsSummary,
     guarantee,
-    safetyAndSecurity,
-    None
+    safetyAndSecurity
   )
 
 }

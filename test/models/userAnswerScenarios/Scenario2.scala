@@ -35,7 +35,7 @@ import play.api.libs.json.Json
 
 import java.time.{LocalDate, LocalDateTime}
 
-object Scenario2 extends UserAnswerScenario {
+case object Scenario2 extends UserAnswerScenario {
 
   private val firstGoodItem: Index      = Index(0)
   private val eoriNumber: EoriNumber    = EoriNumber("EoriNumber")
@@ -94,7 +94,7 @@ object Scenario2 extends UserAnswerScenario {
      * Item Details section - Item One
      * */
     .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-    .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+    .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))(25000.000)
     .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(false)
     .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(false)
     .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
@@ -136,7 +136,7 @@ object Scenario2 extends UserAnswerScenario {
 
   private val itemDetails = NonEmptyList(
     ItemSection(
-      itemDetails = ItemDetails("ItemOnesDescription", "25000", None, None),
+      itemDetails = ItemDetails("ItemOnesDescription", "25000.000", None, None),
       consignor = None,
       consignee = None,
       packages = NonEmptyList(
@@ -190,7 +190,6 @@ object Scenario2 extends UserAnswerScenario {
     itemDetails,
     goodsSummary,
     guarantee,
-    None,
     None
   )
 

@@ -24,10 +24,10 @@ class ItemTotalGrossMassPageSpec extends PageBehaviours {
 
   "ItemTotalGrossMassPage" - {
 
-    beRetrievable[String](ItemTotalGrossMassPage(index))
+    beRetrievable[Double](ItemTotalGrossMassPage(index))
 
-    beSettable[String](ItemTotalGrossMassPage(index))
+    beSettable[Double](ItemTotalGrossMassPage(index))
 
-    beRemovable[String](ItemTotalGrossMassPage(index))
+    beRemovable[Double](ItemTotalGrossMassPage(index))
   }
 }

@@ -23,7 +23,7 @@ import pages.addItems.CommodityCodePage
 
 final case class ItemDetails(
   itemDescription: String,
-  totalGrossMass: String,
+  itemTotalGrossMass: String,
   totalNetMass: Option[String],
   commodityCode: Option[String]
 )
@@ -43,7 +43,9 @@ object ItemDetails {
   def itemDetailsReader(index: Index): UserAnswersReader[ItemDetails] =
     (
       ItemDescriptionPage(index).reader,
-      ItemTotalGrossMassPage(index).reader,
+      ItemTotalGrossMassPage(index).reader.map(
+        x => f"$x%.3f"
+      ),
       readTotalNetMassPage(index),
       readCommodityCodePage(index)
     ).tupled.map((ItemDetails.apply _).tupled)

@@ -20,7 +20,7 @@ import models.Index
 import play.api.libs.json.JsPath
 import queries.Constants.items
 
-case class ItemTotalGrossMassPage(index: Index) extends QuestionPage[String] {
+case class ItemTotalGrossMassPage(index: Index) extends QuestionPage[Double] {
 
   override def path: JsPath = JsPath \ items \ index.position \ toString
 

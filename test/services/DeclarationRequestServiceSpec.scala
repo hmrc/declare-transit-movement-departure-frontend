@@ -26,11 +26,13 @@ import models.journeyDomain.TransportDetails.InlandMode.Rail
 import models.messages.InterchangeControlReference
 import models.messages.trader.TraderPrincipalWithEori
 import models.reference.{Country, CountryCode}
+import models.{CommonAddress, EoriNumber, Index, LocalReferenceNumber, UserAnswers}
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, TotalGrossMassPage, WhatIsPrincipalEoriPage, _}
+import pages._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
@@ -124,6 +126,10 @@ class DeclarationRequestServiceSpec
               result.right.value.header.totGroMasHEA307 mustBe "100.123"
           }
         }
+              val updatedUserAnswer = JourneyDomainSpec
+                .setJourneyDomain(journeyDomain)(userAnswers)
+                .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))(100.123)
+                .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))(200.123)
 
         "Pass the correct value when Total Gross Mass page is removed and using ItemTotalGrossMassPage answer(s)" in {
 
@@ -141,9 +147,11 @@ class DeclarationRequestServiceSpec
               val result = service.convert(updatedUserAnswer).futureValue
 
               result.right.value.header.totGroMasHEA307 mustBe itemTotalGrossMass.toString
+              result.right.value.header.totGroMasHEA307 mustBe "300.246"
           }
         }
       }
+
       "Normal Journey without Prelodge" - {
 
         "cusSubPlaHEA66" - {

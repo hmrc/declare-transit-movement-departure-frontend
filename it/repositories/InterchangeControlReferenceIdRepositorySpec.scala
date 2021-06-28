@@ -33,7 +33,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class InterchangeControlReferenceIdRepositorySpec
     extends ItSpecBase
-    with itMongoSuite
+    with ItMongoSuite
     with BeforeAndAfterEach
     with GuiceOneAppPerSuite
     with MockDateTimeService

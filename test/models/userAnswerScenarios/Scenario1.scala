@@ -56,7 +56,7 @@ import play.api.libs.json.Json
 
 import java.time.LocalDateTime
 
-object Scenario1 extends UserAnswerScenario {
+case object Scenario1 extends UserAnswerScenario {
 
   private val firstGoodItem: Index      = Index(0)
   private val secondGoodItem: Index     = Index(1)
@@ -132,7 +132,7 @@ object Scenario1 extends UserAnswerScenario {
      * Item Details section - Item One
      * */
     .unsafeSetVal(pages.ItemDescriptionPage(firstGoodItem))("ItemOnesDescription")
-    .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))("25000")
+    .unsafeSetVal(pages.ItemTotalGrossMassPage(firstGoodItem))(25000.000)
     .unsafeSetVal(pages.AddTotalNetMassPage(firstGoodItem))(true)
     .unsafeSetVal(pages.TotalNetMassPage(firstGoodItem))("12342")
     .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
@@ -204,7 +204,7 @@ object Scenario1 extends UserAnswerScenario {
      * Item Details section - Item Two
      * */
     .unsafeSetVal(pages.ItemDescriptionPage(secondGoodItem))("ItemTwosDescription")
-    .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))("25001")
+    .unsafeSetVal(pages.ItemTotalGrossMassPage(secondGoodItem))(12345.000)
     .unsafeSetVal(pages.AddTotalNetMassPage(secondGoodItem))(false)
     .unsafeSetVal(pages.IsCommodityCodeKnownPage(secondGoodItem))(false)
     .unsafeSetVal(pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage(secondGoodItem))(false)
@@ -302,13 +302,13 @@ object Scenario1 extends UserAnswerScenario {
   private val transportDetails = TransportDetails(NonSpecialMode(4, Some(CountryCode("ND")), None), SameDetailsAtBorder)
 
   private val traderDetails = TraderDetails(
-    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "description"))),
+    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France"))),
     None,
     None
   )
 
   private val item1 = ItemSection(
-    itemDetails = ItemDetails("ItemOnesDescription", "25000", Some("12342"), Some("ComoCode1")),
+    itemDetails = ItemDetails("ItemOnesDescription", "25000.000", Some("12342"), Some("ComoCode1")),
     consignor = Some(
       RequiredDetails("ConorName",
                       CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GA"), "SomethingCO")),
@@ -355,7 +355,7 @@ object Scenario1 extends UserAnswerScenario {
   )
 
   val item2 = ItemSection(
-    itemDetails = ItemDetails("ItemTwosDescription", "25001", None, None),
+    itemDetails = ItemDetails("ItemTwosDescription", "12345.000", None, None),
     consignor = Some(RequiredDetails("ConorName", CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("GB"), "SomethingCO")), None)),
     consignee = Some(RequiredDetails("ConeeName", CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE")), None)),
     packages = NonEmptyList(
@@ -414,7 +414,6 @@ object Scenario1 extends UserAnswerScenario {
     NonEmptyList(item1, List(item2)),
     goodsSummary,
     guarantee,
-    safetyAndSecurity,
-    None
+    safetyAndSecurity
   )
 }
