@@ -48,7 +48,7 @@ class DeclarationTypeControllerSpec
     with MockitoSugar
     with NunjucksSupport
     with JsonMatchers
-    with UserAnswersSpecHelper{
+    with UserAnswersSpecHelper {
 
   def onwardRoute = Call("GET", "/foo")
 
