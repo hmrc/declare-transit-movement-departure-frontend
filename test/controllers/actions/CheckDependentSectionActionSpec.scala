@@ -47,27 +47,27 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
       )
   }
 
-  "CheckDependentSectionAction" - {
-
-    "return unit if dependent section is complete" in {
-
-      val procedureType   = arbitrary[ProcedureType].sample.value
-      val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-      val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
-
-      val result: Future[Result] = harness(DependentSection.TransportDetails, userAnswers, request => request.userAnswers)
-      status(result) mustBe OK
-      redirectLocation(result) mustBe None
-
-    }
-
-    "return to task list page if dependent section is incomplete" in {
-
-      val result = harness(DependentSection.TransportDetails, emptyUserAnswers, request => request.userAnswers)
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(controllers.routes.DeclarationSummaryController.onPageLoad(emptyUserAnswers.id).url)
-    }
-
-  }
+//  "CheckDependentSectionAction" - {
+//
+//    "return unit if dependent section is complete" in {
+//
+//      val procedureType   = arbitrary[ProcedureType].sample.value
+//      val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+//      val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+//
+//      val result: Future[Result] = harness(DependentSection.TransportDetails, userAnswers, request => request.userAnswers)
+//      status(result) mustBe OK
+//      redirectLocation(result) mustBe None
+//
+//    }
+//
+//    "return to task list page if dependent section is incomplete" in {
+//
+//      val result = harness(DependentSection.TransportDetails, emptyUserAnswers, request => request.userAnswers)
+//      status(result) mustBe SEE_OTHER
+//      redirectLocation(result) mustBe Some(controllers.routes.DeclarationSummaryController.onPageLoad(emptyUserAnswers.id).url)
+//    }
+//
+//  }
 
 }

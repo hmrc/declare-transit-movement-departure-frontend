@@ -19,14 +19,13 @@ package services
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
+import models.CommonAddress
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
 import models.journeyDomain.JourneyDomain
 import models.journeyDomain.TransportDetails.InlandMode.Rail
-import models.journeyDomain.traderDetails.ConsignorDetails
-import models.messages.{ControlResult, InterchangeControlReference}
-import models.messages.trader.{TraderConsignor, TraderPrincipalWithEori}
+import models.messages.InterchangeControlReference
+import models.messages.trader.TraderPrincipalWithEori
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, UserAnswers}
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach

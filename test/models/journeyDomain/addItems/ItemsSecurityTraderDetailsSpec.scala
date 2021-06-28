@@ -17,18 +17,18 @@
 package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import generators.JourneyModelGenerators
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, Index, UserAnswers}
+import models.{CommonAddress, EoriNumber}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
-import pages.{AddSecurityDetailsPage, QuestionPage}
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, _}
+import pages.{AddSecurityDetailsPage, QuestionPage}
 
-class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
+class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
 
   private val itemSecurityTraderDetailsUa = emptyUserAnswers
     .unsafeSetVal(AddSecurityDetailsPage)(true)
@@ -144,50 +144,4 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       }
     }
   }
-}
-
-object ItemsSecurityTraderDetailsSpec {
-
-  def setItemsSecurityTraderDetails(itemsSecurityTraderDetails: ItemsSecurityTraderDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers =
-    startUserAnswers
-      // Set method of payment
-      .unsafeSetOpt(TransportChargesPage(index))(itemsSecurityTraderDetails.methodOfPayment)
-
-      // Set commercial reference number
-      .unsafeSetOpt(CommercialReferenceNumberPage(index))(itemsSecurityTraderDetails.commercialReferenceNumber)
-
-      // Set Dangerous goods
-      .unsafeSetVal(AddDangerousGoodsCodePage(index))(itemsSecurityTraderDetails.dangerousGoodsCode.contains(true))
-      .unsafeSetOpt(DangerousGoodsCodePage(index))(itemsSecurityTraderDetails.dangerousGoodsCode)
-
-      // Set Consignor
-      .unsafeSetPFn(AddSecurityConsignorsEoriPage(index))(itemsSecurityTraderDetails.consignor)({
-        case Some(SecurityTraderEori(_)) => true
-        case Some(_)                     => false
-      })
-      .unsafeSetPFn(SecurityConsignorEoriPage(index))(itemsSecurityTraderDetails.consignor)({
-        case Some(SecurityTraderEori(eori)) => eori.value
-      })
-      .unsafeSetPFn(SecurityConsignorNamePage(index))(itemsSecurityTraderDetails.consignor)({
-        case Some(SecurityPersonalInformation(name, _)) => name
-      })
-      .unsafeSetPFn(SecurityConsignorAddressPage(index))(itemsSecurityTraderDetails.consignor)({
-        case Some(SecurityPersonalInformation(_, address)) => address
-      })
-
-      //     Set Consignee
-      .unsafeSetPFn(AddSecurityConsigneesEoriPage(index))(itemsSecurityTraderDetails.consignee)({
-        case Some(SecurityTraderEori(_)) => true
-        case Some(_)                     => false
-      })
-      .unsafeSetPFn(SecurityConsigneeEoriPage(index))(itemsSecurityTraderDetails.consignee)({
-        case Some(SecurityTraderEori(eori)) => eori.value
-      })
-      .unsafeSetPFn(SecurityConsigneeNamePage(index))(itemsSecurityTraderDetails.consignee)({
-        case Some(SecurityPersonalInformation(name, _)) => name
-      })
-      .unsafeSetPFn(SecurityConsigneeAddressPage(index))(itemsSecurityTraderDetails.consignee)({
-        case Some(SecurityPersonalInformation(_, address)) => address
-      })
-
 }

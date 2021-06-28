@@ -18,14 +18,13 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.{CommonAddress, EoriNumber}
 import models.reference._
+import models.{CommonAddress, EoriNumber}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
-class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
+class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   "Reading from User Answers" - {
 

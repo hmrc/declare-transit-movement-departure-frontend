@@ -18,18 +18,16 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
-import generators.JourneyModelGenerators
+import commonTestUtils.UserAnswersSpecHelper
 import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute}
 import models.journeyDomain.CurrencyCode.GBP
 import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference}
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.{Index, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
 
-class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   private val guaranteeReferenceType      = Gen.oneOf(guaranteeReferenceRoute).sample.value
   private val otherGuaranteeReferenceType = Gen.oneOf(nonGuaranteeReferenceRoute).sample.value
@@ -225,37 +223,5 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with JourneyModel
         }
       }
     }
-  }
-}
-
-object GuaranteeDetailsSpec {
-
-  def setGuaranteeDetails(guaranteeDetails: NonEmptyList[GuaranteeDetails])(startUserAnswers: UserAnswers): UserAnswers =
-    guaranteeDetails.zipWithIndex.foldLeft[UserAnswers](startUserAnswers) {
-      case (updatedUserAnswers, (guaranteeReference: GuaranteeReference, index)) =>
-        setGuaranteeReferenceUserAnswers(guaranteeReference, Index(index))(updatedUserAnswers)
-      case (updatedUserAnswers, (guaranteeOther: GuaranteeOther, index)) =>
-        setGuaranteeOtherUserAnswers(guaranteeOther, Index(index))(updatedUserAnswers)
-    }
-
-  def setGuaranteeOtherUserAnswers(otherGuarantee: GuaranteeOther, index: Index)(startUserAnswers: UserAnswers): UserAnswers = {
-
-    val guaranteeOtherUserAnswers = startUserAnswers
-      .unsafeSetVal(GuaranteeTypePage(index))(otherGuarantee.guaranteeType)
-      .unsafeSetVal(OtherReferencePage(index))(otherGuarantee.otherReference)
-
-    guaranteeOtherUserAnswers
-  }
-
-  def setGuaranteeReferenceUserAnswers(guaranteeReference: GuaranteeReference, index: Index)(startUserAnswers: UserAnswers): UserAnswers = {
-    val liabilityAmountAmount = guaranteeReference.liabilityAmount match {
-      case DefaultLiabilityAmount          => "10000"
-      case OtherLiabilityAmount(amount, _) => amount
-    }
-    startUserAnswers
-      .unsafeSetVal(GuaranteeTypePage(index))(guaranteeReference.guaranteeType)
-      .unsafeSetVal(GuaranteeReferencePage(index))(guaranteeReference.guaranteeReferenceNumber)
-      .unsafeSetVal(LiabilityAmountPage(index))(liabilityAmountAmount)
-      .unsafeSetVal(AccessCodePage(index))(guaranteeReference.accessCode)
   }
 }

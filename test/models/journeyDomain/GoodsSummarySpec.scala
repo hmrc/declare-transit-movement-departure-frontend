@@ -16,20 +16,19 @@
 
 package models.journeyDomain
 
-import java.time.LocalDate
-
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
+import models.Index
 import models.ProcedureType.{Normal, Simplified}
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetailsWithPreLodge, GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
-import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
-class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
+import java.time.LocalDate
+
+class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   "GoodsSummary" - {
 
@@ -305,40 +304,4 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with JourneyModelGene
       }
     }
   }
-}
-
-object GoodsSummarySpec extends UserAnswersSpecHelper {
-
-  private def sealIdDetailsPageForIndex(index: Int): SealIdDetailsPage =
-    SealIdDetailsPage(Index(index))
-
-  def setGoodsSummary(goodsSummary: GoodsSummary)(userAnswers: UserAnswers): UserAnswers =
-    userAnswers
-      .unsafeSetVal(TotalPackagesPage)(goodsSummary.numberOfPackages)
-      .unsafeSetVal(AddSealsPage)(goodsSummary.sealNumbers.nonEmpty)
-      .unsafeSetSeq(sealIdDetailsPageForIndex)(goodsSummary.sealNumbers)
-      .unsafeSetPFn(AddCustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetailsWithoutPreLodge(_, Some(_)) => true
-        case _                                                   => false
-      }
-      .unsafeSetPFnOpt(CustomsApprovedLocationPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetailsWithoutPreLodge(_, customsApprovedLocation) => customsApprovedLocation
-      }
-      .unsafeSetPFn(AuthorisedLocationCodePage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummarySimplifiedDetails(authorisedLocationCode, _) => authorisedLocationCode
-      }
-      .unsafeSetPFn(ControlResultDateLimitPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummarySimplifiedDetails(_, controlResultDateLimit) => controlResultDateLimit
-      }
-      .unsafeSetOpt(LoadingPlacePage)(goodsSummary.loadingPlace)
-      .unsafeSetPFn(AgreedLocationOfGoodsPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetailsWithoutPreLodge(Some(agreedLocationOfGoods), _)        => agreedLocationOfGoods
-        case GoodsSummary.GoodSummaryNormalDetailsWithPreLodge(Some(agreedLocationOfGoods)) => agreedLocationOfGoods
-
-      }
-      .unsafeSetPFn(AddAgreedLocationOfGoodsPage)(goodsSummary.goodSummaryDetails) {
-        case GoodSummaryNormalDetailsWithoutPreLodge(agreedLocationOfGoods, _)        => agreedLocationOfGoods.isDefined
-        case GoodsSummary.GoodSummaryNormalDetailsWithPreLodge(agreedLocationOfGoods) => agreedLocationOfGoods.isDefined
-
-      }
 }

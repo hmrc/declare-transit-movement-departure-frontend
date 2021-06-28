@@ -19,16 +19,14 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
+import models.Index
 import models.reference.CircumstanceIndicator
-import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
 import pages.{AddSecurityDetailsPage, QuestionPage}
 
-class ProducedDocumentSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   private val producedDocumentUa = emptyUserAnswers
     .unsafeSetVal(DocumentTypePage(index, referenceIndex))("documentType")
@@ -232,9 +230,6 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with JourneyModel
             .sample
             .value
 
-          val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-          val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
-
           val userAnswers = producedDocumentUa
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
@@ -286,21 +281,6 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with JourneyModel
 
         result.right.value mustBe None
       }
-    }
-  }
-}
-
-object ProducedDocumentSpec extends UserAnswersSpecHelper {
-
-  def setProducedDocumentsUserAnswers(document: ProducedDocument, index: Index, referenceIndex: Index)(statUserAnswers: UserAnswers): UserAnswers = {
-    val ua = statUserAnswers
-      .unsafeSetVal(DocumentTypePage(index, referenceIndex))(document.documentType)
-      .unsafeSetVal(DocumentReferencePage(index, referenceIndex))(document.documentReference)
-      .unsafeSetVal(AddExtraDocumentInformationPage(index, referenceIndex))(document.extraInformation.isDefined)
-
-    document.extraInformation.fold(ua) {
-      info =>
-        ua.unsafeSetVal(DocumentExtraInformationPage(index, referenceIndex))(info)
     }
   }
 }

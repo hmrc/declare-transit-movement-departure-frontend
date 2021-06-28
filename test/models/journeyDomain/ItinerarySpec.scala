@@ -19,15 +19,11 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.journeyDomain.ItinerarySpec.setItineraryUserAnswers
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
+import models.Index
 import models.reference.CountryCode
-import models.{Index, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
 import pages.safetyAndSecurity.CountryOfRoutingPage
 
-class ItinerarySpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class ItinerarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   private val itineraryUa = emptyUserAnswers
     .unsafeSetVal(CountryOfRoutingPage(index))(CountryCode("GB"))
@@ -71,15 +67,4 @@ class ItinerarySpec extends SpecBase with GeneratorSpec with JourneyModelGenerat
       }
     }
   }
-}
-
-object ItinerarySpec extends UserAnswersSpecHelper {
-
-  def setItineraries(itineraries: Seq[Itinerary])(userAnswers: UserAnswers): UserAnswers =
-    userAnswers.unsafeSetSeqIndex(CountryOfRoutingPage)(itineraries.map(_.countryCode))
-
-  def setItineraryUserAnswers(itinerary: Itinerary, index: Index)(userAnswers: UserAnswers): UserAnswers =
-    userAnswers
-      .unsafeSetVal(CountryOfRoutingPage(index))(itinerary.countryCode)
-
 }
