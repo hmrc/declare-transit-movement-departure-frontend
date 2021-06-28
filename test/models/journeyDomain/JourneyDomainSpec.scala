@@ -20,9 +20,15 @@ import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
-import models.Index
+import models.{CommonAddress, Index}
+import models.journeyDomain.ItemTraderDetails.RequiredDetails
+import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
+import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPersonalInformation}
+import models.reference.{Country, CountryCode, PackageType}
 import models.userAnswerScenarios.Scenario1
-import pages.{AddSecurityDetailsPage, ItemTotalGrossMassPage}
+import org.scalacheck.Gen
+import pages.addItems.{AddMarkPage, DeclareMarkPage, HowManyPackagesPage, TotalPiecesPage}
+import pages.{AddSecurityDetailsPage, ItemTotalGrossMassPage, PackageTypePage}
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
 
@@ -67,6 +73,130 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
 
           result.totalGrossMassFormatted mustBe "300.246"
         }
+      }
+
+      "Must submit the correct number for total packages" - {
+
+        "must submit 1 for each bulk package" in {
+          val item = ItemSection(
+            itemDetails = ItemDetails("ItemTwosDescription", "12345.000", None, None),
+            consignor = None,
+            consignee = None,
+            packages = NonEmptyList(
+              BulkPackages(PackageType("VQ", "GD2PKG1"), None),
+              List.empty
+            ),
+            containers = None,
+            specialMentions = None,
+            producedDocuments = None,
+            itemSecurityTraderDetails = None,
+            previousReferences = None
+          )
+
+          val result = ItemSections(NonEmptyList(item, List.empty))
+
+          result.totalPackages mustBe 1
+        }
+
+        "must submit exact number for pieces of packages when unpacked" in {
+          val item = ItemSection(
+            itemDetails = ItemDetails("ItemTwosDescription", "12345.000", None, None),
+            consignor = None,
+            consignee = None,
+            packages = NonEmptyList(
+              UnpackedPackages(PackageType("NE", "GD2PKG2"), 10, Some("GD2PK2MK")),
+              List.empty
+            ),
+            containers = None,
+            specialMentions = None,
+            producedDocuments = None,
+            itemSecurityTraderDetails = None,
+            previousReferences = None
+          )
+
+          val result = ItemSections(NonEmptyList(item, List.empty))
+
+          result.totalPackages mustBe 10
+        }
+
+        "must submit exact number for other packages types" in {
+          val item = ItemSection(
+            itemDetails = ItemDetails("ItemTwosDescription", "12345.000", None, None),
+            consignor = None,
+            consignee = None,
+            packages = NonEmptyList(
+              OtherPackages(PackageType("BAG", "GD2PKG3"), 2, "GD2PK3MK"),
+              List.empty
+            ),
+            containers = None,
+            specialMentions = None,
+            producedDocuments = None,
+            itemSecurityTraderDetails = None,
+            previousReferences = None
+          )
+
+          val result = ItemSections(NonEmptyList(item, List.empty))
+
+          result.totalPackages mustBe 2
+        }
+
+        "must submit the total of all packages types for one item" in {
+          val item = ItemSection(
+            itemDetails = ItemDetails("ItemTwosDescription", "12345.000", None, None),
+            consignor = None,
+            consignee = None,
+            packages = NonEmptyList(
+              BulkPackages(PackageType("VQ", "GD2PKG1"), None),
+              List(UnpackedPackages(PackageType("NE", "GD2PKG2"), 10, Some("GD2PK2MK")), OtherPackages(PackageType("BAG", "GD2PKG3"), 10, "GD2PK3MK"))
+            ),
+            containers = None,
+            specialMentions = None,
+            producedDocuments = None,
+            itemSecurityTraderDetails = None,
+            previousReferences = None
+          )
+
+          val result = ItemSections(NonEmptyList(item, List.empty))
+
+          result.totalPackages mustBe 21
+        }
+
+        "must submit the total of all packages types for two items" in {
+          val item1 = ItemSection(
+            itemDetails = ItemDetails("ItemTwosDescription", "12345.000", None, None),
+            consignor = None,
+            consignee = None,
+            packages = NonEmptyList(
+              BulkPackages(PackageType("VQ", "GD2PKG1"), None),
+              List(UnpackedPackages(PackageType("NE", "GD2PKG2"), 10, Some("GD2PK2MK")), OtherPackages(PackageType("BAG", "GD2PKG3"), 10, "GD2PK3MK"))
+            ),
+            containers = None,
+            specialMentions = None,
+            producedDocuments = None,
+            itemSecurityTraderDetails = None,
+            previousReferences = None
+          )
+
+          val item2 = ItemSection(
+            itemDetails = ItemDetails("ItemTwosDescription", "12345.000", None, None),
+            consignor = None,
+            consignee = None,
+            packages = NonEmptyList(
+              BulkPackages(PackageType("VQ", "GD2PKG1"), None),
+              List(UnpackedPackages(PackageType("NE", "GD2PKG2"), 10, Some("GD2PK2MK")), OtherPackages(PackageType("BAG", "GD2PKG3"), 10, "GD2PK3MK"))
+            ),
+            containers = None,
+            specialMentions = None,
+            producedDocuments = None,
+            itemSecurityTraderDetails = None,
+            previousReferences = None
+          )
+
+          val result = ItemSections(NonEmptyList(item1, List(item2)))
+
+          result.totalPackages mustBe 42
+        }
+
       }
     }
   }

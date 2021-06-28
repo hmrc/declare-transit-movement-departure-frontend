@@ -172,28 +172,19 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
     "cannot be parsed from UserAnswers" - {
 
       "when a mandatory answers is not defined" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(ProcedureTypePage)(Normal)
+          .unsafeSetVal(PreLodgeDeclarationPage)(false)
+          .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(LoadingPlacePage)("loadingPlace")
+          .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
+          .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
+          .unsafeSetVal(AddSealsPage)(false)
+          .unsafeRemove(AddSecurityDetailsPage)
 
-        val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          ???,
-          AddSecurityDetailsPage
-        )
+        val result = UserAnswersReader[GoodsSummary].run(userAnswers)
 
-        forAll(mandatoryPages) {
-          mandatoryPage =>
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(ProcedureTypePage)(Normal)
-              .unsafeSetVal(PreLodgeDeclarationPage)(false)
-              .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(LoadingPlacePage)("loadingPlace")
-              .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
-              .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
-              .unsafeSetVal(AddSealsPage)(false)
-              .unsafeRemove(mandatoryPage)
-
-            val result = UserAnswersReader[GoodsSummary].run(userAnswers)
-
-            result.left.value.page mustBe mandatoryPage
-        }
+        result.left.value.page mustBe AddSecurityDetailsPage
       }
 
       "when Normal" - {

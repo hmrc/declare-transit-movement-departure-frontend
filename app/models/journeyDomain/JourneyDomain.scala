@@ -30,6 +30,17 @@ case class ItemSections(itemDetails: NonEmptyList[ItemSection]) {
 
   val totalGrossMassFormatted = f"$totalGrossMassDouble%.3f"
 
+  val totalPackages = itemDetails.foldLeft(0) {
+    (total, y) =>
+      y.packages.foldLeft(total) {
+        (z, a) =>
+          a match {
+            case Packages.UnpackedPackages(packageType, totalPieces, markOrNumber)      => z + totalPieces
+            case Packages.BulkPackages(packageType, markOrNumber)                       => z + 1
+            case Packages.OtherPackages(packageType, howManyPackagesPage, markOrNumber) => z + howManyPackagesPage
+          }
+      }
+  }
 }
 
 case class JourneyDomain(
