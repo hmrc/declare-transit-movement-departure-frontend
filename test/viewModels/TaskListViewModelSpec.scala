@@ -24,7 +24,7 @@ import models.ProcedureType.{Normal, Simplified}
 import models.RepresentativeCapacity.Direct
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.userAnswerScenarios.{Scenario1, Scenario3}
-import models.{DeclarationType, EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
+import models.{EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
@@ -69,16 +69,14 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         "is InProgress when the first question for the section has been answered" - {
           "for Normal procedure" - {
             "when the first question (IsPrincipalEoriKnownPage) has been answered" in {
-              forAll(arb[Boolean]) {
-                pageAnswer =>
-                  val userAnswers = emptyUserAnswers
-                    .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                    .unsafeSetVal(PreLodgeDeclarationPage)(pageAnswer)
 
-                  val viewModel = TaskListViewModel(userAnswers)
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                .unsafeSetVal(PreLodgeDeclarationPage)(false)
 
-                  viewModel.getStatus(movementSectionName).value mustEqual Status.InProgress
-              }
+              val viewModel = TaskListViewModel(userAnswers)
+
+              viewModel.getStatus(movementSectionName).value mustEqual Status.InProgress
             }
           }
 
@@ -131,46 +129,43 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         }
 
         "when the status is InProgress and 'Procedure Type is Normal', links to the first page" in {
-          forAll(arb[Boolean]) {
-            pageAnswer =>
-              val userAnswers = emptyUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
 
-              val viewModel = TaskListViewModel(userAnswers)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
 
-              val expectedHref: String = controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(lrn, NormalMode).url
+          val viewModel = TaskListViewModel(userAnswers)
 
-              viewModel.getHref(movementSectionName).value mustEqual expectedHref
-          }
+          val expectedHref: String = controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(lrn, NormalMode).url
+
+          viewModel.getHref(movementSectionName).value mustEqual expectedHref
+
         }
 
         "when the status is InProgress and 'Procedure Type is Simplified', links to the first page" in {
-          forAll(arb[Boolean]) {
-            pageAnswer =>
-              val userAnswers = emptyUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
 
-              val viewModel = TaskListViewModel(userAnswers)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
 
-              val expectedHref: String = controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
+          val viewModel = TaskListViewModel(userAnswers)
 
-              viewModel.getHref(movementSectionName).value mustEqual expectedHref
-          }
+          val expectedHref: String = controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
+
+          viewModel.getHref(movementSectionName).value mustEqual expectedHref
+
         }
 
         "when the status is InProgress and 'Procedure Type is Unknown', links to the Session expired" in {
-          forAll(arb[Boolean]) {
-            pageAnswer =>
-              val userAnswers = emptyUserAnswers.unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
 
-              val viewModel = TaskListViewModel(userAnswers)
+          val userAnswers = emptyUserAnswers.unsafeSetVal(IsPrincipalEoriKnownPage)(false)
 
-              val expectedHref: String = controllers.routes.SessionExpiredController.onPageLoad().url
+          val viewModel = TaskListViewModel(userAnswers)
 
-              viewModel.getHref(movementSectionName).value mustEqual expectedHref
-          }
+          val expectedHref: String = controllers.routes.SessionExpiredController.onPageLoad().url
+
+          viewModel.getHref(movementSectionName).value mustEqual expectedHref
+
         }
 
         "when the status is Completed, links to the Check your answers page for the section" in {
@@ -464,46 +459,41 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         }
 
         "when the status is InProgress and 'Procedure Type is Normal', links to the first page" in {
-          forAll(arb[Boolean]) {
-            pageAnswer =>
-              val userAnswers = emptyUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
 
-              val viewModel = TaskListViewModel(userAnswers)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
 
-              val expectedHref: String = controllers.traderDetails.routes.IsPrincipalEoriKnownController.onPageLoad(lrn, NormalMode).url
+          val viewModel = TaskListViewModel(userAnswers)
 
-              viewModel.getHref(tradersSectionName).value mustEqual expectedHref
-          }
+          val expectedHref: String = controllers.traderDetails.routes.IsPrincipalEoriKnownController.onPageLoad(lrn, NormalMode).url
+
+          viewModel.getHref(tradersSectionName).value mustEqual expectedHref
         }
 
         "when the status is InProgress and 'Procedure Type is Simplified', links to the first page" in {
-          forAll(arb[Boolean]) {
-            pageAnswer =>
-              val userAnswers = emptyUserAnswers
-                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-                .unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
 
-              val viewModel = TaskListViewModel(userAnswers)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
 
-              val expectedHref: String = controllers.traderDetails.routes.WhatIsPrincipalEoriController.onPageLoad(lrn, NormalMode).url
+          val viewModel = TaskListViewModel(userAnswers)
 
-              viewModel.getHref(tradersSectionName).value mustEqual expectedHref
-          }
+          val expectedHref: String = controllers.traderDetails.routes.WhatIsPrincipalEoriController.onPageLoad(lrn, NormalMode).url
+
+          viewModel.getHref(tradersSectionName).value mustEqual expectedHref
         }
 
         "when the status is InProgress and 'Procedure Type is Unknown', links to the Session expired" in {
-          forAll(arb[Boolean]) {
-            pageAnswer =>
-              val userAnswers = emptyUserAnswers.unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
 
-              val viewModel = TaskListViewModel(userAnswers)
+          val userAnswers = emptyUserAnswers.unsafeSetVal(IsPrincipalEoriKnownPage)(false)
 
-              val expectedHref: String = controllers.routes.SessionExpiredController.onPageLoad().url
+          val viewModel = TaskListViewModel(userAnswers)
 
-              viewModel.getHref(tradersSectionName).value mustEqual expectedHref
-          }
+          val expectedHref: String = controllers.routes.SessionExpiredController.onPageLoad().url
+
+          viewModel.getHref(tradersSectionName).value mustEqual expectedHref
+
         }
 
         "when the status is Completed and 'Procedure Type is Normal', links to the Check your answers page for the section" in {

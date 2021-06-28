@@ -19,14 +19,10 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import models.DeclarationType.Option1
-import models.{DeclarationType, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
-import pages.{AddSecurityDetailsPage, DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, QuestionPage}
 import models.ProcedureType.Normal
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
-import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage, ProcedureTypePage, QuestionPage}
+import pages._
 
 class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
