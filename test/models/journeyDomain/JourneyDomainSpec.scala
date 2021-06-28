@@ -83,7 +83,7 @@ object JourneyDomainSpec {
         GoodsSummarySpec.setGoodsSummary(journeyDomain.goodsSummary) andThen
         GuaranteeDetailsSpec.setGuaranteeDetails(journeyDomain.guarantee) andThen
         TraderDetailsSpec.setTraderDetails(journeyDomain.traderDetails) andThen
-        MovementDetailsSpec.setMovementDetails(journeyDomain.movementDetails) andThen
+        MovementDetailsSpec.setMovementDetails(journeyDomain.movementDetails, journeyDomain.preTaskList) andThen
         safetyAndSecurity(journeyDomain.safetyAndSecurity)
     )(startUserAnswers)
 

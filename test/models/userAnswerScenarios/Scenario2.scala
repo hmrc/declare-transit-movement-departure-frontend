@@ -128,7 +128,8 @@ case object Scenario2 extends UserAnswerScenario {
     .unsafeSetVal(pages.OtherReferencePage(Index(0)))("GUA1Reference")
     .unsafeSetVal(pages.AddAnotherGuaranteePage)(false)
 
-  private val preTaskList = PreTaskListDetails(lrn, Simplified, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), List.empty, None), false)
+  private val preTaskList =
+    PreTaskListDetails(lrn, Simplified, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), List.empty, None), Option2, false)
 
   private val guarantee = NonEmptyList(GuaranteeOther(GuaranteeType.CashDepositGuarantee, "GUA1Reference"), List.empty)
 
@@ -168,7 +169,6 @@ case object Scenario2 extends UserAnswerScenario {
   )
 
   private val movementDetails = SimplifiedMovementDetails(
-    Option2,
     false,
     "XX1 1XX",
     DeclarationForSelf

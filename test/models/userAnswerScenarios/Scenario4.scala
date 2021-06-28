@@ -232,7 +232,7 @@ case object Scenario4 extends UserAnswerScenario {
     NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty)
   )
 
-  private val movementDetails = NormalMovementDetails(Option2, false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
+  private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 
   private val transportDetails = TransportDetails(Rail(2, None), SameDetailsAtBorder)
 
@@ -292,7 +292,8 @@ case object Scenario4 extends UserAnswerScenario {
     )
   )
 
-  private val preTaskList = PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), List.empty, None), true)
+  private val preTaskList =
+    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), List.empty, None), Option2, true)
 
   val toModel: JourneyDomain = JourneyDomain(
     preTaskList,

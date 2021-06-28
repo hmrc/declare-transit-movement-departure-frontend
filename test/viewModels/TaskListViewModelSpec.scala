@@ -68,22 +68,42 @@ class TaskListViewModelSpec
           viewModel.getStatus(movementSectionName).value mustEqual Status.NotStarted
         }
 
-        "is InProgress when the first question for the section has been answered" in {
-          forAll(arb[DeclarationType]) {
-            data =>
-              val userAnswers = emptyUserAnswers.unsafeSetVal(DeclarationTypePage)(data)
+        "is InProgress when the first question for the section has been answered" - {
+          "for Normal procedure" - {
+            "when the first question (IsPrincipalEoriKnownPage) has been answered" in {
+              forAll(arb[Boolean]) {
+                pageAnswer =>
+                  val userAnswers = emptyUserAnswers
+                    .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                    .unsafeSetVal(PreLodgeDeclarationPage)(pageAnswer)
+
+                  val viewModel = TaskListViewModel(userAnswers)
+
+                  viewModel.getStatus(movementSectionName).value mustEqual Status.InProgress
+              }
+            }
+          }
+
+          "for Simplified procedure" - {
+            "when the first question (WhatIsPrincipalEoriPage) has been answered" in {
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+                .unsafeSetVal(ContainersUsedPage)(true)
 
               val viewModel = TaskListViewModel(userAnswers)
 
               viewModel.getStatus(movementSectionName).value mustEqual Status.InProgress
+            }
           }
         }
 
         "is Completed when all the answers are completed" in {
-          val procedureType = arb[ProcedureType].sample.value
+          val procedureType      = arb[ProcedureType].sample.value
+          val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
           forAll(arbitraryMovementDetails(procedureType).arbitrary) {
             movementDetails =>
-              val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+              val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
 
               val viewModel = TaskListViewModel(userAnswers)
 
@@ -93,32 +113,82 @@ class TaskListViewModelSpec
       }
 
       "navigation" - {
-        "when the status is Not started, links to the first page" in {
-          val viewModel = TaskListViewModel(emptyUserAnswers)
+        "when the status is Not started and 'Procedure Type is Normal', links to the first page" in {
+          val userAnswers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+          val viewModel   = TaskListViewModel(userAnswers)
 
-          val expectedHref: String = controllers.movementDetails.routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
+          val expectedHref: String = controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(lrn, NormalMode).url
 
           viewModel.getHref(movementSectionName).value mustEqual expectedHref
         }
 
-        "when the status is InProgress, links to the first page" in {
-          forAll(arb[ProcedureType]) {
-            procedure =>
-              val userAnswers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(procedure)
+        "when the status is Not started and 'Procedure Type is Simplified', links to the first page" in {
+          val userAnswers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+          val viewModel   = TaskListViewModel(userAnswers)
+
+          val expectedHref: String = controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
+
+          viewModel.getHref(movementSectionName).value mustEqual expectedHref
+        }
+
+        "when the status is Not started and 'Procedure Type is Unknown', links to Session expired" in {
+          val viewModel = TaskListViewModel(emptyUserAnswers)
+
+          val expectedHref: String = controllers.routes.SessionExpiredController.onPageLoad().url
+
+          viewModel.getHref(movementSectionName).value mustEqual expectedHref
+        }
+
+        "when the status is InProgress and 'Procedure Type is Normal', links to the first page" in {
+          forAll(arb[Boolean]) {
+            pageAnswer =>
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                .unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
 
               val viewModel = TaskListViewModel(userAnswers)
 
-              val expectedHref: String = controllers.movementDetails.routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
+              val expectedHref: String = controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(lrn, NormalMode).url
+
+              viewModel.getHref(movementSectionName).value mustEqual expectedHref
+          }
+        }
+
+        "when the status is InProgress and 'Procedure Type is Simplified', links to the first page" in {
+          forAll(arb[Boolean]) {
+            pageAnswer =>
+              val userAnswers = emptyUserAnswers
+                .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
+                .unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
+
+              val viewModel = TaskListViewModel(userAnswers)
+
+              val expectedHref: String = controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
+
+              viewModel.getHref(movementSectionName).value mustEqual expectedHref
+          }
+        }
+
+        "when the status is InProgress and 'Procedure Type is Unknown', links to the Session expired" in {
+          forAll(arb[Boolean]) {
+            pageAnswer =>
+              val userAnswers = emptyUserAnswers.unsafeSetVal(IsPrincipalEoriKnownPage)(pageAnswer)
+
+              val viewModel = TaskListViewModel(userAnswers)
+
+              val expectedHref: String = controllers.routes.SessionExpiredController.onPageLoad().url
 
               viewModel.getHref(movementSectionName).value mustEqual expectedHref
           }
         }
 
         "when the status is Completed, links to the Check your answers page for the section" in {
-          val procedureType = arb[ProcedureType].sample.value
+          val procedureType      = arb[ProcedureType].sample.value
+          val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
           forAll(arbitraryMovementDetails(procedureType).arbitrary) {
             movementDetails =>
-              val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+              val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
 
               val viewModel = TaskListViewModel(userAnswers)
 
@@ -231,18 +301,22 @@ class TaskListViewModelSpec
 
           "is Not started when there are no answers for the section" in {
 
-            val procedureType   = arb[ProcedureType].sample.value
-            val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-            val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
-            val viewModel       = TaskListViewModel(userAnswers)
+            val procedureType      = arb[ProcedureType].sample.value
+            val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
+            val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
+            val viewModel   = TaskListViewModel(userAnswers)
 
             viewModel.getStatus(transportSectionName).value mustEqual Status.NotStarted
           }
 
           "is InProgress when the first question for the section has been answered" in {
-            val procedureType   = arb[ProcedureType].sample.value
-            val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-            val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+            val procedureType      = arb[ProcedureType].sample.value
+            val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
+            val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
 
             forAll(Gen.chooseNum(10, 100)) {
               pageAnswer =>
@@ -255,9 +329,10 @@ class TaskListViewModelSpec
           }
 
           "is Completed when all the answers are completed" in {
-            val procedureType   = arb[ProcedureType].sample.value
-            val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-            val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+            val procedureType      = arb[ProcedureType].sample.value
+            val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+            val userAnswers        = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
             forAll(arb[TransportDetails]) {
               sectionDetails =>
                 val updatedUserAnswers = TransportDetailsSpec.setTransportDetail(sectionDetails)(userAnswers)
@@ -281,10 +356,11 @@ class TaskListViewModelSpec
 
         "when dependent section is complete" - {
           "when the status is Not started, links to the first page" in {
-            val procedureType   = arb[ProcedureType].sample.value
-            val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-            val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
-            val viewModel       = TaskListViewModel(userAnswers)
+            val procedureType      = arb[ProcedureType].sample.value
+            val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+            val userAnswers        = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
+            val viewModel          = TaskListViewModel(userAnswers)
 
             val expectedHref: String = controllers.transportDetails.routes.InlandModeController.onPageLoad(lrn, NormalMode).url
 
@@ -292,9 +368,11 @@ class TaskListViewModelSpec
           }
 
           "when the status is InProgress, links to the first page" in {
-            val procedureType   = arb[ProcedureType].sample.value
-            val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-            val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+            val procedureType      = arb[ProcedureType].sample.value
+            val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
+            val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
             forAll(Gen.chooseNum(10, 100)) {
               pageAnswer =>
                 val updatedUserAnswers = userAnswers.unsafeSetVal(InlandModePage)(pageAnswer.toString)
@@ -308,9 +386,11 @@ class TaskListViewModelSpec
           }
 
           "when the status is Completed, links to the Check your answers page for the section" in {
-            val procedureType   = arb[ProcedureType].sample.value
-            val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-            val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+            val procedureType      = arb[ProcedureType].sample.value
+            val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
+            val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
             forAll(arb[TransportDetails]) {
               sectionDetails =>
                 val updatedUserAnswers = TransportDetailsSpec.setTransportDetail(sectionDetails)(userAnswers)
@@ -638,14 +718,15 @@ class TaskListViewModelSpec
     }
 
     "ItemsDetails" - {
-      val zeroIndex = Index(0)
+      val zeroIndex          = Index(0)
+      val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
 
       def setDependentSections(
         generalInformation: MovementDetails,
         traderDetails: TraderDetails,
         routeDetails: RouteDetails
       ): UserAnswers => UserAnswers =
-        MovementDetailsSpec.setMovementDetails(generalInformation) _ andThen
+        MovementDetailsSpec.setMovementDetails(generalInformation, preTaskListDetails) _ andThen
           TraderDetailsSpec.setTraderDetails(traderDetails) andThen
           RouteDetailsSpec.setRouteDetails(routeDetails)
 
@@ -670,7 +751,7 @@ class TaskListViewModelSpec
               val routeDetails             = arbitraryRouteDetails(false).arbitrary.sample.value
               val generalInformation       = arbitraryMovementDetails(procedureType).arbitrary.sample.value
               val userAnswers              = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
-              val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+              val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation, preTaskListDetails)(userAnswers)
               val traderDetailsUserAnswers = TraderDetailsSpec.setTraderDetails(traderDetails)(generalInfoUserAnswers)
               val routerDetailsUserAnswers = RouteDetailsSpec.setRouteDetails(routeDetails)(traderDetailsUserAnswers)
 
@@ -716,8 +797,9 @@ class TaskListViewModelSpec
               val userAnswers =
                 setDependentSections(generalInformation, traderDetails, routeDetails)(emptyUserAnswers)
                   .unsafeSetVal(AddSecurityDetailsPage)(false)
+              val preTaskList = arb[PreTaskListDetails].sample.value
 
-              forAll(genItemSection(containersUser, false, safetyAndSecurity, generalInformation, routeDetails)) {
+              forAll(genItemSection(containersUser, false, safetyAndSecurity, preTaskList, routeDetails)) {
                 sectionDetails =>
                   val updatedUserAnswers = ItemSectionSpec.setItemSection(sectionDetails, Index(0))(userAnswers)
                   val viewModel          = TaskListViewModel(updatedUserAnswers)
@@ -736,8 +818,9 @@ class TaskListViewModelSpec
               val userAnswers =
                 setDependentSections(generalInformation, traderDetails, routeDetails)(emptyUserAnswers)
                   .unsafeSetVal(AddSecurityDetailsPage)(false)
+              val preTaskList = arb[PreTaskListDetails].sample.value
 
-              forAll(genItemSection(containersUser, false, safetyAndSecurity, generalInformation, routeDetails)) {
+              forAll(genItemSection(containersUser, false, safetyAndSecurity, preTaskList, routeDetails)) {
                 sectionDetails =>
                   val updatedUserAnswers = ItemSectionSpec.setItemSection(sectionDetails, Index(0))(userAnswers)
                   val viewModel          = TaskListViewModel(updatedUserAnswers)
@@ -763,13 +846,13 @@ class TaskListViewModelSpec
         "when dependent section is complete" - {
 
           "when the status is Not started, links to the first page" in {
-            val procedureType      = ProcedureType.Normal
-            val traderDetails      = genTraderDetailsNormal.sample.value
-            val routeDetails       = arbitraryRouteDetails(false).arbitrary.sample.value
-            val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-
+            val procedureType            = ProcedureType.Normal
+            val traderDetails            = genTraderDetailsNormal.sample.value
+            val routeDetails             = arbitraryRouteDetails(false).arbitrary.sample.value
+            val generalInformation       = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val preTaskListDetails       = arbitrary[PreTaskListDetails].sample.value
             val userAnswers              = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
-            val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+            val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation, preTaskListDetails)(userAnswers)
             val traderDetailsUserAnswers = TraderDetailsSpec.setTraderDetails(traderDetails)(generalInfoUserAnswers)
             val routerDetailsUserAnswers = RouteDetailsSpec.setRouteDetails(routeDetails)(traderDetailsUserAnswers)
 
@@ -781,13 +864,13 @@ class TaskListViewModelSpec
           }
 
           "when the status is InProgress, links to the first page" in {
-            val procedureType      = ProcedureType.Normal
-            val traderDetails      = genTraderDetailsNormal.sample.value
-            val routeDetails       = arbitraryRouteDetails(false).arbitrary.sample.value
-            val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-
+            val procedureType            = ProcedureType.Normal
+            val traderDetails            = genTraderDetailsNormal.sample.value
+            val routeDetails             = arbitraryRouteDetails(false).arbitrary.sample.value
+            val generalInformation       = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+            val preTaskListDetails       = arbitrary[PreTaskListDetails].sample.value
             val userAnswers              = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
-            val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+            val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation, preTaskListDetails)(userAnswers)
             val traderDetailsUserAnswers = TraderDetailsSpec.setTraderDetails(traderDetails)(generalInfoUserAnswers)
             val routerDetailsUserAnswers = RouteDetailsSpec.setRouteDetails(routeDetails)(traderDetailsUserAnswers)
 
@@ -811,13 +894,15 @@ class TaskListViewModelSpec
               val routeDetails       = arbitraryRouteDetails(false).arbitrary.sample.value
               val safetyAndSecurity  = arb[SafetyAndSecurity].sample.value
               val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+              val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
 
               val userAnswers              = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
-              val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+              val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation, preTaskListDetails)(userAnswers)
               val traderDetailsUserAnswers = TraderDetailsSpec.setTraderDetails(traderDetails)(generalInfoUserAnswers)
               val routerDetailsUserAnswers = RouteDetailsSpec.setRouteDetails(routeDetails)(traderDetailsUserAnswers)
+              val preTaskList              = arb[PreTaskListDetails].sample.value
 
-              forAll(genItemSection(containersUser, false, safetyAndSecurity, generalInformation, routeDetails)) {
+              forAll(genItemSection(containersUser, false, safetyAndSecurity, preTaskList, routeDetails)) {
                 sectionDetails =>
                   val updatedUserAnswers = ItemSectionSpec.setItemSection(sectionDetails, zeroIndex)(routerDetailsUserAnswers)
 
@@ -837,13 +922,15 @@ class TaskListViewModelSpec
               val routeDetails       = arbitraryRouteDetails(false).arbitrary.sample.value
               val safetyAndSecurity  = arb[SafetyAndSecurity].sample.value
               val generalInformation = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+              val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
 
               val userAnswers              = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
-              val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation)(userAnswers)
+              val generalInfoUserAnswers   = MovementDetailsSpec.setMovementDetails(generalInformation, preTaskListDetails)(userAnswers)
               val traderDetailsUserAnswers = TraderDetailsSpec.setTraderDetails(traderDetails)(generalInfoUserAnswers)
               val routerDetailsUserAnswers = RouteDetailsSpec.setRouteDetails(routeDetails)(traderDetailsUserAnswers)
+              val preTaskList              = arb[PreTaskListDetails].sample.value
 
-              forAll(genItemSection(containersUser, false, safetyAndSecurity, generalInformation, routeDetails)) {
+              forAll(genItemSection(containersUser, false, safetyAndSecurity, preTaskList, routeDetails)) {
                 sectionDetails =>
                   val updatedUserAnswers = ItemSectionSpec.setItemSection(sectionDetails, zeroIndex)(routerDetailsUserAnswers)
 
@@ -897,10 +984,12 @@ class TaskListViewModelSpec
 
         "is Completed and procedure type is 'Normal' when all the answers are completed" in {
 
-          val isSecurityDefined           = arb[Boolean].sample.value
-          val procedureType               = ProcedureType.Normal
-          val movementDetails             = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-          val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+          val isSecurityDefined  = arb[Boolean].sample.value
+          val procedureType      = ProcedureType.Normal
+          val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+          val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
+          val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
 
           forAll(arb(arbitraryGoodsSummary(isSecurityDefined, procedureType)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
             (goodsSummary, detailsWithPrelodge) =>
@@ -958,10 +1047,12 @@ class TaskListViewModelSpec
         }
 
         "when the status is Completed, links to the Check your answers page for the section" in {
-          val isSecurityDefined           = arb[Boolean].sample.value
-          val procedureType               = ProcedureType.Normal
-          val movementDetails             = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-          val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+          val isSecurityDefined  = arb[Boolean].sample.value
+          val procedureType      = ProcedureType.Normal
+          val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+          val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
+          val userAnswersWithMovementDtls = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
 
           forAll(arb(arbitraryGoodsSummary(isSecurityDefined, procedureType)), arbitraryGoodSummaryNormalDetailsWithPrelodge.arbitrary) {
             (goodsSummary, detailsWithPrelodge) =>

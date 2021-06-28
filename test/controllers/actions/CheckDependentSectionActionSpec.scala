@@ -18,7 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import generators.{Generators, JourneyModelGenerators}
-import models.journeyDomain.{MovementDetails, MovementDetailsSpec, UserAnswersReader}
+import models.journeyDomain.{MovementDetails, MovementDetailsSpec, PreTaskListDetails, UserAnswersReader}
 import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, ProcedureType, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
@@ -51,9 +51,11 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
 
     "return unit if dependent section is complete" in {
 
-      val procedureType   = arbitrary[ProcedureType].sample.value
-      val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-      val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
+      val procedureType      = arbitrary[ProcedureType].sample.value
+      val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+      val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
+      val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
 
       val result: Future[Result] = harness(DependentSection.TransportDetails, userAnswers, request => request.userAnswers)
       status(result) mustBe OK

@@ -62,12 +62,32 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from Procedure Type to Add Security Details page" in {
+      "must go from Procedure Type to Declaration Type page" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
               .nextPage(ProcedureTypePage, NormalMode, answers)
-              .mustBe(routes.AddSecurityDetailsController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.DeclarationTypeController.onPageLoad(answers.id, NormalMode))
+        }
+      }
+
+      "must go from Declaration Type to Add Security Details when Add Security Details page has not been answered" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeRemove(AddSecurityDetailsPage)
+            navigator
+              .nextPage(DeclarationTypePage, NormalMode, updatedAnswers)
+              .mustBe(routes.AddSecurityDetailsController.onPageLoad(updatedAnswers.id, NormalMode))
+        }
+      }
+
+      "must go from Declaration Type to Declaration Place page when Add Security Details page has been answered" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeSetVal(AddSecurityDetailsPage)(true)
+            navigator
+              .nextPage(DeclarationTypePage, NormalMode, updatedAnswers)
+              .mustBe(controllers.movementDetails.routes.DeclarationPlaceController.onPageLoad(updatedAnswers.id, NormalMode))
         }
       }
     }
