@@ -944,7 +944,7 @@ class TaskListViewModelSpec
             .unsafeSetVal(GuaranteeReferencePage(index))("refNumber")
             .unsafeSetVal(LiabilityAmountPage(index))("5000")
             .unsafeSetVal(AccessCodePage(index))("1234")
-          
+
           val viewModel = TaskListViewModel(updatedUserAnswers)
 
           viewModel.getStatus(guaranteeSectionName).value mustEqual Status.Completed

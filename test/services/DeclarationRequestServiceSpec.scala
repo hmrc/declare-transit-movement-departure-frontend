@@ -19,20 +19,19 @@ package services
 import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
-import models.CommonAddress
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
 import models.journeyDomain.JourneyDomain
 import models.journeyDomain.TransportDetails.InlandMode.Rail
 import models.messages.InterchangeControlReference
 import models.messages.trader.TraderPrincipalWithEori
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, Index, LocalReferenceNumber, UserAnswers}
+import models.userAnswerScenarios.Scenario1
+import models.{CommonAddress, Index}
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import pages.movementDetails.PreLodgeDeclarationPage
-import pages.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, TotalGrossMassPage, WhatIsPrincipalEoriPage, _}
-import pages._
+import pages.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage, _}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
@@ -113,42 +112,18 @@ class DeclarationRequestServiceSpec
       "TotGroMasHEA307" - {
         "Pass the correct value when it has already been answers in Total Gross Mass Page" in {
 
-          forAll(genUserAnswerScenario) {
-            userAnswerScenario =>
-              val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
+          val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
-              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+          when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-              val updatedUserAnswer = userAnswerScenario.userAnswers.unsafeSetVal(TotalGrossMassPage)("100.123")
-              val result            = service.convert(updatedUserAnswer).futureValue
+          val updatedUserAnswer = Scenario1.userAnswers
+            .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))(100.123)
+            .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))(200.123)
 
-              result.right.value.header.totGroMasHEA307 mustBe "100.123"
-          }
-        }
-              val updatedUserAnswer = JourneyDomainSpec
-                .setJourneyDomain(journeyDomain)(userAnswers)
-                .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))(100.123)
-                .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))(200.123)
+          val result = service.convert(updatedUserAnswer).futureValue
 
-        "Pass the correct value when Total Gross Mass page is removed and using ItemTotalGrossMassPage answer(s)" in {
-
-          forAll(genUserAnswerScenario) {
-            userAnswerScenario =>
-              val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
-
-              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
-
-              val updatedUserAnswer = userAnswerScenario.userAnswers.unsafeRemove(TotalGrossMassPage)
-
-              val itemTotalGrossMass = userAnswerScenario.toModel.itemDetails.foldLeft(0.0)(_ + _.itemDetails.totalGrossMass.toDouble)
-
-              val result = service.convert(updatedUserAnswer).futureValue
-
-              result.right.value.header.totGroMasHEA307 mustBe itemTotalGrossMass.toString
-              result.right.value.header.totGroMasHEA307 mustBe "300.246"
-          }
+          result.right.value.header.totGroMasHEA307 mustBe "300.246"
         }
       }
 
