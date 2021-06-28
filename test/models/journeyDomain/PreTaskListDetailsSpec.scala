@@ -18,16 +18,13 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.DeclarationType.Option1
-import models.{DeclarationType, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
-import pages.{AddSecurityDetailsPage, DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, QuestionPage}
 import models.ProcedureType.Normal
 import models.reference.{CountryCode, CustomsOffice}
+import org.scalacheck.Gen
+import pages._
 
-class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
+class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   private val preTaskListUa = emptyUserAnswers
     .unsafeSetVal(ProcedureTypePage)(Normal)
@@ -74,14 +71,4 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with JourneyMod
       }
     }
   }
-}
-
-object PreTaskListDetailsSpec extends UserAnswersSpecHelper {
-
-  def setPreTaskListDetails(preTaskListDetails: PreTaskListDetails)(startUserAnswers: UserAnswers): UserAnswers =
-    startUserAnswers
-      .copy(id = preTaskListDetails.lrn)
-      .unsafeSetVal(ProcedureTypePage)(preTaskListDetails.procedureType)
-      .unsafeSetVal(OfficeOfDeparturePage)(preTaskListDetails.officeOfDeparture)
-      .unsafeSetVal(AddSecurityDetailsPage)(preTaskListDetails.addSecurityDetails)
 }

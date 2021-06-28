@@ -17,18 +17,16 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
-import generators.JourneyModelGenerators
-import models.DeclarationType.{Option1, Option2}
+import commonTestUtils.UserAnswersSpecHelper
+import models.DeclarationType.Option1
 import models.ProcedureType.{Normal, Simplified}
 import models.RepresentativeCapacity.Direct
 import models.journeyDomain.MovementDetails.{DeclarationForSelf, DeclarationForSomeoneElse, NormalMovementDetails, SimplifiedMovementDetails}
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.{ProcedureType, UserAnswers}
 import org.scalacheck.Gen
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
-class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   "MovementDetails" - {
 
@@ -315,57 +313,4 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
       }
     }
   }
-}
-
-object MovementDetailsSpec {
-
-  def setMovementDetails(movementDetails: MovementDetails, preTaskListDetails: PreTaskListDetails)(startUserAnswers: UserAnswers): UserAnswers =
-    movementDetails match {
-      case details: NormalMovementDetails     => setNormalMovement(details, preTaskListDetails)(startUserAnswers)
-      case details: SimplifiedMovementDetails => setSimplifiedMovement(details, preTaskListDetails)(startUserAnswers)
-    }
-
-  def setNormalMovement(movementDetails: NormalMovementDetails, preTaskList: PreTaskListDetails)(startUserAnswers: UserAnswers): UserAnswers = {
-    val interstitialUserAnswers =
-      startUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-        .unsafeSetVal(DeclarationTypePage)(preTaskList.declarationType)
-        .unsafeSetVal(PreLodgeDeclarationPage)(movementDetails.prelodge)
-        .unsafeSetVal(ContainersUsedPage)(movementDetails.containersUsed)
-        .unsafeSetVal(DeclarationPlacePage)(movementDetails.declarationPlacePage)
-        .unsafeSetVal(DeclarationForSomeoneElsePage)(movementDetails.declarationForSomeoneElse != DeclarationForSelf)
-
-    val userAnswers = movementDetails.declarationForSomeoneElse match {
-      case DeclarationForSelf =>
-        interstitialUserAnswers
-      case DeclarationForSomeoneElse(companyName, capacity) =>
-        interstitialUserAnswers
-          .unsafeSetVal(RepresentativeNamePage)(companyName)
-          .unsafeSetVal(RepresentativeCapacityPage)(capacity)
-    }
-
-    userAnswers
-  }
-
-  def setSimplifiedMovement(movementDetails: SimplifiedMovementDetails, preTaskListDetails: PreTaskListDetails)(startUserAnswers: UserAnswers): UserAnswers = {
-    val interstitialUserAnswers =
-      startUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-        .unsafeSetVal(DeclarationTypePage)(preTaskListDetails.declarationType)
-        .unsafeSetVal(ContainersUsedPage)(movementDetails.containersUsed)
-        .unsafeSetVal(DeclarationPlacePage)(movementDetails.declarationPlacePage)
-        .unsafeSetVal(DeclarationForSomeoneElsePage)(movementDetails.declarationForSomeoneElse != DeclarationForSelf)
-
-    val userAnswers = movementDetails.declarationForSomeoneElse match {
-      case DeclarationForSelf =>
-        interstitialUserAnswers
-      case DeclarationForSomeoneElse(companyName, capacity) =>
-        interstitialUserAnswers
-          .unsafeSetVal(RepresentativeNamePage)(companyName)
-          .unsafeSetVal(RepresentativeCapacityPage)(capacity)
-    }
-
-    userAnswers
-  }
-
 }

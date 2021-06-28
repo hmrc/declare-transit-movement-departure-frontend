@@ -16,20 +16,17 @@
 
 package models.journeyDomain
 
-import java.time.LocalDateTime
-
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
-import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages._
 
-class RouteDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
-  import RouteDetailsSpec._
+import java.time.LocalDateTime
+
+class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   "RouteDetails" - {
 
@@ -140,24 +137,5 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGene
         }
       }
     }
-  }
-}
-
-object RouteDetailsSpec extends UserAnswersSpecHelper {
-
-  def setRouteDetails(routeDetails: RouteDetails)(startUserAnswers: UserAnswers): UserAnswers = {
-    val interstitialUserAnswers =
-      startUserAnswers
-        .unsafeSetVal(CountryOfDispatchPage)(routeDetails.countryOfDispatch)
-        .unsafeSetVal(DestinationCountryPage)(routeDetails.destinationCountry)
-        .unsafeSetVal(DestinationOfficePage)(routeDetails.destinationOffice)
-
-    val userAnswers = routeDetails.transitInformation.zipWithIndex.foldLeft(interstitialUserAnswers) {
-      case (ua, (TransitInformation(transitOffice, arrivalTime), index)) =>
-        ua.unsafeSetVal(AddAnotherTransitOfficePage(Index(index)))(transitOffice)
-          .unsafeSetOpt(ArrivalTimesAtOfficePage(Index(index)))(arrivalTime)
-    }
-
-    userAnswers
   }
 }

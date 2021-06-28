@@ -17,20 +17,26 @@
 package controllers.actions
 
 import base.SpecBase
-import generators.{Generators, JourneyModelGenerators}
-import models.journeyDomain.{MovementDetails, MovementDetailsSpec, PreTaskListDetails, UserAnswersReader}
+import commonTestUtils.UserAnswersSpecHelper
+import generators.Generators
+import models.DeclarationType.Option1
+import models.ProcedureType.Normal
+import models.RepresentativeCapacity.Direct
+import models.journeyDomain.PreTaskListDetails
+import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, ProcedureType, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import pages.movementDetails.PreLodgeDeclarationPage
+import pages._
 import play.api.mvc.{AnyContent, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewModels.TaskListViewModel
 
 import scala.concurrent.Future
 
-class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators with JourneyModelGenerators {
+class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators with UserAnswersSpecHelper {
 
   def harness(reader: DependentSection, userAnswers: UserAnswers, f: DataRequest[AnyContent] => Unit): Future[Result] = {
 
@@ -51,16 +57,25 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
 
     "return unit if dependent section is complete" in {
 
-      val procedureType      = arbitrary[ProcedureType].sample.value
-      val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-      val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+      val dependentSections = emptyUserAnswers
+        // PreTaskList
+        .unsafeSetVal(ProcedureTypePage)(Normal)
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), Seq.empty, None))
+        .unsafeSetVal(AddSecurityDetailsPage)(false)
+        .unsafeSetVal(DeclarationTypePage)(Option1)
+        // MovementDetails
+        .unsafeSetVal(ProcedureTypePage)(Normal)
+        .unsafeSetVal(DeclarationTypePage)(Option1)
+        .unsafeSetVal(PreLodgeDeclarationPage)(false)
+        .unsafeSetVal(ContainersUsedPage)(false)
+        .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
+        .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
+        .unsafeSetVal(RepresentativeNamePage)("repName")
+        .unsafeSetVal(RepresentativeCapacityPage)(Direct)
 
-      val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
-
-      val result: Future[Result] = harness(DependentSection.TransportDetails, userAnswers, request => request.userAnswers)
+      val result: Future[Result] = harness(DependentSection.TransportDetails, dependentSections, request => request.userAnswers)
       status(result) mustBe OK
       redirectLocation(result) mustBe None
-
     }
 
     "return to task list page if dependent section is incomplete" in {
@@ -69,7 +84,5 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(controllers.routes.DeclarationSummaryController.onPageLoad(emptyUserAnswers.id).url)
     }
-
   }
-
 }

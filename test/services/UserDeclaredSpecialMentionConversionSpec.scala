@@ -18,13 +18,13 @@ package services
 
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
-import generators.{JourneyModelGenerators, ModelGenerators}
+import generators.ModelGenerators
 import models.GuaranteeType.GuaranteeWaiver
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.SpecialMentionDomain
 import models.messages.goodsitem.{SpecialMentionExportFromGB, SpecialMentionGuaranteeLiabilityAmount, SpecialMentionNoCountry}
 
-class UserDeclaredSpecialMentionConversionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with ModelGenerators {
+class UserDeclaredSpecialMentionConversionSpec extends SpecBase with GeneratorSpec with ModelGenerators {
 
   "UserDeclaredSpecialMentionConversion" - {
 

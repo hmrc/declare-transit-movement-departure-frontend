@@ -17,16 +17,12 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
-import generators.JourneyModelGenerators
-import models.journeyDomain.ItemDetailsSpec.setItemDetailsUserAnswers
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.{Index, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
+import commonTestUtils.UserAnswersSpecHelper
 import org.scalacheck.Gen
 import pages.addItems.CommodityCodePage
-import pages.{AddTotalNetMassPage, IsCommodityCodeKnownPage, ItemDescriptionPage, ItemTotalGrossMassPage, QuestionPage, TotalNetMassPage}
+import pages._
 
-class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   val itemDetailsUa = emptyUserAnswers
     .unsafeSetVal(ItemDescriptionPage(index))("itemDescription")
@@ -113,41 +109,5 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGener
 
       result.left.value.page mustEqual CommodityCodePage(index)
     }
-  }
-}
-
-object ItemDetailsSpec {
-  //format off
-
-  def setItemDetailsUserAnswers(itemDetails: ItemDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers = {
-    val userAnswers =
-      startUserAnswers
-        .unsafeSetVal(ItemTotalGrossMassPage(index))(itemDetails.itemTotalGrossMass.toDouble)
-        .unsafeSetVal(ItemDescriptionPage(index))(itemDetails.itemDescription)
-
-    val totalNetMass = itemDetails.totalNetMass match {
-      case Some(value) =>
-        userAnswers
-          .unsafeSetVal(AddTotalNetMassPage(index))(true)
-          .unsafeSetVal(TotalNetMassPage(index))(value)
-
-      case _ =>
-        userAnswers
-          .unsafeSetVal(AddTotalNetMassPage(index))(false)
-    }
-
-    val commodityCode = itemDetails.commodityCode match {
-      case Some(value) =>
-        totalNetMass
-          .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
-          .unsafeSetVal(CommodityCodePage(index))(value)
-      case _ =>
-        totalNetMass
-          .unsafeSetVal(IsCommodityCodeKnownPage(index))(false)
-    }
-
-    commodityCode
-
-    //format off
   }
 }

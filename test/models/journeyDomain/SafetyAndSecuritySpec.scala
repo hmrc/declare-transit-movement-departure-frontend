@@ -19,17 +19,15 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, Index, UserAnswers}
+import models.{CommonAddress, EoriNumber, Index}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
-import pages.{ModeAtBorderPage, QuestionPage}
 import pages.safetyAndSecurity._
+import pages.{ModeAtBorderPage, QuestionPage}
 
-class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
+class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   private val fullSafetyAndSecurityUa = emptyUserAnswers
     .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
@@ -553,78 +551,5 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
         }
       }
     }
-  }
-}
-
-object SafetyAndSecuritySpec extends UserAnswersSpecHelper {
-
-  def setSafetyAndSecurity(safetyAndSecurity: SafetyAndSecurity)(startUserAnswers: UserAnswers): UserAnswers = {
-    val ua = startUserAnswers
-      // Set summary details
-      .unsafeSetVal(AddCircumstanceIndicatorPage)(safetyAndSecurity.circumstanceIndicator.isDefined)
-      .unsafeSetOpt(CircumstanceIndicatorPage)(safetyAndSecurity.circumstanceIndicator)
-      .unsafeSetVal(AddTransportChargesPaymentMethodPage)(safetyAndSecurity.paymentMethod.isDefined)
-      .unsafeSetOpt(TransportChargesPaymentMethodPage)(safetyAndSecurity.paymentMethod)
-      .unsafeSetVal(AddCommercialReferenceNumberPage)(safetyAndSecurity.commercialReferenceNumber.isDefined)
-      .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(safetyAndSecurity.commercialReferenceNumber.isDefined)
-      .unsafeSetOpt(CommercialReferenceNumberAllItemsPage)(safetyAndSecurity.commercialReferenceNumber)
-      .unsafeSetVal(AddPlaceOfUnloadingCodePage)(safetyAndSecurity.placeOfUnloading.isDefined)
-      .unsafeSetOpt(PlaceOfUnloadingCodePage)(safetyAndSecurity.placeOfUnloading)
-      // Set Consignor
-      .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(safetyAndSecurity.consignor.isDefined)
-      .unsafeSetPFn(AddSafetyAndSecurityConsignorEoriPage)(safetyAndSecurity.consignor)({
-        case Some(TraderEori(_)) => true
-        case Some(_)             => false
-      })
-      .unsafeSetPFn(SafetyAndSecurityConsignorEoriPage)(safetyAndSecurity.consignor)({
-        case Some(TraderEori(eori)) => eori.value
-      })
-      .unsafeSetPFn(SafetyAndSecurityConsignorNamePage)(safetyAndSecurity.consignor)({
-        case Some(PersonalInformation(name, _)) => name
-      })
-      .unsafeSetPFn(SafetyAndSecurityConsignorAddressPage)(safetyAndSecurity.consignor)({
-        case Some(PersonalInformation(_, address)) => address
-      })
-      // Set Consignee
-      .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(safetyAndSecurity.consignee.isDefined)
-      .unsafeSetPFn(AddSafetyAndSecurityConsigneeEoriPage)(safetyAndSecurity.consignee)({
-        case Some(TraderEori(_)) => true
-        case Some(_)             => false
-      })
-      .unsafeSetPFn(SafetyAndSecurityConsigneeEoriPage)(safetyAndSecurity.consignee)({
-        case Some(TraderEori(eori)) => eori.value
-      })
-      .unsafeSetPFn(SafetyAndSecurityConsigneeNamePage)(safetyAndSecurity.consignee)({
-        case Some(PersonalInformation(name, _)) => name
-      })
-      .unsafeSetPFn(SafetyAndSecurityConsigneeAddressPage)(safetyAndSecurity.consignee)({
-        case Some(PersonalInformation(_, address)) => address
-      })
-      // Set Carrier
-      .unsafeSetVal(AddCarrierPage)(safetyAndSecurity.carrier.isDefined)
-      .unsafeSetPFn(AddCarrierEoriPage)(safetyAndSecurity.carrier)({
-        case Some(TraderEori(_)) => true
-        case Some(_)             => false
-      })
-      .unsafeSetPFn(CarrierEoriPage)(safetyAndSecurity.carrier)({
-        case Some(TraderEori(eori)) => eori.value
-      })
-      .unsafeSetPFn(CarrierNamePage)(safetyAndSecurity.carrier)({
-        case Some(PersonalInformation(name, _)) => name
-      })
-      .unsafeSetPFn(CarrierAddressPage)(safetyAndSecurity.carrier)({
-        case Some(PersonalInformation(_, address)) => address
-      })
-
-    val updatedUserAnswers = ua.get(ModeAtBorderPage) match {
-      case Some("4") | Some("40") =>
-        ua.unsafeSetOpt(ConveyanceReferenceNumberPage)(safetyAndSecurity.conveyanceReferenceNumber)
-      case _ =>
-        ua.unsafeSetVal(AddConveyanceReferenceNumberPage)(safetyAndSecurity.conveyanceReferenceNumber.isDefined)
-          .unsafeSetOpt(ConveyanceReferenceNumberPage)(safetyAndSecurity.conveyanceReferenceNumber)
-    }
-
-    ItinerarySpec.setItineraries(safetyAndSecurity.itineraryList.toList)(updatedUserAnswers)
-
   }
 }

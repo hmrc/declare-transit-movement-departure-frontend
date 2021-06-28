@@ -18,14 +18,13 @@ package models.journeyDomain.traderDetails
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber}
 import org.scalatest.TryValues
 import pages._
 
-class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
+class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   "Parsing ConsigneeDetails from UserAnswers" - {
 
