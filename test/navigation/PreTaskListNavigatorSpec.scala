@@ -26,7 +26,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 
-class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
+class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   val navigator = new PreTaskListNavigator
 
@@ -62,7 +62,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from Procedure Type to Declaration Type page" in {
+      "must go from Procedure Type page to Declaration Type page" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
@@ -71,23 +71,12 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         }
       }
 
-      "must go from Declaration Type to Add Security Details when Add Security Details page has not been answered" in {
+      "must go from Declaration Type page to Add Security Details page" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.unsafeRemove(AddSecurityDetailsPage)
             navigator
-              .nextPage(DeclarationTypePage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddSecurityDetailsController.onPageLoad(updatedAnswers.id, NormalMode))
-        }
-      }
-
-      "must go from Declaration Type to Declaration Place page when Add Security Details page has been answered" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers.unsafeSetVal(AddSecurityDetailsPage)(true)
-            navigator
-              .nextPage(DeclarationTypePage, NormalMode, updatedAnswers)
-              .mustBe(controllers.movementDetails.routes.DeclarationPlaceController.onPageLoad(updatedAnswers.id, NormalMode))
+              .nextPage(DeclarationTypePage, NormalMode, answers)
+              .mustBe(routes.AddSecurityDetailsController.onPageLoad(answers.id, NormalMode))
         }
       }
     }

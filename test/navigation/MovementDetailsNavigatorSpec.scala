@@ -28,7 +28,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
-class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
+class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   val navigator = new MovementDetailsNavigator
   // format: off
@@ -45,25 +45,13 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         }
       }
 
-      "must go from  Container Used page to Declaration Place page if Declaration Type has been answered" in {
+      "must go from Containers Used page to Declaration Place page" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val userAnswers = answers.unsafeSetVal(DeclarationTypePage)(Option1)
             navigator
-              .nextPage(ContainersUsedPage, NormalMode, userAnswers)
-              .mustBe(movementDetailsRoute.DeclarationPlaceController.onPageLoad(userAnswers.id, NormalMode))
-        }
-      }
-
-      "must go from  Container Used page to Declaration Type page if Declaration Type has not been answered" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val userAnswers = answers.unsafeRemove(DeclarationTypePage)
-            navigator
-              .nextPage(ContainersUsedPage, NormalMode, userAnswers)
-              .mustBe(controllers.routes.DeclarationTypeController.onPageLoad(userAnswers.id, NormalMode))
+              .nextPage(ContainersUsedPage, NormalMode, answers)
+              .mustBe(movementDetailsRoute.DeclarationPlaceController.onPageLoad(answers.id, NormalMode))
         }
       }
 
