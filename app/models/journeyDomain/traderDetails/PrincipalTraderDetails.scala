@@ -63,9 +63,9 @@ object PrincipalTraderDetails {
     ProcedureTypePage.reader.flatMap {
       case Normal =>
         (IsPrincipalEoriKnownPage.reader, WhatIsPrincipalEoriPage.optionalReader).tupled.flatMap {
-          case (true, Some(principleEori)) if principleEori.toUpperCase.startsWith("GB") | (principleEori.toUpperCase.startsWith("XI")) => readEori
-          case (true, _)                                                                                                                => readAllDetails
-          case (false, _)                                                                                                               => readNameAndAddress
+          case (true, Some(principleEori)) if principleEori.toUpperCase.startsWith("GB") => readEori
+          case (true, _)                                                                 => readAllDetails
+          case (false, _)                                                                => readNameAndAddress
         }
       case Simplified => readEori
     }
