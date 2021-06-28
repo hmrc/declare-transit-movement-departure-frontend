@@ -18,21 +18,36 @@ package viewModels
 
 import cats.data.NonEmptyList
 import cats.implicits._
+import controllers.movementDetails.routes
 import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
-import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
+import models.{CheckMode, DependentSection, Index, Mode, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
 import pages._
 import pages.guaranteeDetails.GuaranteeTypePage
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
 import play.api.libs.json._
+import play.api.mvc.Call
 
 private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
 
   private val lrn         = userAnswers.id
   private val taskListDsl = new TaskListDslCollectSectionName(userAnswers)
+
+  private def movementDetailsStartPage(procedureType: Option[ProcedureType]): String =
+    procedureType match {
+      case Some(Normal)     => controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(userAnswers.id, NormalMode).url
+      case Some(Simplified) => controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(userAnswers.id, NormalMode).url
+      case _                => controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+  private def movementDetailsInProgressReader: UserAnswersReader[_] =
+    ProcedureTypePage.reader.flatMap {
+      case Normal     => PreLodgeDeclarationPage.reader
+      case Simplified => ContainersUsedPage.reader
+    }
 
   private val movementDetails =
     taskListDsl
@@ -43,10 +58,10 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.movementDetails.routes.MovementDetailsCheckYourAnswersController.onPageLoad(userAnswers.id).url
       )
       .ifInProgress(
-        DeclarationTypePage.reader,
-        controllers.movementDetails.routes.DeclarationTypeController.onPageLoad(userAnswers.id, NormalMode).url
+        movementDetailsInProgressReader,
+        movementDetailsStartPage(userAnswers.get(ProcedureTypePage))
       )
-      .ifNotStarted(controllers.movementDetails.routes.DeclarationTypeController.onPageLoad(userAnswers.id, NormalMode).url)
+      .ifNotStarted(movementDetailsStartPage(userAnswers.get(ProcedureTypePage)))
 
   private val routeDetails =
     taskListDsl

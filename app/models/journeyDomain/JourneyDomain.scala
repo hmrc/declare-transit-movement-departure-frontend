@@ -20,7 +20,17 @@ import cats.data._
 import cats.implicits._
 import models.journeyDomain.traderDetails.TraderDetails
 import models.reference.CountryCode
-import pages.{AddSecurityDetailsPage, TotalGrossMassPage}
+import pages.AddSecurityDetailsPage
+
+case class ItemSections(itemDetails: NonEmptyList[ItemSection]) {
+
+  val totalGrossMassDouble: Double = itemDetails.foldLeft(0.000) {
+    (x, y) => y.itemDetails.itemTotalGrossMass.toDouble + x
+  }
+
+  val totalGrossMassFormatted = f"$totalGrossMassDouble%.3f"
+
+}
 
 case class JourneyDomain(
   preTaskList: PreTaskListDetails,
@@ -31,8 +41,7 @@ case class JourneyDomain(
   itemDetails: NonEmptyList[ItemSection],
   goodsSummary: GoodsSummary,
   guarantee: NonEmptyList[GuaranteeDetails],
-  safetyAndSecurity: Option[SafetyAndSecurity],
-  grossMass: Option[String] //TODO remove once deployed and journeys completed by current users
+  safetyAndSecurity: Option[SafetyAndSecurity]
 )
 
 object JourneyDomain {
@@ -61,7 +70,6 @@ object JourneyDomain {
       goodsSummary      <- UserAnswersReader[GoodsSummary]
       guarantee         <- UserAnswersReader[NonEmptyList[GuaranteeDetails]]
       safetyAndSecurity <- safetyAndSecurityReader
-      grossMass         <- TotalGrossMassPage.optionalReader //TODO remove once deployed and journeys completed by current users
     } yield JourneyDomain(
       preTaskList,
       movementDetails,
@@ -71,8 +79,7 @@ object JourneyDomain {
       itemDetails,
       goodsSummary,
       guarantee,
-      safetyAndSecurity,
-      grossMass //TODO remove once deployed and journeys completed by current users
+      safetyAndSecurity
     )
   }
 }

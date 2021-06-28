@@ -18,7 +18,6 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.UserAnswers
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{SameDetailsAtBorder, _}
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, _}
@@ -29,8 +28,7 @@ import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages._
 
-class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
-  import TransportDetailsSpec._
+class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   "TransportDetails" - {
 
@@ -422,78 +420,4 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
       }
     }
   }
-
-}
-
-object TransportDetailsSpec extends UserAnswersSpecHelper {
-
-  def setTransportDetail(transportDetails: TransportDetails)(startUserAnswers: UserAnswers): UserAnswers =
-    transportDetails.inlandMode match {
-      case InlandMode.Rail(code, departureId) =>
-        startUserAnswers
-          .unsafeSetVal(ChangeAtBorderPage)(!transportDetails.detailsAtBorder.isInstanceOf[SameDetailsAtBorder.type])
-          .unsafeSetVal(InlandModePage)(code.toString)
-          .unsafeSetVal(AddIdAtDeparturePage)(departureId.isDefined)
-          .unsafeSetOpt(IdAtDeparturePage)(departureId)
-          .unsafeSetPFn(ModeAtBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(mode, _) => mode
-          })
-          .unsafeSetPFn(IdCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(_, _, idCrossing)) => idCrossing
-          })
-          .unsafeSetPFn(ModeCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeExemptNationality(modeCode)) => modeCode.toString
-          })
-          .unsafeSetPFn(ModeCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(_, modeCode, _)) => modeCode.toString
-          })
-          .unsafeSetPFn(NationalityCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(nationalityCrossingBorder, _, _)) => nationalityCrossingBorder
-          })
-
-      case Mode5or7(code) =>
-        startUserAnswers
-          .unsafeSetVal(ChangeAtBorderPage)(!transportDetails.detailsAtBorder.isInstanceOf[SameDetailsAtBorder.type])
-          .unsafeSetVal(InlandModePage)(code.toString)
-          .unsafeSetPFn(ModeAtBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(mode, _) => mode
-          })
-          .unsafeSetPFn(IdCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(_, _, idCrossing)) => idCrossing
-          })
-          .unsafeSetPFn(ModeCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeExemptNationality(modeCode)) => modeCode.toString
-          })
-          .unsafeSetPFn(ModeCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(_, modeCode, _)) => modeCode.toString
-          })
-          .unsafeSetPFn(NationalityCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(nationalityCrossingBorder, _, _)) => nationalityCrossingBorder
-          })
-
-      case NonSpecialMode(code, nationalityAtDeparture, departureId) =>
-        startUserAnswers
-          .unsafeSetVal(ChangeAtBorderPage)(!transportDetails.detailsAtBorder.isInstanceOf[SameDetailsAtBorder.type])
-          .unsafeSetVal(InlandModePage)(code.toString)
-          .unsafeSetVal(AddIdAtDeparturePage)(departureId.isDefined)
-          .unsafeSetOpt(IdAtDeparturePage)(departureId)
-          .unsafeSetVal(AddNationalityAtDeparturePage)(nationalityAtDeparture.isDefined)
-          .unsafeSetOpt(NationalityAtDeparturePage)(nationalityAtDeparture)
-          .unsafeSetPFn(ModeAtBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(mode, _) => mode
-          })
-          .unsafeSetPFn(IdCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(_, _, idCrossing)) => idCrossing
-          })
-          .unsafeSetPFn(ModeCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeExemptNationality(modeCode)) => modeCode.toString
-          })
-          .unsafeSetPFn(ModeCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(_, modeCode, _)) => modeCode.toString
-          })
-          .unsafeSetPFn(NationalityCrossingBorderPage)(transportDetails.detailsAtBorder)({
-            case NewDetailsAtBorder(_, ModeWithNationality(nationalityCrossingBorder, _, _)) => nationalityCrossingBorder
-          })
-    }
-
 }

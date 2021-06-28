@@ -19,16 +19,14 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.DeclarationType.{Option1, Option2}
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
+import models.Index
 import models.reference.{CountryCode, CountryOfDispatch}
-import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages.addItems._
 import pages.{CountryOfDispatchPage, DeclarationTypePage, QuestionPage}
 
-class PreviousReferenceSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   private val previousReferenceUa = emptyUserAnswers
     .unsafeSetVal(ReferenceTypePage(index, referenceIndex))("referenceType")
@@ -183,21 +181,6 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with JourneyMode
 
           result.left.value.page mustBe AddAdministrativeReferencePage(index)
         }
-    }
-  }
-}
-
-object PreviousReferenceSpec extends UserAnswersSpecHelper {
-
-  def setPreviousReferenceUserAnswers(previousReference: PreviousReferences, index: Index, referenceIndex: Index)(statUserAnswers: UserAnswers): UserAnswers = {
-    val ua = statUserAnswers
-      .unsafeSetVal(ReferenceTypePage(index, referenceIndex))(previousReference.referenceType)
-      .unsafeSetVal(PreviousReferencePage(index, referenceIndex))(previousReference.previousReference)
-      .unsafeSetVal(AddExtraInformationPage(index, referenceIndex))(previousReference.extraInformation.isDefined)
-
-    previousReference.extraInformation.fold(ua) {
-      info =>
-        ua.unsafeSetVal(ExtraInformationPage(index, referenceIndex))(info)
     }
   }
 }

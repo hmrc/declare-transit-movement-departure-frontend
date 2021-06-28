@@ -18,15 +18,13 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.{CommonAddress, EoriNumber}
-import models.domain.Address
 import models.reference._
+import models.{CommonAddress, EoriNumber}
 import pages.AddSecurityDetailsPage
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
-class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with UserAnswersSpecHelper {
+class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   "Reading from User Answers" - {
 
@@ -113,7 +111,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
                 .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
 
-              val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+              val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
               val expected = SecurityPersonalInformation("testName", address)
               val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
 
@@ -133,7 +131,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
                 .unsafeSetVal(SecurityConsigneeNamePage(index))("testName")
                 .unsafeSetVal(SecurityConsigneeAddressPage(index))(consigneeAddress)
 
-              val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+              val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
               val expected = SecurityPersonalInformation("testName", address)
 
               val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
@@ -216,7 +214,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Journey
               .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
               .unsafeSetVal(SecurityConsignorAddressPage(index))(consigneeAddress)
 
-            val address  = Address("1", "2", "3", Some(Country(CountryCode("ZZ"), "")))
+            val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
             val expected = SecurityPersonalInformation("testName", address)
             val result   = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
 

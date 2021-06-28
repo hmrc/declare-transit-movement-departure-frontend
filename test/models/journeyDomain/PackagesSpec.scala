@@ -18,17 +18,13 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.{JourneyModelGenerators, ModelGenerators}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.reference.PackageType
-import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages.addItems.{DeclareMarkPage, TotalPiecesPage, _}
 import pages.{PackageTypePage, QuestionPage}
 
-class PackagesSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with ModelGenerators {
-
-  import PackagesSpec._
+class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   private val unpackedPackageCode = Gen.oneOf(PackageType.unpackedCodes).sample.value
   private val bulkPackageCode     = Gen.oneOf(PackageType.bulkCodes).sample.value
@@ -235,28 +231,4 @@ class PackagesSpec extends SpecBase with GeneratorSpec with JourneyModelGenerato
       }
     }
   }
-}
-
-object PackagesSpec extends UserAnswersSpecHelper {
-
-  def setPackageUserAnswers(packages: Packages, itemIndex: Index, packageIndex: Index)(userAnswers: UserAnswers): UserAnswers =
-    packages match {
-      case otherPackage: OtherPackages =>
-        userAnswers
-          .unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(otherPackage.packageType)
-          .unsafeSetVal(HowManyPackagesPage(itemIndex, packageIndex))(otherPackage.howManyPackagesPage)
-          .unsafeSetVal(DeclareMarkPage(itemIndex, packageIndex))(otherPackage.markOrNumber)
-      case bulkPackage: BulkPackages =>
-        userAnswers
-          .unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(bulkPackage.packageType)
-          .unsafeSetVal(AddMarkPage(itemIndex, packageIndex))(bulkPackage.markOrNumber.isDefined)
-          .unsafeSetOpt(DeclareMarkPage(itemIndex, packageIndex))(bulkPackage.markOrNumber)
-      case unpackedPackages: UnpackedPackages =>
-        userAnswers
-          .unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(unpackedPackages.packageType)
-          .unsafeSetVal(TotalPiecesPage(itemIndex, packageIndex))(unpackedPackages.totalPieces)
-          .unsafeSetVal(AddMarkPage(itemIndex, packageIndex))(unpackedPackages.markOrNumber.isDefined)
-          .unsafeSetOpt(DeclareMarkPage(itemIndex, packageIndex))(unpackedPackages.markOrNumber)
-    }
-
 }

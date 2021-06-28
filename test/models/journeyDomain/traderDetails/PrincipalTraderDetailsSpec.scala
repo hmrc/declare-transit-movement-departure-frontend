@@ -18,15 +18,13 @@ package models.journeyDomain.traderDetails
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.domain.Address
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber, ProcedureType}
 import org.scalatest.TryValues
 import pages._
 
-class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
+class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   "PrincipleTraderDetails" - {
 
@@ -60,11 +58,9 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
             .unsafeSetVal(PrincipalNamePage)("principleName")
             .unsafeSetVal(PrincipalAddressPage)(address)
 
-          val expectedAddress = Address.prismAddressToCommonAddress(address)
-
           val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-          val expectedResult = PrincipalTraderEoriPersonalInfo(eoriNumber, "principleName", expectedAddress)
+          val expectedResult = PrincipalTraderEoriPersonalInfo(eoriNumber, "principleName", address)
 
           result mustBe expectedResult
         }
@@ -81,9 +77,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
 
           val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-          val expectedAddress = Address.prismAddressToCommonAddress(address)
-
-          val expectedResult = PrincipalTraderDetails("principleName", expectedAddress)
+          val expectedResult = PrincipalTraderDetails("principleName", address)
 
           result mustBe expectedResult
         }

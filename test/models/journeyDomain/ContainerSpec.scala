@@ -18,12 +18,9 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.{Index, UserAnswers}
 import pages.addItems.containers.ContainerNumberPage
 
-class ContainerSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class ContainerSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
   "Container" - {
     "can be parsed from UserAnswers" - {
       "when all details for section have been answered" in {
@@ -48,15 +45,4 @@ class ContainerSpec extends SpecBase with GeneratorSpec with JourneyModelGenerat
       }
     }
   }
-}
-
-object ContainerSpec extends UserAnswersSpecHelper {
-
-  def setContainers(containers: Seq[Container], index: Index)(userAnswers: UserAnswers): UserAnswers =
-    userAnswers.unsafeSetSeqIndex(ContainerNumberPage(index, _))(containers.map(_.containerNumber))
-
-  def setContainerUserAnswers(container: Container, index: Index, referenceIndex: Index)(userAnswers: UserAnswers): UserAnswers =
-    userAnswers
-      .unsafeSetVal(ContainerNumberPage(index, referenceIndex))(container.containerNumber)
-
 }

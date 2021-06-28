@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package models.userAnswerScenarios
 
-import play.api.libs.json.JsPath
+import commonTestUtils.UserAnswersSpecHelper
+import models.UserAnswers
+import models.journeyDomain.JourneyDomain
 
-case object TotalGrossMassPage extends QuestionPage[String] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "totalGrossMass"
+trait UserAnswerScenario extends UserAnswersSpecHelper {
+  val userAnswers: UserAnswers
+  val toModel: JourneyDomain
 }

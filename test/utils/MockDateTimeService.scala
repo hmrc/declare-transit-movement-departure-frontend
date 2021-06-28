@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package pages
+package utils
 
-import models.Index
-import play.api.libs.json.JsPath
-import queries.Constants.items
+import org.mockito.Mockito.{reset, when}
+import org.scalatest.{BeforeAndAfterEach, Suite}
+import org.scalatestplus.mockito.MockitoSugar
+import services.DateTimeService
 
-case class ItemTotalGrossMassPage(index: Index) extends QuestionPage[Double] {
+trait MockDateTimeService extends MockitoSugar with BeforeAndAfterEach {
+  this: Suite =>
 
-  override def path: JsPath = JsPath \ items \ index.position \ toString
+  val mockTimeService: DateTimeService = mock[DateTimeService]
 
-  override def toString: String = "itemTotalGrossMass"
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockTimeService)
+  }
+
+  def mockDateFormatted(response: String): Unit =
+    when(mockTimeService.dateFormatted)
+      .thenReturn(response)
+
 }

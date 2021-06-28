@@ -18,19 +18,15 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.domain.Address
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, Index, UserAnswers}
+import models.{CommonAddress, EoriNumber}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages._
-import pages.addItems.{DeclareMarkPage, HowManyPackagesPage}
 import pages.addItems.traderDetails._
 
-class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators {
+class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   "ItemTraderDetail" - {
     "Consignor" - {
@@ -48,7 +44,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(TraderDetailsConsignorAddressPage(index))(commonAddress)
 
           val expectedResult =
-            RequiredDetails("name", Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "description"))), None)
+            RequiredDetails("name", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description")), None)
 
           val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
@@ -69,7 +65,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
 
           val expectedResult = RequiredDetails(
             "name",
-            Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "description"))),
+            CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description")),
             Some(EoriNumber("eoriNumber1"))
           )
 
@@ -156,7 +152,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(false)
 
           val expectedResult =
-            RequiredDetails("name", Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "description"))), None)
+            RequiredDetails("name", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description")), None)
 
           val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
 
@@ -177,7 +173,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
 
           val expectedResult = RequiredDetails(
             "name",
-            Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "description"))),
+            CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description")),
             Some(EoriNumber("eoriNumber1"))
           )
 
@@ -247,39 +243,4 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
       }
     }
   }
-}
-
-object ItemTraderDetailsSpec extends UserAnswersSpecHelper {
-
-  def setItemTraderDetails(itemTraderDetails: ItemTraderDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers =
-    startUserAnswers
-      // Set Consignor
-      .unsafeSetPFn(TraderDetailsConsignorEoriKnownPage(index))(itemTraderDetails.consignor)({
-        case Some(RequiredDetails(_, _, Some(_))) => true
-        case Some(_)                              => false
-      })
-      .unsafeSetPFn(TraderDetailsConsignorEoriNumberPage(index))(itemTraderDetails.consignor)({
-        case Some(RequiredDetails(_, _, Some(eori))) => eori.value
-      })
-      .unsafeSetPFn(TraderDetailsConsignorNamePage(index))(itemTraderDetails.consignor)({
-        case Some(RequiredDetails(name, _, _)) => name
-      })
-      .unsafeSetPFn(TraderDetailsConsignorAddressPage(index))(itemTraderDetails.consignor)({
-        case Some(RequiredDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
-      })
-      // Set Consignee
-      .unsafeSetPFn(TraderDetailsConsigneeEoriKnownPage(index))(itemTraderDetails.consignee)({
-        case Some(RequiredDetails(_, _, Some(_))) => true
-        case Some(_)                              => false
-      })
-      .unsafeSetPFn(TraderDetailsConsigneeEoriNumberPage(index))(itemTraderDetails.consignee)({
-        case Some(RequiredDetails(_, _, Some(eori))) => eori.value
-      })
-      .unsafeSetPFn(TraderDetailsConsigneeNamePage(index))(itemTraderDetails.consignee)({
-        case Some(RequiredDetails(name, _, _)) => name
-      })
-      .unsafeSetPFn(TraderDetailsConsigneeAddressPage(index))(itemTraderDetails.consignee)({
-        case Some(RequiredDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
-      })
-
 }

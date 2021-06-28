@@ -17,6 +17,7 @@
 package generators
 
 import models.UserAnswers
+import models.userAnswerScenarios.{Scenario1, Scenario2, Scenario3, Scenario4, UserAnswerScenario}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
@@ -25,6 +26,12 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   self: Generators =>
+
+  val genUserAnswerScenario: Gen[UserAnswerScenario] = Gen.oneOf(Seq(Scenario1, Scenario2, Scenario3, Scenario4))
+
+  val genNormalScenarios: Gen[UserAnswerScenario] = Gen.oneOf(Seq(Scenario1, Scenario3, Scenario4))
+
+  val genSimplifiedScenarios: Gen[UserAnswerScenario] = Gen.oneOf(Seq(Scenario2))
 
   /**
     * The max number of QuestionPage and valid answers that are generated

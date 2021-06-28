@@ -17,18 +17,16 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
-import generators.JourneyModelGenerators
+import commonTestUtils.UserAnswersSpecHelper
 import models.DeclarationType.Option1
 import models.ProcedureType.{Normal, Simplified}
 import models.RepresentativeCapacity.Direct
 import models.journeyDomain.MovementDetails.{DeclarationForSelf, DeclarationForSomeoneElse, NormalMovementDetails, SimplifiedMovementDetails}
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.{ProcedureType, UserAnswers}
 import org.scalacheck.Gen
 import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
-class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   "MovementDetails" - {
 
@@ -37,9 +35,8 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
       "when procedure type is Normal" in {
 
         val expectedResult = NormalMovementDetails(
-          Option1,
-          prelodge = false,
-          containersUsed = false,
+          false,
+          false,
           "declarationPlace",
           DeclarationForSomeoneElse("repName", Direct)
         )
@@ -62,8 +59,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
       "when procedure type is Simplified" in {
 
         val expectedResult = SimplifiedMovementDetails(
-          Option1,
-          containersUsed = false,
+          false,
           "declarationPlace",
           DeclarationForSomeoneElse("repName", Direct)
         )
@@ -101,9 +97,8 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
           "and all mandatory answers are defined" in {
 
             val expectedResult = NormalMovementDetails(
-              Option1,
-              prelodge = false,
-              containersUsed = false,
+              false,
+              false,
               "declarationPlace",
               DeclarationForSomeoneElse("repName", Direct)
             )
@@ -128,9 +123,8 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
           "and all mandatory answers are defined" in {
 
             val expectedResult = NormalMovementDetails(
-              Option1,
-              prelodge = false,
-              containersUsed = false,
+              false,
+              false,
               "declarationPlace",
               DeclarationForSelf
             )
@@ -156,7 +150,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
           "and a mandatory page is missing" in {
 
             val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-              DeclarationTypePage,
               PreLodgeDeclarationPage,
               ContainersUsedPage,
               DeclarationPlacePage,
@@ -168,7 +161,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
             forAll(mandatoryPages) {
               mandatoryPage =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(DeclarationTypePage)(Option1)
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
                   .unsafeSetVal(ContainersUsedPage)(false)
                   .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
@@ -189,7 +181,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
           "and a mandatory page is missing" in {
 
             val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-              DeclarationTypePage,
               PreLodgeDeclarationPage,
               ContainersUsedPage,
               DeclarationPlacePage,
@@ -199,7 +190,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
             forAll(mandatoryPages) {
               mandatoryPage =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(DeclarationTypePage)(Option1)
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
                   .unsafeSetVal(ContainersUsedPage)(false)
                   .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
@@ -224,8 +214,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
           "and all mandatory answers are defined" in {
 
             val expectedResult = SimplifiedMovementDetails(
-              Option1,
-              containersUsed = false,
+              false,
               "declarationPlace",
               DeclarationForSomeoneElse("repName", Direct)
             )
@@ -249,14 +238,12 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
           "and all mandatory answers are defined" in {
 
             val expectedResult = SimplifiedMovementDetails(
-              Option1,
-              containersUsed = false,
+              false,
               "declarationPlace",
               DeclarationForSelf
             )
 
             val userAnswers = emptyUserAnswers
-              .unsafeSetVal(DeclarationTypePage)(Option1)
               .unsafeSetVal(ContainersUsedPage)(false)
               .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
               .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
@@ -275,7 +262,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
           "and a mandatory page is missing" in {
 
             val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-              DeclarationTypePage,
               ContainersUsedPage,
               DeclarationPlacePage,
               DeclarationForSomeoneElsePage,
@@ -286,7 +272,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
             forAll(mandatoryPages) {
               mandatoryPage =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(DeclarationTypePage)(Option1)
                   .unsafeSetVal(ContainersUsedPage)(false)
                   .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
                   .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
@@ -306,7 +291,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
           "and a mandatory page is missing" in {
 
             val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-              DeclarationTypePage,
               ContainersUsedPage,
               DeclarationPlacePage,
               DeclarationForSomeoneElsePage
@@ -315,7 +299,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
             forAll(mandatoryPages) {
               mandatoryPage =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(DeclarationTypePage)(Option1)
                   .unsafeSetVal(ContainersUsedPage)(false)
                   .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
                   .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
@@ -330,57 +313,4 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelG
       }
     }
   }
-}
-
-object MovementDetailsSpec {
-
-  def setMovementDetails(movementDetails: MovementDetails)(startUserAnswers: UserAnswers): UserAnswers =
-    movementDetails match {
-      case details: NormalMovementDetails     => setNormalMovement(details)(startUserAnswers)
-      case details: SimplifiedMovementDetails => setSimplifiedMovement(details)(startUserAnswers)
-    }
-
-  def setNormalMovement(movementDetails: NormalMovementDetails)(startUserAnswers: UserAnswers): UserAnswers = {
-    val interstitialUserAnswers =
-      startUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-        .unsafeSetVal(DeclarationTypePage)(movementDetails.declarationType)
-        .unsafeSetVal(PreLodgeDeclarationPage)(movementDetails.prelodge)
-        .unsafeSetVal(ContainersUsedPage)(movementDetails.containersUsed)
-        .unsafeSetVal(DeclarationPlacePage)(movementDetails.declarationPlacePage)
-        .unsafeSetVal(DeclarationForSomeoneElsePage)(movementDetails.declarationForSomeoneElse != DeclarationForSelf)
-
-    val userAnswers = movementDetails.declarationForSomeoneElse match {
-      case DeclarationForSelf =>
-        interstitialUserAnswers
-      case DeclarationForSomeoneElse(companyName, capacity) =>
-        interstitialUserAnswers
-          .unsafeSetVal(RepresentativeNamePage)(companyName)
-          .unsafeSetVal(RepresentativeCapacityPage)(capacity)
-    }
-
-    userAnswers
-  }
-
-  def setSimplifiedMovement(movementDetails: SimplifiedMovementDetails)(startUserAnswers: UserAnswers): UserAnswers = {
-    val interstitialUserAnswers =
-      startUserAnswers
-        .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-        .unsafeSetVal(DeclarationTypePage)(movementDetails.declarationType)
-        .unsafeSetVal(ContainersUsedPage)(movementDetails.containersUsed)
-        .unsafeSetVal(DeclarationPlacePage)(movementDetails.declarationPlacePage)
-        .unsafeSetVal(DeclarationForSomeoneElsePage)(movementDetails.declarationForSomeoneElse != DeclarationForSelf)
-
-    val userAnswers = movementDetails.declarationForSomeoneElse match {
-      case DeclarationForSelf =>
-        interstitialUserAnswers
-      case DeclarationForSomeoneElse(companyName, capacity) =>
-        interstitialUserAnswers
-          .unsafeSetVal(RepresentativeNamePage)(companyName)
-          .unsafeSetVal(RepresentativeCapacityPage)(capacity)
-    }
-
-    userAnswers
-  }
-
 }

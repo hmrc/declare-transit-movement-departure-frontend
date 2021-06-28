@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package controllers
 
-import models.Index
-import play.api.libs.json.JsPath
-import queries.Constants.items
+import models.reference.CountryCode
 
-case class ItemTotalGrossMassPage(index: Index) extends QuestionPage[Double] {
+package object routeDetails {
 
-  override def path: JsPath = JsPath \ items \ index.position \ toString
-
-  override def toString: String = "itemTotalGrossMass"
+  val excludedTransitCountries: Seq[CountryCode] = Seq(
+    CountryCode("JE")
+  )
 }

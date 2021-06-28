@@ -18,16 +18,14 @@ package models.journeyDomain.traderDetails
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.ProcedureType.Simplified
-import models.domain.Address
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber, ProcedureType, UserAnswers}
 import org.scalatest.TryValues
 import pages.{ConsignorEoriPage, _}
 
-class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
+class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   private val traderDetailsUa = emptyUserAnswers
     .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
@@ -57,7 +55,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
 
         val expectedResult = TraderDetails(
           PrincipalTraderDetails(EoriNumber("eoriNumber")),
-          Some(ConsignorDetails("consignorName", Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "123"))), None)),
+          Some(ConsignorDetails("consignorName", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")), None)),
           None
         )
 
@@ -77,7 +75,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
         val expectedResult = TraderDetails(
           PrincipalTraderDetails(EoriNumber("eoriNumber")),
           None,
-          Some(ConsigneeDetails("consigneeName", Address("addressLine1", "addressLine2", "postalCode", Some(Country(CountryCode("GB"), "123"))), None))
+          Some(ConsigneeDetails("consigneeName", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")), None))
         )
 
         val userAnswers = traderDetailsUa
@@ -120,64 +118,4 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
       }
     }
   }
-}
-
-object TraderDetailsSpec extends UserAnswersSpecHelper {
-
-  def setTraderDetails(traderDetails: TraderDetails)(startUserAnswers: UserAnswers): UserAnswers = {
-    val isPrincipalEoriKnown: Boolean = traderDetails.principalTraderDetails.isInstanceOf[PrincipalTraderEoriInfo] | traderDetails.principalTraderDetails
-      .isInstanceOf[PrincipalTraderEoriPersonalInfo]
-
-    startUserAnswers
-      // Set Principal Trader details
-      .unsafeSetVal(IsPrincipalEoriKnownPage)(isPrincipalEoriKnown)
-      .unsafeSetPFn(WhatIsPrincipalEoriPage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderEoriInfo(eori)               => eori.value
-        case PrincipalTraderEoriPersonalInfo(eori, _, _) => eori.value
-      })
-      .unsafeSetPFn(PrincipalNamePage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderPersonalInfo(name, _)        => name
-        case PrincipalTraderEoriPersonalInfo(_, name, _) => name
-      })
-      .unsafeSetPFn(PrincipalAddressPage)(traderDetails.principalTraderDetails)({
-        case PrincipalTraderPersonalInfo(_, address)        => Address.prismAddressToCommonAddress.getOption(address).get
-        case PrincipalTraderEoriPersonalInfo(_, _, address) => Address.prismAddressToCommonAddress.getOption(address).get
-      })
-      .assert("Eori must be provided for Simplified procedure") {
-        ua =>
-          (ua.get(ProcedureTypePage), ua.get(WhatIsPrincipalEoriPage)) match {
-            case (Some(Simplified), None) => false
-            case _                        => true
-          }
-      }
-      // Set Consignor details
-      .unsafeSetVal(AddConsignorPage)(traderDetails.consignor.isDefined)
-      .unsafeSetPFn(IsConsignorEoriKnownPage)(traderDetails.consignor)({
-        case Some(ConsignorDetails(_, _, eoriOpt)) => eoriOpt.isDefined
-      })
-      .unsafeSetPFn(ConsignorEoriPage)(traderDetails.consignor)({
-        case Some(ConsignorDetails(_, _, Some(eori))) => eori.value
-      })
-      .unsafeSetPFn(ConsignorNamePage)(traderDetails.consignor)({
-        case Some(ConsignorDetails(name, _, _)) => name
-      })
-      .unsafeSetPFn(ConsignorAddressPage)(traderDetails.consignor)({
-        case Some(ConsignorDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
-      })
-      // Set Consignee details
-      .unsafeSetVal(AddConsigneePage)(traderDetails.consignee.isDefined)
-      .unsafeSetPFn(IsConsigneeEoriKnownPage)(traderDetails.consignee)({
-        case Some(ConsigneeDetails(_, _, eoriOpt)) => eoriOpt.isDefined
-      })
-      .unsafeSetPFn(WhatIsConsigneeEoriPage)(traderDetails.consignee)({
-        case Some(ConsigneeDetails(_, _, Some(eori))) => eori.value
-      })
-      .unsafeSetPFn(ConsigneeNamePage)(traderDetails.consignee)({
-        case Some(ConsigneeDetails(name, _, _)) => name
-      })
-      .unsafeSetPFn(ConsigneeAddressPage)(traderDetails.consignee)({
-        case Some(ConsigneeDetails(_, address, _)) => Address.prismAddressToCommonAddress.getOption(address).get
-      })
-  }
-
 }

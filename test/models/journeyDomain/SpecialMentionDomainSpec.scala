@@ -18,16 +18,11 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.journeyDomain.SpecialMentionSpec.setSpecialMentionsUserAnswers
-import models.{Index, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import pages._
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
 
-class SpecialMentionDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class SpecialMentionDomainSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   "SpecialMention" - {
 
@@ -72,14 +67,4 @@ class SpecialMentionDomainSpec extends SpecBase with GeneratorSpec with JourneyM
       }
     }
   }
-
-}
-
-object SpecialMentionSpec extends UserAnswersSpecHelper {
-
-  def setSpecialMentionsUserAnswers(specialMention: SpecialMentionDomain, index: Index, referenceIndex: Index)(userAnswers: UserAnswers): UserAnswers =
-    userAnswers
-      .unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))(specialMention.specialMentionType)
-      .unsafeSetVal(SpecialMentionAdditionalInfoPage(index, referenceIndex))(specialMention.additionalInfo)
-
 }

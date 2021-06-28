@@ -17,20 +17,16 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
-import generators.JourneyModelGenerators
-import models.journeyDomain.ItemDetailsSpec.setItemDetailsUserAnswers
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.{Index, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
+import commonTestUtils.UserAnswersSpecHelper
 import org.scalacheck.Gen
 import pages.addItems.CommodityCodePage
-import pages.{AddTotalNetMassPage, IsCommodityCodeKnownPage, ItemDescriptionPage, ItemTotalGrossMassPage, QuestionPage, TotalNetMassPage}
+import pages._
 
-class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   val itemDetailsUa = emptyUserAnswers
     .unsafeSetVal(ItemDescriptionPage(index))("itemDescription")
-    .unsafeSetVal(ItemTotalGrossMassPage(index))("123")
+    .unsafeSetVal(ItemTotalGrossMassPage(index))(123)
     .unsafeSetVal(AddTotalNetMassPage(index))(true)
     .unsafeSetVal(TotalNetMassPage(index))("123")
     .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
@@ -40,7 +36,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGener
 
     "when all details for section have been answered" in {
 
-      val expectedResult = ItemDetails("itemDescription", "123", Some("123"), Some("commodityCode"))
+      val expectedResult = ItemDetails("itemDescription", "123.000", Some("123"), Some("commodityCode"))
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(itemDetailsUa)
 
@@ -51,7 +47,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGener
 
       val userAnswers = itemDetailsUa.unsafeSetVal(AddTotalNetMassPage(index))(false)
 
-      val expectedResult = ItemDetails("itemDescription", "123", None, Some("commodityCode"))
+      val expectedResult = ItemDetails("itemDescription", "123.000", None, Some("commodityCode"))
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
 
@@ -62,7 +58,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGener
 
       val userAnswers = itemDetailsUa.unsafeSetVal(IsCommodityCodeKnownPage(index))(false)
 
-      val expectedResult = ItemDetails("itemDescription", "123", Some("123"), None)
+      val expectedResult = ItemDetails("itemDescription", "123.000", Some("123"), None)
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
 
@@ -113,41 +109,5 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with JourneyModelGener
 
       result.left.value.page mustEqual CommodityCodePage(index)
     }
-  }
-}
-
-object ItemDetailsSpec {
-  //format off
-
-  def setItemDetailsUserAnswers(itemDetails: ItemDetails, index: Index)(startUserAnswers: UserAnswers): UserAnswers = {
-    val userAnswers =
-      startUserAnswers
-        .unsafeSetVal(ItemTotalGrossMassPage(index))(itemDetails.totalGrossMass)
-        .unsafeSetVal(ItemDescriptionPage(index))(itemDetails.itemDescription)
-
-    val totalNetMass = itemDetails.totalNetMass match {
-      case Some(value) =>
-        userAnswers
-          .unsafeSetVal(AddTotalNetMassPage(index))(true)
-          .unsafeSetVal(TotalNetMassPage(index))(value)
-
-      case _ =>
-        userAnswers
-          .unsafeSetVal(AddTotalNetMassPage(index))(false)
-    }
-
-    val commodityCode = itemDetails.commodityCode match {
-      case Some(value) =>
-        totalNetMass
-          .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
-          .unsafeSetVal(CommodityCodePage(index))(value)
-      case _ =>
-        totalNetMass
-          .unsafeSetVal(IsCommodityCodeKnownPage(index))(false)
-    }
-
-    commodityCode
-
-    //format off
   }
 }

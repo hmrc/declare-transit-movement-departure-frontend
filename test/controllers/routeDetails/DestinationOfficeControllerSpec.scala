@@ -27,10 +27,10 @@ import models.{CountryList, CustomsOfficeList, NormalMode}
 import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{DestinationCountryPage, DestinationOfficePage, MovementDestinationCountryPage}
+import pages.{DestinationOfficePage, MovementDestinationCountryPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -70,7 +70,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
-      when(mockReferenceDataConnector.getTransitCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(GET, destinationOfficeRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -128,7 +128,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
-      when(mockReferenceDataConnector.getTransitCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(GET, destinationOfficeRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -165,7 +165,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
       dataRetrievalWithData(userAnswers)
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
-      when(mockReferenceDataConnector.getTransitCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
@@ -185,7 +185,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
-      when(mockReferenceDataConnector.getTransitCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(POST, destinationOfficeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))

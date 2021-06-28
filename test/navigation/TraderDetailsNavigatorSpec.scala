@@ -94,6 +94,20 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
+          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'gb' " in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("gb123456")
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
           "must go from Principal eori page to Add Principal's Name page if principals EORI does not start with prefix 'GB' " in {
 
             forAll(genNormalProcedureUserAnswers) {
@@ -389,6 +403,20 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
               answers =>
                 val updatedAnswers = answers
                   .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
+                  .unsafeSetVal(ProcedureTypePage)(Normal)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
+                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            }
+          }
+
+          "to Check Your Answers Page if Prefix is 'gb' " in {
+
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("gb123456")
                   .unsafeSetVal(ProcedureTypePage)(Normal)
 
                 navigator

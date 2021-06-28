@@ -17,68 +17,57 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
-import generators.JourneyModelGenerators
-import models.UserAnswers
-import models.journeyDomain.PackagesSpec.UserAnswersSpecHelperOps
-import models.journeyDomain.traderDetails.TraderDetailsSpec
-import pages.movementDetails.PreLodgeDeclarationPage
+import cats.data.NonEmptyList
+import commonTestUtils.UserAnswersSpecHelper
+import generators.UserAnswersGenerator
+import models.Index
+import models.userAnswerScenarios.Scenario1
+import pages.{AddSecurityDetailsPage, ItemTotalGrossMassPage}
 
-class JourneyDomainSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators {
+class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
 
-//  "JourneyDomain" - {
-//    "can be parsed UserAnswers" - {
-//      "when all details for section have been answered" in {
-//        forAll(arb[JourneyDomain]) {
-//          journeyDomain =>
-//            val updatedUserAnswer = JourneyDomainSpec.setJourneyDomain(journeyDomain)(emptyUserAnswers)
-//
-//            val result = UserAnswersReader[JourneyDomain].run(updatedUserAnswer)
-//
-//            result.right.value.preTaskList mustEqual journeyDomain.preTaskList
-//            result.right.value.movementDetails mustEqual journeyDomain.movementDetails
-//            result.right.value.routeDetails mustEqual journeyDomain.routeDetails
-//            result.right.value.transportDetails mustEqual journeyDomain.transportDetails
-//            result.right.value.traderDetails mustEqual journeyDomain.traderDetails
-//            result.right.value.goodsSummary mustEqual journeyDomain.goodsSummary
-//            result.right.value.guarantee mustEqual journeyDomain.guarantee
-//            result.right.value.safetyAndSecurity mustEqual journeyDomain.safetyAndSecurity
-//        }
-//      }
-//    }
-//
-//    "cannot be parsed" - {
-//      "when some answers is missing" in {
-//        forAll(arb[ItemSection], arb[UserAnswers]) {
-//          case (itemSection, ua) =>
-//            val userAnswers = ItemDetailsSpec.setItemDetailsUserAnswers(itemSection.itemDetails, index)(ua)
-//            val result      = ItemSection.readerItemSection(index).run(userAnswers).isLeft
-//
-//            result mustBe true
-//        }
-//      }
-//    }
-//  }
-}
+  "JourneyDomain" - {
+    "can be parsed UserAnswers" - {
+      "when all details for section have been answered" in {
 
-object JourneyDomainSpec {
+        forAll(genUserAnswerScenario) {
+          userAnswerScenario =>
+            val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers).right.value
 
-  def setJourneyDomain(journeyDomain: JourneyDomain)(startUserAnswers: UserAnswers): UserAnswers =
-    (
-      PreTaskListDetailsSpec.setPreTaskListDetails(journeyDomain.preTaskList) _ andThen
-        RouteDetailsSpec.setRouteDetails(journeyDomain.routeDetails) andThen
-        TransportDetailsSpec.setTransportDetail(journeyDomain.transportDetails) andThen
-        ItemSectionSpec.setItemSections(journeyDomain.itemDetails.toList) andThen
-        GoodsSummarySpec.setGoodsSummary(journeyDomain.goodsSummary) andThen
-        GuaranteeDetailsSpec.setGuaranteeDetails(journeyDomain.guarantee) andThen
-        TraderDetailsSpec.setTraderDetails(journeyDomain.traderDetails) andThen
-        MovementDetailsSpec.setMovementDetails(journeyDomain.movementDetails) andThen
-        safetyAndSecurity(journeyDomain.safetyAndSecurity)
-    )(startUserAnswers)
+            result mustBe userAnswerScenario.toModel
+        }
+      }
 
-  def safetyAndSecurity(safetyAndSecurity: Option[SafetyAndSecurity])(startUserAnswers: UserAnswers): UserAnswers =
-    safetyAndSecurity match {
-      case Some(value) => SafetyAndSecuritySpec.setSafetyAndSecurity(value)(startUserAnswers)
-      case None        => startUserAnswers
+      "cannot be parsed from UserAnswers" - {
+
+        "when a safety and security is missing" in {
+
+          forAll(genUserAnswerScenario) {
+            userAnswerScenario =>
+              val userAnswers = userAnswerScenario.userAnswers
+                .unsafeRemove(AddSecurityDetailsPage)
+
+              val result = UserAnswersReader[JourneyDomain].run(userAnswers).left.value
+
+              result.page mustBe AddSecurityDetailsPage
+          }
+        }
+      }
+
+      "ItemSections" - {
+        "Must submit the correct amount for total gross mass" in {
+
+          val updatedUserAnswer = Scenario1.userAnswers
+            .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))(100.123)
+            .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))(200.123)
+
+          val itemSectionList = UserAnswersReader[NonEmptyList[ItemSection]].run(updatedUserAnswer).right.value
+
+          val result = ItemSections(itemSectionList)
+
+          result.totalGrossMassFormatted mustBe "300.246"
+        }
+      }
     }
-
+  }
 }

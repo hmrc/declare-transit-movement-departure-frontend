@@ -728,7 +728,7 @@ addAnotherPackage.title.plural = You have added {0} packages
 addAnotherPackage.title.singular = You have added {0} package
 addAnotherPackage.heading.plural = You have added {0} packages
 addAnotherPackage.heading.singular = You have added {0} package
-addAnotherPackage.yesNo = Do you need to add another of package?
+addAnotherPackage.yesNo = Do you need to add another package?
 addAnotherPackage.error.required = Select yes if you need to add another package
 addAnotherPackage.change.hidden = Change {0}
 

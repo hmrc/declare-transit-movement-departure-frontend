@@ -18,15 +18,13 @@ package models.journeyDomain.traderDetails
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
-import models.domain.Address
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, UserAnswers}
+import models.{CommonAddress, EoriNumber}
 import org.scalatest.TryValues
 import pages._
 
-class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
+class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   "Parsing ConsigneeDetails from UserAnswers" - {
 
@@ -41,9 +39,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
           .unsafeSetVal(ConsigneeNamePage)("consigneeName")
           .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
 
-        val expectedAddress: Address = Address.prismAddressToCommonAddress(
-          CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123"))
-        )
+        val expectedAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123"))
 
         val expectedResult = ConsigneeDetails("consigneeName", expectedAddress, Some(EoriNumber("eoriNumber")))
 
@@ -60,9 +56,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
           .unsafeSetVal(ConsigneeNamePage)("consigneeName")
           .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
 
-        val expectedAddress: Address = Address.prismAddressToCommonAddress(
-          CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123"))
-        )
+        val expectedAddress = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123"))
 
         val expectedResult = ConsigneeDetails("consigneeName", expectedAddress, None)
 
