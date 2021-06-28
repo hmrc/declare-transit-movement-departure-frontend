@@ -19,10 +19,12 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import generators.{JourneyModelGenerators, UserAnswersGenerator}
-import pages.AddSecurityDetailsPage
+import generators.UserAnswersGenerator
+import models.Index
+import models.userAnswerScenarios.Scenario1
+import pages.{AddSecurityDetailsPage, ItemTotalGrossMassPage}
 
-class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper with JourneyModelGenerators {
+class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
 
   "JourneyDomain" - {
     "can be parsed UserAnswers" - {
@@ -54,16 +56,16 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
 
       "ItemSections" - {
         "Must submit the correct amount for total gross mass" in {
-          forAll(arb[ItemSection]) {
-            itemsSection =>
-              val itemDetailsSection = itemsSection.itemDetails
-              val itemSection1       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "100.123"))
-              val itemSection2       = itemsSection.copy(itemDetails = itemDetailsSection.copy(itemTotalGrossMass = "200.246"))
 
-              val result = ItemSections(NonEmptyList(itemSection1, List(itemSection2))).totalGrossMassFormatted
+          val updatedUserAnswer = Scenario1.userAnswers
+            .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))(100.123)
+            .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))(200.123)
 
-              result mustBe "300.369"
-          }
+          val itemSectionList = UserAnswersReader[NonEmptyList[ItemSection]].run(updatedUserAnswer).right.value
+
+          val result = ItemSections(itemSectionList)
+
+          result.totalGrossMassFormatted mustBe "300.246"
         }
       }
     }

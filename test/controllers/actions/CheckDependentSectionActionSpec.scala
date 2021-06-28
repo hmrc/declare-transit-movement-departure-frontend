@@ -17,7 +17,7 @@
 package controllers.actions
 
 import base.SpecBase
-import generators.{Generators, JourneyModelGenerators}
+import generators.Generators
 import models.journeyDomain.{MovementDetails, MovementDetailsSpec, UserAnswersReader}
 import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, ProcedureType, UserAnswers}
@@ -30,7 +30,7 @@ import viewModels.TaskListViewModel
 
 import scala.concurrent.Future
 
-class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators with JourneyModelGenerators {
+class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators {
 
   def harness(reader: DependentSection, userAnswers: UserAnswers, f: DataRequest[AnyContent] => Unit): Future[Result] = {
 

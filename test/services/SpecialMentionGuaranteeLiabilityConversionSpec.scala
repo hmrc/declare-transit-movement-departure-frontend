@@ -18,14 +18,14 @@ package services
 
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
-import generators.{JourneyModelGenerators, ModelGenerators}
+import generators.ModelGenerators
 import models.GuaranteeType.{nonGuaranteeReferenceRoute, GuaranteeNotRequired, GuaranteeWaiver}
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.{CurrencyCode, DefaultLiabilityAmount, OtherLiabilityAmount}
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount
 import org.scalacheck.Gen
 
-class SpecialMentionGuaranteeLiabilityConversionSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with ModelGenerators {
+class SpecialMentionGuaranteeLiabilityConversionSpec extends SpecBase with GeneratorSpec with ModelGenerators {
 
   "SpecialMentionGuaranteeLiabilityConversion" - {
 
@@ -81,16 +81,12 @@ class SpecialMentionGuaranteeLiabilityConversionSpec extends SpecBase with Gener
 
     "must return empty list when all GuaranteeReferences dont have a GuaranteeType of 0, 1, 2, 4 or 9" in {
 
-      val genGuaranteeType = Gen.oneOf(nonGuaranteeReferenceRoute)
+      val guaranteeType = Gen.oneOf(nonGuaranteeReferenceRoute).sample.value
 
-      forAll(nonEmptyListOf[GuaranteeReference](2), genGuaranteeType) {
-        (guaranteeDetails, guaranteeType) =>
-          val updatedGuaranteeReferenceHead: NonEmptyList[GuaranteeReference] = guaranteeDetails.map {
-            _.copy(guaranteeType = guaranteeType)
-          }
+      val guaranteeReference1 = GuaranteeReference(guaranteeType, "AB123", DefaultLiabilityAmount, "****")
+      val guaranteeReference2 = GuaranteeReference(guaranteeType, "AB123", DefaultLiabilityAmount, "****")
 
-          SpecialMentionGuaranteeLiabilityConversion(updatedGuaranteeReferenceHead) mustBe Seq.empty
-      }
+      SpecialMentionGuaranteeLiabilityConversion(NonEmptyList(guaranteeReference1, List(guaranteeReference2))) mustBe Seq.empty
     }
   }
 

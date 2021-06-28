@@ -18,7 +18,6 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.UserAnswers
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{SameDetailsAtBorder, _}
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, _}
@@ -29,7 +28,7 @@ import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages._
 
-class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
+class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   "TransportDetails" - {
 

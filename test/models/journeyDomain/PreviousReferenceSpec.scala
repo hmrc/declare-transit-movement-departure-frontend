@@ -19,7 +19,6 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.DeclarationType.{Option1, Option2}
 import models.Index
 import models.reference.{CountryCode, CountryOfDispatch}

@@ -18,7 +18,6 @@ package models.journeyDomain.traderDetails
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.ProcedureType.Simplified
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}

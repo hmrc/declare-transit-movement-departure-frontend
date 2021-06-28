@@ -18,7 +18,6 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.JourneyModelGenerators
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber}
 import org.scalacheck.Gen
@@ -28,7 +27,7 @@ import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, _}
 import pages.{AddSecurityDetailsPage, QuestionPage}
 
-class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with JourneyModelGenerators with UserAnswersSpecHelper {
+class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   private val itemSecurityTraderDetailsUa = emptyUserAnswers
     .unsafeSetVal(AddSecurityDetailsPage)(true)

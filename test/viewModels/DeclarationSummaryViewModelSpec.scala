@@ -17,11 +17,10 @@
 package viewModels
 
 import base.{GeneratorSpec, SpecBase}
-import generators.JourneyModelGenerators
 import org.scalatest.BeforeAndAfterEach
 import play.api.libs.json.Json
 
-class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with JourneyModelGenerators with BeforeAndAfterEach {
+class DeclarationSummaryViewModelSpec extends SpecBase with GeneratorSpec with BeforeAndAfterEach {
 
   val serviceUrl = "https://serviceUrl/1222"
 

@@ -18,11 +18,10 @@ package viewModels
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import generators.{JourneyModelGenerators, ModelGenerators, UserAnswersGenerator}
+import generators.{ModelGenerators, UserAnswersGenerator}
 import models.DeclarationType.Option1
 import models.ProcedureType.{Normal, Simplified}
 import models.RepresentativeCapacity.Direct
-import models.journeyDomain.{GuaranteeDetails, RouteDetails, UserAnswersReader}
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.userAnswerScenarios.{Scenario1, Scenario3}
 import models.{DeclarationType, EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
@@ -35,13 +34,8 @@ import play.api.libs.json.{JsObject, Json}
 
 import java.time.{LocalDate, LocalDateTime}
 
-class TaskListViewModelSpec
-    extends SpecBase
-    with GeneratorSpec
-    with JourneyModelGenerators
-    with UserAnswersSpecHelper
-    with UserAnswersGenerator
-    with ModelGenerators {
+class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper with UserAnswersGenerator with ModelGenerators {
+
   import TaskListViewModelSpec._
 
   private val movementSectionName          = "declarationSummary.section.movementDetails"
