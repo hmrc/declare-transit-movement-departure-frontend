@@ -38,7 +38,6 @@ class DepartureMovementConnector @Inject() (val appConfig: FrontendAppConfig, ht
   def submitDepartureMovement(departureMovement: DeclarationRequest)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val serviceUrl = s"${appConfig.departureHost}/movements/departures/"
     val headers    = Seq(ContentTypeHeader("application/xml"), ChannelHeader(channel))
-    println(s"********************\n${departureMovement.toXml.toString}\n***************")
     http.POSTString[HttpResponse](serviceUrl, departureMovement.toXml.toString, headers)
   }
 
