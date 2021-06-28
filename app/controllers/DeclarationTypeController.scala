@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package controllers.movementDetails
+package controllers
 
 import controllers.actions._
 import forms.DeclarationTypeFormProvider
 import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.MovementDetails
+import navigation.annotations.PreTaskListDetails
 import pages.DeclarationTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeclarationTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @MovementDetails navigator: Navigator,
+  @PreTaskListDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

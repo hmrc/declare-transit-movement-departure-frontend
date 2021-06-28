@@ -63,7 +63,6 @@ class MovementDetailsCheckYourAnswersController @Inject() (
     Seq(
       Section(
         Seq(
-          checkYourAnswersHelper.declarationType,
           checkYourAnswersHelper.preLodgeDeclarationPage,
           checkYourAnswersHelper.containersUsedPage,
           checkYourAnswersHelper.declarationPlace,

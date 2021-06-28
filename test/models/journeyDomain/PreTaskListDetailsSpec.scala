@@ -18,6 +18,11 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
+import models.DeclarationType.Option1
+import models.{DeclarationType, UserAnswers}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
+import pages.{AddSecurityDetailsPage, DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage, QuestionPage}
 import models.ProcedureType.Normal
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
@@ -29,6 +34,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
     .unsafeSetVal(ProcedureTypePage)(Normal)
     .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), Seq.empty, None))
     .unsafeSetVal(AddSecurityDetailsPage)(false)
+    .unsafeSetVal(DeclarationTypePage)(Option1)
 
   "PreTaskListDetails" - {
 
@@ -39,6 +45,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
           lrn,
           Normal,
           CustomsOffice("id", "name", CountryCode("code"), Seq.empty, None),
+          Option1,
           false
         )
 

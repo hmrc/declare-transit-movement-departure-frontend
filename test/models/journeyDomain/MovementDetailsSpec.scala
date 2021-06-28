@@ -35,9 +35,8 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
       "when procedure type is Normal" in {
 
         val expectedResult = NormalMovementDetails(
-          Option1,
-          prelodge = false,
-          containersUsed = false,
+          false,
+          false,
           "declarationPlace",
           DeclarationForSomeoneElse("repName", Direct)
         )
@@ -60,8 +59,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
       "when procedure type is Simplified" in {
 
         val expectedResult = SimplifiedMovementDetails(
-          Option1,
-          containersUsed = false,
+          false,
           "declarationPlace",
           DeclarationForSomeoneElse("repName", Direct)
         )
@@ -99,9 +97,8 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           "and all mandatory answers are defined" in {
 
             val expectedResult = NormalMovementDetails(
-              Option1,
-              prelodge = false,
-              containersUsed = false,
+              false,
+              false,
               "declarationPlace",
               DeclarationForSomeoneElse("repName", Direct)
             )
@@ -126,9 +123,8 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           "and all mandatory answers are defined" in {
 
             val expectedResult = NormalMovementDetails(
-              Option1,
-              prelodge = false,
-              containersUsed = false,
+              false,
+              false,
               "declarationPlace",
               DeclarationForSelf
             )
@@ -154,7 +150,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           "and a mandatory page is missing" in {
 
             val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-              DeclarationTypePage,
               PreLodgeDeclarationPage,
               ContainersUsedPage,
               DeclarationPlacePage,
@@ -166,7 +161,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
             forAll(mandatoryPages) {
               mandatoryPage =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(DeclarationTypePage)(Option1)
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
                   .unsafeSetVal(ContainersUsedPage)(false)
                   .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
@@ -187,7 +181,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           "and a mandatory page is missing" in {
 
             val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-              DeclarationTypePage,
               PreLodgeDeclarationPage,
               ContainersUsedPage,
               DeclarationPlacePage,
@@ -197,7 +190,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
             forAll(mandatoryPages) {
               mandatoryPage =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(DeclarationTypePage)(Option1)
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
                   .unsafeSetVal(ContainersUsedPage)(false)
                   .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
@@ -222,8 +214,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           "and all mandatory answers are defined" in {
 
             val expectedResult = SimplifiedMovementDetails(
-              Option1,
-              containersUsed = false,
+              false,
               "declarationPlace",
               DeclarationForSomeoneElse("repName", Direct)
             )
@@ -247,14 +238,12 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           "and all mandatory answers are defined" in {
 
             val expectedResult = SimplifiedMovementDetails(
-              Option1,
-              containersUsed = false,
+              false,
               "declarationPlace",
               DeclarationForSelf
             )
 
             val userAnswers = emptyUserAnswers
-              .unsafeSetVal(DeclarationTypePage)(Option1)
               .unsafeSetVal(ContainersUsedPage)(false)
               .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
               .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
@@ -273,7 +262,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           "and a mandatory page is missing" in {
 
             val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-              DeclarationTypePage,
               ContainersUsedPage,
               DeclarationPlacePage,
               DeclarationForSomeoneElsePage,
@@ -284,7 +272,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
             forAll(mandatoryPages) {
               mandatoryPage =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(DeclarationTypePage)(Option1)
                   .unsafeSetVal(ContainersUsedPage)(false)
                   .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
                   .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
@@ -304,7 +291,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           "and a mandatory page is missing" in {
 
             val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-              DeclarationTypePage,
               ContainersUsedPage,
               DeclarationPlacePage,
               DeclarationForSomeoneElsePage
@@ -313,7 +299,6 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
             forAll(mandatoryPages) {
               mandatoryPage =>
                 val userAnswers = emptyUserAnswers
-                  .unsafeSetVal(DeclarationTypePage)(Option1)
                   .unsafeSetVal(ContainersUsedPage)(false)
                   .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
                   .unsafeSetVal(DeclarationForSomeoneElsePage)(false)

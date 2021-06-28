@@ -19,6 +19,8 @@ package controllers.actions
 import base.SpecBase
 import generators.Generators
 import models.journeyDomain.{MovementDetails, MovementDetailsSpec, UserAnswersReader}
+import generators.{Generators, JourneyModelGenerators}
+import models.journeyDomain.{MovementDetails, MovementDetailsSpec, PreTaskListDetails, UserAnswersReader}
 import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, ProcedureType, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
@@ -47,27 +49,29 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
       )
   }
 
-//  "CheckDependentSectionAction" - {
-//
-//    "return unit if dependent section is complete" in {
-//
-//      val procedureType   = arbitrary[ProcedureType].sample.value
-//      val movementDetails = arbitraryMovementDetails(procedureType).arbitrary.sample.value
-//      val userAnswers     = MovementDetailsSpec.setMovementDetails(movementDetails)(emptyUserAnswers)
-//
-//      val result: Future[Result] = harness(DependentSection.TransportDetails, userAnswers, request => request.userAnswers)
-//      status(result) mustBe OK
-//      redirectLocation(result) mustBe None
-//
-//    }
-//
-//    "return to task list page if dependent section is incomplete" in {
-//
-//      val result = harness(DependentSection.TransportDetails, emptyUserAnswers, request => request.userAnswers)
-//      status(result) mustBe SEE_OTHER
-//      redirectLocation(result) mustBe Some(controllers.routes.DeclarationSummaryController.onPageLoad(emptyUserAnswers.id).url)
-//    }
-//
-//  }
+  "CheckDependentSectionAction" - {
+
+    "return unit if dependent section is complete" in {
+
+      val procedureType      = arbitrary[ProcedureType].sample.value
+      val movementDetails    = arbitraryMovementDetails(procedureType).arbitrary.sample.value
+      val preTaskListDetails = arbitrary[PreTaskListDetails].sample.value
+
+      val userAnswers = MovementDetailsSpec.setMovementDetails(movementDetails, preTaskListDetails)(emptyUserAnswers)
+
+      val result: Future[Result] = harness(DependentSection.TransportDetails, userAnswers, request => request.userAnswers)
+      status(result) mustBe OK
+      redirectLocation(result) mustBe None
+
+    }
+
+    "return to task list page if dependent section is incomplete" in {
+
+      val result = harness(DependentSection.TransportDetails, emptyUserAnswers, request => request.userAnswers)
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(controllers.routes.DeclarationSummaryController.onPageLoad(emptyUserAnswers.id).url)
+    }
+
+  }
 
 }

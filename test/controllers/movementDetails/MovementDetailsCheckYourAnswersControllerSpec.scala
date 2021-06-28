@@ -102,9 +102,8 @@ class MovementDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNu
       val rows     = sections \\ "key"
 
 
-      rows.size mustBe 2
-      rows(0)("text").as[String] mustBe "declarationType.checkYourAnswersLabel"
-      rows(1)("text").as[String] mustBe "preLodgeDeclaration.checkYourAnswersLabel"
+      rows.size mustBe 1
+      rows.head("text").as[String] mustBe "preLodgeDeclaration.checkYourAnswersLabel"
 
     }
   }

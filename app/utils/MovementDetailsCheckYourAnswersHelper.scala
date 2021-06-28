@@ -121,21 +121,5 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def declarationType: Option[Row] = userAnswers.get(DeclarationTypePage) map {
-    answer =>
-      Row(
-        key = Key(msg"declarationType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(msg"declarationType.$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.DeclarationTypeController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declarationType.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-declaration-type""")
-          )
-        )
-      )
-  }
-
   def lrn: LocalReferenceNumber = userAnswers.id
 }

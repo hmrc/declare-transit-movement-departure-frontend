@@ -286,9 +286,10 @@ case object Scenario1 extends UserAnswerScenario {
     .unsafeSetVal(pages.LiabilityAmountPage(Index(1)))("500")
     .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
 
-  private val preTaskListDetails = PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Seq.empty, None), true)
+  private val preTaskListDetails =
+    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Seq.empty, None), Option2, true)
 
-  private val movementDetails = NormalMovementDetails(Option2, false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
+  private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 
   private val routeDetails = RouteDetails(
     CountryOfDispatch(CountryCode("SC"), false),
