@@ -56,7 +56,7 @@ class DeclarationTypeControllerSpec
 
   val formProvider    = new DeclarationTypeFormProvider()
   val form            = formProvider()
-  val gbCustomsOffice = CustomsOffice("Id", "Name", CountryCode("GB"), Seq.empty, None)
+  val gbCustomsOffice = CustomsOffice("Id", "Name", CountryCode("GB"), None)
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

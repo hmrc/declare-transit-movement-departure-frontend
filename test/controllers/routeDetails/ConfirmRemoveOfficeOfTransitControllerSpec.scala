@@ -49,7 +49,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
   val formProvider                                   = new ConfirmRemoveOfficeOfTransitFormProvider()
   val form                                           = formProvider()
   private val mockReferenceDataConnector             = mock[ReferenceDataConnector]
-  private val customsOffice                          = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+  private val customsOffice                          = CustomsOffice("id", "name", CountryCode("GB"), None)
   lazy val confirmRemoveOfficeOfTransitRoute: String = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

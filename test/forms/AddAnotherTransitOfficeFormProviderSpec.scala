@@ -26,8 +26,8 @@ class AddAnotherTransitOfficeFormProviderSpec extends StringFieldBehaviours {
   private val requiredKey                          = "addAnotherTransitOffice.error.required"
   private val maxLength                            = 8
   private val countryName                          = "United Kingdom"
-  private val customsOffice1: CustomsOffice        = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  private val customsOffice2: CustomsOffice        = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+  private val customsOffice1: CustomsOffice        = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
+  private val customsOffice2: CustomsOffice        = CustomsOffice("id", "name", CountryCode("GB"), None)
   private val customsOfficeList: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   private val form                                 = new AddAnotherTransitOfficeFormProvider()(customsOfficeList, "United Kingdom")
 

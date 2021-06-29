@@ -258,8 +258,8 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
         val expectedResult =
           CustomsOfficeList(
             Seq(
-              CustomsOffice("testId1", "testName1", CountryCode("GB"), Seq("role1", "role2"), Some("testPhoneNumber")),
-              CustomsOffice("testId2", "testName2", CountryCode("GB"), Seq("role1", "role2"), None)
+              CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
+              CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
             )
           )
 
@@ -281,8 +281,8 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
         val expectedResult =
           CustomsOfficeList(
             Seq(
-              CustomsOffice("testId1", "testName1", CountryCode("GB"), Seq("role1", "role2"), Some("testPhoneNumber")),
-              CustomsOffice("testId2", "testName2", CountryCode("GB"), Seq("role1", "role2"), None)
+              CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
+              CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
             )
           )
 
@@ -414,7 +414,7 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
             .willReturn(okJson(customsOfficeJson))
         )
 
-        val expectedResult: CustomsOffice = CustomsOffice("1", "Data1", CountryCode("GB"), Seq("role1", "role2"), Some("testPhoneNumber"))
+        val expectedResult: CustomsOffice = CustomsOffice("1", "Data1", CountryCode("GB"), Some("testPhoneNumber"))
 
         connector.getCustomsOffice("1").futureValue mustEqual expectedResult
       }

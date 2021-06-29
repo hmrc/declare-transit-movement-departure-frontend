@@ -49,7 +49,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererA
 
   lazy val addTransitOfficeRoute           = routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
   private val mockRefDataConnector         = mock[ReferenceDataConnector]
-  val customsOffice                        = CustomsOffice("1", "Transit1", CountryCode("GB"), Seq.empty, None)
+  val customsOffice                        = CustomsOffice("1", "Transit1", CountryCode("GB"), None)
   val customsOfficeList: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice))
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

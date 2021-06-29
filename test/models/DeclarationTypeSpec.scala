@@ -70,7 +70,7 @@ class DeclarationTypeSpec
       "Must return the correct number of radios" - {
         "When Office of Departure is 'GB'" in {
           val form          = new DeclarationTypeFormProvider()
-          val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+          val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), None)
           val userAnswers   = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
           val radios        = DeclarationType.radios(form(), userAnswers)()
           val expected      = Seq(Option1.toString, Option2.toString)
@@ -79,7 +79,7 @@ class DeclarationTypeSpec
         }
         "When Office of Departure is 'XI' and the departure type is Simplified" in {
           val form          = new DeclarationTypeFormProvider()
-          val customsOffice = CustomsOffice("id", "name", CountryCode("XI"), Seq.empty, None)
+          val customsOffice = CustomsOffice("id", "name", CountryCode("XI"), None)
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
             .unsafeSetVal(ProcedureTypePage)(Simplified)
@@ -89,7 +89,7 @@ class DeclarationTypeSpec
         }
         "When Office of Departure is 'XI' and the departure type is Normal" in {
           val form          = new DeclarationTypeFormProvider()
-          val customsOffice = CustomsOffice("id", "name", CountryCode("XI"), Seq.empty, None)
+          val customsOffice = CustomsOffice("id", "name", CountryCode("XI"), None)
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
             .unsafeSetVal(ProcedureTypePage)(Normal)

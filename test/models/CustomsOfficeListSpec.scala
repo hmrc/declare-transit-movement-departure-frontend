@@ -49,9 +49,9 @@ class CustomsOfficeListSpec extends SpecBase with Generators with ScalaCheckProp
     "return a None if it does not exists" in {
 
       val customsOffices = Seq(
-        CustomsOffice("1", "one", CountryCode("GB"), Seq("role1", "role2"), Some("phoneNumber")),
-        CustomsOffice("2", "two", CountryCode("GB"), Seq.empty, None),
-        CustomsOffice("3", "three", CountryCode("FR"), Seq("role1", "role2"), None)
+        CustomsOffice("1", "one", CountryCode("GB"), Some("phoneNumber")),
+        CustomsOffice("2", "two", CountryCode("GB"), None),
+        CustomsOffice("3", "three", CountryCode("FR"), None)
       )
 
       val customsOfficeList = CustomsOfficeList(customsOffices)
@@ -66,11 +66,11 @@ class CustomsOfficeListSpec extends SpecBase with Generators with ScalaCheckProp
   "filter" - {
     "return a list of customs offices without the office with matching id" in {
       val customsOffices = Seq(
-        CustomsOffice("1", "one", CountryCode("GB"), Seq("role1", "role2"), Some("phoneNumber")),
-        CustomsOffice("2", "two", CountryCode("GB"), Seq.empty, None),
-        CustomsOffice("3", "three", CountryCode("FR"), Seq("role1", "role2"), None),
-        CustomsOffice("4", "four", CountryCode("AD"), Seq.empty, Some("phoneNumber")),
-        CustomsOffice("5", "five", CountryCode("IT"), Seq.empty, None)
+        CustomsOffice("1", "one", CountryCode("GB"), Some("phoneNumber")),
+        CustomsOffice("2", "two", CountryCode("GB"), None),
+        CustomsOffice("3", "three", CountryCode("FR"), None),
+        CustomsOffice("4", "four", CountryCode("AD"), Some("phoneNumber")),
+        CustomsOffice("5", "five", CountryCode("IT"), None)
       )
 
       val customsOfficeList = CustomsOfficeList(customsOffices)
@@ -78,10 +78,10 @@ class CustomsOfficeListSpec extends SpecBase with Generators with ScalaCheckProp
       val officeIds = Seq("3")
 
       val expectedOffices = Seq(
-        CustomsOffice("1", "one", CountryCode("GB"), Seq("role1", "role2"), Some("phoneNumber")),
-        CustomsOffice("2", "two", CountryCode("GB"), Seq.empty, None),
-        CustomsOffice("4", "four", CountryCode("AD"), Seq.empty, Some("phoneNumber")),
-        CustomsOffice("5", "five", CountryCode("IT"), Seq.empty, None)
+        CustomsOffice("1", "one", CountryCode("GB"), Some("phoneNumber")),
+        CustomsOffice("2", "two", CountryCode("GB"), None),
+        CustomsOffice("4", "four", CountryCode("AD"), Some("phoneNumber")),
+        CustomsOffice("5", "five", CountryCode("IT"), None)
       )
 
       customsOfficeList.filterNot(officeIds) must contain theSameElementsAs expectedOffices
@@ -90,11 +90,11 @@ class CustomsOfficeListSpec extends SpecBase with Generators with ScalaCheckProp
 
     "return a list of customs offices without the offices with matching ids" in {
       val customsOffices = Seq(
-        CustomsOffice("1", "one", CountryCode("GB"), Seq("role1", "role2"), Some("phoneNumber")),
-        CustomsOffice("2", "two", CountryCode("GB"), Seq.empty, None),
-        CustomsOffice("3", "three", CountryCode("FR"), Seq("role1", "role2"), None),
-        CustomsOffice("4", "four", CountryCode("AD"), Seq.empty, Some("phoneNumber")),
-        CustomsOffice("5", "five", CountryCode("IT"), Seq.empty, None)
+        CustomsOffice("1", "one", CountryCode("GB"), Some("phoneNumber")),
+        CustomsOffice("2", "two", CountryCode("GB"), None),
+        CustomsOffice("3", "three", CountryCode("FR"), None),
+        CustomsOffice("4", "four", CountryCode("AD"), Some("phoneNumber")),
+        CustomsOffice("5", "five", CountryCode("IT"), None)
       )
 
       val customsOfficeList = CustomsOfficeList(customsOffices)
@@ -102,9 +102,9 @@ class CustomsOfficeListSpec extends SpecBase with Generators with ScalaCheckProp
       val officeIds = Seq("5", "3")
 
       val expectedOffices = Seq(
-        CustomsOffice("1", "one", CountryCode("GB"), Seq("role1", "role2"), Some("phoneNumber")),
-        CustomsOffice("2", "two", CountryCode("GB"), Seq.empty, None),
-        CustomsOffice("4", "four", CountryCode("AD"), Seq.empty, Some("phoneNumber"))
+        CustomsOffice("1", "one", CountryCode("GB"), Some("phoneNumber")),
+        CustomsOffice("2", "two", CountryCode("GB"), None),
+        CustomsOffice("4", "four", CountryCode("AD"), Some("phoneNumber"))
       )
 
       customsOfficeList.filterNot(officeIds) must contain theSameElementsAs expectedOffices
@@ -113,11 +113,11 @@ class CustomsOfficeListSpec extends SpecBase with Generators with ScalaCheckProp
 
     "return the full list of customs offices when there are no offices with matching id" in {
       val customsOffices = Seq(
-        CustomsOffice("1", "one", CountryCode("GB"), Seq("role1", "role2"), Some("phoneNumber")),
-        CustomsOffice("2", "two", CountryCode("GB"), Seq.empty, None),
-        CustomsOffice("3", "three", CountryCode("FR"), Seq("role1", "role2"), None),
-        CustomsOffice("4", "four", CountryCode("AD"), Seq.empty, Some("phoneNumber")),
-        CustomsOffice("5", "five", CountryCode("IT"), Seq.empty, None)
+        CustomsOffice("1", "one", CountryCode("GB"), Some("phoneNumber")),
+        CustomsOffice("2", "two", CountryCode("GB"), None),
+        CustomsOffice("3", "three", CountryCode("FR"), None),
+        CustomsOffice("4", "four", CountryCode("AD"), Some("phoneNumber")),
+        CustomsOffice("5", "five", CountryCode("IT"), None)
       )
 
       val customsOfficeList = CustomsOfficeList(customsOffices)

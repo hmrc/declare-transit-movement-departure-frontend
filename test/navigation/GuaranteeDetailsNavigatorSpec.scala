@@ -31,8 +31,8 @@ import play.api.libs.json.{JsObject, JsPath}
 //TODO update to CYA when CYA merged in
 class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
   // format: off
-  val customsOffice1: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  val customsOffice2: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("DE"), Seq.empty, None)
+  val customsOffice1: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
+  val customsOffice2: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("DE"), None)
 
   val navigator = new GuaranteeDetailsNavigator
   "GuaranteeDetailsNavigator" - {

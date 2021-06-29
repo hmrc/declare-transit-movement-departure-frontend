@@ -71,10 +71,10 @@ class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaC
           .set(LiabilityAmountPage(index), "10.00")
           .success
           .value
-          .set(OfficeOfDeparturePage, CustomsOffice("", "", CountryCode("GB"), Seq.empty, None))
+          .set(OfficeOfDeparturePage, CustomsOffice("", "", CountryCode("GB"), None))
           .success
           .value
-          .set(DestinationOfficePage, CustomsOffice("", "", CountryCode("GB"), Seq.empty, None))
+          .set(DestinationOfficePage, CustomsOffice("", "", CountryCode("GB"), None))
           .success
           .value
           .set(GuaranteeTypePage(index), GuaranteeWaiver)
@@ -94,10 +94,10 @@ class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaC
           .set(LiabilityAmountPage(index), "10.00")
           .success
           .value
-          .set(OfficeOfDeparturePage, CustomsOffice("", "", CountryCode("IT"), Seq.empty, None))
+          .set(OfficeOfDeparturePage, CustomsOffice("", "", CountryCode("IT"), None))
           .success
           .value
-          .set(DestinationOfficePage, CustomsOffice("", "", CountryCode("FR"), Seq.empty, None))
+          .set(DestinationOfficePage, CustomsOffice("", "", CountryCode("FR"), None))
           .success
           .value
           .set(GuaranteeTypePage(index), GuaranteeWaiver)
@@ -117,10 +117,10 @@ class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaC
           .remove(LiabilityAmountPage(index))
           .success
           .value
-          .set(OfficeOfDeparturePage, CustomsOffice("", "", CountryCode("GB"), Seq.empty, None))
+          .set(OfficeOfDeparturePage, CustomsOffice("", "", CountryCode("GB"), None))
           .success
           .value
-          .set(DestinationOfficePage, CustomsOffice("", "", CountryCode("GB"), Seq.empty, None))
+          .set(DestinationOfficePage, CustomsOffice("", "", CountryCode("GB"), None))
           .success
           .value
           .set(GuaranteeTypePage(index), GuaranteeWaiver)
@@ -143,10 +143,10 @@ class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaC
         forAll(genNonGuaranteeReferenceGroup) {
           nonGuaranteeReferenceGroup =>
             val updatedAnswers = emptyUserAnswers
-              .set(OfficeOfDeparturePage, CustomsOffice("", "", CountryCode("GB"), Seq.empty, None))
+              .set(OfficeOfDeparturePage, CustomsOffice("", "", CountryCode("GB"), None))
               .success
               .value
-              .set(DestinationOfficePage, CustomsOffice("", "", CountryCode("GB"), Seq.empty, None))
+              .set(DestinationOfficePage, CustomsOffice("", "", CountryCode("GB"), None))
               .success
               .value
               .set(GuaranteeTypePage(index), nonGuaranteeReferenceGroup)

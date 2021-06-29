@@ -28,7 +28,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
 
   private val preTaskListUa = emptyUserAnswers
     .unsafeSetVal(ProcedureTypePage)(Normal)
-    .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), Seq.empty, None))
+    .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
     .unsafeSetVal(AddSecurityDetailsPage)(false)
     .unsafeSetVal(DeclarationTypePage)(Option1)
 
@@ -40,7 +40,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
         val expectedResult = PreTaskListDetails(
           lrn,
           Normal,
-          CustomsOffice("id", "name", CountryCode("code"), Seq.empty, None),
+          CustomsOffice("id", "name", CountryCode("code"), None),
           Option1,
           false
         )

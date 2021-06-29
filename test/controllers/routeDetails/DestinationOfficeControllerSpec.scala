@@ -48,8 +48,8 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
 
   private val countryCode                       = CountryCode("GB")
   private val countries                         = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+  private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
+  private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   private val form                              = new DestinationOfficeFormProvider()(customsOffices, "United Kingdom")
   private val mockReferenceDataConnector        = mock[ReferenceDataConnector]

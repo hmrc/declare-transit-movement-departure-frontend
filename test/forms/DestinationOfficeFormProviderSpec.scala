@@ -27,8 +27,8 @@ class DestinationOfficeFormProviderSpec extends StringFieldBehaviours {
   private val lengthKey                         = "destinationOffice.error.length"
   private val maxLength                         = 20
   private val countryName                       = "United Kingdom"
-  private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+  private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
+  private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   private val form                              = new DestinationOfficeFormProvider()(customsOffices, countryName)
 

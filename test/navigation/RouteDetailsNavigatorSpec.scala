@@ -38,7 +38,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
       "Route Details section" - {
         "must go from Country of dispatch page to Destination Country page" in {
-          val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
+          val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), None)
           forAll(arbitrary[UserAnswers]) {
             answers =>
               navigator
