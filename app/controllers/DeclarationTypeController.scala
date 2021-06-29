@@ -61,7 +61,7 @@ class DeclarationTypeController @Inject() (
         "form"   -> preparedForm,
         "mode"   -> mode,
         "lrn"    -> lrn,
-        "radios" -> DeclarationType.radios(preparedForm, request.userAnswers)()
+        "radios" -> DeclarationType.radios(preparedForm)
       )
 
       renderer.render("declarationType.njk", json).map(Ok(_))
@@ -78,7 +78,7 @@ class DeclarationTypeController @Inject() (
               "form"   -> formWithErrors,
               "mode"   -> mode,
               "lrn"    -> lrn,
-              "radios" -> DeclarationType.radios(formWithErrors, request.userAnswers)()
+              "radios" -> DeclarationType.radios(formWithErrors)
             )
 
             renderer.render("declarationType.njk", json).map(BadRequest(_))

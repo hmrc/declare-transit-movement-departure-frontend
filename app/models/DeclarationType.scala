@@ -16,9 +16,6 @@
 
 package models
 
-import models.ProcedureType.{Normal, Simplified}
-import models.reference.CountryCode
-import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.data.Form
 import uk.gov.hmrc.viewmodels._
 
@@ -28,40 +25,20 @@ object DeclarationType extends Enumerable.Implicits {
 
   case object Option1 extends DeclarationType("T1", "option1")
   case object Option2 extends DeclarationType("T2", "option2")
-  case object Option3 extends DeclarationType("T2F", "option3")
-  case object Option4 extends DeclarationType("TIR", "option4")
 
   val values: Seq[DeclarationType] = Seq(
     Option1,
-    Option2,
-    Option3,
-    Option4
+    Option2
   )
 
-  def radios(form: Form[_], userAnswers: UserAnswers)(): Seq[Radios.Item] = {
+  def radios(form: Form[_])(): Seq[Radios.Item] = {
 
     val field = form("value")
-    val itemsGB = Seq(
+    val items = Seq(
       Radios.Radio(msg"declarationType.option1", Option1.toString),
       Radios.Radio(msg"declarationType.option2", Option2.toString)
     )
-    val itemsNISimplified = Seq(
-      Radios.Radio(msg"declarationType.option1", Option1.toString),
-      Radios.Radio(msg"declarationType.option2", Option2.toString),
-      Radios.Radio(msg"declarationType.option3", Option3.toString)
-    )
-    val itemsNINormal = Seq(
-      Radios.Radio(msg"declarationType.option1", Option1.toString),
-      Radios.Radio(msg"declarationType.option2", Option2.toString),
-      Radios.Radio(msg"declarationType.option3", Option3.toString),
-      Radios.Radio(msg"declarationType.option4", Option4.toString)
-    )
-    val countryCode = userAnswers.get(OfficeOfDeparturePage).map(_.countryId)
-    val items = (countryCode, userAnswers.get(ProcedureTypePage)) match {
-      case (Some(CountryCode("XI")), Some(Simplified)) => itemsNISimplified
-      case (Some(CountryCode("XI")), Some(Normal))     => itemsNINormal
-      case _                                           => itemsGB
-    }
+
     Radios(field, items)
   }
 
