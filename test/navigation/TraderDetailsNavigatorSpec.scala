@@ -108,7 +108,21 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Add Principal's Name page if principals EORI does not start with prefix 'GB' " in {
+          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'XI' " in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Add Principal's Name page if principals EORI does not start with prefix 'GB' or 'XI' " in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
@@ -425,7 +439,21 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "to Principal Page if Prefix is not 'GB' and there is no data for Principal Name" in {
+          "to Check Your Answers Page if Prefix is 'XI' " in {
+
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
+                  .unsafeSetVal(ProcedureTypePage)(Normal)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
+                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            }
+          }
+
+          "to Principal Page if Prefix is not 'GB', is not 'XI' and there is no data for Principal Name" in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>
@@ -439,7 +467,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "to Check Your Answers Page if Prefix is not 'GB' and there is  data for Principal Name" in {
+          "to Check Your Answers Page if Prefix is not 'GB', is not 'XI' and there is  data for Principal Name" in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>

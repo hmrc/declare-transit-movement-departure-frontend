@@ -47,7 +47,22 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
 
         }
 
-        "and Eori is answered in prefix is not GB" in {
+        "and Eori is answered in prefix is XI" in {
+
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+            .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
+            .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
+
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+
+          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("XI123456"))
+
+          result mustEqual expectedResult
+
+        }
+
+        "and Eori is answered in prefix is not GB or XI" in {
 
           val address = CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description"))
 

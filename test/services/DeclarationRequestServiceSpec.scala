@@ -544,13 +544,13 @@ class DeclarationRequestServiceSpec
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
                 .unsafeSetVal(PrincipalNamePage)("Jimmy")
-                .unsafeSetVal(WhatIsPrincipalEoriPage)("xi123456789")
+                .unsafeSetVal(WhatIsPrincipalEoriPage)("ad123456789")
                 .unsafeSetVal(PrincipalAddressPage)(CommonAddress("Line 1", "city", "PostCode", Country(CountryCode("XI"), "SomeDescription")))
 
               val result = service.convert(userAnswers).futureValue.right.value.traderPrincipal
 
               result mustBe TraderPrincipalWithEori(
-                eori = "xi123456789",
+                eori = "ad123456789",
                 name = Some("Jimmy"),
                 streetAndNumber = Some("Line 1"),
                 postCode = Some("PostCode"),
