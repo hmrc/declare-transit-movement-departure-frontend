@@ -105,7 +105,7 @@ class UserAnswersToXmlConversionSpec
           <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>2</TotNumOfIteHEA305>
-          <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
+          <TotNumOfPacHEA306>30</TotNumOfPacHEA306>
           <TotGroMasHEA307>37345.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
@@ -360,7 +360,7 @@ class UserAnswersToXmlConversionSpec
           <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
-          <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
+          <TotNumOfPacHEA306>15</TotNumOfPacHEA306>
           <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
@@ -457,7 +457,7 @@ class UserAnswersToXmlConversionSpec
           <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
-          <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
+          <TotNumOfPacHEA306>15</TotNumOfPacHEA306>
           <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
@@ -636,7 +636,7 @@ class UserAnswersToXmlConversionSpec
           <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
           <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
           <TotNumOfIteHEA305>1</TotNumOfIteHEA305>
-          <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
+          <TotNumOfPacHEA306>15</TotNumOfPacHEA306>
           <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>

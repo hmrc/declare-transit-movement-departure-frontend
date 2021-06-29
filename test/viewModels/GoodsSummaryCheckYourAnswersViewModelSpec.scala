@@ -60,27 +60,9 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
 
     }
 
-    "display Number of packages declared" in {
-
-      val updatedAnswers = emptyUserAnswers
-        .set(TotalPackagesPage, 1000)
-        .success
-        .value
-      val data = GoodsSummaryCheckYourAnswersViewModel(updatedAnswers)
-
-      data.sections.head.sectionTitle must not be defined
-      data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 1
-      data.sections.head.rows.head.value.content mustEqual Literal("1000")
-
-    }
-
     "display Authorised location" in {
 
       val updatedAnswers = emptyUserAnswers
-        .set(TotalPackagesPage, 1000)
-        .success
-        .value
         .set(AuthorisedLocationCodePage, "AuthCode")
         .success
         .value
@@ -88,16 +70,13 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
 
       data.sections.head.sectionTitle must not be defined
       data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 2
-      data.sections.head.rows(1).value.content mustEqual Literal("AuthCode")
+      data.sections.head.rows.length mustEqual 1
+      data.sections.head.rows(0).value.content mustEqual Literal("AuthCode")
 
     }
-    "display Customs approve location" in {
+    "display Customs approved location" in {
 
       val updatedAnswers = emptyUserAnswers
-        .set(TotalPackagesPage, 1000)
-        .success
-        .value
         .set(CustomsApprovedLocationPage, "ApprovedCode")
         .success
         .value
@@ -105,8 +84,8 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
 
       data.sections.head.sectionTitle must not be defined
       data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 2
-      data.sections.head.rows(1).value.content mustEqual Literal("ApprovedCode")
+      data.sections.head.rows.length mustEqual 1
+      data.sections.head.rows(0).value.content mustEqual Literal("ApprovedCode")
 
     }
 
@@ -117,9 +96,6 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
       val todaysDate: String               = dateFormatter.format(date)
 
       val updatedAnswers = emptyUserAnswers
-        .set(TotalPackagesPage, 1000)
-        .success
-        .value
         .set(AuthorisedLocationCodePage, "AuthCode")
         .success
         .value
@@ -130,8 +106,8 @@ class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheck
 
       data.sections.head.sectionTitle must not be defined
       data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 3
-      data.sections.head.rows(2).value.content mustEqual Literal(todaysDate)
+      data.sections.head.rows.length mustEqual 2
+      data.sections.head.rows(1).value.content mustEqual Literal(todaysDate)
 
     }
 

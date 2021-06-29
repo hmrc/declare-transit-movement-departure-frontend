@@ -133,7 +133,6 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryDocumentTypeUserAnswersEntry.arbitrary ::
       arbitraryAddAdministrativeReferenceUserAnswersEntry.arbitrary ::
       arbitraryConfirmRemoveItemUserAnswersEntry.arbitrary ::
-      arbitraryTotalPackagesUserAnswersEntry.arbitrary ::
       arbitraryTotalNetMassUserAnswersEntry.arbitrary ::
       arbitraryCommodityCodeUserAnswersEntry.arbitrary ::
       arbitraryTotalNetMassUserAnswersEntry.arbitrary ::
@@ -167,7 +166,6 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryCustomsApprovedLocationUserAnswersEntry.arbitrary ::
       arbitraryAddCustomsApprovedLocationUserAnswersEntry.arbitrary ::
       arbitraryAuthorisedLocationCodeUserAnswersEntry.arbitrary ::
-      arbitraryTotalPackagesUserAnswersEntry.arbitrary ::
       arbitraryAddTransitOfficeUserAnswersEntry.arbitrary ::
       arbitraryModeAtBorderUserAnswersEntry.arbitrary ::
       arbitraryNationalityCrossingBorderUserAnswersEntry.arbitrary ::
@@ -218,7 +216,6 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryCustomsApprovedLocationUserAnswersEntry.arbitrary ::
       arbitraryAddCustomsApprovedLocationUserAnswersEntry.arbitrary ::
       arbitraryAuthorisedLocationCodeUserAnswersEntry.arbitrary ::
-      arbitraryTotalPackagesUserAnswersEntry.arbitrary ::
       arbitraryAddTransitOfficeUserAnswersEntry.arbitrary ::
       arbitraryModeAtBorderUserAnswersEntry.arbitrary ::
       arbitraryNationalityCrossingBorderUserAnswersEntry.arbitrary ::

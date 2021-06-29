@@ -27,7 +27,6 @@ import pages._
 import pages.movementDetails.PreLodgeDeclarationPage
 
 case class GoodsSummary(
-  numberOfPackages: Int,
   loadingPlace: Option[String],
   goodSummaryDetails: GoodSummaryDetails,
   sealNumbers: Seq[SealDomain]
@@ -37,7 +36,6 @@ object GoodsSummary {
 
   implicit val parser: UserAnswersReader[GoodsSummary] =
     (
-      TotalPackagesPage.reader,
       AddSecurityDetailsPage.filterOptionalDependent(identity)(LoadingPlacePage.optionalReader).map(_.flatten),
       UserAnswersReader[GoodSummaryDetails],
       DeriveNumberOfSeals.reader orElse List.empty[SealDomain].pure[UserAnswersReader]

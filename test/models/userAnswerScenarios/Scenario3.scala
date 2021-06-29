@@ -275,7 +275,7 @@ case object Scenario3 extends UserAnswerScenario {
     List.empty
   )
 
-  private val goodsSummary = GoodsSummary(1, Some("LoadPLace"), GoodSummaryNormalDetailsWithPreLodge(None), List(SealDomain("SEAL1")))
+  private val goodsSummary = GoodsSummary(Some("LoadPLace"), GoodSummaryNormalDetailsWithPreLodge(None), List(SealDomain("SEAL1")))
 
   private val guarantee = NonEmptyList(
     GuaranteeReference(GuaranteeType.ComprehensiveGuarantee, "GUA1Ref", DefaultLiabilityAmount, "1234"),

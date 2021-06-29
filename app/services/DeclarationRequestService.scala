@@ -372,7 +372,7 @@ class DeclarationRequestService @Inject() (
         ),
         conIndHEA96 = booleanToInt(movementDetails.containersUsed),
         totNumOfIteHEA305 = itemDetails.size,
-        totNumOfPacHEA306 = goodsSummary.numberOfPackages,
+        totNumOfPacHEA306 = ItemSections(itemDetails).totalPackages,
         totGroMasHEA307 = ItemSections(itemDetails).totalGrossMassFormatted,
         decDatHEA383 = dateTimeOfPrep.toLocalDate,
         decPlaHEA394 = movementDetails.declarationPlacePage,

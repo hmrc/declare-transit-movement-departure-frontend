@@ -133,7 +133,7 @@ case object Scenario2 extends UserAnswerScenario {
 
   private val guarantee = NonEmptyList(GuaranteeOther(GuaranteeType.CashDepositGuarantee, "GUA1Reference"), List.empty)
 
-  private val goodsSummary = GoodsSummary(1, None, GoodSummarySimplifiedDetails("AuthLocationCode", LocalDate.of(2020, 12, 12)), List.empty)
+  private val goodsSummary = GoodsSummary(None, GoodSummarySimplifiedDetails("AuthLocationCode", LocalDate.of(2020, 12, 12)), List.empty)
 
   private val itemDetails = NonEmptyList(
     ItemSection(

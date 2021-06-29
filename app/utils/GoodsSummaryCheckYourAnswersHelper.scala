@@ -18,7 +18,7 @@ package utils
 
 import controllers.goodsSummary.routes
 import models.{CheckMode, LocalReferenceNumber, UserAnswers}
-import pages.{AddCustomsApprovedLocationPage, AuthorisedLocationCodePage, TotalPackagesPage, _}
+import pages.{AddCustomsApprovedLocationPage, AuthorisedLocationCodePage, _}
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels._
@@ -163,22 +163,6 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) {
             href = routes.AuthorisedLocationCodeController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"authorisedLocationCode.checkYourAnswersLabel")),
             attributes = Map("id" -> "change-authorised-location-code")
-          )
-        )
-      )
-  }
-
-  def totalPackages: Option[Row] = userAnswers.get(TotalPackagesPage) map {
-    answer =>
-      Row(
-        key = Key(msg"totalPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(Literal(answer.toString)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.TotalPackagesController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalPackages.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-total-packages")
           )
         )
       )

@@ -97,16 +97,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from TotalPackagesPage to LoadingPlace page when previously answered Yes to add Safety And Security Details" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers.set(AddSecurityDetailsPage, true).toOption.value
 
-            navigator
-              .nextPage(TotalPackagesPage, NormalMode, updatedAnswers)
-              .mustBe(controllers.routes.LoadingPlaceController.onPageLoad(updatedAnswers.id, NormalMode))
-        }
-      }
 
       "must go from Agreed Location Of Goods Page to to Add seals page" in {
         forAll(arbitrary[UserAnswers]) {
@@ -119,35 +110,6 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from TotalPackagesPage to AddCustomsApprovedLocation page when previously " +
-        "answered No to add Safety And Security Details and answered No to PreLodgeDeclaration on a Normal route" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers
-            .set(AddSecurityDetailsPage, false).toOption.value
-              .set(PreLodgeDeclarationPage, false).toOption.value
-              .set(ProcedureTypePage, Normal).toOption.value
-
-            navigator
-              .nextPage(TotalPackagesPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddCustomsApprovedLocationController.onPageLoad(updatedAnswers.id, NormalMode))
-        }
-      }
-
-      "must go from TotalPackagesPage to Add Agreed location of goods page when previously" +
-        " answered No to add Safety And Security Details and answered Yes to PreLodgeDeclaration on a Normal route" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, false).toOption.value
-              .set(PreLodgeDeclarationPage, true).toOption.value
-              .set(ProcedureTypePage, Normal).toOption.value
-
-            navigator
-              .nextPage(TotalPackagesPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, NormalMode))
-        }
-      }
 
       "must go from Add Agreed Location of Goods Page" - {
         "to Agreed location of goods page when user selects 'Yes'" in {
@@ -171,19 +133,6 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
                 .nextPage(AddAgreedLocationOfGoodsPage, NormalMode, updatedAnswers)
                 .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
           }
-        }
-      }
-
-      "must go from TotalPackagesPage to AuthoriedLocationCode page when previously answered No to add Safety And Security Details on a Simplified route" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers
-              .set(AddSecurityDetailsPage, false).toOption.value
-              .set(ProcedureTypePage, Simplified).toOption.value
-
-            navigator
-              .nextPage(TotalPackagesPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AuthorisedLocationCodeController.onPageLoad(updatedAnswers.id, NormalMode))
         }
       }
 
