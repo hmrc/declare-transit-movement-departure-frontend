@@ -17,7 +17,7 @@
 package services
 
 import commonTestUtils.UserAnswersSpecHelper
-import models.userAnswerScenarios.{Scenario1, Scenario2, Scenario3, Scenario4}
+import models.userAnswerScenarios.{Scenario1, Scenario2, Scenario3, Scenario4, Scenario5}
 import models.messages.InterchangeControlReference
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.EitherValues
@@ -461,6 +461,8 @@ class UserAnswersToXmlConversionSpec
           <TotGroMasHEA307>25000.000</TotGroMasHEA307>
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
+          <TraChaMetOfPayHEA1>M</TraChaMetOfPayHEA1>
+          <ComRefNumHEA>GD1CRN</ComRefNumHEA>
           <SecHEA358>1</SecHEA358>
           <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
         </HEAHEA>
@@ -527,8 +529,6 @@ class UserAnswersToXmlConversionSpec
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
           <GroMasGDS46>25000.000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
-          <MetOfPayGDI12>M</MetOfPayGDI12>
-          <ComRefNumGIM1>GD1CRN</ComRefNumGIM1>
           <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR1</PreDocTypAR21>
@@ -641,6 +641,7 @@ class UserAnswersToXmlConversionSpec
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <SpeCirIndHEA1>E</SpeCirIndHEA1>
+          <TraChaMetOfPayHEA1>W</TraChaMetOfPayHEA1>
           <ComRefNumHEA>COMREFALL</ComRefNumHEA>
           <SecHEA358>1</SecHEA358>
         </HEAHEA>
@@ -651,6 +652,22 @@ class UserAnswersToXmlConversionSpec
           <CitPC124>PrincipalTown</CitPC124>
           <CouPC125>FR</CouPC125>
         </TRAPRIPC1>
+        <TRACONCO1>
+          <NamCO17>ConorName</NamCO17>
+          <StrAndNumCO122>ConorLine1</StrAndNumCO122>
+          <PosCodCO123>ConorL3</PosCodCO123>
+          <CitCO124>ConorLine2</CitCO124>
+          <CouCO125>GA</CouCO125>
+          <TINCO159>Conor123</TINCO159>
+        </TRACONCO1>
+        <TRACONCE1>
+          <NamCE17>ConeeName</NamCE17>
+          <StrAndNumCE122>ConeeLine1</StrAndNumCE122>
+          <PosCodCE123>ConeeL3</PosCodCE123>
+          <CitCE124>ConeeLine2</CitCE124>
+          <CouCE125>GA</CouCE125>
+          <TINCE159>Conee123</TINCE159>
+        </TRACONCE1>
         <CUSOFFDEPEPT>
           <RefNumEPT1>OOD1234A</RefNumEPT1>
         </CUSOFFDEPEPT>
@@ -694,7 +711,6 @@ class UserAnswersToXmlConversionSpec
           <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
           <GroMasGDS46>25000.000</GroMasGDS46>
           <NetMasGDS48>12342</NetMasGDS48>
-          <MetOfPayGDI12>W</MetOfPayGDI12>
           <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>
           <PREADMREFAR2>
             <PreDocTypAR21>GD1PR1</PreDocTypAR21>
@@ -730,22 +746,6 @@ class UserAnswersToXmlConversionSpec
             <AddInfMT21>GD1S2Info</AddInfMT21>
             <AddInfCodMT23>GD1S2</AddInfCodMT23>
           </SPEMENMT2>
-          <TRACONCO2>
-            <NamCO27>ConorName</NamCO27>
-            <StrAndNumCO222>ConorLine1</StrAndNumCO222>
-            <PosCodCO223>ConorL3</PosCodCO223>
-            <CitCO224>ConorLine2</CitCO224>
-            <CouCO225>GA</CouCO225>
-            <TINCO259>Conor123</TINCO259>
-          </TRACONCO2>
-          <TRACONCE2>
-            <NamCE27>ConeeName</NamCE27>
-            <StrAndNumCE222>ConeeLine1</StrAndNumCE222>
-            <PosCodCE223>ConeeL3</PosCodCE223>
-            <CitCE224>ConeeLine2</CitCE224>
-            <CouCE225>GA</CouCE225>
-            <TINCE259>Conee123</TINCE259>
-          </TRACONCE2>
           <CONNR2>
             <ConNumNR21>GD1CN1NUM1</ConNumNR21>
           </CONNR2>
@@ -791,4 +791,257 @@ class UserAnswersToXmlConversionSpec
       generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
     }
   }
+
+  "Scenario 5: " in new Setup {
+
+    val expectedXml = <CC015B>
+      <SynIdeMES1>UNOC</SynIdeMES1>
+      <SynVerNumMES2>3</SynVerNumMES2>
+      <MesRecMES6>NCTS</MesRecMES6>
+      <DatOfPreMES9>20201212</DatOfPreMES9>
+      <TimOfPreMES10>2030</TimOfPreMES10>
+      <IntConRefMES11>DF202012121</IntConRefMES11>
+      <AppRefMES14>NCTS</AppRefMES14>
+      <TesIndMES18>0</TesIndMES18>
+      <MesIdeMES19>1</MesIdeMES19>
+      <MesTypMES20>GB015B</MesTypMES20>
+      <HEAHEA>
+        <RefNumHEA4>ABCD1234567890123</RefNumHEA4>
+        <TypOfDecHEA24>T2</TypOfDecHEA24>
+        <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
+        <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
+        <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
+        <CusSubPlaHEA66>CUSAPPLOC</CusSubPlaHEA66>
+        <InlTraModHEA75>2</InlTraModHEA75>
+        <TraModAtBorHEA76>2</TraModAtBorHEA76>
+        <TypOfMeaOfTraCroHEA88>2</TypOfMeaOfTraCroHEA88>
+        <ConIndHEA96>1</ConIndHEA96>
+        <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
+        <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
+        <TotNumOfIteHEA305>2</TotNumOfIteHEA305>
+        <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
+        <TotGroMasHEA307>50000.000</TotGroMasHEA307>
+        <DecDatHEA383>20201212</DecDatHEA383>
+        <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
+        <SpeCirIndHEA1>E</SpeCirIndHEA1>
+        <ComRefNumHEA>COMREFALL</ComRefNumHEA>
+        <SecHEA358>1</SecHEA358>
+      </HEAHEA>
+      <TRAPRIPC1>
+        <NamPC17>PrincipalName</NamPC17>
+        <StrAndNumPC122>PrincipalStreet</StrAndNumPC122>
+        <PosCodPC123>AA1 1AA</PosCodPC123>
+        <CitPC124>PrincipalTown</CitPC124>
+        <CouPC125>FR</CouPC125>
+      </TRAPRIPC1>
+      <CUSOFFDEPEPT>
+        <RefNumEPT1>OOD1234A</RefNumEPT1>
+      </CUSOFFDEPEPT>
+      <CUSOFFTRARNS>
+        <RefNumRNS1>TOP12341</RefNumRNS1>
+        <ArrTimTRACUS085>202005072112</ArrTimTRACUS085>
+      </CUSOFFTRARNS>
+      <CUSOFFDESEST>
+        <RefNumEST1>DOP1234A</RefNumEST1>
+      </CUSOFFDESEST>
+      <REPREP>
+        <NamREP5>John Doe</NamREP5>
+        <RepCapREP18>direct</RepCapREP18>
+      </REPREP>
+      <SEAINFSLI>
+        <SeaNumSLI2>2</SeaNumSLI2>
+        <SEAIDSID>
+          <SeaIdeSID1>SEAL1</SeaIdeSID1>
+        </SEAIDSID>
+        <SEAIDSID>
+          <SeaIdeSID1>SEAL2</SeaIdeSID1>
+        </SEAIDSID>
+      </SEAINFSLI>
+      <GUAGUA>
+        <GuaTypGUA1>1</GuaTypGUA1>
+        <GUAREFREF>
+          <GuaRefNumGRNREF1>GUA1Ref</GuaRefNumGRNREF1>
+          <AccCodREF6>1234</AccCodREF6>
+        </GUAREFREF>
+      </GUAGUA>
+      <GUAGUA>
+        <GuaTypGUA1>0</GuaTypGUA1>
+        <GUAREFREF>
+          <GuaRefNumGRNREF1>GUA2Ref</GuaRefNumGRNREF1>
+          <AccCodREF6>4321</AccCodREF6>
+        </GUAREFREF>
+      </GUAGUA>
+      <GOOITEGDS>
+        <IteNumGDS7>1</IteNumGDS7>
+        <ComCodTarCodGDS10>ComoCode1</ComCodTarCodGDS10>
+        <GooDesGDS23>ItemOnesDescription</GooDesGDS23>
+        <GroMasGDS46>25000.000</GroMasGDS46>
+        <NetMasGDS48>12342</NetMasGDS48>
+        <MetOfPayGDI12>W</MetOfPayGDI12>
+        <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>
+        <PREADMREFAR2>
+          <PreDocTypAR21>GD1PR1</PreDocTypAR21>
+          <PreDocRefAR26>GD1PR1Ref</PreDocRefAR26>
+          <ComOfInfAR29>GD1PR1Info</ComOfInfAR29>
+        </PREADMREFAR2>
+        <PREADMREFAR2>
+          <PreDocTypAR21>GD1PR2</PreDocTypAR21>
+          <PreDocRefAR26>GD1PR2Ref</PreDocRefAR26>
+        </PREADMREFAR2>
+        <PRODOCDC2>
+          <DocTypDC21>G1D1</DocTypDC21>
+          <DocRefDC23>G1D1Ref</DocRefDC23>
+          <ComOfInfDC25>G1D1Info</ComOfInfDC25>
+        </PRODOCDC2>
+        <PRODOCDC2>
+          <DocTypDC21>G1D2</DocTypDC21>
+          <DocRefDC23>G1D2Ref</DocRefDC23>
+        </PRODOCDC2>
+        <SPEMENMT2>
+          <AddInfMT21>10000EURGUA1Ref</AddInfMT21>
+          <AddInfCodMT23>CAL</AddInfCodMT23>
+        </SPEMENMT2>
+        <SPEMENMT2>
+          <AddInfMT21>500GBPGUA2Ref</AddInfMT21>
+          <AddInfCodMT23>CAL</AddInfCodMT23>
+        </SPEMENMT2>
+        <SPEMENMT2>
+          <AddInfMT21>GD1SPMT1Info</AddInfMT21>
+          <AddInfCodMT23>GD1S1</AddInfCodMT23>
+        </SPEMENMT2>
+        <SPEMENMT2>
+          <AddInfMT21>GD1S2Info</AddInfMT21>
+          <AddInfCodMT23>GD1S2</AddInfCodMT23>
+        </SPEMENMT2>
+        <TRACONCO2>
+          <NamCO27>ConorName</NamCO27>
+          <StrAndNumCO222>ConorLine1</StrAndNumCO222>
+          <PosCodCO223>ConorL3</PosCodCO223>
+          <CitCO224>ConorLine2</CitCO224>
+          <CouCO225>GA</CouCO225>
+          <TINCO259>Conor123</TINCO259>
+        </TRACONCO2>
+        <TRACONCE2>
+          <NamCE27>ConeeName</NamCE27>
+          <StrAndNumCE222>ConeeLine1</StrAndNumCE222>
+          <PosCodCE223>ConeeL3</PosCodCE223>
+          <CitCE224>ConeeLine2</CitCE224>
+          <CouCE225>GA</CouCE225>
+          <TINCE259>Conee123</TINCE259>
+        </TRACONCE2>
+        <CONNR2>
+          <ConNumNR21>GD1CN1NUM1</ConNumNR21>
+        </CONNR2>
+        <CONNR2>
+          <ConNumNR21>GD1CN2NUMS</ConNumNR21>
+        </CONNR2>
+        <PACGS2>
+          <KinOfPacGS23>VQ</KinOfPacGS23>
+        </PACGS2>
+        <PACGS2>
+          <MarNumOfPacGS21>GD1PK2MK</MarNumOfPacGS21>
+          <KinOfPacGS23>NE</KinOfPacGS23>
+          <NumOfPieGS25>12</NumOfPieGS25>
+        </PACGS2>
+        <PACGS2>
+          <MarNumOfPacGS21>GD1PK3MK</MarNumOfPacGS21>
+          <KinOfPacGS23>BAG</KinOfPacGS23>
+          <NumOfPacGS24>2</NumOfPacGS24>
+        </PACGS2>
+      </GOOITEGDS>
+      <GOOITEGDS>
+        <IteNumGDS7>2</IteNumGDS7>
+        <ComCodTarCodGDS10>ComoCode2</ComCodTarCodGDS10>
+        <GooDesGDS23>ItemTwoDescription</GooDesGDS23>
+        <GroMasGDS46>25000.000</GroMasGDS46>
+        <NetMasGDS48>12342</NetMasGDS48>
+        <MetOfPayGDI12>W</MetOfPayGDI12>
+        <UNDanGooCodGDI1>GD1C</UNDanGooCodGDI1>
+        <PREADMREFAR2>
+          <PreDocTypAR21>GD1PR1</PreDocTypAR21>
+          <PreDocRefAR26>GD1PR1Ref</PreDocRefAR26>
+          <ComOfInfAR29>GD1PR1Info</ComOfInfAR29>
+        </PREADMREFAR2>
+        <PREADMREFAR2>
+          <PreDocTypAR21>GD1PR2</PreDocTypAR21>
+          <PreDocRefAR26>GD1PR2Ref</PreDocRefAR26>
+        </PREADMREFAR2>
+        <PRODOCDC2>
+          <DocTypDC21>G1D1</DocTypDC21>
+          <DocRefDC23>G1D1Ref</DocRefDC23>
+          <ComOfInfDC25>G1D1Info</ComOfInfDC25>
+        </PRODOCDC2>
+        <PRODOCDC2>
+          <DocTypDC21>G1D2</DocTypDC21>
+          <DocRefDC23>G1D2Ref</DocRefDC23>
+        </PRODOCDC2>
+        <SPEMENMT2>
+          <AddInfMT21>GD1SPMT1Info</AddInfMT21>
+          <AddInfCodMT23>GD1S1</AddInfCodMT23>
+        </SPEMENMT2>
+        <SPEMENMT2>
+          <AddInfMT21>GD1S2Info</AddInfMT21>
+          <AddInfCodMT23>GD1S2</AddInfCodMT23>
+        </SPEMENMT2>
+        <TRACONCO2>
+          <NamCO27>ConorName2</NamCO27>
+          <StrAndNumCO222>ConorLine1</StrAndNumCO222>
+          <PosCodCO223>ConorL3</PosCodCO223>
+          <CitCO224>ConorLine2</CitCO224>
+          <CouCO225>GA</CouCO225>
+          <TINCO259>Conor123</TINCO259>
+        </TRACONCO2>
+        <TRACONCE2>
+          <NamCE27>ConeeName2</NamCE27>
+          <StrAndNumCE222>ConeeLine1</StrAndNumCE222>
+          <PosCodCE223>ConeeL3</PosCodCE223>
+          <CitCE224>ConeeLine2</CitCE224>
+          <CouCE225>GA</CouCE225>
+          <TINCE259>Conee123</TINCE259>
+        </TRACONCE2>
+        <CONNR2>
+          <ConNumNR21>GD1CN1NUM1</ConNumNR21>
+        </CONNR2>
+        <CONNR2>
+          <ConNumNR21>GD1CN2NUMS</ConNumNR21>
+        </CONNR2>
+        <PACGS2>
+          <KinOfPacGS23>VQ</KinOfPacGS23>
+        </PACGS2>
+        <PACGS2>
+          <MarNumOfPacGS21>GD1PK2MK</MarNumOfPacGS21>
+          <KinOfPacGS23>NE</KinOfPacGS23>
+          <NumOfPieGS25>12</NumOfPieGS25>
+        </PACGS2>
+        <PACGS2>
+          <MarNumOfPacGS21>GD1PK3MK</MarNumOfPacGS21>
+          <KinOfPacGS23>BAG</KinOfPacGS23>
+          <NumOfPacGS24>2</NumOfPacGS24>
+        </PACGS2>
+      </GOOITEGDS>
+      <ITI>
+        <CouOfRouCodITI1>CA</CouOfRouCodITI1>
+      </ITI>
+      <CARTRA100>
+        <NamCARTRA121>CarrierName</NamCARTRA121>
+        <StrAndNumCARTRA254>CarAddL1</StrAndNumCARTRA254>
+        <PosCodCARTRA121>CarAddL3</PosCodCARTRA121>
+        <CitCARTRA789>CarAddL2</CitCARTRA789>
+        <CouCodCARTRA587>CA</CouCodCARTRA587>
+      </CARTRA100>
+      <TRACORSEC037>
+        <TINTRACORSEC044>SafeSecConorEori</TINTRACORSEC044>
+      </TRACORSEC037>
+      <TRACONSEC029>
+        <TINTRACONSEC036>SafeSecConeeEori</TINTRACONSEC036>
+      </TRACONSEC029>
+    </CC015B>
+
+    val generatedXml = service.convert(Scenario5.userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
+
+    validate(generatedXml.toString()) mustBe Success(())
+
+    generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
+  }
+
 }
