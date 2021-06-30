@@ -47,9 +47,9 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
 
   def onwardRoute = Call("GET", "/foo")
 
-  val customsOffice1: CustomsOffice       = CustomsOffice("officeId", "someName", CountryCode("GB"), Seq.empty, None)
-  val customsOffice2: CustomsOffice       = CustomsOffice("id", "name", CountryCode("GB"), Seq.empty, None)
-  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("xi", "ni", CountryCode("XI"), Seq.empty, None)
+  val customsOffice1: CustomsOffice       = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
+  val customsOffice2: CustomsOffice       = CustomsOffice("id", "name", CountryCode("GB"), None)
+  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("xi", "ni", CountryCode("XI"), None)
   val customsOffices: CustomsOfficeList   = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
   val gbForm                              = new OfficeOfDepartureFormProvider()(customsOffices)

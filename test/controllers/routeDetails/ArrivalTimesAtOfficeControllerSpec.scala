@@ -54,7 +54,7 @@ class ArrivalTimesAtOfficeControllerSpec
     with GeneratorSpec {
 
   val formProvider                 = new ArrivalTimesAtOfficeFormProvider()
-  private val customsOffice        = CustomsOffice("1", "name", CountryCode("GB"), Seq.empty, None)
+  private val customsOffice        = CustomsOffice("1", "name", CountryCode("GB"), None)
   private def form                 = formProvider(customsOffice.name)
   private val mockRefDataConnector = mock[ReferenceDataConnector]
 

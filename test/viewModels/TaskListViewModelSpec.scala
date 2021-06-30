@@ -675,7 +675,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       // RouteDetails
       .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
       .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
-      .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), Seq.empty, None))
+      .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
       .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
       .unsafeSetVal(ArrivalTimesAtOfficePage(index))(LocalDateTime.now())
       // SafetyAndSecurity
@@ -1123,7 +1123,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       .unsafeSetVal(AddSecurityDetailsPage)(true)
       .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
       .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
-      .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), Seq.empty, None))
+      .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
       .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
       .unsafeSetVal(ArrivalTimesAtOfficePage(index))(LocalDateTime.now)
 

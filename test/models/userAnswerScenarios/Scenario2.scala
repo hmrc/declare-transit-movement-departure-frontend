@@ -55,10 +55,10 @@ case object Scenario2 extends UserAnswerScenario {
      * RouteDetails
      * */
     .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), Nil, None))
+    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
     .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
     .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
-    .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), Nil, None))
+    .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
     .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
     .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
     .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
@@ -129,7 +129,7 @@ case object Scenario2 extends UserAnswerScenario {
     .unsafeSetVal(pages.AddAnotherGuaranteePage)(false)
 
   private val preTaskList =
-    PreTaskListDetails(lrn, Simplified, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), List.empty, None), Option2, false)
+    PreTaskListDetails(lrn, Simplified, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None), Option2, false)
 
   private val guarantee = NonEmptyList(GuaranteeOther(GuaranteeType.CashDepositGuarantee, "GUA1Reference"), List.empty)
 
@@ -177,7 +177,7 @@ case object Scenario2 extends UserAnswerScenario {
   private val routeDetails = RouteDetails(
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
-    CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), List.empty, None),
+    CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
     NonEmptyList(TransitInformation("TOP12341", None), List(TransitInformation("TOP12342", None)))
   )
 
