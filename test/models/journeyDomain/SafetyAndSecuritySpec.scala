@@ -20,16 +20,17 @@ import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
-import models.reference.{Country, CountryCode}
+import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CommonAddress, EoriNumber, Index}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages.safetyAndSecurity._
-import pages.{ModeAtBorderPage, QuestionPage}
+import pages.{ModeAtBorderPage, OfficeOfDeparturePage, QuestionPage}
 
 class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
   private val fullSafetyAndSecurityUa = emptyUserAnswers
+    .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
     .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
     .unsafeSetVal(CircumstanceIndicatorPage)("circumstanceIndicator")
     .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
@@ -247,6 +248,67 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
       }
 
       "consigneeDetails" - {
+
+        "must be defined with Eori number " +
+          "when AddSafetyAndSecurityConsigneePage is true " +
+          "and CircumstanceIndicatorPage is 'E' " +
+          "and departure office is not XI" in {
+
+            val expectedResult = TraderEori(EoriNumber("eoriNumber"))
+
+            val userAnswers = fullSafetyAndSecurityUa
+              .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+              .unsafeSetVal(CircumstanceIndicatorPage)("E")
+              .unsafeSetVal(AddPlaceOfUnloadingCodePage)(false)
+              .unsafeSetVal(SafetyAndSecurityConsigneeEoriPage)("eoriNumber")
+
+            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+            result.consignee.value mustBe expectedResult
+          }
+
+        "must be defined with Eori number " +
+          "when AddSafetyAndSecurityConsigneePage is true " +
+          "and CircumstanceIndicatorPage is 'E' " +
+          "and departure office is XI " +
+          "and AddSafetyAndSecurityConsigneeEoriPage is true" in {
+
+            val expectedResult = TraderEori(EoriNumber("eoriNumber"))
+
+            val userAnswers = fullSafetyAndSecurityUa
+              .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+              .unsafeSetVal(CircumstanceIndicatorPage)("E")
+              .unsafeSetVal(AddPlaceOfUnloadingCodePage)(false)
+              .unsafeSetVal(SafetyAndSecurityConsigneeEoriPage)("eoriNumber")
+              .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(true)
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+
+            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+            result.consignee.value mustBe expectedResult
+          }
+
+        "must be defined with name and address " +
+          "when AddSafetyAndSecurityConsigneePage is true " +
+          "and CircumstanceIndicatorPage is 'E' " +
+          "and departure office is XI " +
+          "and AddSafetyAndSecurityConsigneeEoriPage is false" in {
+
+            val expectedResult = PersonalInformation("consigneeName", CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
+
+            val userAnswers = fullSafetyAndSecurityUa
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+              .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
+              .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(false)
+              .unsafeSetVal(CircumstanceIndicatorPage)("E")
+              .unsafeSetVal(AddPlaceOfUnloadingCodePage)(false)
+              .unsafeSetVal(SafetyAndSecurityConsigneeNamePage)("consigneeName")
+              .unsafeSetVal(SafetyAndSecurityConsigneeAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
+
+            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+
+            result.consignee.value mustBe expectedResult
+          }
 
         "must be defined with Eori number when AddSafetyAndSecurityConsigneePage is true and AddSafetyAndSecurityConsigneeEoriPage is true" in {
 
@@ -470,7 +532,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
       }
 
       "consigneeDetails" - {
-
+        
         "when AddSafetyAndSecurityConsigneePage is true and AddSafetyAndSecurityConsigneeEoriPage is true and SafetyAndSecurityConsigneeEoriPage is empty" in {
 
           val userAnswers = fullSafetyAndSecurityUa

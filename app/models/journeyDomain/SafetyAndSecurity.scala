@@ -141,16 +141,9 @@ object SafetyAndSecurity {
             SecurityTraderDetails(name, address)
         }
 
-//    AddSafetyAndSecurityConsigneePage.filterOptionalDependent(identity) {
-//      OfficeOfDeparturePage.reader.flatMap {
-//        case CustomsOffice(_, _, CountryCode("XI"), _) => readEori
-//      }
-//    }
-//
-
     AddSafetyAndSecurityConsigneePage.filterOptionalDependent(identity) {
-      (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader).tupled.flatMap {
-        case (true, Some("E")) => readEori
+      (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader, OfficeOfDeparturePage.reader).tupled.flatMap {
+        case (true, Some("E"), CustomsOffice(_, _, countryCode, _)) if countryCode.code != "XI" => readEori
         case _ =>
           AddSafetyAndSecurityConsigneeEoriPage.reader.flatMap {
             case true  => readEori
