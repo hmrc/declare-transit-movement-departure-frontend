@@ -20,7 +20,8 @@ import controllers.safetyAndSecurity.routes
 
 import javax.inject.{Inject, Singleton}
 import models._
-import pages.Page
+import models.reference.{CountryCode, CustomsOffice}
+import pages.{OfficeOfDeparturePage, Page}
 import pages.safetyAndSecurity.{
   AddCarrierEoriPage,
   AddCarrierPage,
@@ -47,39 +48,39 @@ class SafetyAndSecurityTraderDetailsNavigator @Inject() () extends Navigator {
   // format: off
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddSafetyAndSecurityConsignorPage => ua => Some(addSafetyAndSecurityConsignorRoute(ua, NormalMode))
-    case AddSafetyAndSecurityConsignorEoriPage => ua => Some(addSafetyAndSecurityConsignorEoriRoute(ua, NormalMode))
-    case SafetyAndSecurityConsignorEoriPage => ua => Some(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode))
-    case SafetyAndSecurityConsignorNamePage => ua => Some(routes.SafetyAndSecurityConsignorAddressController.onPageLoad(ua.id, NormalMode))
-    case SafetyAndSecurityConsignorAddressPage => ua => Some(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode))
-    case AddSafetyAndSecurityConsigneePage => ua => Some(addSafetyAndSecurityConsigneeRoute(ua, NormalMode))
-    case AddSafetyAndSecurityConsigneeEoriPage => ua => Some(addSafetyAndSecurityConsigneeEoriRoute(ua, NormalMode))
-    case SafetyAndSecurityConsigneeEoriPage => ua => Some(routes.AddCarrierController.onPageLoad(ua.id, NormalMode))
-    case SafetyAndSecurityConsigneeNamePage => ua => Some(routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(ua.id, NormalMode))
-    case SafetyAndSecurityConsigneeAddressPage => ua => Some(routes.AddCarrierController.onPageLoad(ua.id, NormalMode))
-    case AddCarrierPage => ua => Some(addCarrierRoute(ua, NormalMode))
-    case AddCarrierEoriPage => ua => Some(addCarrierEoriRoute(ua, NormalMode))
-    case CarrierEoriPage => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)) // CYA not implemented
-    case CarrierNamePage => ua => Some(routes.CarrierAddressController.onPageLoad(ua.id, NormalMode))
-    case CarrierAddressPage => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+    case AddSafetyAndSecurityConsignorPage      => ua => Some(addSafetyAndSecurityConsignorRoute(ua, NormalMode))
+    case AddSafetyAndSecurityConsignorEoriPage  => ua => Some(addSafetyAndSecurityConsignorEoriRoute(ua, NormalMode))
+    case SafetyAndSecurityConsignorEoriPage     => ua => Some(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode))
+    case SafetyAndSecurityConsignorNamePage     => ua => Some(routes.SafetyAndSecurityConsignorAddressController.onPageLoad(ua.id, NormalMode))
+    case SafetyAndSecurityConsignorAddressPage  => ua => Some(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode))
+    case AddSafetyAndSecurityConsigneePage      => ua => addSafetyAndSecurityConsigneeRouteNormalRoute(ua)
+    case AddSafetyAndSecurityConsigneeEoriPage  => ua => Some(addSafetyAndSecurityConsigneeEoriRoute(ua, NormalMode))
+    case SafetyAndSecurityConsigneeEoriPage     => ua => Some(routes.AddCarrierController.onPageLoad(ua.id, NormalMode))
+    case SafetyAndSecurityConsigneeNamePage     => ua => Some(routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(ua.id, NormalMode))
+    case SafetyAndSecurityConsigneeAddressPage  => ua => Some(routes.AddCarrierController.onPageLoad(ua.id, NormalMode))
+    case AddCarrierPage                         => ua => Some(addCarrierRoute(ua, NormalMode))
+    case AddCarrierEoriPage                     => ua => Some(addCarrierEoriRoute(ua, NormalMode))
+    case CarrierEoriPage                        => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+    case CarrierNamePage                        => ua => Some(routes.CarrierAddressController.onPageLoad(ua.id, NormalMode))
+    case CarrierAddressPage                     => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddSafetyAndSecurityConsignorPage => ua => Some(addSafetyAndSecurityConsignorRoute(ua, CheckMode))
-    case AddSafetyAndSecurityConsignorEoriPage=> ua => Some(addSafetyAndSecurityConsignorEoriRoute(ua, CheckMode))
-    case SafetyAndSecurityConsignorEoriPage => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-    case SafetyAndSecurityConsignorNamePage => ua => Some(safetyAndSecurityConsignorNameRoute(ua))
-    case SafetyAndSecurityConsignorAddressPage => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-    case AddSafetyAndSecurityConsigneePage => ua => Some(addSafetyAndSecurityConsigneeRoute(ua, CheckMode))
-    case AddSafetyAndSecurityConsigneeEoriPage => ua => Some(addSafetyAndSecurityConsigneeEoriRoute(ua, CheckMode))
-    case SafetyAndSecurityConsigneeEoriPage => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-    case SafetyAndSecurityConsigneeNamePage => ua => Some(safetyAndSecurityConsigneeNameRoute(ua))
-    case SafetyAndSecurityConsigneeAddressPage => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-    case AddCarrierPage => ua => Some(addCarrierRoute(ua, CheckMode))
-    case AddCarrierEoriPage => ua => Some(addCarrierEoriRoute(ua, CheckMode))
-    case CarrierNamePage => ua => Some(carrierNameRoute(ua))
-    case CarrierEoriPage => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-    case CarrierAddressPage => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+    case AddSafetyAndSecurityConsignorPage        => ua => Some(addSafetyAndSecurityConsignorRoute(ua, CheckMode))
+    case AddSafetyAndSecurityConsignorEoriPage    => ua => Some(addSafetyAndSecurityConsignorEoriRoute(ua, CheckMode))
+    case SafetyAndSecurityConsignorEoriPage       => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+    case SafetyAndSecurityConsignorNamePage       => ua => Some(safetyAndSecurityConsignorNameRoute(ua))
+    case SafetyAndSecurityConsignorAddressPage    => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+    case AddSafetyAndSecurityConsigneePage        => ua => addSafetyAndSecurityConsigneeRouteCheckRoute(ua)
+    case AddSafetyAndSecurityConsigneeEoriPage    => ua => Some(addSafetyAndSecurityConsigneeEoriRoute(ua, CheckMode))
+    case SafetyAndSecurityConsigneeEoriPage       => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+    case SafetyAndSecurityConsigneeNamePage       => ua => Some(safetyAndSecurityConsigneeNameRoute(ua))
+    case SafetyAndSecurityConsigneeAddressPage    => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+    case AddCarrierPage                           => ua => Some(addCarrierRoute(ua, CheckMode))
+    case AddCarrierEoriPage                       => ua => Some(addCarrierEoriRoute(ua, CheckMode))
+    case CarrierNamePage                          => ua => Some(carrierNameRoute(ua))
+    case CarrierEoriPage                          => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+    case CarrierAddressPage                       => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
   }
 
     private def safetyAndSecurityConsignorNameRoute(ua:UserAnswers) =
@@ -115,21 +116,32 @@ class SafetyAndSecurityTraderDetailsNavigator @Inject() () extends Navigator {
       case (Some(false),  CheckMode)  => routes.SafetyAndSecurityConsignorNameController.onPageLoad(ua.id,CheckMode)
     }
 
-  private def addSafetyAndSecurityConsigneeRoute(ua: UserAnswers, mode:Mode): Call =
-    (ua.get(AddSafetyAndSecurityConsigneePage), ua.get(AddSafetyAndSecurityConsigneeEoriPage), mode) match {
-      case (Some(true),_,NormalMode)   => circumstanceIndicatorCheck(ua, mode)
-      case (Some(false),_, NormalMode)  => routes.AddCarrierController.onPageLoad(ua.id, NormalMode)
-      case (Some(false), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
-      case (Some(true), None, CheckMode) => circumstanceIndicatorCheck(ua, mode)
-      case (Some(true), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
+  private def addSafetyAndSecurityConsigneeRouteNormalRoute(ua: UserAnswers): Option[Call] = {
+
+    ua.get(AddSafetyAndSecurityConsigneePage).flatMap {
+      case true  => circumstanceIndicatorCheck(ua, NormalMode)
+      case false => Some(routes.AddCarrierController.onPageLoad(ua.id, NormalMode))
+    }
+  }
+
+  private def addSafetyAndSecurityConsigneeRouteCheckRoute(ua: UserAnswers): Option[Call] =
+    (ua.get(AddSafetyAndSecurityConsigneePage), ua.get(AddSafetyAndSecurityConsigneeEoriPage)) match {
+      case (Some(true), None) => circumstanceIndicatorCheck(ua, CheckMode)
+      case (Some(_), _)       => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+      case _                  => Some(controllers.routes.SessionExpiredController.onPageLoad())
     }
 
-  private def circumstanceIndicatorCheck(ua: UserAnswers, mode: Mode) =
-    ua.get(CircumstanceIndicatorPage) match {
-      case Some("E") => routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, mode)
-      case _ => routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, mode)
+
+  private def circumstanceIndicatorCheck(ua: UserAnswers, mode: Mode): Option[Call] = {
+    ua.get(OfficeOfDeparturePage).map {
+      case CustomsOffice(_, _, CountryCode("XI"), _) => routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, mode)
+      case _ => ua.get(CircumstanceIndicatorPage) match {
+        case Some("E") => routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, mode)
+        case _         => routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, mode)
+      }
     }
-  
+  }
+
   private def addSafetyAndSecurityConsigneeEoriRoute(ua: UserAnswers, mode:Mode): Call =
     (ua.get(AddSafetyAndSecurityConsigneeEoriPage), mode) match {
       case (Some(true),  NormalMode)   => routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(ua.id, NormalMode)
