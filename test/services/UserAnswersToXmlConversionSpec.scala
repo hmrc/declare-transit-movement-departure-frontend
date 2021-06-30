@@ -819,7 +819,7 @@ class UserAnswersToXmlConversionSpec
         <DiaLanIndAtDepHEA254>EN</DiaLanIndAtDepHEA254>
         <NCTSAccDocHEA601LNG>EN</NCTSAccDocHEA601LNG>
         <TotNumOfIteHEA305>2</TotNumOfIteHEA305>
-        <TotNumOfPacHEA306>1</TotNumOfPacHEA306>
+        <TotNumOfPacHEA306>30</TotNumOfPacHEA306>
         <TotGroMasHEA307>50000.000</TotGroMasHEA307>
         <DecDatHEA383>20201212</DecDatHEA383>
         <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
