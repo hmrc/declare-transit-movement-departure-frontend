@@ -16,14 +16,17 @@
 
 package controllers.routeDetails
 
+import cats.data.OptionT
+import cats.implicits._
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.OfficeOfTransitCountryFormProvider
-import models.reference.Country
-import models.{Index, LocalReferenceNumber, Mode}
+import logging.Logging
+import models.reference.{Country, CountryCode}
+import models.{Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import pages.OfficeOfTransitCountryPage
+import pages.{OfficeOfDeparturePage, OfficeOfTransitCountryPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -52,43 +55,56 @@ class OfficeOfTransitCountryController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
-    with NunjucksSupport {
+    with NunjucksSupport
+    with Logging {
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData andThen officeOfTransitFilter(index)).async {
       implicit request =>
-        referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) flatMap {
-          countries =>
-            val form = formProvider(countries)
-
-            val preparedForm = request.userAnswers
+        (
+          for {
+            excludedCountries  <- OptionT.fromOption[Future](excludedCountries(request.userAnswers))
+            transitCountryList <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+            form = formProvider(transitCountryList)
+            preparedForm = request.userAnswers
               .get(OfficeOfTransitCountryPage(index))
-              .flatMap(countries.getCountry)
+              .flatMap(transitCountryList.getCountry)
               .map(form.fill)
               .getOrElse(form)
-
-            renderPage(lrn, index, mode, preparedForm, countries.fullList, Results.Ok)
+            page <- OptionT.liftF(renderPage(lrn, index, mode, preparedForm, transitCountryList.fullList, Results.Ok))
+          } yield page
+        ).getOrElseF {
+          logger.warn(s"[Controller][OfficeOfTransitCountry][onPageLoad] OfficeOfDeparturePage is missing")
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
         }
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) flatMap {
-        countries =>
-          formProvider(countries)
-            .bindFromRequest()
-            .fold(
-              formWithErrors => renderPage(lrn, index, mode, formWithErrors, countries.fullList, Results.BadRequest),
-              value =>
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfTransitCountryPage(index), value.code))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(OfficeOfTransitCountryPage(index), mode, updatedAnswers))
-            )
+      (
+        for {
+          excludedCountries  <- OptionT.fromOption[Future](excludedCountries(request.userAnswers))
+          transitCountryList <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+          page <- OptionT.liftF(
+            formProvider(transitCountryList)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.fullList, Results.BadRequest),
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfTransitCountryPage(index), value.code))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(OfficeOfTransitCountryPage(index), mode, updatedAnswers))
+              )
+          )
+        } yield page
+      ).getOrElseF {
+        logger.warn(s"[Controller][OfficeOfTransitCountry][onPageLoad] OfficeOfDeparturePage is missing")
+        Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
   }
 
-  def renderPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(implicit
+  private def renderPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(implicit
     request: Request[AnyContent]
   ): Future[Result] = {
     val json = Json.obj(
@@ -100,5 +116,12 @@ class OfficeOfTransitCountryController @Inject() (
     )
 
     renderer.render("officeOfTransitCountry.njk", json).map(status(_))
+  }
+
+  private def excludedCountries(userAnswers: UserAnswers): Option[Seq[CountryCode]] = userAnswers.get(OfficeOfDeparturePage).map {
+    _.countryId.code match {
+      case "XI" => excludedTransitCountries
+      case _    => excludedTransitCountries ++ excludedTransitCountriesForNonNI
+    }
   }
 }

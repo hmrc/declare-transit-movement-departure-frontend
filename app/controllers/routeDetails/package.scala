@@ -23,4 +23,9 @@ package object routeDetails {
   val excludedTransitCountries: Seq[CountryCode] = Seq(
     CountryCode("JE")
   )
+
+  val excludedTransitCountriesForNonNI = Seq(
+    CountryCode("SM"),
+    CountryCode("AD")
+  )
 }
