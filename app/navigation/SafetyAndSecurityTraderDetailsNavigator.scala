@@ -17,33 +17,17 @@
 package navigation
 
 import controllers.safetyAndSecurity.routes
-
-import javax.inject.{Inject, Singleton}
+import logging.Logging
 import models._
 import models.reference.{CountryCode, CustomsOffice}
+import pages.safetyAndSecurity._
 import pages.{OfficeOfDeparturePage, Page}
-import pages.safetyAndSecurity.{
-  AddCarrierEoriPage,
-  AddCarrierPage,
-  AddSafetyAndSecurityConsigneeEoriPage,
-  AddSafetyAndSecurityConsigneePage,
-  AddSafetyAndSecurityConsignorEoriPage,
-  AddSafetyAndSecurityConsignorPage,
-  CarrierAddressPage,
-  CarrierEoriPage,
-  CarrierNamePage,
-  CircumstanceIndicatorPage,
-  SafetyAndSecurityConsigneeAddressPage,
-  SafetyAndSecurityConsigneeEoriPage,
-  SafetyAndSecurityConsigneeNamePage,
-  SafetyAndSecurityConsignorAddressPage,
-  SafetyAndSecurityConsignorEoriPage,
-  SafetyAndSecurityConsignorNamePage
-}
 import play.api.mvc.Call
 
+import javax.inject.Singleton
+
 @Singleton
-class SafetyAndSecurityTraderDetailsNavigator @Inject() () extends Navigator {
+class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
 
   // format: off
 
@@ -128,7 +112,9 @@ class SafetyAndSecurityTraderDetailsNavigator @Inject() () extends Navigator {
     (ua.get(AddSafetyAndSecurityConsigneePage), ua.get(AddSafetyAndSecurityConsigneeEoriPage)) match {
       case (Some(true), None) => circumstanceIndicatorCheck(ua, CheckMode)
       case (Some(_), _)       => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
-      case _                  => Some(controllers.routes.SessionExpiredController.onPageLoad())
+      case _                  =>
+        logger.warn(s"[Navigation][SafetyAndSecurityTraderDetails] AddSafetyAndSecurityConsigneePage is a missing mandatory page")
+        Some(controllers.routes.SessionExpiredController.onPageLoad())
     }
 
 

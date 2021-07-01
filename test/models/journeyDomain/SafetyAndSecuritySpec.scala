@@ -532,7 +532,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
       }
 
       "consigneeDetails" - {
-        
+
         "when AddSafetyAndSecurityConsigneePage is true and AddSafetyAndSecurityConsigneeEoriPage is true and SafetyAndSecurityConsigneeEoriPage is empty" in {
 
           val userAnswers = fullSafetyAndSecurityUa
