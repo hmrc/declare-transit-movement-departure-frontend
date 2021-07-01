@@ -14,6 +14,22 @@
  * limitations under the License.
  */
 
+/*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package models.userAnswerScenarios
 
 import cats.data.NonEmptyList
@@ -80,7 +96,7 @@ case object Scenario1 extends UserAnswerScenario {
      * RouteDetails
      * */
     .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
+    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None))
     .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
     .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
     .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
@@ -287,7 +303,7 @@ case object Scenario1 extends UserAnswerScenario {
     .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
 
   private val preTaskListDetails =
-    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None), Option2, true)
+    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None), Option2, true)
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 
@@ -329,8 +345,8 @@ case object Scenario1 extends UserAnswerScenario {
     containers = Some(NonEmptyList(Container("GD1CN1NUM1"), List(Container("GD1CN2NUMS")))),
     specialMentions = Some(
       NonEmptyList(
-        SpecialMentionDomain("GD1S1", "GD1SPMT1Info"),
-        List(SpecialMentionDomain("DG0", "GD1S2Info"))
+        SpecialMentionDomain("GD1S1", "GD1SPMT1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None)),
+        List(SpecialMentionDomain("DG0", "GD1S2Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None)))
       )
     ),
     producedDocuments = Some(
@@ -364,7 +380,8 @@ case object Scenario1 extends UserAnswerScenario {
       List(UnpackedPackages(PackageType("NE", "GD2PKG2"), 12, Some("GD2PK2MK")), OtherPackages(PackageType("BAG", "GD2PKG3"), 2, "GD2PK3MK"))
     ),
     containers = Some(NonEmptyList(Container("GD2CN1NUM1"), List.empty)),
-    specialMentions = Some(NonEmptyList(SpecialMentionDomain("GD2S1", "GD2S1Info"), List.empty)),
+    specialMentions =
+      Some(NonEmptyList(SpecialMentionDomain("GD2S1", "GD2S1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None)), List.empty)),
     producedDocuments = Some(NonEmptyList(ProducedDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
     itemSecurityTraderDetails = Some(
       ItemsSecurityTraderDetails(

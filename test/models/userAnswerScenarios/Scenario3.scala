@@ -14,6 +14,22 @@
  * limitations under the License.
  */
 
+/*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package models.userAnswerScenarios
 
 import cats.data.NonEmptyList
@@ -267,7 +283,12 @@ case object Scenario3 extends UserAnswerScenario {
         List(UnpackedPackages(PackageType("NE", "GD1PKG2"), 12, Some("GD1PK2MK")), OtherPackages(PackageType("BAG", "GD1PKG3"), 2, "GD1PK3MK"))
       ),
       Some(NonEmptyList(Container("GD1CN1NUM1"), List(Container("GD1CN2NUMS")))),
-      Some(NonEmptyList(SpecialMentionDomain("GD1S1", "GD1SPMT1Info"), List(SpecialMentionDomain("GD1S2", "GD1S2Info")))),
+      Some(
+        NonEmptyList(
+          SpecialMentionDomain("GD1S1", "GD1SPMT1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None)),
+          List(SpecialMentionDomain("GD1S2", "GD1S2Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None)))
+        )
+      ),
       Some(NonEmptyList(ProducedDocument("G1D1", "G1D1Ref", Some("G1D1Info")), List(ProducedDocument("G1D2", "G1D2Ref", None)))),
       Some(ItemsSecurityTraderDetails(Some("M"), Some("GD1CRN"), Some("GD1C"), None, None)),
       Some(NonEmptyList(PreviousReferences("GD1PR1", "GD1PR1Ref", Some("GD1PR1Info")), List(PreviousReferences("GD1PR2", "GD1PR2Ref", None))))

@@ -17,9 +17,9 @@
 package services
 
 import cats.data.NonEmptyList
-import models.{Convert, Index}
+import models.Convert
 import models.journeyDomain.{GuaranteeDetails, SpecialMentionDomain}
-import models.messages.goodsitem.{SpecialMention, SpecialMentionExportFromGB, SpecialMentionNoCountry}
+import models.messages.goodsitem.SpecialMention
 
 private[services] object SpecialMentionConversion
     extends Convert[(Option[NonEmptyList[SpecialMentionDomain]], NonEmptyList[GuaranteeDetails], Int), Seq[SpecialMention]] {

@@ -361,7 +361,12 @@ case object Scenario5 extends UserAnswerScenario {
         List(UnpackedPackages(PackageType("NE", "GD1PKG2"), 12, Some("GD1PK2MK")), OtherPackages(PackageType("BAG", "GD1PKG3"), 2, "GD1PK3MK"))
       ),
       Some(NonEmptyList(Container("GD1CN1NUM1"), List(Container("GD1CN2NUMS")))),
-      Some(NonEmptyList(SpecialMentionDomain("GD1S1", "GD1SPMT1Info"), List(SpecialMentionDomain("GD1S2", "GD1S2Info")))),
+      Some(
+        NonEmptyList(
+          SpecialMentionDomain("GD1S1", "GD1SPMT1Info", CustomsOffice("id", "name", CountryCode("GB"), None)),
+          List(SpecialMentionDomain("GD1S2", "GD1S2Info", CustomsOffice("id", "name", CountryCode("GB"), None)))
+        )
+      ),
       Some(NonEmptyList(ProducedDocument("G1D1", "G1D1Ref", Some("G1D1Info")), List(ProducedDocument("G1D2", "G1D2Ref", None)))),
       Some(ItemsSecurityTraderDetails(Some("W"), None, Some("GD1C"), None, None)),
       Some(NonEmptyList(PreviousReferences("GD1PR1", "GD1PR1Ref", Some("GD1PR1Info")), List(PreviousReferences("GD1PR2", "GD1PR2Ref", None))))

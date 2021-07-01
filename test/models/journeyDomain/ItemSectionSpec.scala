@@ -23,7 +23,7 @@ import models.DeclarationType.Option1
 import models.Index
 import models.journeyDomain.Packages.UnpackedPackages
 import models.journeyDomain.addItems.ItemsSecurityTraderDetails
-import models.reference.{CountryCode, CountryOfDispatch, PackageType}
+import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice, PackageType}
 import org.scalacheck.Gen
 import pages._
 import pages.addItems._
@@ -106,13 +106,14 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
       }
 
       "when add special mention is true and special mentions are defined" in {
-
+        val customsOffice: CustomsOffice = CustomsOffice("id", "name", CountryCode("GB"), None)
         val userAnswers = itemSectionUa
           .unsafeSetVal(AddSpecialMentionPage(index))(true)
           .unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))("specialMentionType")
           .unsafeSetVal(SpecialMentionAdditionalInfoPage(index, referenceIndex))("additionalInfo")
+          .unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
 
-        val expectedResult = NonEmptyList(SpecialMentionDomain("specialMentionType", "additionalInfo"), List.empty)
+        val expectedResult = NonEmptyList(SpecialMentionDomain("specialMentionType", "additionalInfo", customsOffice), List.empty)
 
         val result = ItemSection.readerItemSection(index).run(userAnswers).right.value
 

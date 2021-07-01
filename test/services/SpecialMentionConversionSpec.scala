@@ -23,6 +23,7 @@ import models.GuaranteeType.GuaranteeWaiver
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.{DefaultLiabilityAmount, SpecialMentionDomain}
 import models.messages.goodsitem.{SpecialMentionExportFromGB, SpecialMentionGuaranteeLiabilityAmount, SpecialMentionNoCountry}
+import models.reference.{CountryCode, CustomsOffice}
 
 class SpecialMentionConversionSpec extends SpecBase with GeneratorSpec with ModelGenerators {
 
@@ -30,7 +31,7 @@ class SpecialMentionConversionSpec extends SpecBase with GeneratorSpec with Mode
 
     "apply" - {
 
-      val specialMentions     = Some(NonEmptyList(SpecialMentionDomain("DG0", "Additional info"), List.empty))
+      val specialMentions     = Some(NonEmptyList(SpecialMentionDomain("DG0", "Additional info", CustomsOffice("id", "name", CountryCode("GB"), None)), List.empty))
       val guaranteeReferences = NonEmptyList(GuaranteeReference(GuaranteeWaiver, "AB123", DefaultLiabilityAmount, "****"), List.empty)
 
       val expectedSpecialMention                = SpecialMentionExportFromGB("DG0", "Additional info")

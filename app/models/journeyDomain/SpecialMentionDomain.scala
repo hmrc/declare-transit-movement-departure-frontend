@@ -18,15 +18,18 @@ package models.journeyDomain
 
 import cats.implicits._
 import models.Index
+import models.reference.{CountryCode, CustomsOffice}
+import pages.OfficeOfDeparturePage
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
 
-final case class SpecialMentionDomain(specialMentionType: String, additionalInfo: String)
+final case class SpecialMentionDomain(specialMentionType: String, additionalInfo: String, officeOfDeparture: CustomsOffice)
 
 object SpecialMentionDomain {
 
   def specialMentionsReader(index: Index, referenceIndex: Index): UserAnswersReader[SpecialMentionDomain] =
     (
       SpecialMentionTypePage(index, referenceIndex).reader,
-      SpecialMentionAdditionalInfoPage(index, referenceIndex).reader
+      SpecialMentionAdditionalInfoPage(index, referenceIndex).reader,
+      OfficeOfDeparturePage.reader
     ).tupled.map((SpecialMentionDomain.apply _).tupled)
 }

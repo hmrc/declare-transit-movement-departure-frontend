@@ -18,6 +18,7 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
+import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
 import pages._
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
@@ -28,13 +29,14 @@ class SpecialMentionDomainSpec extends SpecBase with GeneratorSpec with UserAnsw
 
     "can be parsed from UserAnswers" - {
       "when all details for section have been answered" in {
+        val xiCustomsOffice1: CustomsOffice = CustomsOffice("xi", "ni", CountryCode("XI"), None)
 
-        val expectedResult = SpecialMentionDomain("specialMentionType", "additionalInfo")
+        val expectedResult = SpecialMentionDomain("specialMentionType", "additionalInfo", xiCustomsOffice1)
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))("specialMentionType")
           .unsafeSetVal(SpecialMentionAdditionalInfoPage(index, referenceIndex))("additionalInfo")
-
+          .unsafeSetVal(OfficeOfDeparturePage)(xiCustomsOffice1)
         val result: EitherType[SpecialMentionDomain] =
           UserAnswersReader[SpecialMentionDomain](SpecialMentionDomain.specialMentionsReader(index, referenceIndex)).run(userAnswers)
 

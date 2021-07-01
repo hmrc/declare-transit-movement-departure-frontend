@@ -32,6 +32,8 @@ object SpecialMention {
   }
 
   val countrySpecificCodes = Seq("DG0", "DG1")
+  val countryCodeGB        = "GB"
+  val countryCodeNI        = "XI"
 
   implicit val xmlReader: XmlReader[SpecialMention] =
     SpecialMentionGuaranteeLiabilityAmount.xmlReader
