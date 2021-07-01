@@ -21,12 +21,13 @@ import controllers.actions._
 import forms.OfficeOfDepartureFormProvider
 import models.{CountryList, CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import pages.{IsNonEUOfficePage, OfficeOfDeparturePage}
+import pages.OfficeOfDeparturePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import navigation.annotations.PreTaskListDetails
+import pages.addItems.IsNonEuOfficePage
 import repositories.SessionRepository
 import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -100,7 +101,7 @@ class OfficeOfDepartureController @Inject() (
                   getNonEuCountries: CountryList <- referenceDataConnector.getNonEUTransitCountryList
                   isNotEu: Boolean = getNonEuCountries.getCountry(value.countryId).isDefined
                   ua1 <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
-                  ua2 <- Future.fromTry(ua1.set(IsNonEUOfficePage, isNotEu))
+                  ua2 <- Future.fromTry(ua1.set(IsNonEuOfficePage, isNotEu))
                   _   <- sessionRepository.set(ua2)
                 } yield Redirect(navigator.nextPage(OfficeOfDeparturePage, mode, ua2))
             )

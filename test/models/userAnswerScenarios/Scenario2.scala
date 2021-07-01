@@ -114,6 +114,7 @@ case object Scenario2 extends UserAnswerScenario {
     .unsafeSetVal(pages.addItems.specialMentions.AddSpecialMentionPage(firstGoodItem))(false)
     .unsafeSetVal(pages.addItems.AddDocumentsPage(firstGoodItem))(false)
     .unsafeSetVal(pages.addItems.AddAdministrativeReferencePage(firstGoodItem))(false)
+    .unsafeSetVal(pages.addItems.IsNonEuOfficePage)(false)
     /*
      * Goods Summary
      */

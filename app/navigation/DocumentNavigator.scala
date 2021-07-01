@@ -20,7 +20,7 @@ import controllers.addItems.routes
 import derivable.{DeriveNumberOfDocuments, DeriveNumberOfPreviousAdministrativeReferences}
 import models.{CheckMode, DeclarationType, Index, Mode, NormalMode, UserAnswers}
 import pages.addItems._
-import pages.{DeclarationTypePage, IsNonEUOfficePage, Page}
+import pages.{DeclarationTypePage, Page}
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -59,7 +59,7 @@ class DocumentNavigator @Inject() () extends Navigator {
     val declarationTypes = Seq(DeclarationType.Option2, DeclarationType.Option3)
     val isAllowedDeclarationType: Boolean = ua.get(DeclarationTypePage).fold(false)(declarationTypes.contains(_))
     val referenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)
-    val countryOfDeparture: Option[Boolean] = ua.get(IsNonEUOfficePage)
+    val countryOfDeparture: Option[Boolean] = ua.get(IsNonEuOfficePage)
 
     (countryOfDeparture, isAllowedDeclarationType) match {
       case (Some(true), true) => Some(controllers.addItems.previousReferences.routes.ReferenceTypeController.onPageLoad(ua.id, index, Index(referenceIndex), mode))

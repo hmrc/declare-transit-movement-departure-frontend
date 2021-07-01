@@ -24,7 +24,7 @@ import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.{CheckMode, DeclarationType, NormalMode}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems._
-import pages.{CountryOfDispatchPage, DeclarationTypePage, IsNonEUOfficePage, OfficeOfDeparturePage}
+import pages.{CountryOfDispatchPage, DeclarationTypePage, OfficeOfDeparturePage}
 import queries.DocumentQuery
 
 class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -52,7 +52,7 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               val updatedAnswers = emptyUserAnswers
                 .set(AddDocumentsPage(index), false).success.value
                 .set(DeclarationTypePage, DeclarationType.Option2).success.value
-                .set(IsNonEUOfficePage, true).success.value
+                .set(IsNonEuOfficePage, true).success.value
               navigator
                 .nextPage(AddDocumentsPage(index), NormalMode, updatedAnswers)
                 .mustBe(previousReferencesRoutes.ReferenceTypeController.onPageLoad(updatedAnswers.id, index, referenceIndex, NormalMode))
@@ -63,7 +63,7 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           val updatedAnswers = emptyUserAnswers
             .set(AddDocumentsPage(index), false).success.value
             .set(DeclarationTypePage, DeclarationType.Option3).success.value
-            .set(IsNonEUOfficePage, true).success.value
+            .set(IsNonEuOfficePage, true).success.value
           navigator
             .nextPage(AddDocumentsPage(index), NormalMode, updatedAnswers)
             .mustBe(previousReferencesRoutes.ReferenceTypeController.onPageLoad(updatedAnswers.id, index, referenceIndex, NormalMode))
@@ -133,7 +133,7 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               val updatedAnswers = emptyUserAnswers
                 .set(AddAnotherDocumentPage(index), false).success.value
-                .set(IsNonEUOfficePage, false).success.value
+                .set(IsNonEuOfficePage, false).success.value
               navigator
                 .nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers)
                 .mustBe(previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
@@ -144,7 +144,7 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               val updatedAnswers = emptyUserAnswers
                 .set(AddAnotherDocumentPage(index), false).success.value
                 .set(DeclarationTypePage, DeclarationType.Option2).success.value
-                .set(IsNonEUOfficePage, true).success.value
+                .set(IsNonEuOfficePage, true).success.value
 
               navigator
                 .nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers)
@@ -155,7 +155,7 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           val updatedAnswers = emptyUserAnswers
             .set(AddAnotherDocumentPage(index), false).success.value
             .set(DeclarationTypePage, DeclarationType.Option3).success.value
-            .set(IsNonEUOfficePage, true).success.value
+            .set(IsNonEuOfficePage, true).success.value
 
           navigator
             .nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers)

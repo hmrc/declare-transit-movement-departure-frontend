@@ -19,7 +19,7 @@ package models.journeyDomain
 import cats.data.NonEmptyList
 import cats.implicits._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
-import models.DeclarationType.Option2
+import models.DeclarationType.{Option2, Option3}
 import models.Index
 import models.reference.{CountryCode, CountryOfDispatch}
 import pages.addItems._
@@ -50,9 +50,11 @@ object PreviousReferences {
   def derivePreviousReferences(itemIndex: Index): UserAnswersReader[Option[NonEmptyList[PreviousReferences]]] =
     (
       DeclarationTypePage.reader,
-      CountryOfDispatchPage.reader
+      IsNonEuOfficePage.reader
     ).tupled.flatMap {
-      case (Option2, CountryOfDispatch(_, true)) =>
+      case (Option2, true) =>
+        allPreviousReferencesReader(itemIndex)
+      case (Option3, true) =>
         allPreviousReferencesReader(itemIndex)
       case _ =>
         AddAdministrativeReferencePage(itemIndex).reader.flatMap { // Optional reader if any other condition

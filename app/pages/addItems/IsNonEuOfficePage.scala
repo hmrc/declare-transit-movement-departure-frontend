@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package pages.addItems
 
-import models.reference.CountryOfDispatch
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object IsNonEUOfficePage extends QuestionPage[Boolean] {
+case object IsNonEuOfficePage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
