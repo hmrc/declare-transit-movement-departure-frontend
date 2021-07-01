@@ -19,9 +19,11 @@ package navigation
 import base.SpecBase
 import controllers.safetyAndSecurity.routes
 import generators.Generators
+import models.reference.{CountryCode, CustomsOffice}
 import models.{CheckMode, CommonAddress, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.OfficeOfDeparturePage
 import pages.safetyAndSecurity._
 
 class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -95,73 +97,176 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
       }
     }
 
-    "must go from AddSafetyAndSecurityConsignee to SafetyAndSecurityConsigneeEoriController if 'true' and selected 'E' for circumstance indicator" in {
+    "must go from AddSafetyAndSecurityConsignee" - {
 
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddSafetyAndSecurityConsigneePage, true)
-            .success
-            .value
-            .set(CircumstanceIndicatorPage, "E")
-            .success
-            .value
+      "when office at departure is an XI country code" - {
 
-          navigator
-            .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+        "to AddSafetyAndSecurityConsigneeEoriController if 'true' and selected 'E' for circumstance indicator" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddSafetyAndSecurityConsigneePage, true)
+                .success
+                .value
+                .set(CircumstanceIndicatorPage, "E")
+                .success
+                .value
+                .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("XI"), None))
+                .success
+                .value
+
+              navigator
+                .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+          }
+        }
+
+        "to AddSafetyAndSecurityConsigneeEoriController if 'true' and did not select 'E' for circumstance indicator" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddSafetyAndSecurityConsigneePage, true)
+                .success
+                .value
+                .set(CircumstanceIndicatorPage, "B")
+                .success
+                .value
+                .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("XI"), None))
+                .success
+                .value
+
+              navigator
+                .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+          }
+        }
+
+        "to AddSafetyAndSecurityConsigneeEoriController if 'true' and selected 'No' to add circumstance indicator" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddSafetyAndSecurityConsigneePage, true)
+                .success
+                .value
+                .set(AddCircumstanceIndicatorPage, false)
+                .success
+                .value
+                .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("XI"), None))
+                .success
+                .value
+
+              navigator
+                .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+          }
+        }
+
+        "to AddCarrier if 'false'" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddSafetyAndSecurityConsigneePage, false)
+                .success
+                .value
+                .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("XI"), None))
+                .success
+                .value
+
+              navigator
+                .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+                .mustBe(routes.AddCarrierController.onPageLoad(answers.id, NormalMode))
+          }
+        }
       }
-    }
 
-    "must go from AddSafetyAndSecurityConsignee to AddSafetyAndSecurityConsigneeEoriController if 'true' and did not select 'E' for circumstance indicator" in {
+      "when office at departure is anything else" - {
 
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddSafetyAndSecurityConsigneePage, true)
-            .success
-            .value
-            .set(CircumstanceIndicatorPage, "B")
-            .success
-            .value
+        "to SafetyAndSecurityConsigneeEoriController if 'true' and selected 'E' for circumstance indicator" in {
 
-          navigator
-            .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-            .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddSafetyAndSecurityConsigneePage, true)
+                .success
+                .value
+                .set(CircumstanceIndicatorPage, "E")
+                .success
+                .value
+                .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
+                .success
+                .value
+
+              navigator
+                .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+                .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+          }
+        }
+
+        "to AddSafetyAndSecurityConsigneeEoriController if 'true' and did not select 'E' for circumstance indicator" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddSafetyAndSecurityConsigneePage, true)
+                .success
+                .value
+                .set(CircumstanceIndicatorPage, "B")
+                .success
+                .value
+                .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
+                .success
+                .value
+
+              navigator
+                .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+          }
+        }
+
+        "to AddSafetyAndSecurityConsigneeEoriController if 'true' and selected 'No' to add circumstance indicator" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddSafetyAndSecurityConsigneePage, true)
+                .success
+                .value
+                .set(AddCircumstanceIndicatorPage, false)
+                .success
+                .value
+                .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
+                .success
+                .value
+
+              navigator
+                .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+          }
+        }
+
+        "to AddCarrier if 'false'" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .set(AddSafetyAndSecurityConsigneePage, false)
+                .success
+                .value
+                .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
+                .success
+                .value
+
+              navigator
+                .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
+                .mustBe(routes.AddCarrierController.onPageLoad(answers.id, NormalMode))
+          }
+        }
       }
-    }
 
-    "must go from AddSafetyAndSecurityConsignee to AddSafetyAndSecurityConsigneeEoriController if 'true' and selected 'No' to add circumstance indicator" in {
-
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddSafetyAndSecurityConsigneePage, true)
-            .success
-            .value
-            .set(AddCircumstanceIndicatorPage, false)
-            .success
-            .value
-
-          navigator
-            .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-            .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
-      }
-    }
-
-    "must go from AddSafetyAndSecurityConsignee to AddCarrier if 'false'" in {
-
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddSafetyAndSecurityConsigneePage, false)
-            .success
-            .value
-
-          navigator
-            .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-            .mustBe(routes.AddCarrierController.onPageLoad(answers.id, NormalMode))
-      }
     }
 
     "must go from AddSafetyAndSecurityConsigneeEori to SafetyAndSecurityConsigneeEori if 'true'" in {
@@ -363,6 +468,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         }
       }
     }
+
     "AddSafetyAndSecurityConsignorEoriPage must" - {
       "go to Check Your Answers page when Yes is selected and answer already exists for SafetyAndSecurityConsignorEoriPage" in {
         forAll(arbitrary[UserAnswers]) {
@@ -452,6 +558,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
       }
     }
+
     "Must go from SafetyAndSecurityConsignorNamePage to SafetyAndSecurityConsignorAddressPage if no answer exists for  SafetyAndSecurityConsignorAddressPage" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
@@ -473,7 +580,9 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
       }
     }
+
     "Must go from AddSafetyAndSecurityConsigneePage to" - {
+
       "CheckYourAnswersPage when No is selected" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -487,6 +596,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
         }
       }
+
       "to CheckYourAnswers when user selects 'Yes' and answers already exist for consignee" in {
 
         forAll(arbitrary[UserAnswers]) {
@@ -519,6 +629,9 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .set(CircumstanceIndicatorPage, "E")
               .success
               .value
+              .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
+              .success
+              .value
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
@@ -538,6 +651,9 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .success
               .value
               .set(CircumstanceIndicatorPage, "B")
+              .success
+              .value
+              .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
               .success
               .value
 
@@ -561,6 +677,9 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .set(AddCircumstanceIndicatorPage, false)
               .success
               .value
+              .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
+              .success
+              .value
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
@@ -570,6 +689,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
     }
 
     "AddSafetyAndSecurityConsigneeEoriPage must" - {
+
       "go to Check Your Answers page when Yes is selected and answer already exists for SafetyAndSecurityConsigneeEoriPage" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -635,6 +755,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         }
       }
     }
+
     "Must go from SafetyAndSecurityConsigneeEoriPage to Check Your Answers page" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
@@ -643,6 +764,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
       }
     }
+
     "Must go from SafetyAndSecurityConsigneeAddressPage to Check Your Answers page" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
@@ -651,6 +773,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
       }
     }
+
     "Must go from SafetyAndSecurityConsigneeNamePage to Check Your Answers page if answer exists for SafetyAndSecurityConsigneeAddressPage" in {
 
       val consigneeAddress = arbitrary[CommonAddress].sample.value

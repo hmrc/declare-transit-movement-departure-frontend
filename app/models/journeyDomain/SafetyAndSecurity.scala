@@ -20,8 +20,9 @@ import cats.data._
 import cats.implicits._
 import models.journeyDomain.Itinerary.readItineraries
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
+import models.reference.{CountryCode, CustomsOffice}
 import models.{CommonAddress, EoriNumber, UserAnswers}
-import pages.ModeAtBorderPage
+import pages.{ModeAtBorderPage, OfficeOfDeparturePage}
 import pages.safetyAndSecurity._
 
 case class SafetyAndSecurity(
@@ -141,8 +142,8 @@ object SafetyAndSecurity {
         }
 
     AddSafetyAndSecurityConsigneePage.filterOptionalDependent(identity) {
-      (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader).tupled.flatMap {
-        case (true, Some("E")) => readEori
+      (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader, OfficeOfDeparturePage.reader).tupled.flatMap {
+        case (true, Some("E"), CustomsOffice(_, _, countryCode, _)) if countryCode.code != "XI" => readEori
         case _ =>
           AddSafetyAndSecurityConsigneeEoriPage.reader.flatMap {
             case true  => readEori
