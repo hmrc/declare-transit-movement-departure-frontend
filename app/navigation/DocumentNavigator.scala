@@ -16,28 +16,14 @@
 
 package navigation
 
-import connectors.ReferenceDataConnector
-import derivable.{DeriveNumberOfDocuments, DeriveNumberOfPreviousAdministrativeReferences}
-import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
-import models.{CheckMode, CountryList, DeclarationType, Index, Mode, NormalMode, UserAnswers}
-import pages.{CountryOfDispatchPage, DeclarationTypePage, Page}
-import pages.addItems.{
-  AddAnotherDocumentPage,
-  AddDocumentsPage,
-  AddExtraDocumentInformationPage,
-  ConfirmRemoveDocumentPage,
-  DocumentExtraInformationPage,
-  DocumentReferencePage,
-  DocumentTypePage
-}
-import play.api.mvc.Call
 import controllers.addItems.routes
+import derivable.{DeriveNumberOfDocuments, DeriveNumberOfPreviousAdministrativeReferences}
+import models.{CheckMode, DeclarationType, Index, Mode, NormalMode, UserAnswers}
+import pages.addItems._
+import pages.{DeclarationTypePage, IsNonEUOfficePage, Page}
+import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
-import models.reference.{Country, CountryCode, CountryOfDispatch}
-import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DocumentNavigator @Inject() () extends Navigator {
@@ -58,7 +44,7 @@ class DocumentNavigator @Inject() () extends Navigator {
     case DocumentTypePage(index, documentIndex) => ua => Some(routes.DocumentReferenceController.onPageLoad(ua.id, index, documentIndex, CheckMode))
     case DocumentReferencePage(index, documentIndex) => ua => Some(routes.AddExtraDocumentInformationController.onPageLoad(ua.id, index, documentIndex, CheckMode))
     case AddExtraDocumentInformationPage(index, documentIndex) => ua => addExtraDocumentInformationRoute(ua, index, documentIndex, CheckMode)
-    case DocumentExtraInformationPage(index, _) => ua => Some(routes.AddAnotherDocumentController.onPageLoad(ua.id, index, CheckMode))
+    case DocumentExtraInformationPage(index, _) => ua => Some(controllers.addItems.routes.AddAnotherDocumentController.onPageLoad(ua.id, index, CheckMode))
     case AddAnotherDocumentPage(index) => ua =>  addAnotherDocumentRoute(ua, index, CheckMode)
     case ConfirmRemoveDocumentPage(index, _) => ua => Some(confirmRemoveDocumentRoute(ua,index, CheckMode))
 
@@ -70,14 +56,14 @@ class DocumentNavigator @Inject() () extends Navigator {
     }
 
   private def previousReferencesRoute(ua:UserAnswers, index:Index, mode:Mode) = {
-    val declarationTypes = Seq(DeclarationType.Option2)
-    val countryOfDispatch: Option[Boolean] = ua.get(CountryOfDispatchPage).map(_.isNotEu)
+    val declarationTypes = Seq(DeclarationType.Option2, DeclarationType.Option3)
     val isAllowedDeclarationType: Boolean = ua.get(DeclarationTypePage).fold(false)(declarationTypes.contains(_))
     val referenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)
+    val countryOfDeparture: Option[Boolean] = ua.get(IsNonEUOfficePage)
 
-    (countryOfDispatch, isAllowedDeclarationType) match {
-      case (Some(true), true) => Some(previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.id, index, Index(referenceIndex), mode))
-      case _ => Some(previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(ua.id, index, mode))
+    (countryOfDeparture, isAllowedDeclarationType) match {
+      case (Some(true), true) => Some(controllers.addItems.previousReferences.routes.ReferenceTypeController.onPageLoad(ua.id, index, Index(referenceIndex), mode))
+      case _ => Some(controllers.addItems.previousReferences.routes.AddAdministrativeReferenceController.onPageLoad(ua.id, index, mode))
     }
   }
 
