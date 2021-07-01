@@ -32,7 +32,7 @@ class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
   // format: off
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddSafetyAndSecurityConsignorPage      => ua => Some(addSafetyAndSecurityConsignorRoute(ua, NormalMode))
+    case AddSafetyAndSecurityConsignorPage      => ua => addSafetyAndSecurityConsignorNormalRoute(ua)
     case AddSafetyAndSecurityConsignorEoriPage  => ua => Some(addSafetyAndSecurityConsignorEoriRoute(ua, NormalMode))
     case SafetyAndSecurityConsignorEoriPage     => ua => Some(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode))
     case SafetyAndSecurityConsignorNamePage     => ua => Some(routes.SafetyAndSecurityConsignorAddressController.onPageLoad(ua.id, NormalMode))
@@ -50,7 +50,7 @@ class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddSafetyAndSecurityConsignorPage        => ua => Some(addSafetyAndSecurityConsignorRoute(ua, CheckMode))
+    case AddSafetyAndSecurityConsignorPage        => ua => addSafetyAndSecurityConsignorCheckRoute(ua)
     case AddSafetyAndSecurityConsignorEoriPage    => ua => Some(addSafetyAndSecurityConsignorEoriRoute(ua, CheckMode))
     case SafetyAndSecurityConsignorEoriPage       => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
     case SafetyAndSecurityConsignorNamePage       => ua => Some(safetyAndSecurityConsignorNameRoute(ua))
@@ -79,13 +79,18 @@ class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
       case None => routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(ua.id, CheckMode)
     }
 
-    private def addSafetyAndSecurityConsignorRoute(ua: UserAnswers, mode:Mode): Call =
-    (ua.get(AddSafetyAndSecurityConsignorPage), ua.get(AddSafetyAndSecurityConsignorEoriPage), mode) match {
-      case (Some(true), _,NormalMode)   => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, NormalMode)
-      case (Some(false),_, NormalMode)  => routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode)
-      case (Some(false), _, CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
-      case (Some(true), None, CheckMode) => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, CheckMode)
-      case (Some(true), Some(_), CheckMode) => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id)
+    private def addSafetyAndSecurityConsignorNormalRoute(ua: UserAnswers): Option[Call] =
+    ua.get(AddSafetyAndSecurityConsignorPage) match {
+      case Some(true)  => consignorCircumstanceIndicatorCheck(ua, NormalMode)
+      case Some(false)  => Some(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(ua.id, NormalMode))
+    }
+
+  private def addSafetyAndSecurityConsignorCheckRoute(ua: UserAnswers): Option[Call] =
+    (ua.get(AddSafetyAndSecurityConsignorPage), ua.get(AddSafetyAndSecurityConsignorEoriPage)) match {
+      case (Some(true), None) => Some(routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, CheckMode))
+      case (Some(_), _) => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.id))
+      case _ => logger.warn(s"[Navigation][SafetyAndSecurityTraderDetails] AddSafetyAndSecurityConsignorPage is a missing mandatory page")
+        Some(controllers.routes.SessionExpiredController.onPageLoad())
     }
 
   private def addSafetyAndSecurityConsignorEoriRoute(ua: UserAnswers, mode:Mode): Call =
@@ -127,6 +132,17 @@ class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
       }
     }
   }
+
+  private def consignorCircumstanceIndicatorCheck(ua: UserAnswers, mode: Mode): Option[Call] = {
+    ua.get(OfficeOfDeparturePage).map {
+      case CustomsOffice(_, _, CountryCode("XI"), _) => ua.get(CircumstanceIndicatorPage) match {
+        case Some("E") => routes.SafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, mode)
+        case _         => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, mode)
+      }
+      case _ => routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(ua.id, mode)
+    }
+  }
+
 
   private def addSafetyAndSecurityConsigneeEoriRoute(ua: UserAnswers, mode:Mode): Call =
     (ua.get(AddSafetyAndSecurityConsigneeEoriPage), mode) match {

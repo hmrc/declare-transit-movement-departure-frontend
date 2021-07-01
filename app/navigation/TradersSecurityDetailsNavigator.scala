@@ -92,6 +92,8 @@ class TradersSecurityDetailsNavigator @Inject() () extends Navigator {
       case (Some(false), CheckMode) => Some(routes.SecurityConsigneeNameController.onPageLoad(ua.id, index, CheckMode))
     }
 
+
+
   def circumstanceIndicatorCheck(ua: UserAnswers, index: Index, mode: Mode) =
     ua.get(CircumstanceIndicatorPage) match {
       case Some("E") => controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(ua.id, index, mode)

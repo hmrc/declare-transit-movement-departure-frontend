@@ -122,6 +122,17 @@ object SafetyAndSecurity {
         case false => readAddress
       }
     }
+
+    AddSafetyAndSecurityConsignorPage.filterOptionalDependent(identity) {
+      (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader, OfficeOfDeparturePage.reader).tupled.flatMap {
+        case (true, Some("E"), CustomsOffice(_, _, CountryCode("XI"), _)) => readEori
+        case _ =>
+          AddSafetyAndSecurityConsignorEoriPage.reader.flatMap {
+            case true  => readEori
+            case false => readAddress
+          }
+      }
+    }
   }
 
   private def consigneeDetails: UserAnswersReader[Option[SecurityTraderDetails]] = {
