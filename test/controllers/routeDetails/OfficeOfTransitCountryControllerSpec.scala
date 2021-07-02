@@ -74,12 +74,51 @@ class OfficeOfTransitCountryControllerSpec
 
   "OfficeOfTransitCountry Controller" - {
 
-    "must return OK and the correct view for a GET when office of departure is defined" in {
+    "must return OK and the correct view for a GET when office of departure is defined as a XI customs office" in {
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
       when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+
+      val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+
+      dataRetrievalWithData(userAnswers)
+
+      val request        = FakeRequest(GET, officeOfTransitCountryRoute)
+      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockReferenceDataConnector, times(1))
+        .getTransitCountryList(eqTo(excludedTransitCountries))(any(), any())
+
+      val expectedJson = Json.obj(
+        "form"        -> form,
+        "mode"        -> NormalMode,
+        "lrn"         -> lrn,
+        "countries"   -> jsonCountryList(preSelected = false),
+        "onSubmitUrl" -> routes.OfficeOfTransitCountryController.onSubmit(lrn, index, NormalMode).url
+      )
+
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey
+
+      templateCaptor.getValue mustEqual template
+      jsonWithoutConfig mustBe expectedJson
+
+    }
+
+    "must return OK and the correct view for a GET when office of departure is defined as a non XI customs office" in {
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any()))
+        .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
 
@@ -94,6 +133,8 @@ class OfficeOfTransitCountryControllerSpec
       status(result) mustEqual OK
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockReferenceDataConnector, times(1))
+        .getTransitCountryList(eqTo(excludedTransitCountries ++ excludedTransitCountriesForNonNI))(any(), any())
 
       val expectedJson = Json.obj(
         "form"        -> form,
