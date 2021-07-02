@@ -72,7 +72,7 @@ import play.api.libs.json.Json
 
 import java.time.LocalDateTime
 
-case object Scenario1 extends UserAnswerScenario {
+case object Scenario6 extends UserAnswerScenario {
 
   private val firstGoodItem: Index      = Index(0)
   private val secondGoodItem: Index     = Index(1)
@@ -96,7 +96,7 @@ case object Scenario1 extends UserAnswerScenario {
      * RouteDetails
      * */
     .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None))
+    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
     .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
     .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
     .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
@@ -205,7 +205,6 @@ case object Scenario1 extends UserAnswerScenario {
     .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(firstGoodItem))(true)
     .unsafeSetVal(pages.addItems.ReferenceTypePage(firstGoodItem, Index(1)))("GD1PR2")
     .unsafeSetVal(pages.addItems.PreviousReferencePage(firstGoodItem, Index(1)))("GD1PR2Ref")
-    .unsafeSetVal(pages.addItems.IsNonEuOfficePage)(false)
     .unsafeSetVal(pages.addItems.AddExtraInformationPage(firstGoodItem, Index(1)))(false)
     .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(firstGoodItem))(false)
     .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(firstGoodItem))("T")
@@ -304,7 +303,7 @@ case object Scenario1 extends UserAnswerScenario {
     .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
 
   private val preTaskListDetails =
-    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None), Option2, true)
+    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None), Option2, true)
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 
@@ -346,8 +345,8 @@ case object Scenario1 extends UserAnswerScenario {
     containers = Some(NonEmptyList(Container("GD1CN1NUM1"), List(Container("GD1CN2NUMS")))),
     specialMentions = Some(
       NonEmptyList(
-        SpecialMentionDomain("GD1S1", "GD1SPMT1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None)),
-        List(SpecialMentionDomain("DG0", "GD1S2Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None)))
+        SpecialMentionDomain("GD1S1", "GD1SPMT1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None)),
+        List(SpecialMentionDomain("DG0", "GD1S2Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None)))
       )
     ),
     producedDocuments = Some(
@@ -382,7 +381,7 @@ case object Scenario1 extends UserAnswerScenario {
     ),
     containers = Some(NonEmptyList(Container("GD2CN1NUM1"), List.empty)),
     specialMentions =
-      Some(NonEmptyList(SpecialMentionDomain("GD2S1", "GD2S1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None)), List.empty)),
+      Some(NonEmptyList(SpecialMentionDomain("GD2S1", "GD2S1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None)), List.empty)),
     producedDocuments = Some(NonEmptyList(ProducedDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
     itemSecurityTraderDetails = Some(
       ItemsSecurityTraderDetails(

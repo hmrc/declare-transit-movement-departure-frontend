@@ -17,19 +17,22 @@
 package services
 
 import cats.data.NonEmptyList
-import models.{Convert, Index}
-import models.journeyDomain.{GuaranteeDetails, SpecialMentionDomain}
-import models.messages.goodsitem.{SpecialMention, SpecialMentionExportFromGB, SpecialMentionNoCountry}
+import models.Convert
+import models.journeyDomain.SpecialMentionDomain
+import models.messages.goodsitem.{SpecialMention, SpecialMentionExportFromGB, SpecialMentionExportFromNI, SpecialMentionNoCountry}
 
 private[services] object UserDeclaredSpecialMentionConversion extends Convert[NonEmptyList[SpecialMentionDomain], Seq[SpecialMention]] {
 
   override def apply(specialMentionDomain: NonEmptyList[SpecialMentionDomain]): Seq[SpecialMention] =
     specialMentionDomain.map {
-      case SpecialMentionDomain(specialMentionType, additionalInfo) =>
-        if (SpecialMention.countrySpecificCodes.contains(specialMentionType)) {
+      case SpecialMentionDomain(specialMentionType, additionalInfo, officeOfDeparture) =>
+        if (SpecialMention.countrySpecificCodes.contains(specialMentionType) && officeOfDeparture.countryId.code == SpecialMention.countryCodeGB) {
           SpecialMentionExportFromGB(specialMentionType, additionalInfo)
+        } else if (SpecialMention.countrySpecificCodes.contains(specialMentionType) && officeOfDeparture.countryId.code == SpecialMention.countryCodeNI) {
+          SpecialMentionExportFromNI(specialMentionType, additionalInfo)
         } else {
           SpecialMentionNoCountry(specialMentionType, additionalInfo)
         }
     }.toList
+
 }

@@ -16,8 +16,9 @@
 
 package services
 
-import cats.data.{Kleisli, NonEmptyList}
+import cats.data.NonEmptyList
 import cats.implicits._
+import logging.Logging
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
   GoodSummaryDetails,
@@ -26,7 +27,6 @@ import models.journeyDomain.GoodsSummary.{
   GoodSummarySimplifiedDetails
 }
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
-import models.journeyDomain.JourneyDomain.Constants
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
@@ -47,7 +47,6 @@ import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import logging.Logging
 
 trait DeclarationRequestServiceInt {
   def convert(userAnswers: UserAnswers): Future[EitherType[DeclarationRequest]]

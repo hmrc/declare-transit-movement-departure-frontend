@@ -23,6 +23,7 @@ import models.GuaranteeType.GuaranteeWaiver
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.SpecialMentionDomain
 import models.messages.goodsitem.{SpecialMentionExportFromGB, SpecialMentionGuaranteeLiabilityAmount, SpecialMentionNoCountry}
+import models.reference.{CountryCode, CustomsOffice}
 
 class UserDeclaredSpecialMentionConversionSpec extends SpecBase with GeneratorSpec with ModelGenerators {
 
@@ -32,8 +33,8 @@ class UserDeclaredSpecialMentionConversionSpec extends SpecBase with GeneratorSp
 
       "must return a list of SpecialMentionExportFromGB when given a SpecialMentionDomain with a type of DG0 or DG1" in {
 
-        val specialMentionDomain1            = SpecialMentionDomain("DG0", "Additional info")
-        val specialMentionDomain2            = SpecialMentionDomain("DG1", "Additional info")
+        val specialMentionDomain1            = SpecialMentionDomain("DG0", "Additional info", CustomsOffice("id", "name", CountryCode("GB"), None))
+        val specialMentionDomain2            = SpecialMentionDomain("DG1", "Additional info", CustomsOffice("id", "name", CountryCode("GB"), None))
         val specialMentionDomainNonEmptyList = NonEmptyList(specialMentionDomain1, List(specialMentionDomain2))
 
         val expectedSpecialMention1   = SpecialMentionExportFromGB("DG0", "Additional info")
@@ -46,7 +47,7 @@ class UserDeclaredSpecialMentionConversionSpec extends SpecBase with GeneratorSp
 
       "must return a list of SpecialMentionNoCountry when given a SpecialMentionDomain with a type that is not DG0 or DG1" in {
 
-        val specialMentionDomain1            = SpecialMentionDomain("ABC", "Additional info")
+        val specialMentionDomain1            = SpecialMentionDomain("ABC", "Additional info", CustomsOffice("id", "name", CountryCode("GB"), None))
         val specialMentionDomainNonEmptyList = NonEmptyList(specialMentionDomain1, List.empty)
 
         val expectedSpecialMention1   = SpecialMentionNoCountry("ABC", "Additional info")
@@ -56,9 +57,10 @@ class UserDeclaredSpecialMentionConversionSpec extends SpecBase with GeneratorSp
       }
 
       "must return a list of both SpecialMentionNoCountry and SpecialMentionExportFromGB" in {
-
-        val specialMentionDomain1            = SpecialMentionDomain("DG0", "Additional info")
-        val specialMentionDomain2            = SpecialMentionDomain("ABC", "Additional info")
+        val customsOffice2: CustomsOffice    = CustomsOffice("id", "name", CountryCode("GB"), None)
+        val xiCustomsOffice1: CustomsOffice  = CustomsOffice("xi", "ni", CountryCode("XI"), None)
+        val specialMentionDomain1            = SpecialMentionDomain("DG0", "Additional info", customsOffice2)
+        val specialMentionDomain2            = SpecialMentionDomain("ABC", "Additional info", customsOffice2)
         val specialMentionDomainNonEmptyList = NonEmptyList(specialMentionDomain1, List(specialMentionDomain2))
 
         val expectedSpecialMention1 = SpecialMentionExportFromGB("DG0", "Additional info")
