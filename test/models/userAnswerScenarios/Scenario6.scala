@@ -205,6 +205,7 @@ case object Scenario6 extends UserAnswerScenario {
     .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(firstGoodItem))(true)
     .unsafeSetVal(pages.addItems.ReferenceTypePage(firstGoodItem, Index(1)))("GD1PR2")
     .unsafeSetVal(pages.addItems.PreviousReferencePage(firstGoodItem, Index(1)))("GD1PR2Ref")
+    .unsafeSetVal(pages.addItems.IsNonEuOfficePage)(false)
     .unsafeSetVal(pages.addItems.AddExtraInformationPage(firstGoodItem, Index(1)))(false)
     .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(firstGoodItem))(false)
     .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(firstGoodItem))("T")
