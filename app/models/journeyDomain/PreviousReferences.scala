@@ -52,9 +52,7 @@ object PreviousReferences {
       DeclarationTypePage.reader,
       IsNonEuOfficePage.reader
     ).tupled.flatMap {
-      case (Option2, true) =>
-        allPreviousReferencesReader(itemIndex)
-      case (Option3, true) =>
+      case (Option2, true) | (Option3, true) =>
         allPreviousReferencesReader(itemIndex)
       case _ =>
         AddAdministrativeReferencePage(itemIndex).reader.flatMap { // Optional reader if any other condition
