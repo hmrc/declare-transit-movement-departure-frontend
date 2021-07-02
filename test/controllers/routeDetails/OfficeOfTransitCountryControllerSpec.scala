@@ -17,6 +17,7 @@
 package controllers.routeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import forms.OfficeOfTransitCountryFormProvider
 import matchers.JsonMatchers
@@ -27,7 +28,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.OfficeOfTransitCountryPage
+import pages.{OfficeOfDeparturePage, OfficeOfTransitCountryPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -37,11 +38,17 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import controllers.{routes => mainRoutes}
-import models.reference.{Country, CountryCode}
+import models.reference.{Country, CountryCode, CustomsOffice}
 
 import scala.concurrent.Future
 
-class OfficeOfTransitCountryControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class OfficeOfTransitCountryControllerSpec
+    extends SpecBase
+    with MockNunjucksRendererApp
+    with MockitoSugar
+    with NunjucksSupport
+    with JsonMatchers
+    with UserAnswersSpecHelper {
 
   val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
@@ -67,14 +74,16 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with MockNunjucksRen
 
   "OfficeOfTransitCountry Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET when office of departure is defined as a XI customs office" in {
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+
+      dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, officeOfTransitCountryRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -85,6 +94,8 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with MockNunjucksRen
       status(result) mustEqual OK
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockReferenceDataConnector, times(1))
+        .getTransitCountryList(eqTo(excludedTransitCountries))(any(), any())
 
       val expectedJson = Json.obj(
         "form"        -> form,
@@ -101,14 +112,74 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with MockNunjucksRen
 
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must return OK and the correct view for a GET when office of departure is defined as a non XI customs office" in {
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any()))
+        .thenReturn(Future.successful(countries))
 
-      val userAnswers = emptyUserAnswers.set(OfficeOfTransitCountryPage(index), CountryCode("GB")).success.value
+      val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+
+      dataRetrievalWithData(userAnswers)
+
+      val request        = FakeRequest(GET, officeOfTransitCountryRoute)
+      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockReferenceDataConnector, times(1))
+        .getTransitCountryList(eqTo(excludedTransitCountries ++ excludedTransitCountriesForNonNI))(any(), any())
+
+      val expectedJson = Json.obj(
+        "form"        -> form,
+        "mode"        -> NormalMode,
+        "lrn"         -> lrn,
+        "countries"   -> jsonCountryList(preSelected = false),
+        "onSubmitUrl" -> routes.OfficeOfTransitCountryController.onSubmit(lrn, index, NormalMode).url
+      )
+
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey
+
+      templateCaptor.getValue mustEqual template
+      jsonWithoutConfig mustBe expectedJson
+
+    }
+
+    "must redirect to session expired for a GET when office of departure is not defined" in {
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+
+      dataRetrievalWithData(emptyUserAnswers)
+
+      val request = FakeRequest(GET, officeOfTransitCountryRoute)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered and office of departure is defined" in {
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+        .unsafeSetVal(OfficeOfTransitCountryPage(index))(CountryCode("GB"))
+
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, officeOfTransitCountryRoute)
@@ -144,7 +215,9 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with MockNunjucksRen
 
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+
+      dataRetrievalWithData(userAnswers)
 
       val request =
         FakeRequest(POST, officeOfTransitCountryRoute)
@@ -157,6 +230,25 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with MockNunjucksRen
 
     }
 
+    "must redirect to session expired for a POST when office of departure is not defined " in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+
+      dataRetrievalWithData(emptyUserAnswers)
+
+      val request =
+        FakeRequest(POST, officeOfTransitCountryRoute)
+          .withFormUrlEncodedBody(("value", "GB"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+    }
+
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       when(mockRenderer.render(any(), any())(any()))
@@ -164,7 +256,9 @@ class OfficeOfTransitCountryControllerSpec extends SpecBase with MockNunjucksRen
 
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+
+      dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(POST, officeOfTransitCountryRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))
