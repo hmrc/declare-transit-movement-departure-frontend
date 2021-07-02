@@ -19,14 +19,16 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import models.DeclarationType.{Option1, Option2}
-import models.Index
+import models.DeclarationType.{Option1, Option2, Option3}
+import models.{DeclarationType, Index}
 import models.reference.{CountryCode, CountryOfDispatch}
 import org.scalacheck.Gen
 import pages.addItems._
 import pages.{CountryOfDispatchPage, DeclarationTypePage, QuestionPage}
 
 class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
+
+  private val genDeclarationType: Gen[DeclarationType] = Gen.oneOf(Option2, Option3)
 
   private val previousReferenceUa = emptyUserAnswers
     .unsafeSetVal(ReferenceTypePage(index, referenceIndex))("referenceType")
@@ -90,25 +92,28 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
 
       "when all mandatory pages have been answered " +
         "and DeclarationTypePage is either 'T2' or 'T2F'" +
-        "and CountryOfDispatchPage is a none EU Country" in {
+        "and IsNonEuOfficePage in a none EU Transit Country" in {
 
           val expectedResult = NonEmptyList(
             PreviousReferences("referenceType", "previousReference", Some("extraInformation")),
             List(PreviousReferences("referenceType", "previousReference", None))
           )
 
-          val userAnswers = previousReferenceUa
-            .unsafeSetVal(DeclarationTypePage)(Option2)
-            .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), isNotEu = true))
+          forAll(genDeclarationType) {
+            declarationType =>
+              val userAnswers = previousReferenceUa
+                .unsafeSetVal(DeclarationTypePage)(declarationType)
+                .unsafeSetVal(IsNonEuOfficePage)(true)
 
-          val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)
+              val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)
 
-          result.right.value.value mustBe expectedResult
+              result.right.value.value mustBe expectedResult
+          }
         }
 
       "when all mandatory pages have been answered " +
-        "and DeclarationTypePage is either 'T1' or 'T-' " +
-        "and CountryOfDispatchPage is an EU Country " +
+        "and DeclarationTypePage is 'T1'" +
+        "and IsNonEuOfficePage in an EU Transit Country " +
         "and AddAdministrativeReferencePage is true" in {
 
           val expectedResult = NonEmptyList(
@@ -119,7 +124,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
           val userAnswers = previousReferenceUa
             .unsafeSetVal(AddAdministrativeReferencePage(index))(true)
             .unsafeSetVal(DeclarationTypePage)(Option1)
-            .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("IT"), isNotEu = false))
+            .unsafeSetVal(IsNonEuOfficePage)(false)
 
           val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)
 
@@ -127,14 +132,14 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
         }
 
       "when all mandatory pages have been answered " +
-        "and DeclarationTypePage is either 'T1' or 'T-' " +
-        "and CountryOfDispatchPage is an EU Country " +
+        "and DeclarationTypePage is 'T1'" +
+        "and IsNonEuOfficePage in an EU Transit Country " +
         "and AddAdministrativeReferencePage is false" in {
 
           val userAnswers = previousReferenceUa
             .unsafeSetVal(AddAdministrativeReferencePage(index))(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
-            .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("IT"), isNotEu = false))
+            .unsafeSetVal(IsNonEuOfficePage)(false)
 
           val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)
 
@@ -148,17 +153,17 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
 
         val genMandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
           DeclarationTypePage,
-          CountryOfDispatchPage,
+          IsNonEuOfficePage,
           ReferenceTypePage(index, referenceIndex),
           PreviousReferencePage(index, referenceIndex),
           AddExtraInformationPage(index, referenceIndex)
         )
 
-        forAll(genMandatoryPages) {
-          mandatoryPage =>
+        forAll(genMandatoryPages, genDeclarationType) {
+          (mandatoryPage, declarationType) =>
             val userAnswers = previousReferenceUa
-              .unsafeSetVal(DeclarationTypePage)(Option2)
-              .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), isNotEu = true))
+              .unsafeSetVal(DeclarationTypePage)(declarationType)
+              .unsafeSetVal(IsNonEuOfficePage)(true)
               .unsafeRemove(mandatoryPage)
 
             val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)
@@ -168,13 +173,13 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
       }
 
       "when all mandatory pages have been answered " +
-        "and DeclarationTypePage is either 'T1' or 'T-' " +
-        "and CountryOfDispatchPage is an EU Country " +
+        "and DeclarationTypePage is 'T1'" +
+        "and IsNonEuOfficePage in an EU Transit Country " +
         "and AddAdministrativeReferencePage is missing" in {
 
           val userAnswers = previousReferenceUa
             .unsafeSetVal(DeclarationTypePage)(Option1)
-            .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("IT"), isNotEu = false))
+            .unsafeSetVal(IsNonEuOfficePage)(false)
             .unsafeRemove(AddAdministrativeReferencePage(index))
 
           val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)

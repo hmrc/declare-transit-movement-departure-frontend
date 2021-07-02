@@ -42,6 +42,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
     .unsafeSetVal(TotalNetMassPage(index))("123")
     .unsafeSetVal(IsCommodityCodeKnownPage(index))(true)
     .unsafeSetVal(CommodityCodePage(index))("commodityCode")
+    .unsafeSetVal(IsNonEuOfficePage)(false)
     //Consignor
     .unsafeSetVal(AddConsignorPage)(true)
     //Consignee
@@ -191,6 +192,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
           .unsafeSetVal(TotalNetMassPage(Index(1)))("123")
           .unsafeSetVal(IsCommodityCodeKnownPage(Index(1)))(true)
           .unsafeSetVal(CommodityCodePage(Index(1)))("commodityCode")
+          .unsafeSetVal(IsNonEuOfficePage)(false)
           //Consignor
           .unsafeSetVal(AddConsignorPage)(true)
           //Consignee

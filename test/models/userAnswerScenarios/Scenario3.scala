@@ -182,6 +182,7 @@ case object Scenario3 extends UserAnswerScenario {
     .unsafeSetVal(pages.addItems.AddAdministrativeReferencePage(firstGoodItem))(true)
     .unsafeSetVal(pages.addItems.ReferenceTypePage(firstGoodItem, Index(0)))("GD1PR1")
     .unsafeSetVal(pages.addItems.PreviousReferencePage(firstGoodItem, Index(0)))("GD1PR1Ref")
+    .unsafeSetVal(pages.addItems.IsNonEuOfficePage)(false)
     .unsafeSetVal(pages.addItems.AddExtraInformationPage(firstGoodItem, Index(0)))(true)
     .unsafeSetVal(pages.addItems.ExtraInformationPage(firstGoodItem, Index(0)))("GD1PR1Info")
     .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(firstGoodItem))(true)

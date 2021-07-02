@@ -17,12 +17,13 @@
 package viewModels
 
 import base.{GeneratorSpec, SpecBase}
+import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import generators.{ModelGenerators, UserAnswersGenerator}
 import models.DeclarationType.Option1
 import models.ProcedureType.{Normal, Simplified}
 import models.RepresentativeCapacity.Direct
-import models.journeyDomain.{GoodsSummary, MovementDetails, UserAnswersReader}
+import models.journeyDomain.{GoodsSummary, MovementDetails, PreviousReferences, UserAnswersReader}
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.userAnswerScenarios.{Scenario1, Scenario3}
 import models.{EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
