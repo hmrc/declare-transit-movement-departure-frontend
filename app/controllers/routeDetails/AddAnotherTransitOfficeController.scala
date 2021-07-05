@@ -126,7 +126,7 @@ class AddAnotherTransitOfficeController @Inject() (
   private def getCustomsOfficeAndCountryName(countryCode: CountryCode)(implicit request: DataRequest[AnyContent]): Future[(CustomsOfficeList, String)] =
     referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode) flatMap {
       customsOffices =>
-        referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) map {
+        referenceDataConnector.getTransitCountryList(excludeCountries = alwaysExcludedTransitCountries) map {
           countryList =>
             val countryName = countryList.getCountry(countryCode).fold(countryCode.code)(_.description)
             (customsOffices, countryName)

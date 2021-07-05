@@ -82,7 +82,7 @@ class RouteDetailsCheckYourAnswersController @Inject() (
       countryList            <- referenceDataConnector.getCountryList()
       customsOfficeList      <- referenceDataConnector.getCustomsOffices()
       destCountryList        <- referenceDataConnector.getCountryList()
-      movementCountryList    <- referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries)
+      movementCountryList    <- referenceDataConnector.getTransitCountryList(excludeCountries = alwaysExcludedTransitCountries)
       destOfficeList         <- referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode)
       officeOfTransitSection <- officeOfTransitSections(checkYourAnswersHelper)
     } yield {

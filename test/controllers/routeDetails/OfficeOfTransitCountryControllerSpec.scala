@@ -94,8 +94,6 @@ class OfficeOfTransitCountryControllerSpec
       status(result) mustEqual OK
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-      verify(mockReferenceDataConnector, times(1))
-        .getTransitCountryList(eqTo(excludedTransitCountries))(any(), any())
 
       val expectedJson = Json.obj(
         "form"        -> form,
@@ -133,8 +131,6 @@ class OfficeOfTransitCountryControllerSpec
       status(result) mustEqual OK
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-      verify(mockReferenceDataConnector, times(1))
-        .getTransitCountryList(eqTo(excludedTransitCountries ++ excludedTransitCountriesForNonNI))(any(), any())
 
       val expectedJson = Json.obj(
         "form"        -> form,

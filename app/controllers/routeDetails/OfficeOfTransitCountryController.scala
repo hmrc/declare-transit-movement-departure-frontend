@@ -22,17 +22,18 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.OfficeOfTransitCountryFormProvider
 import logging.Logging
-import models.reference.{Country, CountryCode}
-import models.{Index, LocalReferenceNumber, Mode, UserAnswers}
+import models.reference.Country
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import pages.{OfficeOfDeparturePage, OfficeOfTransitCountryPage}
+import pages.OfficeOfTransitCountryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.ExcludedCountriesService.routeDetailsExcludedCountries
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -63,7 +64,7 @@ class OfficeOfTransitCountryController @Inject() (
       implicit request =>
         (
           for {
-            excludedCountries  <- OptionT.fromOption[Future](excludedCountries(request.userAnswers))
+            excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
             transitCountryList <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
             form = formProvider(transitCountryList)
             preparedForm = request.userAnswers
@@ -83,7 +84,7 @@ class OfficeOfTransitCountryController @Inject() (
     implicit request =>
       (
         for {
-          excludedCountries  <- OptionT.fromOption[Future](excludedCountries(request.userAnswers))
+          excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
           transitCountryList <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
           page <- OptionT.liftF(
             formProvider(transitCountryList)
@@ -116,12 +117,5 @@ class OfficeOfTransitCountryController @Inject() (
     )
 
     renderer.render("officeOfTransitCountry.njk", json).map(status(_))
-  }
-
-  private def excludedCountries(userAnswers: UserAnswers): Option[Seq[CountryCode]] = userAnswers.get(OfficeOfDeparturePage).map {
-    _.countryId.code match {
-      case "XI" => excludedTransitCountries
-      case _    => excludedTransitCountries ++ excludedTransitCountriesForNonNI
-    }
   }
 }
