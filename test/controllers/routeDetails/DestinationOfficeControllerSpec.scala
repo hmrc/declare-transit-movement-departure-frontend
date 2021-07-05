@@ -17,6 +17,7 @@
 package controllers.routeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.DestinationOfficeFormProvider
@@ -30,7 +31,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{DestinationOfficePage, MovementDestinationCountryPage}
+import pages.{DestinationOfficePage, MovementDestinationCountryPage, OfficeOfDeparturePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -42,7 +43,13 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers with Generators {
+class DestinationOfficeControllerSpec
+    extends SpecBase
+    with MockNunjucksRendererApp
+    with MockitoSugar
+    with NunjucksSupport
+    with JsonMatchers
+    with UserAnswersSpecHelper {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -63,13 +70,20 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
 
   "DestinationOffice Controller" - {
 
-    "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.set(MovementDestinationCountryPage, countryCode).success.value
+    "must return OK and the correct view for a GET for an NI departure" in {
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+
       dataRetrievalWithData(userAnswers)
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
+
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(GET, destinationOfficeRoute)
@@ -102,8 +116,10 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
 
     "must redirect to session expired when destination country value is 'None'" in {
       dataRetrievalWithData(emptyUserAnswers)
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
@@ -116,18 +132,20 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
+
       val userAnswers = emptyUserAnswers
-        .set(MovementDestinationCountryPage, countryCode)
-        .success
-        .value
-        .set(DestinationOfficePage, customsOffice1)
-        .success
-        .value
+        .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+        .unsafeSetVal(DestinationOfficePage)(customsOffice1)
+
       dataRetrievalWithData(userAnswers)
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
+
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(GET, destinationOfficeRoute)
@@ -161,11 +179,18 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      val userAnswers = emptyUserAnswers.set(MovementDestinationCountryPage, countryCode).success.value
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+
       dataRetrievalWithData(userAnswers)
+
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
+
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
@@ -179,12 +204,19 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = emptyUserAnswers.set(MovementDestinationCountryPage, countryCode).success.value
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+
       dataRetrievalWithData(userAnswers)
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
+
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(POST, destinationOfficeRoute).withFormUrlEncodedBody(("value", ""))
@@ -221,6 +253,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
+
       dataRetrievalNoData()
 
       val request =
