@@ -70,7 +70,7 @@ class DestinationOfficeControllerSpec
 
   "DestinationOffice Controller" - {
 
-    "must return OK and the correct view for a GET for an NI departure" in {
+    "must return OK and the correct view for a GET when office of departure is defined as an XI customs office" in {
 
       val userAnswers = emptyUserAnswers
         .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
@@ -84,7 +84,7 @@ class DestinationOfficeControllerSpec
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(GET, destinationOfficeRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -95,6 +95,54 @@ class DestinationOfficeControllerSpec
       status(result) mustEqual OK
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockReferenceDataConnector, times(1))
+        .getTransitCountryList(eqTo(alwaysExcludedTransitCountries))(any(), any())
+
+      val expectedCustomsOfficeJson = Seq(
+        Json.obj("value" -> "", "text"         -> ""),
+        Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> false),
+        Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
+      )
+
+      val expectedJson = Json.obj(
+        "form"           -> form,
+        "mode"           -> NormalMode,
+        "lrn"            -> lrn,
+        "countryName"    -> "United Kingdom",
+        "customsOffices" -> expectedCustomsOfficeJson
+      )
+
+      templateCaptor.getValue mustEqual "destinationOffice.njk"
+      jsonCaptor.getValue must containJson(expectedJson)
+    }
+
+    "must return OK and the correct view for a GET when office of departure is defined as a non XI customs office" in {
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+
+      dataRetrievalWithData(userAnswers)
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+        .thenReturn(Future.successful(customsOffices))
+
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+
+      val request        = FakeRequest(GET, destinationOfficeRoute)
+      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockReferenceDataConnector, times(1))
+        .getTransitCountryList(eqTo(alwaysExcludedTransitCountries))(any(), any())
 
       val expectedCustomsOfficeJson = Seq(
         Json.obj("value" -> "", "text"         -> ""),
@@ -115,7 +163,29 @@ class DestinationOfficeControllerSpec
     }
 
     "must redirect to session expired when destination country value is 'None'" in {
+
       dataRetrievalWithData(emptyUserAnswers)
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+        .thenReturn(Future.successful(customsOffices))
+
+      val request = FakeRequest(GET, destinationOfficeRoute)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect to session expired when destination country is defined however office of departure is none" in {
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
+
+      dataRetrievalWithData(userAnswers)
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
