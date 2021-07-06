@@ -17,6 +17,7 @@
 package navigation
 
 import controllers.traderDetails.routes
+import models.DeclarationType.Option4
 import models.ProcedureType.{Normal, Simplified}
 
 import javax.inject.{Inject, Singleton}
@@ -30,10 +31,9 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   val normalRoutes: RouteMapping = {
     case IsPrincipalEoriKnownPage =>
       ua => Some(isPrincipalEoriKnownRoute(ua, NormalMode))
-    case PrincipalNamePage    => reverseRouteToCall(NormalMode)(routes.PrincipalAddressController.onPageLoad(_, _))
-    case PrincipalAddressPage => reverseRouteToCall(NormalMode)(routes.AddConsignorController.onPageLoad(_, _))
-    case WhatIsPrincipalEoriPage =>
-      ua => Some(whatIsPrincipalEoriRoute(ua, NormalMode))
+    case PrincipalNamePage       => reverseRouteToCall(NormalMode)(routes.PrincipalAddressController.onPageLoad(_, _))
+    case PrincipalAddressPage    => ua => Some(principalAddressRoute(ua))
+    case WhatIsPrincipalEoriPage => ua => Some(whatIsPrincipalEoriRoute(ua))
     case AddConsignorPage =>
       ua =>
         ua.get(AddConsignorPage) match {
@@ -68,8 +68,8 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
           case (None, None, _)        => Some(routes.IsPrincipalEoriKnownController.onPageLoad(ua.id, NormalMode)) // TODO
           case _                      => Some(checkModeDefaultPage(ua))
         }
-    case WhatIsPrincipalEoriPage =>
-      ua => Some(whatIsPrincipalEoriRoute(ua, CheckMode))
+    case WhatIsPrincipalEoriPage => ua => Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
+    case PrincipalAddressPage    => ua => Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
 
     case PrincipalNamePage =>
       ua =>
@@ -140,14 +140,23 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   private def reverseRouteToCall(mode: Mode)(f: (LocalReferenceNumber, Mode) => Call): UserAnswers => Option[Call] =
     ua => Some(f(ua.id, mode))
 
-  private def whatIsPrincipalEoriRoute(ua: UserAnswers, mode: Mode): Call =
-    (ua.get(WhatIsPrincipalEoriPage), ua.get(ProcedureTypePage), mode) match {
-      case (_, Some(Simplified), NormalMode)                                                            => routes.AddConsignorController.onPageLoad(ua.id, mode)
-      case (Some(x), _, NormalMode) if x.toUpperCase.startsWith("GB") || x.toUpperCase.startsWith("XI") => routes.AddConsignorController.onPageLoad(ua.id, mode)
-      case (Some(_), _, NormalMode)                                                                     => routes.PrincipalNameController.onPageLoad(ua.id, mode)
-      case (Some(x), Some(Normal), CheckMode) if !x.toUpperCase.startsWith("GB") && !x.toUpperCase.startsWith("XI") && ua.get(PrincipalNamePage).isEmpty =>
-        routes.PrincipalNameController.onPageLoad(ua.id, mode)
-      case _ => routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id)
+  private def whatIsPrincipalEoriRoute(ua: UserAnswers): Call =
+    (ua.get(WhatIsPrincipalEoriPage), ua.get(ProcedureTypePage)) match {
+      case (Some(_), Some(Simplified))                                                                 => declarationTypeTIR(ua)
+      case (Some(x), Some(Normal)) if x.toUpperCase.startsWith("GB") || x.toUpperCase.startsWith("XI") => declarationTypeTIR(ua)
+      case _                                                                                           => routes.PrincipalNameController.onPageLoad(ua.id, NormalMode)
+    }
+
+  private def declarationTypeTIR(ua: UserAnswers) =
+    ua.get(DeclarationTypePage) match {
+      case Some(Option4) => routes.PrincipalNameController.onPageLoad(ua.id, NormalMode)
+      case _             => routes.AddConsignorController.onPageLoad(ua.id, NormalMode)
+    }
+
+  private def principalAddressRoute(ua: UserAnswers) =
+    ua.get(DeclarationTypePage) match {
+      case Some(Option4) => routes.WhatIsPrincipalEoriController.onPageLoad(ua.id, NormalMode) // todo changes to new page name
+      case _             => routes.AddConsignorController.onPageLoad(ua.id, NormalMode)
     }
 
   private def isPrincipalEoriKnownRoute(ua: UserAnswers, mode: Mode): Call =
