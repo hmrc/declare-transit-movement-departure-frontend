@@ -18,14 +18,14 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import models.reference.{Country, CountryCode}
+import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CommonAddress, EoriNumber}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, _}
-import pages.{AddSecurityDetailsPage, QuestionPage}
+import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage, QuestionPage}
 
 class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
@@ -80,6 +80,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
         val consignorAddress  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
         val expectedConsignor = SecurityPersonalInformation("testName", consignorAddress)
         val expectedConsignee = SecurityTraderEori(EoriNumber("testEori"))
+        val gbCustomsOffice   = CustomsOffice("Id", "Name", CountryCode("GB"), None)
 
         val userAnswers = itemSecurityTraderDetailsUa
           .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
@@ -90,6 +91,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
           .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
           .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
           .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
+          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
           .unsafeSetVal(SecurityConsignorAddressPage(index))(CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), "")))
 
         val expectedResult = ItemsSecurityTraderDetails(None, None, None, Some(expectedConsignor), Some(expectedConsignee))

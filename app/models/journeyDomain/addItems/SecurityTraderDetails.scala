@@ -16,6 +16,7 @@
 
 package models.journeyDomain.addItems
 
+import cats.data.Kleisli
 import cats.implicits._
 import models.journeyDomain._
 import models.reference.{CountryCode, CustomsOffice}
@@ -23,7 +24,7 @@ import models.{CommonAddress, EoriNumber, Index}
 import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
-
+import cats.syntax.apply._
 sealed trait SecurityTraderDetails
 
 final case class SecurityPersonalInformation(name: String, address: CommonAddress) extends SecurityTraderDetails
@@ -82,6 +83,24 @@ object SecurityTraderDetails {
           case (name, address) =>
             SecurityTraderDetails(name, address)
         }
+
+    AddSecurityDetailsPage
+      .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
+        AddSafetyAndSecurityConsigneePage
+          .filterOptionalDependent(_ == false) {
+            val x = (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader)
+            val y = x.tupled
+            y.flatMap {
+              case (true, Some("E")) => readEori
+              case _ =>
+                AddSecurityConsigneesEoriPage(index).reader.flatMap {
+                  case true  => readEori
+                  case false => readNameAndAddress
+                }
+            }
+          }
+      }
+      .map(_.flatten)
 
     AddSecurityDetailsPage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
