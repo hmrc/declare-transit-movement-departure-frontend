@@ -20,7 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.traderDetails.{routes => traderDetailsRoute}
 import generators.Generators
-import models.DeclarationType.Option1
+import models.DeclarationType.{Option1, Option4}
 import models.ProcedureType.{Normal, Simplified}
 import models._
 import org.scalacheck.Arbitrary.arbitrary
@@ -429,51 +429,54 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       "must go from What is Principal's Eori page" - {
         "on a Normal Journey" - {
-          "to Check Your Answers Page if Prefix is 'GB' " in {
+          "to PrincipalName  Page if Prefix is 'GB' " in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
                   .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
                   .unsafeSetVal(ProcedureTypePage)(Normal)
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
             }
           }
 
-          "to Check Your Answers Page if Prefix is 'gb' " in {
+          "to Principal Name if Prefix is 'gb' and declaration type is TIR " in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
                   .unsafeSetVal(WhatIsPrincipalEoriPage)("gb123456")
                   .unsafeSetVal(ProcedureTypePage)(Normal)
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
             }
           }
 
-          "to Check Your Answers Page if Prefix is 'XI' " in {
+          "to PrincipleNamePage if Prefix is 'XI' and declaration type was type TIR " in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
                   .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
                   .unsafeSetVal(ProcedureTypePage)(Normal)
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
             }
           }
 
 //
 
-          "to Check Your Answers Page if Prefix is not 'GB', is not 'XI' and there is  data for Principal Name" in {
+          "to Principal NamePage if Prefix is not 'GB', is not 'XI' and there is  data for Principal Name" in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>
@@ -484,19 +487,21 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
             }
           }
         }
         "on a Simplified journey" - {
-          "to Check your answers page" in {
+          "to Principal name page when declaration type is TIR" in {
             forAll(arbitrary[UserAnswers]) {
               answers =>
-                val updatedAnswers = answers.unsafeSetVal(ProcedureTypePage)(Simplified)
+                val updatedAnswers = answers
+                  .unsafeSetVal(ProcedureTypePage)(Simplified)
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
             }
           }
         }

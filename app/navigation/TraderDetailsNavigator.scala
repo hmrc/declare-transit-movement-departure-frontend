@@ -33,7 +33,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
       ua => Some(isPrincipalEoriKnownRoute(ua, NormalMode))
     case PrincipalNamePage       => reverseRouteToCall(NormalMode)(routes.PrincipalAddressController.onPageLoad(_, _))
     case PrincipalAddressPage    => ua => Some(principalAddressRoute(ua))
-    case WhatIsPrincipalEoriPage => ua => Some(whatIsPrincipalEoriRoute(ua))
+    case WhatIsPrincipalEoriPage => ua => Some(whatIsPrincipalEoriRoute(ua, NormalMode))
     case AddConsignorPage =>
       ua =>
         ua.get(AddConsignorPage) match {
@@ -70,7 +70,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
           case (None, None, _)        => Some(routes.IsPrincipalEoriKnownController.onPageLoad(ua.id, NormalMode))
           case _                      => Some(checkModeDefaultPage(ua))
         }
-    case WhatIsPrincipalEoriPage => ua => Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
+    case WhatIsPrincipalEoriPage => ua => Some(whatIsPrincipalEoriRoute(ua, CheckMode))
     case PrincipalAddressPage    => ua => Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
 
     case PrincipalNamePage =>
@@ -143,17 +143,18 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   private def reverseRouteToCall(mode: Mode)(f: (LocalReferenceNumber, Mode) => Call): UserAnswers => Option[Call] =
     ua => Some(f(ua.id, mode))
 
-  private def whatIsPrincipalEoriRoute(ua: UserAnswers): Call =
+  private def whatIsPrincipalEoriRoute(ua: UserAnswers, mode: Mode): Call =
     (ua.get(WhatIsPrincipalEoriPage), ua.get(ProcedureTypePage)) match {
-      case (Some(_), Some(Simplified))                                                                 => declarationTypeTIR(ua)
-      case (Some(x), Some(Normal)) if x.toUpperCase.startsWith("GB") || x.toUpperCase.startsWith("XI") => declarationTypeTIR(ua)
-      case _                                                                                           => routes.PrincipalNameController.onPageLoad(ua.id, NormalMode)
+      case (Some(_), Some(Simplified))                                                                 => declarationTypeTIR(ua, mode)
+      case (Some(x), Some(Normal)) if x.toUpperCase.startsWith("GB") || x.toUpperCase.startsWith("XI") => declarationTypeTIR(ua, mode)
+      case _                                                                                           => routes.PrincipalNameController.onPageLoad(ua.id, mode)
     }
 
-  private def declarationTypeTIR(ua: UserAnswers) =
-    ua.get(DeclarationTypePage) match {
-      case Some(Option4) => routes.PrincipalNameController.onPageLoad(ua.id, NormalMode)
-      case _             => routes.AddConsignorController.onPageLoad(ua.id, NormalMode)
+  private def declarationTypeTIR(ua: UserAnswers, mode: Mode) =
+    (ua.get(DeclarationTypePage), mode) match {
+      case (Some(Option4), _) => routes.PrincipalNameController.onPageLoad(ua.id, mode)
+      case (_, NormalMode)    => routes.AddConsignorController.onPageLoad(ua.id, mode)
+      case (_, CheckMode)     => routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id)
     }
 
   private def principalAddressRoute(ua: UserAnswers) =

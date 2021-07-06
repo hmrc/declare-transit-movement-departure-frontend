@@ -16,11 +16,26 @@
 
 package pages
 
+import models.UserAnswers
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object WhatIsPrincipalEoriPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "whatIsPrincipalEori"
+
+  override def cleanup(value: Option[String], ua: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(_) =>
+        ua
+          .remove(PrincipalNamePage)
+          .flatMap(_.remove(PrincipalAddressPage))
+          .flatMap(_.remove(PrincipalTirHolderIdPage))
+      case _ => super.cleanup(value, ua)
+
+    }
+
 }
