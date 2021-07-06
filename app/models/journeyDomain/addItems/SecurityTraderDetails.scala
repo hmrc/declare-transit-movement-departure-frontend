@@ -88,24 +88,6 @@ object SecurityTraderDetails {
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
         AddSafetyAndSecurityConsigneePage
           .filterOptionalDependent(_ == false) {
-            val x = (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader)
-            val y = x.tupled
-            y.flatMap {
-              case (true, Some("E")) => readEori
-              case _ =>
-                AddSecurityConsigneesEoriPage(index).reader.flatMap {
-                  case true  => readEori
-                  case false => readNameAndAddress
-                }
-            }
-          }
-      }
-      .map(_.flatten)
-
-    AddSecurityDetailsPage
-      .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
-        AddSafetyAndSecurityConsigneePage
-          .filterOptionalDependent(_ == false) {
             (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader).tupled.flatMap {
               case (true, Some("E")) => readEori
               case _ =>
