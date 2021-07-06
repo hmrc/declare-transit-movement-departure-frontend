@@ -64,7 +64,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererA
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOffices()(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
 
       val request        = FakeRequest(GET, addTransitOfficeRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -89,7 +89,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererA
 
     "must redirect to the next page when valid data is submitted" in {
       dataRetrievalWithData(emptyUserAnswers)
-      when(mockRefDataConnector.getCustomsOffices()(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
 
       val request =
         FakeRequest(POST, addTransitOfficeRoute)
@@ -106,7 +106,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererA
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOffices()(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
 
       val request        = FakeRequest(POST, addTransitOfficeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))

@@ -68,7 +68,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
@@ -104,7 +104,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
       val request = FakeRequest(GET, destinationOfficeRoute)
@@ -126,7 +126,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
@@ -163,7 +163,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
     "must redirect to the next page when valid data is submitted" in {
       val userAnswers = emptyUserAnswers.set(MovementDestinationCountryPage, countryCode).success.value
       dataRetrievalWithData(userAnswers)
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
@@ -183,7 +183,7 @@ class DestinationOfficeControllerSpec extends SpecBase with MockNunjucksRenderer
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 

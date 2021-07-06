@@ -118,7 +118,7 @@ class DestinationOfficeController @Inject() (
   }
 
   private def getCustomsOfficeAndCountryName(countryCode: CountryCode)(implicit request: DataRequest[AnyContent]): Future[(CustomsOfficeList, String)] =
-    referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode) flatMap {
+    referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode, destinationOfficeRoles) flatMap {
       customsOffices =>
         referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) map {
           countryList =>
