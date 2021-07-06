@@ -24,6 +24,21 @@ import uk.gov.hmrc.viewmodels._
 
 class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def principalTirHolderIdPage: Option[Row] = userAnswers.get(PrincipalTirHolderIdPage) map {
+    answer =>
+      Row(
+        key = Key(msg"principalTirHolderIdPage.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$answer"),
+        actions = List(
+          Action(
+            content = msg"site.edit",
+            href = routes.PrincipalTirHolderIdController.onPageLoad(lrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalTirHolderIdPage.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
   def consigneeAddress: Option[Row] = userAnswers.get(ConsigneeAddressPage) map {
     answer =>
       val address = Html(
