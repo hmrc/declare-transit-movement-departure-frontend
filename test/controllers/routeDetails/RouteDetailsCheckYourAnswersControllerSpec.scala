@@ -56,9 +56,9 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
       dataRetrievalWithData(userAnswers)
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockReferenceDataConnector.getCustomsOffices()(any(), any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockReferenceDataConnector.getCustomsOffices()(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockReferenceDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockReferenceDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

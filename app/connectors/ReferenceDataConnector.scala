@@ -28,14 +28,19 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) {
 
-  def getCustomsOffices()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+  private def roleQueryParams(roles: Seq[String]): Seq[(String, String)] = roles.map("role" -> _)
+
+  def getCustomsOffices(roles: Seq[String] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
     val serviceUrl = s"${config.referenceDataUrl}/customs-offices"
-    http.GET[Seq[CustomsOffice]](serviceUrl).map(CustomsOfficeList(_))
+    http.GET[Seq[CustomsOffice]](serviceUrl, roleQueryParams(roles)).map(CustomsOfficeList(_))
   }
 
-  def getCustomsOfficesOfTheCountry(countryCode: CountryCode)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+  def getCustomsOfficesOfTheCountry(countryCode: CountryCode, roles: Seq[String] = Nil)(implicit
+    ec: ExecutionContext,
+    hc: HeaderCarrier
+  ): Future[CustomsOfficeList] = {
     val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}"
-    http.GET[Seq[CustomsOffice]](serviceUrl).map(CustomsOfficeList(_))
+    http.GET[Seq[CustomsOffice]](serviceUrl, roleQueryParams(roles)).map(CustomsOfficeList(_))
   }
 
   def getCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
