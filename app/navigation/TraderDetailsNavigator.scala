@@ -54,18 +54,20 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
     case WhatIsConsigneeEoriPage => reverseRouteToCall(NormalMode)(routes.ConsigneeNameController.onPageLoad(_, _))
     case ConsigneeAddressPage =>
       ua => Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
+    case PrincipalTirHolderIdPage => ua => Some(routes.AddConsignorController.onPageLoad(ua.id, NormalMode))
   }
 
   override def checkModeDefaultPage(userAnswers: UserAnswers): Call =
     routes.TraderDetailsCheckYourAnswersController.onPageLoad(userAnswers.id)
 
   override def checkRoutes: RouteMapping = {
+
     case IsPrincipalEoriKnownPage =>
       ua =>
         (ua.get(IsPrincipalEoriKnownPage), ua.get(WhatIsPrincipalEoriPage), ua.get(PrincipalNamePage)) match {
           case (Some(true), None, _)  => Some(routes.WhatIsPrincipalEoriController.onPageLoad(ua.id, CheckMode))
           case (Some(false), _, None) => Some(routes.PrincipalNameController.onPageLoad(ua.id, CheckMode))
-          case (None, None, _)        => Some(routes.IsPrincipalEoriKnownController.onPageLoad(ua.id, NormalMode)) // TODO
+          case (None, None, _)        => Some(routes.IsPrincipalEoriKnownController.onPageLoad(ua.id, NormalMode))
           case _                      => Some(checkModeDefaultPage(ua))
         }
     case WhatIsPrincipalEoriPage => ua => Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
@@ -135,6 +137,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
           case Some(value) => Some(checkModeDefaultPage(ua))
           case None        => Some(routes.ConsigneeAddressController.onPageLoad(ua.id, CheckMode))
         }
+    case PrincipalTirHolderIdPage => ua => Some(routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.id))
   }
 
   private def reverseRouteToCall(mode: Mode)(f: (LocalReferenceNumber, Mode) => Call): UserAnswers => Option[Call] =
@@ -155,7 +158,7 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
 
   private def principalAddressRoute(ua: UserAnswers) =
     ua.get(DeclarationTypePage) match {
-      case Some(Option4) => routes.WhatIsPrincipalEoriController.onPageLoad(ua.id, NormalMode) // todo changes to new page name
+      case Some(Option4) => routes.PrincipalTirHolderIdController.onPageLoad(ua.id, NormalMode)
       case _             => routes.AddConsignorController.onPageLoad(ua.id, NormalMode)
     }
 

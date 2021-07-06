@@ -354,8 +354,17 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           }
         }
       }
-    }
 
+      "PrincipalTirHolderid page must go to AddConsignor page" in {
+        forAll(genUserAnswersWithProcedure) {
+          answers =>
+            navigator
+              .nextPage(PrincipalTirHolderIdPage, NormalMode, answers)
+              .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+        }
+      }
+
+    }
     "in Check mode" - {
 
       "must go from Is principal eori known page " - {
@@ -850,7 +859,6 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-
             navigator
               .nextPage(ConsigneeAddressPage, CheckMode, updatedAnswers)
               .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
