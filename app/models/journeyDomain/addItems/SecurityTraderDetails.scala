@@ -16,7 +16,6 @@
 
 package models.journeyDomain.addItems
 
-import cats.data.Kleisli
 import cats.implicits._
 import models.journeyDomain._
 import models.reference.{CountryCode, CustomsOffice}
@@ -24,7 +23,7 @@ import models.{CommonAddress, EoriNumber, Index}
 import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
-import cats.syntax.apply._
+
 sealed trait SecurityTraderDetails
 
 final case class SecurityPersonalInformation(name: String, address: CommonAddress) extends SecurityTraderDetails
