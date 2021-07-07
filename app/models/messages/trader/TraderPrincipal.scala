@@ -17,8 +17,7 @@
 package models.messages.trader
 
 import cats.syntax.all._
-import com.lucidchart.open.xtract.{__, XmlReader}
-import models.LanguageCodeEnglish
+import com.lucidchart.open.xtract.{XmlReader, __}
 import models.messages.escapeXml
 import xml.XMLWrites
 
@@ -50,64 +49,195 @@ object TraderPrincipalWithEori {
     (__ \ "PosCodPC123").read[String].optional,
     (__ \ "CitPC124").read[String].optional,
     (__ \ "CouPC125").read[String].optional
-  ).mapN(apply)
+    ).mapN(apply)
 
   implicit def writes: XMLWrites[TraderPrincipalWithEori] = XMLWrites[TraderPrincipalWithEori] {
     trader =>
       <TRAPRIPC1>
-        {
-        trader.name.fold(NodeSeq.Empty) {
-          name =>
-            <NamPC17>{escapeXml(name)}</NamPC17>
+        {trader.name.fold(NodeSeq.Empty) {
+        name =>
+          <NamPC17>
+            {escapeXml(name)}
+          </NamPC17>
+      } ++
+        trader.streetAndNumber.fold(NodeSeq.Empty) {
+          streetAndNumber =>
+            <StrAndNumPC122>
+              {escapeXml(streetAndNumber)}
+            </StrAndNumPC122>
         } ++
-          trader.streetAndNumber.fold(NodeSeq.Empty) {
-            streetAndNumber =>
-              <StrAndNumPC122>{escapeXml(streetAndNumber)}</StrAndNumPC122>
-          } ++
-          trader.postCode.fold(NodeSeq.Empty) {
-            postCode =>
-              <PosCodPC123>{postCode}</PosCodPC123>
-          } ++
-          trader.city.fold(NodeSeq.Empty) {
-            city =>
-              <CitPC124>{escapeXml(city)}</CitPC124>
-          } ++
-          trader.countryCode.fold(NodeSeq.Empty) {
-            countryCode =>
-              <CouPC125>{countryCode}</CouPC125>
-          }
-      }
-        <TINPC159>{trader.eori}</TINPC159>
+        trader.postCode.fold(NodeSeq.Empty) {
+          postCode =>
+            <PosCodPC123>
+              {postCode}
+            </PosCodPC123>
+        } ++
+        trader.city.fold(NodeSeq.Empty) {
+          city =>
+            <CitPC124>
+              {escapeXml(city)}
+            </CitPC124>
+        } ++
+        trader.countryCode.fold(NodeSeq.Empty) {
+          countryCode =>
+            <CouPC125>
+              {countryCode}
+            </CouPC125>
+        }}<TINPC159>
+        {trader.eori}
+      </TINPC159>
       </TRAPRIPC1>
   }
 }
 
-final case class TraderPrincipalWithoutEori(
-  name: String,
-  streetAndNumber: String,
-  postCode: String,
-  city: String,
-  countryCode: String
-) extends TraderPrincipal
+  final case class TraderPrincipalWithEoriTirHolderId(
+                                                       eori: String,
+                                                       name: Option[String],
+                                                       streetAndNumber: Option[String],
+                                                       postCode: Option[String],
+                                                       city: Option[String],
+                                                       countryCode: Option[String],
+                                                       principalWithEoriTirHolderId: String
+                                                     ) extends TraderPrincipal
 
-object TraderPrincipalWithoutEori {
+  object TraderPrincipalWithEoriTirHolderId {
 
-  implicit val xmlReader: XmlReader[TraderPrincipalWithoutEori] = (
-    (__ \ "NamPC17").read[String],
-    (__ \ "StrAndNumPC122").read[String],
-    (__ \ "PosCodPC123").read[String],
-    (__ \ "CitPC124").read[String],
-    (__ \ "CouPC125").read[String]
-  ).mapN(apply)
+    implicit val xmlReader: XmlReader[TraderPrincipalWithEoriTirHolderId] = (
+      (__ \ "TINPC159").read[String],
+      (__ \ "NamPC17").read[String].optional,
+      (__ \ "StrAndNumPC122").read[String].optional,
+      (__ \ "PosCodPC123").read[String].optional,
+      (__ \ "CitPC124").read[String].optional,
+      (__ \ "CouPC125").read[String].optional,
+      (__ \ "HITPC126").read[String]
 
-  implicit def writes: XMLWrites[TraderPrincipalWithoutEori] = XMLWrites[TraderPrincipalWithoutEori] {
-    trader =>
-      <TRAPRIPC1>
-        <NamPC17>{escapeXml(trader.name)}</NamPC17>
-        <StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122>
-        <PosCodPC123>{trader.postCode}</PosCodPC123>
-        <CitPC124>{escapeXml(trader.city)}</CitPC124>
-        <CouPC125>{trader.countryCode}</CouPC125>
-      </TRAPRIPC1>
+      ).mapN(apply)
+
+    implicit def writes: XMLWrites[TraderPrincipalWithEoriTirHolderId] = XMLWrites[TraderPrincipalWithEoriTirHolderId] {
+      trader =>
+        <TRAPRIPC1>
+          {trader.name.fold(NodeSeq.Empty) {
+          name =>
+            <NamPC17>
+              {escapeXml(name)}
+            </NamPC17>
+        } ++
+          trader.streetAndNumber.fold(NodeSeq.Empty) {
+            streetAndNumber =>
+              <StrAndNumPC122>
+                {escapeXml(streetAndNumber)}
+              </StrAndNumPC122>
+          } ++
+          trader.postCode.fold(NodeSeq.Empty) {
+            postCode =>
+              <PosCodPC123>
+                {postCode}
+              </PosCodPC123>
+          } ++
+          trader.city.fold(NodeSeq.Empty) {
+            city =>
+              <CitPC124>
+                {escapeXml(city)}
+              </CitPC124>
+          } ++
+          trader.countryCode.fold(NodeSeq.Empty) {
+            countryCode =>
+              <CouPC125>
+                {countryCode}
+              </CouPC125>
+          }}<TINPC159>
+          {trader.eori}
+        </TINPC159>
+          <HITPC126>
+            {trader.principalWithEoriTirHolderId}
+          </HITPC126>
+        </TRAPRIPC1>
+    }
   }
+
+    final case class TraderPrincipalWithoutEori(
+                                                 name: String,
+                                                 streetAndNumber: String,
+                                                 postCode: String,
+                                                 city: String,
+                                                 countryCode: String
+                                               ) extends TraderPrincipal
+
+    object TraderPrincipalWithoutEori {
+
+      implicit val xmlReader: XmlReader[TraderPrincipalWithoutEori] = (
+        (__ \ "NamPC17").read[String],
+        (__ \ "StrAndNumPC122").read[String],
+        (__ \ "PosCodPC123").read[String],
+        (__ \ "CitPC124").read[String],
+        (__ \ "CouPC125").read[String]
+        ).mapN(apply)
+
+      implicit def writes: XMLWrites[TraderPrincipalWithoutEori] = XMLWrites[TraderPrincipalWithoutEori] {
+        trader =>
+          <TRAPRIPC1>
+            <NamPC17>
+              {escapeXml(trader.name)}
+            </NamPC17>
+            <StrAndNumPC122>
+              {escapeXml(trader.streetAndNumber)}
+            </StrAndNumPC122>
+            <PosCodPC123>
+              {trader.postCode}
+            </PosCodPC123>
+            <CitPC124>
+              {escapeXml(trader.city)}
+            </CitPC124>
+            <CouPC125>
+              {trader.countryCode}
+            </CouPC125>
+          </TRAPRIPC1>
+      }
+
+    }
+
+    final case class TraderPrincipalWithPrincipalWithoutEoriTirHolderId(
+                                                                         name: String,
+                                                                         streetAndNumber: String,
+                                                                         postCode: String,
+                                                                         city: String,
+                                                                         countryCode: String,
+                                                                         principalTirHolderId: String
+                                                                       ) extends TraderPrincipal
+
+    object TraderPrincipalWithPrincipalWithoutEoriTirHolderId {
+
+      implicit val xmlReader: XmlReader[TraderPrincipalWithPrincipalWithoutEoriTirHolderId] = (
+        (__ \ "NamPC17").read[String],
+        (__ \ "StrAndNumPC122").read[String],
+        (__ \ "PosCodPC123").read[String],
+        (__ \ "CitPC124").read[String],
+        (__ \ "CouPC125").read[String],
+        (__ \ "HITPC126").read[String]
+        ).mapN(apply)
+
+      implicit def writes: XMLWrites[TraderPrincipalWithPrincipalWithoutEoriTirHolderId] = XMLWrites[TraderPrincipalWithPrincipalWithoutEoriTirHolderId] {
+        trader =>
+          <TRAPRIPC1>
+            <NamPC17>
+              {escapeXml(trader.name)}
+            </NamPC17>
+            <StrAndNumPC122>
+              {escapeXml(trader.streetAndNumber)}
+            </StrAndNumPC122>
+            <PosCodPC123>
+              {trader.postCode}
+            </PosCodPC123>
+            <CitPC124>
+              {escapeXml(trader.city)}
+            </CitPC124>
+            <CouPC125>
+              {trader.countryCode}
+            </CouPC125>
+            <HITPC126>
+              {trader.principalTirHolderId}
+            </HITPC126>
+          </TRAPRIPC1>
+      }
+
 }

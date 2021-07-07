@@ -19,13 +19,9 @@ package services
 import cats.data.NonEmptyList
 import cats.implicits._
 import logging.Logging
+import models.DeclarationType.Option4
 import models.domain.SealDomain
-import models.journeyDomain.GoodsSummary.{
-  GoodSummaryDetails,
-  GoodSummaryNormalDetailsWithPreLodge,
-  GoodSummaryNormalDetailsWithoutPreLodge,
-  GoodSummarySimplifiedDetails
-}
+import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetailsWithPreLodge, GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
@@ -180,22 +176,43 @@ class DeclarationRequestService @Inject() (
           }
       }
 
-    def principalTrader(traderDetails: TraderDetails): TraderPrincipal =
-      traderDetails.principalTraderDetails match {
-        case PrincipalTraderPersonalInfo(name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
-          TraderPrincipalWithoutEori(
-            name = name,
-            streetAndNumber = buildingAndStreet,
-            postCode = postcode,
-            city = city,
-            countryCode = country.code.code
-          )
-        case PrincipalTraderEoriInfo(traderEori) =>
-          TraderPrincipalWithEori(eori = traderEori.value, None, None, None, None, None)
+    def principalTrader(traderDetails: TraderDetails, preTaskListDetails: PreTaskListDetails): TraderPrincipal = {
+      if(preTaskListDetails.declarationType != Option4){
 
-        case PrincipalTraderEoriPersonalInfo(eori, name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
-          TraderPrincipalWithEori(eori.value, Some(name), Some(buildingAndStreet), Some(postcode), Some(city), Some(country.code.code))
+        traderDetails.principalTraderDetails match {
+          case PrincipalTraderPersonalInfo(name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
+            TraderPrincipalWithoutEori(
+              name = name,
+              streetAndNumber = buildingAndStreet,
+              postCode = postcode,
+              city = city,
+              countryCode = country.code.code
+            )
+          case PrincipalTraderEoriInfo(traderEori) =>
+            TraderPrincipalWithEori(eori = traderEori.value, None, None, None, None, None)
+
+          case PrincipalTraderEoriPersonalInfo(eori, name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
+            TraderPrincipalWithEori(eori.value, Some(name), Some(buildingAndStreet), Some(postcode), Some(city), Some(country.code.code))
+        }
+      } else {
+        traderDetails.principalTraderDetails match {
+          case PrincipalTraderPersonalInfo(name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
+            TraderPrincipalWithPrincipalWithoutEoriTirHolderId(
+              name = name,
+              streetAndNumber = buildingAndStreet,
+              postCode = postcode,
+              city = city,
+              countryCode = country.code.code,
+              principalTirHolderId =
+            )
+          case PrincipalTraderEoriInfo(traderEori) =>
+            TraderPrincipalWithEoriTirHolderId(eori = traderEori.value, None, None, None, None, None)
+
+          case PrincipalTraderEoriPersonalInfo(eori, name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
+            TraderPrincipalWithEoriTirHolderId(eori.value, Some(name), Some(buildingAndStreet), Some(postcode), Some(city), Some(country.code.code))
+        }
       }
+    }
 
     def detailsAtBorderMode(detailsAtBorder: DetailsAtBorder, inlandCode: Int): String =
       detailsAtBorder match {

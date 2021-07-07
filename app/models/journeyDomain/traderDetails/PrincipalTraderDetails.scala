@@ -24,18 +24,21 @@ import pages._
 
 sealed trait PrincipalTraderDetails
 
-final case class PrincipalTraderPersonalInfo(name: String, address: CommonAddress) extends PrincipalTraderDetails
+final case class PrincipalTraderPersonalInfo(name: String, address: CommonAddress, principalTirHolderId: Option[String]) extends PrincipalTraderDetails
 
-final case class PrincipalTraderEoriInfo(eori: EoriNumber) extends PrincipalTraderDetails
+final case class PrincipalTraderEoriInfo(eori: EoriNumber, principalTirHolderId: Option[String]) extends PrincipalTraderDetails
 
-final case class PrincipalTraderEoriPersonalInfo(eori: EoriNumber, name: String, address: CommonAddress) extends PrincipalTraderDetails
+final case class PrincipalTraderEoriPersonalInfo(eori: EoriNumber, name: String, address: CommonAddress,
+                                                 principalTirHolderId: Option[String]) extends PrincipalTraderDetails
 
 object PrincipalTraderDetails {
-  def apply(eori: EoriNumber): PrincipalTraderDetails = PrincipalTraderEoriInfo(eori)
+  def apply(eori: EoriNumber, principalTirHolderId: Option[String] = None): PrincipalTraderDetails = PrincipalTraderEoriInfo(eori, principalTirHolderId)
 
-  def apply(name: String, address: CommonAddress): PrincipalTraderDetails = PrincipalTraderPersonalInfo(name, address)
+  def apply(name: String, address: CommonAddress, principalTirHolderId: Option[String] = None): PrincipalTraderDetails =
+    PrincipalTraderPersonalInfo(name, address, principalTirHolderId)
 
-  def apply(eori: EoriNumber, name: String, address: CommonAddress): PrincipalTraderDetails = PrincipalTraderEoriPersonalInfo(eori, name, address)
+  def apply(eori: EoriNumber, name: String, address: CommonAddress, principalTirHolderId: Option[String] = None): PrincipalTraderDetails =
+    PrincipalTraderEoriPersonalInfo(eori, name, address, principalTirHolderId)
 
   implicit val principalTraderDetails: UserAnswersReader[PrincipalTraderDetails] = {
 
@@ -46,18 +49,20 @@ object PrincipalTraderDetails {
     val readNameAndAddress =
       (
         PrincipalNamePage.reader,
-        PrincipalAddressPage.reader
+        PrincipalAddressPage.reader,
+        PrincipalTirHolderIdPage.reader
       ).tupled.map {
-        case (name, address) => PrincipalTraderDetails(name, address)
+        case (name, address, principalTirHolderId) => PrincipalTraderDetails(name, address, Some(principalTirHolderId))
       }
 
     val readAllDetails: UserAnswersReader[PrincipalTraderDetails] =
       (
         WhatIsPrincipalEoriPage.reader,
         PrincipalNamePage.reader,
-        PrincipalAddressPage.reader
-      ).tupled.map {
-        case (eori, name, address) => PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address)
+        PrincipalAddressPage.reader,
+        PrincipalTirHolderIdPage.reader
+        ).tupled.map {
+        case (eori, name, address, principalTirHolderId) => PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address, Some(principalTirHolderId))
       }
 
     ProcedureTypePage.reader.flatMap {

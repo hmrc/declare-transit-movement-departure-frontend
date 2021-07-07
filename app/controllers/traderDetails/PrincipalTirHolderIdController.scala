@@ -84,7 +84,7 @@ class PrincipalTirHolderIdController @Inject() (
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(PrincipalTirHolderIdPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(PrincipalTirHolderIdPage, value.toUpperCase))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(PrincipalTirHolderIdPage, mode, updatedAnswers))
         )
