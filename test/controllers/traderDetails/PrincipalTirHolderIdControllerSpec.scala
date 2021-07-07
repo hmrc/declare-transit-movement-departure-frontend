@@ -91,7 +91,7 @@ class PrincipalTirHolderIdControllerSpec extends SpecBase with MockNunjucksRende
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(PrincipalTirHolderIdPage, "answer").success.value
+      val userAnswers = emptyUserAnswers.set(PrincipalTirHolderIdPage, "ABC/123/1234567").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, principalTirHolderIdPageRoute)
@@ -104,7 +104,7 @@ class PrincipalTirHolderIdControllerSpec extends SpecBase with MockNunjucksRende
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "answer"))
+      val filledForm = form.bind(Map("value" -> "ABC/123/1234567"))
 
       val expectedJson = Json.obj(
         "form" -> filledForm,
@@ -127,7 +127,7 @@ class PrincipalTirHolderIdControllerSpec extends SpecBase with MockNunjucksRende
 
       val request =
         FakeRequest(POST, principalTirHolderIdPageRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "ABC/123/1234567"))
 
       val result = route(app, request).value
 
