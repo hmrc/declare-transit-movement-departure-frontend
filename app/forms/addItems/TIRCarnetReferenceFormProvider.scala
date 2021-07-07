@@ -16,8 +16,11 @@
 
 package forms.addItems
 
+import forms.Constants.tirCarnetReferencMaxLength
 import forms.mappings.Mappings
+import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
+import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
 import javax.inject.Inject
 
@@ -26,6 +29,11 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("tirCarnetReference.error.required")
-        .verifying(maxLength(13, "tirCarnetReference.error.length"))
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(tirCarnetReferencMaxLength, "tirCarnetReference.error.length"),
+            regexp(alphaNumericRegex, "tirCarnetReference.error.invalid")
+          )
+        )
     )
 }

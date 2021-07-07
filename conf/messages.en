@@ -1432,8 +1432,9 @@ agreedLocationOfGoods.error.required = Enter the agreed location for the goods
 agreedLocationOfGoods.error.length = The agreed location for the goods must be 35 characters or less
 agreedLocationOfGoods.error.invalid = The agreed location for the goods must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
-tirCarnetReference.title = tIRCarnetReference
-tirCarnetReference.heading = tIRCarnetReference
-tirCarnetReference.checkYourAnswersLabel = tIRCarnetReference
-tirCarnetReference.error.required = Enter tIRCarnetReference
-tirCarnetReference.error.length = TIRCarnetReference must be 13 characters or less
+tirCarnetReference.title = What is the TIR Carnet reference?
+tirCarnetReference.heading = What is the TIR Carnet reference?
+tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
+tirCarnetReference.error.required = Enter the TIR Carnet reference
+tirCarnetReference.error.length = The TIR Carnet reference must be 35 characters or less
+tirCarnetReference.error.invalid = The TIR Carnet reference must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces

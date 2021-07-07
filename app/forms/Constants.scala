@@ -16,9 +16,6 @@
 
 package forms
 
-import models.{Index, Mode, UserAnswers}
-import pages.safetyAndSecurity.CircumstanceIndicatorPage
-
 object Constants {
 
   lazy val maxLengthEoriNumber: Int       = 17
@@ -27,6 +24,7 @@ object Constants {
   lazy val addressMaxLength: Int          = 35
   lazy val loadingPlaceMaxLength: Int     = 35
   lazy val maxLengthAgreedLocationOfGoods = 35
+  lazy val tirCarnetReferencMaxLength     = 35
   lazy val addressRegex: String           = "^[a-zA-Z0-9/@?%,.\\- ]*$"
 
 }

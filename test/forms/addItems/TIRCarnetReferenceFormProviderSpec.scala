@@ -16,6 +16,7 @@
 
 package forms.addItems
 
+import forms.Constants.tirCarnetReferencMaxLength
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
@@ -23,9 +24,9 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "tirCarnetReference.error.required"
   val lengthKey   = "tirCarnetReference.error.length"
-  val maxLength   = 13
-
-  val form = new TIRCarnetReferenceFormProvider()()
+  val invalidKey  = "tirCarnetReference.error.invalid"
+  val maxLength   = tirCarnetReferencMaxLength
+  val form        = new TIRCarnetReferenceFormProvider()()
 
   ".value" - {
 
@@ -49,5 +50,8 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+
   }
 }
