@@ -81,7 +81,7 @@ class DestinationOfficeControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
       when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
@@ -127,7 +127,7 @@ class DestinationOfficeControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
       when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
@@ -169,7 +169,7 @@ class DestinationOfficeControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
       val request = FakeRequest(GET, destinationOfficeRoute)
@@ -190,7 +190,7 @@ class DestinationOfficeControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
       val request = FakeRequest(GET, destinationOfficeRoute)
@@ -213,7 +213,7 @@ class DestinationOfficeControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
@@ -256,7 +256,7 @@ class DestinationOfficeControllerSpec
 
       dataRetrievalWithData(userAnswers)
 
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
@@ -284,7 +284,7 @@ class DestinationOfficeControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any())(any(), any()))
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
 
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
