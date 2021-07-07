@@ -27,7 +27,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def principalTirHolderIdPage: Option[Row] = userAnswers.get(PrincipalTirHolderIdPage) map {
     answer =>
       Row(
-        key = Key(msg"principalTirHolderIdPage.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"principalTirHolderId.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(

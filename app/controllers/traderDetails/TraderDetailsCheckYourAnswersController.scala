@@ -69,7 +69,8 @@ class TraderDetailsCheckYourAnswersController @Inject() (
           checkYourAnswersHelper.isPrincipalEoriKnown,
           checkYourAnswersHelper.whatIsPrincipalEori,
           checkYourAnswersHelper.principalName,
-          checkYourAnswersHelper.principalAddress
+          checkYourAnswersHelper.principalAddress,
+          checkYourAnswersHelper.principalTirHolderIdPage
         ).flatten
       ),
       Section(
