@@ -17,14 +17,17 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import models.domain.StringFieldRegex.principalTirHolderIdFormatRegex
+import org.scalacheck.Gen
+import play.api.data.{Field, FormError}
+import wolfendale.scalacheck.regexp.RegexpGen
 
 class PrincipalTirHolderIdFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey      = "principalTirHolderId.error.required"
   private val lengthKey        = "principalTirHolderId.error.length"
   private val invalidCharsKey  = "principalTirHolderId.error.characters"
-  private val invalidFormatKey = "principalTirHolderId.error.invalidFormat"
+  private val invalidFormatKey = "principalTirHolderId.error.format"
   private val maxLength        = 35
   val form                     = new PrincipalTirHolderIdFormProvider()()
 
@@ -53,14 +56,14 @@ class PrincipalTirHolderIdFormProviderSpec extends StringFieldBehaviours {
 
     behave like fieldWithInvalidCharacters(form, fieldName, invalidCharsKey, maxLength)
 
-//    "must not bind strings that do not match the eoriNumber format regex" in {
-//      val expectedError          = FormError(fieldName, invalidFormatKey, Seq(principalTirHolderIdFormatRegex))
-//      val generator: Gen[String] = RegexpGen.from("^[//*^&]{1}{1,13}") //TODO update when format is confirmed
-//      forAll(generator) {
-//        invalidString =>
-//          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
-//          result.errors must contain(expectedError)
-//      }
-//    }
+    "must not bind strings that do not match the eoriNumber format regex" in {
+      val expectedError          = FormError(fieldName, invalidFormatKey, Seq(principalTirHolderIdFormatRegex))
+      val generator: Gen[String] = RegexpGen.from("^[\\/A-Z0-9]{15}")
+      forAll(generator) {
+        invalidString =>
+          val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+          result.errors must contain(expectedError)
+      }
+    }
   }
 }

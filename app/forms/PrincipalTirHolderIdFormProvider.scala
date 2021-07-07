@@ -17,7 +17,7 @@
 package forms
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
+import models.domain.StringFieldRegex.{principalTirHolderIdFormatRegex, stringFieldRegex}
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
@@ -33,8 +33,8 @@ class PrincipalTirHolderIdFormProvider @Inject() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxLengthPrincipalTirHolderId, "principalTirHolderId.error.length"),
-            regexp(stringFieldRegex, "principalTirHolderId.error.characters")
-            //       regexp(principalTirHolderIdFormatRegex, "principalTirHolderId.error.format") //TODO awaiting confirmation on format restrictions
+            regexp(stringFieldRegex, "principalTirHolderId.error.characters"),
+            regexp(principalTirHolderIdFormatRegex, "principalTirHolderId.error.format")
           )
         )
     )
