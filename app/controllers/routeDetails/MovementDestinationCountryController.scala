@@ -16,9 +16,12 @@
 
 package controllers.routeDetails
 
+import cats.data.OptionT
+import cats.implicits._
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.MovementDestinationCountryFormProvider
+import logging.Logging
 import models.reference.{Country, CountryCode}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -30,6 +33,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.ExcludedCountriesService.routeDetailsExcludedCountries
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -51,38 +55,50 @@ class MovementDestinationCountryController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
-    with NunjucksSupport {
+    with NunjucksSupport
+    with Logging {
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) flatMap {
-        countries =>
-          val form = formProvider(countries)
-
-          val preparedForm = request.userAnswers
+      (
+        for {
+          excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
+          countries         <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+          preparedForm = request.userAnswers
             .get(MovementDestinationCountryPage)
             .flatMap(countries.getCountry)
-            .map(form.fill)
-            .getOrElse(form)
-
-          renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok)
+            .map(formProvider(countries).fill)
+            .getOrElse(formProvider(countries))
+          page <- OptionT.liftF(renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok))
+        } yield page
+      ).getOrElseF {
+        logger.warn(s"[Controller][MovementDestinationCountry][onPageLoad] OfficeOfDeparturePage is missing")
+        Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getTransitCountryList(excludeCountries = excludedTransitCountries) flatMap {
-        countries =>
-          formProvider(countries)
-            .bindFromRequest()
-            .fold(
-              formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
-              value =>
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(MovementDestinationCountryPage, value.code))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(MovementDestinationCountryPage, mode, updatedAnswers))
-            )
+      (
+        for {
+          excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
+          countries         <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+          page <- OptionT.liftF(
+            formProvider(countries)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(MovementDestinationCountryPage, value.code))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(MovementDestinationCountryPage, mode, updatedAnswers))
+              )
+          )
+        } yield page
+      ).getOrElseF {
+        logger.warn(s"[Controller][MovementDestinationCountry][onSubmit] OfficeOfDeparturePage is missing")
+        Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
   }
 

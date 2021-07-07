@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package services
 
+import controllers.routeDetails.{alwaysExcludedTransitCountries, gbExcludedCountries}
+import models.UserAnswers
 import models.reference.CountryCode
+import pages.OfficeOfDeparturePage
 
-package object routeDetails {
+object ExcludedCountriesService {
 
-  val alwaysExcludedTransitCountries: Seq[CountryCode] = Seq(
-    CountryCode("JE")
-  )
+  def routeDetailsExcludedCountries(userAnswers: UserAnswers): Option[Seq[CountryCode]] = userAnswers.get(OfficeOfDeparturePage).map {
+    _.countryId.code match {
+      case "XI" => alwaysExcludedTransitCountries
+      case _    => alwaysExcludedTransitCountries ++ gbExcludedCountries
+    }
+  }
 
-  val gbExcludedCountries = Seq(
-    CountryCode("SM"),
-    CountryCode("AD")
-  )
-
-  val transitOfficeRoles: Seq[String] = Seq(
-    "TRA"
-  )
-
-  val destinationOfficeRoles: Seq[String] = Seq(
-    "DES"
-  )
 }
