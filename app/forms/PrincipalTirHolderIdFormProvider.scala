@@ -29,12 +29,12 @@ class PrincipalTirHolderIdFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("principalTirHolderIdPage.error.required")
+      "value" -> text("principalTirHolderId.error.required")
         .verifying(
           StopOnFirstFail[String](
-            maxLength(maxLengthPrincipalTirHolderId, "principalTirHolderIdPage.error.length"),
-            regexp(stringFieldRegex, "principalTirHolderIdPage.error.characters")
-            //       regexp(principalTirHolderIdFormatRegex, "principalTirHolderIdPage.error.format") //TODO awaiting confirmation on format restrictions
+            maxLength(maxLengthPrincipalTirHolderId, "principalTirHolderId.error.length"),
+            regexp(stringFieldRegex, "principalTirHolderId.error.characters")
+            //       regexp(principalTirHolderIdFormatRegex, "principalTirHolderId.error.format") //TODO awaiting confirmation on format restrictions
           )
         )
     )

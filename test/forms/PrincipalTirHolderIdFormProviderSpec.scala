@@ -21,10 +21,10 @@ import play.api.data.FormError
 
 class PrincipalTirHolderIdFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey      = "principalTirHolderIdPage.error.required"
-  private val lengthKey        = "principalTirHolderIdPage.error.length"
-  private val invalidCharsKey  = "principalTirHolderIdPage.error.characters"
-  private val invalidFormatKey = "principalTirHolderIdPage.error.invalidFormat"
+  private val requiredKey      = "principalTirHolderId.error.required"
+  private val lengthKey        = "principalTirHolderId.error.length"
+  private val invalidCharsKey  = "principalTirHolderId.error.characters"
+  private val invalidFormatKey = "principalTirHolderId.error.invalidFormat"
   private val maxLength        = 35
   val form                     = new PrincipalTirHolderIdFormProvider()()
 
