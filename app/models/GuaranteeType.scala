@@ -16,6 +16,7 @@
 
 package models
 
+import pages.DeclarationTypePage
 import play.api.data.Form
 import uk.gov.hmrc.viewmodels._
 
@@ -33,6 +34,7 @@ object GuaranteeType extends Enumerable.Implicits {
   case object GuaranteeWaiverByAgreement extends WithName("A") with GuaranteeType
   case object GuaranteeWaiverSecured extends WithName("5") with GuaranteeType
   case object IndividualGuaranteeMultiple extends WithName("9") with GuaranteeType
+  case object TIR extends WithName("B") with GuaranteeType
 
   val values: Seq[GuaranteeType] = Seq(
     GuaranteeWaiver,
@@ -44,7 +46,8 @@ object GuaranteeType extends Enumerable.Implicits {
     GuaranteeWaivedRedirect,
     GuaranteeWaiverByAgreement,
     GuaranteeWaiverSecured,
-    IndividualGuaranteeMultiple
+    IndividualGuaranteeMultiple,
+    TIR
   )
 
   val guaranteeReferenceRoute: Seq[GuaranteeType] = Seq(
@@ -60,7 +63,8 @@ object GuaranteeType extends Enumerable.Implicits {
     GuaranteeNotRequired,
     GuaranteeWaivedRedirect,
     GuaranteeWaiverByAgreement,
-    GuaranteeWaiverSecured
+    GuaranteeWaiverSecured,
+    TIR
   )
 
   def getId(gtValue: String): String = gtValue match {
@@ -74,13 +78,14 @@ object GuaranteeType extends Enumerable.Implicits {
     case "A" => "GuaranteeWaiverByAgreement"
     case "5" => "GuaranteeWaiverSecured"
     case "9" => "IndividualGuaranteeMultiple"
+    case "B" => "TIR"
     case _   => gtValue
   }
 
-  def radios(form: Form[_]): Seq[Radios.Item] = {
+  def radios(form: Form[_], userAnswers: UserAnswers): Seq[Radios.Item] = {
 
     val field = form("value")
-    val items = Seq(
+    val nonTIRItems = Seq(
       Radios.Radio(msg"guaranteeType.GuaranteeWaiver", GuaranteeWaiver.toString),
       Radios.Radio(msg"guaranteeType.ComprehensiveGuarantee", ComprehensiveGuarantee.toString),
       Radios.Radio(msg"guaranteeType.IndividualGuarantee", IndividualGuarantee.toString),
@@ -92,6 +97,11 @@ object GuaranteeType extends Enumerable.Implicits {
       Radios.Radio(msg"guaranteeType.GuaranteeWaiverSecured", GuaranteeWaiverSecured.toString),
       Radios.Radio(msg"guaranteeType.IndividualGuaranteeMultiple", IndividualGuaranteeMultiple.toString)
     )
+
+    val items = userAnswers.get(DeclarationTypePage) match {
+      case Some(DeclarationType.Option4) => nonTIRItems :+ Radios.Radio(msg"guaranteeType.TIR", TIR.toString)
+      case _                             => nonTIRItems
+    }
 
     Radios(field, items)
   }

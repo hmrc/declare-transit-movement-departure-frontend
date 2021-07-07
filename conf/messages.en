@@ -640,6 +640,7 @@ guaranteeType.GuaranteeWaivedRedirect = (6) Guarantee waived redirect
 guaranteeType.GuaranteeWaiverByAgreement = (A) Guarantee waiver by agreement
 guaranteeType.GuaranteeWaiverSecured = (5) Guarantee waiver, secured amount not greater than 500 Euros
 guaranteeType.IndividualGuaranteeMultiple = (9) Individual guarantee with multiple usage
+guaranteeType.TIR = (B) TIR
 guaranteeType.checkYourAnswersLabel = Which type of guarantee is being used?
 guaranteeType.error.required = Select which type of guarantee is being used
 

@@ -16,15 +16,19 @@
 
 package models
 
+import base.SpecBase
+import commonTestUtils.UserAnswersSpecHelper
+import forms.guaranteeDetails.GuaranteeTypeFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.OptionValues
+import pages.DeclarationTypePage
 import play.api.libs.json.{JsError, JsString, Json}
 
-class GuaranteeTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class GuaranteeTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with SpecBase with UserAnswersSpecHelper {
 
   "GuaranteeType" - {
 
@@ -56,6 +60,22 @@ class GuaranteeTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropert
         guaranteeType =>
           Json.toJson(guaranteeType) mustEqual JsString(guaranteeType.toString)
       }
+    }
+  }
+
+  "radios" - {
+    "must return options without TIR if TIR not selected" in {
+      val form        = new GuaranteeTypeFormProvider()()
+      val userAnswers = emptyUserAnswers
+      val radios      = GuaranteeType.radios(form, userAnswers)
+      radios.map(_.value) must not contain GuaranteeType.TIR.toString
+    }
+    "must return options with TIR if TIR selected" in {
+      val form = new GuaranteeTypeFormProvider()()
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+      val radios = GuaranteeType.radios(form, userAnswers)
+      radios.map(_.value) must contain(GuaranteeType.TIR.toString)
     }
   }
 }
