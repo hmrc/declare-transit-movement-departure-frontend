@@ -28,4 +28,12 @@ package object routeDetails {
     CountryCode("SM"),
     CountryCode("AD")
   )
+
+  val transitOfficeRoles: Seq[String] = Seq(
+    "TRA"
+  )
+
+  val destinationOfficeRoles: Seq[String] = Seq(
+    "DES"
+  )
 }

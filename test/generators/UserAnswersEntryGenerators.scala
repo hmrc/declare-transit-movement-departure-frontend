@@ -75,6 +75,13 @@ trait UserAnswersEntryGenerators {
 
   self: Generators =>
 
+  implicit lazy val arbitraryTIRCarnetReferenceUserAnswersEntry: Arbitrary[(TIRCarnetReferencePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[TIRCarnetReferencePage.type#Data].map(Json.toJson(_))
+      } yield (TIRCarnetReferencePage, value)
+    }
+
   implicit lazy val arbitraryAgreedLocationOfGoodsUserAnswersEntry: Arbitrary[(AgreedLocationOfGoodsPage.type, JsValue)] =
     Arbitrary {
       for {

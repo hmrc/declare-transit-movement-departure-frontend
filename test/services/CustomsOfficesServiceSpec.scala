@@ -50,27 +50,30 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
     "must return a list of GB and NI customs offices" in {
 
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())).thenReturn(Future.successful(xiCustomsOffices))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())).thenReturn(Future.successful(gbCustomsOffices))
+      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any()))
+        .thenReturn(Future.successful(xiCustomsOffices))
+      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any()))
+        .thenReturn(Future.successful(gbCustomsOffices))
       when(mockFrontendAppConfig.isNIJourneyEnabled).thenReturn(true)
 
       service.getCustomsOfficesOfDeparture.futureValue.getAll mustBe customsOffices.getAll
 
-      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
-      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any())
 
     }
 
     "must return a list of GB customs offices" in {
 
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())).thenReturn(Future.successful(xiCustomsOffices))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())).thenReturn(Future.successful(gbCustomsOffices))
+      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any()))
+        .thenReturn(Future.successful(gbCustomsOffices))
+
       when(mockFrontendAppConfig.isNIJourneyEnabled).thenReturn(false)
 
       service.getCustomsOfficesOfDeparture.futureValue.getAll mustBe gbCustomsOffices.getAll
 
-      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")))(any(), any())
-      verify(mockRefDataConnector, times(0)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")))(any(), any())
+      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any())
+      verify(mockRefDataConnector, times(0)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any())
 
     }
 

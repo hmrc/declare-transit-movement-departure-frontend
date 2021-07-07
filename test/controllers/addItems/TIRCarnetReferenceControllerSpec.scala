@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package controllers.routeDetails
+package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import connectors.ReferenceDataConnector
-import controllers.{routes => mainRoutes}
-import forms.AddTransitOfficeFormProvider
+import forms.addItems.TIRCarnetReferenceFormProvider
 import matchers.JsonMatchers
-import models.reference.{CountryCode, CustomsOffice}
-import models.{CustomsOfficeList, NormalMode}
-import navigation.annotations.RouteDetails
+import models.NormalMode
+import navigation.annotations.Document
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.TIRCarnetReferencePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -36,37 +34,35 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class AddTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class TIRCarnetReferenceControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AddTransitOfficeFormProvider()
-  val form         = formProvider()
+  private val formProvider = new TIRCarnetReferenceFormProvider()
+  private val form         = formProvider()
+  private val template     = "tirCarnetReference.njk"
 
-  lazy val addTransitOfficeRoute           = routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
-  private val mockRefDataConnector         = mock[ReferenceDataConnector]
-  val customsOffice                        = CustomsOffice("1", "Transit1", CountryCode("GB"), None)
-  val customsOfficeList: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice))
+  lazy val tirCarnetReferenceRoute = controllers.addItems.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[RouteDetails]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
 
-  "AddTransitOffice Controller" - {
+  "TIRCarnetReference Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
 
-      val request        = FakeRequest(GET, addTransitOfficeRoute)
+      dataRetrievalWithData(emptyUserAnswers)
+
+      val request        = FakeRequest(GET, tirCarnetReferenceRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -77,38 +73,76 @@ class AddTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererA
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"   -> form,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(form("value"))
+        "form" -> form,
+        "mode" -> NormalMode,
+        "lrn"  -> lrn
       )
 
-      templateCaptor.getValue mustEqual "addTransitOffice.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey
+
+      templateCaptor.getValue mustEqual template
+      jsonWithoutConfig mustBe expectedJson
+
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage, "answer").success.value
+      dataRetrievalWithData(userAnswers)
+
+      val request        = FakeRequest(GET, tirCarnetReferenceRoute)
+      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+
+      val filledForm = form.bind(Map("value" -> "answer"))
+
+      val expectedJson = Json.obj(
+        "form" -> filledForm,
+        "lrn"  -> lrn,
+        "mode" -> NormalMode
+      )
+
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey
+
+      templateCaptor.getValue mustEqual template
+      jsonWithoutConfig mustBe expectedJson
+
     }
 
     "must redirect to the next page when valid data is submitted" in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
       dataRetrievalWithData(emptyUserAnswers)
-      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
 
       val request =
-        FakeRequest(POST, addTransitOfficeRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, tirCarnetReferenceRoute)
+          .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual onwardRoute.url
+
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
 
-      val request        = FakeRequest(POST, addTransitOfficeRoute).withFormUrlEncodedBody(("value", ""))
+      dataRetrievalWithData(emptyUserAnswers)
+
+      val request        = FakeRequest(POST, tirCarnetReferenceRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
@@ -120,40 +154,44 @@ class AddTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererA
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"   -> boundForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(boundForm("value"))
+        "form" -> boundForm,
+        "lrn"  -> lrn,
+        "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addTransitOffice.njk"
+      templateCaptor.getValue mustEqual template
       jsonCaptor.getValue must containJson(expectedJson)
+
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
+
       dataRetrievalNoData()
 
-      val request = FakeRequest(GET, addTransitOfficeRoute)
+      val request = FakeRequest(GET, tirCarnetReferenceRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
+
       dataRetrievalNoData()
 
       val request =
-        FakeRequest(POST, addTransitOfficeRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, tirCarnetReferenceRoute)
+          .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
     }
   }
 }
