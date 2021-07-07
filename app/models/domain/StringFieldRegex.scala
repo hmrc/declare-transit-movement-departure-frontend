@@ -32,7 +32,7 @@ object StringFieldRegex {
   val consignorNameRegex                   = s"^[a-zA-Z0-9&'@\\/.\\-%? ]{1,35}"
   val addressRegex: String                 = "^[a-zA-Z0-9/@?%,.\\- ]*$"
   val authorisedLocationCodeRegex          = "^[a-zA-Z0-9&'@/.%-? ]*$"
-  val principalTirHolderIdFormatRegex      = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{7}]*$"
+  val principalTirHolderIdFormatRegex      = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{7}$"
   val principalTirHolderIdCharRegex        = "^[a-zA-Z0-9]*$".r
 
 }

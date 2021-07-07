@@ -126,6 +126,51 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
+          "must go from Principal eori page to Principal name page if principals EORI starts with prefix 'XI' and Declaration type is TIR" in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Principal name page if principals EORI starts with prefix 'GB' and Declaration type is TIR" in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Principal name page if principals EORI does not start with 'XI' or 'GB'' and Declaration type is TIR" in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("AD123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
           "must go from Principal eori page to Add Principal's Name page if principals EORI does not start with prefix 'GB' or 'XI' " in {
 
             forAll(genNormalProcedureUserAnswers) {
@@ -160,6 +205,17 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
+          "must go from Principal address page to What is Principal's TIR Holder Id page when declaration type is TIR" in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers.unsafeSetVal(DeclarationTypePage)(Option4)
+                navigator
+                  .nextPage(PrincipalAddressPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalTirHolderIdController.onPageLoad(ua.id, NormalMode))
+            }
+          }
+
         }
 
         "for a Simplified procedure declaration" - {
@@ -174,6 +230,19 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
                   .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(ua.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Principal name page and Declaration type is TIR" in {
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("GB")
+                  .unsafeSetVal(ProcedureTypePage)(Simplified)
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(ua.id, NormalMode))
             }
           }
 
@@ -474,8 +543,6 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-//
-
           "to Principal NamePage if Prefix is not 'GB', is not 'XI' and there is  data for Principal Name" in {
 
             forAll(arbitrary[UserAnswers]) {
@@ -491,6 +558,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
         }
+
         "on a Simplified journey" - {
           "to Principal name page when declaration type is TIR" in {
             forAll(arbitrary[UserAnswers]) {
