@@ -30,23 +30,26 @@ class DocumentNavigator @Inject() () extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddDocumentsPage(index) => ua => addDocumentRoute(ua, index, NormalMode)
-    case DocumentTypePage(index, documentIndex) => ua => Some(routes.DocumentReferenceController.onPageLoad(ua.id, index, documentIndex, NormalMode))
-    case DocumentReferencePage(index, documentIndex) => ua => Some(routes.AddExtraDocumentInformationController.onPageLoad(ua.id, index, documentIndex, NormalMode))
+    case AddDocumentsPage(index)                               => ua => addDocumentRoute(ua, index, NormalMode)
+    case DocumentTypePage(index, documentIndex)                => ua => Some(routes.DocumentReferenceController.onPageLoad(ua.id, index, documentIndex, NormalMode))
+    case DocumentReferencePage(index, documentIndex)           => ua => Some(routes.AddExtraDocumentInformationController.onPageLoad(ua.id, index, documentIndex, NormalMode))
     case AddExtraDocumentInformationPage(index, documentIndex) => ua => addExtraDocumentInformationRoute(ua, index, documentIndex, NormalMode)
-    case DocumentExtraInformationPage(index, _) => ua => Some(routes.AddAnotherDocumentController.onPageLoad(ua.id, index, NormalMode))
-    case AddAnotherDocumentPage(index) => ua =>  addAnotherDocumentRoute(ua, index, NormalMode)
-    case ConfirmRemoveDocumentPage(index, _) => ua =>  Some(confirmRemoveDocumentRoute(ua,index, NormalMode))
+    case DocumentExtraInformationPage(index, _)                => ua => Some(routes.AddAnotherDocumentController.onPageLoad(ua.id, index, NormalMode))
+    case AddAnotherDocumentPage(index)                         => ua => addAnotherDocumentRoute(ua, index, NormalMode)
+    case ConfirmRemoveDocumentPage(index, _)                   => ua => Some(confirmRemoveDocumentRoute(ua,index, NormalMode))
+    case TIRCarnetReferencePage(index, documentIndex)          => ua => Some(routes.DocumentExtraInformationController.onPageLoad(ua.id, index, documentIndex, NormalMode))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddDocumentsPage(index) => ua => addDocumentRoute(ua, index, CheckMode)
-    case DocumentTypePage(index, documentIndex) => ua => Some(routes.DocumentReferenceController.onPageLoad(ua.id, index, documentIndex, CheckMode))
-    case DocumentReferencePage(index, documentIndex) => ua => Some(routes.AddExtraDocumentInformationController.onPageLoad(ua.id, index, documentIndex, CheckMode))
+    case AddDocumentsPage(index)                               => ua => addDocumentRoute(ua, index, CheckMode)
+    case DocumentTypePage(index, documentIndex)                => ua => Some(routes.DocumentReferenceController.onPageLoad(ua.id, index, documentIndex, CheckMode))
+    case DocumentReferencePage(index, documentIndex)           => ua => Some(routes.AddExtraDocumentInformationController.onPageLoad(ua.id, index, documentIndex, CheckMode))
     case AddExtraDocumentInformationPage(index, documentIndex) => ua => addExtraDocumentInformationRoute(ua, index, documentIndex, CheckMode)
-    case DocumentExtraInformationPage(index, _) => ua => Some(controllers.addItems.routes.AddAnotherDocumentController.onPageLoad(ua.id, index, CheckMode))
-    case AddAnotherDocumentPage(index) => ua =>  addAnotherDocumentRoute(ua, index, CheckMode)
-    case ConfirmRemoveDocumentPage(index, _) => ua => Some(confirmRemoveDocumentRoute(ua,index, CheckMode))
+    case DocumentExtraInformationPage(index, _)                => ua => Some(controllers.addItems.routes.AddAnotherDocumentController.onPageLoad(ua.id, index, CheckMode))
+    case AddAnotherDocumentPage(index)                         => ua => addAnotherDocumentRoute(ua, index, CheckMode)
+    case ConfirmRemoveDocumentPage(index, _)                   => ua => Some(confirmRemoveDocumentRoute(ua,index, CheckMode))
+    case TIRCarnetReferencePage(index, documentIndex)          => ua => Some(routes.DocumentExtraInformationController.onPageLoad(ua.id, index, documentIndex, CheckMode))
+
 
   }
   private def confirmRemoveDocumentRoute(ua: UserAnswers, index: Index, mode: Mode) =

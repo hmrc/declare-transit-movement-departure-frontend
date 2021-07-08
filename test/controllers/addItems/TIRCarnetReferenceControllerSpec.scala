@@ -26,7 +26,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TIRCarnetReferencePage
+import pages.addItems.TIRCarnetReferencePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -90,7 +90,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage, "answer").success.value
+      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage(index, index), "answer").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, tirCarnetReferenceRoute)

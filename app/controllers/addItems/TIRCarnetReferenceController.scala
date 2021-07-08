@@ -21,7 +21,7 @@ import forms.addItems.TIRCarnetReferenceFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.Document
-import pages.TIRCarnetReferencePage
+import pages.addItems.TIRCarnetReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -54,7 +54,7 @@ class TIRCarnetReferenceController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(TIRCarnetReferencePage) match {
+        val preparedForm = request.userAnswers.get(TIRCarnetReferencePage(itemIndex, documentIndex)) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
@@ -86,9 +86,9 @@ class TIRCarnetReferenceController @Inject() (
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage(documentIndex, itemIndex), value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(TIRCarnetReferencePage(documentIndex, itemIndex), mode, updatedAnswers))
           )
     }
 }
