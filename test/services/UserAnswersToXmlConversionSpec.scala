@@ -1314,7 +1314,7 @@ class UserAnswersToXmlConversionSpec
       <MesTypMES20>GB015B</MesTypMES20>
       <HEAHEA>
         <RefNumHEA4>ABCD1234567890123</RefNumHEA4>
-        <TypOfDecHEA24>T2</TypOfDecHEA24>
+        <TypOfDecHEA24>TIR</TypOfDecHEA24>
         <CouOfDesCodHEA30>DC</CouOfDesCodHEA30>
         <PlaOfLoaCodHEA46>LoadPLace</PlaOfLoaCodHEA46>
         <CouOfDisCodHEA55>SC</CouOfDisCodHEA55>
@@ -1343,6 +1343,7 @@ class UserAnswersToXmlConversionSpec
         <PosCodPC123>AA1 1AA</PosCodPC123>
         <CitPC124>PrincipalTown</CitPC124>
         <CouPC125>FR</CouPC125>
+        <HITPC126>GBR/123/1234567</HITPC126>
       </TRAPRIPC1>
       <CUSOFFDEPEPT>
         <RefNumEPT1>OOD1234A</RefNumEPT1>
