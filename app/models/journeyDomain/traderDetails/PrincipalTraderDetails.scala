@@ -32,12 +32,12 @@ final case class PrincipalTraderEoriPersonalInfo(eori: EoriNumber, name: String,
     extends PrincipalTraderDetails
 
 object PrincipalTraderDetails {
-  def apply(eori: EoriNumber, principalTirHolderId: Option[String] = None): PrincipalTraderDetails = PrincipalTraderEoriInfo(eori, principalTirHolderId)
+  def apply(eori: EoriNumber, principalTirHolderId: Option[String]): PrincipalTraderDetails = PrincipalTraderEoriInfo(eori, principalTirHolderId)
 
-  def apply(name: String, address: CommonAddress, principalTirHolderId: Option[String] = None): PrincipalTraderDetails =
+  def apply(name: String, address: CommonAddress, principalTirHolderId: Option[String]): PrincipalTraderDetails =
     PrincipalTraderPersonalInfo(name, address, principalTirHolderId)
 
-  def apply(eori: EoriNumber, name: String, address: CommonAddress, principalTirHolderId: Option[String] = None): PrincipalTraderDetails =
+  def apply(eori: EoriNumber, name: String, address: CommonAddress, principalTirHolderId: Option[String]): PrincipalTraderDetails =
     PrincipalTraderEoriPersonalInfo(eori, name, address, principalTirHolderId)
 
   implicit val principalTraderDetails: UserAnswersReader[PrincipalTraderDetails] = {
