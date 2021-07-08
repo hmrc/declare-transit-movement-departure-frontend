@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package forms
+package services
 
-object Constants {
+import controllers.routeDetails.{alwaysExcludedTransitCountries, gbExcludedCountries}
+import models.UserAnswers
+import models.reference.CountryCode
+import pages.OfficeOfDeparturePage
 
-  lazy val maxLengthEoriNumber: Int       = 17
-  lazy val vehicleIdMaxLength             = 27
-  lazy val consigneeNameMaxLength: Int    = 35
-  lazy val addressMaxLength: Int          = 35
-  lazy val loadingPlaceMaxLength: Int     = 35
-  lazy val maxLengthAgreedLocationOfGoods = 35
-  lazy val tirCarnetReferencMaxLength     = 35
-  lazy val addressRegex: String           = "^[a-zA-Z0-9/@?%,.\\- ]*$"
+object ExcludedCountriesService {
+
+  def routeDetailsExcludedCountries(userAnswers: UserAnswers): Option[Seq[CountryCode]] = userAnswers.get(OfficeOfDeparturePage).map {
+    _.countryId.code match {
+      case "XI" => alwaysExcludedTransitCountries
+      case _    => alwaysExcludedTransitCountries ++ gbExcludedCountries
+    }
+  }
 
 }

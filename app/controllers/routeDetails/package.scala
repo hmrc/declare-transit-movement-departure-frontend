@@ -20,12 +20,20 @@ import models.reference.CountryCode
 
 package object routeDetails {
 
-  val excludedTransitCountries: Seq[CountryCode] = Seq(
+  val alwaysExcludedTransitCountries: Seq[CountryCode] = Seq(
     CountryCode("JE")
   )
 
-  val excludedTransitCountriesForNonNI = Seq(
+  val gbExcludedCountries = Seq(
     CountryCode("SM"),
     CountryCode("AD")
+  )
+
+  val transitOfficeRoles: Seq[String] = Seq(
+    "TRA"
+  )
+
+  val destinationOfficeRoles: Seq[String] = Seq(
+    "DES"
   )
 }

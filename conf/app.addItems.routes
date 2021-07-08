@@ -221,6 +221,12 @@ POST       /:lrn/add-items/:itemIndex/documents/:documentIndex/confirm-remove-do
 GET        /:lrn/add-items/:itemIndex/documents/:documentIndex/change-confirm-remove-document                   controllers.addItems.ConfirmRemoveDocumentController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex:Index, mode: Mode = CheckMode)
 POST       /:lrn/add-items/:itemIndex/documents/:documentIndex/change-confirm-remove-document                  controllers.addItems.ConfirmRemoveDocumentController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex:Index, mode: Mode = CheckMode)
 
+GET        /:lrn/add-items/:itemIndex/documents/:documentIndex/tir-carnet-reference                         controllers.addItems.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex:Index, mode: Mode = NormalMode)
+POST       /:lrn/add-items/:itemIndex/documents/:documentIndex/tir-carnet-reference                         controllers.addItems.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex:Index, mode: Mode = NormalMode)
+GET        /:lrn/add-items/:itemIndex/documents/:documentIndex/change-tir-carnet-reference                  controllers.addItems.TIRCarnetReferenceController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex:Index, mode: Mode = CheckMode)
+POST       /:lrn/add-items/:itemIndex/documents/:documentIndex/change-tir-carnet-reference                  controllers.addItems.TIRCarnetReferenceController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex:Index, mode: Mode = CheckMode)
+
+
 GET        /:lrn/add-items/:itemIndex/containers/:containerIndex/confirm-remove-container                        controllers.addItems.containers.ConfirmRemoveContainerController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, containerIndex: Index, mode: Mode = NormalMode)
 POST       /:lrn/add-items/:itemIndex/containers/:containerIndex/confirm-remove-container                        controllers.addItems.containers.ConfirmRemoveContainerController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, containerIndex: Index, mode: Mode = NormalMode)
 GET        /:lrn/add-items/:itemIndex/containers/:containerIndex/change-confirm-remove-container                 controllers.addItems.containers.ConfirmRemoveContainerController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, containerIndex: Index, mode: Mode = CheckMode)
