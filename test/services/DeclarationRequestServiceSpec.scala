@@ -555,7 +555,8 @@ class DeclarationRequestServiceSpec
                 streetAndNumber = Some("Line 1"),
                 postCode = Some("PostCode"),
                 city = Some("city"),
-                countryCode = Some("XI")
+                countryCode = Some("XI"),
+                principalTirHolderId = None
               )
           }
         }

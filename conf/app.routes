@@ -53,3 +53,4 @@ POST       /:lrn/goods-summary/loading-place                            controll
 GET        /:lrn/goods-summary/change-loading-place                      controllers.LoadingPlaceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 POST       /:lrn/goods-summary/change-loading-place                     controllers.LoadingPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
+

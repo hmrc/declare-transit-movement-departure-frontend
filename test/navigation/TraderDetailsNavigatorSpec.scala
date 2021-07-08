@@ -20,6 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.traderDetails.{routes => traderDetailsRoute}
 import generators.Generators
+import models.DeclarationType.{Option1, Option4}
 import models.ProcedureType.{Normal, Simplified}
 import models._
 import org.scalacheck.Arbitrary.arbitrary
@@ -80,13 +81,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'GB' " in {
+          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'GB' and Declaration type is not TIR " in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
                 val ua = answers
                   .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                   .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
@@ -94,13 +96,14 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'gb' " in {
+          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'gb' and Declaration type is not TIR" in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
                 val ua = answers
                   .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                   .unsafeSetVal(WhatIsPrincipalEoriPage)("gb123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
@@ -108,17 +111,63 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'XI' " in {
+          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'XI' and Declaration type is not TIR" in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
                 val ua = answers
                   .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
                   .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
                   .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Principal name page if principals EORI starts with prefix 'XI' and Declaration type is TIR" in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Principal name page if principals EORI starts with prefix 'GB' and Declaration type is TIR" in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Principal name page if principals EORI does not start with 'XI' or 'GB'' and Declaration type is TIR" in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("AD123456")
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
             }
           }
 
@@ -145,13 +194,25 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal address page to Add consignor page" in {
+          "must go from Principal address page to Add consignor page when declaration type is not TIR" in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
+                val ua = answers.unsafeSetVal(DeclarationTypePage)(Option1)
                 navigator
-                  .nextPage(PrincipalAddressPage, NormalMode, answers)
-                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+                  .nextPage(PrincipalAddressPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(ua.id, NormalMode))
+            }
+          }
+
+          "must go from Principal address page to What is Principal's TIR Holder Id page when declaration type is TIR" in {
+
+            forAll(genNormalProcedureUserAnswers) {
+              answers =>
+                val ua = answers.unsafeSetVal(DeclarationTypePage)(Option4)
+                navigator
+                  .nextPage(PrincipalAddressPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalTirHolderIdController.onPageLoad(ua.id, NormalMode))
             }
           }
 
@@ -159,12 +220,29 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
         "for a Simplified procedure declaration" - {
 
-          "must go from Principal eori page to Add consignor page" in {
-            forAll(genSimplifiedProcedureUserAnswers) {
+          "must go from Principal eori page to Add consignor page and Declaration type is not TIR" in {
+            forAll(arbitrary[UserAnswers]) {
               answers =>
+                val ua = answers
+                  .unsafeSetVal(DeclarationTypePage)(Option1)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("GB")
+                  .unsafeSetVal(ProcedureTypePage)(Simplified)
                 navigator
-                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, answers)
-                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(ua.id, NormalMode))
+            }
+          }
+
+          "must go from Principal eori page to Principal name page and Declaration type is TIR" in {
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val ua = answers
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("GB")
+                  .unsafeSetVal(ProcedureTypePage)(Simplified)
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(ua.id, NormalMode))
             }
           }
 
@@ -345,8 +423,17 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           }
         }
       }
-    }
 
+      "PrincipalTirHolderid page must go to AddConsignor page" in {
+        forAll(genUserAnswersWithProcedure) {
+          answers =>
+            navigator
+              .nextPage(PrincipalTirHolderIdPage, NormalMode, answers)
+              .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+        }
+      }
+
+    }
     "in Check mode" - {
 
       "must go from Is principal eori known page " - {
@@ -411,63 +498,52 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       "must go from What is Principal's Eori page" - {
         "on a Normal Journey" - {
-          "to Check Your Answers Page if Prefix is 'GB' " in {
+          "to PrincipalName  Page if Prefix is 'GB' (in uppercase) and declaration type is TIR" in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
                   .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
                   .unsafeSetVal(ProcedureTypePage)(Normal)
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
 
-                navigator
-                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
-            }
-          }
-
-          "to Check Your Answers Page if Prefix is 'gb' " in {
-
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val updatedAnswers = answers
-                  .unsafeSetVal(WhatIsPrincipalEoriPage)("gb123456")
-                  .unsafeSetVal(ProcedureTypePage)(Normal)
-
-                navigator
-                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
-            }
-          }
-
-          "to Check Your Answers Page if Prefix is 'XI' " in {
-
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val updatedAnswers = answers
-                  .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
-                  .unsafeSetVal(ProcedureTypePage)(Normal)
-
-                navigator
-                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
-            }
-          }
-
-          "to Principal Page if Prefix is not 'GB', is not 'XI' and there is no data for Principal Name" in {
-
-            forAll(arbitrary[UserAnswers]) {
-              answers =>
-                val updatedAnswers = answers
-                  .unsafeSetVal(WhatIsPrincipalEoriPage)("AD123456")
-                  .unsafeRemove(PrincipalNamePage)
-                  .unsafeSetVal(ProcedureTypePage)(Normal)
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
                   .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
             }
           }
 
-          "to Check Your Answers Page if Prefix is not 'GB', is not 'XI' and there is  data for Principal Name" in {
+          "to Principal Name if Prefix is 'gb' in (lowercase) and declaration type is TIR " in {
+
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("gb123456")
+                  .unsafeSetVal(ProcedureTypePage)(Normal)
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
+            }
+          }
+
+          "to PrincipleNamePage if Prefix is 'XI' and declaration type was type TIR " in {
+
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                val updatedAnswers = answers
+                  .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
+                  .unsafeSetVal(ProcedureTypePage)(Normal)
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
+
+                navigator
+                  .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
+            }
+          }
+
+          "to Principal NamePage if Prefix is not 'GB', is not 'XI' and there is  data for Principal Name" in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>
@@ -478,19 +554,22 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
             }
           }
         }
+
         "on a Simplified journey" - {
-          "to Check your answers page" in {
+          "to Principal name page when declaration type is TIR" in {
             forAll(arbitrary[UserAnswers]) {
               answers =>
-                val updatedAnswers = answers.unsafeSetVal(ProcedureTypePage)(Simplified)
+                val updatedAnswers = answers
+                  .unsafeSetVal(ProcedureTypePage)(Simplified)
+                  .unsafeSetVal(DeclarationTypePage)(Option4)
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
             }
           }
         }
@@ -853,7 +932,6 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-
             navigator
               .nextPage(ConsigneeAddressPage, CheckMode, updatedAnswers)
               .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))

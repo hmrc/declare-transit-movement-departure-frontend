@@ -19,6 +19,7 @@ package services
 import cats.data.NonEmptyList
 import cats.implicits._
 import logging.Logging
+import models.DeclarationType.Option4
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
   GoodSummaryDetails,
@@ -182,19 +183,20 @@ class DeclarationRequestService @Inject() (
 
     def principalTrader(traderDetails: TraderDetails): TraderPrincipal =
       traderDetails.principalTraderDetails match {
-        case PrincipalTraderPersonalInfo(name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
+        case PrincipalTraderPersonalInfo(name, CommonAddress(buildingAndStreet, city, postcode, country), principalTirHolderId) =>
           TraderPrincipalWithoutEori(
             name = name,
             streetAndNumber = buildingAndStreet,
             postCode = postcode,
             city = city,
-            countryCode = country.code.code
+            countryCode = country.code.code,
+            principalTirHolderId
           )
-        case PrincipalTraderEoriInfo(traderEori) =>
-          TraderPrincipalWithEori(eori = traderEori.value, None, None, None, None, None)
+        case PrincipalTraderEoriInfo(traderEori, principalTirHolderId) =>
+          TraderPrincipalWithEori(eori = traderEori.value, None, None, None, None, None, principalTirHolderId)
 
-        case PrincipalTraderEoriPersonalInfo(eori, name, CommonAddress(buildingAndStreet, city, postcode, country)) =>
-          TraderPrincipalWithEori(eori.value, Some(name), Some(buildingAndStreet), Some(postcode), Some(city), Some(country.code.code))
+        case PrincipalTraderEoriPersonalInfo(eori, name, CommonAddress(buildingAndStreet, city, postcode, country), principalTirHolderId) =>
+          TraderPrincipalWithEori(eori.value, Some(name), Some(buildingAndStreet), Some(postcode), Some(city), Some(country.code.code), principalTirHolderId)
       }
 
     def detailsAtBorderMode(detailsAtBorder: DetailsAtBorder, inlandCode: Int): String =

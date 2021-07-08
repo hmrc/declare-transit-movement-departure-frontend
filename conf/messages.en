@@ -1432,6 +1432,16 @@ agreedLocationOfGoods.error.required = Enter the agreed location for the goods
 agreedLocationOfGoods.error.length = The agreed location for the goods must be 35 characters or less
 agreedLocationOfGoods.error.invalid = The agreed location for the goods must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
+principalTirHolderId.title =  What is the principal’s TIR holder identification?
+principalTirHolderId.heading =  What is the principal’s TIR holder identification?
+principalTirHolderId.hintText =  Like GBR/xxx/xxxxxxx or NIR/xxx/xxxxxxx.
+principalTirHolderId.checkYourAnswersLabel = Principal’s TIR holder identification
+principalTirHolderId.error.required = Enter  Enter the principal’s TIR holder identification
+principalTirHolderId.error.length = Principal’s TIR holder identification must be 35 characters or less
+principalTirHolderId.error.format = Enter the principal’s TIR holder identification in the right format
+principalTirHolderId.error.characters = The principal’s TIR holder identification must only include letters a to z, numbers 0 to 9 and forward slashes
+
+
 tirCarnetReference.title = What is the TIR Carnet reference?
 tirCarnetReference.heading = What is the TIR Carnet reference?
 tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
