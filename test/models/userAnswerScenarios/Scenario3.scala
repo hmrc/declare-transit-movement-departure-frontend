@@ -257,7 +257,7 @@ case object Scenario3 extends UserAnswerScenario {
   )
 
   private val traderDetails = TraderDetails(
-    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France"))),
+    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")), None),
     Some(
       ConsignorDetails(
         "ConsignorName",

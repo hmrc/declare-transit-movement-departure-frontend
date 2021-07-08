@@ -41,7 +41,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
 
           val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("GB123456"))
+          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("GB123456"), None)
 
           result mustEqual expectedResult
 
@@ -56,7 +56,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
 
           val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("XI123456"))
+          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("XI123456"), None)
 
           result mustEqual expectedResult
 
@@ -75,7 +75,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
 
           val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-          val expectedResult = PrincipalTraderEoriPersonalInfo(eoriNumber, "principleName", address)
+          val expectedResult = PrincipalTraderEoriPersonalInfo(eoriNumber, "principleName", address, None)
 
           result mustBe expectedResult
         }
@@ -92,7 +92,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
 
           val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-          val expectedResult = PrincipalTraderDetails("principleName", address)
+          val expectedResult = PrincipalTraderDetails("principleName", address, None)
 
           result mustBe expectedResult
         }
@@ -109,7 +109,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
 
           val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
 
-          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("GB123456"))
+          val expectedResult = PrincipalTraderEoriInfo(EoriNumber("GB123456"), None)
 
           result mustBe expectedResult
         }

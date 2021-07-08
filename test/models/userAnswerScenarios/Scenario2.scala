@@ -155,7 +155,7 @@ case object Scenario2 extends UserAnswerScenario {
   )
 
   private val traderDetails = TraderDetails(
-    principalTraderDetails = PrincipalTraderEoriInfo(EoriNumber("PRINCEORI")),
+    principalTraderDetails = PrincipalTraderEoriInfo(EoriNumber("PRINCEORI"), None),
     consignor = Some(
       ConsignorDetails("ConsignorName", CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")), None)
     ),
