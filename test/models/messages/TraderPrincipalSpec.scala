@@ -90,16 +90,9 @@ class TraderPrincipalSpec
             )
             val expectedResult =
               <TRAPRIPC1>
-                <NamPC17>{escapeXml(trader.name)}</NamPC17>
-                <StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122>
-                <PosCodPC123>{trader.postCode}</PosCodPC123>
-                <CitPC124>{escapeXml(trader.city)}</CitPC124>
-                <CouPC125>{trader.countryCode}</CouPC125>
-                {principalTirHolderId.getOrElse(NodeSeq.Empty)}
-
-              </TRAPRIPC1>
-println("\n\n\nTRADER.toxml =" +trader.toXml)
-println("\n\n\nxpctedresult =" + expectedResult)
+                <NamPC17>{escapeXml(trader.name)}</NamPC17><StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122><PosCodPC123>{trader.postCode}</PosCodPC123><CitPC124>{escapeXml(trader.city)}</CitPC124><CouPC125>{trader.countryCode}</CouPC125>{principalTirHolderId.getOrElse(NodeSeq.Empty)}</TRAPRIPC1>
+            println("\n\n\nTRADER.toxml =" + trader.toXml)
+            println("\n\n\nxpctedresult =" + expectedResult)
 
             trader.toXml mustEqual expectedResult
         }
