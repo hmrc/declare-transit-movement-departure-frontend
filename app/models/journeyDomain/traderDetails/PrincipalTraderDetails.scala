@@ -28,8 +28,8 @@ final case class PrincipalTraderPersonalInfo(name: String, address: CommonAddres
 
 final case class PrincipalTraderEoriInfo(eori: EoriNumber, principalTirHolderId: Option[String]) extends PrincipalTraderDetails
 
-final case class PrincipalTraderEoriPersonalInfo(eori: EoriNumber, name: String, address: CommonAddress,
-                                                 principalTirHolderId: Option[String]) extends PrincipalTraderDetails
+final case class PrincipalTraderEoriPersonalInfo(eori: EoriNumber, name: String, address: CommonAddress, principalTirHolderId: Option[String])
+    extends PrincipalTraderDetails
 
 object PrincipalTraderDetails {
   def apply(eori: EoriNumber, principalTirHolderId: Option[String] = None): PrincipalTraderDetails = PrincipalTraderEoriInfo(eori, principalTirHolderId)
@@ -42,17 +42,18 @@ object PrincipalTraderDetails {
 
   implicit val principalTraderDetails: UserAnswersReader[PrincipalTraderDetails] = {
 
-    val readEori = WhatIsPrincipalEoriPage.reader
-      .map(EoriNumber(_))
-      .map(PrincipalTraderDetails(_))
+    val readEoriWithTri = (WhatIsPrincipalEoriPage.reader, PrincipalTirHolderIdPage.optionalReader).tupled.map {
+      case (eori, optionalPrincipalTirHolderId) => PrincipalTraderDetails(EoriNumber(eori), optionalPrincipalTirHolderId)
+    }
 
     val readNameAndAddress =
       (
         PrincipalNamePage.reader,
         PrincipalAddressPage.reader,
-        PrincipalTirHolderIdPage.reader
+        PrincipalTirHolderIdPage.optionalReader
       ).tupled.map {
-        case (name, address, principalTirHolderId) => PrincipalTraderDetails(name, address, Some(principalTirHolderId))
+        case (name, address, optionalPrincipalTirHolderId) =>
+          PrincipalTraderDetails(name, address, optionalPrincipalTirHolderId)
       }
 
     val readAllDetails: UserAnswersReader[PrincipalTraderDetails] =
@@ -60,19 +61,20 @@ object PrincipalTraderDetails {
         WhatIsPrincipalEoriPage.reader,
         PrincipalNamePage.reader,
         PrincipalAddressPage.reader,
-        PrincipalTirHolderIdPage.reader
-        ).tupled.map {
-        case (eori, name, address, principalTirHolderId) => PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address, Some(principalTirHolderId))
+        PrincipalTirHolderIdPage.optionalReader
+      ).tupled.map {
+        case (eori, name, address, optionalPrincipalTirHolderId) =>
+          PrincipalTraderEoriPersonalInfo(EoriNumber(eori), name, address, optionalPrincipalTirHolderId)
       }
 
     ProcedureTypePage.reader.flatMap {
       case Normal =>
         (IsPrincipalEoriKnownPage.reader, WhatIsPrincipalEoriPage.optionalReader).tupled.flatMap {
-          case (true, Some(principleEori)) if principleEori.toUpperCase.startsWith("GB") || principleEori.toUpperCase.startsWith("XI") => readEori
+          case (true, Some(principleEori)) if principleEori.toUpperCase.startsWith("GB") || principleEori.toUpperCase.startsWith("XI") => readEoriWithTri
           case (true, _)                                                                                                               => readAllDetails
           case (false, _)                                                                                                              => readNameAndAddress
         }
-      case Simplified => readEori
+      case Simplified => readEoriWithTri
     }
   }
 }
