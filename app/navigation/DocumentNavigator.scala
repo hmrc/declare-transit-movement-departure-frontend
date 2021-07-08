@@ -49,9 +49,8 @@ class DocumentNavigator @Inject() () extends Navigator {
     case AddAnotherDocumentPage(index)                         => ua => addAnotherDocumentRoute(ua, index, CheckMode)
     case ConfirmRemoveDocumentPage(index, _)                   => ua => Some(confirmRemoveDocumentRoute(ua,index, CheckMode))
     case TIRCarnetReferencePage(index, documentIndex)          => ua => Some(routes.DocumentExtraInformationController.onPageLoad(ua.id, index, documentIndex, CheckMode))
-
-
   }
+
   private def confirmRemoveDocumentRoute(ua: UserAnswers, index: Index, mode: Mode) =
     ua.get(DeriveNumberOfDocuments(index)).getOrElse(0) match {
       case 0 => routes.AddDocumentsController.onPageLoad(ua.id, index,  mode)
@@ -87,8 +86,10 @@ class DocumentNavigator @Inject() () extends Navigator {
 
     (ua.get(AddDocumentsPage(index)), mode) match {
       case (Some(true), NormalMode)  => Some(routes.DocumentTypeController.onPageLoad(ua.id, index, Index(count(index)(ua)), NormalMode))
-      case (Some(true), CheckMode) if (count(index)(ua) == 0) => Some(routes.DocumentTypeController.onPageLoad(ua.id, index, Index(count(index)(ua)), CheckMode))
       case (Some(false), NormalMode) => previousReferencesRoute(ua, index, mode)
+      case (Some(true), CheckMode) if (count(index)(ua) == 0) => {
+        Some(routes.DocumentTypeController.onPageLoad(ua.id, index, Index(count(index)(ua)), CheckMode))
+      }
       case _ => Some(routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
     }
   
