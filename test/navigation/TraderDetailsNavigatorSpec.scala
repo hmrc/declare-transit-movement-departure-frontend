@@ -498,7 +498,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
       "must go from What is Principal's Eori page" - {
         "on a Normal Journey" - {
-          "to PrincipalName  Page if Prefix is 'GB' " in {
+          "to PrincipalName  Page if Prefix is 'GB' (in uppercase) and declaration type is TIR" in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>
@@ -513,7 +513,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "to Principal Name if Prefix is 'gb' and declaration type is TIR " in {
+          "to Principal Name if Prefix is 'gb' in (lowercase) and declaration type is TIR " in {
 
             forAll(arbitrary[UserAnswers]) {
               answers =>

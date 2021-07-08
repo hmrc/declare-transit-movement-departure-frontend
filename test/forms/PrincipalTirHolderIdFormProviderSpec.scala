@@ -56,7 +56,7 @@ class PrincipalTirHolderIdFormProviderSpec extends StringFieldBehaviours {
 
     behave like fieldWithInvalidCharacters(form, fieldName, invalidCharsKey, maxLength)
 
-    "must not bind strings that do not match the eoriNumber format regex" in {
+    "must not bind strings that do not match the principalTirHolderIdRegex format regex" in {
       val expectedError          = FormError(fieldName, invalidFormatKey, Seq(principalTirHolderIdFormatRegex))
       val generator: Gen[String] = RegexpGen.from("^[\\/A-Z0-9]{15}")
       forAll(generator) {

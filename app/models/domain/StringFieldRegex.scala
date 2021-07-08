@@ -33,6 +33,6 @@ object StringFieldRegex {
   val addressRegex: String                 = "^[a-zA-Z0-9/@?%,.\\- ]*$"
   val authorisedLocationCodeRegex          = "^[a-zA-Z0-9&'@/.%-? ]*$"
   val principalTirHolderIdFormatRegex      = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{7}$"
-  val principalTirHolderIdCharRegex        = "^[a-zA-Z0-9]*$".r
+  val principalTirHolderIdCharRegex        = "[a-zA-Z0-9\\/]*".r
 
 }
