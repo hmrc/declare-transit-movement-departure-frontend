@@ -26,7 +26,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.{OptionValues, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-import scala.xml.NodeSeq
+import scala.xml.{Elem, NodeSeq}
 
 class TraderPrincipalSpec
     extends AnyFreeSpec
@@ -88,11 +88,16 @@ class TraderPrincipalSpec
             val principalTirHolderId = trader.principalTirHolderId.map(
               value => <HITPC126>{escapeXml(value)}</HITPC126>
             )
-            val expectedResult =
+            val expectedResult: Elem =
               <TRAPRIPC1>
-                <NamPC17>{escapeXml(trader.name)}</NamPC17><StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122><PosCodPC123>{trader.postCode}</PosCodPC123><CitPC124>{escapeXml(trader.city)}</CitPC124><CouPC125>{trader.countryCode}</CouPC125>{principalTirHolderId.getOrElse(NodeSeq.Empty)}</TRAPRIPC1>
-            println("\n\n\nTRADER.toxml =" + trader.toXml)
-            println("\n\n\nxpctedresult =" + expectedResult)
+                <NamPC17>{escapeXml(trader.name)}</NamPC17>
+                <StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122>
+                <PosCodPC123>{trader.postCode}</PosCodPC123>
+                <CitPC124>{escapeXml(trader.city)}</CitPC124>
+                <CouPC125>{trader.countryCode}</CouPC125>
+                {principalTirHolderId.getOrElse(NodeSeq.Empty)}
+
+              </TRAPRIPC1>
 
             trader.toXml mustEqual expectedResult
         }

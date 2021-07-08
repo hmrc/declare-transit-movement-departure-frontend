@@ -59,43 +59,29 @@ object TraderPrincipalWithEori {
         {
         trader.name.fold(NodeSeq.Empty) {
           name =>
-            <NamPC17>
-            {escapeXml(name)}
-          </NamPC17>
+            <NamPC17>{escapeXml(name)}</NamPC17>
         } ++
           trader.streetAndNumber.fold(NodeSeq.Empty) {
             streetAndNumber =>
-              <StrAndNumPC122>
-              {escapeXml(streetAndNumber)}
-            </StrAndNumPC122>
+              <StrAndNumPC122>{escapeXml(streetAndNumber)}</StrAndNumPC122>
           } ++
           trader.postCode.fold(NodeSeq.Empty) {
             postCode =>
-              <PosCodPC123>
-              {postCode}
-            </PosCodPC123>
+              <PosCodPC123>{postCode}</PosCodPC123>
           } ++
           trader.city.fold(NodeSeq.Empty) {
             city =>
-              <CitPC124>
-              {escapeXml(city)}
-            </CitPC124>
+              <CitPC124>{escapeXml(city)}</CitPC124>
           } ++
           trader.countryCode.fold(NodeSeq.Empty) {
             countryCode =>
-              <CouPC125>
-              {countryCode}
-            </CouPC125>
+              <CouPC125>{countryCode}</CouPC125>
           }
-      }<TINPC159>
-        {trader.eori}
-      </TINPC159>
+      }<TINPC159>{trader.eori}</TINPC159>
         {
         trader.principalTirHolderId.fold(NodeSeq.Empty) {
           value =>
-            <HITPC126>
-            {value}
-          </HITPC126>
+            <HITPC126>{value}</HITPC126>
         }
       }
       </TRAPRIPC1>
@@ -125,21 +111,11 @@ object TraderPrincipalWithoutEori {
   implicit def writes: XMLWrites[TraderPrincipalWithoutEori] = XMLWrites[TraderPrincipalWithoutEori] {
     trader =>
       <TRAPRIPC1>
-            <NamPC17>
-              {escapeXml(trader.name)}
-            </NamPC17>
-            <StrAndNumPC122>
-              {escapeXml(trader.streetAndNumber)}
-            </StrAndNumPC122>
-            <PosCodPC123>
-              {trader.postCode}
-            </PosCodPC123>
-            <CitPC124>
-              {escapeXml(trader.city)}
-            </CitPC124>
-            <CouPC125>
-              {trader.countryCode}
-            </CouPC125>
+            <NamPC17>{escapeXml(trader.name)}</NamPC17>
+            <StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122>
+            <PosCodPC123>{trader.postCode}</PosCodPC123>
+            <CitPC124>{escapeXml(trader.city)}</CitPC124>
+            <CouPC125>{trader.countryCode}</CouPC125>
             {
         trader.principalTirHolderId.fold(NodeSeq.Empty) {
           value => <HITPC126>{value}</HITPC126>
