@@ -73,7 +73,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
         "form"   -> form,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
-        "radios" -> GuaranteeType.radios(form)
+        "radios" -> GuaranteeType.radios(form, emptyUserAnswers)
       )
 
       templateCaptor.getValue mustEqual "guaranteeDetails/guaranteeType.njk"
@@ -102,7 +102,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
         "form"   -> filledForm,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
-        "radios" -> GuaranteeType.radios(filledForm)
+        "radios" -> GuaranteeType.radios(filledForm, emptyUserAnswers)
       )
 
       templateCaptor.getValue mustEqual "guaranteeDetails/guaranteeType.njk"
@@ -144,7 +144,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
         "form"   -> boundForm,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
-        "radios" -> GuaranteeType.radios(boundForm)
+        "radios" -> GuaranteeType.radios(boundForm, emptyUserAnswers)
       )
 
       templateCaptor.getValue mustEqual "guaranteeDetails/guaranteeType.njk"
