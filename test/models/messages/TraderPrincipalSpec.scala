@@ -85,6 +85,9 @@ class TraderPrincipalSpec
       "TraderPrincipalWithoutEori to xml" in {
         forAll(arbitrary[TraderPrincipalWithoutEori]) {
           trader =>
+            val principalTirHolderId = trader.principalTirHolderId.map(
+              value => <HITPC126>{escapeXml(value)}</HITPC126>
+            )
             val expectedResult =
               <TRAPRIPC1>
                 <NamPC17>{escapeXml(trader.name)}</NamPC17>
@@ -92,7 +95,11 @@ class TraderPrincipalSpec
                 <PosCodPC123>{trader.postCode}</PosCodPC123>
                 <CitPC124>{escapeXml(trader.city)}</CitPC124>
                 <CouPC125>{trader.countryCode}</CouPC125>
+                {principalTirHolderId.getOrElse(NodeSeq.Empty)}
+
               </TRAPRIPC1>
+println("\n\n\nTRADER.toxml =" +trader.toXml)
+println("\n\n\nxpctedresult =" + expectedResult)
 
             trader.toXml mustEqual expectedResult
         }
