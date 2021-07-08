@@ -59,6 +59,9 @@ class TraderPrincipalSpec
             val countryCodeNode = trader.countryCode.map(
               value => <CouPC125>{value}</CouPC125>
             )
+            val principalTirHolderId = trader.principalTirHolderId.map(
+              value => <HITPC126>{escapeXml(value)}</HITPC126>
+            )
 
             val expectedResult =
               <TRAPRIPC1>
@@ -70,6 +73,8 @@ class TraderPrincipalSpec
                   countryCodeNode.getOrElse(NodeSeq.Empty)
               }
                 <TINPC159>{trader.eori}</TINPC159>
+                {principalTirHolderId.getOrElse(NodeSeq.Empty)}
+
               </TRAPRIPC1>
 
             trader.toXml mustEqual expectedResult
