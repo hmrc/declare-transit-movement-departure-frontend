@@ -30,15 +30,19 @@ class CustomsOfficesService @Inject() (
   referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
+  private val departureOfficeRoles: Seq[String] = Seq(
+    "DEP"
+  )
+
   private def getNICustomsOffices(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = if (frontendAppConfig.isNIJourneyEnabled) {
-    referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("XI"))
+    referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("XI"), departureOfficeRoles)
   } else {
     Future.successful(CustomsOfficeList(Nil))
   }
 
   def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     for {
-      gbOffices <- referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("GB"))
+      gbOffices <- referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("GB"), departureOfficeRoles)
       niOffices <- getNICustomsOffices
     } yield CustomsOfficeList(gbOffices.getAll ++ niOffices.getAll)
 }

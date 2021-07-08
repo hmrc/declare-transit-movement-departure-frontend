@@ -337,7 +337,7 @@ case object Scenario5 extends UserAnswerScenario {
   private val transportDetails = TransportDetails(Rail(2, None), SameDetailsAtBorder)
 
   private val traderDetails = TraderDetails(
-    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France"))),
+    PrincipalTraderPersonalInfo("PrincipalName", CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")), None),
     None,
     None
   )

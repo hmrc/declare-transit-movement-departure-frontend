@@ -16,26 +16,16 @@
 
 package pages
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-import scala.util.Try
+class PrincipalTirHolderIdSpec extends PageBehaviours {
 
-case object WhatIsPrincipalEoriPage extends QuestionPage[String] {
+  "PrincipalTirHolderIdPage" - {
 
-  override def path: JsPath = JsPath \ toString
+    beRetrievable[String](PrincipalTirHolderIdPage)
 
-  override def toString: String = "whatIsPrincipalEori"
+    beSettable[String](PrincipalTirHolderIdPage)
 
-  override def cleanup(value: Option[String], ua: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(_) =>
-        ua
-          .remove(PrincipalNamePage)
-          .flatMap(_.remove(PrincipalAddressPage))
-          .flatMap(_.remove(PrincipalTirHolderIdPage))
-      case _ => super.cleanup(value, ua)
-
-    }
-
+    beRemovable[String](PrincipalTirHolderIdPage)
+  }
 }

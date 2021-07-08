@@ -14,28 +14,20 @@
  * limitations under the License.
  */
 
-package pages
+package services
 
+import controllers.routeDetails.{alwaysExcludedTransitCountries, gbExcludedCountries}
 import models.UserAnswers
-import play.api.libs.json.JsPath
+import models.reference.CountryCode
+import pages.OfficeOfDeparturePage
 
-import scala.util.Try
+object ExcludedCountriesService {
 
-case object WhatIsPrincipalEoriPage extends QuestionPage[String] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "whatIsPrincipalEori"
-
-  override def cleanup(value: Option[String], ua: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(_) =>
-        ua
-          .remove(PrincipalNamePage)
-          .flatMap(_.remove(PrincipalAddressPage))
-          .flatMap(_.remove(PrincipalTirHolderIdPage))
-      case _ => super.cleanup(value, ua)
-
+  def routeDetailsExcludedCountries(userAnswers: UserAnswers): Option[Seq[CountryCode]] = userAnswers.get(OfficeOfDeparturePage).map {
+    _.countryId.code match {
+      case "XI" => alwaysExcludedTransitCountries
+      case _    => alwaysExcludedTransitCountries ++ gbExcludedCountries
     }
+  }
 
 }

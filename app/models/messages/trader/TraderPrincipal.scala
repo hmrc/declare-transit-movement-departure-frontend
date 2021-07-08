@@ -18,7 +18,6 @@ package models.messages.trader
 
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.LanguageCodeEnglish
 import models.messages.escapeXml
 import xml.XMLWrites
 
@@ -38,7 +37,8 @@ final case class TraderPrincipalWithEori(
   streetAndNumber: Option[String],
   postCode: Option[String],
   city: Option[String],
-  countryCode: Option[String]
+  countryCode: Option[String],
+  principalTirHolderId: Option[String]
 ) extends TraderPrincipal
 
 object TraderPrincipalWithEori {
@@ -49,7 +49,8 @@ object TraderPrincipalWithEori {
     (__ \ "StrAndNumPC122").read[String].optional,
     (__ \ "PosCodPC123").read[String].optional,
     (__ \ "CitPC124").read[String].optional,
-    (__ \ "CouPC125").read[String].optional
+    (__ \ "CouPC125").read[String].optional,
+    (__ \ "HITPC126").read[String].optional
   ).mapN(apply)
 
   implicit def writes: XMLWrites[TraderPrincipalWithEori] = XMLWrites[TraderPrincipalWithEori] {
@@ -76,8 +77,13 @@ object TraderPrincipalWithEori {
             countryCode =>
               <CouPC125>{countryCode}</CouPC125>
           }
+      }<TINPC159>{trader.eori}</TINPC159>
+        {
+        trader.principalTirHolderId.fold(NodeSeq.Empty) {
+          value =>
+            <HITPC126>{value}</HITPC126>
+        }
       }
-        <TINPC159>{trader.eori}</TINPC159>
       </TRAPRIPC1>
   }
 }
@@ -87,7 +93,8 @@ final case class TraderPrincipalWithoutEori(
   streetAndNumber: String,
   postCode: String,
   city: String,
-  countryCode: String
+  countryCode: String,
+  principalTirHolderId: Option[String]
 ) extends TraderPrincipal
 
 object TraderPrincipalWithoutEori {
@@ -97,17 +104,24 @@ object TraderPrincipalWithoutEori {
     (__ \ "StrAndNumPC122").read[String],
     (__ \ "PosCodPC123").read[String],
     (__ \ "CitPC124").read[String],
-    (__ \ "CouPC125").read[String]
+    (__ \ "CouPC125").read[String],
+    (__ \ "HITPC126").read[String].optional
   ).mapN(apply)
 
   implicit def writes: XMLWrites[TraderPrincipalWithoutEori] = XMLWrites[TraderPrincipalWithoutEori] {
     trader =>
       <TRAPRIPC1>
-        <NamPC17>{escapeXml(trader.name)}</NamPC17>
-        <StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122>
-        <PosCodPC123>{trader.postCode}</PosCodPC123>
-        <CitPC124>{escapeXml(trader.city)}</CitPC124>
-        <CouPC125>{trader.countryCode}</CouPC125>
-      </TRAPRIPC1>
+            <NamPC17>{escapeXml(trader.name)}</NamPC17>
+            <StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122>
+            <PosCodPC123>{trader.postCode}</PosCodPC123>
+            <CitPC124>{escapeXml(trader.city)}</CitPC124>
+            <CouPC125>{trader.countryCode}</CouPC125>
+            {
+        trader.principalTirHolderId.fold(NodeSeq.Empty) {
+          value => <HITPC126>{value}</HITPC126>
+        }
+      }
+          </TRAPRIPC1>
   }
+
 }

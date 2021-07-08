@@ -41,7 +41,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
       "when all mandatory answers have been defined" in {
 
         val expectedResult = TraderDetails(
-          PrincipalTraderDetails(EoriNumber("eoriNumber")),
+          PrincipalTraderDetails(EoriNumber("eoriNumber"), None),
           None,
           None
         )
@@ -54,7 +54,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
       "when all mandatory answers have been defined with Consignor details" in {
 
         val expectedResult = TraderDetails(
-          PrincipalTraderDetails(EoriNumber("eoriNumber")),
+          PrincipalTraderDetails(EoriNumber("eoriNumber"), None),
           Some(ConsignorDetails("consignorName", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")), None)),
           None
         )
@@ -73,7 +73,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
       "when all mandatory answers have been defined with Consignee details" in {
 
         val expectedResult = TraderDetails(
-          PrincipalTraderDetails(EoriNumber("eoriNumber")),
+          PrincipalTraderDetails(EoriNumber("eoriNumber"), None),
           None,
           Some(ConsigneeDetails("consigneeName", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")), None))
         )

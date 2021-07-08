@@ -27,7 +27,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.MovementDestinationCountryPage
+import pages.{MovementDestinationCountryPage, OfficeOfDeparturePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -37,7 +37,8 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import controllers.{routes => mainRoutes}
-import models.reference.{Country, CountryCode}
+import models.reference.{Country, CountryCode, CustomsOffice}
+import models.userAnswerScenarios.Scenario1.UserAnswersSpecHelperOps
 
 import scala.concurrent.Future
 
@@ -67,14 +68,17 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
   "MovementDestinationCountry Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET for NI departure" in {
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, movementDestinationCountryRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -85,6 +89,47 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
       status(result) mustEqual OK
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockReferenceDataConnector, times(1))
+        .getTransitCountryList(eqTo(alwaysExcludedTransitCountries))(any(), any())
+
+      val expectedJson = Json.obj(
+        "form"        -> form,
+        "mode"        -> NormalMode,
+        "lrn"         -> lrn,
+        "countries"   -> jsonCountryList(preSelected = false),
+        "onSubmitUrl" -> routes.MovementDestinationCountryController.onSubmit(lrn, NormalMode).url
+      )
+
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey
+
+      templateCaptor.getValue mustEqual template
+      jsonWithoutConfig mustBe expectedJson
+
+    }
+
+    "must return OK and the correct view for a GET for GB departure" in {
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+
+      dataRetrievalWithData(userAnswers)
+
+      val request        = FakeRequest(GET, movementDestinationCountryRoute)
+      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockReferenceDataConnector, times(1))
+        .getTransitCountryList(eqTo(alwaysExcludedTransitCountries ++ gbExcludedCountries))(any(), any())
 
       val expectedJson = Json.obj(
         "form"        -> form,
@@ -103,12 +148,15 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+        .unsafeSetVal(MovementDestinationCountryPage)(CountryCode("GB"))
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
 
-      val userAnswers = emptyUserAnswers.set(MovementDestinationCountryPage, CountryCode("GB")).success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, movementDestinationCountryRoute)
@@ -140,11 +188,14 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
     "must redirect to the next page when valid data is submitted" in {
 
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      dataRetrievalWithData(userAnswers)
 
       val request =
         FakeRequest(POST, movementDestinationCountryRoute)
@@ -159,12 +210,15 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(POST, movementDestinationCountryRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))

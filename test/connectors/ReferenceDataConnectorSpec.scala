@@ -263,11 +263,28 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
             )
           )
 
-        connector.getCustomsOffices.futureValue mustBe expectedResult
+        connector.getCustomsOffices().futureValue mustBe expectedResult
+      }
+
+      "must return a successful future response with roles with a sequence of CustomsOffices" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$startUrl/customs-offices?role=NPM"))
+            .willReturn(okJson(customsOfficeResponseJson))
+        )
+
+        val expectedResult =
+          CustomsOfficeList(
+            Seq(
+              CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
+              CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
+            )
+          )
+
+        connector.getCustomsOffices(Seq("NPM")).futureValue mustBe expectedResult
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/customs-offices", connector.getCustomsOffices)
+        checkErrorResponse(s"/$startUrl/customs-offices", connector.getCustomsOffices())
       }
     }
 
@@ -287,6 +304,23 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
           )
 
         connector.getCustomsOfficesOfTheCountry(CountryCode("GB")).futureValue mustBe expectedResult
+      }
+
+      "must return a successful future response when roles are defined with a sequence of CustomsOffices" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$startUrl/customs-offices/GB?role=TRA"))
+            .willReturn(okJson(customsOfficeResponseJson))
+        )
+
+        val expectedResult =
+          CustomsOfficeList(
+            Seq(
+              CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
+              CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
+            )
+          )
+
+        connector.getCustomsOfficesOfTheCountry(CountryCode("GB"), Seq("TRA")).futureValue mustBe expectedResult
       }
 
       "must return an exception when an error response is returned" in {
