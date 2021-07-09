@@ -16,11 +16,24 @@
 
 package pages
 
+import models.{Index, UserAnswers}
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object AddOfficeOfTransitPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "addOfficeOfTransit"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) =>
+        userAnswers
+          .remove(OfficeOfTransitCountryPage(Index(0)))
+          .flatMap(_.remove(OfficeOfTransitCountryPage(Index(0))))
+          .flatMap(_.remove(ArrivalTimesAtOfficePage(Index(0))))
+      case _ => super.cleanup(value, userAnswers)
+    }
 }
