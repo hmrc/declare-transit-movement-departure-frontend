@@ -27,6 +27,21 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def lrn: LocalReferenceNumber = userAnswers.id
 
+  def addOfficeOfTransit: Option[Row] = userAnswers.get(AddOfficeOfTransitPage) map {
+    answer =>
+      Row(
+        key = Key(msg"addOfficeOfTransit.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(yesOrNo(answer)),
+        actions = List(
+          Action(
+            content = msg"site.edit",
+            href = routes.AddOfficeOfTransitController.onPageLoad(lrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addOfficeOfTransit.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
   def arrivalTimesAtOffice(index: Index): Option[Row] = userAnswers.get(ArrivalTimesAtOfficePage(index)) map {
     answer =>
       val dateTime: String = s"${Format.dateTimeFormattedAMPM(answer).toLowerCase}"

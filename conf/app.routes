@@ -55,7 +55,3 @@ POST       /:lrn/goods-summary/change-loading-place                     controll
 
 
 
-GET        /:lrn/addOfficeOfTransit                        controllers.AddOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/addOfficeOfTransit                        controllers.AddOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/changeAddOfficeOfTransit                  controllers.AddOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/changeAddOfficeOfTransit                  controllers.AddOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

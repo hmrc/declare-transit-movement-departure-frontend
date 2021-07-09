@@ -24,21 +24,6 @@ import uk.gov.hmrc.viewmodels._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def addOfficeOfTransit: Option[Row] = userAnswers.get(AddOfficeOfTransitPage) map {
-    answer =>
-      Row(
-        key = Key(msg"addOfficeOfTransit.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddOfficeOfTransitController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addOfficeOfTransit.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
-
   def loadingPlace: Option[Row] = userAnswers.get(LoadingPlacePage) map {
     answer =>
       Row(
