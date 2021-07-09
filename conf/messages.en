@@ -1442,10 +1442,14 @@ principalTirHolderId.error.length = Principal’s TIR holder identification must
 principalTirHolderId.error.format = Enter the principal’s TIR holder identification in the right format
 principalTirHolderId.error.characters = The principal’s TIR holder identification must only include letters a to z, numbers 0 to 9 and forward slashes
 
-
 tirCarnetReference.title = What is the TIR Carnet reference?
 tirCarnetReference.heading = What is the TIR Carnet reference?
 tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
 tirCarnetReference.error.required = Enter the TIR Carnet reference
 tirCarnetReference.error.length = The TIR Carnet reference must be 35 characters or less
 tirCarnetReference.error.invalid = The TIR Carnet reference must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+addOfficeOfTransit.title = Do you need to add an office of transit?
+addOfficeOfTransit.heading = Do you need to add an office of transit?
+addOfficeOfTransit.checkYourAnswersLabel = Do you need to add an office of transit?
+addOfficeOfTransit.error.required = Select yes if you need to add an office of transit
