@@ -122,7 +122,7 @@ class CircumstanceIndicatorController @Inject() (
       _              <- sessionRepository.set(updatedAnswers)
     } yield updatedAnswers
 
-  private def redirectRoutesF(c: String, mode: Mode, userAnswers: UserAnswers)(implicit
+  private def redirectRoutesF(circumstanceIndicatorCode: String, mode: Mode, userAnswers: UserAnswers)(implicit
     request: DataRequest[AnyContent]
   ): Future[Result] =
     if (mode == CheckMode) {
