@@ -16,9 +16,9 @@
 
 package controllers.routeDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.DestinationCountryFormProvider
+import javax.inject.Inject
 import models.reference.Country
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -30,11 +30,11 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DestinationCountryController @Inject() (
@@ -44,7 +44,7 @@ class DestinationCountryController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: DestinationCountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -55,7 +55,7 @@ class DestinationCountryController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
+      countriesService.getDestinationCountryList(userAnswers = request.userAnswers) flatMap {
         countries =>
           val form = formProvider(countries)
 
@@ -71,7 +71,7 @@ class DestinationCountryController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
+      countriesService.getDestinationCountryList(userAnswers = request.userAnswers) flatMap {
         countries =>
           formProvider(countries)
             .bindFromRequest()
