@@ -20,21 +20,22 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.safetyAndSecurity.CircumstanceIndicatorFormProvider
 import models.reference.CircumstanceIndicator
-import models.{CircumstanceIndicatorList, DependentSection, LocalReferenceNumber, Mode}
+import models.requests.DataRequest
+import models.{CheckMode, CircumstanceIndicatorList, DependentSection, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
-import pages.safetyAndSecurity.CircumstanceIndicatorPage
+import pages.QuestionPage
+import pages.safetyAndSecurity.{AddPlaceOfUnloadingCodePage, CircumstanceIndicatorPage, PlaceOfUnloadingCodePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import play.api.libs.json.{Json, Writes}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
 import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getCircumstanceIndicatorsAsJson
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -93,7 +94,8 @@ class CircumstanceIndicatorController @Inject() (
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(CircumstanceIndicatorPage, value.code))
                     _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, updatedAnswers))
+                    result         <- redirectRoutesF(value.code, mode, updatedAnswers)
+                  } yield result
               )
         }
     }
@@ -110,4 +112,35 @@ class CircumstanceIndicatorController @Inject() (
 
     renderer.render(template, json)
   }
+
+  private def updateUserAnswers[A](page: QuestionPage[A], value: A, userAnswers: UserAnswers)(implicit
+    request: DataRequest[AnyContent],
+    writes: Writes[A]
+  ): Future[UserAnswers] =
+    for {
+      updatedAnswers <- Future.fromTry(userAnswers.set(page, value))
+      _              <- sessionRepository.set(updatedAnswers)
+    } yield updatedAnswers
+
+  private def redirectRoutesF(c: String, mode: Mode, userAnswers: UserAnswers)(implicit
+    request: DataRequest[AnyContent]
+  ): Future[Result] =
+    if (mode == CheckMode) {
+      (circumstanceIndicatorCode, request.userAnswers.get(PlaceOfUnloadingCodePage)) match {
+        case ("E", Some(_)) =>
+          updateUserAnswers(AddPlaceOfUnloadingCodePage, true, userAnswers).map(
+            updatedAnswers => Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, updatedAnswers))
+          ) // update flag true
+        case ("E", None)  => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers))) // do nothing
+        case (_, Some(_)) => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers))) // do nothing
+        case (_, None) =>
+          updateUserAnswers(AddPlaceOfUnloadingCodePage, true, userAnswers).map(
+            updatedAnswers => Redirect(navigator.nextPage(AddPlaceOfUnloadingCodePage, mode, updatedAnswers))
+          ) // route to place of unloading
+        case _ => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers))) // do nothing
+      }
+    } else {
+      Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers))) // do nothing
+    }
+
 }
