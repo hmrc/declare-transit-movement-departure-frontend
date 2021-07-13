@@ -18,8 +18,9 @@ package models.journeyDomain.addItems
 
 import cats.implicits._
 import models.journeyDomain._
+import models.reference.{CountryCode, CustomsOffice}
 import models.{CommonAddress, EoriNumber, Index}
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
@@ -52,9 +53,13 @@ object SecurityTraderDetails {
     AddSecurityDetailsPage
       .filterOptionalDependent[Option[SecurityTraderDetails]](_ == true) {
         AddSafetyAndSecurityConsignorPage.filterOptionalDependent(_ == false) {
-          AddSecurityConsignorsEoriPage(index).reader.flatMap {
-            case true  => readEori
-            case false => readNameAndAddress
+          (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader, OfficeOfDeparturePage.reader).tupled.flatMap {
+            case (true, Some("E"), CustomsOffice(_, _, CountryCode("XI"), _)) => readEori
+            case _ =>
+              AddSecurityConsignorsEoriPage(index).reader.flatMap {
+                case true  => readEori
+                case false => readNameAndAddress
+              }
           }
         }
       }

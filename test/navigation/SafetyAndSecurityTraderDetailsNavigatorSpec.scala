@@ -407,6 +407,12 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .set(AddSafetyAndSecurityConsignorPage, true)
             .success
             .value
+            .set(CircumstanceIndicatorPage, "circumstanceIndicator")
+            .success
+            .value
+            .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("XI"), None))
+            .success
+            .value
 
           navigator
             .nextPage(AddSafetyAndSecurityConsignorPage, NormalMode, updatedAnswers)
