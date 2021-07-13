@@ -1299,7 +1299,7 @@ class UserAnswersToXmlConversionSpec
     generatedXml xmlMustEqual expectedXml.map(scala.xml.Utility.trim)
   }
 
-  "Scenario 7 XI when declaration type is TIR: " in new Setup {
+  "Scenario 7 XI when declaration type is TIR and AddOfficeOfTransit is false: " in new Setup {
 
     val expectedXml = <CC015B>
       <SynIdeMES1>UNOC</SynIdeMES1>
@@ -1348,14 +1348,6 @@ class UserAnswersToXmlConversionSpec
       <CUSOFFDEPEPT>
         <RefNumEPT1>OOD1234A</RefNumEPT1>
       </CUSOFFDEPEPT>
-      <CUSOFFTRARNS>
-        <RefNumRNS1>TOP12341</RefNumRNS1>
-        <ArrTimTRACUS085>202005050512</ArrTimTRACUS085>
-      </CUSOFFTRARNS>
-      <CUSOFFTRARNS>
-        <RefNumRNS1>TOP12342</RefNumRNS1>
-        <ArrTimTRACUS085>202005072112</ArrTimTRACUS085>
-      </CUSOFFTRARNS>
       <CUSOFFDESEST>
         <RefNumEST1>DOP1234A</RefNumEST1>
       </CUSOFFDESEST>
