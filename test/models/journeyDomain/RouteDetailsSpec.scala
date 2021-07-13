@@ -44,6 +44,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
         )
 
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
           .unsafeSetVal(AddSecurityDetailsPage)(true)
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("GB", "Name", CountryCode("GB"), None))
           .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
@@ -57,23 +58,23 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
         result mustBe expectedResult
       }
 
-      "when safetyAndSecurityFlag is true and arrival time is added when office of transit is not added" in {
+      "when safetyAndSecurityFlag is true when office of transit is not added" in {
 
         val dateNow = LocalDateTime.now()
 
         val expectedResult = RouteDetails(
           CountryOfDispatch(CountryCode("GB"), true),
           CountryCode("IT"),
-          CustomsOffice("id", "name", CountryCode("XI"), None),
+          CustomsOffice("XI", "name", CountryCode("XI"), None),
           None
         )
 
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
           .unsafeSetVal(AddSecurityDetailsPage)(true)
-          .unsafeSetVal(DestinationOfficePage)(CustomsOffice("XI", "Name", CountryCode("XI"), None))
+          .unsafeSetVal(DestinationOfficePage)(CustomsOffice("XI", "name", CountryCode("XI"), None))
           .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
-          .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
           .unsafeSetVal(AddOfficeOfTransitPage)(false)
 
         val result = UserAnswersReader[RouteDetails].run(userAnswers).right.value
@@ -87,15 +88,17 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           CountryOfDispatch(CountryCode("GB"), true),
           CountryCode("IT"),
           CustomsOffice("id", "name", CountryCode("IT"), None),
-          Some(NonEmptyList(TransitInformation("transitOffice", None), List.empty))
+          None
         )
 
         val userAnswers = emptyUserAnswers
+          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
           .unsafeSetVal(AddSecurityDetailsPage)(false)
           .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
           .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
+          .unsafeSetVal(AddOfficeOfTransitPage)(false)
 
         val result = UserAnswersReader[RouteDetails].run(userAnswers).right.value
 
@@ -121,6 +124,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
             val dateNow = LocalDateTime.now()
 
             val userAnswers = emptyUserAnswers
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
               .unsafeSetVal(AddSecurityDetailsPage)(true)
               .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
               .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
@@ -149,6 +153,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
         forAll(mandatoryPages) {
           mandatoryPage =>
             val userAnswers = emptyUserAnswers
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
               .unsafeSetVal(AddSecurityDetailsPage)(false)
               .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
               .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
