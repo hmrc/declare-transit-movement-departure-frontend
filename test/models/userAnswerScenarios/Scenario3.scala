@@ -241,7 +241,7 @@ case object Scenario3 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty)
+    Some(NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty))
   )
 
   private val movementDetails = NormalMovementDetails(

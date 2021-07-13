@@ -312,8 +312,10 @@ case object Scenario1 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
-                 List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
+    Some(
+      NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
+                   List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
+      )
     )
   )
 

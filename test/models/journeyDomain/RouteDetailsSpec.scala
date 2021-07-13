@@ -32,7 +32,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
     "can be parsed from UserAnswers" - {
 
-      "when safetyAndSecurityFlag is true and arrival time is added" in {
+      "when safetyAndSecurityFlag is true and arrival time is added when office of transit is added" in {
 
         val dateNow = LocalDateTime.now()
 
@@ -40,16 +40,41 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           CountryOfDispatch(CountryCode("GB"), true),
           CountryCode("IT"),
           CustomsOffice("id", "name", CountryCode("IT"), None),
-          NonEmptyList(TransitInformation("transitOffice", Some(dateNow)), List.empty)
+          Some(NonEmptyList(TransitInformation("transitOffice", Some(dateNow)), List.empty))
         )
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(DestinationOfficePage)(CustomsOffice("GB", "Name", CountryCode("GB"), None))
           .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
           .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
           .unsafeSetVal(ArrivalTimesAtOfficePage(index))(dateNow)
+
+        val result = UserAnswersReader[RouteDetails].run(userAnswers).right.value
+
+        result mustBe expectedResult
+      }
+
+      "when safetyAndSecurityFlag is true and arrival time is added when office of transit is not added" in {
+
+        val dateNow = LocalDateTime.now()
+
+        val expectedResult = RouteDetails(
+          CountryOfDispatch(CountryCode("GB"), true),
+          CountryCode("IT"),
+          CustomsOffice("id", "name", CountryCode("XI"), None),
+          None
+        )
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(AddSecurityDetailsPage)(true)
+          .unsafeSetVal(DestinationOfficePage)(CustomsOffice("XI", "Name", CountryCode("XI"), None))
+          .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
+          .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
+          .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
+          .unsafeSetVal(AddOfficeOfTransitPage)(false)
 
         val result = UserAnswersReader[RouteDetails].run(userAnswers).right.value
 
@@ -62,7 +87,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           CountryOfDispatch(CountryCode("GB"), true),
           CountryCode("IT"),
           CustomsOffice("id", "name", CountryCode("IT"), None),
-          NonEmptyList(TransitInformation("transitOffice", None), List.empty)
+          Some(NonEmptyList(TransitInformation("transitOffice", None), List.empty))
         )
 
         val userAnswers = emptyUserAnswers

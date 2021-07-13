@@ -179,7 +179,7 @@ case object Scenario2 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    NonEmptyList(TransitInformation("TOP12341", None), List(TransitInformation("TOP12342", None)))
+    Some(NonEmptyList(TransitInformation("TOP12341", None), List(TransitInformation("TOP12342", None))))
   )
 
   val toModel = JourneyDomain(
