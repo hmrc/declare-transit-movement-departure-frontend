@@ -60,10 +60,10 @@ import models.journeyDomain.{
   OtherLiabilityAmount,
   PreTaskListDetails,
   PreviousReferences,
-  ProducedDocument,
   RouteDetails,
   SafetyAndSecurity,
   SpecialMentionDomain,
+  StandardDocument,
   TransportDetails
 }
 import models.reference._
@@ -352,8 +352,8 @@ case object Scenario1 extends UserAnswerScenario {
     ),
     producedDocuments = Some(
       NonEmptyList(
-        ProducedDocument("G1D1", "G1D1Ref", Some("G1D1Info")),
-        List(ProducedDocument("G1D2", "G1D2Ref", None))
+        StandardDocument("G1D1", "G1D1Ref", Some("G1D1Info")),
+        List(StandardDocument("G1D2", "G1D2Ref", None))
       )
     ),
     itemSecurityTraderDetails = Some(
@@ -383,7 +383,7 @@ case object Scenario1 extends UserAnswerScenario {
     containers = Some(NonEmptyList(Container("GD2CN1NUM1"), List.empty)),
     specialMentions =
       Some(NonEmptyList(SpecialMentionDomain("GD2S1", "GD2S1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None)), List.empty)),
-    producedDocuments = Some(NonEmptyList(ProducedDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
+    producedDocuments = Some(NonEmptyList(StandardDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
     itemSecurityTraderDetails = Some(
       ItemsSecurityTraderDetails(
         Some("U"),

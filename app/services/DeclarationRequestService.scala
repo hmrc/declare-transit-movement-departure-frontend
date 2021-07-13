@@ -150,9 +150,11 @@ class DeclarationRequestService @Inject() (
     def producedDocuments(producedDocument: Option[NonEmptyList[models.journeyDomain.ProducedDocument]]): Seq[goodsitem.ProducedDocument] =
       producedDocument
         .map(
-          _.toList.map(
-            x => goodsitem.ProducedDocument(x.documentType, Some(x.documentReference), x.extraInformation)
-          )
+          _.toList.map {
+            case StandardDocument(documentType, documentReference, extraInformation) =>
+              goodsitem.ProducedDocument(documentType, Some(documentReference), extraInformation)
+            case TIRDocument(tirReference, extraInformation) => goodsitem.ProducedDocument("952", Some(tirReference), Some(extraInformation))
+          }
         )
         .getOrElse(List.empty)
 

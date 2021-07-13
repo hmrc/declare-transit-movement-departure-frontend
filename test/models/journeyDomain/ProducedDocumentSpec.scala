@@ -19,12 +19,13 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
+import models.DeclarationType.Option4
 import models.Index
 import models.reference.CircumstanceIndicator
 import org.scalacheck.Gen
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, QuestionPage}
+import pages.{AddSecurityDetailsPage, DeclarationTypePage, QuestionPage}
 
 class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
@@ -37,25 +38,35 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
     .unsafeSetVal(DocumentReferencePage(index, Index(1)))("documentReference")
     .unsafeSetVal(AddExtraDocumentInformationPage(index, Index(1)))(false)
 
+  private val producedDocumentsWithTIR = emptyUserAnswers
+    .unsafeSetVal(DeclarationTypePage)(Option4)
+    .unsafeSetVal(TIRCarnetReferencePage(index, referenceIndex))("carnetReference")
+    .unsafeSetVal(DocumentExtraInformationPage(index, referenceIndex))("documentExtraInformation")
+    .unsafeSetVal(AddDocumentsPage(index))(true)
+    .unsafeSetVal(DocumentTypePage(index, Index(1)))("documentType")
+    .unsafeSetVal(DocumentReferencePage(index, Index(1)))("documentReference")
+    .unsafeSetVal(AddExtraDocumentInformationPage(index, Index(1)))(false)
+
   "ProducedDocument" - {
-    "producedDocumentReader" - {
+
+    "standardDocumentReader" - {
       "can be parsed from UserAnswers" - {
         "when all details for section have been answered" in {
 
-          val expectedResult = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
+          val expectedResult = StandardDocument("documentType", "documentReference", Some("documentExtraInformation"))
 
-          val result = UserAnswersReader[ProducedDocument](ProducedDocument.producedDocumentReader(index, referenceIndex)).run(producedDocumentUa)
+          val result = UserAnswersReader[StandardDocument](ProducedDocument.standardDocumentReader(index, referenceIndex)).run(producedDocumentUa)
 
           result.right.value mustBe expectedResult
         }
 
         "when AddExtraDocumentInformationPage is false" in {
 
-          val expectedResult = ProducedDocument("documentType", "documentReference", None)
+          val expectedResult = StandardDocument("documentType", "documentReference", None)
 
           val userAnswers = producedDocumentUa.unsafeSetVal(AddExtraDocumentInformationPage(index, referenceIndex))(false)
 
-          val result = UserAnswersReader[ProducedDocument](ProducedDocument.producedDocumentReader(index, referenceIndex)).run(userAnswers)
+          val result = UserAnswersReader[StandardDocument](ProducedDocument.standardDocumentReader(index, referenceIndex)).run(userAnswers)
 
           result.right.value mustBe expectedResult
         }
@@ -74,7 +85,39 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
             mandatoryPage =>
               val userAnswers = producedDocumentUa.unsafeRemove(mandatoryPage)
 
-              val result = UserAnswersReader[ProducedDocument](ProducedDocument.producedDocumentReader(index, referenceIndex)).run(userAnswers)
+              val result = UserAnswersReader[StandardDocument](ProducedDocument.standardDocumentReader(index, referenceIndex)).run(userAnswers)
+              result.left.value.page mustBe mandatoryPage
+          }
+        }
+      }
+    }
+
+    "tirDocumentReader" - {
+
+      "can be parsed from UserAnswers" - {
+        "when all details for section have been answered" in {
+
+          val expectedResult = TIRDocument("carnetReference", "documentExtraInformation")
+
+          val result = UserAnswersReader[TIRDocument](ProducedDocument.tirDocumentReader(index, referenceIndex)).run(producedDocumentsWithTIR)
+
+          result.right.value mustBe expectedResult
+        }
+      }
+
+      "cannot be parsed from UserAnswers" - {
+        "when a mandatory answer is missing" in {
+
+          val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+            TIRCarnetReferencePage(index, referenceIndex),
+            DocumentExtraInformationPage(index, referenceIndex)
+          )
+
+          forAll(mandatoryPages) {
+            mandatoryPage =>
+              val userAnswers = producedDocumentsWithTIR.unsafeRemove(mandatoryPage)
+
+              val result = UserAnswersReader[TIRDocument](ProducedDocument.tirDocumentReader(index, referenceIndex)).run(userAnswers)
               result.left.value.page mustBe mandatoryPage
           }
         }
@@ -83,14 +126,28 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
     "deriveProducedDocuments" - {
 
-      "must return List of produced documents when " +
+      "must return List of standard documents and a TIR document when " +
+        "DeclarationTypePage is Option4 (TIR) " +
+        "Index position is 0" in {
+
+          val producedDoc1 = TIRDocument("carnetReference", "documentExtraInformation")
+          val producedDoc2 = StandardDocument("documentType", "documentReference", None)
+
+          val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
+
+          val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(producedDocumentsWithTIR)
+
+          result.right.value.value mustBe expectedResult
+        }
+
+      "must return List of standard documents when " +
         "AddSecurityDetailsPage is true, " +
         "AddCommercialReferenceNumberPage is false, " +
         "AddCircumstanceIndicatorPage is false and " +
         "Index position is 0" in {
 
-          val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-          val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+          val producedDoc1 = StandardDocument("documentType", "documentReference", Some("documentExtraInformation"))
+          val producedDoc2 = StandardDocument("documentType", "documentReference", None)
 
           val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
@@ -104,7 +161,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
           result.right.value.value mustBe expectedResult
         }
 
-      "must return List of produced documents when " +
+      "must return List of standard documents when " +
         "AddSecurityDetailsPage is true, " +
         "AddCommercialReferenceNumberPage is false, " +
         "AddCircumstanceIndicatorPage is true and " +
@@ -113,8 +170,8 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val validCircumstanceIndicator = Gen.oneOf(CircumstanceIndicator.conditionalIndicators).sample.value
 
-          val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-          val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+          val producedDoc1 = StandardDocument("documentType", "documentReference", Some("documentExtraInformation"))
+          val producedDoc2 = StandardDocument("documentType", "documentReference", None)
 
           val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
@@ -129,10 +186,10 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
           result.right.value.value mustBe expectedResult
         }
 
-      "must return List of produced documents when AddSecurityDetailsPage is false and AddDocumentsPage is true" in {
+      "must return List of standard documents when AddSecurityDetailsPage is false and AddDocumentsPage is true" in {
 
-        val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-        val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+        val producedDoc1 = StandardDocument("documentType", "documentReference", Some("documentExtraInformation"))
+        val producedDoc2 = StandardDocument("documentType", "documentReference", None)
 
         val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
@@ -147,10 +204,10 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
         result.right.value.value mustBe expectedResult
       }
 
-      "must return List of produced documents when AddCommercialReferenceNumberPage is true and addDocumentsPage is true" in {
+      "must return List of standard documents when AddCommercialReferenceNumberPage is true and addDocumentsPage is true" in {
 
-        val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-        val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+        val producedDoc1 = StandardDocument("documentType", "documentReference", Some("documentExtraInformation"))
+        val producedDoc2 = StandardDocument("documentType", "documentReference", None)
 
         val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
@@ -165,9 +222,9 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
         result.right.value.value mustBe expectedResult
       }
 
-      "must return List of produced documents when Index position is not 0 and AddDocumentsPage is true" in {
+      "must return List of standard documents when Index position is not 0 and AddDocumentsPage is true" in {
 
-        val expectedResult = NonEmptyList(ProducedDocument("documentType", "documentReference", None), List.empty)
+        val expectedResult = NonEmptyList(StandardDocument("documentType", "documentReference", None), List.empty)
 
         val userAnswers = producedDocumentUa
           .unsafeSetVal(AddSecurityDetailsPage)(true)
@@ -183,7 +240,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
         result.right.value.value mustBe expectedResult
       }
 
-      "must return List of produced documents when " +
+      "must return List of standard documents when " +
         "AddSecurityDetailsPage is true, " +
         "AddCommercialReferenceNumberPage is false, " +
         "AddCircumstanceIndicatorPage is true and " +
@@ -198,8 +255,8 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
             .sample
             .value
 
-          val producedDoc1 = ProducedDocument("documentType", "documentReference", Some("documentExtraInformation"))
-          val producedDoc2 = ProducedDocument("documentType", "documentReference", None)
+          val producedDoc1 = StandardDocument("documentType", "documentReference", Some("documentExtraInformation"))
+          val producedDoc2 = StandardDocument("documentType", "documentReference", None)
 
           val expectedResult = NonEmptyList(producedDoc1, List(producedDoc2))
 
