@@ -113,10 +113,7 @@ class CircumstanceIndicatorController @Inject() (
     renderer.render(template, json)
   }
 
-  private def updateUserAnswers[A](page: QuestionPage[A], value: A, userAnswers: UserAnswers)(implicit
-    request: DataRequest[AnyContent],
-    writes: Writes[A]
-  ): Future[UserAnswers] =
+  private def updateUserAnswers[A](page: QuestionPage[A], value: A, userAnswers: UserAnswers)(implicit writes: Writes[A]): Future[UserAnswers] =
     for {
       updatedAnswers <- Future.fromTry(userAnswers.set(page, value))
       _              <- sessionRepository.set(updatedAnswers)
@@ -130,17 +127,17 @@ class CircumstanceIndicatorController @Inject() (
         case ("E", Some(_)) =>
           updateUserAnswers(AddPlaceOfUnloadingCodePage, true, userAnswers).map(
             updatedAnswers => Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, updatedAnswers))
-          ) // update flag true
-        case ("E", None)  => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers))) // do nothing
-        case (_, Some(_)) => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers))) // do nothing
+          )
+        case ("E", None)  => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers)))
+        case (_, Some(_)) => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers)))
         case (_, None) =>
           updateUserAnswers(AddPlaceOfUnloadingCodePage, true, userAnswers).map(
             updatedAnswers => Redirect(navigator.nextPage(AddPlaceOfUnloadingCodePage, mode, updatedAnswers))
-          ) // route to place of unloading
-        case _ => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers))) // do nothing
+          )
+        case _ => Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers)))
       }
     } else {
-      Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers))) // do nothing
+      Future.successful(Redirect(navigator.nextPage(CircumstanceIndicatorPage, mode, userAnswers)))
     }
 
 }
