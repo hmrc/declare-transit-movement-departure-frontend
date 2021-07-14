@@ -24,6 +24,21 @@ import uk.gov.hmrc.viewmodels._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def tIRGuaranteeReference: Option[Row] = userAnswers.get(TIRGuaranteeReferencePage) map {
+    answer =>
+      Row(
+        key = Key(msg"tIRGuaranteeReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$answer"),
+        actions = List(
+          Action(
+            content = msg"site.edit",
+            href = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"tIRGuaranteeReference.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
   def loadingPlace: Option[Row] = userAnswers.get(LoadingPlacePage) map {
     answer =>
       Row(

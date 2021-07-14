@@ -54,3 +54,8 @@ GET        /:lrn/goods-summary/change-loading-place                      control
 POST       /:lrn/goods-summary/change-loading-place                     controllers.LoadingPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 
+
+GET        /:lrn/tIRGuaranteeReference                        controllers.TIRGuaranteeReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/tIRGuaranteeReference                        controllers.TIRGuaranteeReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/changeTIRGuaranteeReference                  controllers.TIRGuaranteeReferenceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/changeTIRGuaranteeReference                  controllers.TIRGuaranteeReferenceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
