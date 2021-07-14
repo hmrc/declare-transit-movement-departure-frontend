@@ -65,6 +65,7 @@ case object Scenario4 extends UserAnswerScenario {
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
     .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
     .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
+    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
     /*
      * General Information Section
      * */
@@ -79,7 +80,6 @@ case object Scenario4 extends UserAnswerScenario {
      * RouteDetails
      * */
     .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
     .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
     .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
     .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
@@ -230,7 +230,7 @@ case object Scenario4 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty)
+    Some(NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty))
   )
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))

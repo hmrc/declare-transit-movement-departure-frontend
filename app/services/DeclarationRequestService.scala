@@ -396,7 +396,7 @@ class DeclarationRequestService @Inject() (
       CustomsOfficeDeparture(
         referenceNumber = preTaskList.officeOfDeparture.id
       ),
-      customsOfficeTransit(routeDetails.transitInformation),
+      routeDetails.transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty),
       CustomsOfficeDestination(
         referenceNumber = routeDetails.destinationOffice.id
       ),

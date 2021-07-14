@@ -44,3 +44,8 @@ GET        /:lrn/route/:index/office-of-transit-country                        c
 POST       /:lrn/route/:index/office-of-transit-country                       controllers.routeDetails.OfficeOfTransitCountryController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
 GET        /:lrn/route/:index/change-office-of-transit-country                 controllers.routeDetails.OfficeOfTransitCountryController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
 POST       /:lrn/route/:index/change-office-of-transit-country                  controllers.routeDetails.OfficeOfTransitCountryController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+
+GET        /:lrn/route/add-office-of-transit                        controllers.routeDetails.AddOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/route/add-office-of-transit                        controllers.routeDetails.AddOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/route/change-add-office-of-transit               controllers.routeDetails.AddOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/route/change-add-office-of-transit                  controllers.routeDetails.AddOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)

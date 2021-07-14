@@ -75,6 +75,13 @@ trait UserAnswersEntryGenerators {
 
   self: Generators =>
 
+  implicit lazy val arbitraryAddOfficeOfTransitUserAnswersEntry: Arbitrary[(AddOfficeOfTransitPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[AddOfficeOfTransitPage.type#Data].map(Json.toJson(_))
+      } yield (AddOfficeOfTransitPage, value)
+    }
+
   implicit lazy val arbitraryTIRGuaranteeReferenceUserAnswersEntry: Arbitrary[(TIRGuaranteeReferencePage.type, JsValue)] =
     Arbitrary {
       for {
