@@ -48,8 +48,9 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def guaranteeType(index: Index): Option[Row] = userAnswers.get(GuaranteeTypePage(index)) flatMap {
     answer =>
       val gtName = GuaranteeType.getId(answer.toString)
-      userAnswers.get(DeclarationTypePage).flatMap {
-        case Option4 => None
+
+      (userAnswers.get(DeclarationTypePage), index) match {
+        case (Some(Option4), Index(0)) => None
         case _ =>
           Some(
             Row(
@@ -101,8 +102,8 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def tirLiabilityAmount(index: Index): Option[Row] =
-    (userAnswers.get(DeclarationTypePage), userAnswers.get(LiabilityAmountPage(index))) match {
-      case (Some(Option4), Some(value)) =>
+    (userAnswers.get(DeclarationTypePage), userAnswers.get(LiabilityAmountPage(index)), index) match {
+      case (Some(Option4), Some(value), Index(0)) =>
         Some(
           Row(
             key = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
@@ -169,8 +170,6 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def tirGuaranteeReference(index: Index): Option[Row] = userAnswers.get(TIRGuaranteeReferencePage(index)) map {
     answer =>
-      userAnswers.get(GuaranteeReferencePage(index))
-
       Row(
         key = Key(msg"tirGuaranteeReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
@@ -185,13 +184,21 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def guaranteeRows(index: Index): Option[Row] =
-    userAnswers.get(GuaranteeTypePage(index)).map {
-      answer =>
-        Row(
-          key = Key(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}"),
-          value = Value(lit""),
-          actions = List(
+  def guaranteeRows(index: Index): Option[Row] = {
+
+    def actions(answer: GuaranteeType) =
+      (userAnswers.get(DeclarationTypePage), index) match {
+        case (Some(Option4), Index(0)) =>
+          List(
+            Action(
+              content = msg"site.change",
+              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.id, index).url,
+              visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
+              attributes = Map("id" -> s"""change-guarantee-${index.display}""")
+            )
+          )
+        case _ =>
+          List(
             Action(
               content = msg"site.change",
               href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.id, index).url,
@@ -205,8 +212,17 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
               attributes = Map("id" -> s"""remove-guarantee-${index.display}""")
             )
           )
+      }
+
+    userAnswers.get(GuaranteeTypePage(index)).map {
+      answer =>
+        Row(
+          key = Key(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}"),
+          value = Value(lit""),
+          actions = actions(answer)
         )
     }
+  }
 
   def lrn: LocalReferenceNumber = userAnswers.id
 }
