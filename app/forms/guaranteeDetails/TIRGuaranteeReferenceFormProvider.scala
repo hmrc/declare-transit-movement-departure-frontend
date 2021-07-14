@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package forms.addItems
+package forms.guaranteeDetails
 
-import forms.Constants.tirCarnetReferenceMaxLength
+import forms.Constants.tirGuaranteeReferenceMaxLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
@@ -24,15 +24,15 @@ import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
 import javax.inject.Inject
 
-class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
+class TIRGuaranteeReferenceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("tirCarnetReference.error.required")
+      "value" -> text("tirGuaranteeReference.error.required")
         .verifying(
           StopOnFirstFail[String](
-            maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.length"),
-            regexp(alphaNumericRegex, "tirCarnetReference.error.invalid")
+            maxLength(tirGuaranteeReferenceMaxLength, "tirGuaranteeReference.error.length"),
+            regexp(alphaNumericRegex, "tirGuaranteeReference.error.invalid")
           )
         )
     )
