@@ -21,8 +21,10 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CircumstanceIndicatorFormProvider
 import matchers.JsonMatchers
-import models.{CircumstanceIndicatorList, NormalMode}
+import models.ProcedureType.Normal
+import models.{CheckMode, CircumstanceIndicatorList, NormalMode}
 import models.reference.CircumstanceIndicator
+import models.userAnswerScenarios.Scenario1.UserAnswersSpecHelperOps
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -30,7 +32,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import pages.safetyAndSecurity.CircumstanceIndicatorPage
+import pages.{OfficeOfDeparturePage, ProcedureTypePage}
+import pages.safetyAndSecurity.{CircumstanceIndicatorPage, PlaceOfUnloadingCodePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -60,12 +63,14 @@ class CircumstanceIndicatorControllerSpec
   private val circumstanceIndicatorList: CircumstanceIndicatorList = CircumstanceIndicatorList(
     Seq(
       CircumstanceIndicator("A", "Data1"),
-      CircumstanceIndicator("B", "Data2")
+      CircumstanceIndicator("B", "Data2"),
+      CircumstanceIndicator("E", "Data2")
     )
   )
   private val form = formProvider(circumstanceIndicatorList)
 
-  private lazy val circumstanceIndicatorRoute = routes.CircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url
+  private lazy val circumstanceIndicatorRoute          = routes.CircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url
+  private lazy val circumstanceIndicatorCheckModeRoute = routes.CircumstanceIndicatorController.onPageLoad(lrn, CheckMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -148,15 +153,53 @@ class CircumstanceIndicatorControllerSpec
     }
 
     "must redirect to the next page when valid data is submitted" in {
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
+
+      dataRetrievalWithData(emptyUserAnswers)
+      circumstanceIndicatorList.circumstanceIndicators.foreach {
+        indicator =>
+          val request =
+            FakeRequest(POST, circumstanceIndicatorRoute)
+              .withFormUrlEncodedBody(("value", indicator.code))
+
+          val result = route(app, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+      }
+
+    }
+
+    "must redirect to the next page when valid data is submitted in CheckMode for Indicator E with Unloading Code" in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
+
+      val updatedAnswers = emptyUserAnswers
+        .unsafeSetVal(PlaceOfUnloadingCodePage)("unloadingcode")
+      dataRetrievalWithData(updatedAnswers)
+      val request =
+        FakeRequest(POST, circumstanceIndicatorCheckModeRoute)
+          .withFormUrlEncodedBody(("value", "E"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+    }
+
+    "must redirect to the next page when valid data is submitted in CheckMode for Indicator E with  Unloading Code not set" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       dataRetrievalWithData(emptyUserAnswers)
-
       val request =
-        FakeRequest(POST, circumstanceIndicatorRoute)
-          .withFormUrlEncodedBody(("value", "A"))
+        FakeRequest(POST, circumstanceIndicatorCheckModeRoute)
+          .withFormUrlEncodedBody(("value", "E"))
 
       val result = route(app, request).value
 

@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package forms.addItems
+package forms
 
-import forms.Constants.tirCarnetReferenceMaxLength
+import forms.Constants.tirGuaranteeReferenceMaxLength
 import forms.behaviours.StringFieldBehaviours
+import forms.guaranteeDetails.TIRGuaranteeReferenceFormProvider
 import play.api.data.FormError
 
-class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
+class TIRGuaranteeReferenceFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "tirCarnetReference.error.required"
-  val lengthKey   = "tirCarnetReference.error.length"
-  val invalidKey  = "tirCarnetReference.error.invalid"
-  val maxLength   = tirCarnetReferenceMaxLength
-  val form        = new TIRCarnetReferenceFormProvider()()
+  val requiredKey = "tirGuaranteeReference.error.required"
+  val lengthKey   = "tirGuaranteeReference.error.length"
+  val invalidKey  = "tirGuaranteeReference.error.invalid"
+  val maxLength   = tirGuaranteeReferenceMaxLength
+
+  val form = new TIRGuaranteeReferenceFormProvider()()
 
   ".value" - {
 
@@ -52,6 +54,5 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
     )
 
     behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
-
   }
 }

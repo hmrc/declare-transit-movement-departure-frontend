@@ -640,6 +640,7 @@ guaranteeType.GuaranteeWaivedRedirect = (6) Guarantee waived redirect
 guaranteeType.GuaranteeWaiverByAgreement = (A) Guarantee waiver by agreement
 guaranteeType.GuaranteeWaiverSecured = (5) Guarantee waiver, secured amount not greater than 500 Euros
 guaranteeType.IndividualGuaranteeMultiple = (9) Individual guarantee with multiple usage
+guaranteeType.TIR = (B) TIR
 guaranteeType.checkYourAnswersLabel = Which type of guarantee is being used?
 guaranteeType.error.required = Select which type of guarantee is being used
 
@@ -1448,3 +1449,10 @@ tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
 tirCarnetReference.error.required = Enter the TIR Carnet reference
 tirCarnetReference.error.length = The TIR Carnet reference must be 35 characters or less
 tirCarnetReference.error.invalid = The TIR Carnet reference must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+tirGuaranteeReference.title = What is the reference for the TIR guarantee?
+tirGuaranteeReference.heading = What is the reference for the TIR guarantee?
+tirGuaranteeReference.checkYourAnswersLabel = TIR guarantee reference
+tirGuaranteeReference.error.required = Enter the reference for the TIR guarantee
+tirGuaranteeReference.error.length = The reference for the TIR guarantee must be 35 characters or less
+tirGuaranteeReference.error.invalid = The reference for the TIR guarantee must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces

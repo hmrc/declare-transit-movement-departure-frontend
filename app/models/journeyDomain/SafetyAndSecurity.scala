@@ -117,9 +117,13 @@ object SafetyAndSecurity {
         }
 
     AddSafetyAndSecurityConsignorPage.filterOptionalDependent(identity) {
-      AddSafetyAndSecurityConsignorEoriPage.reader.flatMap {
-        case true  => readEori
-        case false => readAddress
+      (AddCircumstanceIndicatorPage.reader, CircumstanceIndicatorPage.optionalReader, OfficeOfDeparturePage.reader).tupled.flatMap {
+        case (true, Some("E"), CustomsOffice(_, _, CountryCode("XI"), _)) => readEori
+        case _ =>
+          AddSafetyAndSecurityConsignorEoriPage.reader.flatMap {
+            case true  => readEori
+            case false => readAddress
+          }
       }
     }
   }
