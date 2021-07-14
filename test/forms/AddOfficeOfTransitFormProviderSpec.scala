@@ -14,13 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-case object TIRCarnetReferencePage extends QuestionPage[String] {
+class AddOfficeOfTransitFormProviderSpec extends BooleanFieldBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  val requiredKey = "addOfficeOfTransit.error.required"
+  val invalidKey  = "error.boolean"
 
-  override def toString: String = "tIRCarnetReference"
+  val form = new AddOfficeOfTransitFormProvider()()
+
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

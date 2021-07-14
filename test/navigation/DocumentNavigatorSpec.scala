@@ -20,11 +20,10 @@ import base.SpecBase
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.routes
 import generators.Generators
-import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.{CheckMode, DeclarationType, NormalMode}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.DeclarationTypePage
 import pages.addItems._
-import pages.{CountryOfDispatchPage, DeclarationTypePage, OfficeOfDeparturePage}
 import queries.DocumentQuery
 
 class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -94,7 +93,9 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           .nextPage(DocumentReferencePage(index, documentIndex), NormalMode, updatedAnswers)
           .mustBe(routes.AddExtraDocumentInformationController.onPageLoad(updatedAnswers.id, index, documentIndex, NormalMode))
       }
+
       "AddExtraDocumentInformation page must go to" - {
+
         "DocumentExtraInformationPage when user selects 'Yes' " in {
           val updatedAnswers = emptyUserAnswers
             .set(AddExtraDocumentInformationPage(index, documentIndex), true).success.value
@@ -121,6 +122,7 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
       }
 
       "AddAnotherDocument page must go to" - {
+
         "DocumentTypePage when user selects 'Yes'" in {
           val updatedAnswers = emptyUserAnswers
             .set(AddAnotherDocumentPage(index), true).success.value
@@ -164,6 +166,7 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
       }
 
       "Confirm remove Document page must go to" - {
+
         "AddDocument page when user selects 'No'" in {
           val updatedAnswers = emptyUserAnswers
             .set(ConfirmRemoveDocumentPage(index, documentIndex), false).success.value
@@ -180,6 +183,16 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             .mustBe(routes.AddDocumentsController.onPageLoad(updatedAnswers.id, index, NormalMode))
 
         }
+      }
+
+      "TIRCarnetReference page must go to DocumentExtraInformation page" in {
+
+        val updatedAnswers = emptyUserAnswers
+          .set(TIRCarnetReferencePage(index, documentIndex), "test").success.value
+
+        navigator
+          .nextPage(TIRCarnetReferencePage(index, documentIndex), NormalMode, updatedAnswers)
+          .mustBe(routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.id, index, documentIndex, NormalMode))
       }
     }
 
@@ -290,7 +303,17 @@ class DocumentNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
     navigator
       .nextPage(ConfirmRemoveDocumentPage(index, documentIndex), CheckMode, updatedAnswers)
       .mustBe(routes.AddDocumentsController.onPageLoad(updatedAnswers.id, index, CheckMode))
-
   }
+
+  "TIRCarnetReference page must go to DocumentExtraInformation page" in {
+
+    val updatedAnswers = emptyUserAnswers
+      .set(TIRCarnetReferencePage(index, documentIndex), "test").success.value
+
+    navigator
+      .nextPage(TIRCarnetReferencePage(index, documentIndex), CheckMode, updatedAnswers)
+      .mustBe(routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.id, index, documentIndex, CheckMode))
+  }
+
   // format: on
 }

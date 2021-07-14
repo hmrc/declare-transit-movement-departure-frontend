@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.routeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import commonTestUtils.UserAnswersSpecHelper
-import forms.addItems.TIRCarnetReferenceFormProvider
+import forms.AddOfficeOfTransitFormProvider
 import matchers.JsonMatchers
-import models.DeclarationType.{Option1, Option4}
-import models.NormalMode
-import navigation.annotations.Document
+import models.{NormalMode, UserAnswers}
+import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.DeclarationTypePage
-import pages.addItems.TIRCarnetReferencePage
+import pages.AddOfficeOfTransitPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -37,32 +34,27 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import controllers.{routes => mainRoutes}
 
 import scala.concurrent.Future
 
-class TIRCarnetReferenceControllerSpec
-    extends SpecBase
-    with MockNunjucksRendererApp
-    with MockitoSugar
-    with NunjucksSupport
-    with JsonMatchers
-    with UserAnswersSpecHelper {
+class AddOfficeOfTransitControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new TIRCarnetReferenceFormProvider()
+  private val formProvider = new AddOfficeOfTransitFormProvider()
   private val form         = formProvider()
-  private val template     = "tirCarnetReference.njk"
+  private val template     = "addOfficeOfTransit.njk"
 
-  lazy val tirCarnetReferenceRoute = controllers.addItems.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val addOfficeOfTransitRoute = routes.AddOfficeOfTransitController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[RouteDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
-  "TIRCarnetReference Controller" - {
+  "AddOfficeOfTransit Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -71,7 +63,7 @@ class TIRCarnetReferenceControllerSpec
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(GET, tirCarnetReferenceRoute)
+      val request        = FakeRequest(GET, addOfficeOfTransitRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -82,9 +74,10 @@ class TIRCarnetReferenceControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"   -> form,
+        "mode"   -> NormalMode,
+        "lrn"    -> lrn,
+        "radios" -> Radios.yesNo(form("value"))
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -99,10 +92,10 @@ class TIRCarnetReferenceControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage(index, index), "answer").success.value
+      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddOfficeOfTransitPage, true).success.value
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, tirCarnetReferenceRoute)
+      val request        = FakeRequest(GET, addOfficeOfTransitRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -112,12 +105,13 @@ class TIRCarnetReferenceControllerSpec
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "answer"))
+      val filledForm = form.bind(Map("value" -> "true"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"   -> filledForm,
+        "mode"   -> NormalMode,
+        "lrn"    -> lrn,
+        "radios" -> Radios.yesNo(filledForm("value"))
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -127,72 +121,32 @@ class TIRCarnetReferenceControllerSpec
 
     }
 
-    "must redirect to the next page when valid data is submitted when DeclarationType is TIR" in {
-
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(DeclarationTypePage)(Option4)
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      dataRetrievalWithData(userAnswers)
-
-      val request =
-        FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute.url
-
-    }
-
-    "must redirect Session Expired when DeclarationType is not TIR" in {
-
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(DeclarationTypePage)(Option1)
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      dataRetrievalWithData(userAnswers)
-
-      val request =
-        FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
-
-      val result = route(app, request).value
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-    }
-
-    "must redirect Session Expired when DeclarationType is not defined" in {
+    "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       dataRetrievalWithData(emptyUserAnswers)
 
       val request =
-        FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+        FakeRequest(POST, addOfficeOfTransitRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(DeclarationTypePage)(Option4)
-
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(userAnswers)
+      dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(POST, tirCarnetReferenceRoute).withFormUrlEncodedBody(("value", ""))
+      val request        = FakeRequest(POST, addOfficeOfTransitRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
@@ -204,13 +158,16 @@ class TIRCarnetReferenceControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"   -> boundForm,
+        "mode"   -> NormalMode,
+        "lrn"    -> lrn,
+        "radios" -> Radios.yesNo(boundForm("value"))
       )
 
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey
+
       templateCaptor.getValue mustEqual template
-      jsonCaptor.getValue must containJson(expectedJson)
+      jsonWithoutConfig mustBe expectedJson
 
     }
 
@@ -218,13 +175,13 @@ class TIRCarnetReferenceControllerSpec
 
       dataRetrievalNoData()
 
-      val request = FakeRequest(GET, tirCarnetReferenceRoute)
+      val request = FakeRequest(GET, addOfficeOfTransitRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
 
     }
 
@@ -233,14 +190,14 @@ class TIRCarnetReferenceControllerSpec
       dataRetrievalNoData()
 
       val request =
-        FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+        FakeRequest(POST, addOfficeOfTransitRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
 
     }
   }

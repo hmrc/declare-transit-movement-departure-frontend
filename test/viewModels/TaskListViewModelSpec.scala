@@ -659,6 +659,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
     }
 
     val dependantSections = emptyUserAnswers
+      .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("Id", "name", CountryCode("GB"), None))
       // MovementDetails
       .unsafeSetVal(ProcedureTypePage)(Normal)
       .unsafeSetVal(DeclarationTypePage)(Option1)
@@ -1121,6 +1122,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
   "GuaranteeDetails" - {
 
     val dependentSection = emptyUserAnswers
+      .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("Id", "name", CountryCode("GB"), None))
       .unsafeSetVal(AddSecurityDetailsPage)(true)
       .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
       .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))

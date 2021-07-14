@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.Index
-import pages.addItems.TIRCarnetReferencePage
-import pages.behaviours.PageBehaviours
+import javax.inject.Inject
 
-class TIRCarnetReferencePageSpec extends PageBehaviours {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  private val itemIndex     = Index(0)
-  private val documentIndex = Index(0)
+class AddOfficeOfTransitFormProvider @Inject() extends Mappings {
 
-  "TIRCarnetReferencePage" - {
-
-    beRetrievable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
-
-    beSettable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
-
-    beRemovable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("addOfficeOfTransit.error.required")
+    )
 }

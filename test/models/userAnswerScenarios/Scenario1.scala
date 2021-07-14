@@ -60,10 +60,10 @@ import models.journeyDomain.{
   OtherLiabilityAmount,
   PreTaskListDetails,
   PreviousReferences,
-  ProducedDocument,
   RouteDetails,
   SafetyAndSecurity,
   SpecialMentionDomain,
+  StandardDocument,
   TransportDetails
 }
 import models.reference._
@@ -82,6 +82,7 @@ case object Scenario1 extends UserAnswerScenario {
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
     .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
     .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
+    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None))
     /*
      * General Information Section
      * */
@@ -96,7 +97,6 @@ case object Scenario1 extends UserAnswerScenario {
      * RouteDetails
      * */
     .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None))
     .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
     .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
     .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
@@ -312,8 +312,10 @@ case object Scenario1 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
-                 List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
+    Some(
+      NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
+                   List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
+      )
     )
   )
 
@@ -352,8 +354,8 @@ case object Scenario1 extends UserAnswerScenario {
     ),
     producedDocuments = Some(
       NonEmptyList(
-        ProducedDocument("G1D1", "G1D1Ref", Some("G1D1Info")),
-        List(ProducedDocument("G1D2", "G1D2Ref", None))
+        StandardDocument("G1D1", "G1D1Ref", Some("G1D1Info")),
+        List(StandardDocument("G1D2", "G1D2Ref", None))
       )
     ),
     itemSecurityTraderDetails = Some(
@@ -383,7 +385,7 @@ case object Scenario1 extends UserAnswerScenario {
     containers = Some(NonEmptyList(Container("GD2CN1NUM1"), List.empty)),
     specialMentions =
       Some(NonEmptyList(SpecialMentionDomain("GD2S1", "GD2S1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("GB"), None)), List.empty)),
-    producedDocuments = Some(NonEmptyList(ProducedDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
+    producedDocuments = Some(NonEmptyList(StandardDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
     itemSecurityTraderDetails = Some(
       ItemsSecurityTraderDetails(
         Some("U"),

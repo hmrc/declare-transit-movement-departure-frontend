@@ -67,13 +67,47 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "must go from Destination Office Page to Office Of Transit Country page" in {
+        "must go from Destination Office Page to Office Of Transit Country page when not an EU movement eg 'gb' " in {
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
+              val updatedAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
               navigator
-                .nextPage(DestinationOfficePage, NormalMode, answers)
-                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(answers.id, index, NormalMode))
+                .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
+                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.id, index, NormalMode))
+          }
+        }
+
+        "must go from Destination Office Page to Add Office Of Transit page when an EU movement eg'NI' " in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+              navigator
+                .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
+                .mustBe(routes.AddOfficeOfTransitController.onPageLoad(updatedAnswers.id, NormalMode))
+          }
+        }
+
+        "must go from Add Office Of Transit page to Transit Country Page when user selects 'Yes' " in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers.unsafeSetVal(AddOfficeOfTransitPage)(true)
+              navigator
+                .nextPage(AddOfficeOfTransitPage, NormalMode, updatedAnswers)
+                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.id, index, NormalMode))
+          }
+        }
+
+        "must go from Add Office Of Transit page to CYA Page when user selects 'Yes' " in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers.unsafeSetVal(AddOfficeOfTransitPage)(false)
+              navigator
+                .nextPage(AddOfficeOfTransitPage, NormalMode, updatedAnswers)
+                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
           }
         }
 
@@ -281,7 +315,30 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
               .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
 
         }
+      }
 
+      "Must go from Add Office of Transit to Route Details Check Your Answers when user selects 'No' " in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeSetVal(AddOfficeOfTransitPage)(false)
+            navigator
+              .nextPage(AddOfficeOfTransitPage, CheckMode, updatedAnswers)
+              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+
+        }
+      }
+
+      "Must go from Add Office of Transit to OfficeOfTransitCountry page when user selects 'Yes' " in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeSetVal(AddOfficeOfTransitPage)(true)
+            navigator
+              .nextPage(AddOfficeOfTransitPage, CheckMode, updatedAnswers)
+              .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.id, Index(0), CheckMode))
+
+        }
       }
 
       "Must go from Office Of Transit Country to Add Another Transit Office" in {

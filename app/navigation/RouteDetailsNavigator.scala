@@ -33,7 +33,8 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     case MovementDestinationCountryPage =>
       ua => Some(routes.DestinationOfficeController.onPageLoad(ua.id, NormalMode))
     case DestinationOfficePage =>
-      ua => Some(routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), NormalMode))
+      ua => Some(destinationOfficeRoute(ua, NormalMode))
+    case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, NormalMode))
     case OfficeOfTransitCountryPage(index) =>
       ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, NormalMode))
     case AddAnotherTransitOfficePage(index) =>
@@ -54,9 +55,25 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
       ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, CheckMode))
     case page if isRouteDetailsSectionPage(page) =>
       ua => Some(routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id))
+    case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, CheckMode))
     case _ =>
       _ => None
   }
+
+  def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =
+    (ua.get(AddOfficeOfTransitPage), mode) match {
+      case (Some(true), NormalMode) => routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), NormalMode)
+      case (Some(true), CheckMode)  => routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), CheckMode)
+      case (Some(false), _)         => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id)
+
+    }
+
+  def destinationOfficeRoute(ua: UserAnswers, mode: Mode) =
+    ua.get(OfficeOfDeparturePage) match {
+      case Some(x) if x.countryId.code.startsWith("XI") => routes.AddOfficeOfTransitController.onPageLoad(ua.id, mode)
+      case _                                            => routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), mode)
+
+    }
 
   def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =
     ua.get(AddSecurityDetailsPage) match {

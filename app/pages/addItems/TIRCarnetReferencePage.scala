@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package pages.addItems
 
 import models.Index
-import pages.addItems.TIRCarnetReferencePage
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import queries.Constants.{documents, items}
 
-class TIRCarnetReferencePageSpec extends PageBehaviours {
+case class TIRCarnetReferencePage(itemIndex: Index, documentIndex: Index) extends QuestionPage[String] {
 
-  private val itemIndex     = Index(0)
-  private val documentIndex = Index(0)
+  override def path: JsPath = JsPath \ items \ itemIndex.position \ documents \ documentIndex.position \ toString
 
-  "TIRCarnetReferencePage" - {
-
-    beRetrievable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
-
-    beSettable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
-
-    beRemovable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
-  }
+  override def toString: String = "tirCarnetReference"
 }

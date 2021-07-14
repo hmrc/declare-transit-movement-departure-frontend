@@ -23,6 +23,7 @@ import controllers.addItems.securityDetails.{routes => securityDetailsRoutes}
 import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
 import controllers.addItems.traderSecurityDetails.{routes => tradersSecurityDetailsRoutes}
 import models._
+import models.reference.DocumentType
 import pages.addItems._
 import pages.addItems.containers._
 import pages.addItems.securityDetails._
@@ -87,9 +88,22 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
       answer =>
         documentType.getDocumentType(answer) map {
-          documentType =>
+          case DocumentType("952", description, _) => // TODO move to constant
             Row(
-              key = Key(lit"(${documentType.code}) ${documentType.description}"),
+              key = Key(lit"(952) $description"),
+              value = Value(lit""),
+              actions = List(
+                Action(
+                  content = msg"site.change",
+                  href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
+                  visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(answer)),
+                  attributes = Map("id" -> s"""change-document-${index.display}""")
+                )
+              )
+            )
+          case DocumentType(code, description, _) =>
+            Row(
+              key = Key(lit"($code) $description"),
               value = Value(lit""),
               actions = List(
                 Action(

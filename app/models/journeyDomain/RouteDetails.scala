@@ -30,7 +30,7 @@ final case class RouteDetails(
   countryOfDispatch: CountryOfDispatch,
   destinationCountry: CountryCode,
   destinationOffice: CustomsOffice,
-  transitInformation: NonEmptyList[TransitInformation]
+  transitInformation: Option[NonEmptyList[TransitInformation]]
 )
 
 object RouteDetails {
@@ -42,31 +42,39 @@ object RouteDetails {
 
   object TransitInformation {
 
-    implicit val readSeqTransitInformation: UserAnswersReader[NonEmptyList[TransitInformation]] =
-      AddSecurityDetailsPage.reader
-        .flatMap {
-          addSecurityDetailsFlag =>
-            if (addSecurityDetailsFlag) {
-              DeriveNumberOfOfficeOfTransits.mandatoryNonEmptyListReader.flatMap {
-                _.zipWithIndex.traverse({
-                  case (_, index) =>
-                    (
-                      AddAnotherTransitOfficePage(Index(index)).reader,
-                      ArrivalTimesAtOfficePage(Index(index)).reader
-                    ).tupled.map {
-                      case (office, time) => TransitInformation(office, Some(time))
-                    }
-                })
-              }
-            } else {
-              DeriveNumberOfOfficeOfTransits.mandatoryNonEmptyListReader.flatMap {
-                _.zipWithIndex.traverse({
-                  case (_, index) =>
-                    AddAnotherTransitOfficePage(Index(index)).reader.map(TransitInformation(_, None))
-                })
-              }
+    private def addOfficeOfTransit = AddSecurityDetailsPage.reader
+      .flatMap {
+        addSecurityDetailsFlag =>
+          if (addSecurityDetailsFlag) {
+            DeriveNumberOfOfficeOfTransits.mandatoryNonEmptyListReader.flatMap {
+              _.zipWithIndex.traverse({
+                case (_, index) =>
+                  (
+                    AddAnotherTransitOfficePage(Index(index)).reader,
+                    ArrivalTimesAtOfficePage(Index(index)).reader
+                  ).tupled.map {
+                    case (office, time) => TransitInformation(office, Some(time))
+                  }
+              })
             }
-        }
+          } else {
+            DeriveNumberOfOfficeOfTransits.mandatoryNonEmptyListReader.flatMap {
+              _.zipWithIndex.traverse({
+                case (_, index) =>
+                  AddAnotherTransitOfficePage(Index(index)).reader.map(TransitInformation(_, None))
+              })
+            }
+          }
+      }
+
+    implicit val readSeqTransitInformation: UserAnswersReader[Option[NonEmptyList[TransitInformation]]] =
+      OfficeOfDeparturePage.reader.flatMap {
+        case c if c.countryId.code.toUpperCase == "XI" =>
+          AddOfficeOfTransitPage.filterOptionalDependent(identity) {
+            addOfficeOfTransit
+          }
+        case _ => addOfficeOfTransit.map(Some.apply)
+      }
   }
 
   implicit val makeSimplifiedMovementDetails: UserAnswersReader[RouteDetails] =
@@ -74,6 +82,6 @@ object RouteDetails {
       CountryOfDispatchPage.reader,
       DestinationCountryPage.reader,
       DestinationOfficePage.reader,
-      UserAnswersReader[NonEmptyList[TransitInformation]]
+      UserAnswersReader[Option[NonEmptyList[TransitInformation]]]
     ).tupled.map((RouteDetails.apply _).tupled)
 }

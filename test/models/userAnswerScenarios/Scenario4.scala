@@ -44,10 +44,10 @@ import models.journeyDomain.{
   OtherLiabilityAmount,
   PreTaskListDetails,
   PreviousReferences,
-  ProducedDocument,
   RouteDetails,
   SafetyAndSecurity,
   SpecialMentionDomain,
+  StandardDocument,
   TransportDetails
 }
 import models.reference._
@@ -65,6 +65,7 @@ case object Scenario4 extends UserAnswerScenario {
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
     .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
     .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
+    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
     /*
      * General Information Section
      * */
@@ -79,7 +80,6 @@ case object Scenario4 extends UserAnswerScenario {
      * RouteDetails
      * */
     .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None))
     .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
     .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
     .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
@@ -230,7 +230,7 @@ case object Scenario4 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty)
+    Some(NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty))
   )
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
@@ -269,7 +269,7 @@ case object Scenario4 extends UserAnswerScenario {
           List(SpecialMentionDomain("GD1S2", "GD1S2Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("CC"), None)))
         )
       ),
-      Some(NonEmptyList(ProducedDocument("G1D1", "G1D1Ref", Some("G1D1Info")), List(ProducedDocument("G1D2", "G1D2Ref", None)))),
+      Some(NonEmptyList(StandardDocument("G1D1", "G1D1Ref", Some("G1D1Info")), List(StandardDocument("G1D2", "G1D2Ref", None)))),
       Some(ItemsSecurityTraderDetails(Some("W"), None, Some("GD1C"), None, None)),
       Some(NonEmptyList(PreviousReferences("GD1PR1", "GD1PR1Ref", Some("GD1PR1Info")), List(PreviousReferences("GD1PR2", "GD1PR2Ref", None))))
     ),

@@ -16,21 +16,16 @@
 
 package pages
 
-import models.Index
-import pages.addItems.TIRCarnetReferencePage
 import pages.behaviours.PageBehaviours
 
-class TIRCarnetReferencePageSpec extends PageBehaviours {
+class AddOfficeOfTransitPageSpec extends PageBehaviours {
 
-  private val itemIndex     = Index(0)
-  private val documentIndex = Index(0)
+  "AddOfficeOfTransitPage" - {
 
-  "TIRCarnetReferencePage" - {
+    beRetrievable[Boolean](AddOfficeOfTransitPage)
 
-    beRetrievable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
+    beSettable[Boolean](AddOfficeOfTransitPage)
 
-    beSettable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
-
-    beRemovable[String](TIRCarnetReferencePage(itemIndex, documentIndex))
+    beRemovable[Boolean](AddOfficeOfTransitPage)
   }
 }

@@ -14,34 +14,33 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.routeDetails
 
 import controllers.actions._
-import forms.DeclarationTypeFormProvider
-import models.{DeclarationType, Index, LocalReferenceNumber, Mode}
+import forms.AddOfficeOfTransitFormProvider
+import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.PreTaskListDetails
-import pages.DeclarationTypePage
-import pages.addItems.DocumentTypePage
+import navigation.annotations.RouteDetails
+import pages.AddOfficeOfTransitPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclarationTypeController @Inject() (
+class AddOfficeOfTransitController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @PreTaskListDetails navigator: Navigator,
+  @RouteDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: DeclarationTypeFormProvider,
+  formProvider: AddOfficeOfTransitFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,11 +48,12 @@ class DeclarationTypeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form     = formProvider()
+  private val template = "addOfficeOfTransit.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(DeclarationTypePage) match {
+      val preparedForm = request.userAnswers.get(AddOfficeOfTransitPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -62,10 +62,10 @@ class DeclarationTypeController @Inject() (
         "form"   -> preparedForm,
         "mode"   -> mode,
         "lrn"    -> lrn,
-        "radios" -> DeclarationType.radios(preparedForm, request.userAnswers)()
+        "radios" -> Radios.yesNo(preparedForm("value"))
       )
 
-      renderer.render("declarationType.njk", json).map(Ok(_))
+      renderer.render(template, json).map(Ok(_))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -79,16 +79,16 @@ class DeclarationTypeController @Inject() (
               "form"   -> formWithErrors,
               "mode"   -> mode,
               "lrn"    -> lrn,
-              "radios" -> DeclarationType.radios(formWithErrors, request.userAnswers)()
+              "radios" -> Radios.yesNo(formWithErrors("value"))
             )
 
-            renderer.render("declarationType.njk", json).map(BadRequest(_))
+            renderer.render(template, json).map(BadRequest(_))
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationTypePage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(AddOfficeOfTransitPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(DeclarationTypePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(AddOfficeOfTransitPage, mode, updatedAnswers))
         )
   }
 }
