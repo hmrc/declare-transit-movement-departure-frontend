@@ -16,11 +16,13 @@
 
 package pages
 
+import models.Index
 import play.api.libs.json.JsPath
+import queries.Constants.guarantees
 
-case object TIRGuaranteeReferencePage extends QuestionPage[String] {
+case class TIRGuaranteeReferencePage(index: Index) extends QuestionPage[String] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ guarantees \ index.position \ toString
 
-  override def toString: String = "tIRGuaranteeReference"
+  override def toString: String = "tirGuaranteeReference"
 }

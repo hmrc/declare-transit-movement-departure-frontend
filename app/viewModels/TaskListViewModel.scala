@@ -19,6 +19,7 @@ package viewModels
 import cats.data.NonEmptyList
 import cats.implicits._
 import controllers.movementDetails.routes
+import models.DeclarationType.Option4
 import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.traderDetails.TraderDetails
@@ -173,6 +174,19 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage))
       )
 
+  private val guaranteeDetailsInProgressReader =
+    DeclarationTypePage.reader.map {
+      case Option4 => TIRGuaranteeReferencePage(Index(0)).reader
+      case _       => GuaranteeTypePage(Index(0)).reader
+    }
+
+  private def guaranteeDetailsStartPage(userAnswers: UserAnswers) =
+    userAnswers.get(DeclarationTypePage) match {
+      case Some(Option4) => controllers.guaranteeDetails.routes.TIRGuaranteeReferenceController.onPageLoad(lrn, Index(0), NormalMode).url
+      case Some(_)       => controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(lrn, Index(0), NormalMode).url
+      case None          => controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
   private val guaranteeDetails =
     taskListDsl
       .sectionName("declarationSummary.section.guarantee")
@@ -182,10 +196,10 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
       )
       .ifInProgress(
-        GuaranteeTypePage(Index(0)).reader,
-        controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(lrn, Index(0), NormalMode).url
+        guaranteeDetailsInProgressReader,
+        guaranteeDetailsStartPage(userAnswers)
       )
-      .ifNotStarted(controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(lrn, Index(0), NormalMode).url)
+      .ifNotStarted(guaranteeDetailsStartPage(userAnswers))
 
   private val safetyAndSecurityDetails =
     userAnswers

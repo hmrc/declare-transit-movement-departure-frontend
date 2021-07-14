@@ -20,7 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import generators.{ModelGenerators, UserAnswersGenerator}
-import models.DeclarationType.Option1
+import models.DeclarationType.{Option1, Option2, Option4}
 import models.ProcedureType.{Normal, Simplified}
 import models.RepresentativeCapacity.Direct
 import models.journeyDomain.{GoodsSummary, MovementDetails, PreviousReferences, UserAnswersReader}
@@ -1152,14 +1152,27 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           viewModel.getStatus(guaranteeSectionName).value mustEqual Status.NotStarted
         }
 
-        "is InProgress when the first question for the section has been answered" in {
+        "is InProgress when the first question for the section has been answered for TIR declaration" in {
 
-          val updatedUserAnswers = dependentSection.unsafeSetVal(GuaranteeTypePage(index))(GuaranteeType.GuaranteeWaiver)
+          val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option4)
+            .unsafeSetVal(TIRGuaranteeReferencePage(index))("TIRGuarantee")
 
           val viewModel = TaskListViewModel(updatedUserAnswers)
 
           viewModel.getStatus(guaranteeSectionName).value mustEqual Status.InProgress
 
+        }
+
+        "is InProgress when the first question for the section has been answered for non TIR declaration" in {
+
+          val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option2)
+            .unsafeSetVal(GuaranteeTypePage(index))(GuaranteeType.GuaranteeWaiver)
+
+          val viewModel = TaskListViewModel(updatedUserAnswers)
+
+          viewModel.getStatus(guaranteeSectionName).value mustEqual Status.InProgress
         }
 
         "is Completed when all the answers are completed for the first Item" in {
@@ -1189,17 +1202,46 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
       "when dependent section is complete" - {
 
-        "when the status is Not started, links to the first page" in {
+        "when the status is Not started, links to the first page for TIR declaration" in {
 
-          val viewModel = TaskListViewModel(dependentSection)
+          val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option4)
+
+          val viewModel = TaskListViewModel(updatedUserAnswers)
+
+          val expectedHref: String = controllers.guaranteeDetails.routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, NormalMode).url
+
+          viewModel.getHref(guaranteeSectionName).value mustEqual expectedHref
+        }
+
+        "when the status is Not started, links to the first page for non TIR declaration" in {
+
+          val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option2)
+
+          val viewModel = TaskListViewModel(updatedUserAnswers)
 
           val expectedHref: String = controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(lrn, index, NormalMode).url
 
           viewModel.getHref(guaranteeSectionName).value mustEqual expectedHref
         }
 
-        "when the status is InProgress, links to the first page" in {
-          val updatedUserAnswers = dependentSection.unsafeSetVal(GuaranteeTypePage(index))(GuaranteeType.GuaranteeWaiver)
+        "when the status is InProgress, links to the first page for TIR declaration" in {
+          val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option4)
+            .unsafeSetVal(GuaranteeTypePage(index))(GuaranteeType.GuaranteeWaiver)
+
+          val viewModel = TaskListViewModel(updatedUserAnswers)
+
+          val expectedHref: String = controllers.guaranteeDetails.routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, NormalMode).url
+
+          viewModel.getHref(guaranteeSectionName).value mustEqual expectedHref
+        }
+
+        "when the status is InProgress, links to the first page for non TIR declaration" in {
+          val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option2)
+            .unsafeSetVal(GuaranteeTypePage(index))(GuaranteeType.GuaranteeWaiver)
 
           val viewModel = TaskListViewModel(updatedUserAnswers)
 

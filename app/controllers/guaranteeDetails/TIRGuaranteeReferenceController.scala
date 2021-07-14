@@ -53,7 +53,7 @@ class TIRGuaranteeReferenceController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(TIRGuaranteeReferencePage) match {
+      val preparedForm = request.userAnswers.get(TIRGuaranteeReferencePage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -84,9 +84,9 @@ class TIRGuaranteeReferenceController @Inject() (
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRGuaranteeReferencePage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRGuaranteeReferencePage(index), value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TIRGuaranteeReferencePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(TIRGuaranteeReferencePage(index), mode, updatedAnswers))
         )
   }
 }

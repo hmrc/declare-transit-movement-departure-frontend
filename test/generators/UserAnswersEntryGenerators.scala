@@ -75,13 +75,6 @@ trait UserAnswersEntryGenerators {
 
   self: Generators =>
 
-  implicit lazy val arbitraryTIRGuaranteeReferenceUserAnswersEntry: Arbitrary[(TIRGuaranteeReferencePage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[TIRGuaranteeReferencePage.type#Data].map(Json.toJson(_))
-      } yield (TIRGuaranteeReferencePage, value)
-    }
-
   implicit lazy val arbitraryPrincipalTirHolderIdPageUserAnswersEntry: Arbitrary[(PrincipalTirHolderIdPage.type, JsValue)] =
     Arbitrary {
       for {
@@ -269,6 +262,13 @@ trait UserAnswersEntryGenerators {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
       } yield (CountryOfRoutingPage(Index(0)), value)
+    }
+
+  implicit lazy val arbitraryTIRGuaranteeReferenceUserAnswersEntry: Arbitrary[(TIRGuaranteeReferencePage, JsValue)] =
+    Arbitrary {
+      for {
+        value <- nonEmptyString.map(Json.toJson(_))
+      } yield (TIRGuaranteeReferencePage(Index(0)), value)
     }
 
   implicit lazy val arbitraryPlaceOfUnloadingCodeUserAnswersEntry: Arbitrary[(PlaceOfUnloadingCodePage.type, JsValue)] =
