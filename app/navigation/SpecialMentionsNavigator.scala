@@ -18,15 +18,16 @@ package navigation
 
 import controllers.addItems.specialMentions.routes
 import controllers.addItems.{routes => addItemRoutes}
-import controllers.{routes => mainRoutes}
 import derivable.{DeriveNumberOfDocuments, DeriveNumberOfSpecialMentions}
-import javax.inject.{Inject, Singleton}
+import models.DeclarationType.Option4
 import models.reference.CircumstanceIndicator
 import models.{CheckMode, Index, Mode, NormalMode, UserAnswers}
 import pages.addItems.specialMentions._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
-import pages.{AddSecurityDetailsPage, Page}
+import pages.{AddSecurityDetailsPage, DeclarationTypePage, Page}
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class SpecialMentionsNavigator @Inject() () extends Navigator {
@@ -117,14 +118,20 @@ class SpecialMentionsNavigator @Inject() () extends Navigator {
       case _                  => None
     }
 
-  private def documentsJourney(userAnswers: UserAnswers, itemIndex: Index, mode: Mode): Option[Call] =
-    showDocumentTypePage(userAnswers, itemIndex) match {
-      case Some(true) =>
-        val index = userAnswers.get(DeriveNumberOfDocuments(itemIndex)).getOrElse(0)
-        Some(addItemRoutes.DocumentTypeController.onPageLoad(userAnswers.id, itemIndex, Index(index), mode))
-      case Some(false) => Some(addItemRoutes.AddDocumentsController.onPageLoad(userAnswers.id, itemIndex, mode))
-      case None        => Some(mainRoutes.SessionExpiredController.onPageLoad())
+  private def documentsJourney(userAnswers: UserAnswers, itemIndex: Index, mode: Mode): Option[Call] = {
+
+    val documentIndex = Index(userAnswers.get(DeriveNumberOfDocuments(itemIndex)).getOrElse(0))
+
+    userAnswers.get(DeclarationTypePage).flatMap {
+      case Option4 if itemIndex.position == 0 && documentIndex.position == 0 =>
+        Some(addItemRoutes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, itemIndex, documentIndex, mode))
+      case _ =>
+        showDocumentTypePage(userAnswers, itemIndex).map {
+          case true  => addItemRoutes.DocumentTypeController.onPageLoad(userAnswers.id, itemIndex, documentIndex, mode)
+          case false => addItemRoutes.AddDocumentsController.onPageLoad(userAnswers.id, itemIndex, mode)
+        }
     }
+  }
 
   private def removeSpecialMentionPage(): PartialFunction[Page, UserAnswers => Option[Call]] = {
     case RemoveSpecialMentionPage(itemIndex, _) =>

@@ -89,13 +89,6 @@ trait UserAnswersEntryGenerators {
       } yield (PrincipalTirHolderIdPage, value)
     }
 
-  implicit lazy val arbitraryTIRCarnetReferenceUserAnswersEntry: Arbitrary[(TIRCarnetReferencePage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[TIRCarnetReferencePage.type#Data].map(Json.toJson(_))
-      } yield (TIRCarnetReferencePage, value)
-    }
-
   implicit lazy val arbitraryAgreedLocationOfGoodsUserAnswersEntry: Arbitrary[(AgreedLocationOfGoodsPage.type, JsValue)] =
     Arbitrary {
       for {
@@ -550,6 +543,13 @@ trait UserAnswersEntryGenerators {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
       } yield (ExtraInformationPage(Index(0), Index(0)), value)
+    }
+
+  implicit lazy val arbitraryTIRCarnetReferenceUserAnswersEntry: Arbitrary[(TIRCarnetReferencePage, JsValue)] =
+    Arbitrary {
+      for {
+        value <- nonEmptyString.map(Json.toJson(_))
+      } yield (TIRCarnetReferencePage(Index(0), Index(0)), value)
     }
 
   implicit lazy val arbitraryConfirmRemoveItemUserAnswersEntry: Arbitrary[(ConfirmRemoveItemPage.type, JsValue)] =
