@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-object Constants {
+import pages.behaviours.PageBehaviours
 
-  lazy val maxLengthEoriNumber: Int       = 17
-  lazy val vehicleIdMaxLength             = 27
-  lazy val consigneeNameMaxLength: Int    = 35
-  lazy val addressMaxLength: Int          = 35
-  lazy val loadingPlaceMaxLength: Int     = 35
-  lazy val maxLengthAgreedLocationOfGoods = 35
-  lazy val tirCarnetReferenceMaxLength    = 35
-  lazy val tirGuaranteeReferenceMaxLength = 35
-  lazy val addressRegex: String           = "^[a-zA-Z0-9/@?%,.\\- ]*$"
+class TIRGuaranteeReferencePageSpec extends PageBehaviours {
 
+  "TIRGuaranteeReferencePage" - {
+
+    beRetrievable[String](TIRGuaranteeReferencePage)
+
+    beSettable[String](TIRGuaranteeReferencePage)
+
+    beRemovable[String](TIRGuaranteeReferencePage)
+  }
 }

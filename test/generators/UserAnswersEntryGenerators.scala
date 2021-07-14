@@ -82,6 +82,13 @@ trait UserAnswersEntryGenerators {
       } yield (AddOfficeOfTransitPage, value)
     }
 
+  implicit lazy val arbitraryTIRGuaranteeReferenceUserAnswersEntry: Arbitrary[(TIRGuaranteeReferencePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[TIRGuaranteeReferencePage.type#Data].map(Json.toJson(_))
+      } yield (TIRGuaranteeReferencePage, value)
+    }
+
   implicit lazy val arbitraryPrincipalTirHolderIdPageUserAnswersEntry: Arbitrary[(PrincipalTirHolderIdPage.type, JsValue)] =
     Arbitrary {
       for {

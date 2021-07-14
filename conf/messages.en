@@ -1453,3 +1453,10 @@ addOfficeOfTransit.title = Do you need to add an office of transit?
 addOfficeOfTransit.heading = Do you need to add an office of transit?
 addOfficeOfTransit.checkYourAnswersLabel = Do you need to add an office of transit?
 addOfficeOfTransit.error.required = Select yes if you need to add an office of transit
+
+tirGuaranteeReference.title = What is the reference for the TIR guarantee?
+tirGuaranteeReference.heading = What is the reference for the TIR guarantee?
+tirGuaranteeReference.checkYourAnswersLabel = TIR guarantee reference
+tirGuaranteeReference.error.required = Enter the reference for the TIR guarantee
+tirGuaranteeReference.error.length = The reference for the TIR guarantee must be 35 characters or less
+tirGuaranteeReference.error.invalid = The reference for the TIR guarantee must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
