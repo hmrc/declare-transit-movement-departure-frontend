@@ -24,7 +24,8 @@ object Constants {
   lazy val addressMaxLength: Int          = 35
   lazy val loadingPlaceMaxLength: Int     = 35
   lazy val maxLengthAgreedLocationOfGoods = 35
-  lazy val tirCarnetReferencMaxLength     = 35
+  lazy val tirCarnetReferenceMaxLength    = 35
+  lazy val tirGuaranteeReferenceMaxLength = 35
   lazy val addressRegex: String           = "^[a-zA-Z0-9/@?%,.\\- ]*$"
 
 }

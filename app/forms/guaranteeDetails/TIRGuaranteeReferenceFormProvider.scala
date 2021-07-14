@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-package forms
+package forms.guaranteeDetails
+
+import forms.Constants.tirGuaranteeReferenceMaxLength
+import forms.mappings.Mappings
+import models.domain.StringFieldRegex.alphaNumericRegex
+import play.api.data.Form
+import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
 import javax.inject.Inject
-
-import forms.mappings.Mappings
-import play.api.data.Form
 
 class TIRGuaranteeReferenceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("tIRGuaranteeReference.error.required")
-        .verifying(maxLength(35, "tIRGuaranteeReference.error.length"))
+      "value" -> text("tirGuaranteeReference.error.required")
+        .verifying(
+          StopOnFirstFail[String](
+            maxLength(tirGuaranteeReferenceMaxLength, "tirGuaranteeReference.error.length"),
+            regexp(alphaNumericRegex, "tirGuaranteeReference.error.invalid")
+          )
+        )
     )
 }

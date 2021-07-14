@@ -16,14 +16,17 @@
 
 package forms
 
+import forms.Constants.tirGuaranteeReferenceMaxLength
 import forms.behaviours.StringFieldBehaviours
+import forms.guaranteeDetails.TIRGuaranteeReferenceFormProvider
 import play.api.data.FormError
 
 class TIRGuaranteeReferenceFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "tIRGuaranteeReference.error.required"
-  val lengthKey   = "tIRGuaranteeReference.error.length"
-  val maxLength   = 35
+  val requiredKey = "tirGuaranteeReference.error.required"
+  val lengthKey   = "tirGuaranteeReference.error.length"
+  val invalidKey  = "tirGuaranteeReference.error.invalid"
+  val maxLength   = tirGuaranteeReferenceMaxLength
 
   val form = new TIRGuaranteeReferenceFormProvider()()
 
@@ -49,5 +52,7 @@ class TIRGuaranteeReferenceFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
   }
 }

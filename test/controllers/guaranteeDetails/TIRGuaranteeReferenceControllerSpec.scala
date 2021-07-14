@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.guaranteeDetails
 
-import base.SpecBase
-import base.MockNunjucksRendererApp
+import base.{MockNunjucksRendererApp, SpecBase}
+import forms.guaranteeDetails.TIRGuaranteeReferenceFormProvider
 import matchers.JsonMatchers
-import forms.TIRGuaranteeReferenceFormProvider
-import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import models.NormalMode
 import navigation.annotations.GuaranteeDetails
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -30,12 +29,11 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.TIRGuaranteeReferencePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, JsString, Json}
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import repositories.SessionRepository
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -46,9 +44,9 @@ class TIRGuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRend
 
   private val formProvider = new TIRGuaranteeReferenceFormProvider()
   private val form         = formProvider()
-  private val template     = "views/tIRGuaranteeReference.njk"
+  private val template     = "tirGuaranteeReference.njk"
 
-  lazy val tIRGuaranteeReferenceRoute = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, NormalMode).url
+  lazy val tIRGuaranteeReferenceRoute = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -176,7 +174,7 @@ class TIRGuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRend
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
     }
 
@@ -192,7 +190,7 @@ class TIRGuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRend
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
     }
   }

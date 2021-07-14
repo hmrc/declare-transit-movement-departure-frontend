@@ -16,7 +16,7 @@
 
 package forms.addItems
 
-import forms.Constants.tirCarnetReferencMaxLength
+import forms.Constants.tirCarnetReferenceMaxLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
@@ -31,7 +31,7 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
       "value" -> text("tirCarnetReference.error.required")
         .verifying(
           StopOnFirstFail[String](
-            maxLength(tirCarnetReferencMaxLength, "tirCarnetReference.error.length"),
+            maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.length"),
             regexp(alphaNumericRegex, "tirCarnetReference.error.invalid")
           )
         )

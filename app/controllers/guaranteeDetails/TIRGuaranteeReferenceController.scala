@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.guaranteeDetails
 
 import controllers.actions._
-import forms.TIRGuaranteeReferenceFormProvider
-import javax.inject.Inject
-import models.{LocalReferenceNumber, Mode}
+import forms.guaranteeDetails.TIRGuaranteeReferenceFormProvider
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
 import pages.TIRGuaranteeReferencePage
@@ -31,6 +30,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TIRGuaranteeReferenceController @Inject() (
@@ -49,9 +49,9 @@ class TIRGuaranteeReferenceController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "tIRGuaranteeReference.njk"
+  private val template = "tirGuaranteeReference.njk"
 
-  def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       val preparedForm = request.userAnswers.get(TIRGuaranteeReferencePage) match {
         case None        => form
@@ -67,7 +67,7 @@ class TIRGuaranteeReferenceController @Inject() (
       renderer.render(template, json).map(Ok(_))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
