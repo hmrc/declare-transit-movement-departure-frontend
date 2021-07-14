@@ -368,32 +368,15 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
     "From TIRGuaranteeReferencePage" - {
 
-      "to CYA if other liability amount and access code exists" in {
+      "to CYA" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers: UserAnswers = answers
               .set(TIRGuaranteeReferencePage(index), "125678901234567").success.value
-              .set(LiabilityAmountPage(index), "1").success.value
-              .set(AccessCodePage(index), "1111").success.value
 
             navigator
               .nextPage(TIRGuaranteeReferencePage(index), CheckMode, updatedAnswers)
               .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
-        }
-      }
-
-      "to AccessCodePage when no access code exists but liability amount exists" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-
-            val updatedAnswers: UserAnswers = answers
-              .set(TIRGuaranteeReferencePage(index), "test").success.value
-              .set(LiabilityAmountPage(index), "1").success.value
-              .remove(AccessCodePage(index)).success.value
-
-            navigator
-              .nextPage(TIRGuaranteeReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.id, index, CheckMode))
         }
       }
     }

@@ -174,10 +174,10 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         goodsSummaryStartPage(userAnswers.get(ProcedureTypePage), userAnswers.get(AddSecurityDetailsPage), userAnswers.get(PreLodgeDeclarationPage))
       )
 
-  private val guaranteeDetailsInProgressReader =
-    DeclarationTypePage.reader.map {
-      case Option4 => TIRGuaranteeReferencePage(Index(0)).reader
-      case _       => GuaranteeTypePage(Index(0)).reader
+  private def guaranteeDetailsInProgressReader(userAnswers: UserAnswers) =
+    userAnswers.get(DeclarationTypePage) match {
+      case Some(Option4) => TIRGuaranteeReferencePage(Index(0)).reader
+      case _             => GuaranteeTypePage(Index(0)).reader
     }
 
   private def guaranteeDetailsStartPage(userAnswers: UserAnswers) =
@@ -196,7 +196,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
       )
       .ifInProgress(
-        guaranteeDetailsInProgressReader,
+        guaranteeDetailsInProgressReader(userAnswers),
         guaranteeDetailsStartPage(userAnswers)
       )
       .ifNotStarted(guaranteeDetailsStartPage(userAnswers))

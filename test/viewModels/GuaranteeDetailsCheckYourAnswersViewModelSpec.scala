@@ -75,24 +75,6 @@ class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaC
 
     }
 
-    "display TIR Liability amount number when selected" in {
-
-      val updatedAnswers = emptyUserAnswers
-        .set(DeclarationTypePage, Option4)
-        .success
-        .value
-        .set(LiabilityAmountPage(index), "123")
-        .success
-        .value
-
-      val data = GuaranteeDetailsCheckYourAnswersViewModel(updatedAnswers, Index(0))
-
-      data.sections.head.sectionTitle must not be defined
-      data.sections.length mustEqual 1
-      data.sections.head.rows.length mustEqual 1
-      data.sections.head.rows.head.value.content mustEqual Literal("123")
-    }
-
     "display Other Reference when selected" in {
 
       val updatedAnswers = emptyUserAnswers.set(OtherReferencePage(index), "test").success.value

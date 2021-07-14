@@ -21,7 +21,8 @@ import cats.implicits._
 import derivable.DeriveNumberOfGuarantees
 import models.{GuaranteeType, Index}
 import DefaultLiabilityAmount._
-import models.GuaranteeType.guaranteeReferenceRoute
+import models.DeclarationType.Option4
+import models.GuaranteeType.{guaranteeReferenceRoute, TIR}
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
 
@@ -87,10 +88,14 @@ object GuaranteeDetails {
   object GuaranteeOther {
 
     def parseGuaranteeOther(index: Index): UserAnswersReader[GuaranteeOther] =
-      (
-        GuaranteeTypePage(index).reader,
-        OtherReferencePage(index).reader
-      ).tupled.map((GuaranteeOther.apply _).tupled)
+      DeclarationTypePage.reader.flatMap {
+        case Option4 if index == Index(0) =>
+          TIRGuaranteeReferencePage(index).reader.map(GuaranteeOther(TIR, _))
+        case _ =>
+          (
+            GuaranteeTypePage(index).reader,
+            OtherReferencePage(index).reader
+          ).tupled.map((GuaranteeOther.apply _).tupled)
+      }
   }
-
 }
