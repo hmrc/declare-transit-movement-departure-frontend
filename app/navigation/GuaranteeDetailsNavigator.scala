@@ -36,7 +36,7 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
     case GuaranteeTypePage(index)                 => ua => guaranteeTypeRoute(ua, index, NormalMode)
     case OtherReferencePage(index)                => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
     case GuaranteeReferencePage(index)            => ua => guaranteeReferenceNormalRoutes(ua, index, NormalMode)
-    case TIRGuaranteeReferencePage(index)         => ua => guaranteeReferenceNormalRoutes(ua, index, NormalMode)
+    case TIRGuaranteeReferencePage(index)         => ua => Some(routes.OtherReferenceLiabilityAmountController.onPageLoad(ua.id, index, NormalMode))
     case LiabilityAmountPage(index)               => ua => Some(routes.AccessCodeController.onPageLoad(ua.id, index, NormalMode))
     case OtherReferenceLiabilityAmountPage(index) => ua => otherReferenceLiablityAmountRoute(ua, index, NormalMode)
     case DefaultAmountPage(index)                 => ua => defaultAmountRoute(ua, index, NormalMode)
@@ -49,7 +49,7 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
     case GuaranteeTypePage(index)                 => ua => guaranteeTypeRoute(ua, index, CheckMode)
     case OtherReferencePage(index)                => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
     case GuaranteeReferencePage(index)            => ua => guaranteeReferenceRoutes(ua, index)
-    case TIRGuaranteeReferencePage(index)         => ua => guaranteeReferenceRoutes(ua, index)
+    case TIRGuaranteeReferencePage(index)         => ua => tirGuaranteeReferenceRoutes(ua, index)
     case LiabilityAmountPage(index)               => ua => liabilityAmountRoute(ua, index, CheckMode)
     case OtherReferenceLiabilityAmountPage(index) => ua => otherReferenceLiablityAmountRoute(ua, index, CheckMode)
     case DefaultAmountPage(index)                 => ua => defaultAmountRoute(ua, index, CheckMode)
@@ -76,6 +76,13 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
   def guaranteeReferenceRoutes(ua: UserAnswers, index: Index) =
     (ua.get(LiabilityAmountPage(index)), ua.get(AccessCodePage(index))) match {
       case (None, _) => guaranteeReferenceNormalRoutes(ua: UserAnswers, index, CheckMode)
+      case (_, None) => Some(routes.AccessCodeController.onPageLoad(ua.id, index, CheckMode))
+      case _         => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
+    }
+
+  def tirGuaranteeReferenceRoutes(ua: UserAnswers, index: Index) =
+    (ua.get(LiabilityAmountPage(index)), ua.get(AccessCodePage(index))) match {
+      case (None, _) => Some(routes.OtherReferenceLiabilityAmountController.onPageLoad(ua.id, index, CheckMode))
       case (_, None) => Some(routes.AccessCodeController.onPageLoad(ua.id, index, CheckMode))
       case _         => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
     }
