@@ -92,7 +92,7 @@ class TIRCarnetReferenceController @Inject() (
                 value =>
                   for {
                     ua1 <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage(documentIndex, itemIndex), value))
-                    ua2 <- Future.fromTry(ua1.set(DocumentTypePage(Index(0), Index(0)), "952")) // TODO move to constant
+                    ua2 <- Future.fromTry(ua1.set(DocumentTypePage(Index(0), Index(0)), "952"))
                     _   <- sessionRepository.set(ua2)
                   } yield Redirect(navigator.nextPage(TIRCarnetReferencePage(documentIndex, itemIndex), mode, ua2))
               )

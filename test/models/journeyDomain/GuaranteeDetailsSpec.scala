@@ -17,9 +17,10 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
-import cats.data.NonEmptyList
+import cats.data.{NonEmptyList, NonEmptyMap}
 import commonTestUtils.UserAnswersSpecHelper
-import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute}
+import models.DeclarationType.{Option2, Option4}
+import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute, TIR}
 import models.journeyDomain.CurrencyCode.GBP
 import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference}
 import models.{Index, UserAnswers}
@@ -32,6 +33,10 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
   private val guaranteeReferenceType      = Gen.oneOf(guaranteeReferenceRoute).sample.value
   private val otherGuaranteeReferenceType = Gen.oneOf(nonGuaranteeReferenceRoute).sample.value
 
+  private val tirGuaranteeReferenceUa = emptyUserAnswers
+    .unsafeSetVal(DeclarationTypePage)(Option4)
+    .unsafeSetVal(TIRGuaranteeReferencePage(index))("tirRefNumber")
+
   private val guaranteeReferenceUa: UserAnswers = emptyUserAnswers
     .unsafeSetVal(GuaranteeTypePage(index))(guaranteeReferenceType)
     .unsafeSetVal(GuaranteeReferencePage(index))("refNumber")
@@ -39,10 +44,29 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
     .unsafeSetVal(AccessCodePage(index))("1234")
 
   private val otherGuaranteeUa: UserAnswers = emptyUserAnswers
+    .unsafeSetVal(DeclarationTypePage)(Option2)
     .unsafeSetVal(GuaranteeTypePage(index))(otherGuaranteeReferenceType)
     .unsafeSetVal(OtherReferencePage(index))("otherRefNumber")
 
+  private val listOfGuaranteeDetailsWithTIR = emptyUserAnswers
+    .unsafeSetVal(DeclarationTypePage)(Option4)
+    .unsafeSetVal(GuaranteeTypePage(index))(TIR)
+    .unsafeSetVal(TIRGuaranteeReferencePage(index))("tirRefNumber")
+    .unsafeSetVal(GuaranteeTypePage(Index(1)))(otherGuaranteeReferenceType)
+    .unsafeSetVal(OtherReferencePage(Index(1)))("otherRefNumber")
+    .unsafeSetVal(GuaranteeTypePage(Index(2)))(otherGuaranteeReferenceType)
+    .unsafeSetVal(OtherReferencePage(Index(2)))("otherRefNumber")
+    .unsafeSetVal(GuaranteeTypePage(Index(3)))(guaranteeReferenceType)
+    .unsafeSetVal(GuaranteeReferencePage(Index(3)))("refNumber")
+    .unsafeSetVal(LiabilityAmountPage(Index(3)))("5000")
+    .unsafeSetVal(AccessCodePage(Index(3)))("1234")
+    .unsafeSetVal(GuaranteeTypePage(Index(4)))(guaranteeReferenceType)
+    .unsafeSetVal(GuaranteeReferencePage(Index(4)))("refNumber")
+    .unsafeSetVal(LiabilityAmountPage(Index(4)))("5000")
+    .unsafeSetVal(AccessCodePage(Index(4)))("1234")
+
   private val listOfGuaranteeDetails = emptyUserAnswers
+    .unsafeSetVal(DeclarationTypePage)(Option2)
     .unsafeSetVal(GuaranteeTypePage(index))(guaranteeReferenceType)
     .unsafeSetVal(GuaranteeReferencePage(index))("refNumber")
     .unsafeSetVal(LiabilityAmountPage(index))("5000")
@@ -79,6 +103,23 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
         )
 
         val result: EitherType[NonEmptyList[GuaranteeDetails]] = UserAnswersReader[NonEmptyList[GuaranteeDetails]].run(listOfGuaranteeDetails)
+
+        result.right.value mustBe expectedResult
+      }
+
+      "when there are multiple GuaranteeDetails with a TIR Declaration Type" in {
+
+        val expectedResult = NonEmptyList(
+          GuaranteeOther(TIR, "tirRefNumber"),
+          List(
+            GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber"),
+            GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber"),
+            GuaranteeReference(guaranteeReferenceType, "refNumber", OtherLiabilityAmount("5000", GBP), "1234"),
+            GuaranteeReference(guaranteeReferenceType, "refNumber", OtherLiabilityAmount("5000", GBP), "1234")
+          )
+        )
+
+        val result: EitherType[NonEmptyList[GuaranteeDetails]] = UserAnswersReader[NonEmptyList[GuaranteeDetails]].run(listOfGuaranteeDetailsWithTIR)
 
         result.right.value mustBe expectedResult
       }
@@ -192,14 +233,9 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
     "GuaranteeOther" - {
 
-      val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-        GuaranteeTypePage(index),
-        OtherReferencePage(index)
-      )
-
       "can be parsed" - {
 
-        "when all details for section have been answered" in {
+        "when all details for section have been answered when not a TIR Declaration Type" in {
 
           val expectedResult = GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber")
 
@@ -207,11 +243,26 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           result mustBe expectedResult
         }
+
+        "when all details for section have been answered when a TIR Declaration Type" in {
+
+          val expectedResult = GuaranteeOther(TIR, "tirRefNumber")
+
+          val result = UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).run(tirGuaranteeReferenceUa).right.value
+
+          result mustBe expectedResult
+        }
       }
 
       "cannot be parsed" - {
 
-        "when an answer is missing" in {
+        val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
+          DeclarationTypePage,
+          GuaranteeTypePage(index),
+          OtherReferencePage(index)
+        )
+
+        "when an answer is missing for non TIR Declaration Type" in {
 
           forAll(mandatoryPages) {
             mandatoryPage =>
@@ -220,6 +271,16 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
               result.left.value.page mustBe mandatoryPage
           }
+        }
+
+        "when an answer is missing for TIR Declaration Type" in {
+
+          val userAnswers = tirGuaranteeReferenceUa
+            .unsafeRemove(TIRGuaranteeReferencePage(index))
+
+          val result = UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).run(userAnswers)
+
+          result.left.value.page mustBe TIRGuaranteeReferencePage(index)
         }
       }
     }

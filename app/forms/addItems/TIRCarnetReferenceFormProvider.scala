@@ -18,7 +18,7 @@ package forms.addItems
 
 import forms.Constants.tirCarnetReferenceMaxLength
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.alphaNumericRegex
+import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
@@ -32,7 +32,7 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.length"),
-            regexp(alphaNumericRegex, "tirCarnetReference.error.invalid")
+            regexp(stringFieldRegex, "tirCarnetReference.error.invalid")
           )
         )
     )
