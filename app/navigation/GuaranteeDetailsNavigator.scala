@@ -31,28 +31,30 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
 // format: off
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddAnotherGuaranteePage => ua => addAnotherGuaranteeRoute(ua)
-    case ConfirmRemoveGuaranteePage => ua => confirmRemoveGuaranteeRoute(ua)
-    case GuaranteeTypePage(index) => ua => guaranteeTypeRoute(ua, index, NormalMode)
-    case OtherReferencePage(index) => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case GuaranteeReferencePage(index) => ua => guaranteeReferenceNormalRoutes(ua, index, NormalMode)
-    case LiabilityAmountPage(index) => ua => Some(routes.AccessCodeController.onPageLoad(ua.id, index, NormalMode))
+    case AddAnotherGuaranteePage                  => ua => addAnotherGuaranteeRoute(ua)
+    case ConfirmRemoveGuaranteePage               => ua => confirmRemoveGuaranteeRoute(ua)
+    case GuaranteeTypePage(index)                 => ua => guaranteeTypeRoute(ua, index, NormalMode)
+    case OtherReferencePage(index)                => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case GuaranteeReferencePage(index)            => ua => guaranteeReferenceNormalRoutes(ua, index, NormalMode)
+    case TIRGuaranteeReferencePage(index)         => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case LiabilityAmountPage(index)               => ua => Some(routes.AccessCodeController.onPageLoad(ua.id, index, NormalMode))
     case OtherReferenceLiabilityAmountPage(index) => ua => otherReferenceLiablityAmountRoute(ua, index, NormalMode)
-    case DefaultAmountPage(index) => ua => defaultAmountRoute(ua, index, NormalMode)
-    case AccessCodePage(index) => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case DefaultAmountPage(index)                 => ua => defaultAmountRoute(ua, index, NormalMode)
+    case AccessCodePage(index)                    => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddAnotherGuaranteePage => ua => addAnotherGuaranteeRoute(ua)
-    case ConfirmRemoveGuaranteePage => ua => confirmRemoveGuaranteeRoute(ua)
-    case GuaranteeTypePage(index) => ua => guaranteeTypeRoute(ua, index, CheckMode)
-    case OtherReferencePage(index) => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case GuaranteeReferencePage(index) => ua => guaranteeReferenceRoutes(ua, index)
-    case LiabilityAmountPage(index) => ua => liabilityAmountRoute(ua, index, CheckMode)
+    case AddAnotherGuaranteePage                  => ua => addAnotherGuaranteeRoute(ua)
+    case ConfirmRemoveGuaranteePage               => ua => confirmRemoveGuaranteeRoute(ua)
+    case GuaranteeTypePage(index)                 => ua => guaranteeTypeRoute(ua, index, CheckMode)
+    case OtherReferencePage(index)                => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case GuaranteeReferencePage(index)            => ua => guaranteeReferenceRoutes(ua, index)
+    case TIRGuaranteeReferencePage(index)         => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case LiabilityAmountPage(index)               => ua => liabilityAmountRoute(ua, index, CheckMode)
     case OtherReferenceLiabilityAmountPage(index) => ua => otherReferenceLiablityAmountRoute(ua, index, CheckMode)
-    case DefaultAmountPage(index) => ua => defaultAmountRoute(ua, index, CheckMode)
-    case AccessCodePage(index) => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case _ => ua => Some(routes.AddAnotherGuaranteeController.onPageLoad(ua.id))
+    case DefaultAmountPage(index)                 => ua => defaultAmountRoute(ua, index, CheckMode)
+    case AccessCodePage(index)                    => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case _                                        => ua => Some(routes.AddAnotherGuaranteeController.onPageLoad(ua.id))
   }
 
   def otherReferenceLiablityAmountRoute(ua: UserAnswers, index: Index, mode: Mode) =

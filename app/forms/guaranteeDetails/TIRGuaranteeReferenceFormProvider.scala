@@ -18,7 +18,7 @@ package forms.guaranteeDetails
 
 import forms.Constants.tirGuaranteeReferenceMaxLength
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.alphaNumericRegex
+import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
@@ -32,7 +32,7 @@ class TIRGuaranteeReferenceFormProvider @Inject() extends Mappings {
         .verifying(
           StopOnFirstFail[String](
             maxLength(tirGuaranteeReferenceMaxLength, "tirGuaranteeReference.error.length"),
-            regexp(alphaNumericRegex, "tirGuaranteeReference.error.invalid")
+            regexp(stringFieldRegex, "tirGuaranteeReference.error.invalid")
           )
         )
     )

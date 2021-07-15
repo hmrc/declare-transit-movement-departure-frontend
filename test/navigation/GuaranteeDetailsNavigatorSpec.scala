@@ -151,6 +151,18 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
+      "From TIRGuaranteeReferencePage to OtherReferenceLiabilityAmountPage" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers
+              .set(TIRGuaranteeReferencePage(index), "test").success.value
+
+            navigator
+              .nextPage(GuaranteeReferencePage(index), NormalMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.id, index, NormalMode))
+        }
+      }
+
       "From GuaranteeReferencePage to LiabilityAmountPage when both 'OfficeOfDeparture' and 'DestinationOffice' are in GB" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -265,6 +277,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
   }
 
   "in Checkmode" - {
+
     "must go from Guarantee Type page to" - {
       "OtherReferencePage when user selects 3,5,6,7 or A and guaranteeReference had been set" in {
 
@@ -350,9 +363,24 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
         }
       }
-
-
     }
+
+
+    "From TIRGuaranteeReferencePage" - {
+
+      "to CYA" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers
+              .set(TIRGuaranteeReferencePage(index), "125678901234567").success.value
+
+            navigator
+              .nextPage(TIRGuaranteeReferencePage(index), CheckMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+        }
+      }
+    }
+
     "From GuaranteeReferencePage" - {
       "to CYA if liability amount and access code exists" in {
         forAll(arbitrary[UserAnswers]) {
@@ -419,6 +447,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
     }
+
     "From LiabilityAmountPage" - {
       "to CYA if access code exists" in {
         forAll(arbitrary[UserAnswers]) {

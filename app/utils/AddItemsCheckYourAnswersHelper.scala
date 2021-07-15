@@ -22,6 +22,7 @@ import controllers.addItems.routes
 import controllers.addItems.securityDetails.{routes => securityDetailsRoutes}
 import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
 import controllers.addItems.traderSecurityDetails.{routes => tradersSecurityDetailsRoutes}
+import models.DeclarationType.Option4
 import models._
 import models.reference.DocumentType
 import pages.addItems._
@@ -84,44 +85,47 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     AddAnotherViewModel(addAnotherContainerHref, content)
   }
 
-  def documentRows(index: Index, documentIndex: Index, documentType: DocumentTypeList): Option[Row] =
+  def documentRows(index: Index, documentIndex: Index, documentType: DocumentTypeList): Option[Row] = {
+
+    def actions(documentType: String) = userAnswers.get(DeclarationTypePage) match {
+      case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
+        List(
+          Action(
+            content = msg"site.change",
+            href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
+            visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(documentType)),
+            attributes = Map("id" -> s"""change-document-${index.display}""")
+          )
+        )
+      case _ =>
+        List(
+          Action(
+            content = msg"site.change",
+            href = routes.DocumentTypeController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
+            visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(documentType)),
+            attributes = Map("id" -> s"""change-document-${index.display}""")
+          ),
+          Action(
+            content = msg"site.delete",
+            href = routes.ConfirmRemoveDocumentController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
+            visuallyHiddenText = Some(msg"addAnotherDocument.documentList.delete.hidden".withArgs(documentType)),
+            attributes = Map("id" -> s"""remove-document-${index.display}""")
+          )
+        )
+    }
+
     userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
       answer =>
         documentType.getDocumentType(answer) map {
-          case DocumentType("952", description, _) => // TODO move to constant
-            Row(
-              key = Key(lit"(952) $description"),
-              value = Value(lit""),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(answer)),
-                  attributes = Map("id" -> s"""change-document-${index.display}""")
-                )
-              )
-            )
           case DocumentType(code, description, _) =>
             Row(
               key = Key(lit"($code) $description"),
               value = Value(lit""),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = routes.DocumentTypeController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(answer)),
-                  attributes = Map("id" -> s"""change-document-${index.display}""")
-                ),
-                Action(
-                  content = msg"site.delete",
-                  href = routes.ConfirmRemoveDocumentController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"addAnotherDocument.documentList.delete.hidden".withArgs(answer)),
-                  attributes = Map("id" -> s"""remove-document-${index.display}""")
-                )
-              )
+              actions = actions(answer)
             )
         }
     }
+  }
 
   def itemRows(index: Index): Option[Row] =
     userAnswers.get(ItemDescriptionPage(index)).map {
@@ -600,7 +604,29 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     AddAnotherViewModel(addAnotherDocumentHref, content)
   }
 
-  def documentRow(itemIndex: Index, documentIndex: Index, userAnswers: UserAnswers, documentTypeList: DocumentTypeList): Option[Row] =
+  def documentRow(itemIndex: Index, documentIndex: Index, userAnswers: UserAnswers, documentTypeList: DocumentTypeList): Option[Row] = {
+
+    def actions(updatedAnswer: String) = userAnswers.get(DeclarationTypePage) match {
+      case Some(Option4) if itemIndex.position == 0 & documentIndex.position == 0 =>
+        List(
+          Action(
+            content = msg"site.change",
+            href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, itemIndex, documentIndex, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
+            attributes = Map("id" -> s"""change-document-${documentIndex.display}""")
+          )
+        )
+      case _ =>
+        List(
+          Action(
+            content = msg"site.change",
+            href = routes.DocumentTypeController.onPageLoad(userAnswers.id, itemIndex, documentIndex, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
+            attributes = Map("id" -> s"""change-document-${documentIndex.display}""")
+          )
+        )
+    }
+
     userAnswers.get(DocumentTypePage(itemIndex, documentIndex)).flatMap {
       answer =>
         documentTypeList.getDocumentType(answer).map {
@@ -609,17 +635,11 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
             Row(
               key = Key(lit"$updatedAnswer"),
               value = Value(lit""),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = routes.DocumentTypeController.onPageLoad(userAnswers.id, itemIndex, documentIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer.toString)),
-                  attributes = Map("id" -> s"""change-document-${documentIndex.display}""")
-                )
-              )
+              actions = actions(answer)
             )
         }
     }
+  }
 
   def confirmRemoveDocument(index: Index, documentIndex: Index): Option[Row] = userAnswers.get(ConfirmRemoveDocumentPage(index, documentIndex)) map {
     answer =>

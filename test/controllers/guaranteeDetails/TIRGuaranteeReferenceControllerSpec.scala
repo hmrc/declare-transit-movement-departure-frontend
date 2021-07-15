@@ -90,7 +90,7 @@ class TIRGuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRend
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(TIRGuaranteeReferencePage, "answer").success.value
+      val userAnswers = emptyUserAnswers.set(TIRGuaranteeReferencePage(index), "answer").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, tIRGuaranteeReferenceRoute)

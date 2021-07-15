@@ -16,16 +16,17 @@
 
 package pages
 
+import models.Index
 import pages.behaviours.PageBehaviours
 
 class TIRGuaranteeReferencePageSpec extends PageBehaviours {
 
   "TIRGuaranteeReferencePage" - {
 
-    beRetrievable[String](TIRGuaranteeReferencePage)
+    beRetrievable[String](TIRGuaranteeReferencePage(Index(0)))
 
-    beSettable[String](TIRGuaranteeReferencePage)
+    beSettable[String](TIRGuaranteeReferencePage(Index(0)))
 
-    beRemovable[String](TIRGuaranteeReferencePage)
+    beRemovable[String](TIRGuaranteeReferencePage(Index(0)))
   }
 }
