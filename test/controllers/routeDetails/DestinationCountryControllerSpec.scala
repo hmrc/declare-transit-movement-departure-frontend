@@ -17,7 +17,6 @@
 package controllers.routeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.DestinationCountryFormProvider
 import matchers.JsonMatchers
@@ -37,13 +36,14 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{GET, POST, redirectLocation, route, status, _}
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
 class DestinationCountryControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  val mockCountriesService: CountriesService = mock[CountriesService]
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -62,7 +62,7 @@ class DestinationCountryControllerSpec extends SpecBase with MockNunjucksRendere
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[RouteDetails]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "DestinationCountry Controller" - {
 
@@ -70,7 +70,7 @@ class DestinationCountryControllerSpec extends SpecBase with MockNunjucksRendere
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountryList(any())(any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(GET, destinationCountryRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -99,7 +99,7 @@ class DestinationCountryControllerSpec extends SpecBase with MockNunjucksRendere
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountryList(any())(any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(GET, destinationCountryRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -132,7 +132,7 @@ class DestinationCountryControllerSpec extends SpecBase with MockNunjucksRendere
     "must redirect to the next page when valid data is submitted" in {
       dataRetrievalWithData(emptyUserAnswers)
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountryList(any())(any())).thenReturn(Future.successful(countries))
 
       val request =
         FakeRequest(POST, destinationCountryRoute)
@@ -149,7 +149,7 @@ class DestinationCountryControllerSpec extends SpecBase with MockNunjucksRendere
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountryList(any())(any())).thenReturn(Future.successful(countries))
 
       val request        = FakeRequest(POST, destinationCountryRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm      = form.bind(Map("value" -> "invalid value"))

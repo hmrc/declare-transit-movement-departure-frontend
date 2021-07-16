@@ -29,5 +29,4 @@ object ExcludedCountriesService {
       case _    => alwaysExcludedTransitCountries ++ gbExcludedCountries
     }
   }
-
 }
