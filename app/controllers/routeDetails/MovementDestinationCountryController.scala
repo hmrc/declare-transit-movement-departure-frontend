@@ -22,7 +22,7 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.MovementDestinationCountryFormProvider
 import logging.Logging
-import models.reference.{Country, CountryCode}
+import models.reference.Country
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
@@ -63,7 +63,7 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countries         <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+          countries         <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
           preparedForm = request.userAnswers
             .get(MovementDestinationCountryPage)
             .flatMap(countries.getCountry)
@@ -82,7 +82,7 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countries         <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+          countries         <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
           page <- OptionT.liftF(
             formProvider(countries)
               .bindFromRequest()
