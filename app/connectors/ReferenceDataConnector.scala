@@ -55,7 +55,7 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
 
     val excludeCountriesQuery = excludeCountries
       .map(_.code)
-      .map("excludeCountries" -> _)
+      .map("exclude" -> _)
 
     val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery
 
