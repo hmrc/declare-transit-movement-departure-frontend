@@ -359,7 +359,7 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
 
       "when there are no excluded coutries, must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/countries?customsOffice=true"))
+          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY"))
             .willReturn(okJson(countryListResponseJson))
         )
 
@@ -375,7 +375,7 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
 
       "when there are excluded coutries, then the excluded coutries must be sent as a query paramter and the request returns a Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/countries?customsOffice=true&exclude=JE&exclude=AB"))
+          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&exclude=JE&exclude=AB"))
             .willReturn(okJson(countryListResponseJson))
         )
 
@@ -390,7 +390,7 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/countries?customsOffice=true", connector.getCountriesWithCustomsOffices(Nil))
+        checkErrorResponse(s"/$startUrl/countries?customsOfficeRole=ANY", connector.getCountriesWithCustomsOffices(Nil))
       }
     }
 
