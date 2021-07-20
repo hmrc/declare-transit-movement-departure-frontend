@@ -18,10 +18,12 @@ package controllers.traderDetails
 
 import controllers.actions._
 import forms.WhatIsPrincipalEoriFormProvider
+import models.ProcedureType.Simplified
+import models.reference.CustomsOffice
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.WhatIsPrincipalEoriPage
+import pages.{OfficeOfDeparturePage, ProcedureTypePage, WhatIsPrincipalEoriPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,13 +50,15 @@ class WhatIsPrincipalEoriController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
-
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
+      val isSimplified = request.userAnswers.get(ProcedureTypePage).contains(Simplified)
+      val countryCode = request.userAnswers.get(OfficeOfDeparturePage) map (
+        x => x.countryId
+      )
       val preparedForm = request.userAnswers.get(WhatIsPrincipalEoriPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+        case None        => formProvider(isSimplified, countryCode)
+        case Some(value) => formProvider(isSimplified, countryCode).fill(value)
       }
 
       val json = Json.obj(
@@ -68,7 +72,14 @@ class WhatIsPrincipalEoriController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      form
+      val isSimplified = request.userAnswers.get(ProcedureTypePage) match {
+        case Some(Simplified) => true
+        case _                => false
+      }
+      val countryCode = request.userAnswers.get(OfficeOfDeparturePage) map (
+        x => x.countryId
+      )
+      formProvider(isSimplified, countryCode)
         .bindFromRequest()
         .fold(
           formWithErrors => {

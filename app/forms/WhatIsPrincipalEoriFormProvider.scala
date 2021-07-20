@@ -19,6 +19,7 @@ package forms
 import forms.Constants._
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.{alphaNumericRegex, eoriNumberRegex}
+import models.reference.CountryCode
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
 
@@ -26,11 +27,12 @@ import javax.inject.Inject
 
 class WhatIsPrincipalEoriFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def apply(simplified: Boolean, countryCode: Option[CountryCode]): Form[String] =
     Form(
       "value" -> text("whatIsPrincipalEori.error.required")
         .verifying(
           StopOnFirstFail[String](
+            isSimplified(simplified, countryCode, "whatIsPrincipalEori.error.prefix"),
             maxLength(maxLengthEoriNumber, "whatIsPrincipalEori.error.length"),
             regexp(alphaNumericRegex, "whatIsPrincipalEori.error.invalidCharacters"),
             regexp(eoriNumberRegex, "whatIsPrincipalEori.error.invalidFormat")

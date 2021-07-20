@@ -17,8 +17,8 @@
 package forms.mappings
 
 import java.time.LocalDate
-
 import models.Index
+import models.reference.CountryCode
 import play.api.data.validation.{Constraint, Invalid, Valid}
 
 import scala.util.matching.Regex
@@ -172,6 +172,26 @@ trait Constraints {
         Valid
       case _ =>
         Invalid(errorKey, args: _*)
+    }
+
+  protected def isSimplified(simplified: Boolean, countryCode: Option[CountryCode], errorKey: String): Constraint[String] =
+    if (simplified) {
+      prefix(countryCode, errorKey)
+    } else {
+      Constraint {
+        case _ => Valid
+      }
+    }
+
+  protected def prefix(countryCode: Option[CountryCode], errorKey: String): Constraint[String] =
+    countryCode match {
+      case Some(code) =>
+        Constraint {
+          case str if str.toUpperCase.take(2) == code.code.toUpperCase.take(2) =>
+            Valid
+          case _ =>
+            Invalid(errorKey, code.code)
+        }
     }
 
   protected def doesNotExistIn[A](values: Seq[A], index: Index, errorKey: String, args: Any*)(implicit ev: StringEquivalence[A]): Constraint[String] = {
