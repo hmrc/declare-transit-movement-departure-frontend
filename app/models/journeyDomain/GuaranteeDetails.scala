@@ -23,6 +23,7 @@ import models.{GuaranteeType, Index}
 import DefaultLiabilityAmount._
 import models.DeclarationType.Option4
 import models.GuaranteeType.{guaranteeReferenceRoute, TIR}
+import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference}
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 
@@ -39,12 +40,16 @@ object GuaranteeDetails {
     }
 
   def parseGuaranteeDetails(index: Index): UserAnswersReader[GuaranteeDetails] =
-    GuaranteeTypePage(index).reader.flatMap {
-      guaranteeType =>
-        if (guaranteeReferenceRoute.contains(guaranteeType)) {
-          UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).widen[GuaranteeDetails]
-        } else {
-          UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).widen[GuaranteeDetails]
+    DeclarationTypePage.reader.flatMap {
+      case Option4 => UserAnswersReader[GuaranteeTIR](GuaranteeTIR.parseGuaranteeTIR(index)).widen[GuaranteeDetails]
+      case _ =>
+        GuaranteeTypePage(index).reader.flatMap {
+          guaranteeType =>
+            if (guaranteeReferenceRoute.contains(guaranteeType)) {
+              UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).widen[GuaranteeDetails]
+            } else {
+              UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).widen[GuaranteeDetails]
+            }
         }
     }
 
@@ -88,14 +93,17 @@ object GuaranteeDetails {
   object GuaranteeOther {
 
     def parseGuaranteeOther(index: Index): UserAnswersReader[GuaranteeOther] =
-      DeclarationTypePage.reader.flatMap {
-        case Option4 =>
-          TIRGuaranteeReferencePage(index).reader.map(GuaranteeOther(TIR, _))
-        case _ =>
-          (
-            GuaranteeTypePage(index).reader,
-            OtherReferencePage(index).reader
-          ).tupled.map((GuaranteeOther.apply _).tupled)
-      }
+      (
+        GuaranteeTypePage(index).reader,
+        OtherReferencePage(index).reader
+      ).tupled.map((GuaranteeOther.apply _).tupled)
+  }
+
+  final case class GuaranteeTIR(reference: String) extends GuaranteeDetails
+
+  object GuaranteeTIR {
+
+    def parseGuaranteeTIR(index: Index): UserAnswersReader[GuaranteeTIR] =
+      TIRGuaranteeReferencePage(index).reader.map(GuaranteeTIR.apply)
   }
 }
