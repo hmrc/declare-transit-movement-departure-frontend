@@ -174,7 +174,7 @@ trait Constraints {
         Invalid(errorKey, args: _*)
     }
 
-  protected def isSimplified(simplified: Boolean, countryCode: Option[CountryCode], errorKey: String): Constraint[String] =
+  protected def isSimplified(simplified: Boolean, countryCode: CountryCode, errorKey: String): Constraint[String] =
     if (simplified) {
       prefix(countryCode, errorKey)
     } else {
@@ -183,15 +183,12 @@ trait Constraints {
       }
     }
 
-  protected def prefix(countryCode: Option[CountryCode], errorKey: String): Constraint[String] =
-    countryCode match {
-      case Some(code) =>
-        Constraint {
-          case str if str.toUpperCase.take(2) == code.code.toUpperCase.take(2) =>
-            Valid
-          case _ =>
-            Invalid(errorKey, code.code)
-        }
+  def prefix(countryCode: CountryCode, errorKey: String): Constraint[String] =
+    Constraint {
+      case str if str.toUpperCase.take(2) == countryCode.code.toUpperCase.take(2) =>
+        Valid
+      case _ =>
+        Invalid(errorKey, countryCode.code)
     }
 
   protected def doesNotExistIn[A](values: Seq[A], index: Index, errorKey: String, args: Any*)(implicit ev: StringEquivalence[A]): Constraint[String] = {

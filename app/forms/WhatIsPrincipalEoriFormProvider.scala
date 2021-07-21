@@ -27,15 +27,15 @@ import javax.inject.Inject
 
 class WhatIsPrincipalEoriFormProvider @Inject() extends Mappings {
 
-  def apply(simplified: Boolean, countryCode: Option[CountryCode]): Form[String] =
+  def apply(simplified: Boolean, countryCode: CountryCode): Form[String] =
     Form(
       "value" -> text("whatIsPrincipalEori.error.required")
         .verifying(
           StopOnFirstFail[String](
-            isSimplified(simplified, countryCode, "whatIsPrincipalEori.error.prefix"),
             maxLength(maxLengthEoriNumber, "whatIsPrincipalEori.error.length"),
             regexp(alphaNumericRegex, "whatIsPrincipalEori.error.invalidCharacters"),
-            regexp(eoriNumberRegex, "whatIsPrincipalEori.error.invalidFormat")
+            regexp(eoriNumberRegex, "whatIsPrincipalEori.error.invalidFormat"),
+            isSimplified(simplified, countryCode, "whatIsPrincipalEori.error.prefix")
           )
         )
     )

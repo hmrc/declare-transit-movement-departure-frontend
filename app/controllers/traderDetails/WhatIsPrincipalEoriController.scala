@@ -19,7 +19,7 @@ package controllers.traderDetails
 import controllers.actions._
 import forms.WhatIsPrincipalEoriFormProvider
 import models.ProcedureType.Simplified
-import models.reference.CustomsOffice
+import models.reference.{CountryCode, CustomsOffice}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
@@ -57,8 +57,8 @@ class WhatIsPrincipalEoriController @Inject() (
         x => x.countryId
       )
       val preparedForm = request.userAnswers.get(WhatIsPrincipalEoriPage) match {
-        case None        => formProvider(isSimplified, countryCode)
-        case Some(value) => formProvider(isSimplified, countryCode).fill(value)
+        case None        => formProvider(isSimplified, countryCode.getOrElse(CountryCode("")))
+        case Some(value) => formProvider(isSimplified, countryCode.getOrElse(CountryCode(""))).fill(value)
       }
 
       val json = Json.obj(
@@ -79,7 +79,7 @@ class WhatIsPrincipalEoriController @Inject() (
       val countryCode = request.userAnswers.get(OfficeOfDeparturePage) map (
         x => x.countryId
       )
-      formProvider(isSimplified, countryCode)
+      formProvider(isSimplified, countryCode.getOrElse(CountryCode("")))
         .bindFromRequest()
         .fold(
           formWithErrors => {
