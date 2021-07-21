@@ -27,6 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import queries.OfficeOfTransitQuery
+import org.scalacheck.Gen
 
 class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
@@ -35,8 +36,49 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
   "RouteDetailsNavigator" - {
 
     "in Normal mode" - {
+      /*
+            Given a user has selected a TIR declaration type
+            And has entered the route details journey
+              When the user completes the office of destination question
+            Then the section finishes
+              And the user is not asked about transit offices
+            And no XML relating to transit offices is sent (please see attached)
+       */
 
       "Route Details section" - {
+
+        "Route Details section proceeds when a TIR declartion type is not found" in {
+
+          val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val userAnswers = answers
+                .set(DeclarationTypePage, generatedOption)
+                .toOption
+                .value
+
+              navigator
+                .nextPage(MovementDestinationCountryPage, NormalMode, userAnswers)
+                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.id, NormalMode))
+          }
+        }
+
+        "Got to Check your answers when a TIR declartion type is found" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val userAnswers = answers
+                .set(DeclarationTypePage, DeclarationType.Option4)
+                .toOption
+                .value
+
+              navigator
+                .nextPage(MovementDestinationCountryPage, NormalMode, userAnswers)
+                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
+          }
+        }
+
         "must go from Country of dispatch page to Destination Country page" in {
           val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), None)
           forAll(arbitrary[UserAnswers]) {
@@ -303,7 +345,6 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
               .mustBe(routes.DestinationOfficeController.onPageLoad(answers.id, CheckMode))
 
         }
-
       }
 
       "Must go from Destination Office to Router Details Check Your Answers" in {

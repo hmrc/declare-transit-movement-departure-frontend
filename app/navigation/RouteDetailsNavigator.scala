@@ -31,7 +31,7 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     case DestinationCountryPage =>
       ua => Some(routes.MovementDestinationCountryController.onPageLoad(ua.id, NormalMode))
     case MovementDestinationCountryPage =>
-      ua => Some(routes.DestinationOfficeController.onPageLoad(ua.id, NormalMode))
+      ua => Some(declarationTypeTIR(ua, NormalMode))
     case DestinationOfficePage =>
       ua => Some(destinationOfficeRoute(ua, NormalMode))
     case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, NormalMode))
@@ -59,6 +59,12 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     case _ =>
       _ => None
   }
+
+  def declarationTypeTIR(ua: UserAnswers, mode: NormalMode.type) =
+    ua.get(DeclarationTypePage) match {
+      case Some(DeclarationType.Option4) => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case _                             => routes.DestinationOfficeController.onPageLoad(ua.id, NormalMode)
+    }
 
   def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =
     (ua.get(AddOfficeOfTransitPage), mode) match {
