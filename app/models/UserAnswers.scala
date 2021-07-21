@@ -16,13 +16,12 @@
 
 package models
 
-import java.time.LocalDateTime
 import derivable.Derivable
 import pages._
 import play.api.libs.json._
 import queries.Gettable
 
-import java.util.UUID
+import java.time.LocalDateTime
 import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
