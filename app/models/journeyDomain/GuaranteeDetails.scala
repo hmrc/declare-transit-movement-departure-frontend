@@ -24,7 +24,7 @@ import DefaultLiabilityAmount._
 import models.DeclarationType.Option4
 import models.GuaranteeType.{guaranteeReferenceRoute, TIR}
 import pages._
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 
 sealed trait GuaranteeDetails
 
@@ -89,7 +89,7 @@ object GuaranteeDetails {
 
     def parseGuaranteeOther(index: Index): UserAnswersReader[GuaranteeOther] =
       DeclarationTypePage.reader.flatMap {
-        case Option4 if index == Index(0) =>
+        case Option4 =>
           TIRGuaranteeReferencePage(index).reader.map(GuaranteeOther(TIR, _))
         case _ =>
           (

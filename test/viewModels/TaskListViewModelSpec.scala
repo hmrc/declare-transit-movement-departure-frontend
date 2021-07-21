@@ -29,7 +29,7 @@ import models.userAnswerScenarios.{Scenario1, Scenario3}
 import models.{EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity._
 import play.api.libs.json.{JsObject, Json}

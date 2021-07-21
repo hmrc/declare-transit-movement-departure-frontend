@@ -26,7 +26,7 @@ import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
 import models.{CheckMode, DependentSection, Index, Mode, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
 import pages._
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
 import play.api.libs.json._

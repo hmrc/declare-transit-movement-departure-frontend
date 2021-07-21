@@ -22,8 +22,8 @@ import models.GuaranteeType.TIR
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
-import pages.TIRGuaranteeReferencePage
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails
+import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -55,7 +55,7 @@ class TIRGuaranteeReferenceController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(TIRGuaranteeReferencePage(index)) match {
+      val preparedForm = request.userAnswers.get(guaranteeDetails.TIRGuaranteeReferencePage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }

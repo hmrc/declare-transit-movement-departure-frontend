@@ -26,7 +26,7 @@ import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages._
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 
 class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
@@ -51,19 +51,15 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
   private val listOfGuaranteeDetailsWithTIR = emptyUserAnswers
     .unsafeSetVal(DeclarationTypePage)(Option4)
     .unsafeSetVal(GuaranteeTypePage(index))(TIR)
-    .unsafeSetVal(TIRGuaranteeReferencePage(index))("tirRefNumber")
-    .unsafeSetVal(GuaranteeTypePage(Index(1)))(otherGuaranteeReferenceType)
-    .unsafeSetVal(OtherReferencePage(Index(1)))("otherRefNumber")
-    .unsafeSetVal(GuaranteeTypePage(Index(2)))(otherGuaranteeReferenceType)
-    .unsafeSetVal(OtherReferencePage(Index(2)))("otherRefNumber")
-    .unsafeSetVal(GuaranteeTypePage(Index(3)))(guaranteeReferenceType)
-    .unsafeSetVal(GuaranteeReferencePage(Index(3)))("refNumber")
-    .unsafeSetVal(LiabilityAmountPage(Index(3)))("5000")
-    .unsafeSetVal(AccessCodePage(Index(3)))("1234")
-    .unsafeSetVal(GuaranteeTypePage(Index(4)))(guaranteeReferenceType)
-    .unsafeSetVal(GuaranteeReferencePage(Index(4)))("refNumber")
-    .unsafeSetVal(LiabilityAmountPage(Index(4)))("5000")
-    .unsafeSetVal(AccessCodePage(Index(4)))("1234")
+    .unsafeSetVal(TIRGuaranteeReferencePage(index))("tirRefNumber1")
+    .unsafeSetVal(GuaranteeTypePage(Index(1)))(TIR)
+    .unsafeSetVal(TIRGuaranteeReferencePage(Index(1)))("tirRefNumber2")
+    .unsafeSetVal(GuaranteeTypePage(Index(2)))(TIR)
+    .unsafeSetVal(TIRGuaranteeReferencePage(Index(2)))("tirRefNumber3")
+    .unsafeSetVal(GuaranteeTypePage(Index(3)))(TIR)
+    .unsafeSetVal(TIRGuaranteeReferencePage(Index(3)))("tirRefNumber4")
+    .unsafeSetVal(GuaranteeTypePage(Index(4)))(TIR)
+    .unsafeSetVal(TIRGuaranteeReferencePage(Index(4)))("tirRefNumber5")
 
   private val listOfGuaranteeDetails = emptyUserAnswers
     .unsafeSetVal(DeclarationTypePage)(Option2)
@@ -110,12 +106,12 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
       "when there are multiple GuaranteeDetails with a TIR Declaration Type" in {
 
         val expectedResult = NonEmptyList(
-          GuaranteeOther(TIR, "tirRefNumber"),
+          GuaranteeOther(TIR, "tirRefNumber1"),
           List(
-            GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber"),
-            GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber"),
-            GuaranteeReference(guaranteeReferenceType, "refNumber", OtherLiabilityAmount("5000", GBP), "1234"),
-            GuaranteeReference(guaranteeReferenceType, "refNumber", OtherLiabilityAmount("5000", GBP), "1234")
+            GuaranteeOther(TIR, "tirRefNumber2"),
+            GuaranteeOther(TIR, "tirRefNumber3"),
+            GuaranteeOther(TIR, "tirRefNumber4"),
+            GuaranteeOther(TIR, "tirRefNumber5")
           )
         )
 

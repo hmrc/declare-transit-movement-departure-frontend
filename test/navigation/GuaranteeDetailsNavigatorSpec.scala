@@ -25,7 +25,7 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.{CheckMode, GuaranteeType, Index, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages._
+import pages.{guaranteeDetails, _}
 import pages.guaranteeDetails._
 import play.api.libs.json.{JsObject, JsPath}
 
@@ -151,15 +151,15 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
-      "From TIRGuaranteeReferencePage to OtherReferenceLiabilityAmountPage" in {
+      "From TIRGuaranteeReferencePage to AddAnotherGuarantee" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers: UserAnswers = answers
-              .set(TIRGuaranteeReferencePage(index), "test").success.value
+              .set(guaranteeDetails.TIRGuaranteeReferencePage(index), "test").success.value
 
             navigator
-              .nextPage(GuaranteeReferencePage(index), NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .nextPage(TIRGuaranteeReferencePage(index), NormalMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.id))
         }
       }
 
@@ -437,15 +437,15 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
     "From TIRGuaranteeReferencePage" - {
 
-      "to CYA" in {
+      "to AddAnotherGuaranteeReference" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers: UserAnswers = answers
-              .set(TIRGuaranteeReferencePage(index), "125678901234567").success.value
+              .set(guaranteeDetails.TIRGuaranteeReferencePage(index), "125678901234567").success.value
 
             navigator
-              .nextPage(TIRGuaranteeReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .nextPage(guaranteeDetails.TIRGuaranteeReferencePage(index), CheckMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.id))
         }
       }
     }

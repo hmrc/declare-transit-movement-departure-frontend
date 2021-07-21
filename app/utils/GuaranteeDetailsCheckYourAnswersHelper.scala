@@ -22,7 +22,7 @@ import models.GuaranteeType.guaranteeReferenceRoute
 import models._
 import models.reference.CountryCode
 import pages._
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 
