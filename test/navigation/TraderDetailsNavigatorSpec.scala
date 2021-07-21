@@ -63,7 +63,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                   navigator
                     .nextPage(IsPrincipalEoriKnownPage, NormalMode, updatedAnswers)
-                    .mustBe(traderDetailsRoute.WhatIsPrincipalEoriController.onPageLoad(answers.id, NormalMode))
+                    .mustBe(traderDetailsRoute.WhatIsPrincipalEoriController.onPageLoad(answers.lrn, NormalMode))
               }
             }
 
@@ -76,7 +76,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                   navigator
                     .nextPage(IsPrincipalEoriKnownPage, NormalMode, updatedAnswers)
-                    .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+                    .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.lrn, NormalMode))
               }
             }
           }
@@ -92,7 +92,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.lrn, NormalMode))
             }
           }
 
@@ -107,7 +107,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.lrn, NormalMode))
             }
           }
 
@@ -122,7 +122,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.lrn, NormalMode))
             }
           }
 
@@ -137,7 +137,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.lrn, NormalMode))
             }
           }
 
@@ -152,7 +152,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.lrn, NormalMode))
             }
           }
 
@@ -167,7 +167,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.lrn, NormalMode))
             }
           }
 
@@ -181,7 +181,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.lrn, NormalMode))
             }
           }
 
@@ -190,7 +190,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
               answers =>
                 navigator
                   .nextPage(PrincipalNamePage, NormalMode, answers)
-                  .mustBe(traderDetailsRoute.PrincipalAddressController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(traderDetailsRoute.PrincipalAddressController.onPageLoad(answers.lrn, NormalMode))
             }
           }
 
@@ -201,7 +201,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
                 val ua = answers.unsafeSetVal(DeclarationTypePage)(Option1)
                 navigator
                   .nextPage(PrincipalAddressPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(ua.id, NormalMode))
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(ua.lrn, NormalMode))
             }
           }
 
@@ -212,7 +212,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
                 val ua = answers.unsafeSetVal(DeclarationTypePage)(Option4)
                 navigator
                   .nextPage(PrincipalAddressPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.PrincipalTirHolderIdController.onPageLoad(ua.id, NormalMode))
+                  .mustBe(traderDetailsRoute.PrincipalTirHolderIdController.onPageLoad(ua.lrn, NormalMode))
             }
           }
 
@@ -229,7 +229,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
                   .unsafeSetVal(ProcedureTypePage)(Simplified)
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(ua.id, NormalMode))
+                  .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(ua.lrn, NormalMode))
             }
           }
 
@@ -242,7 +242,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
                   .unsafeSetVal(ProcedureTypePage)(Simplified)
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, NormalMode, ua)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(ua.id, NormalMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(ua.lrn, NormalMode))
             }
           }
 
@@ -259,7 +259,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
             navigator
               .nextPage(AddConsignorPage, NormalMode, updatedAnswers)
-              .mustBe(traderDetailsRoute.IsConsignorEoriKnownController.onPageLoad(answers.id, NormalMode))
+              .mustBe(traderDetailsRoute.IsConsignorEoriKnownController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -272,7 +272,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
             navigator
               .nextPage(AddConsignorPage, NormalMode, updatedAnswers)
-              .mustBe(traderDetailsRoute.AddConsigneeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(traderDetailsRoute.AddConsigneeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -287,7 +287,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsignorEoriKnownPage, NormalMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsignorEoriController.onPageLoad(answers.id, NormalMode))
+                .mustBe(traderDetailsRoute.ConsignorEoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -297,7 +297,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             answers =>
               navigator
                 .nextPage(ConsignorEoriPage, NormalMode, answers)
-                .mustBe(traderDetailsRoute.ConsignorNameController.onPageLoad(answers.id, NormalMode))
+                .mustBe(traderDetailsRoute.ConsignorNameController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -313,7 +313,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsignorEoriKnownPage, NormalMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsignorNameController.onPageLoad(answers.id, NormalMode))
+                .mustBe(traderDetailsRoute.ConsignorNameController.onPageLoad(answers.lrn, NormalMode))
           }
         }
       }
@@ -324,7 +324,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           answers =>
             navigator
               .nextPage(ConsignorNamePage, NormalMode, answers)
-              .mustBe(traderDetailsRoute.ConsignorAddressController.onPageLoad(answers.id, NormalMode))
+              .mustBe(traderDetailsRoute.ConsignorAddressController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -334,7 +334,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           answers =>
             navigator
               .nextPage(ConsignorAddressPage, NormalMode, answers)
-              .mustBe(traderDetailsRoute.AddConsigneeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(traderDetailsRoute.AddConsigneeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -348,7 +348,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(AddConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.IsConsigneeEoriKnownController.onPageLoad(answers.id, NormalMode))
+                .mustBe(traderDetailsRoute.IsConsigneeEoriKnownController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -360,7 +360,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsigneeEoriKnownPage, NormalMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.WhatIsConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+                .mustBe(traderDetailsRoute.WhatIsConsigneeEoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -373,7 +373,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsigneeEoriKnownPage, NormalMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsigneeNameController.onPageLoad(answers.id, NormalMode))
+                .mustBe(traderDetailsRoute.ConsigneeNameController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -383,7 +383,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             answers =>
               navigator
                 .nextPage(WhatIsConsigneeEoriPage, NormalMode, answers)
-                .mustBe(traderDetailsRoute.ConsigneeNameController.onPageLoad(answers.id, NormalMode))
+                .mustBe(traderDetailsRoute.ConsigneeNameController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -393,7 +393,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             answers =>
               navigator
                 .nextPage(ConsigneeNamePage, NormalMode, answers)
-                .mustBe(traderDetailsRoute.ConsigneeAddressController.onPageLoad(answers.id, NormalMode))
+                .mustBe(traderDetailsRoute.ConsigneeAddressController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -403,7 +403,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             answers =>
               navigator
                 .nextPage(ConsigneeAddressPage, NormalMode, answers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -419,7 +419,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(AddConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
@@ -429,7 +429,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
           answers =>
             navigator
               .nextPage(PrincipalTirHolderIdPage, NormalMode, answers)
-              .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.id, NormalMode))
+              .mustBe(traderDetailsRoute.AddConsignorController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -448,7 +448,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsPrincipalEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.WhatIsPrincipalEoriController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.WhatIsPrincipalEoriController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -462,7 +462,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsPrincipalEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -476,7 +476,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsPrincipalEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -490,7 +490,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsPrincipalEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -509,7 +509,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.lrn, CheckMode))
             }
           }
 
@@ -524,7 +524,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.lrn, CheckMode))
             }
           }
 
@@ -539,7 +539,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.lrn, CheckMode))
             }
           }
 
@@ -554,7 +554,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.lrn, CheckMode))
             }
           }
         }
@@ -569,7 +569,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
                 navigator
                   .nextPage(WhatIsPrincipalEoriPage, CheckMode, updatedAnswers)
-                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.id, CheckMode))
+                  .mustBe(traderDetailsRoute.PrincipalNameController.onPageLoad(updatedAnswers.lrn, CheckMode))
             }
           }
         }
@@ -585,7 +585,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(PrincipalNamePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -598,7 +598,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(PrincipalNamePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.PrincipalAddressController.onPageLoad(updatedAnswers.id, CheckMode))
+                .mustBe(traderDetailsRoute.PrincipalAddressController.onPageLoad(updatedAnswers.lrn, CheckMode))
           }
         }
       }
@@ -614,7 +614,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(AddConsignorPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.IsConsignorEoriKnownController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.IsConsignorEoriKnownController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -628,7 +628,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(AddConsignorPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
 
           }
         }
@@ -642,7 +642,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(AddConsignorPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
 
           }
         }
@@ -659,7 +659,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsignorEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsignorEoriController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.ConsignorEoriController.onPageLoad(answers.lrn, CheckMode))
 
           }
         }
@@ -673,7 +673,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsignorEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
 
           }
         }
@@ -687,7 +687,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsignorEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsignorNameController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.ConsignorNameController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -700,7 +700,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsignorEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -715,7 +715,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(ConsignorEoriPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsignorNameController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.ConsignorNameController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -727,7 +727,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(ConsignorEoriPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
@@ -741,7 +741,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(ConsignorNamePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -753,7 +753,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(ConsignorNamePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsignorAddressController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.ConsignorAddressController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -766,7 +766,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
             navigator
               .nextPage(ConsignorAddressPage, CheckMode, updatedAnswers)
-              .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -781,7 +781,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(AddConsigneePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.IsConsigneeEoriKnownController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.IsConsigneeEoriKnownController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -795,7 +795,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(AddConsigneePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
 
           }
         }
@@ -809,7 +809,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(AddConsigneePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
 
           }
         }
@@ -826,7 +826,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsigneeEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.WhatIsConsigneeEoriController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.WhatIsConsigneeEoriController.onPageLoad(answers.lrn, CheckMode))
 
           }
         }
@@ -840,7 +840,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsigneeEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
 
           }
         }
@@ -854,7 +854,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsigneeEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsigneeNameController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.ConsigneeNameController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -867,7 +867,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(IsConsigneeEoriKnownPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
@@ -881,7 +881,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(WhatIsConsigneeEoriPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsigneeNameController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.ConsigneeNameController.onPageLoad(answers.lrn, CheckMode))
           }
         }
 
@@ -893,7 +893,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(WhatIsConsigneeEoriPage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
       }
@@ -908,7 +908,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(ConsigneeNamePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
 
         }
@@ -921,7 +921,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
 
               navigator
                 .nextPage(ConsigneeNamePage, CheckMode, updatedAnswers)
-                .mustBe(traderDetailsRoute.ConsigneeAddressController.onPageLoad(answers.id, CheckMode))
+                .mustBe(traderDetailsRoute.ConsigneeAddressController.onPageLoad(answers.lrn, CheckMode))
           }
 
         }
@@ -934,7 +934,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             val updatedAnswers = answers
             navigator
               .nextPage(ConsigneeAddressPage, CheckMode, updatedAnswers)
-              .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(traderDetailsRoute.TraderDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }

@@ -46,7 +46,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .value
           navigator
             .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -59,7 +59,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .value
           navigator
             .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -72,7 +72,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .value
           navigator
             .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -81,7 +81,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         answers =>
           navigator
             .nextPage(CommercialReferenceNumberPage(index), NormalMode, answers)
-            .mustBe(routes.AddDangerousGoodsCodeController.onPageLoad(answers.id, index, NormalMode))
+            .mustBe(routes.AddDangerousGoodsCodeController.onPageLoad(answers.lrn, index, NormalMode))
       }
     }
 
@@ -101,7 +101,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
               .value
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
 
@@ -123,7 +123,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
               .value
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -145,7 +145,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
               .value
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -167,7 +167,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
               .value
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -180,7 +180,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
               .value
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.DangerousGoodsCodeController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(routes.DangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
     }
@@ -197,7 +197,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .value
           navigator
             .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
 
@@ -219,7 +219,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .value
           navigator
             .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-            .mustBe(controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -241,7 +241,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .value
           navigator
             .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-            .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -263,7 +263,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .value
           navigator
             .nextPage(DangerousGoodsCodePage(index), NormalMode, updatedAnswers)
-            .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
   }
@@ -274,7 +274,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         answers =>
           navigator
             .nextPage(TransportChargesPage(index), CheckMode, answers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
       }
     }
   }
@@ -284,7 +284,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       answers =>
         navigator
           .nextPage(CommercialReferenceNumberPage(index), CheckMode, answers)
-          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
     }
   }
 
@@ -298,7 +298,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
             .value
           navigator
             .nextPage(AddDangerousGoodsCodePage(index), CheckMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
 
@@ -315,7 +315,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddDangerousGoodsCodePage(index), CheckMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
 
@@ -332,7 +332,7 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddDangerousGoodsCodePage(index), CheckMode, updatedAnswers)
-            .mustBe(routes.DangerousGoodsCodeController.onPageLoad(updatedAnswers.id, index, CheckMode))
+            .mustBe(routes.DangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
       }
     }
   }

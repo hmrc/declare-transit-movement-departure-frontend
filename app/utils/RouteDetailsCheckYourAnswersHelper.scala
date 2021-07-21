@@ -25,7 +25,7 @@ import uk.gov.hmrc.viewmodels._
 
 class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def lrn: LocalReferenceNumber = userAnswers.id
+  def lrn: LocalReferenceNumber = userAnswers.lrn
 
   def addOfficeOfTransit: Option[Row] = userAnswers.get(AddOfficeOfTransitPage) map {
     answer =>
@@ -168,13 +168,13 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
               actions = List(
                 Action(
                   content = msg"site.change",
-                  href = routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, index, mode).url,
+                  href = routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, index, mode).url,
                   visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.change.hidden".withArgs(answer)),
                   attributes = Map("id" -> s"""change-office-of-transit-${index.display}""")
                 ),
                 Action(
                   content = msg"site.delete",
-                  href = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.id, index, mode).url,
+                  href = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index, mode).url,
                   visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.delete.hidden".withArgs(answer)),
                   attributes = Map("id" -> s"""remove-office-of-transit-${index.display}""")
                 )

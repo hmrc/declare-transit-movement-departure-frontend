@@ -17,19 +17,20 @@
 package models
 
 import java.time.LocalDateTime
-
 import derivable.Derivable
 import pages._
 import play.api.libs.json._
 import queries.Gettable
 
+import java.util.UUID
 import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
-  id: LocalReferenceNumber,
+  lrn: LocalReferenceNumber,
   eoriNumber: EoriNumber,
   data: JsObject = Json.obj(),
-  lastUpdated: LocalDateTime = LocalDateTime.now
+  lastUpdated: LocalDateTime = LocalDateTime.now,
+  id: Id = Id()
 ) {
 
   def get[A](gettable: Gettable[A])(implicit rds: Reads[A]): Option[A] =
@@ -78,11 +79,26 @@ object UserAnswers {
     import play.api.libs.functional.syntax._
 
     (
+      (__ \ "lrn").read[LocalReferenceNumber] and
+        (__ \ "eoriNumber").read[EoriNumber] and
+        (__ \ "data").read[JsObject] and
+        (__ \ "lastUpdated").read(MongoDateTimeFormats.localDateTimeRead) and
+        (__ \ "_id").read[Id]
+    )(UserAnswers.apply _)
+  }
+
+  val legacyReads: Reads[UserAnswers] = {
+
+    import play.api.libs.functional.syntax._
+    (
       (__ \ "_id").read[LocalReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
-        (__ \ "lastUpdated").read(MongoDateTimeFormats.localDateTimeRead)
-    )(UserAnswers.apply _)
+        (__ \ "lastUpdated").read(MongoDateTimeFormats.localDateTimeRead) and
+        (__ \ "_id").read[Id]
+    )(UserAnswers.apply _).map(
+      ua => ua.copy(id = Id())
+    )
   }
 
   implicit lazy val writes: OWrites[UserAnswers] = {
@@ -90,10 +106,27 @@ object UserAnswers {
     import play.api.libs.functional.syntax._
 
     (
-      (__ \ "_id").write[LocalReferenceNumber] and
+      (__ \ "lrn").write[LocalReferenceNumber] and
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "data").write[JsObject] and
-        (__ \ "lastUpdated").write(MongoDateTimeFormats.localDateTimeWrite)
+        (__ \ "lastUpdated").write(MongoDateTimeFormats.localDateTimeWrite) and
+        (__ \ "_id").write[Id]
     )(unlift(UserAnswers.unapply))
+  }
+}
+
+final case class Id(uuid: String)
+
+object Id {
+
+  def apply() =
+    new Id(UUID.randomUUID().toString)
+
+  implicit def reads: Reads[Id] =
+    __.read[String].map(Id.apply)
+
+  implicit def writes: Writes[Id] = Writes {
+    id =>
+      JsString(id.uuid)
   }
 }

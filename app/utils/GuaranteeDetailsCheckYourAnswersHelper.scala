@@ -192,7 +192,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           List(
             Action(
               content = msg"site.change",
-              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.id, index).url,
+              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
               visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
               attributes = Map("id" -> s"""change-guarantee-${index.display}""")
             )
@@ -201,13 +201,13 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           List(
             Action(
               content = msg"site.change",
-              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.id, index).url,
+              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
               visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
               attributes = Map("id" -> s"""change-guarantee-${index.display}""")
             ),
             Action(
               content = msg"site.delete",
-              href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.id, index).url,
+              href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.lrn, index).url,
               visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
               attributes = Map("id" -> s"""remove-guarantee-${index.display}""")
             )
@@ -224,5 +224,5 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     }
   }
 
-  def lrn: LocalReferenceNumber = userAnswers.id
+  def lrn: LocalReferenceNumber = userAnswers.lrn
 }

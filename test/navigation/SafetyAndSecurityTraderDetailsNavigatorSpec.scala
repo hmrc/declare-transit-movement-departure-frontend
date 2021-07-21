@@ -43,7 +43,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddSafetyAndSecurityConsignorPage, NormalMode, updatedAnswers)
-            .mustBe(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -58,7 +58,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddSafetyAndSecurityConsignorEoriPage, NormalMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityConsignorEoriController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.SafetyAndSecurityConsignorEoriController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -73,7 +73,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddSafetyAndSecurityConsignorEoriPage, NormalMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityConsignorNameController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.SafetyAndSecurityConsignorNameController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -83,7 +83,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(SafetyAndSecurityConsignorNamePage, NormalMode, answers)
-            .mustBe(routes.SafetyAndSecurityConsignorAddressController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.SafetyAndSecurityConsignorAddressController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -93,7 +93,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(SafetyAndSecurityConsignorEoriPage, NormalMode, answers)
-            .mustBe(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.AddSafetyAndSecurityConsigneeController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -118,7 +118,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
               navigator
                 .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -139,7 +139,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
               navigator
                 .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -160,7 +160,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
               navigator
                 .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -178,7 +178,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
               navigator
                 .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddCarrierController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddCarrierController.onPageLoad(answers.lrn, NormalMode))
           }
         }
       }
@@ -202,7 +202,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
               navigator
                 .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -223,7 +223,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
               navigator
                 .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -244,7 +244,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
               navigator
                 .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -262,7 +262,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
               navigator
                 .nextPage(AddSafetyAndSecurityConsigneePage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddCarrierController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddCarrierController.onPageLoad(answers.lrn, NormalMode))
           }
         }
       }
@@ -280,7 +280,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddSafetyAndSecurityConsigneeEoriPage, NormalMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -295,7 +295,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddSafetyAndSecurityConsigneeEoriPage, NormalMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityConsigneeNameController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.SafetyAndSecurityConsigneeNameController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -305,7 +305,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(SafetyAndSecurityConsigneeNamePage, NormalMode, answers)
-            .mustBe(routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -315,7 +315,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(SafetyAndSecurityConsigneeEoriPage, NormalMode, answers)
-            .mustBe(routes.AddCarrierController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.AddCarrierController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -330,7 +330,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddCarrierPage, NormalMode, updatedAnswers)
-            .mustBe(routes.AddCarrierEoriController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.AddCarrierEoriController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -345,7 +345,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddCarrierPage, NormalMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
 
@@ -360,7 +360,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddCarrierEoriPage, NormalMode, updatedAnswers)
-            .mustBe(routes.CarrierEoriController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.CarrierEoriController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -375,7 +375,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddCarrierEoriPage, NormalMode, updatedAnswers)
-            .mustBe(routes.CarrierNameController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.CarrierNameController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -385,7 +385,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(CarrierNamePage, NormalMode, answers)
-            .mustBe(routes.CarrierAddressController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.CarrierAddressController.onPageLoad(answers.lrn, NormalMode))
       }
     }
 
@@ -395,7 +395,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(CarrierEoriPage, NormalMode, answers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
 
@@ -416,7 +416,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
           navigator
             .nextPage(AddSafetyAndSecurityConsignorPage, NormalMode, updatedAnswers)
-            .mustBe(routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(answers.id, NormalMode))
+            .mustBe(routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(answers.lrn, NormalMode))
       }
     }
   }
@@ -434,7 +434,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsignorPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -452,7 +452,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsignorPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -470,7 +470,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsignorPage, CheckMode, updatedAnswers)
-              .mustBe(routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(answers.lrn, CheckMode))
         }
       }
     }
@@ -489,7 +489,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsignorEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
       "go to SafetyAndSecurityConsignorEoriPage when Yes is selected and no answer already exists for SafetyAndSecurityConsignorEoriPage" in {
@@ -505,7 +505,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsignorEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityConsignorEoriController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.SafetyAndSecurityConsignorEoriController.onPageLoad(answers.lrn, CheckMode))
         }
       }
       "go to Check Your Answers page when No is selected and answer already exists for SafetyAndSecurityConsignorNamePage" in {
@@ -521,7 +521,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsignorEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
       "go to SafetyAndSecurityConsignorNamePage when No is selected and no answer already exists for SafetyAndSecurityConsignorNamePage" in {
@@ -537,7 +537,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsignorEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityConsignorNameController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.SafetyAndSecurityConsignorNameController.onPageLoad(answers.lrn, CheckMode))
         }
       }
     }
@@ -547,7 +547,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(SafetyAndSecurityConsignorEoriPage, CheckMode, answers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
 
@@ -561,7 +561,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .value
           navigator
             .nextPage(SafetyAndSecurityConsignorNamePage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
       }
     }
 
@@ -574,7 +574,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .value
           navigator
             .nextPage(SafetyAndSecurityConsignorNamePage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityConsignorAddressController.onPageLoad(updatedAnswers.id, CheckMode))
+            .mustBe(routes.SafetyAndSecurityConsignorAddressController.onPageLoad(updatedAnswers.lrn, CheckMode))
       }
     }
 
@@ -583,7 +583,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(SafetyAndSecurityConsignorAddressPage, CheckMode, answers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
 
@@ -599,7 +599,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -617,7 +617,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -641,7 +641,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -665,7 +665,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
-              .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -689,7 +689,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneePage, CheckMode, updatedAnswers)
-              .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, CheckMode))
         }
       }
     }
@@ -709,7 +709,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneeEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
       "go to SafetyAndSecurityConsigneeEoriPage when Yes is selected and no answer already exists for SafetyAndSecurityConsigneeEoriPage" in {
@@ -725,7 +725,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneeEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(answers.lrn, CheckMode))
         }
       }
       "go to Check Your Answers page when No is selected and answer already exists for SafetyAndSecurityConsigneeNamePage" in {
@@ -741,7 +741,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneeEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
       "go to SafetyAndSecurityConsigneeNamePage when No is selected and no answer already exists for SafetyAndSecurityConsigneeNamePage" in {
@@ -757,7 +757,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
 
             navigator
               .nextPage(AddSafetyAndSecurityConsigneeEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityConsigneeNameController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.SafetyAndSecurityConsigneeNameController.onPageLoad(answers.lrn, CheckMode))
         }
       }
     }
@@ -767,7 +767,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(SafetyAndSecurityConsigneeEoriPage, CheckMode, answers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
 
@@ -776,7 +776,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(SafetyAndSecurityConsigneeAddressPage, CheckMode, answers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
 
@@ -791,7 +791,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .value
           navigator
             .nextPage(SafetyAndSecurityConsigneeNamePage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
       }
     }
     "Must go from SafetyAndSecurityConsigneeNamePage to SafetyAndSecurityConsigneeAddressPage if no answer exists for  SafetyAndSecurityConsigneeAddressPage" in {
@@ -803,7 +803,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
             .value
           navigator
             .nextPage(SafetyAndSecurityConsigneeNamePage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(updatedAnswers.id, CheckMode))
+            .mustBe(routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(updatedAnswers.lrn, CheckMode))
       }
     }
 
@@ -817,7 +817,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(AddCarrierPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -833,7 +833,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(AddCarrierPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -849,7 +849,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(AddCarrierPage, CheckMode, updatedAnswers)
-              .mustBe(routes.AddCarrierEoriController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.AddCarrierEoriController.onPageLoad(answers.lrn, CheckMode))
         }
       }
     }
@@ -867,7 +867,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(AddCarrierEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -883,7 +883,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(AddCarrierEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.CarrierEoriController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.CarrierEoriController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -899,7 +899,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(AddCarrierEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.CarrierNameController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.CarrierNameController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -915,7 +915,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(AddCarrierEoriPage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }
@@ -930,7 +930,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(CarrierNamePage, CheckMode, updatedAnswers)
-              .mustBe(routes.CarrierAddressController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.CarrierAddressController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -945,7 +945,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
               .value
             navigator
               .nextPage(CarrierNamePage, CheckMode, updatedAnswers)
-              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }
@@ -955,7 +955,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(CarrierEoriPage, CheckMode, answers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
 
@@ -964,7 +964,7 @@ class SafetyAndSecurityTraderDetailsNavigatorSpec extends SpecBase with ScalaChe
         answers =>
           navigator
             .nextPage(CarrierAddressPage, CheckMode, answers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(answers.lrn))
       }
     }
   }
