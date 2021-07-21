@@ -52,51 +52,51 @@ class WhatIsPrincipalEoriController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val isSimplified = request.userAnswers.get(ProcedureTypePage).contains(Simplified)
-      val countryCode = request.userAnswers.get(OfficeOfDeparturePage) map (
-        x => x.countryId
-      )
-      val preparedForm = request.userAnswers.get(WhatIsPrincipalEoriPage) match {
-        case None        => formProvider(isSimplified, countryCode.getOrElse(CountryCode("")))
-        case Some(value) => formProvider(isSimplified, countryCode.getOrElse(CountryCode(""))).fill(value)
+      request.userAnswers.get(OfficeOfDeparturePage) match {
+        case Some(officeOfDeparture) =>
+          val isSimplified = request.userAnswers.get(ProcedureTypePage).contains(Simplified)
+          val preparedForm = request.userAnswers.get(WhatIsPrincipalEoriPage) match {
+            case None        => formProvider(isSimplified, officeOfDeparture.countryId)
+            case Some(value) => formProvider(isSimplified, officeOfDeparture.countryId).fill(value)
+          }
+          val json = Json.obj(
+            "form" -> preparedForm,
+            "lrn"  -> lrn,
+            "mode" -> mode
+          )
+          renderer.render("whatIsPrincipalEori.njk", json).map(Ok(_))
+        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
-
-      val json = Json.obj(
-        "form" -> preparedForm,
-        "lrn"  -> lrn,
-        "mode" -> mode
-      )
-
-      renderer.render("whatIsPrincipalEori.njk", json).map(Ok(_))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val isSimplified = request.userAnswers.get(ProcedureTypePage) match {
-        case Some(Simplified) => true
-        case _                => false
-      }
-      val countryCode = request.userAnswers.get(OfficeOfDeparturePage) map (
-        x => x.countryId
-      )
-      formProvider(isSimplified, countryCode.getOrElse(CountryCode("")))
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+      request.userAnswers.get(OfficeOfDeparturePage) match {
+        case Some(officeOfDeparture) =>
+          val isSimplified = request.userAnswers.get(ProcedureTypePage) match {
+            case Some(Simplified) => true
+            case _                => false
+          }
 
-            val json = Json.obj(
-              "form" -> formWithErrors,
-              "lrn"  -> lrn,
-              "mode" -> mode
+          formProvider(isSimplified, officeOfDeparture.countryId)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => {
+                val json = Json.obj(
+                  "form" -> formWithErrors,
+                  "lrn"  -> lrn,
+                  "mode" -> mode
+                )
+                renderer.render("whatIsPrincipalEori.njk", json).map(BadRequest(_))
+              },
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsPrincipalEoriPage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(WhatIsPrincipalEoriPage, mode, updatedAnswers))
             )
+        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
 
-            renderer.render("whatIsPrincipalEori.njk", json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsPrincipalEoriPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(WhatIsPrincipalEoriPage, mode, updatedAnswers))
-        )
+      }
   }
 }

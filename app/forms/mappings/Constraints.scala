@@ -183,7 +183,7 @@ trait Constraints {
       }
     }
 
-  def prefix(countryCode: CountryCode, errorKey: String): Constraint[String] =
+  private def prefix(countryCode: CountryCode, errorKey: String): Constraint[String] =
     Constraint {
       case str if str.toUpperCase.take(2) == countryCode.code.toUpperCase.take(2) =>
         Valid
