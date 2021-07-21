@@ -36,14 +36,6 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
   "RouteDetailsNavigator" - {
 
     "in Normal mode" - {
-      /*
-            Given a user has selected a TIR declaration type
-            And has entered the route details journey
-              When the user completes the office of destination question
-            Then the section finishes
-              And the user is not asked about transit offices
-            And no XML relating to transit offices is sent (please see attached)
-       */
 
       "Route Details section" - {
 
