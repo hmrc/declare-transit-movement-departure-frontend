@@ -114,19 +114,3 @@ object UserAnswers {
     )(unlift(UserAnswers.unapply))
   }
 }
-
-final case class Id(uuid: String)
-
-object Id {
-
-  def apply() =
-    new Id(UUID.randomUUID().toString)
-
-  implicit def reads: Reads[Id] =
-    __.read[String].map(Id.apply)
-
-  implicit def writes: Writes[Id] = Writes {
-    id =>
-      JsString(id.uuid)
-  }
-}
