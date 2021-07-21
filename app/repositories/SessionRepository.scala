@@ -58,16 +58,11 @@ private[repositories] class DefaultSessionRepository @Inject() (
       userAnswers <- userAnswersF
       result <-
         if (userAnswers.isEmpty) {
-          println(s"****legacyUserAnswerF*****$userAnswers******************")
           legacyUserAnswerF
         } else {
-          println(s"****userAnswersF*****$userAnswers******************")
           Future.successful(userAnswers)
         }
-    } yield {
-      println(s"*********$result******************")
-      result
-    }
+    } yield result
 
   }
 
