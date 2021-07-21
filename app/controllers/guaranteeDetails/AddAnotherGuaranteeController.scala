@@ -19,11 +19,13 @@ package controllers.guaranteeDetails
 import controllers.actions._
 import derivable.DeriveNumberOfGuarantees
 import forms.AddAnotherGuaranteeFormProvider
+import models.DeclarationType.Option4
+import models.journeyDomain.GettableAsReaderOps
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
-import pages.AddAnotherGuaranteePage
+import pages.{AddAnotherGuaranteePage, DeclarationTypePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -61,7 +63,12 @@ class AddAnotherGuaranteeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.GuaranteeDetails)).async {
       implicit request =>
-        renderPage(lrn, formProvider(allowMoreGuarantees(request.userAnswers))).map(Ok(_))
+        val tirDeclarationType = request.userAnswers.get(DeclarationTypePage) match {
+          case Some(Option4) => true
+          case _             => false
+        }
+
+        renderPage(lrn, formProvider(allowMoreGuarantees(request.userAnswers), tirDeclarationType), tirDeclarationType).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] =
@@ -70,10 +77,15 @@ class AddAnotherGuaranteeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.GuaranteeDetails)).async {
       implicit request =>
-        formProvider(allowMoreGuarantees(request.userAnswers))
+        val tirDeclarationType = request.userAnswers.get(DeclarationTypePage) match {
+          case Some(Option4) => true
+          case _             => false
+        }
+
+        formProvider(allowMoreGuarantees(request.userAnswers), tirDeclarationType)
           .bindFromRequest()
           .fold(
-            formWithErrors => renderPage(lrn, formWithErrors).map(BadRequest(_)),
+            formWithErrors => renderPage(lrn, formWithErrors, tirDeclarationType).map(BadRequest(_)),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAnotherGuaranteePage, value))
@@ -81,7 +93,7 @@ class AddAnotherGuaranteeController @Inject() (
           )
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
+  private def renderPage(lrn: LocalReferenceNumber, form: Form[Boolean], isTir: Boolean)(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
     val cyaHelper             = new GuaranteeDetailsCheckYourAnswersHelper(request.userAnswers)
     val numberOfItems         = request.userAnswers.get(DeriveNumberOfGuarantees).getOrElse(0)
@@ -89,15 +101,19 @@ class AddAnotherGuaranteeController @Inject() (
 
     val guaranteeRows = indexList.map {
       index =>
-        cyaHelper.guaranteeRows(index)
+        cyaHelper.guaranteeRows(index, isTir)
     }
 
     val singularOrPlural = if (numberOfItems == 1) "singular" else "plural"
+
+    val tirOrRegularGuarantee = if (isTir) "addAnotherGuarantee.tir" else "addAnotherGuarantee"
+
     val json = Json.obj(
       "form"                -> form,
       "lrn"                 -> lrn,
-      "pageTitle"           -> msg"addAnotherGuarantee.title.$singularOrPlural".withArgs(numberOfItems),
-      "heading"             -> msg"addAnotherGuarantee.heading.$singularOrPlural".withArgs(numberOfItems),
+      "pageTitle"           -> msg"$tirOrRegularGuarantee.title.$singularOrPlural".withArgs(numberOfItems),
+      "heading"             -> msg"$tirOrRegularGuarantee.heading.$singularOrPlural".withArgs(numberOfItems),
+      "radioHeading"        -> msg"$tirOrRegularGuarantee.radio.heading",
       "guaranteeRows"       -> guaranteeRows,
       "allowMoreGuarantees" -> allowMoreGuarantees(request.userAnswers),
       "radios"              -> Radios.yesNo(form("value"))
