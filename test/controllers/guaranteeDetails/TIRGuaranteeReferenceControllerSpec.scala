@@ -26,7 +26,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TIRGuaranteeReferencePage
+import pages.guaranteeDetails
+import pages.guaranteeDetails.TIRGuaranteeReferencePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -90,7 +91,7 @@ class TIRGuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRend
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(TIRGuaranteeReferencePage(index), "answer").success.value
+      val userAnswers = emptyUserAnswers.set(guaranteeDetails.TIRGuaranteeReferencePage(index), "answer").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, tIRGuaranteeReferenceRoute)

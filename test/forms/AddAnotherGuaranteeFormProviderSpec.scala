@@ -19,26 +19,45 @@ package forms
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class AddAnotherGuaranteeFormProviderSpec extends BooleanFieldBehaviours {
+class AddAnotherGuaranteeFormProviderSpec extends BooleanFieldBehaviours with FormSpec {
 
-  private val requiredKey = "addAnotherGuarantee.error.required"
-  private val invalidKey  = "error.boolean"
-  private val form        = new AddAnotherGuaranteeFormProvider()
+  private val requiredKey    = "addAnotherGuarantee.error.required"
+  private val tirRequiredKey = "addAnotherGuarantee.tir.error.required"
+  private val invalidKey     = "error.boolean"
+  private val form           = new AddAnotherGuaranteeFormProvider()
 
   ".value" - {
 
     val fieldName = "value"
 
     behave like booleanField(
-      form(true),
+      form(allowMoreGuarantees = true, isTir = false),
       fieldName,
       invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(
-      form(true),
+      form(allowMoreGuarantees = true, isTir = false),
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "must not bind when key is not present at all for a TIR declaration" in {
+
+      val result = form(allowMoreGuarantees = true, isTir = true).bind(emptyForm).apply(fieldName)
+
+      val expectedError = List(FormError(fieldName, tirRequiredKey))
+
+      result.errors mustEqual expectedError
+    }
+
+    "must not bind blank values for a TIR declaration" in {
+
+      val result = form(allowMoreGuarantees = true, isTir = true).bind(Map(fieldName -> "")).apply(fieldName)
+
+      val expectedError = List(FormError(fieldName, tirRequiredKey))
+
+      result.errors mustEqual expectedError
+    }
   }
 }

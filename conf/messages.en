@@ -1393,6 +1393,14 @@ addAnotherGuarantee.error.required = Select yes if you need to add another guara
 addAnotherGuarantee.guarantee.change.hidden = guarantee {0}
 addAnotherGuarantee.guarantee.delete.hidden = guarantee {0}
 
+addAnotherGuarantee.tir.title.singular = You have added 1 TIR Carnet
+addAnotherGuarantee.tir.title.plural = You have added {0} TIR Carnets
+addAnotherGuarantee.tir.heading.singular = You have added 1 TIR Carnet
+addAnotherGuarantee.tir.heading.plural = You have added {0} TIR Carnets
+addAnotherGuarantee.tir.radio.heading = Do you need to add another TIR Carnet
+addAnotherGuarantee.tir.error.required = Select yes if you need to add another TIR Carnet
+
+
 confirmRemoveGuarantee.title =  Are you sure you want to remove this guarantee?
 confirmRemoveGuarantee.heading =  Are you sure you want to remove this guarantee?
 confirmRemoveGuarantee.error.required = Select yes if you want to remove this guarantee

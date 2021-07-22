@@ -20,6 +20,7 @@ import cats.data.NonEmptyList
 import cats.implicits._
 import logging.Logging
 import models.DeclarationType.Option4
+import models.GuaranteeType.TIR
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
   GoodSummaryDetails,
@@ -98,6 +99,9 @@ class DeclarationRequestService @Inject() (
         case GuaranteeDetails.GuaranteeOther(guaranteeType, otherReference) =>
           val guaranteeReferenceOther = GuaranteeReferenceWithOther(otherReference, None)
           Guarantee(guaranteeType.toString, Seq(guaranteeReferenceOther))
+        case GuaranteeDetails.GuaranteeTIR(tirReference) =>
+          val guaranteeReferenceTir = GuaranteeReferenceWithOther(tirReference, None)
+          Guarantee(TIR.toString, Seq(guaranteeReferenceTir))
       }
 
     def packages(packages: NonEmptyList[Packages]): NonEmptyList[models.messages.goodsitem.Package] =

@@ -22,7 +22,7 @@ import models.GuaranteeType.guaranteeReferenceRoute
 import models._
 import models.reference.CountryCode
 import pages._
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 
@@ -184,45 +184,59 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def guaranteeRows(index: Index): Option[Row] = {
-
-    def actions(answer: GuaranteeType) =
-      (userAnswers.get(DeclarationTypePage), index) match {
-        case (Some(Option4), Index(0)) =>
-          List(
-            Action(
-              content = msg"site.change",
-              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
-              visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-              attributes = Map("id" -> s"""change-guarantee-${index.display}""")
-            )
+  def guaranteeRows(index: Index, isTir: Boolean): Option[Row] =
+    if (isTir) {
+      userAnswers.get(TIRGuaranteeReferencePage(index)).map {
+        answer =>
+          Row(
+            key = Key(msg"$answer"),
+            value = Value(lit""),
+            actions = List(
+              Action(
+                content = msg"site.change",
+                href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
+                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"$answer")),
+                attributes = Map("id" -> s"""change-tir-carnet-${index.display}""")
+              )
+            ) ++ {
+              if (index.position != 0) {
+                List(
+                  Action(
+                    content = msg"site.delete",
+                    href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.lrn, index).url,
+                    visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"$answer")),
+                    attributes = Map("id" -> s"""remove-tir-carnet-${index.display}""")
+                  )
+                )
+              } else {
+                List.empty
+              }
+            }
           )
-        case _ =>
-          List(
-            Action(
-              content = msg"site.change",
-              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
-              visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-              attributes = Map("id" -> s"""change-guarantee-${index.display}""")
-            ),
-            Action(
-              content = msg"site.delete",
-              href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.lrn, index).url,
-              visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-              attributes = Map("id" -> s"""remove-guarantee-${index.display}""")
+      }
+    } else {
+      userAnswers.get(GuaranteeTypePage(index)).map {
+        answer =>
+          Row(
+            key = Key(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}"),
+            value = Value(lit""),
+            actions = List(
+              Action(
+                content = msg"site.change",
+                href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
+                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
+                attributes = Map("id" -> s"""change-guarantee-${index.display}""")
+              ),
+              Action(
+                content = msg"site.delete",
+                href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.lrn, index).url,
+                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
+                attributes = Map("id" -> s"""remove-guarantee-${index.display}""")
+              )
             )
           )
       }
-
-    userAnswers.get(GuaranteeTypePage(index)).map {
-      answer =>
-        Row(
-          key = Key(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}"),
-          value = Value(lit""),
-          actions = actions(answer)
-        )
     }
-  }
 
   def lrn: LocalReferenceNumber = userAnswers.lrn
 }

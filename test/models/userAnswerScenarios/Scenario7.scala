@@ -38,7 +38,7 @@ import models.ProcedureType.Normal
 import models.RepresentativeCapacity.Direct
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryNormalDetailsWithoutPreLodge
-import models.journeyDomain.GuaranteeDetails.GuaranteeReference
+import models.journeyDomain.GuaranteeDetails.GuaranteeTIR
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.MovementDetails.{DeclarationForSomeoneElse, NormalMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
@@ -50,14 +50,11 @@ import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPerson
 import models.journeyDomain.traderDetails.{PrincipalTraderPersonalInfo, TraderDetails}
 import models.journeyDomain.{
   Container,
-  CurrencyCode,
-  DefaultLiabilityAmount,
   GoodsSummary,
   ItemDetails,
   ItemSection,
   Itinerary,
   JourneyDomain,
-  OtherLiabilityAmount,
   PreTaskListDetails,
   PreviousReferences,
   RouteDetails,
@@ -67,7 +64,7 @@ import models.journeyDomain.{
   TransportDetails
 }
 import models.reference._
-import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
+import models.{CommonAddress, DeclarationType, EoriNumber, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
 
 import java.time.LocalDateTime
@@ -287,15 +284,9 @@ case object Scenario7 extends UserAnswerScenario {
     /*
      * guarantee Details
      */
-    .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(0)))(GuaranteeType.ComprehensiveGuarantee)
-    .unsafeSetVal(pages.guaranteeDetails.GuaranteeReferencePage(Index(0)))("GUA1Ref")
-    .unsafeSetVal(pages.DefaultAmountPage(Index(0)))(true)
-    .unsafeSetVal(pages.AccessCodePage(Index(0)))("1234")
+    .unsafeSetVal(pages.guaranteeDetails.TIRGuaranteeReferencePage(Index(0)))("GUA1Ref")
     .unsafeSetVal(pages.AddAnotherGuaranteePage)(true)
-    .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(1)))(GuaranteeType.GuaranteeWaiver)
-    .unsafeSetVal(pages.guaranteeDetails.GuaranteeReferencePage(Index(1)))("GUA2Ref")
-    .unsafeSetVal(pages.LiabilityAmountPage(Index(1)))("500")
-    .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
+    .unsafeSetVal(pages.guaranteeDetails.TIRGuaranteeReferencePage(Index(1)))("GUA2Ref")
 
   private val preTaskListDetails =
     PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None), Option2, true)
@@ -400,8 +391,8 @@ case object Scenario7 extends UserAnswerScenario {
     GoodsSummary(Some("LoadPLace"), GoodSummaryNormalDetailsWithoutPreLodge(None, Some("CUSAPPLOC")), List(SealDomain("SEAL1"), SealDomain("SEAL2")))
 
   private val guarantee = NonEmptyList(
-    GuaranteeReference(GuaranteeType.ComprehensiveGuarantee, "GUA1Ref", DefaultLiabilityAmount, "1234"),
-    List(GuaranteeReference(GuaranteeType.GuaranteeWaiver, "GUA2Ref", OtherLiabilityAmount("500", CurrencyCode.GBP), "4321"))
+    GuaranteeTIR("GUA1Ref"),
+    List(GuaranteeTIR("GUA2Ref"))
   )
 
   private val safetyAndSecurity = Some(

@@ -16,15 +16,18 @@
 
 package navigation
 
+import cats.implicits._
 import controllers.guaranteeDetails.routes
 import derivable.DeriveNumberOfGuarantees
-import javax.inject.{Inject, Singleton}
+import models.DeclarationType.Option4
 import models.GuaranteeType._
 import models._
 import models.reference.CountryCode
-import pages._
 import pages.guaranteeDetails._
+import pages.{AddAnotherGuaranteePage, _}
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class GuaranteeDetailsNavigator @Inject() () extends Navigator {
@@ -36,7 +39,7 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
     case GuaranteeTypePage(index)                 => ua => guaranteeTypeRoute(ua, index, NormalMode)
     case OtherReferencePage(index)                => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case GuaranteeReferencePage(index)            => ua => guaranteeReferenceNormalRoutes(ua, index, NormalMode)
-    case TIRGuaranteeReferencePage(index)         => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
+    case TIRGuaranteeReferencePage(_)             => ua => Some(routes.AddAnotherGuaranteeController.onPageLoad(ua.lrn))
     case LiabilityAmountPage(index)               => ua => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, NormalMode))
     case OtherReferenceLiabilityAmountPage(index) => ua => otherReferenceLiablityAmountRoute(ua, index, NormalMode)
     case DefaultAmountPage(index)                 => ua => defaultAmountRoute(ua, index, NormalMode)
@@ -49,7 +52,7 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
     case GuaranteeTypePage(index)                 => ua => guaranteeTypeRoute(ua, index, CheckMode)
     case OtherReferencePage(index)                => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case GuaranteeReferencePage(index)            => ua => guaranteeReferenceRoutes(ua, index)
-    case TIRGuaranteeReferencePage(index)         => ua => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
+    case TIRGuaranteeReferencePage(_)             => ua => Some(routes.AddAnotherGuaranteeController.onPageLoad(ua.lrn))
     case LiabilityAmountPage(index)               => ua => liabilityAmountRoute(ua, index, CheckMode)
     case OtherReferenceLiabilityAmountPage(index) => ua => otherReferenceLiablityAmountRoute(ua, index, CheckMode)
     case DefaultAmountPage(index)                 => ua => defaultAmountRoute(ua, index, CheckMode)
@@ -99,10 +102,16 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
 
   def addAnotherGuaranteeRoute(ua: UserAnswers): Option[Call] = {
     val count = ua.get(DeriveNumberOfGuarantees).getOrElse(1)
+    val declarationType = ua.get(DeclarationTypePage)
+    val addAnotherGuarantee = ua.get(AddAnotherGuaranteePage)
 
-    (count, ua.get(AddAnotherGuaranteePage)) match {
-      case (AddAnotherGuaranteePage.maxAllowedGuarantees, _) | (_, Some(false)) => Some(controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn))
-      case _                                                                    => Some(routes.GuaranteeTypeController.onPageLoad(ua.lrn, Index(count), NormalMode))
+    count match {
+      case AddAnotherGuaranteePage.maxAllowedGuarantees => Some(controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn))
+      case _ => (declarationType, addAnotherGuarantee).tupled.map {
+        case (Option4, true)   => routes.TIRGuaranteeReferenceController.onPageLoad(ua.lrn, Index(count), NormalMode)
+        case (_,       true)   => routes.GuaranteeTypeController.onPageLoad(ua.lrn, Index(count), NormalMode)
+        case (_,       false)  => controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn)
+      }
     }
   }
 

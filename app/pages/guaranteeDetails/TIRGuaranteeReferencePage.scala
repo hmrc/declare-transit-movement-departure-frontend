@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package pages
+package pages.guaranteeDetails
 
 import models.Index
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 import queries.Constants.guarantees
 

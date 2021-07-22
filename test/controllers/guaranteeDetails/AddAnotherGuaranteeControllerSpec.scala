@@ -19,6 +19,8 @@ package controllers.guaranteeDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import forms.AddAnotherGuaranteeFormProvider
 import matchers.JsonMatchers
+import models.DeclarationType.Option4
+import models.GuaranteeType.TIR
 import models.{GuaranteeType, UserAnswers}
 import navigation.annotations.GuaranteeDetails
 import navigation.{FakeNavigator, Navigator}
@@ -26,8 +28,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddAnotherGuaranteePage
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.{AddAnotherGuaranteePage, DeclarationTypePage}
+import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -44,8 +46,10 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
   def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new AddAnotherGuaranteeFormProvider()
-  private val form         = formProvider(true)
   private val template     = "guaranteeDetails/addAnotherGuarantee.njk"
+
+  private val standardGuaranteeForm = formProvider(true, false)
+  private val tirGuaranteeForm      = formProvider(true, true)
 
   lazy val addAnotherGuaranteeRoute = routes.AddAnotherGuaranteeController.onPageLoad(lrn).url
 
@@ -58,7 +62,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
 
   "AddAnotherGuarantee Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET for non tir guarantees" in {
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -81,12 +85,58 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"                -> form,
+        "form"                -> standardGuaranteeForm,
         "lrn"                 -> lrn,
         "pageTitle"           -> msg"addAnotherGuarantee.title.singular".withArgs(1),
         "heading"             -> msg"addAnotherGuarantee.heading.singular".withArgs(1),
+        "radioHeading"        -> msg"addAnotherGuarantee.radio.heading",
         "allowMoreGuarantees" -> true,
-        "radios"              -> Radios.yesNo(form("value"))
+        "radios"              -> Radios.yesNo(standardGuaranteeForm("value"))
+      )
+
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey
+
+      templateCaptor.getValue mustEqual template
+      jsonWithoutConfig must containJson(expectedJson)
+
+    }
+
+    "must return OK and the correct view for a GET for tir guarantees" in {
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      dataRetrievalWithData(
+        emptyUserAnswers
+          .set(GuaranteeTypePage(index), TIR)
+          .success
+          .value
+          .set(TIRGuaranteeReferencePage(index), "guaranteeRef")
+          .success
+          .value
+          .set(DeclarationTypePage, Option4)
+          .success
+          .value
+      )
+
+      val request        = FakeRequest(GET, addAnotherGuaranteeRoute)
+      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+
+      val expectedJson = Json.obj(
+        "form"                -> tirGuaranteeForm,
+        "lrn"                 -> lrn,
+        "pageTitle"           -> msg"addAnotherGuarantee.tir.title.singular".withArgs(1),
+        "heading"             -> msg"addAnotherGuarantee.tir.heading.singular".withArgs(1),
+        "radioHeading"        -> msg"addAnotherGuarantee.tir.radio.heading",
+        "allowMoreGuarantees" -> true,
+        "radios"              -> Radios.yesNo(tirGuaranteeForm("value"))
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -119,12 +169,12 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"                -> form,
+        "form"                -> standardGuaranteeForm,
         "lrn"                 -> lrn,
         "pageTitle"           -> msg"addAnotherGuarantee.title.singular".withArgs(1),
         "heading"             -> msg"addAnotherGuarantee.heading.singular".withArgs(1),
         "allowMoreGuarantees" -> true,
-        "radios"              -> Radios.yesNo(form("value"))
+        "radios"              -> Radios.yesNo(standardGuaranteeForm("value"))
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -165,7 +215,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
       )
 
       val request        = FakeRequest(POST, addAnotherGuaranteeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
+      val boundForm      = standardGuaranteeForm.bind(Map("value" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -181,7 +231,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
         "pageTitle"           -> msg"addAnotherGuarantee.title.singular".withArgs(1),
         "heading"             -> msg"addAnotherGuarantee.heading.singular".withArgs(1),
         "allowMoreGuarantees" -> true,
-        "radios"              -> Radios.yesNo(form("value"))
+        "radios"              -> Radios.yesNo(formProvider(true, false)("value"))
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey

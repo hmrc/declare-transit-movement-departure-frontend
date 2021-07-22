@@ -23,9 +23,13 @@ import play.api.data.Form
 
 class AddAnotherGuaranteeFormProvider @Inject() extends Mappings {
 
-  def apply(allowMoreGuarantees: Boolean): Form[Boolean] =
+  def apply(allowMoreGuarantees: Boolean, isTir: Boolean): Form[Boolean] = {
+
+    val requiredMessage = if (isTir) "addAnotherGuarantee.tir.error.required" else "addAnotherGuarantee.error.required"
+
     Form(
       "value" ->
-        mandatoryIfBoolean(allowMoreGuarantees, "addAnotherGuarantee.error.required")
+        mandatoryIfBoolean(allowMoreGuarantees, requiredMessage)
     )
+  }
 }

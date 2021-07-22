@@ -1365,17 +1365,15 @@ class UserAnswersToXmlConversionSpec
         </SEAIDSID>
       </SEAINFSLI>
       <GUAGUA>
-        <GuaTypGUA1>1</GuaTypGUA1>
+        <GuaTypGUA1>B</GuaTypGUA1>
         <GUAREFREF>
-          <GuaRefNumGRNREF1>GUA1Ref</GuaRefNumGRNREF1>
-          <AccCodREF6>1234</AccCodREF6>
+          <OthGuaRefREF4>GUA1Ref</OthGuaRefREF4>
         </GUAREFREF>
       </GUAGUA>
       <GUAGUA>
-        <GuaTypGUA1>0</GuaTypGUA1>
+        <GuaTypGUA1>B</GuaTypGUA1>
         <GUAREFREF>
-          <GuaRefNumGRNREF1>GUA2Ref</GuaRefNumGRNREF1>
-          <AccCodREF6>4321</AccCodREF6>
+          <OthGuaRefREF4>GUA2Ref</OthGuaRefREF4>
         </GUAREFREF>
       </GUAGUA>
       <GOOITEGDS>
@@ -1405,14 +1403,6 @@ class UserAnswersToXmlConversionSpec
           <DocTypDC21>G1D2</DocTypDC21>
           <DocRefDC23>G1D2Ref</DocRefDC23>
         </PRODOCDC2>
-        <SPEMENMT2>
-          <AddInfMT21>10000EURGUA1Ref</AddInfMT21>
-          <AddInfCodMT23>CAL</AddInfCodMT23>
-        </SPEMENMT2>
-        <SPEMENMT2>
-          <AddInfMT21>500GBPGUA2Ref</AddInfMT21>
-          <AddInfCodMT23>CAL</AddInfCodMT23>
-        </SPEMENMT2>
         <SPEMENMT2>
           <AddInfMT21>GD1SPMT1Info</AddInfMT21>
           <AddInfCodMT23>GD1S1</AddInfCodMT23>
