@@ -45,12 +45,11 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
       ua => Some(routes.AddTransitOfficeController.onPageLoad(ua.id, NormalMode))
     case ConfirmRemoveOfficeOfTransitPage =>
       ua => Some(removeOfficeOfTransit(NormalMode)(ua))
-
   }
 
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case MovementDestinationCountryPage =>
-      ua => Some(routes.DestinationOfficeController.onPageLoad(ua.id, CheckMode))
+      ua => Some(declarationTypeTIR(ua, CheckMode))
     case OfficeOfTransitCountryPage(index) =>
       ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, CheckMode))
     case page if isRouteDetailsSectionPage(page) =>
@@ -60,10 +59,10 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
       _ => None
   }
 
-  def declarationTypeTIR(ua: UserAnswers, mode: NormalMode.type) =
+  def declarationTypeTIR(ua: UserAnswers, mode: Mode) =
     ua.get(DeclarationTypePage) match {
       case Some(DeclarationType.Option4) => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id)
-      case _                             => routes.DestinationOfficeController.onPageLoad(ua.id, NormalMode)
+      case _                             => routes.DestinationOfficeController.onPageLoad(ua.id, mode)
     }
 
   def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =
@@ -78,7 +77,6 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     ua.get(OfficeOfDeparturePage) match {
       case Some(x) if x.countryId.code.startsWith("XI") => routes.AddOfficeOfTransitController.onPageLoad(ua.id, mode)
       case _                                            => routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), mode)
-
     }
 
   def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =

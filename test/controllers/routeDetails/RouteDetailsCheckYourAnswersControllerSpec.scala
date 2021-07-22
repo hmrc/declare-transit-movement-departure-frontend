@@ -76,7 +76,8 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
       val expectedJson = Json.obj(
         "lrn"                    -> lrn,
         "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
-        "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
+        "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url,
+        "showOfficesOfTransit"   -> true
       )
 
       val jsonCaptorWithoutConfig: JsObject = jsonCaptor.getValue - configKey - "sections"

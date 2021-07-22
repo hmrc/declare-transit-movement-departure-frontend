@@ -39,7 +39,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
       "Route Details section" - {
 
-        "Route Details section proceeds when a TIR declartion type is not found" in {
+        "Must go from Movement Destination Country to Destination Office when Not TIR found" in {
 
           val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
 
@@ -56,7 +56,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "Got to Check your answers when a TIR declartion type is found" in {
+        "Must go from Movement Destination Country when TIR declartion type is found" in {
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
@@ -91,13 +91,20 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "must go from Movement Destination Country page to Destination Office page" in {
+        "must go from Movement Destination Country page to Destination Office page when not TIR" in {
+
+          val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
+              val userAnswers = answers
+                .set(DeclarationTypePage, generatedOption)
+                .toOption
+                .value
+
               navigator
-                .nextPage(MovementDestinationCountryPage, NormalMode, answers)
-                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.id, NormalMode))
+                .nextPage(MovementDestinationCountryPage, NormalMode, userAnswers)
+                .mustBe(routes.DestinationOfficeController.onPageLoad(userAnswers.id, NormalMode))
           }
         }
 
@@ -291,7 +298,6 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
         }
       }
-
     }
 
     "in Check mode" - {
@@ -328,14 +334,35 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "Must go from Movement Destination Country to Destination Office" in {
+      "Must go from Movement Destination Country to Destination Office when no TIR is found" in {
+
+        val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            navigator
-              .nextPage(MovementDestinationCountryPage, CheckMode, answers)
-              .mustBe(routes.DestinationOfficeController.onPageLoad(answers.id, CheckMode))
+            val userAnswers = answers
+              .set(DeclarationTypePage, generatedOption)
+              .toOption
+              .value
 
+            navigator
+              .nextPage(MovementDestinationCountryPage, CheckMode, userAnswers)
+              .mustBe(routes.DestinationOfficeController.onPageLoad(userAnswers.id, CheckMode))
+        }
+      }
+
+      "Must go from Movement Destination to Check your answers when a TIR declartion type is found" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val userAnswers = answers
+              .set(DeclarationTypePage, DeclarationType.Option4)
+              .toOption
+              .value
+
+            navigator
+              .nextPage(MovementDestinationCountryPage, CheckMode, userAnswers)
+              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
         }
       }
 

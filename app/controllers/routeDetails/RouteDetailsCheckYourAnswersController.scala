@@ -24,8 +24,8 @@ import javax.inject.Inject
 import models.journeyDomain.RouteDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
-import pages.MovementDestinationCountryPage
+import models.{DeclarationType, Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
+import pages.{DeclarationTypePage, MovementDestinationCountryPage}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,6 +36,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import utils.RouteDetailsCheckYourAnswersHelper
 import viewModels.sections.Section
+import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -58,11 +59,17 @@ class RouteDetailsCheckYourAnswersController @Inject() (
         case Some(countryCode) =>
           createSections(countryCode) flatMap {
             sections =>
+              val decType = request.userAnswers.get(DeclarationTypePage) match {
+                case Some(DeclarationType.Option4) => false
+                case _                             => true
+              }
+
               val json = Json.obj(
                 "lrn"                    -> lrn,
                 "sections"               -> Json.toJson(sections),
                 "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url,
-                "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
+                "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
+                "showOfficesOfTransit"   -> decType
               )
 
               ValidateReaderLogger[RouteDetails](request.userAnswers)
