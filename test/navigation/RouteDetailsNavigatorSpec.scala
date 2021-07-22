@@ -43,7 +43,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             answers =>
               navigator
                 .nextPage(CountryOfDispatchPage, NormalMode, answers)
-                .mustBe(routes.DestinationCountryController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.DestinationCountryController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -53,7 +53,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             answers =>
               navigator
                 .nextPage(DestinationCountryPage, NormalMode, answers)
-                .mustBe(routes.MovementDestinationCountryController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.MovementDestinationCountryController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -63,7 +63,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             answers =>
               navigator
                 .nextPage(MovementDestinationCountryPage, NormalMode, answers)
-                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -74,7 +74,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
               val updatedAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
               navigator
                 .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
-                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -85,7 +85,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
               val updatedAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
               navigator
                 .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddOfficeOfTransitController.onPageLoad(updatedAnswers.id, NormalMode))
+                .mustBe(routes.AddOfficeOfTransitController.onPageLoad(updatedAnswers.lrn, NormalMode))
           }
         }
 
@@ -96,7 +96,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
               val updatedAnswers = answers.unsafeSetVal(AddOfficeOfTransitPage)(true)
               navigator
                 .nextPage(AddOfficeOfTransitPage, NormalMode, updatedAnswers)
-                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -107,7 +107,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
               val updatedAnswers = answers.unsafeSetVal(AddOfficeOfTransitPage)(false)
               navigator
                 .nextPage(AddOfficeOfTransitPage, NormalMode, updatedAnswers)
-                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
           }
         }
 
@@ -117,7 +117,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             answers =>
               navigator
                 .nextPage(OfficeOfTransitCountryPage(index), NormalMode, answers)
-                .mustBe(routes.AddAnotherTransitOfficeController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(routes.AddAnotherTransitOfficeController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -129,7 +129,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddAnotherTransitOfficePage(index), NormalMode, updatedUserAnswers)
-                .mustBe(routes.ArrivalTimesAtOfficeController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(routes.ArrivalTimesAtOfficeController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -141,7 +141,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddAnotherTransitOfficePage(index), NormalMode, updatedUserAnswers)
-                .mustBe(routes.AddTransitOfficeController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddTransitOfficeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -151,7 +151,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             answers =>
               navigator
                 .nextPage(ArrivalTimesAtOfficePage(index), NormalMode, answers)
-                .mustBe(routes.AddTransitOfficeController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddTransitOfficeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -172,7 +172,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddTransitOfficePage, NormalMode, userAnswers)
-                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(answers.id, Index(2), NormalMode))
+                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(answers.lrn, Index(2), NormalMode))
           }
         }
 
@@ -184,7 +184,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddTransitOfficePage, NormalMode, userAnswers)
-                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -214,7 +214,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddTransitOfficePage, NormalMode, userAnswers)
-                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
+                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
           }
         }
 
@@ -238,7 +238,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(ConfirmRemoveOfficeOfTransitPage, NormalMode, userAnswers)
-                .mustBe(routes.AddTransitOfficeController.onPageLoad(answers.id, NormalMode))
+                .mustBe(routes.AddTransitOfficeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -253,7 +253,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
           navigator
             .nextPage(ConfirmRemoveOfficeOfTransitPage, NormalMode, userAnswers)
-            .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(emptyUserAnswers.id, index, NormalMode))
+            .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(emptyUserAnswers.lrn, index, NormalMode))
 
         }
       }
@@ -280,7 +280,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           answers =>
             navigator
               .nextPage(CountryOfDispatchPage, CheckMode, answers)
-              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -290,7 +290,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           answers =>
             navigator
               .nextPage(DestinationCountryPage, CheckMode, answers)
-              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -300,7 +300,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           answers =>
             navigator
               .nextPage(MovementDestinationCountryPage, CheckMode, answers)
-              .mustBe(routes.DestinationOfficeController.onPageLoad(answers.id, CheckMode))
+              .mustBe(routes.DestinationOfficeController.onPageLoad(answers.lrn, CheckMode))
 
         }
 
@@ -312,7 +312,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           answers =>
             navigator
               .nextPage(DestinationOfficePage, CheckMode, answers)
-              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
 
         }
       }
@@ -324,7 +324,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             val updatedAnswers = answers.unsafeSetVal(AddOfficeOfTransitPage)(false)
             navigator
               .nextPage(AddOfficeOfTransitPage, CheckMode, updatedAnswers)
-              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
 
         }
       }
@@ -336,7 +336,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             val updatedAnswers = answers.unsafeSetVal(AddOfficeOfTransitPage)(true)
             navigator
               .nextPage(AddOfficeOfTransitPage, CheckMode, updatedAnswers)
-              .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.id, Index(0), CheckMode))
+              .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.lrn, Index(0), CheckMode))
 
         }
       }
@@ -347,7 +347,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           answers =>
             navigator
               .nextPage(OfficeOfTransitCountryPage(index), CheckMode, answers)
-              .mustBe(routes.AddAnotherTransitOfficeController.onPageLoad(answers.id, index, CheckMode))
+              .mustBe(routes.AddAnotherTransitOfficeController.onPageLoad(answers.lrn, index, CheckMode))
 
         }
       }

@@ -40,7 +40,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(AddSecurityConsignorsEoriPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.SecurityConsignorEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(routes.SecurityConsignorEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -53,7 +53,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(AddSecurityConsignorsEoriPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.SecurityConsignorNameController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(routes.SecurityConsignorNameController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -62,7 +62,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
         answers =>
           navigator
             .nextPage(SecurityConsignorNamePage(index), NormalMode, answers)
-            .mustBe(routes.SecurityConsignorAddressController.onPageLoad(answers.id, index, NormalMode))
+            .mustBe(routes.SecurityConsignorAddressController.onPageLoad(answers.lrn, index, NormalMode))
       }
     }
 
@@ -75,7 +75,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -90,7 +90,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
 
@@ -106,7 +106,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -122,7 +122,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -138,7 +138,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(SecurityConsignorAddressPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
     }
@@ -156,7 +156,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(SecurityConsignorEoriPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -172,7 +172,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(SecurityConsignorEoriPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -188,7 +188,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(SecurityConsignorEoriPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -201,7 +201,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(AddSecurityConsigneesEoriPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
     }
@@ -215,7 +215,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(AddSecurityConsigneesEoriPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.SecurityConsigneeNameController.onPageLoad(updatedAnswers.id, index, NormalMode))
+            .mustBe(routes.SecurityConsigneeNameController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
     }
 
@@ -224,7 +224,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
         answers =>
           navigator
             .nextPage(SecurityConsigneeNamePage(index), NormalMode, answers)
-            .mustBe(routes.SecurityConsigneeAddressController.onPageLoad(answers.id, index, NormalMode))
+            .mustBe(routes.SecurityConsigneeAddressController.onPageLoad(answers.lrn, index, NormalMode))
       }
     }
 
@@ -233,7 +233,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
         answers =>
           navigator
             .nextPage(SecurityConsigneeAddressPage(index), NormalMode, answers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
       }
     }
 
@@ -242,7 +242,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
         answers =>
           navigator
             .nextPage(SecurityConsigneeEoriPage(index), NormalMode, answers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
       }
     }
 
@@ -264,7 +264,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(AddSecurityConsignorsEoriPage(index), CheckMode, updatedAnswers)
-              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
       "To SecurityConsignorEoriPage when selects Yes and no answer already exists for SecurityConsignorEori" in {
@@ -279,7 +279,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(AddSecurityConsignorsEoriPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.SecurityConsignorEoriController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(routes.SecurityConsignorEoriController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
 
@@ -295,7 +295,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(AddSecurityConsignorsEoriPage(index), CheckMode, updatedAnswers)
-              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
       "To SecurityConsignorNamePage when selects No and no answer already exists for SecurityConsignorName" in {
@@ -310,7 +310,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
               .value
             navigator
               .nextPage(AddSecurityConsignorsEoriPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.SecurityConsignorNameController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(routes.SecurityConsignorNameController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
     }
@@ -320,7 +320,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
         answers =>
           navigator
             .nextPage(SecurityConsignorEoriPage(index), CheckMode, answers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
       }
     }
 
@@ -334,7 +334,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(SecurityConsignorNamePage(index), CheckMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
 
@@ -347,7 +347,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(SecurityConsignorNamePage(index), CheckMode, updatedAnswers)
-            .mustBe(routes.SecurityConsignorAddressController.onPageLoad(updatedAnswers.id, index, CheckMode))
+            .mustBe(routes.SecurityConsignorAddressController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
       }
     }
   }
@@ -357,7 +357,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
       answers =>
         navigator
           .nextPage(SecurityConsignorAddressPage(index), CheckMode, answers)
-          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
     }
   }
 
@@ -374,7 +374,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(AddSecurityConsigneesEoriPage(index), CheckMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
 
@@ -390,7 +390,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(AddSecurityConsigneesEoriPage(index), CheckMode, updatedAnswers)
-            .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.id, index, CheckMode))
+            .mustBe(routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
       }
     }
     "To AddItemsCheckYours answers page if answer is No and an answer already exists for SecurityConsigneesName" in {
@@ -405,7 +405,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(AddSecurityConsigneesEoriPage(index), CheckMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
     "To SecurityConsigneesNamePage  page if answer is No and no answer already exists for SecurityConsigneesName" in {
@@ -420,7 +420,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
             .value
           navigator
             .nextPage(AddSecurityConsigneesEoriPage(index), CheckMode, updatedAnswers)
-            .mustBe(routes.SecurityConsigneeNameController.onPageLoad(updatedAnswers.id, index, CheckMode))
+            .mustBe(routes.SecurityConsigneeNameController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
       }
     }
   }
@@ -430,7 +430,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
       answers =>
         navigator
           .nextPage(SecurityConsigneeEoriPage(index), CheckMode, answers)
-          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
     }
   }
 
@@ -439,7 +439,7 @@ class TradersSecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckProper
       answers =>
         navigator
           .nextPage(SecurityConsigneeAddressPage(index), CheckMode, answers)
-          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
     }
   }
 

@@ -41,7 +41,7 @@ class AddSealHelper(userAnswers: UserAnswers) {
             ),
             Action(
               content = msg"site.delete",
-              href = ConfirmRemoveSealController.onPageLoad(userAnswers.id, sealIndex, mode).url,
+              href = ConfirmRemoveSealController.onPageLoad(userAnswers.lrn, sealIndex, mode).url,
               visuallyHiddenText = Some(msg"sealsInformation.sealList.delete.hidden".withArgs(answer.numberOrMark)),
               attributes = Map("id" -> s"""remove-seal-${sealIndex.display}""")
             )

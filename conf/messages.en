@@ -299,6 +299,7 @@ whatIsPrincipalEori.error.required = Enter the principal’s EORI number
 whatIsPrincipalEori.error.length = The principal’s EORI number must be 17 characters or less
 whatIsPrincipalEori.error.invalidCharacters = The principal’s EORI number must only include letters a to z without accents and numbers 0 to 9
 whatIsPrincipalEori.error.invalidFormat = Enter the principal’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+whatIsPrincipalEori.error.prefix = Principal’s EORI number must start with {0}
 
 principalAddress.title = What is the principal’s address?
 principalAddress.heading = What is {0}’s address?

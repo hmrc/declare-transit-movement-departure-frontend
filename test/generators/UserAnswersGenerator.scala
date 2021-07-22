@@ -272,7 +272,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
           case _   => Gen.mapOf(oneOf(generators))
         }
       } yield UserAnswers(
-        id = id,
+        lrn = id,
         eoriNumber = eoriNumber,
         data = data.foldLeft(Json.obj()) {
           case (obj, (path, value)) =>

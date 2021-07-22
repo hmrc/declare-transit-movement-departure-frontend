@@ -46,26 +46,26 @@ class SpecialMentionsNavigator @Inject() () extends Navigator {
       userAnswers =>
         (userAnswers.get(AddSpecialMentionPage(itemIndex)), count(itemIndex)(userAnswers)) match {
           case (Some(true), specialMentionCount) if specialMentionCount == 0 =>
-            Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, itemIndex, Index(specialMentionCount), CheckMode))
-          case (Some(true), _) => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, CheckMode))
-          case _               => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.id, itemIndex))
+            Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, Index(specialMentionCount), CheckMode))
+          case (Some(true), _) => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, CheckMode))
+          case _               => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex))
         }
     case SpecialMentionTypePage(itemIndex, referenceIndex) =>
-      userAnswers => Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, CheckMode))
+      userAnswers => Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, CheckMode))
     case SpecialMentionAdditionalInfoPage(itemIndex, _) =>
-      userAnswers => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, CheckMode))
+      userAnswers => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, CheckMode))
     case AddAnotherSpecialMentionPage(itemIndex) =>
       userAnswers =>
         userAnswers.get(AddAnotherSpecialMentionPage(itemIndex)) match {
-          case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, itemIndex, Index(count(itemIndex)(userAnswers)), CheckMode))
-          case _          => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.id, itemIndex))
+          case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, Index(count(itemIndex)(userAnswers)), CheckMode))
+          case _          => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex))
         }
     case RemoveSpecialMentionPage(itemIndex, _) =>
       userAnswers =>
         if (count(itemIndex)(userAnswers) == 0) {
-          Some(routes.AddSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, CheckMode))
+          Some(routes.AddSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, CheckMode))
         } else {
-          Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, CheckMode))
+          Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, CheckMode))
         }
   }
 
@@ -73,35 +73,35 @@ class SpecialMentionsNavigator @Inject() () extends Navigator {
     case AddSpecialMentionPage(itemIndex) =>
       userAnswers =>
         userAnswers.get(AddSpecialMentionPage(itemIndex)) match {
-          case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, itemIndex, Index(count(itemIndex)(userAnswers)), NormalMode))
+          case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, Index(count(itemIndex)(userAnswers)), NormalMode))
           case _          => documentsJourney(userAnswers, itemIndex, NormalMode)
         }
   }
 
   private def specialMentionTypePage: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case SpecialMentionTypePage(itemIndex, referenceIndex) =>
-      userAnswers => Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, NormalMode))
+      userAnswers => Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, NormalMode))
   }
 
   private def specialMentionAdditionalInfoPage: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case SpecialMentionAdditionalInfoPage(itemIndex, _) =>
-      userAnswers => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
+      userAnswers => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
   }
 
   private def addAnotherSpecialMentionPage: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case AddAnotherSpecialMentionPage(itemIndex) =>
       userAnswers =>
         userAnswers.get(AddAnotherSpecialMentionPage(itemIndex)) match {
-          case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, itemIndex, Index(count(itemIndex)(userAnswers)), NormalMode))
+          case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, Index(count(itemIndex)(userAnswers)), NormalMode))
           case _ =>
             documentsJourney(userAnswers, itemIndex, NormalMode)
         }
     case RemoveSpecialMentionPage(itemIndex, _) =>
       userAnswers =>
         if (count(itemIndex)(userAnswers) == 0) {
-          Some(routes.AddSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
+          Some(routes.AddSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
         } else {
-          Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
+          Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
         }
   }
 
@@ -124,11 +124,11 @@ class SpecialMentionsNavigator @Inject() () extends Navigator {
 
     userAnswers.get(DeclarationTypePage).flatMap {
       case Option4 if itemIndex.position == 0 && documentIndex.position == 0 =>
-        Some(addItemRoutes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, itemIndex, documentIndex, mode))
+        Some(addItemRoutes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode))
       case _ =>
         showDocumentTypePage(userAnswers, itemIndex).map {
-          case true  => addItemRoutes.DocumentTypeController.onPageLoad(userAnswers.id, itemIndex, documentIndex, mode)
-          case false => addItemRoutes.AddDocumentsController.onPageLoad(userAnswers.id, itemIndex, mode)
+          case true  => addItemRoutes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode)
+          case false => addItemRoutes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, mode)
         }
     }
   }
@@ -137,9 +137,9 @@ class SpecialMentionsNavigator @Inject() () extends Navigator {
     case RemoveSpecialMentionPage(itemIndex, _) =>
       userAnswers =>
         if (count(itemIndex)(userAnswers) == 0) {
-          Some(routes.AddSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
+          Some(routes.AddSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
         } else {
-          Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, NormalMode))
+          Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
         }
   }
 

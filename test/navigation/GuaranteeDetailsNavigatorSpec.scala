@@ -44,7 +44,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               val updatedAnswers: UserAnswers = answers.set(GuaranteeTypePage(index), GuaranteeWaiver).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -54,7 +54,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               val updatedAnswers: UserAnswers = answers.set(GuaranteeTypePage(index), ComprehensiveGuarantee).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -64,7 +64,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               val updatedAnswers: UserAnswers = answers.set(GuaranteeTypePage(index), IndividualGuarantee).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -74,7 +74,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               val updatedAnswers: UserAnswers = answers.set(GuaranteeTypePage(index), FlatRateVoucher).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.id, (index), NormalMode))
+                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, (index), NormalMode))
           }
         }
 
@@ -84,7 +84,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               val updatedAnswers: UserAnswers = answers.set(GuaranteeTypePage(index), IndividualGuaranteeMultiple).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
       }
@@ -98,7 +98,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
                 .set(GuaranteeTypePage(index), CashDepositGuarantee).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -110,7 +110,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
                 .set(GuaranteeTypePage(index), GuaranteeNotRequired).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -122,7 +122,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
                 .set(GuaranteeTypePage(index), GuaranteeWaivedRedirect).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -134,7 +134,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
                 .set(GuaranteeTypePage(index), GuaranteeWaiverByAgreement).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
@@ -146,7 +146,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
                 .set(GuaranteeTypePage(index), GuaranteeWaiverSecured).success.value
               navigator
                 .nextPage(GuaranteeTypePage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
       }
@@ -172,7 +172,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(DestinationOfficePage, customsOffice1).success.value
             navigator
               .nextPage(GuaranteeReferencePage(index), NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.LiabilityAmountController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(guaranteeDetailsRoute.LiabilityAmountController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -185,7 +185,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(DestinationOfficePage, customsOffice2).success.value
             navigator
               .nextPage(GuaranteeReferencePage(index), NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -198,7 +198,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(DestinationOfficePage, customsOffice1).success.value
             navigator
               .nextPage(GuaranteeReferencePage(index), NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -213,7 +213,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
                   .set(LiabilityAmountPage(index), "100.12").success.value
               navigator
                 .nextPage(LiabilityAmountPage(index), NormalMode, updatedAnswers)
-                .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
       }
@@ -227,7 +227,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(DefaultAmountPage(index), false).success.value
             navigator
               .nextPage(DefaultAmountPage(index), NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -238,7 +238,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(DefaultAmountPage(index), true).success.value
             navigator
               .nextPage(DefaultAmountPage(index), NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
     }
@@ -249,7 +249,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           val updatedAnswers: UserAnswers = answers.set(AccessCodePage(index), "1234").success.value
           navigator
             .nextPage(AccessCodePage(index), NormalMode, updatedAnswers)
-            .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
 
@@ -260,7 +260,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers: UserAnswers = answers.set(LiabilityAmountPage(index), "1234").success.value
             navigator
               .nextPage(OtherReferenceLiabilityAmountPage(index), NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.id, index, NormalMode))
+              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
     }
@@ -271,7 +271,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           val updatedAnswers: UserAnswers = answers.set(OtherReferencePage(index), "1234").success.value
           navigator
             .nextPage(OtherReferencePage(index), NormalMode, updatedAnswers)
-            .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
 
@@ -359,7 +359,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .remove(OtherReferencePage(index)).success.value
             navigator
               .nextPage(GuaranteeTypePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.OtherReferenceController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
 
@@ -374,7 +374,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(GuaranteeTypePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
 
@@ -389,7 +389,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(GuaranteeTypePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
 
@@ -402,7 +402,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(GuaranteeTypePage(index), GuaranteeWaiver).success.value
             navigator
               .nextPage(GuaranteeTypePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
 
@@ -416,7 +416,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(GuaranteeTypePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.GuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
     }
@@ -430,7 +430,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(LiabilityAmountPage(index), "1").success.value
             navigator
               .nextPage(OtherReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
     }
@@ -460,7 +460,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AccessCodePage(index), "1111").success.value
             navigator
               .nextPage(GuaranteeReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
       "to CYA if other liability amount and access code exists" in {
@@ -472,7 +472,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AccessCodePage(index), "1111").success.value
             navigator
               .nextPage(GuaranteeReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
       "to AccessCodePage when no access code exists but liability amount exists" in {
@@ -484,7 +484,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .remove(AccessCodePage(index)).success.value
             navigator
               .nextPage(GuaranteeReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
 
@@ -498,7 +498,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .remove(LiabilityAmountPage(index)).success.value
             navigator
               .nextPage(GuaranteeReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.LiabilityAmountController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.LiabilityAmountController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
 
@@ -512,7 +512,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .remove(LiabilityAmountPage(index)).success.value
             navigator
               .nextPage(GuaranteeReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
     }
@@ -526,7 +526,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AccessCodePage(index), "1111").success.value
             navigator
               .nextPage(LiabilityAmountPage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
       "to access code if access code does not exist" in {
@@ -538,7 +538,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .remove(AccessCodePage(index)).success.value
             navigator
               .nextPage(LiabilityAmountPage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
     }
@@ -553,7 +553,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             .set(AccessCodePage(index), "1111").success.value
           navigator
             .nextPage(GuaranteeReferencePage(index), CheckMode, updatedAnswers)
-            .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+            .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
       }
     }
 
@@ -567,7 +567,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AccessCodePage(index), "1111").success.value
             navigator
               .nextPage(DefaultAmountPage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
       "to AccessCode page when Yes is selected and access code is not present" in {
@@ -579,7 +579,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .remove(AccessCodePage(index)).success.value
             navigator
               .nextPage(DefaultAmountPage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
       "to OtherReferenceLiabilityAmountPage when No is selected" in {
@@ -589,7 +589,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers: UserAnswers = answers.set(DefaultAmountPage(index), false).success.value
             navigator
               .nextPage(DefaultAmountPage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.OtherReferenceLiabilityAmountController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
     }
@@ -603,7 +603,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AccessCodePage(index), "1111").success.value
             navigator
               .nextPage(OtherReferenceLiabilityAmountPage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+              .mustBe(guaranteeDetailsRoute.GuaranteeDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
         }
       }
       "to access code page when a valid amount is input and no access code exists" in {
@@ -614,7 +614,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .remove(AccessCodePage(index)).success.value
             navigator
               .nextPage(OtherReferenceLiabilityAmountPage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.id, index, CheckMode))
+              .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
 
         }
       }
@@ -731,6 +731,46 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       }
     }
 
+    "From ConfirmRemoveGuaranteePage" - {
+      "to AddAnotherGuaranteePage if yes is selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers
+              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
+              .set(ConfirmRemoveGuaranteePage, true).success.value
+            navigator
+              .nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)
+              .mustBe(controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.lrn))
+        }
+      }
+      "to AddAnotherGuaranteePage if no is selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers
+              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
+              .set(GuaranteeTypePage(Index(1)), GuaranteeType.FlatRateVoucher).success.value
+              .set(GuaranteeTypePage(Index(2)), GuaranteeType.FlatRateVoucher).success.value
+              .set(ConfirmRemoveGuaranteePage, false).success.value
+            navigator
+              .nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)
+              .mustBe(controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.lrn))
+        }
+      }
+      "to GuaranteeTypePage if yes is selected and there are no more guarantees left" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val guaranteesBlock: QuestionPage[JsObject] = new QuestionPage[JsObject] {
+              override def path: JsPath = JsPath \ "guarantees"
+            }
+
+            val updatedAnswers: UserAnswers = answers.remove(guaranteesBlock).success.value
+              .set(ConfirmRemoveGuaranteePage, true).success.value
+            navigator
+              .nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)
+              .mustBe(controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(updatedAnswers.lrn, Index(0), NormalMode))
+        }
+      }
+    }
     // format: on
   }
 }

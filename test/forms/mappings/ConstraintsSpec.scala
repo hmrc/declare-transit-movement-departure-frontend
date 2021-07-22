@@ -17,8 +17,8 @@
 package forms.mappings
 
 import java.time.LocalDate
-
 import generators.Generators
+import models.reference.CountryCode
 import org.scalacheck.Gen
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -188,4 +188,21 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
       }
     }
   }
+  "prefix" - {
+    "must return valid if not a Simplified journey" in {
+      val result = isSimplified(false, CountryCode("GB"), "test")("GB")
+      result mustEqual Valid
+    }
+
+    "must return Invalid For a Simplified journey" in {
+      val result = isSimplified(true, CountryCode("GB"), "test")("XI")
+      result mustEqual Invalid("test", "GB")
+    }
+
+    "must return Valid For a Simplified journey" in {
+      val result = isSimplified(true, CountryCode("GB"), "test")("GB")
+      result mustEqual Valid
+    }
+  }
+
 }

@@ -38,7 +38,7 @@ class CheckDependentSectionCompletionAction(val dependentSection: DependentSecti
       case Right(_) => Future.successful(None)
       case Left(_) =>
         logger.info(s"User is redirected to 'task-list' page when trying to access the URL: ${request.request.path}")
-        Future.successful(Some(Redirect(routes.DeclarationSummaryController.onPageLoad(request.userAnswers.id))))
+        Future.successful(Some(Redirect(routes.DeclarationSummaryController.onPageLoad(request.userAnswers.lrn))))
     }
   }
 }

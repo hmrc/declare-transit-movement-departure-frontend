@@ -19,19 +19,22 @@ package forms
 import forms.Constants._
 import forms.behaviours.StringFieldBehaviours
 import models.domain.StringFieldRegex.eoriNumberRegex
+import models.reference.CountryCode
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class WhatIsPrincipalEoriFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey          = "whatIsPrincipalEori.error.required"
-  private val lengthKey            = "whatIsPrincipalEori.error.length"
-  private val invalidCharactersKey = "whatIsPrincipalEori.error.invalidCharacters"
-  private val invalidFormatKey     = "whatIsPrincipalEori.error.invalidFormat"
-  private val invalidCharacterKey  = "whatIsPrincipalEori.error.invalidCharacters"
+  private val requiredKey         = "whatIsPrincipalEori.error.required"
+  private val lengthKey           = "whatIsPrincipalEori.error.length"
+  private val invalidFormatKey    = "whatIsPrincipalEori.error.invalidFormat"
+  private val invalidPrefixKey    = "whatIsPrincipalEori.error.prefix"
+  private val invalidCharacterKey = "whatIsPrincipalEori.error.invalidCharacters"
 
-  val form = new WhatIsPrincipalEoriFormProvider()()
+  val formGBSimplified = new WhatIsPrincipalEoriFormProvider()(true, CountryCode("GB"))
+  val formXISimplified = new WhatIsPrincipalEoriFormProvider()(true, CountryCode("XI"))
+  val form             = new WhatIsPrincipalEoriFormProvider()(false, CountryCode("XI"))
 
   ".value" - {
 
@@ -64,6 +67,28 @@ class WhatIsPrincipalEoriFormProviderSpec extends StringFieldBehaviours {
       forAll(generator) {
         invalidString =>
           val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+          result.errors must contain(expectedError)
+      }
+    }
+
+    "must not bind when Principal EORI starts with 'XI' but Office of Departure starts with 'GB' " in {
+      val expectedError          = FormError(fieldName, invalidPrefixKey, Seq("GB"))
+      val generator: Gen[String] = RegexpGen.from("^[X][I][0-9]{5}")
+      forAll(generator) {
+
+        invalidString =>
+          val result: Field = formGBSimplified.bind(Map(fieldName -> invalidString)).apply(fieldName)
+          result.errors must contain(expectedError)
+      }
+    }
+
+    "must not bind when Principal EORI starts with 'GB' but Office of Departure starts with 'XI' " in {
+      val expectedError          = FormError(fieldName, invalidPrefixKey, Seq("XI"))
+      val generator: Gen[String] = RegexpGen.from("^[G][B][0-9]{5}")
+      forAll(generator) {
+
+        invalidString =>
+          val result: Field = formXISimplified.bind(Map(fieldName -> invalidString)).apply(fieldName)
           result.errors must contain(expectedError)
       }
     }

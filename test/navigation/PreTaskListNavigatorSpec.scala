@@ -49,7 +49,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           answers =>
             navigator
               .nextPage(LocalReferenceNumberPage, NormalMode, answers)
-              .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.OfficeOfDepartureController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -58,7 +58,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           answers =>
             navigator
               .nextPage(OfficeOfDeparturePage, NormalMode, answers)
-              .mustBe(routes.ProcedureTypeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.ProcedureTypeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -67,7 +67,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           answers =>
             navigator
               .nextPage(ProcedureTypePage, NormalMode, answers)
-              .mustBe(routes.DeclarationTypeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.DeclarationTypeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -76,7 +76,7 @@ class PreTaskListNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           answers =>
             navigator
               .nextPage(DeclarationTypePage, NormalMode, answers)
-              .mustBe(routes.AddSecurityDetailsController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddSecurityDetailsController.onPageLoad(answers.lrn, NormalMode))
         }
       }
     }

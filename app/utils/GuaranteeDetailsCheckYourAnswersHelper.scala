@@ -238,5 +238,5 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       }
     }
 
-  def lrn: LocalReferenceNumber = userAnswers.id
+  def lrn: LocalReferenceNumber = userAnswers.lrn
 }

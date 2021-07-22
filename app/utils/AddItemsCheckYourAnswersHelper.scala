@@ -70,7 +70,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.change",
-              href = containerRoutes.ContainerNumberController.onPageLoad(userAnswers.id, itemIndex, containerIndex, CheckMode).url,
+              href = containerRoutes.ContainerNumberController.onPageLoad(userAnswers.lrn, itemIndex, containerIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer.toString)),
               attributes = Map("id" -> s"""change-container-${containerIndex.display}""")
             )
@@ -92,7 +92,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         List(
           Action(
             content = msg"site.change",
-            href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
+            href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(documentType)),
             attributes = Map("id" -> s"""change-document-${index.display}""")
           )
@@ -101,13 +101,13 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         List(
           Action(
             content = msg"site.change",
-            href = routes.DocumentTypeController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
+            href = routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(documentType)),
             attributes = Map("id" -> s"""change-document-${index.display}""")
           ),
           Action(
             content = msg"site.delete",
-            href = routes.ConfirmRemoveDocumentController.onPageLoad(userAnswers.id, index, documentIndex, CheckMode).url,
+            href = routes.ConfirmRemoveDocumentController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"addAnotherDocument.documentList.delete.hidden".withArgs(documentType)),
             attributes = Map("id" -> s"""remove-document-${index.display}""")
           )
@@ -136,13 +136,13 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.change",
-              href = routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.id, index).url,
+              href = routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
               visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.change.hidden".withArgs(answer)),
               attributes = Map("id" -> s"""change-item-${index.display}""")
             ),
             Action(
               content = msg"site.delete",
-              href = routes.ConfirmRemoveItemController.onPageLoad(userAnswers.id, index).url,
+              href = routes.ConfirmRemoveItemController.onPageLoad(userAnswers.lrn, index).url,
               visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.delete.hidden".withArgs(answer)),
               attributes = Map("id" -> s"""remove-item-${index.display}""")
             )
@@ -434,7 +434,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
               actions = List(
                 Action(
                   content = msg"site.change",
-                  href = previousReferencesRoutes.ReferenceTypeController.onPageLoad(userAnswers.id, index, referenceIndex, CheckMode).url,
+                  href = previousReferencesRoutes.ReferenceTypeController.onPageLoad(userAnswers.lrn, index, referenceIndex, CheckMode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
                   attributes = Map("id" -> s"""change-item-${index.display}""")
                 )
@@ -458,14 +458,15 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
               actions = List(
                 Action(
                   content = msg"site.change",
-                  href = previousReferencesRoutes.ReferenceTypeController.onPageLoad(userAnswers.id, index, referenceIndex, mode).url,
+                  href = previousReferencesRoutes.ReferenceTypeController.onPageLoad(userAnswers.lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
                   attributes = Map("id" -> s"""change-reference-document-type-${index.display}""")
                 ),
                 Action(
                   content = msg"site.delete",
-                  href =
-                    previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(userAnswers.id, index, referenceIndex, mode).url,
+                  href = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController
+                    .onPageLoad(userAnswers.lrn, index, referenceIndex, mode)
+                    .url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
                   attributes = Map("id" -> s"""remove-reference-document-type-${index.display}""")
                 )
@@ -551,7 +552,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.change",
-              href = routes.PackageTypeController.onPageLoad(userAnswers.id, itemIndex, packageIndex, CheckMode).url,
+              href = routes.PackageTypeController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer.toString)),
               attributes = Map("id" -> s"""change-package-${packageIndex.display}""")
             )
@@ -611,7 +612,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         List(
           Action(
             content = msg"site.change",
-            href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, itemIndex, documentIndex, CheckMode).url,
+            href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
             attributes = Map("id" -> s"""change-document-${documentIndex.display}""")
           )
@@ -620,7 +621,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         List(
           Action(
             content = msg"site.change",
-            href = routes.DocumentTypeController.onPageLoad(userAnswers.id, itemIndex, documentIndex, CheckMode).url,
+            href = routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
             attributes = Map("id" -> s"""change-document-${documentIndex.display}""")
           )
@@ -834,6 +835,6 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def lrn: LocalReferenceNumber = userAnswers.id
+  def lrn: LocalReferenceNumber = userAnswers.lrn
 
 }

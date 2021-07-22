@@ -29,24 +29,24 @@ class MovementDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case PreLodgeDeclarationPage       => ua => Some(routes.ContainersUsedPageController.onPageLoad(ua.id, NormalMode))
-    case ContainersUsedPage            => ua => Some(routes.DeclarationPlaceController.onPageLoad(ua.id, NormalMode))
-    case DeclarationPlacePage          => ua => Some(routes.DeclarationForSomeoneElseController.onPageLoad(ua.id, NormalMode))
+    case PreLodgeDeclarationPage       => ua => Some(routes.ContainersUsedPageController.onPageLoad(ua.lrn, NormalMode))
+    case ContainersUsedPage            => ua => Some(routes.DeclarationPlaceController.onPageLoad(ua.lrn, NormalMode))
+    case DeclarationPlacePage          => ua => Some(routes.DeclarationForSomeoneElseController.onPageLoad(ua.lrn, NormalMode))
     case DeclarationForSomeoneElsePage => ua => Some(isDeclarationForSomeoneElse(ua, NormalMode))
-    case RepresentativeNamePage        => ua => Some(routes.RepresentativeCapacityController.onPageLoad(ua.id, NormalMode))
-    case RepresentativeCapacityPage    => ua => Some(routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.id))
+    case RepresentativeNamePage        => ua => Some(routes.RepresentativeCapacityController.onPageLoad(ua.lrn, NormalMode))
+    case RepresentativeCapacityPage    => ua => Some(routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case DeclarationForSomeoneElsePage => ua => Some(isDeclarationForSomeoneElse(ua, CheckMode))
-    case _                             => ua => Some(routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.id))
+    case _                             => ua => Some(routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
   }
 
   private def isDeclarationForSomeoneElse(ua: UserAnswers, mode: Mode): Call =
     (ua.get(DeclarationForSomeoneElsePage), ua.get(RepresentativeNamePage), mode) match {
-      case (Some(true), None, CheckMode) => routes.RepresentativeNameController.onPageLoad(ua.id, NormalMode)
-      case (Some(true), _, NormalMode)   => routes.RepresentativeNameController.onPageLoad(ua.id, NormalMode)
-      case _                             => routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case (Some(true), None, CheckMode) => routes.RepresentativeNameController.onPageLoad(ua.lrn, NormalMode)
+      case (Some(true), _, NormalMode)   => routes.RepresentativeNameController.onPageLoad(ua.lrn, NormalMode)
+      case _                             => routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
     }
   // format: on
 }

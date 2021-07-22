@@ -41,7 +41,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       "must go from SpecialMentionAdditionalInfoPage to AddAnotherSpecialMentionController" in {
         navigator
           .nextPage(SpecialMentionAdditionalInfoPage(index, itemIndex), CheckMode, emptyUserAnswers)
-          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.id, index, CheckMode))
+          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, CheckMode))
       }
 
       "must go from AddSpecialMentionPage to SpecialMentionTypeController when" - {
@@ -51,7 +51,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, index, index, CheckMode))
+            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, index, index, CheckMode))
         }
 
         "AddSpecialMentionPage is true and 1 special mention exists" in {
@@ -66,7 +66,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, index, CheckMode))
+            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, index, CheckMode))
         }
 
         "AddSpecialMentionPage is false" in {
@@ -78,20 +78,20 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
         }
       }
 
       "must go from SpecialMentionType to SpecialMentionAdditionalInfo" in {
         navigator
           .nextPage(SpecialMentionTypePage(index, index), CheckMode, emptyUserAnswers)
-          .mustBe(routes.SpecialMentionAdditionalInfoController.onPageLoad(emptyUserAnswers.id, index, index, CheckMode))
+          .mustBe(routes.SpecialMentionAdditionalInfoController.onPageLoad(emptyUserAnswers.lrn, index, index, CheckMode))
       }
 
       "must go from SpecialMentionAdditionalInfo to AddAnotherSpecialMention" in {
         navigator
           .nextPage(SpecialMentionAdditionalInfoPage(index, index), CheckMode, emptyUserAnswers)
-          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.id, index, CheckMode))
+          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, CheckMode))
       }
 
       "must go from AddAnotherSpecialMention" - {
@@ -102,7 +102,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddAnotherSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, index, index, CheckMode))
+            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, index, index, CheckMode))
         }
 
         "to ItemsCheckYourAnswers when set to false" in {
@@ -111,7 +111,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddAnotherSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.id, index))
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
         }
       }
 
@@ -126,13 +126,13 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(RemoveSpecialMentionPage(index, index), CheckMode, userAnswers)
-            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, index, CheckMode))
+            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, index, CheckMode))
         }
 
         "to AddSpecialMentionPage when no special mentions exist" in {
           navigator
             .nextPage(RemoveSpecialMentionPage(index, index), CheckMode, emptyUserAnswers)
-            .mustBe(routes.AddSpecialMentionController.onPageLoad(emptyUserAnswers.id, index, CheckMode))
+            .mustBe(routes.AddSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, CheckMode))
         }
       }
     }
@@ -147,7 +147,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, index, index, NormalMode))
+            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, index, index, NormalMode))
         }
 
         "to TIRCarnetReference page when false and " +
@@ -159,7 +159,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.id, index, itemIndex, NormalMode))
+              .mustBe(controllers.addItems.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
           }
 
         "to standard add document journey when false and " +
@@ -172,7 +172,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(AddSpecialMentionPage(Index(1)), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, Index(1), NormalMode))
+              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, Index(1), NormalMode))
 
           }
 
@@ -190,7 +190,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, index, NormalMode))
+              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
           }
 
         "to AddDocuments when set to false and safety " +
@@ -202,7 +202,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, index, NormalMode))
+              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
           }
 
         "to DocumentType when set to false " +
@@ -219,7 +219,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.id, index, itemIndex, NormalMode))
+              .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
           }
 
         "to AddDocumentType when set to false and AddSecurityDetailsPage is 'Yes' " +
@@ -236,7 +236,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(AddSpecialMentionPage(nextIndex), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, nextIndex, NormalMode))
+              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, nextIndex, NormalMode))
           }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and " +
@@ -254,7 +254,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.id, index, itemIndex, NormalMode))
+              .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
           }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and " +
@@ -270,7 +270,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, index, NormalMode))
+              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
           }
 
       }
@@ -278,13 +278,13 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       "must go from SpecialMentionType to SpecialMentionAdditionalInfo" in {
         navigator
           .nextPage(SpecialMentionTypePage(index, index), NormalMode, emptyUserAnswers)
-          .mustBe(routes.SpecialMentionAdditionalInfoController.onPageLoad(emptyUserAnswers.id, index, index, NormalMode))
+          .mustBe(routes.SpecialMentionAdditionalInfoController.onPageLoad(emptyUserAnswers.lrn, index, index, NormalMode))
       }
 
       "must go from SpecialMentionAdditionalInfo to AddAnotherSpecialMention" in {
         navigator
           .nextPage(SpecialMentionAdditionalInfoPage(index, index), NormalMode, emptyUserAnswers)
-          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.id, index, NormalMode))
+          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, NormalMode))
       }
 
       "must go from RemoveSpecialMentionController" - {
@@ -298,20 +298,20 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(RemoveSpecialMentionPage(index, index), NormalMode, userAnswers)
-            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.id, index, NormalMode))
+            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, index, NormalMode))
         }
 
         "to AddSpecialMentionPage when no special mentions exist" in {
           navigator
             .nextPage(RemoveSpecialMentionPage(index, index), NormalMode, emptyUserAnswers)
-            .mustBe(routes.AddSpecialMentionController.onPageLoad(emptyUserAnswers.id, index, NormalMode))
+            .mustBe(routes.AddSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, NormalMode))
         }
       }
 
       "must go from SpecialMentionAdditionalInfoPage to AddAnotherSpecialMention" in {
         navigator
           .nextPage(SpecialMentionAdditionalInfoPage(index, index), NormalMode, emptyUserAnswers)
-          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.id, index, NormalMode))
+          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, NormalMode))
       }
 
       "must go from AddAnotherSpecialMention" - {
@@ -323,7 +323,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.id, index, index, NormalMode))
+            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, index, index, NormalMode))
         }
 
         "to AddDocuments when set to false and safeTye and security is selected as 'No'" in {
@@ -335,7 +335,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, index, NormalMode))
+            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
         }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and  AddCircumstanceIndicatorPage is 'No' and it is the first Item and AddCommercialReferenceNumberPage is false" in {
@@ -349,7 +349,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.id, index, itemIndex, NormalMode))
+            .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
         }
 
         "to AddDocumentType when set to false and AddSecurityDetailsPage is 'Yes' and  AddCircumstanceIndicatorPage is 'No' and it is the not the first Item and AddCommercialReferenceNumberPage is false" in {
@@ -365,7 +365,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddAnotherSpecialMentionPage(nextIndex), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, nextIndex, NormalMode))
+            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, nextIndex, NormalMode))
         }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and  AddCircumstanceIndicatorPage is 'Yes' and CircumstanceIndicator is either E, D, C and B && AddCommercialReferenceNumberPage is false" in {
@@ -382,7 +382,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.id, index, itemIndex, NormalMode))
+            .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
         }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and  AddCircumstanceIndicatorPage is 'Yes' and CircumstanceIndicator other then E, D, C and B" in {
@@ -397,7 +397,7 @@ class SpecialMentionsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
           navigator
             .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.id, index, NormalMode))
+            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
         }
       }
     }
