@@ -18,10 +18,12 @@ package controllers.traderDetails
 
 import controllers.actions._
 import forms.WhatIsPrincipalEoriFormProvider
+import models.ProcedureType.Simplified
+import models.reference.{CountryCode, CustomsOffice}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.WhatIsPrincipalEoriPage
+import pages.{OfficeOfDeparturePage, ProcedureTypePage, WhatIsPrincipalEoriPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,44 +50,53 @@ class WhatIsPrincipalEoriController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
-
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(WhatIsPrincipalEoriPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+      request.userAnswers.get(OfficeOfDeparturePage) match {
+        case Some(officeOfDeparture) =>
+          val isSimplified = request.userAnswers.get(ProcedureTypePage).contains(Simplified)
+          val preparedForm = request.userAnswers.get(WhatIsPrincipalEoriPage) match {
+            case None        => formProvider(isSimplified, officeOfDeparture.countryId)
+            case Some(value) => formProvider(isSimplified, officeOfDeparture.countryId).fill(value)
+          }
+          val json = Json.obj(
+            "form" -> preparedForm,
+            "lrn"  -> lrn,
+            "mode" -> mode
+          )
+          renderer.render("whatIsPrincipalEori.njk", json).map(Ok(_))
+        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
-
-      val json = Json.obj(
-        "form" -> preparedForm,
-        "lrn"  -> lrn,
-        "mode" -> mode
-      )
-
-      renderer.render("whatIsPrincipalEori.njk", json).map(Ok(_))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+      request.userAnswers.get(OfficeOfDeparturePage) match {
+        case Some(officeOfDeparture) =>
+          val isSimplified = request.userAnswers.get(ProcedureTypePage) match {
+            case Some(Simplified) => true
+            case _                => false
+          }
 
-            val json = Json.obj(
-              "form" -> formWithErrors,
-              "lrn"  -> lrn,
-              "mode" -> mode
+          formProvider(isSimplified, officeOfDeparture.countryId)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => {
+                val json = Json.obj(
+                  "form" -> formWithErrors,
+                  "lrn"  -> lrn,
+                  "mode" -> mode
+                )
+                renderer.render("whatIsPrincipalEori.njk", json).map(BadRequest(_))
+              },
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsPrincipalEoriPage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(WhatIsPrincipalEoriPage, mode, updatedAnswers))
             )
+        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
 
-            renderer.render("whatIsPrincipalEori.njk", json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatIsPrincipalEoriPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(WhatIsPrincipalEoriPage, mode, updatedAnswers))
-        )
+      }
   }
 }
