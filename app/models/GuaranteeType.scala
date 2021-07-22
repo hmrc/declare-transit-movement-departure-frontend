@@ -82,10 +82,11 @@ object GuaranteeType extends Enumerable.Implicits {
     case _   => gtValue
   }
 
-  def radios(form: Form[_], userAnswers: UserAnswers): Seq[Radios.Item] = {
+  def radios(form: Form[_]): Seq[Radios.Item] = {
 
     val field = form("value")
-    val nonTIRItems = Seq(
+
+    val items = Seq(
       Radios.Radio(msg"guaranteeType.GuaranteeWaiver", GuaranteeWaiver.toString),
       Radios.Radio(msg"guaranteeType.ComprehensiveGuarantee", ComprehensiveGuarantee.toString),
       Radios.Radio(msg"guaranteeType.IndividualGuarantee", IndividualGuarantee.toString),
@@ -97,11 +98,6 @@ object GuaranteeType extends Enumerable.Implicits {
       Radios.Radio(msg"guaranteeType.GuaranteeWaiverSecured", GuaranteeWaiverSecured.toString),
       Radios.Radio(msg"guaranteeType.IndividualGuaranteeMultiple", IndividualGuaranteeMultiple.toString)
     )
-
-    val items = userAnswers.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => nonTIRItems :+ Radios.Radio(msg"guaranteeType.TIR", TIR.toString)
-      case _                             => nonTIRItems
-    }
 
     Radios(field, items)
   }
