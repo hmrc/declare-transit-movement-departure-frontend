@@ -41,7 +41,7 @@ object GoodsSummaryCheckYourAnswersViewModel {
     val loadingPlace: Option[SummaryList.Row]               = checkYourAnswersHelper.loadingPlace
     val addSeals: Option[SummaryList.Row]                   = goodsSummaryheckYourAnswersHelper.addSeals
     val numberOfSeals                                       = userAnswers.get(DeriveNumberOfSeals).getOrElse(0)
-    val seals                                               = if (numberOfSeals == 0) None else addSealHelper.sealsRow(userAnswers.id)
+    val seals                                               = if (numberOfSeals == 0) None else addSealHelper.sealsRow(userAnswers.lrn)
     val sealsInformation: Option[SummaryList.Row]           = goodsSummaryheckYourAnswersHelper.sealsInformation
 
     val checkYourAnswersData = Seq(

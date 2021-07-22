@@ -79,7 +79,7 @@ class AddAnotherContainerController @Inject() (
                 case true =>
                   val containerCount = request.userAnswers.get(DeriveNumberOfContainers(itemIndex)).getOrElse(0)
                   val containerIndex = Index(containerCount)
-                  routes.ContainerNumberController.onPageLoad(request.userAnswers.id, itemIndex, containerIndex, mode)
+                  routes.ContainerNumberController.onPageLoad(request.userAnswers.lrn, itemIndex, containerIndex, mode)
                 case false =>
                   navigator.nextPage(AddAnotherContainerPage(itemIndex), mode, request.userAnswers)
                 case _ =>
@@ -106,7 +106,7 @@ class AddAnotherContainerController @Inject() (
     val json = Json.obj(
       "form"           -> form,
       "mode"           -> mode,
-      "lrn"            -> request.userAnswers.id,
+      "lrn"            -> request.userAnswers.lrn,
       "pageTitle"      -> title,
       "containerCount" -> numberOfContainers,
       "containerRows"  -> containerRows,

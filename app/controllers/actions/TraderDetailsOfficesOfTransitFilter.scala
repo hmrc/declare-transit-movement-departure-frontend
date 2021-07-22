@@ -41,7 +41,7 @@ class TraderDetailsOfficesOfTransitFilter(index: Index)(implicit protected val e
 
     def redirectToAddTransitOfficeController =
       Future.successful(
-        Option(Redirect(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(request.userAnswers.id, NormalMode).url))
+        Option(Redirect(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(request.userAnswers.lrn, NormalMode).url))
       )
 
     def redirectToOfficeOfTransitCountryController(index: Index) =
@@ -49,7 +49,7 @@ class TraderDetailsOfficesOfTransitFilter(index: Index)(implicit protected val e
         Option(
           Redirect(
             controllers.routeDetails.routes.OfficeOfTransitCountryController
-              .onPageLoad(request.userAnswers.id, index, NormalMode)
+              .onPageLoad(request.userAnswers.lrn, index, NormalMode)
               .url
           )
         )

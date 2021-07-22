@@ -47,7 +47,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddCircumstanceIndicatorPage, NormalMode, updatedAnswers)
-              .mustBe(routes.CircumstanceIndicatorController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.CircumstanceIndicatorController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -61,7 +61,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddCircumstanceIndicatorPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddTransportChargesPaymentMethodController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddTransportChargesPaymentMethodController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -72,7 +72,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(CircumstanceIndicatorPage, NormalMode, answers)
-              .mustBe(routes.AddTransportChargesPaymentMethodController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddTransportChargesPaymentMethodController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -86,7 +86,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddTransportChargesPaymentMethodPage, NormalMode, updatedAnswers)
-              .mustBe(routes.TransportChargesPaymentMethodController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.TransportChargesPaymentMethodController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -100,7 +100,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddTransportChargesPaymentMethodPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddCommercialReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddCommercialReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -111,7 +111,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(TransportChargesPaymentMethodPage, NormalMode, answers)
-              .mustBe(routes.AddCommercialReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddCommercialReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -125,7 +125,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddCommercialReferenceNumberPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -140,7 +140,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddCommercialReferenceNumberPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -157,7 +157,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddCommercialReferenceNumberPage, NormalMode, updatedAnswers)
-              .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -171,7 +171,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddCommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
-              .mustBe(routes.CommercialReferenceNumberAllItemsController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.CommercialReferenceNumberAllItemsController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -186,7 +186,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddCommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -203,7 +203,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddCommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
-              .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -219,7 +219,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(CommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
-              .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -233,7 +233,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(CommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -247,7 +247,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(CommercialReferenceNumberAllItemsPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddConveyanceReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -261,7 +261,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddConveyanceReferenceNumberPage, NormalMode, updatedAnswers)
-              .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -276,7 +276,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddConveyanceReferenceNumberPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddPlaceOfUnloadingCodeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddPlaceOfUnloadingCodeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -291,7 +291,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddConveyanceReferenceNumberPage, NormalMode, updatedAnswers)
-              .mustBe(routes.PlaceOfUnloadingCodeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.PlaceOfUnloadingCodeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -306,7 +306,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(ConveyanceReferenceNumberPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddPlaceOfUnloadingCodeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddPlaceOfUnloadingCodeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -321,7 +321,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(ConveyanceReferenceNumberPage, NormalMode, updatedAnswers)
-              .mustBe(routes.PlaceOfUnloadingCodeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.PlaceOfUnloadingCodeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -335,7 +335,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddPlaceOfUnloadingCodePage, NormalMode, updatedAnswers)
-              .mustBe(routes.PlaceOfUnloadingCodeController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.PlaceOfUnloadingCodeController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -350,7 +350,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddPlaceOfUnloadingCodePage, NormalMode, updatedAnswers)
-              .mustBe(routes.CountryOfRoutingController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(routes.CountryOfRoutingController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -365,7 +365,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(PlaceOfUnloadingCodePage, NormalMode, updatedAnswers)
-              .mustBe(routes.CountryOfRoutingController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(routes.CountryOfRoutingController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -380,7 +380,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(PlaceOfUnloadingCodePage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -391,7 +391,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(CountryOfRoutingPage(index), NormalMode, answers)
-              .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -406,7 +406,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddAnotherCountryOfRoutingPage, NormalMode, updatedAnswers)
-              .mustBe(routes.CountryOfRoutingController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(routes.CountryOfRoutingController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -420,7 +420,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator
               .nextPage(AddAnotherCountryOfRoutingPage, NormalMode, updatedAnswers)
-              .mustBe(routes.AddSafetyAndSecurityConsignorController.onPageLoad(answers.id, NormalMode))
+              .mustBe(routes.AddSafetyAndSecurityConsignorController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -436,7 +436,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
               .set(ConfirmRemoveCountryPage, false).success.value
               navigator
                 .nextPage(ConfirmRemoveCountryPage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(updatedAnswers.id, NormalMode))
+                .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(updatedAnswers.lrn, NormalMode))
           }
         }
 
@@ -449,7 +449,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
                 .set(ConfirmRemoveCountryPage, true).success.value
               navigator
                 .nextPage(ConfirmRemoveCountryPage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(updatedAnswers.id, NormalMode))
+                .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(updatedAnswers.lrn, NormalMode))
           }
         }
 
@@ -460,7 +460,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
                 .remove(CountriesOfRoutingQuery(index)).success.value
               navigator
                 .nextPage(ConfirmRemoveCountryPage, NormalMode, updatedAnswers)
-                .mustBe(routes.CountryOfRoutingController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                .mustBe(routes.CountryOfRoutingController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
       }
@@ -476,7 +476,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCircumstanceIndicatorPage, CheckMode, updatedAnswers)
-            .mustBe(routes.CircumstanceIndicatorController.onPageLoad(updatedAnswers.id, CheckMode))
+            .mustBe(routes.CircumstanceIndicatorController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
 
         "CheckYourAnswers page if 'true' and CircumstanceIndicator answer exists" in {
@@ -487,7 +487,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCircumstanceIndicatorPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
 
         "CheckYourAnswers if 'false'" in {
@@ -497,7 +497,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCircumstanceIndicatorPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -505,7 +505,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
         navigator
           .nextPage(CircumstanceIndicatorPage, CheckMode, emptyUserAnswers)
-          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.id))
+          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
       }
 
       "must go from AddTransportChargesPaymentMethod page to" - {
@@ -516,7 +516,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddTransportChargesPaymentMethodPage, CheckMode, updatedAnswers)
-            .mustBe(routes.TransportChargesPaymentMethodController.onPageLoad(updatedAnswers.id, CheckMode))
+            .mustBe(routes.TransportChargesPaymentMethodController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
 
         "CheckYourAnswers page if 'true' and TransportChargesPaymentMethod answer exists" in {
@@ -527,7 +527,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddTransportChargesPaymentMethodPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
 
         "CheckYourAnswers if 'false'" in {
@@ -537,7 +537,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddTransportChargesPaymentMethodPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -545,7 +545,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
         navigator
           .nextPage(TransportChargesPaymentMethodPage, CheckMode, emptyUserAnswers)
-          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.id))
+          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
       }
 
       "must go from AddCommercialReferenceNumber page to" - {
@@ -556,7 +556,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
-            .mustBe(routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(updatedAnswers.id, CheckMode))
+            .mustBe(routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
 
         "CheckYourAnswers page if 'true' and AddCommercialReferenceNumberAllItems answer is 'true'" in {
@@ -567,7 +567,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
 
         "CheckYourAnswers page if 'true' and AddCommercialReferenceNumberAllItems answer is 'false'" in {
@@ -578,7 +578,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
 
         "CheckYourAnswers if 'false'" in {
@@ -588,7 +588,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCommercialReferenceNumberPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -600,7 +600,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCommercialReferenceNumberAllItemsPage, CheckMode, updatedAnswers)
-            .mustBe(routes.CommercialReferenceNumberAllItemsController.onPageLoad(updatedAnswers.id, CheckMode))
+            .mustBe(routes.CommercialReferenceNumberAllItemsController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
 
         "CheckYourAnswers page if 'true' and CommercialReferenceNumberAllItems answer exists" in {
@@ -611,7 +611,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCommercialReferenceNumberAllItemsPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
 
         "CheckYourAnswers if 'false'" in {
@@ -621,7 +621,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddCommercialReferenceNumberAllItemsPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -629,7 +629,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
         navigator
           .nextPage(CommercialReferenceNumberAllItemsPage, CheckMode, emptyUserAnswers)
-          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.id))
+          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
       }
 
       "must go from AddConveyanceReferenceNumber page to" - {
@@ -640,7 +640,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddConveyanceReferenceNumberPage, CheckMode, updatedAnswers)
-            .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(updatedAnswers.id, CheckMode))
+            .mustBe(routes.ConveyanceReferenceNumberController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
 
         "CheckYourAnswers page if 'true' and ConveyanceReferenceNumber answer exists" in {
@@ -651,7 +651,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddConveyanceReferenceNumberPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
 
         "CheckYourAnswers if 'false'" in {
@@ -661,7 +661,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddConveyanceReferenceNumberPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -669,7 +669,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
         navigator
           .nextPage(ConveyanceReferenceNumberPage, CheckMode, emptyUserAnswers)
-          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.id))
+          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
       }
 
       "must go from AddPlaceOfUnloadingCode page to" - {
@@ -680,7 +680,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddPlaceOfUnloadingCodePage, CheckMode, updatedAnswers)
-            .mustBe(routes.PlaceOfUnloadingCodeController.onPageLoad(updatedAnswers.id, CheckMode))
+            .mustBe(routes.PlaceOfUnloadingCodeController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
 
         "CheckYourAnswers page if 'true' and PlaceOfUnloadingCode answer exists" in {
@@ -691,7 +691,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddPlaceOfUnloadingCodePage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
 
         "CheckYourAnswers if 'false'" in {
@@ -701,7 +701,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddPlaceOfUnloadingCodePage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -709,14 +709,14 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
         navigator
           .nextPage(PlaceOfUnloadingCodePage, CheckMode, emptyUserAnswers)
-          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.id))
+          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn))
       }
 
       "must go from CountryOfRouting page to CheckYourAnswers" in {
 
         navigator
           .nextPage(CountryOfRoutingPage(index), CheckMode, emptyUserAnswers)
-          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.id)) //TODO: Possibly change to do below instead
+          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn)) //TODO: Possibly change to do below instead
         //          .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(emptyUserAnswers.id, CheckMode))
       }
 
@@ -728,7 +728,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddAnotherCountryOfRoutingPage, CheckMode, updatedAnswers)
-            .mustBe(routes.CountryOfRoutingController.onPageLoad(updatedAnswers.id, index, CheckMode))
+            .mustBe(routes.CountryOfRoutingController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
 
         "CheckYourAnswers if 'false'" in {
@@ -738,7 +738,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
           navigator
             .nextPage(AddAnotherCountryOfRoutingPage, CheckMode, updatedAnswers)
-            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+            .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
     }

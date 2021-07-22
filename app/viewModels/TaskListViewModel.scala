@@ -34,13 +34,13 @@ import play.api.mvc.Call
 
 private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
 
-  private val lrn         = userAnswers.id
+  private val lrn         = userAnswers.lrn
   private val taskListDsl = new TaskListDslCollectSectionName(userAnswers)
 
   private def movementDetailsStartPage(procedureType: Option[ProcedureType]): String =
     procedureType match {
-      case Some(Normal)     => controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(userAnswers.id, NormalMode).url
-      case Some(Simplified) => controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(userAnswers.id, NormalMode).url
+      case Some(Normal)     => controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(userAnswers.lrn, NormalMode).url
+      case Some(Simplified) => controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(userAnswers.lrn, NormalMode).url
       case _                => controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
@@ -56,7 +56,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       .ifNoDependencyOnOtherSection
       .ifCompleted(
         UserAnswersReader[MovementDetails],
-        controllers.movementDetails.routes.MovementDetailsCheckYourAnswersController.onPageLoad(userAnswers.id).url
+        controllers.movementDetails.routes.MovementDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn).url
       )
       .ifInProgress(
         movementDetailsInProgressReader,
@@ -94,8 +94,8 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
 
   private def traderDetailsStartPage(procedureType: Option[ProcedureType]): String =
     procedureType match {
-      case Some(Normal)     => controllers.traderDetails.routes.IsPrincipalEoriKnownController.onPageLoad(userAnswers.id, NormalMode).url
-      case Some(Simplified) => controllers.traderDetails.routes.WhatIsPrincipalEoriController.onPageLoad(userAnswers.id, NormalMode).url
+      case Some(Normal)     => controllers.traderDetails.routes.IsPrincipalEoriKnownController.onPageLoad(userAnswers.lrn, NormalMode).url
+      case Some(Simplified) => controllers.traderDetails.routes.WhatIsPrincipalEoriController.onPageLoad(userAnswers.lrn, NormalMode).url
       case _                => controllers.routes.SessionExpiredController.onPageLoad().url
     }
 
@@ -111,7 +111,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       .ifNoDependencyOnOtherSection
       .ifCompleted(
         UserAnswersReader[TraderDetails],
-        controllers.traderDetails.routes.TraderDetailsCheckYourAnswersController.onPageLoad(userAnswers.id).url
+        controllers.traderDetails.routes.TraderDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn).url
       )
       .ifInProgress(
         traderDetailsInProgressReader,
@@ -125,22 +125,22 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       .ifDependentSectionCompleted(dependentSectionReader(DependentSection.ItemDetails, userAnswers))
       .ifCompleted(
         UserAnswersReader[NonEmptyList[ItemSection]],
-        controllers.addItems.routes.AddAnotherItemController.onPageLoad(userAnswers.id).url
+        controllers.addItems.routes.AddAnotherItemController.onPageLoad(userAnswers.lrn).url
       )
       .ifInProgress(
         ItemDescriptionPage(Index(0)).reader,
-        controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.id, Index(0), NormalMode).url
+        controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(0), NormalMode).url
       )
-      .ifNotStarted(controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.id, Index(0), NormalMode).url)
+      .ifNotStarted(controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(0), NormalMode).url)
 
   private def goodsSummaryStartPage(procedureType: Option[ProcedureType], safetyAndSecurity: Option[Boolean], prelodgedDeclaration: Option[Boolean]): String =
     (procedureType, safetyAndSecurity, prelodgedDeclaration) match {
-      case (_, Some(true), _) => controllers.routes.LoadingPlaceController.onPageLoad(userAnswers.id, NormalMode).url
+      case (_, Some(true), _) => controllers.routes.LoadingPlaceController.onPageLoad(userAnswers.lrn, NormalMode).url
       case (Some(Normal), Some(false), Some(false)) =>
-        controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(userAnswers.id, NormalMode).url
+        controllers.goodsSummary.routes.AddCustomsApprovedLocationController.onPageLoad(userAnswers.lrn, NormalMode).url
       case (Some(Normal), Some(false), Some(true)) =>
-        controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(userAnswers.id, NormalMode).url
-      case (Some(Simplified), Some(false), _) => controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(userAnswers.id, NormalMode).url
+        controllers.goodsSummary.routes.AddAgreedLocationOfGoodsController.onPageLoad(userAnswers.lrn, NormalMode).url
+      case (Some(Simplified), Some(false), _) => controllers.goodsSummary.routes.AuthorisedLocationCodeController.onPageLoad(userAnswers.lrn, NormalMode).url
       case _                                  => controllers.routes.SessionExpiredController.onPageLoad().url
     }
 

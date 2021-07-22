@@ -22,7 +22,7 @@ import controllers.{routes => mainRoutes}
 import forms.ConfirmRemoveOfficeOfTransitFormProvider
 import matchers.JsonMatchers
 import models.reference.{CountryCode, CustomsOffice}
-import models.{Index, NormalMode, UserAnswers}
+import models.{Id, Index, NormalMode, UserAnswers}
 import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -162,8 +162,9 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
     }
 
     "must redirect to the next page when valid data is submitted" in {
+      val id          = Id()
       val userAnswers = emptyUserAnswers.set(AddAnotherTransitOfficePage(index), "id").toOption.value
-      dataRetrievalWithData(userAnswers)
+      dataRetrievalWithData(userAnswers.copy(id = id))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
@@ -177,10 +178,11 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
       redirectLocation(result).value mustEqual onwardRoute.url
 
       val newUserAnswers = UserAnswers(
-        id = userAnswers.id,
+        lrn = userAnswers.lrn,
         eoriNumber = userAnswers.eoriNumber,
         userAnswers.remove(OfficeOfTransitQuery(index)).success.value.data,
-        userAnswers.lastUpdated
+        userAnswers.lastUpdated,
+        id
       )
 
       verify(mockSessionRepository, times(1)).set(newUserAnswers)

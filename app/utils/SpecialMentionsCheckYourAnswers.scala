@@ -43,7 +43,7 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
                 ),
                 Action(
                   content = msg"site.delete",
-                  href = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.id, itemIndex, referenceIndex, mode).url,
+                  href = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
                   attributes = Map("id" -> s"""remove-special-mentions-${itemIndex.display}""")
                 )
@@ -95,5 +95,5 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
     AddAnotherViewModel(addAnotherContainerHref, content)
   }
 
-  private def lrn: LocalReferenceNumber = userAnswers.id
+  private def lrn: LocalReferenceNumber = userAnswers.lrn
 }

@@ -33,13 +33,13 @@ class ContainersCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = containerRoutes.ContainerNumberController.onPageLoad(userAnswers.id, itemIndex, containerIndex, CheckMode).url,
+            href = containerRoutes.ContainerNumberController.onPageLoad(userAnswers.lrn, itemIndex, containerIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"containerNumber.checkYourAnswersLabel")),
             attributes = Map("id" -> s"""edit-container-number-${itemIndex.display}""")
           ),
           Action(
             content = msg"site.delete",
-            href = containerRoutes.ConfirmRemoveContainerController.onPageLoad(userAnswers.id, itemIndex, containerIndex, CheckMode).url,
+            href = containerRoutes.ConfirmRemoveContainerController.onPageLoad(userAnswers.lrn, itemIndex, containerIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
             attributes = Map("id" -> s"""remove-container-number-${itemIndex.display}""")
           )

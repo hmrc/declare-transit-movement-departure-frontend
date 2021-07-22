@@ -17,11 +17,11 @@
 package repositories
 
 import java.time.LocalDateTime
-
 import javax.inject.{Inject, Singleton}
-import models.{EoriNumber, LocalReferenceNumber, MongoDateTimeFormats, UserAnswers}
+import models.{EoriNumber, Id, LocalReferenceNumber, MongoDateTimeFormats, UserAnswers}
 import play.api.libs.json._
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -33,24 +33,44 @@ private[repositories] class DefaultSessionRepository @Inject() (
   override def get(id: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Option[UserAnswers]] = {
     implicit val dateWriter: Writes[LocalDateTime] = MongoDateTimeFormats.localDateTimeWrite
     val selector = Json.obj(
+      "lrn"        -> id.value,
+      "eoriNumber" -> eoriNumber.value
+    )
+    //TODO to be removed 24hours after deployment
+    val legacySelector = Json.obj(
       "_id"        -> id.value,
       "eoriNumber" -> eoriNumber.value
     )
-
     val modifier = Json.obj(
       "$set" -> Json.obj("lastUpdated" -> LocalDateTime.now)
     )
 
-    sessionCollection().flatMap {
+    def userAnswersF: Future[Option[UserAnswers]] = sessionCollection().flatMap {
       _.findAndUpdate(selector, modifier)
         .map(_.value.map(_.as[UserAnswers]))
     }
+
+    def legacyUserAnswerF: Future[Option[UserAnswers]] = sessionCollection().flatMap {
+      _.findAndUpdate(legacySelector, modifier)
+        .map(_.value.map(_.as[UserAnswers](UserAnswers.legacyReads)))
+    }
+    for {
+      userAnswers <- userAnswersF
+      result <-
+        if (userAnswers.isEmpty) {
+          legacyUserAnswerF
+        } else {
+          Future.successful(userAnswers)
+        }
+    } yield result
+
   }
 
   override def set(userAnswers: UserAnswers): Future[Boolean] = {
 
     val selector = Json.obj(
-      "_id" -> userAnswers.id
+      "lrn"        -> userAnswers.lrn,
+      "eoriNumber" -> userAnswers.eoriNumber
     )
 
     val modifier = Json.obj(
@@ -68,7 +88,7 @@ private[repositories] class DefaultSessionRepository @Inject() (
   }
 
   override def remove(id: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Unit] = sessionCollection().flatMap {
-    _.findAndRemove(Json.obj("_id" -> id.toString, "eoriNumber" -> eoriNumber.value))
+    _.findAndRemove(Json.obj("lrn" -> id.toString, "eoriNumber" -> eoriNumber.value))
       .map(
         _ => ()
       )
