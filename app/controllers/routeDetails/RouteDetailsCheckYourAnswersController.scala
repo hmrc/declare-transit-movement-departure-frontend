@@ -28,7 +28,6 @@ import models.{DeclarationType, Index, LocalReferenceNumber, NormalMode, Validat
 import pages.{DeclarationTypePage, MovementDestinationCountryPage}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.http.HeaderCarrier
@@ -65,11 +64,13 @@ class RouteDetailsCheckYourAnswersController @Inject() (
               }
 
               val json = Json.obj(
-                "lrn"                    -> lrn,
-                "sections"               -> Json.toJson(sections),
-                "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url,
-                "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
-                "showOfficesOfTransit"   -> decType
+                "lrn"      -> lrn,
+                "sections" -> Json.toJson(sections),
+                "addOfficesOfTransitUrl" -> routes.OfficeOfTransitCountryController
+                  .onPageLoad(lrn, Index(request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)), NormalMode)
+                  .url,
+                "nextPageUrl"          -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
+                "showOfficesOfTransit" -> decType
               )
 
               ValidateReaderLogger[RouteDetails](request.userAnswers)

@@ -62,7 +62,7 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
   def declarationTypeTIR(ua: UserAnswers, mode: Mode) =
     ua.get(DeclarationTypePage) match {
       case Some(DeclarationType.Option4) => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id)
-      case _                             => routes.DestinationOfficeController.onPageLoad(ua.id, mode)
+      case _                             => destinationOfficeRoute(ua, mode)
     }
 
   def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =

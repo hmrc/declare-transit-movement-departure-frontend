@@ -21,7 +21,7 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, CustomsOffice}
-import models.{CountryList, CustomsOfficeList, NormalMode}
+import models.{CountryList, CustomsOfficeList, Index, NormalMode}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
@@ -33,7 +33,6 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-
 import scala.concurrent.Future
 
 class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {
@@ -76,7 +75,7 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
       val expectedJson = Json.obj(
         "lrn"                    -> lrn,
         "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
-        "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url,
+        "addOfficesOfTransitUrl" -> routes.OfficeOfTransitCountryController.onPageLoad(lrn, Index(0), NormalMode).url,
         "showOfficesOfTransit"   -> true
       )
 
