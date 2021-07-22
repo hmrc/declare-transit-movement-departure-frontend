@@ -159,7 +159,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(TIRGuaranteeReferencePage(index), NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.id))
+              .mustBe(guaranteeDetailsRoute.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -288,7 +288,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AddAnotherGuaranteePage, true).success.value
             navigator
               .nextPage(AddAnotherGuaranteePage, NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeTypeController.onPageLoad(updatedAnswers.id, Index(1), NormalMode))
+              .mustBe(guaranteeDetailsRoute.GuaranteeTypeController.onPageLoad(updatedAnswers.lrn, Index(1), NormalMode))
         }
       }
 
@@ -304,7 +304,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AddAnotherGuaranteePage, true).success.value
             navigator
               .nextPage(AddAnotherGuaranteePage, NormalMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.TIRGuaranteeReferenceController.onPageLoad(updatedAnswers.id, Index(1), NormalMode))
+              .mustBe(guaranteeDetailsRoute.TIRGuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, Index(1), NormalMode))
         }
       }
 
@@ -319,7 +319,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AddAnotherGuaranteePage, false).success.value
             navigator
               .nextPage(AddAnotherGuaranteePage, NormalMode, updatedAnswers)
-              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.id))
+              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.lrn))
         }
       }
       "to TaskListPage when number of guarantees is 9" in {
@@ -340,7 +340,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(AddAnotherGuaranteePage, true).success.value
             navigator
               .nextPage(AddAnotherGuaranteePage, NormalMode, updatedAnswers)
-              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.id))
+              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.lrn))
         }
       }
     }
@@ -445,7 +445,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(guaranteeDetails.TIRGuaranteeReferencePage(index), CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.id))
+              .mustBe(guaranteeDetailsRoute.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.lrn))
         }
       }
     }
@@ -629,117 +629,6 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(ConfirmRemoveGuaranteePage, true).success.value
             navigator
               .nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)
-              .mustBe(controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.id))
-        }
-      }
-      "to AddAnotherGuaranteePage if no is selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers: UserAnswers = answers
-              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
-              .set(GuaranteeTypePage(Index(1)), GuaranteeType.FlatRateVoucher).success.value
-              .set(GuaranteeTypePage(Index(2)), GuaranteeType.FlatRateVoucher).success.value
-              .set(ConfirmRemoveGuaranteePage, false).success.value
-            navigator
-              .nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)
-              .mustBe(controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.id))
-        }
-      }
-      "to GuaranteeTypePage if yes is selected and there are no more guarantees left" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val guaranteesBlock: QuestionPage[JsObject] = new QuestionPage[JsObject] {
-              override def path: JsPath = JsPath \ "guarantees"
-            }
-
-            val updatedAnswers: UserAnswers = answers.remove(guaranteesBlock).success.value
-              .set(ConfirmRemoveGuaranteePage, true).success.value
-            navigator
-              .nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)
-              .mustBe(controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(updatedAnswers.id, Index(0), NormalMode))
-        }
-      }
-    }
-
-    "From AddAnotherGuaranteePage" - {
-      "to GuaranteeTypePage for next guarantee in the array when yes is selected and declaration type is not TIR" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers: UserAnswers = answers
-              .set(DeclarationTypePage, Option2).success.value
-              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
-              .set(LiabilityAmountPage(index), "12345").success.value
-              .set(AccessCodePage(index), "1234").success.value
-              .set(AddAnotherGuaranteePage, true).success.value
-            navigator
-              .nextPage(AddAnotherGuaranteePage, CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.GuaranteeTypeController.onPageLoad(updatedAnswers.id, Index(1), NormalMode))
-        }
-      }
-
-      "to TIRGuaranteeReference page for next guarantee in the array when yes is selected and declaration type is TIR" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers: UserAnswers = answers
-              .set(DeclarationTypePage, Option4).success.value
-              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
-              .set(LiabilityAmountPage(index), "12345").success.value
-              .set(AccessCodePage(index), "1234").success.value
-              .set(AddAnotherGuaranteePage, true).success.value
-            navigator
-              .nextPage(AddAnotherGuaranteePage, CheckMode, updatedAnswers)
-              .mustBe(guaranteeDetailsRoute.TIRGuaranteeReferenceController.onPageLoad(updatedAnswers.id, Index(1), NormalMode))
-        }
-      }
-
-      "to TaskListPage when no is selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers: UserAnswers = answers
-              .set(DeclarationTypePage, Option2).success.value
-              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
-              .set(LiabilityAmountPage(index), "12345").success.value
-              .set(AccessCodePage(index), "1234").success.value
-              .set(AddAnotherGuaranteePage, false).success.value
-            navigator
-              .nextPage(AddAnotherGuaranteePage, CheckMode, updatedAnswers)
-              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.id))
-        }
-      }
-      "to TaskListPage when number of guarantees is 9" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers: UserAnswers = answers
-              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
-              .set(GuaranteeTypePage(Index(1)), GuaranteeType.FlatRateVoucher).success.value
-              .set(GuaranteeTypePage(Index(2)), GuaranteeType.CashDepositGuarantee).success.value
-              .set(GuaranteeTypePage(Index(3)), GuaranteeType.ComprehensiveGuarantee).success.value
-              .set(GuaranteeTypePage(Index(4)), GuaranteeType.GuaranteeNotRequired).success.value
-              .set(GuaranteeTypePage(Index(5)), GuaranteeType.GuaranteeWaivedRedirect).success.value
-              .set(GuaranteeTypePage(Index(6)), GuaranteeType.GuaranteeWaiverByAgreement).success.value
-              .set(GuaranteeTypePage(Index(7)), GuaranteeType.IndividualGuaranteeMultiple).success.value
-              .set(GuaranteeTypePage(Index(8)), GuaranteeType.IndividualGuarantee).success.value
-              .set(LiabilityAmountPage(index), "12345").success.value
-              .set(AccessCodePage(index), "1234").success.value
-              .set(AddAnotherGuaranteePage, true).success.value
-            navigator
-              .nextPage(AddAnotherGuaranteePage, CheckMode, updatedAnswers)
-              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.id))
-        }
-      }
-    }
-
-    "From ConfirmRemoveGuaranteePage" - {
-      "to AddAnotherGuaranteePage if yes is selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers: UserAnswers = answers
-              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
-              .set(ConfirmRemoveGuaranteePage, true).success.value
-            navigator
-              .nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)
               .mustBe(controllers.guaranteeDetails.routes.AddAnotherGuaranteeController.onPageLoad(updatedAnswers.lrn))
         }
       }
@@ -768,6 +657,76 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             navigator
               .nextPage(ConfirmRemoveGuaranteePage, NormalMode, updatedAnswers)
               .mustBe(controllers.guaranteeDetails.routes.GuaranteeTypeController.onPageLoad(updatedAnswers.lrn, Index(0), NormalMode))
+        }
+      }
+    }
+
+    "From AddAnotherGuaranteePage" - {
+      "to GuaranteeTypePage for next guarantee in the array when yes is selected and declaration type is not TIR" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers
+              .set(DeclarationTypePage, Option2).success.value
+              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
+              .set(LiabilityAmountPage(index), "12345").success.value
+              .set(AccessCodePage(index), "1234").success.value
+              .set(AddAnotherGuaranteePage, true).success.value
+            navigator
+              .nextPage(AddAnotherGuaranteePage, CheckMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.GuaranteeTypeController.onPageLoad(updatedAnswers.lrn, Index(1), NormalMode))
+        }
+      }
+
+      "to TIRGuaranteeReference page for next guarantee in the array when yes is selected and declaration type is TIR" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers
+              .set(DeclarationTypePage, Option4).success.value
+              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
+              .set(LiabilityAmountPage(index), "12345").success.value
+              .set(AccessCodePage(index), "1234").success.value
+              .set(AddAnotherGuaranteePage, true).success.value
+            navigator
+              .nextPage(AddAnotherGuaranteePage, CheckMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.TIRGuaranteeReferenceController.onPageLoad(updatedAnswers.lrn, Index(1), NormalMode))
+        }
+      }
+
+      "to TaskListPage when no is selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers
+              .set(DeclarationTypePage, Option2).success.value
+              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
+              .set(LiabilityAmountPage(index), "12345").success.value
+              .set(AccessCodePage(index), "1234").success.value
+              .set(AddAnotherGuaranteePage, false).success.value
+            navigator
+              .nextPage(AddAnotherGuaranteePage, CheckMode, updatedAnswers)
+              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.lrn))
+        }
+      }
+      "to TaskListPage when number of guarantees is 9" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers
+              .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value
+              .set(GuaranteeTypePage(Index(1)), GuaranteeType.FlatRateVoucher).success.value
+              .set(GuaranteeTypePage(Index(2)), GuaranteeType.CashDepositGuarantee).success.value
+              .set(GuaranteeTypePage(Index(3)), GuaranteeType.ComprehensiveGuarantee).success.value
+              .set(GuaranteeTypePage(Index(4)), GuaranteeType.GuaranteeNotRequired).success.value
+              .set(GuaranteeTypePage(Index(5)), GuaranteeType.GuaranteeWaivedRedirect).success.value
+              .set(GuaranteeTypePage(Index(6)), GuaranteeType.GuaranteeWaiverByAgreement).success.value
+              .set(GuaranteeTypePage(Index(7)), GuaranteeType.IndividualGuaranteeMultiple).success.value
+              .set(GuaranteeTypePage(Index(8)), GuaranteeType.IndividualGuarantee).success.value
+              .set(LiabilityAmountPage(index), "12345").success.value
+              .set(AccessCodePage(index), "1234").success.value
+              .set(AddAnotherGuaranteePage, true).success.value
+            navigator
+              .nextPage(AddAnotherGuaranteePage, CheckMode, updatedAnswers)
+              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.lrn))
         }
       }
     }
