@@ -91,23 +91,6 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "must go from Movement Destination Country page to Destination Office page when not TIR" in {
-
-          val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val userAnswers = answers
-                .set(DeclarationTypePage, generatedOption)
-                .toOption
-                .value
-
-              navigator
-                .nextPage(MovementDestinationCountryPage, NormalMode, userAnswers)
-                .mustBe(routes.DestinationOfficeController.onPageLoad(userAnswers.id, NormalMode))
-          }
-        }
-
         "must go from Destination Office Page to Office Of Transit Country page when not an EU movement eg 'gb' " in {
 
           forAll(arbitrary[UserAnswers]) {
