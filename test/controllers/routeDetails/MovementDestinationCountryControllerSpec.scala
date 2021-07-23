@@ -76,7 +76,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getCountriesWithCustomsOffices(any())(any(), any())).thenReturn(Future.successful(countries))
 
       dataRetrievalWithData(userAnswers)
 
@@ -90,7 +90,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
       verify(mockReferenceDataConnector, times(1))
-        .getTransitCountryList(eqTo(alwaysExcludedTransitCountries))(any(), any())
+        .getCountriesWithCustomsOffices(eqTo(alwaysExcludedTransitCountries))(any(), any())
 
       val expectedJson = Json.obj(
         "form"        -> form,
@@ -115,7 +115,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getCountriesWithCustomsOffices(any())(any(), any())).thenReturn(Future.successful(countries))
 
       dataRetrievalWithData(userAnswers)
 
@@ -129,7 +129,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
       verify(mockReferenceDataConnector, times(1))
-        .getTransitCountryList(eqTo(alwaysExcludedTransitCountries ++ gbExcludedCountries))(any(), any())
+        .getCountriesWithCustomsOffices(eqTo(alwaysExcludedTransitCountries ++ gbExcludedCountries))(any(), any())
 
       val expectedJson = Json.obj(
         "form"        -> form,
@@ -155,7 +155,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getCountriesWithCustomsOffices(any())(any(), any())).thenReturn(Future.successful(countries))
 
       dataRetrievalWithData(userAnswers)
 
@@ -193,7 +193,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getCountriesWithCustomsOffices(any())(any(), any())).thenReturn(Future.successful(countries))
 
       dataRetrievalWithData(userAnswers)
 
@@ -216,7 +216,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataConnector.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
       dataRetrievalWithData(userAnswers)
 

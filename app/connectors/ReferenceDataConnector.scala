@@ -48,6 +48,20 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[Country]](serviceUrl).map(CountryList(_))
   }
 
+  def getCountriesWithCustomsOffices(excludeCountries: Seq[CountryCode])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/countries"
+
+    val customsOfficeQuery = Seq("customsOfficeRole" -> "ANY")
+
+    val excludeCountriesQuery = excludeCountries
+      .map(_.code)
+      .map("exclude" -> _)
+
+    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery
+
+    http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
+  }
+
   def getTransitCountryList(excludeCountries: Seq[CountryCode] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
     val serviceUrl = s"${config.referenceDataUrl}/transit-countries"
 
