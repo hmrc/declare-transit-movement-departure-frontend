@@ -130,7 +130,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         ItemDescriptionPage(Index(0)).reader,
         controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(0), NormalMode).url
       )
-      .ifNotStarted(controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(0), NormalMode).url)
+      .ifNotStarted(controllers.addItems.routes.ConfirmStartAddItemsController.onPageLoad(userAnswers.lrn).url)
 
   private def goodsSummaryStartPage(procedureType: Option[ProcedureType], safetyAndSecurity: Option[Boolean], prelodgedDeclaration: Option[Boolean]): String =
     (procedureType, safetyAndSecurity, prelodgedDeclaration) match {

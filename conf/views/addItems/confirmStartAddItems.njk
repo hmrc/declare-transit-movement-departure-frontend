@@ -1,0 +1,68 @@
+{% extends "includes/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
+{% from "govuk/components/radios/macro.njk"        import govukRadios %}
+{% from "govuk/components/button/macro.njk"        import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "macros/title.njk"                         import title %}
+
+{% block pageTitle %}
+  {{ title(messages("confirmStartAddItems.title"), form.errors) }}
+{% endblock %}
+
+{% block mainContent %}
+
+  {{ govukBackLink({
+    text: messages("site.back")
+  }) }}
+
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {% if form.errors.length > 0 %}
+          {{ govukErrorSummary({
+            "titleText": messages("error.summary.title"),
+            "errorList": form.errors
+          }) }}
+        {% endif %}
+
+        <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
+        <form action="{{ routes.controllers.addItems.ConfirmStartAddItemsController.onSubmit(lrn, mode).url }}" method="post">
+
+          {{ csrf() | safe }}
+
+          {{ govukRadios({
+            name: 'value',
+            fieldset: {
+              legend: {
+                text: messages('confirmStartAddItems.heading'),
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
+            },
+            hint: {
+                html:  govukWarningText({
+                        text: messages('confirmStartAddItems.info.safety') if safety else messages('confirmStartAddItems.info.nonSafety'),
+                        iconFallbackText: "Warning",
+                        classes: "govuk-!-padding-top-5"
+                      })
+
+            },
+            items: radios,
+            errorMessage: form.value.error
+          }) }}
+
+          {{ govukButton({
+            text: messages("site.continue"),
+            attributes: {id:"submit"}
+          }) }}
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
