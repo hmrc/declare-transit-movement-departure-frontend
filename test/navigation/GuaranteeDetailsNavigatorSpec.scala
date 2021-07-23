@@ -254,13 +254,23 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
     }
 
     "From OtherDetailsLiabilityAmount" - {
-      "to AccessCode page when an amount is entered" in {
+      "to AccessCode page when an amount greater than '0' is entered" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers: UserAnswers = answers.set(LiabilityAmountPage(index), "1234").success.value
             navigator
               .nextPage(OtherReferenceLiabilityAmountPage(index), NormalMode, updatedAnswers)
               .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+        }
+      }
+
+      "to Default Amount page when an amount of '0' is entered" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers.set(LiabilityAmountPage(index), "0").success.value
+            navigator
+              .nextPage(OtherReferenceLiabilityAmountPage(index), NormalMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.DefaultAmountController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
     }
