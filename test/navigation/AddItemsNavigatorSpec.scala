@@ -50,7 +50,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             val updatedAnswers = answers.unsafeSetVal(ConfirmStartAddItemsPage)(true)
             navigator
               .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
-              .mustBe(routes.ItemDescriptionController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(routes.ItemDescriptionController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -61,7 +61,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             val updatedAnswers = answers.unsafeSetVal(ConfirmStartAddItemsPage)(false)
             navigator
               .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
-              .mustBe(mainRoutes.DeclarationSummaryController.onPageLoad(answers.id))
+              .mustBe(mainRoutes.DeclarationSummaryController.onPageLoad(answers.lrn))
         }
       }
 
