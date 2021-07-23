@@ -18,12 +18,11 @@ package controllers.guaranteeDetails
 
 import controllers.actions._
 import forms.guaranteeDetails.TIRGuaranteeReferenceFormProvider
-import models.GuaranteeType.TIR
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
-import pages.TIRGuaranteeReferencePage
-import pages.guaranteeDetails.GuaranteeTypePage
+import pages.guaranteeDetails
+import pages.guaranteeDetails.TIRGuaranteeReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -55,7 +54,7 @@ class TIRGuaranteeReferenceController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(TIRGuaranteeReferencePage(index)) match {
+      val preparedForm = request.userAnswers.get(guaranteeDetails.TIRGuaranteeReferencePage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -86,10 +85,9 @@ class TIRGuaranteeReferenceController @Inject() (
           },
           value =>
             for {
-              u1 <- Future.fromTry(request.userAnswers.set(GuaranteeTypePage(index), TIR))
-              u2 <- Future.fromTry(u1.set(TIRGuaranteeReferencePage(index), value))
-              _  <- sessionRepository.set(u2)
-            } yield Redirect(navigator.nextPage(TIRGuaranteeReferencePage(index), mode, u2))
+              userAnswers <- Future.fromTry(request.userAnswers.set(TIRGuaranteeReferencePage(index), value))
+              _           <- sessionRepository.set(userAnswers)
+            } yield Redirect(navigator.nextPage(TIRGuaranteeReferencePage(index), mode, userAnswers))
         )
   }
 }

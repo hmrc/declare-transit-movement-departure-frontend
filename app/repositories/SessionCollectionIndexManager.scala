@@ -42,8 +42,8 @@ private[repositories] class SessionCollectionIndexManagerImpl @Inject() (
   )
 
   private val eoriIndex = SimpleMongoIndexConfig(
-    key = Seq("eoriNumber" -> IndexType.Ascending),
-    name = Some("eoriNumber-index")
+    key = Seq("eoriNumber" -> IndexType.Ascending, "lrn" -> IndexType.Ascending),
+    name = Some("eoriNumber-lrn-index")
   )
 
   val started: Future[Unit] =

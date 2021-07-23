@@ -299,6 +299,7 @@ whatIsPrincipalEori.error.required = Enter the principal’s EORI number
 whatIsPrincipalEori.error.length = The principal’s EORI number must be 17 characters or less
 whatIsPrincipalEori.error.invalidCharacters = The principal’s EORI number must only include letters a to z without accents and numbers 0 to 9
 whatIsPrincipalEori.error.invalidFormat = Enter the principal’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+whatIsPrincipalEori.error.prefix = Principal’s EORI number must start with {0}
 
 principalAddress.title = What is the principal’s address?
 principalAddress.heading = What is {0}’s address?
@@ -1391,6 +1392,14 @@ addAnotherGuarantee.radio.heading = Do you need to add another guarantee?
 addAnotherGuarantee.error.required = Select yes if you need to add another guarantee
 addAnotherGuarantee.guarantee.change.hidden = guarantee {0}
 addAnotherGuarantee.guarantee.delete.hidden = guarantee {0}
+
+addAnotherGuarantee.tir.title.singular = You have added 1 TIR Carnet
+addAnotherGuarantee.tir.title.plural = You have added {0} TIR Carnets
+addAnotherGuarantee.tir.heading.singular = You have added 1 TIR Carnet
+addAnotherGuarantee.tir.heading.plural = You have added {0} TIR Carnets
+addAnotherGuarantee.tir.radio.heading = Do you need to add another TIR Carnet
+addAnotherGuarantee.tir.error.required = Select yes if you need to add another TIR Carnet
+
 
 confirmRemoveGuarantee.title =  Are you sure you want to remove this guarantee?
 confirmRemoveGuarantee.heading =  Are you sure you want to remove this guarantee?

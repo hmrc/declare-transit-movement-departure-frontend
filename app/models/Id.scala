@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import javax.inject.Inject
+import play.api.libs.json._
+import java.util.UUID
 
-import forms.mappings.Mappings
-import play.api.data.Form
+final case class Id(uuid: String)
 
-class AddAnotherGuaranteeFormProvider @Inject() extends Mappings {
+object Id {
 
-  def apply(allowMoreGuarantees: Boolean, isTir: Boolean): Form[Boolean] = {
+  def apply() =
+    new Id(UUID.randomUUID().toString)
 
-    val requiredMessage = if (isTir) "addAnotherGuarantee.tir.error.required" else "addAnotherGuarantee.error.required"
+  implicit def reads: Reads[Id] =
+    __.read[String].map(Id.apply)
 
-    Form(
-      "value" ->
-        mandatoryIfBoolean(allowMoreGuarantees, requiredMessage)
-    )
+  implicit def writes: Writes[Id] = Writes {
+    id =>
+      JsString(id.uuid)
   }
 }

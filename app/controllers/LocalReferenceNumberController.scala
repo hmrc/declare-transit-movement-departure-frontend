@@ -77,7 +77,7 @@ class LocalReferenceNumberController @Inject() (
   }
 
   def getOrCreateUserAnswers(eoriNumber: EoriNumber, value: LocalReferenceNumber): Future[UserAnswers] = {
-    val initialUserAnswers = UserAnswers(id = value, eoriNumber = eoriNumber)
+    val initialUserAnswers = UserAnswers(lrn = value, eoriNumber = eoriNumber)
 
     sessionRepository.get(id = value, eoriNumber = eoriNumber) map {
       userAnswers =>

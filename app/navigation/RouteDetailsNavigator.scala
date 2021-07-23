@@ -27,22 +27,22 @@ import play.api.mvc.Call
 class RouteDetailsNavigator @Inject() () extends Navigator {
 
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case CountryOfDispatchPage => ua => Some(routes.DestinationCountryController.onPageLoad(ua.id, NormalMode))
+    case CountryOfDispatchPage => ua => Some(routes.DestinationCountryController.onPageLoad(ua.lrn, NormalMode))
     case DestinationCountryPage =>
-      ua => Some(routes.MovementDestinationCountryController.onPageLoad(ua.id, NormalMode))
+      ua => Some(routes.MovementDestinationCountryController.onPageLoad(ua.lrn, NormalMode))
     case MovementDestinationCountryPage =>
       ua => Some(declarationTypeTIR(ua, NormalMode))
     case DestinationOfficePage =>
       ua => Some(destinationOfficeRoute(ua, NormalMode))
     case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, NormalMode))
     case OfficeOfTransitCountryPage(index) =>
-      ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, NormalMode))
+      ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.lrn, index, NormalMode))
     case AddAnotherTransitOfficePage(index) =>
       ua => Some(redirectToAddTransitOfficeNextPage(ua, index, NormalMode))
     case AddTransitOfficePage =>
       ua => Some(addOfficeOfTransit(NormalMode, ua))
     case ArrivalTimesAtOfficePage(_) =>
-      ua => Some(routes.AddTransitOfficeController.onPageLoad(ua.id, NormalMode))
+      ua => Some(routes.AddTransitOfficeController.onPageLoad(ua.lrn, NormalMode))
     case ConfirmRemoveOfficeOfTransitPage =>
       ua => Some(removeOfficeOfTransit(NormalMode)(ua))
   }
@@ -51,9 +51,9 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     case MovementDestinationCountryPage =>
       ua => Some(declarationTypeTIR(ua, CheckMode))
     case OfficeOfTransitCountryPage(index) =>
-      ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.id, index, CheckMode))
+      ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.lrn, index, CheckMode))
     case page if isRouteDetailsSectionPage(page) =>
-      ua => Some(routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id))
+      ua => Some(routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
     case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, CheckMode))
     case _ =>
       _ => None
@@ -61,28 +61,29 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
 
   def declarationTypeTIR(ua: UserAnswers, mode: Mode) =
     ua.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case Some(DeclarationType.Option4) => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
       case _                             => destinationOfficeRoute(ua, mode)
     }
 
   def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =
     (ua.get(AddOfficeOfTransitPage), mode) match {
-      case (Some(true), NormalMode) => routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), NormalMode)
-      case (Some(true), CheckMode)  => routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), CheckMode)
-      case (Some(false), _)         => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.id)
+      case (Some(true), NormalMode) => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), NormalMode)
+      case (Some(true), CheckMode)  => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), CheckMode)
+      case (Some(false), _)         => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
 
     }
 
   def destinationOfficeRoute(ua: UserAnswers, mode: Mode) =
     ua.get(OfficeOfDeparturePage) match {
-      case Some(x) if x.countryId.code.startsWith("XI") => routes.AddOfficeOfTransitController.onPageLoad(ua.id, mode)
-      case _                                            => routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), mode)
+      case Some(x) if x.countryId.code.startsWith("XI") => routes.AddOfficeOfTransitController.onPageLoad(ua.lrn, mode)
+      case _                                            => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
+
     }
 
   def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =
     ua.get(AddSecurityDetailsPage) match {
-      case Some(isSelected) if isSelected => routes.ArrivalTimesAtOfficeController.onPageLoad(ua.id, index, mode)
-      case _                              => routes.AddTransitOfficeController.onPageLoad(ua.id, mode)
+      case Some(isSelected) if isSelected => routes.ArrivalTimesAtOfficeController.onPageLoad(ua.lrn, index, mode)
+      case _                              => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
     }
 
   private def isRouteDetailsSectionPage(page: Page): Boolean =
@@ -98,15 +99,15 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     userAnswers.get(AddTransitOfficePage) match {
       case Some(true) if count <= maxNumberOfOfficesAllowed =>
         val index = Index(count)
-        routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, index, mode)
+        routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, index, mode)
       case _ =>
-        routes.RouteDetailsCheckYourAnswersController.onPageLoad(userAnswers.id)
+        routes.RouteDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn)
     }
   }
 
   private def removeOfficeOfTransit(mode: Mode)(ua: UserAnswers) =
     ua.get(DeriveNumberOfOfficeOfTransits) match {
-      case None | Some(0) => routes.OfficeOfTransitCountryController.onPageLoad(ua.id, Index(0), mode)
-      case _              => routes.AddTransitOfficeController.onPageLoad(ua.id, mode)
+      case None | Some(0) => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
+      case _              => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
     }
 }

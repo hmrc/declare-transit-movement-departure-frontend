@@ -17,16 +17,16 @@
 package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
-import cats.data.{NonEmptyList, NonEmptyMap}
+import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import models.DeclarationType.{Option2, Option4}
-import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute, TIR}
+import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute}
 import models.journeyDomain.CurrencyCode.GBP
-import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference}
+import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference, GuaranteeTIR}
 import models.{Index, UserAnswers}
 import org.scalacheck.Gen
 import pages._
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 
 class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
@@ -34,10 +34,10 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
   private val otherGuaranteeReferenceType = Gen.oneOf(nonGuaranteeReferenceRoute).sample.value
 
   private val tirGuaranteeReferenceUa = emptyUserAnswers
-    .unsafeSetVal(DeclarationTypePage)(Option4)
     .unsafeSetVal(TIRGuaranteeReferencePage(index))("tirRefNumber")
 
   private val guaranteeReferenceUa: UserAnswers = emptyUserAnswers
+    .unsafeSetVal(DeclarationTypePage)(Option2)
     .unsafeSetVal(GuaranteeTypePage(index))(guaranteeReferenceType)
     .unsafeSetVal(GuaranteeReferencePage(index))("refNumber")
     .unsafeSetVal(LiabilityAmountPage(index))("5000")
@@ -50,20 +50,11 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
   private val listOfGuaranteeDetailsWithTIR = emptyUserAnswers
     .unsafeSetVal(DeclarationTypePage)(Option4)
-    .unsafeSetVal(GuaranteeTypePage(index))(TIR)
-    .unsafeSetVal(TIRGuaranteeReferencePage(index))("tirRefNumber")
-    .unsafeSetVal(GuaranteeTypePage(Index(1)))(otherGuaranteeReferenceType)
-    .unsafeSetVal(OtherReferencePage(Index(1)))("otherRefNumber")
-    .unsafeSetVal(GuaranteeTypePage(Index(2)))(otherGuaranteeReferenceType)
-    .unsafeSetVal(OtherReferencePage(Index(2)))("otherRefNumber")
-    .unsafeSetVal(GuaranteeTypePage(Index(3)))(guaranteeReferenceType)
-    .unsafeSetVal(GuaranteeReferencePage(Index(3)))("refNumber")
-    .unsafeSetVal(LiabilityAmountPage(Index(3)))("5000")
-    .unsafeSetVal(AccessCodePage(Index(3)))("1234")
-    .unsafeSetVal(GuaranteeTypePage(Index(4)))(guaranteeReferenceType)
-    .unsafeSetVal(GuaranteeReferencePage(Index(4)))("refNumber")
-    .unsafeSetVal(LiabilityAmountPage(Index(4)))("5000")
-    .unsafeSetVal(AccessCodePage(Index(4)))("1234")
+    .unsafeSetVal(TIRGuaranteeReferencePage(index))("tirRefNumber1")
+    .unsafeSetVal(TIRGuaranteeReferencePage(Index(1)))("tirRefNumber2")
+    .unsafeSetVal(TIRGuaranteeReferencePage(Index(2)))("tirRefNumber3")
+    .unsafeSetVal(TIRGuaranteeReferencePage(Index(3)))("tirRefNumber4")
+    .unsafeSetVal(TIRGuaranteeReferencePage(Index(4)))("tirRefNumber5")
 
   private val listOfGuaranteeDetails = emptyUserAnswers
     .unsafeSetVal(DeclarationTypePage)(Option2)
@@ -110,12 +101,12 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
       "when there are multiple GuaranteeDetails with a TIR Declaration Type" in {
 
         val expectedResult = NonEmptyList(
-          GuaranteeOther(TIR, "tirRefNumber"),
+          GuaranteeTIR("tirRefNumber1"),
           List(
-            GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber"),
-            GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber"),
-            GuaranteeReference(guaranteeReferenceType, "refNumber", OtherLiabilityAmount("5000", GBP), "1234"),
-            GuaranteeReference(guaranteeReferenceType, "refNumber", OtherLiabilityAmount("5000", GBP), "1234")
+            GuaranteeTIR("tirRefNumber2"),
+            GuaranteeTIR("tirRefNumber3"),
+            GuaranteeTIR("tirRefNumber4"),
+            GuaranteeTIR("tirRefNumber5")
           )
         )
 
@@ -127,13 +118,13 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
     "cannot be parsed from UserAnswers" - {
 
-      "when GuaranteeTypePage in missing" in {
+      "when DeclarationType is missing" in {
 
         val userAnswers = emptyUserAnswers
 
         val result: EitherType[GuaranteeDetails] = UserAnswersReader[GuaranteeDetails](GuaranteeDetails.parseGuaranteeDetails(index)).run(userAnswers)
 
-        result.left.value.page mustBe GuaranteeTypePage(index)
+        result.left.value.page mustBe DeclarationTypePage
       }
 
       "when GuaranteeTypePage is missing when multiple GuaranteeDetails" in {
@@ -235,20 +226,11 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
       "can be parsed" - {
 
-        "when all details for section have been answered when not a TIR Declaration Type" in {
+        "when all details for section have been answered" in {
 
           val expectedResult = GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber")
 
           val result = UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).run(otherGuaranteeUa).right.value
-
-          result mustBe expectedResult
-        }
-
-        "when all details for section have been answered when a TIR Declaration Type" in {
-
-          val expectedResult = GuaranteeOther(TIR, "tirRefNumber")
-
-          val result = UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).run(tirGuaranteeReferenceUa).right.value
 
           result mustBe expectedResult
         }
@@ -257,12 +239,11 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
       "cannot be parsed" - {
 
         val mandatoryPages: Gen[QuestionPage[_]] = Gen.oneOf(
-          DeclarationTypePage,
           GuaranteeTypePage(index),
           OtherReferencePage(index)
         )
 
-        "when an answer is missing for non TIR Declaration Type" in {
+        "when an answer is missing" in {
 
           forAll(mandatoryPages) {
             mandatoryPage =>
@@ -272,17 +253,32 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
               result.left.value.page mustBe mandatoryPage
           }
         }
+      }
+    }
 
-        "when an answer is missing for TIR Declaration Type" in {
+    "GuaranteeTIR" - {
 
-          val userAnswers = tirGuaranteeReferenceUa
-            .unsafeRemove(TIRGuaranteeReferencePage(index))
+      "can be parsed" - {
 
-          val result = UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).run(userAnswers)
+        "when all details for section have been answered" in {
 
-          result.left.value.page mustBe TIRGuaranteeReferencePage(index)
+          val expectedResult = GuaranteeTIR("tirRefNumber")
+
+          val result = UserAnswersReader[GuaranteeTIR](GuaranteeTIR.parseGuaranteeTIR(index)).run(tirGuaranteeReferenceUa).right.value
+
+          result mustBe expectedResult
+        }
+      }
+
+      "cannot be parsed" - {
+        "when an answer is missing" in {
+
+          val result = UserAnswersReader[GuaranteeTIR](GuaranteeTIR.parseGuaranteeTIR(index)).run(emptyUserAnswers).left.value
+
+          result.page mustBe TIRGuaranteeReferencePage(index)
         }
       }
     }
+
   }
 }

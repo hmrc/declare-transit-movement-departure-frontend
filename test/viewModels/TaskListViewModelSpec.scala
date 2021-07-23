@@ -27,7 +27,7 @@ import models.userAnswerScenarios.{Scenario1, Scenario3}
 import models.{EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity._
 import play.api.libs.json.{JsObject, Json}
@@ -1152,18 +1152,6 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           viewModel.getStatus(guaranteeSectionName).value mustEqual Status.NotStarted
         }
 
-        "is InProgress when the first question for the section has been answered for TIR declaration" in {
-
-          val updatedUserAnswers = dependentSection
-            .unsafeSetVal(DeclarationTypePage)(Option4)
-            .unsafeSetVal(TIRGuaranteeReferencePage(index))("TIRGuarantee")
-
-          val viewModel = TaskListViewModel(updatedUserAnswers)
-
-          viewModel.getStatus(guaranteeSectionName).value mustEqual Status.InProgress
-
-        }
-
         "is InProgress when the first question for the section has been answered for non TIR declaration" in {
 
           val updatedUserAnswers = dependentSection
@@ -1178,6 +1166,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         "is Completed when all the answers are completed for the first Item" in {
 
           val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option2)
             .unsafeSetVal(GuaranteeTypePage(index))(GuaranteeType.GuaranteeWaiver)
             .unsafeSetVal(GuaranteeReferencePage(index))("refNumber")
             .unsafeSetVal(LiabilityAmountPage(index))("5000")
@@ -1186,6 +1175,18 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           val viewModel = TaskListViewModel(updatedUserAnswers)
 
           viewModel.getStatus(guaranteeSectionName).value mustEqual Status.Completed
+        }
+
+        "is Completed when the first question for the section has been answered for TIR declaration" in {
+
+          val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option4)
+            .unsafeSetVal(TIRGuaranteeReferencePage(index))("TIRGuarantee")
+
+          val viewModel = TaskListViewModel(updatedUserAnswers)
+
+          viewModel.getStatus(guaranteeSectionName).value mustEqual Status.Completed
+
         }
       }
     }
@@ -1252,6 +1253,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
         "when the status is Completed, links to the add another guarantee page" in {
           val updatedUserAnswers = dependentSection
+            .unsafeSetVal(DeclarationTypePage)(Option2)
             .unsafeSetVal(GuaranteeTypePage(index))(GuaranteeType.GuaranteeWaiver)
             .unsafeSetVal(GuaranteeReferencePage(index))("refNumber")
             .unsafeSetVal(LiabilityAmountPage(index))("5000")

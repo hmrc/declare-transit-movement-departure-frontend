@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.ConfirmRemoveSealFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, UserAnswers}
+import models.{Id, NormalMode, UserAnswers}
 import navigation.annotations.GoodsSummary
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -85,8 +85,9 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must redirect to the next page when valid data is submitted" in {
+      val id = Id()
 
-      dataRetrievalWithData(userAnswersWithSeal)
+      dataRetrievalWithData(userAnswersWithSeal.copy(id = id))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -99,12 +100,12 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with MockNunjucksRenderer
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
-
       val newUserAnswers = UserAnswers(
-        id = userAnswersWithSeal.id,
+        lrn = userAnswersWithSeal.lrn,
         eoriNumber = userAnswersWithSeal.eoriNumber,
         userAnswersWithSeal.remove(SealIdDetailsPage(sealIndex)).success.value.data,
-        userAnswersWithSeal.lastUpdated
+        userAnswersWithSeal.lastUpdated,
+        id
       )
 
       verify(mockSessionRepository, times(1)).set(newUserAnswers)

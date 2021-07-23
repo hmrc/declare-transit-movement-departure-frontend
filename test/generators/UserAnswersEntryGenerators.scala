@@ -19,7 +19,7 @@ package generators
 import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages._
+import pages.{guaranteeDetails, _}
 import pages.addItems.{CommodityCodePage, ConfirmRemoveItemPage, _}
 import pages.addItems.traderDetails._
 import pages.addItems._
@@ -36,7 +36,7 @@ import pages.addItems.traderSecurityDetails.{
   SecurityConsignorEoriPage,
   SecurityConsignorNamePage
 }
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity.{
   AddAnotherCountryOfRoutingPage,
@@ -268,7 +268,7 @@ trait UserAnswersEntryGenerators {
     Arbitrary {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
-      } yield (TIRGuaranteeReferencePage(Index(0)), value)
+      } yield (guaranteeDetails.TIRGuaranteeReferencePage(Index(0)), value)
     }
 
   implicit lazy val arbitraryPlaceOfUnloadingCodeUserAnswersEntry: Arbitrary[(PlaceOfUnloadingCodePage.type, JsValue)] =

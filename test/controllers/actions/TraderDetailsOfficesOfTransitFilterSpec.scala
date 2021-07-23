@@ -51,7 +51,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result) mustBe Some(
-          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, Index(1), NormalMode).url
+          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, Index(1), NormalMode).url
         )
       }
 
@@ -83,7 +83,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
         val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
 
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(userAnswers.id, NormalMode).url)
+        redirectLocation(result) mustBe Some(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(userAnswers.lrn, NormalMode).url)
       }
 
     }
@@ -110,7 +110,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result) mustBe Some(
-          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, Index(0), NormalMode).url
+          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, Index(0), NormalMode).url
         )
       }
 
@@ -140,7 +140,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(userAnswers.id, NormalMode).url)
+        redirectLocation(result) mustBe Some(controllers.routeDetails.routes.AddTransitOfficeController.onPageLoad(userAnswers.lrn, NormalMode).url)
       }
 
       "and the previous loop is not complete, must redirect to the OfficeOfTransitCountryController for the incomplete loop" in {
@@ -156,7 +156,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result) mustBe Some(
-          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.id, Index(index.position + 1), NormalMode).url
+          controllers.routeDetails.routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, Index(index.position + 1), NormalMode).url
         )
       }
 
