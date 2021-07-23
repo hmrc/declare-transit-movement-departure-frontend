@@ -778,19 +778,19 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
       "when dependent section is complete" - {
 
-        "when the status is Not started, links to the first page" in {
+        "when the status is Not started, links to the confirm start add item page" in {
 
           val userAnswers = dependantSections
             .unsafeSetVal(AddSecurityDetailsPage)(true)
 
           val viewModel = TaskListViewModel(userAnswers)
 
-          val expectedHref: String = controllers.addItems.routes.ItemDescriptionController.onPageLoad(lrn, Index(0), NormalMode).url
+          val expectedHref: String = controllers.addItems.routes.ConfirmStartAddItemsController.onPageLoad(lrn).url
 
           viewModel.getHref(addItemsSectionName).value mustEqual expectedHref
         }
 
-        "when the status is InProgress, links to the first page" in {
+        "when the status is InProgress, links to the item description page" in {
 
           val updatedUserAnswers = dependantSections
             .unsafeSetVal(AddSecurityDetailsPage)(true)

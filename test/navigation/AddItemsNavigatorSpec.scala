@@ -43,6 +43,38 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
   "Add Items section" - {
 
     "in normal mode" - {
+      "must go from confirm start add items page to item description page if answer is true" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeSetVal(ConfirmStartAddItemsPage)(true)
+            navigator
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
+              .mustBe(routes.ItemDescriptionController.onPageLoad(answers.id, index, NormalMode))
+        }
+      }
+
+      "must go from confirm start add items page to task list if answer is false" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeSetVal(ConfirmStartAddItemsPage)(false)
+            navigator
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
+              .mustBe(mainRoutes.DeclarationSummaryController.onPageLoad(answers.id))
+        }
+      }
+
+      "must go from confirm start add items page to session expiry page if no answer is present" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeRemove(ConfirmStartAddItemsPage)
+            navigator
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
+              .mustBe(mainRoutes.SessionExpiredController.onPageLoad())
+        }
+      }
 
       "must go from item description page to total gross mass page" in {
 

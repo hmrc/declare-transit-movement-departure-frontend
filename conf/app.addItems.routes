@@ -1,3 +1,6 @@
+GET        /:lrn/add-items/item-warning                        controllers.addItems.ConfirmStartAddItemsController.onPageLoad(lrn: LocalReferenceNumber)
+POST       /:lrn/add-items/item-warning                        controllers.addItems.ConfirmStartAddItemsController.onSubmit(lrn: LocalReferenceNumber)
+
 GET        /:lrn/add-items/item-details/:index/item-description                        controllers.addItems.ItemDescriptionController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
 POST       /:lrn/add-items/item-details/:index/item-description                         controllers.addItems.ItemDescriptionController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
 GET        /:lrn/add-items/item-details/:index/change-item-description                   controllers.addItems.ItemDescriptionController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
