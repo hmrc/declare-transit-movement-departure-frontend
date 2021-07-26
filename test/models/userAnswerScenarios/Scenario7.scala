@@ -33,7 +33,7 @@
 package models.userAnswerScenarios
 
 import cats.data.NonEmptyList
-import models.DeclarationType.Option2
+import models.DeclarationType.Option4
 import models.ProcedureType.Normal
 import models.RepresentativeCapacity.Direct
 import models.domain.SealDomain
@@ -42,7 +42,6 @@ import models.journeyDomain.GuaranteeDetails.GuaranteeTIR
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.MovementDetails.{DeclarationForSomeoneElse, NormalMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
-import models.journeyDomain.RouteDetails.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.TraderEori
 import models.journeyDomain.TransportDetails.DetailsAtBorder.SameDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.NonSpecialMode
@@ -58,6 +57,7 @@ import models.journeyDomain.{
   PreTaskListDetails,
   PreviousReferences,
   RouteDetails,
+  RouteDetailsShortJourney,
   SafetyAndSecurity,
   SpecialMentionDomain,
   StandardDocument,
@@ -66,7 +66,6 @@ import models.journeyDomain.{
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
-
 import java.time.LocalDateTime
 
 case object Scenario7 extends UserAnswerScenario {
@@ -289,19 +288,13 @@ case object Scenario7 extends UserAnswerScenario {
     .unsafeSetVal(pages.guaranteeDetails.TIRGuaranteeReferencePage(Index(1)))("GUA2Ref")
 
   private val preTaskListDetails =
-    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None), Option2, true)
+    PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None), Option4, true)
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 
-  private val routeDetails = RouteDetails(
+  private val routeDetails = RouteDetailsShortJourney(
     CountryOfDispatch(CountryCode("SC"), false),
-    CountryCode("DC"),
-    CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    Some(
-      NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
-                   List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
-      )
-    )
+    CountryCode("DC")
   )
 
   private val transportDetails = TransportDetails(NonSpecialMode(4, Some(CountryCode("ND")), None), SameDetailsAtBorder)

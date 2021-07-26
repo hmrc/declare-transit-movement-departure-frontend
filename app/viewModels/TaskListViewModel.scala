@@ -18,19 +18,18 @@ package viewModels
 
 import cats.data.NonEmptyList
 import cats.implicits._
-import controllers.movementDetails.routes
 import models.DeclarationType.Option4
 import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
-import models.{CheckMode, DependentSection, Index, Mode, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
+import models.journeyDomain.RouteDetails._
+import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers}
 import pages._
 import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
 import play.api.libs.json._
-import play.api.mvc.Call
 
 private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
 

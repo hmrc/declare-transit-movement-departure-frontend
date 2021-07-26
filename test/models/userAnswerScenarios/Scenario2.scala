@@ -23,16 +23,15 @@ import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
 import models.journeyDomain.GuaranteeDetails.GuaranteeOther
 import models.journeyDomain.MovementDetails.{DeclarationForSelf, SimplifiedMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
-import models.journeyDomain.RouteDetails.TransitInformation
+import models.journeyDomain.RouteDetailsLongJourney.TransitInformation
 import models.journeyDomain.TransportDetails.DetailsAtBorder.NewDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.NonSpecialMode
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.ModeWithNationality
 import models.journeyDomain.traderDetails.{ConsigneeDetails, ConsignorDetails, PrincipalTraderEoriInfo, TraderDetails}
-import models.journeyDomain.{GoodsSummary, ItemDetails, ItemSection, JourneyDomain, PreTaskListDetails, RouteDetails, TransportDetails}
+import models.journeyDomain.{GoodsSummary, ItemDetails, ItemSection, JourneyDomain, PreTaskListDetails, RouteDetails, RouteDetailsLongJourney, TransportDetails}
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, UserAnswers}
 import play.api.libs.json.Json
-
 import java.time.{LocalDate, LocalDateTime}
 
 case object Scenario2 extends UserAnswerScenario {
@@ -175,7 +174,7 @@ case object Scenario2 extends UserAnswerScenario {
     DeclarationForSelf
   )
 
-  private val routeDetails = RouteDetails(
+  private val routeDetails = RouteDetailsLongJourney(
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),

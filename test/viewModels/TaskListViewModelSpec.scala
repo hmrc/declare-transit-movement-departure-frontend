@@ -877,8 +877,6 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         }
 
         "when add custom approved location page has been answered" in {
-          val isSecurityDefined = false
-          val procedureType     = ProcedureType.Normal
 
           forAll(arb[Boolean]) {
             pageAnswer =>
@@ -1125,6 +1123,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
       .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
       .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
+      .unsafeSetVal(DeclarationTypePage)(Option1)
       .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
       .unsafeSetVal(ArrivalTimesAtOfficePage(index))(LocalDateTime.now)
 

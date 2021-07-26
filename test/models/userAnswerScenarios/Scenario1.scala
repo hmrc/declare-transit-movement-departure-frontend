@@ -42,7 +42,7 @@ import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.MovementDetails.{DeclarationForSomeoneElse, NormalMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
-import models.journeyDomain.RouteDetails.TransitInformation
+import models.journeyDomain.RouteDetailsLongJourney.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.TraderEori
 import models.journeyDomain.TransportDetails.DetailsAtBorder.SameDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.NonSpecialMode
@@ -60,7 +60,7 @@ import models.journeyDomain.{
   OtherLiabilityAmount,
   PreTaskListDetails,
   PreviousReferences,
-  RouteDetails,
+  RouteDetailsLongJourney,
   SafetyAndSecurity,
   SpecialMentionDomain,
   StandardDocument,
@@ -69,7 +69,6 @@ import models.journeyDomain.{
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
-
 import java.time.LocalDateTime
 
 case object Scenario1 extends UserAnswerScenario {
@@ -308,7 +307,7 @@ case object Scenario1 extends UserAnswerScenario {
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 
-  private val routeDetails = RouteDetails(
+  private val routeDetails = RouteDetailsLongJourney(
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
