@@ -18,8 +18,8 @@ package viewModels
 
 import base.SpecBase
 import generators.Generators
-import models.reference.{CircumstanceIndicator, Country, CountryCode}
-import models.{CircumstanceIndicatorList, CommonAddress, CountryList}
+import models.reference.{CircumstanceIndicator, Country, CountryCode, MethodOfPayment}
+import models.{CircumstanceIndicatorList, CommonAddress, CountryList, MethodOfPaymentList}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.MessageInterpolators
@@ -109,9 +109,11 @@ class SafetyAndSecurityCheckYourAnswersViewModelSpec extends SpecBase with Gener
 
   val countryList                = new CountryList(Seq(Country(CountryCode("FR"), "France")))
   val circumstanceIndicatorsList = CircumstanceIndicatorList(Seq(CircumstanceIndicator("C", "Road mode of transport")))
+  val methodOfPaymentList        = MethodOfPaymentList(Seq(MethodOfPayment("A", "Payment in cash")))
   // scalastyle:on
 
-  private val data: Seq[Section] = SafetyAndSecurityCheckYourAnswersViewModel(setSafetyAndSecurityCarrier, countryList, circumstanceIndicatorsList)
+  private val data: Seq[Section] =
+    SafetyAndSecurityCheckYourAnswersViewModel(setSafetyAndSecurityCarrier, countryList, circumstanceIndicatorsList, methodOfPaymentList)
 
   "SafetyAndSecurityCheckYourAnswersViewModel" - {
 

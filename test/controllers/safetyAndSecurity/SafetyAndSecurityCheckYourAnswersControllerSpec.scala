@@ -33,8 +33,8 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import controllers.{routes => mainRoutes}
-import models.{CircumstanceIndicatorList, CountryList, NormalMode}
-import models.reference.{CircumstanceIndicator, Country, CountryCode}
+import models.{CircumstanceIndicatorList, CountryList, MethodOfPaymentList, NormalMode}
+import models.reference.{CircumstanceIndicator, Country, CountryCode, MethodOfPayment}
 
 import scala.concurrent.Future
 
@@ -45,6 +45,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec extends SpecBase with Mock
   private val mockReferenceDataConnector = mock[ReferenceDataConnector]
   val countries                          = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   val circumstanceIndicatorsList         = CircumstanceIndicatorList(Seq(CircumstanceIndicator("C", "Road mode of transport")))
+  val methodOfPaymentList                = MethodOfPaymentList(Seq(MethodOfPayment("A", "Payment in cash")))
 
   lazy val safetyAndSecurityRoute = routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(lrn).url
 
@@ -63,6 +64,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec extends SpecBase with Mock
 
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorsList))
+      when(mockReferenceDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       dataRetrievalWithData(emptyUserAnswers)
 

@@ -56,18 +56,22 @@ class SafetyAndSecurityCheckYourAnswersController @Inject() (
           countries =>
             referenceDataConnector.getCircumstanceIndicatorList() flatMap {
               circumstanceIndicators =>
-                val sections: Seq[Section] = SafetyAndSecurityCheckYourAnswersViewModel(request.userAnswers, countries, circumstanceIndicators)
+                referenceDataConnector.getMethodOfPaymentList() flatMap {
+                  methodOfPaymentList =>
+                    val sections: Seq[Section] =
+                      SafetyAndSecurityCheckYourAnswersViewModel(request.userAnswers, countries, circumstanceIndicators, methodOfPaymentList)
 
-                val json = Json.obj(
-                  "lrn"                           -> lrn,
-                  "sections"                      -> Json.toJson(sections),
-                  "addAnotherCountryOfRoutingUrl" -> routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url,
-                  "nextPageUrl"                   -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
-                )
+                    val json = Json.obj(
+                      "lrn"                           -> lrn,
+                      "sections"                      -> Json.toJson(sections),
+                      "addAnotherCountryOfRoutingUrl" -> routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url,
+                      "nextPageUrl"                   -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
+                    )
 
-                ValidateReaderLogger[SafetyAndSecurity](request.userAnswers)
+                    ValidateReaderLogger[SafetyAndSecurity](request.userAnswers)
 
-                renderer.render("safetyAndSecurity/SafetyAndSecurityCheckYourAnswers.njk", json).map(Ok(_))
+                    renderer.render("safetyAndSecurity/SafetyAndSecurityCheckYourAnswers.njk", json).map(Ok(_))
+                }
             }
         }
 

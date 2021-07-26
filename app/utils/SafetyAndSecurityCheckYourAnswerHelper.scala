@@ -17,7 +17,7 @@
 package utils
 
 import controllers.safetyAndSecurity.routes
-import models.{CheckMode, CircumstanceIndicatorList, CountryList, Index, LocalReferenceNumber, Mode, UserAnswers}
+import models.{CheckMode, CircumstanceIndicatorList, CountryList, Index, LocalReferenceNumber, MethodOfPaymentList, Mode, UserAnswers}
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
@@ -420,11 +420,17 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def transportChargesPaymentMethod: Option[Row] = userAnswers.get(TransportChargesPaymentMethodPage) map {
+  def transportChargesPaymentMethod(methodOfPaymentList: MethodOfPaymentList): Option[Row] = userAnswers.get(TransportChargesPaymentMethodPage) map {
     answer =>
+      val methodOfPayment = methodOfPaymentList
+        .getMethodOfPayment(answer)
+        .map(
+          method => s"(${method.code}) ${method.description}"
+        )
+        .getOrElse(answer)
       Row(
         key = Key(msg"transportChargesPaymentMethod.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
+        value = Value(lit"$methodOfPayment"),
         actions = List(
           Action(
             content = msg"site.edit",
