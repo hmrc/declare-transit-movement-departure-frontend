@@ -17,7 +17,7 @@
 package viewModels
 
 import derivable._
-import models.{CountryList, DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
+import models.{CountryList, DocumentTypeList, Index, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
 import uk.gov.hmrc.viewmodels.{MessageInterpolators, SummaryList}
 import utils.{AddItemsCheckYourAnswersHelper, SpecialMentionsCheckYourAnswers}
 import viewModels.sections.Section
@@ -29,7 +29,8 @@ object AddItemsCheckYourAnswersViewModel {
             documentTypeList: DocumentTypeList,
             previousDocumentTypes: PreviousReferencesDocumentTypeList,
             specialMentionList: SpecialMentionList,
-            countryList: CountryList
+            countryList: CountryList,
+            methodOfPaymentList: MethodOfPaymentList
   ): AddItemsCheckYourAnswersViewModel = {
 
     val checkYourAnswersHelper = new AddItemsCheckYourAnswersHelper(userAnswers)
@@ -46,7 +47,7 @@ object AddItemsCheckYourAnswersViewModel {
         specialMentionsSection(specialMentionsCheckYourAnswers, index, specialMentionList)(userAnswers),
         documentsSection(checkYourAnswersHelper, index, documentTypeList)(userAnswers),
         referencesSection(checkYourAnswersHelper, index, previousDocumentTypes)(userAnswers),
-        securitySection(checkYourAnswersHelper, index),
+        securitySection(checkYourAnswersHelper, index, methodOfPaymentList),
         traderSecuritySection(checkYourAnswersHelper, countryList, index)
       )
     )
@@ -66,10 +67,10 @@ object AddItemsCheckYourAnswersViewModel {
     ).flatten
   )
 
-  private def securitySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Section(
+  private def securitySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index, methodOfPaymentList: MethodOfPaymentList) = Section(
     msg"addItems.checkYourAnswersLabel.safetyAndSecurity",
     Seq(
-      checkYourAnswersHelper.transportCharges(index),
+      checkYourAnswersHelper.transportCharges(index, methodOfPaymentList),
       checkYourAnswersHelper.commercialReferenceNumber(index),
       checkYourAnswersHelper.AddDangerousGoodsCode(index),
       checkYourAnswersHelper.dangerousGoodsCode(index)

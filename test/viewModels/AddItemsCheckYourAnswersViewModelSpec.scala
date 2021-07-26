@@ -17,10 +17,8 @@
 package viewModels
 
 import base.SpecBase
-import models.reference.{DocumentType, PreviousReferencesDocumentType, SpecialMention}
-import models.{DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
-import models.reference.{Country, CountryCode, DocumentType, SpecialMention}
-import models.{CountryList, DocumentTypeList, SpecialMentionList}
+import models.reference.{Country, CountryCode, DocumentType, MethodOfPayment, PreviousReferencesDocumentType, SpecialMention}
+import models.{CountryList, DocumentTypeList, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
@@ -35,7 +33,8 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
   private val documentTypeList = DocumentTypeList(Seq(DocumentType("code", "name", true)))
   private val previousReferencesDocumentTypeList = PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType("code", Some("name"))))
   private val specialMentionList = SpecialMentionList(Seq(SpecialMention("code", "name")))
-  val countryList = new CountryList(Seq(Country(CountryCode("FR"), "France")))
+  private val countryList = new CountryList(Seq(Country(CountryCode("FR"), "France")))
+  private val methodOfPaymentList = MethodOfPaymentList(Seq(MethodOfPayment("A", "Payment in cash")))
 
   private val updatedAnswers = emptyUserAnswers
     .set(ItemDescriptionPage(index), "test").success.value
@@ -47,7 +46,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     .set(ContainerNumberPage(itemIndex, containerIndex), arbitrary[String].sample.value).success.value
     .set(SpecialMentionTypePage(index, itemIndex), "code").success.value
 
-  private val data = AddItemsCheckYourAnswersViewModel(updatedAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList, countryList)
+  private val data = AddItemsCheckYourAnswersViewModel(updatedAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList, countryList, methodOfPaymentList)
 
 
   "AddItemsCheckYourAnswersViewModel" - {
