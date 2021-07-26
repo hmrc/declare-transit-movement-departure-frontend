@@ -62,7 +62,8 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
 
   def otherReferenceLiablityAmountRoute(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(LiabilityAmountPage(index)), ua.get(AccessCodePage(index)), mode) match {
-      case (None, _, _)                  => Some(routes.DefaultAmountController.onPageLoad(ua.lrn, index, mode))
+      case (Some(x), _, _)            if (x.toDouble == 0.00 || x.toDouble.equals(0.0) || x.toDouble.toInt.equals(0)) =>
+        Some(routes.DefaultAmountController.onPageLoad(ua.lrn, index, mode))
       case (Some(_), _, NormalMode)      => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, NormalMode))
       case (Some(_), Some(_), CheckMode) => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
       case (Some(_), None, CheckMode)    => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, CheckMode))

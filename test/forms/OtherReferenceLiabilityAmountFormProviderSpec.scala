@@ -55,9 +55,9 @@ class OtherReferenceLiabilityAmountFormProviderSpec extends StringFieldBehaviour
       }
     }
     "must not bind strings with invalid formatting" in {
-      val invalidKey             = "liabilityAmount.error.invalidFormat"
-      val expectedError          = FormError(fieldName, invalidKey, Seq(liabilityAmountFormatRegex))
-      val generator: Gen[String] = RegexpGen.from("^([1-9]\\.[1-9][1-9][1-9])$")
+      val invalidKey: String       = "liabilityAmount.error.invalidFormat"
+      val expectedError: FormError = FormError(fieldName, invalidKey, Seq(liabilityAmountFormatRegex))
+      val generator: Gen[String]   = RegexpGen.from("^([1-9]\\.[1-9][1-9][1-9])$")
       forAll(generator) {
         invalidString =>
           val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
@@ -65,7 +65,7 @@ class OtherReferenceLiabilityAmountFormProviderSpec extends StringFieldBehaviour
       }
     }
 
-    "must not bind strings that do not match greater than zero regex" in {
+    "must not bind strings that do not match greaterThanOneRegex " in {
 
       val expectedError = List(FormError(fieldName, greaterThanZeroErrorKey, Seq(greaterThanZeroRegex)))
       val invalidString = "0.5"
