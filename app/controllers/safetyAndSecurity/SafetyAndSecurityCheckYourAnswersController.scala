@@ -21,16 +21,17 @@ import controllers.actions._
 import controllers.{routes => mainRoutes}
 import models.{DependentSection, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.SafetyAndSecurityCheckYourAnswersViewModel
 import viewModels.sections.Section
+
 import javax.inject.Inject
 import models.journeyDomain.SafetyAndSecurity
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class SafetyAndSecurityCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
@@ -52,28 +53,25 @@ class SafetyAndSecurityCheckYourAnswersController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
-          countries =>
-            referenceDataConnector.getCircumstanceIndicatorList() flatMap {
-              circumstanceIndicators =>
-                referenceDataConnector.getMethodOfPaymentList() flatMap {
-                  methodOfPaymentList =>
-                    val sections: Seq[Section] =
-                      SafetyAndSecurityCheckYourAnswersViewModel(request.userAnswers, countries, circumstanceIndicators, methodOfPaymentList)
+        val buildJson: Future[JsObject] =
+          for {
+            countries              <- referenceDataConnector.getCountryList()
+            circumstanceIndicators <- referenceDataConnector.getCircumstanceIndicatorList()
+            methodOfPaymentList    <- referenceDataConnector.getMethodOfPaymentList()
+          } yield {
+            val sections: Seq[Section] =
+              SafetyAndSecurityCheckYourAnswersViewModel(request.userAnswers, countries, circumstanceIndicators, methodOfPaymentList)
 
-                    val json = Json.obj(
-                      "lrn"                           -> lrn,
-                      "sections"                      -> Json.toJson(sections),
-                      "addAnotherCountryOfRoutingUrl" -> routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url,
-                      "nextPageUrl"                   -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
-                    )
+            Json.obj(
+              "lrn"                           -> lrn,
+              "sections"                      -> Json.toJson(sections),
+              "addAnotherCountryOfRoutingUrl" -> routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url,
+              "nextPageUrl"                   -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
+            )
+          }
 
-                    ValidateReaderLogger[SafetyAndSecurity](request.userAnswers)
+        ValidateReaderLogger[SafetyAndSecurity](request.userAnswers)
 
-                    renderer.render("safetyAndSecurity/SafetyAndSecurityCheckYourAnswers.njk", json).map(Ok(_))
-                }
-            }
-        }
-
+        buildJson.flatMap(renderer.render("safetyAndSecurity/SafetyAndSecurityCheckYourAnswers.njk", _).map(Ok(_)))
     }
 }
