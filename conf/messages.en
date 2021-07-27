@@ -1458,8 +1458,8 @@ tirCarnetReference.title = What is the TIR Carnet reference?
 tirCarnetReference.heading = What is the TIR Carnet reference?
 tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
 tirCarnetReference.error.required = Enter the reference for the TIR carnet
-tirCarnetReference.error.maximumlength = The TIR Carnet reference must be 11 characters or less
-tirCarnetReference.error.minimumlength = The TIR Carnet reference must be 10 characters or more
+tirCarnetReference.error.maxlength = The TIR Carnet reference must be 11 characters or less
+tirCarnetReference.error.minlength = The TIR Carnet reference must be 10 characters or more
 tirCarnetReference.error.invalidCharacters = The reference for the TIR Carnet must only include letters a to z and numbers 0 to 9
 
 addOfficeOfTransit.title = Do you need to add an office of transit?

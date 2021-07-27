@@ -25,7 +25,7 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
   val requiredKey  = "tirCarnetReference.error.required"
   val maxLengthKey = "tirCarnetReference.error.maxLength"
   val minLengthKey = "tirCarnetReference.error.minLength"
-  val invalidKey   = "tirCarnetReference.error.invalid"
+  val invalidKey   = "tirCarnetReference.error.invalidCharacters"
   val maxLength    = tirCarnetReferenceMaxLength
   val minLength    = tirCarnetReferenceMinLength
   val form         = new TIRCarnetReferenceFormProvider()()

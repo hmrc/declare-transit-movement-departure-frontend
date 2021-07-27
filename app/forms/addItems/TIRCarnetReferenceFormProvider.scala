@@ -33,7 +33,7 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
           StopOnFirstFail[String](
             minLength(tirCarnetReferenceMinLength, "tirCarnetReference.error.minLength", tirCarnetReferenceMinLength),
             maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.maxLength", tirCarnetReferenceMaxLength),
-            regexp(alphaNumericRegex, "tirCarnetReference.error.invalid")
+            regexp(alphaNumericRegex, "tirCarnetReference.error.invalidCharacters")
           )
         )
     )
