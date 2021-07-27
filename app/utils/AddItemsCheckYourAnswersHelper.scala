@@ -580,13 +580,13 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     userAnswers.get(TotalPiecesPage(itemIndex, packageIndex)).map {
       answer =>
         Row(
-          key = Key(msg"totalPieces.error.checkYpurAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+          key = Key(msg"totalPieces.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
           value = Value(lit"$answer"),
           actions = List(
             Action(
               content = msg"site.edit",
               href = routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
-              visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalPieces.error.checkYpurAnswersLabel"))
+              visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalPieces.checkYourAnswersLabel"))
             )
           )
         )

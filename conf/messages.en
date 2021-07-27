@@ -718,7 +718,7 @@ totalPieces.error.nonNumeric = How many pieces have been used for item {0} must 
 totalPieces.error.required = Enter how many pieces have been used for item {0}
 totalPieces.error.wholeNumber = How many pieces have been used for item {0} using whole numbers
 totalPieces.error.outOfRange = The pieces used for item {0} must be {1} or less
-totalPieces.error.checkYpurAnswersLabel = Number of pieces
+totalPieces.checkYourAnswersLabel = Number of pieces
 
 addMark.title = Do you need to add a mark or number for package {0}?
 addMark.heading = Do you need to add a mark or number for package {0}?
