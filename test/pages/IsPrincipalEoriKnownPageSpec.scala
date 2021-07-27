@@ -20,6 +20,7 @@ import models.ProcedureType.Normal
 import models.{CommonAddress, PrincipalAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage}
 
 class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
 

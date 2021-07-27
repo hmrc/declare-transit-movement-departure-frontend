@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.generalInformation
 
-import models.Index
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
-import queries.Constants.routeDetailsOfficesOfTransit
 
-import java.time.LocalDateTime
+case object PreLodgeDeclarationPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
-case class ArrivalTimesAtOfficePage(index: Index) extends QuestionPage[LocalDateTime] {
+  override def path: JsPath = JsPath \ toString
 
-  override def path: JsPath = JsPath \ routeDetailsOfficesOfTransit \ index.position \ toString
-
-  override def toString: String = ArrivalTimesAtOfficePage.key
-}
-
-object ArrivalTimesAtOfficePage {
-  val key: String = "arrivalTimesAtOffice"
+  override def toString: String = "preLodgeDeclaration"
 }

@@ -19,6 +19,7 @@ package pages
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.traderDetails.IsConsigneeEoriKnownPage
 
 class IsConsigneeEoriKnownPageSpec extends PageBehaviours {
 

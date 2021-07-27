@@ -14,24 +14,29 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
 import models.UserAnswers
-import models.reference.CountryCode
+import pages.{ClearAllAddItems, QuestionPage, WhatIsConsigneeEoriPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
-case object MovementDestinationCountryPage extends QuestionPage[CountryCode] {
+case object IsConsigneeEoriKnownPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "movementDestinationCountry"
+  override def toString: String = "isConsigneeEoriKnown"
 
-  override def cleanup(value: Option[CountryCode], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(_) =>
-        userAnswers.remove(DestinationOfficePage)
-      case _ => super.cleanup(value, userAnswers)
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    val cleanedUpUserAnswers = value match {
+      case Some(false) => userAnswers.remove(WhatIsConsigneeEoriPage)
+      case _           => Success(userAnswers)
     }
+
+    cleanedUpUserAnswers
+      .flatMap(
+        updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+      )
+  }
 }

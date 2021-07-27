@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package pages.routeDetails
 
+import models.reference.CountryOfDispatch
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object RepresentativeNamePage extends QuestionPage[String] {
+case object CountryOfDispatchPage extends QuestionPage[CountryOfDispatch] with ClearAllAddItems[CountryOfDispatch] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "representativeName"
+  override def toString: String = "countryOfDispatch"
+
 }

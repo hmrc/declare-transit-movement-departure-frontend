@@ -14,14 +14,31 @@
  * limitations under the License.
  */
 
-package pages
+package pages.routeDetails
 
+import models.UserAnswers
 import models.reference.CountryCode
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object DestinationCountryPage extends QuestionPage[CountryCode] {
+import scala.util.{Success, Try}
+
+case object MovementDestinationCountryPage extends QuestionPage[CountryCode] with ClearAllAddItems[CountryCode] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "destinationCountry"
+  override def toString: String = "movementDestinationCountry"
+
+  override def cleanup(value: Option[CountryCode], userAnswers: UserAnswers): Try[UserAnswers] = {
+    val cleanedUpUserAnswers = value match {
+      case Some(_) =>
+        userAnswers.remove(DestinationOfficePage)
+      case _ => Success(userAnswers)
+    }
+
+    cleanedUpUserAnswers
+      .flatMap(
+        updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+      )
+  }
 }

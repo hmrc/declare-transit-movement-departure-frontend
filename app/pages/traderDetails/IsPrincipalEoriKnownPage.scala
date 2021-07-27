@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
 import models.UserAnswers
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
-case object IsPrincipalEoriKnownPage extends QuestionPage[Boolean] {
+case object IsPrincipalEoriKnownPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "isPrincipalEoriKnown"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    val cleanedUpUserAnswers = value match {
       case Some(false) => userAnswers.remove(WhatIsPrincipalEoriPage)
       case Some(true) =>
         userAnswers.get(WhatIsPrincipalEoriPage) match {
@@ -36,8 +37,14 @@ case object IsPrincipalEoriKnownPage extends QuestionPage[Boolean] {
             userAnswers
               .remove(PrincipalNamePage)
               .flatMap(_.remove(PrincipalAddressPage))
-          case _ => super.cleanup(value, userAnswers)
+          case _ => Success(userAnswers)
         }
-      case _ => super.cleanup(value, userAnswers)
+      case _ => Success(userAnswers)
     }
+
+    cleanedUpUserAnswers
+      .flatMap(
+        updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+      )
+  }
 }

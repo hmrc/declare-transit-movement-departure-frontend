@@ -27,6 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.{guaranteeDetails, _}
 import pages.guaranteeDetails._
+import pages.routeDetails.DestinationOfficePage
 import play.api.libs.json.{JsObject, JsPath}
 
 class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

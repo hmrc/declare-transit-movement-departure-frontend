@@ -23,6 +23,14 @@ import models.journeyDomain.RouteDetails.TransitInformation
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import org.scalacheck.Gen
 import pages._
+import pages.routeDetails.{
+  AddAnotherTransitOfficePage,
+  AddOfficeOfTransitPage,
+  ArrivalTimesAtOfficePage,
+  CountryOfDispatchPage,
+  DestinationCountryPage,
+  DestinationOfficePage
+}
 
 import java.time.LocalDateTime
 

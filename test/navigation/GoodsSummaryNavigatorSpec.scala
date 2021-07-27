@@ -27,7 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.generalInformation.PreLodgeDeclarationPage
 import queries.SealsQuery
 
 class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

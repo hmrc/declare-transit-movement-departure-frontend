@@ -20,6 +20,7 @@ import generators.UserAnswersGenerator
 import models.{RepresentativeCapacity, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.generalInformation.{DeclarationForSomeoneElsePage, RepresentativeCapacityPage, RepresentativeNamePage}
 
 class DeclarationForSomeoneElsePageSpec extends PageBehaviours with UserAnswersGenerator {
 

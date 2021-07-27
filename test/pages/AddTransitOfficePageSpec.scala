@@ -17,6 +17,7 @@
 package pages
 
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.AddTransitOfficePage
 
 class AddTransitOfficePageSpec extends PageBehaviours {
 

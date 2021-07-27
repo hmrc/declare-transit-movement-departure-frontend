@@ -26,9 +26,11 @@ import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
 import models.{CheckMode, DependentSection, Index, Mode, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
 import pages._
+import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
 import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.routeDetails.CountryOfDispatchPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
+import pages.traderDetails.{IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json._
 import play.api.mvc.Call
 

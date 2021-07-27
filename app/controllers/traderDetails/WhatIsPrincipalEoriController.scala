@@ -23,7 +23,8 @@ import models.reference.{CountryCode, CustomsOffice}
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.{OfficeOfDeparturePage, ProcedureTypePage, WhatIsPrincipalEoriPage}
+import pages.traderDetails.WhatIsPrincipalEoriPage
+import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
 import models.UserAnswers
+import pages.{ClearAllAddItems, PrincipalTirHolderIdPage, QuestionPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
-case object WhatIsPrincipalEoriPage extends QuestionPage[String] {
+case object WhatIsPrincipalEoriPage extends QuestionPage[String] with ClearAllAddItems[String] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "whatIsPrincipalEori"
 
-  override def cleanup(value: Option[String], ua: UserAnswers): Try[UserAnswers] =
-    value match {
+  override def cleanup(value: Option[String], ua: UserAnswers): Try[UserAnswers] = {
+    val cleanedUpUserAnswers = value match {
       case Some(_) =>
         ua
           .remove(PrincipalNamePage)
           .flatMap(_.remove(PrincipalAddressPage))
           .flatMap(_.remove(PrincipalTirHolderIdPage))
-      case _ => super.cleanup(value, ua)
-
+      case _ => Success(ua)
     }
+
+    cleanedUpUserAnswers
+      .flatMap(
+        updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+      )
+  }
 
 }

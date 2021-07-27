@@ -17,6 +17,7 @@
 package pages
 
 import pages.behaviours.PageBehaviours
+import pages.generalInformation.ContainersUsedPage
 
 class ContainersUsedPageSpec extends PageBehaviours {
 

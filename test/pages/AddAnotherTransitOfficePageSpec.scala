@@ -18,6 +18,7 @@ package pages
 
 import models.Index
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.AddAnotherTransitOfficePage
 
 class AddAnotherTransitOfficePageSpec extends PageBehaviours {
 

@@ -26,6 +26,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
+import pages.generalInformation.ContainersUsedPage
 
 class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

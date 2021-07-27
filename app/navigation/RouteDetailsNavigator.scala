@@ -18,9 +18,21 @@ package navigation
 
 import controllers.routeDetails.routes
 import derivable.DeriveNumberOfOfficeOfTransits
+
 import javax.inject.{Inject, Singleton}
 import models._
 import pages._
+import pages.routeDetails.{
+  AddAnotherTransitOfficePage,
+  AddOfficeOfTransitPage,
+  AddTransitOfficePage,
+  ArrivalTimesAtOfficePage,
+  CountryOfDispatchPage,
+  DestinationCountryPage,
+  DestinationOfficePage,
+  MovementDestinationCountryPage,
+  OfficeOfTransitCountryPage
+}
 import play.api.mvc.Call
 
 @Singleton

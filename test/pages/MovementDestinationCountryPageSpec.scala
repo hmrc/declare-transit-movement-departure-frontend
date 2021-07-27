@@ -18,6 +18,7 @@ package pages
 
 import models.reference.CountryCode
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.MovementDestinationCountryPage
 
 class MovementDestinationCountryPageSpec extends PageBehaviours {
 

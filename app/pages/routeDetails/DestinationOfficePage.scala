@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.routeDetails
 
-import models.UserAnswers
+import models.reference.CustomsOffice
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object IsConsigneeEoriKnownPage extends QuestionPage[Boolean] {
+case object DestinationOfficePage extends QuestionPage[CustomsOffice] with ClearAllAddItems[CustomsOffice] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "isConsigneeEoriKnown"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(WhatIsConsigneeEoriPage)
-      case _           => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "destinationOffice"
 }

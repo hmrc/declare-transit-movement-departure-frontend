@@ -19,7 +19,14 @@ package utils
 import controllers.movementDetails.routes
 import models.{CheckMode, LocalReferenceNumber, UserAnswers}
 import pages._
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.generalInformation.{
+  ContainersUsedPage,
+  DeclarationForSomeoneElsePage,
+  DeclarationPlacePage,
+  PreLodgeDeclarationPage,
+  RepresentativeCapacityPage,
+  RepresentativeNamePage
+}
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 

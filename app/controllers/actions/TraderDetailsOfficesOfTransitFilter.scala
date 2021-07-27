@@ -19,7 +19,7 @@ package controllers.actions
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.requests.DataRequest
 import models.{Index, NormalMode}
-import pages.AddAnotherTransitOfficePage
+import pages.routeDetails.AddAnotherTransitOfficePage
 import play.api.mvc.Results._
 import play.api.mvc.{ActionFilter, Result}
 

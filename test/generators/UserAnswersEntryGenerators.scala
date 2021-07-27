@@ -19,7 +19,7 @@ package generators
 import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages.{guaranteeDetails, _}
+import pages.{guaranteeDetails, routeDetails, _}
 import pages.addItems.{CommodityCodePage, ConfirmRemoveItemPage, _}
 import pages.addItems.traderDetails._
 import pages.addItems._
@@ -36,8 +36,26 @@ import pages.addItems.traderSecurityDetails.{
   SecurityConsignorEoriPage,
   SecurityConsignorNamePage
 }
+import pages.generalInformation.{
+  ContainersUsedPage,
+  DeclarationForSomeoneElsePage,
+  DeclarationPlacePage,
+  PreLodgeDeclarationPage,
+  RepresentativeCapacityPage,
+  RepresentativeNamePage
+}
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.routeDetails.{
+  AddAnotherTransitOfficePage,
+  AddOfficeOfTransitPage,
+  AddTransitOfficePage,
+  ArrivalTimesAtOfficePage,
+  CountryOfDispatchPage,
+  DestinationCountryPage,
+  DestinationOfficePage,
+  MovementDestinationCountryPage,
+  OfficeOfTransitCountryPage
+}
 import pages.safetyAndSecurity.{
   AddAnotherCountryOfRoutingPage,
   AddCarrierEoriPage,
@@ -68,6 +86,21 @@ import pages.safetyAndSecurity.{
   SafetyAndSecurityConsignorEoriPage,
   SafetyAndSecurityConsignorNamePage,
   TransportChargesPaymentMethodPage
+}
+import pages.traderDetails.{
+  AddConsigneePage,
+  AddConsignorPage,
+  ConsigneeAddressPage,
+  ConsigneeNamePage,
+  ConsignorAddressPage,
+  ConsignorEoriPage,
+  ConsignorNamePage,
+  IsConsigneeEoriKnownPage,
+  IsConsignorEoriKnownPage,
+  IsPrincipalEoriKnownPage,
+  PrincipalAddressPage,
+  PrincipalNamePage,
+  WhatIsPrincipalEoriPage
 }
 import play.api.libs.json.{JsValue, Json}
 
@@ -114,7 +147,7 @@ trait UserAnswersEntryGenerators {
     Arbitrary {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
-      } yield (OfficeOfTransitCountryPage(Index(0)), value)
+      } yield (routeDetails.OfficeOfTransitCountryPage(Index(0)), value)
     }
 
   implicit lazy val arbitraryLoadingPlaceUserAnswersEntry: Arbitrary[(LoadingPlacePage.type, JsValue)] =

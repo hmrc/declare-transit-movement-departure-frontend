@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.movementDetails
+package pages.traderDetails
 
-import pages.QuestionPage
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object PreLodgeDeclarationPage extends QuestionPage[Boolean] {
+case object ConsignorEoriPage extends QuestionPage[String] with ClearAllAddItems[String] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "preLodgeDeclaration"
+  override def toString: String = "consignorEori"
 }

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.routeDetails
 
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object DeclarationPlacePage extends QuestionPage[String] {
+case object AddTransitOfficePage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "declarationPlace"
+  override def toString: String = "addTransitOffice"
 }

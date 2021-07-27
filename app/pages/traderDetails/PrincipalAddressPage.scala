@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
-import models.UserAnswers
+import models.CommonAddress
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object IsConsignorEoriKnownPage extends QuestionPage[Boolean] {
+case object PrincipalAddressPage extends QuestionPage[CommonAddress] with ClearAllAddItems[CommonAddress] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "isConsignorEoriKnown"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(ConsignorEoriPage)
-      case _           => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "principalAddress"
 }

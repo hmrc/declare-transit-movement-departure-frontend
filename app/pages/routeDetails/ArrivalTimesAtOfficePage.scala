@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package pages
+package pages.routeDetails
 
-import models.reference.CustomsOffice
+import models.Index
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
+import queries.Constants.routeDetailsOfficesOfTransit
 
-case object DestinationOfficePage extends QuestionPage[CustomsOffice] {
+import java.time.LocalDateTime
 
-  override def path: JsPath = JsPath \ toString
+case class ArrivalTimesAtOfficePage(index: Index) extends QuestionPage[LocalDateTime] with ClearAllAddItems[LocalDateTime] {
 
-  override def toString: String = "destinationOffice"
+  override def path: JsPath = JsPath \ routeDetailsOfficesOfTransit \ index.position \ toString
+
+  override def toString: String = ArrivalTimesAtOfficePage.key
+}
+
+object ArrivalTimesAtOfficePage {
+  val key: String = "arrivalTimesAtOffice"
 }

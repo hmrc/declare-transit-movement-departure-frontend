@@ -17,6 +17,7 @@
 package pages
 
 import pages.behaviours.PageBehaviours
+import pages.generalInformation.DeclarationPlacePage
 
 class DeclarationPlacePageSpec extends PageBehaviours {
 

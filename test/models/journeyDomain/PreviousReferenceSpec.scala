@@ -24,7 +24,7 @@ import models.{DeclarationType, Index}
 import models.reference.{CountryCode, CountryOfDispatch}
 import org.scalacheck.Gen
 import pages.addItems._
-import pages.{CountryOfDispatchPage, DeclarationTypePage, QuestionPage}
+import pages.{DeclarationTypePage, QuestionPage}
 
 class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.generalInformation
 
-import models.RepresentativeCapacity
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object RepresentativeCapacityPage extends QuestionPage[RepresentativeCapacity] {
+case object ContainersUsedPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "representativeCapacity"
+  override def toString: String = "containersUsed"
 }

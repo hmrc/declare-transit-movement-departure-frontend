@@ -18,6 +18,7 @@ package pages
 
 import models.reference.CustomsOffice
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.DestinationOfficePage
 
 class DestinationOfficePageSpec extends PageBehaviours {
 

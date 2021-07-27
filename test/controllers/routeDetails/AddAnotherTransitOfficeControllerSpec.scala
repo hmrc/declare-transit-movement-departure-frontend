@@ -29,7 +29,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
+import pages.routeDetails
+import pages.routeDetails.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -121,7 +122,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
         .set(AddAnotherTransitOfficePage(index), customsOffice1.id)
         .success
         .value
-        .set(OfficeOfTransitCountryPage(index), countryCode)
+        .set(routeDetails.OfficeOfTransitCountryPage(index), countryCode)
         .success
         .value
       dataRetrievalWithData(userAnswers)
@@ -158,7 +159,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      val userAnswers = emptyUserAnswers.set(OfficeOfTransitCountryPage(index), countryCode).success.value
+      val userAnswers = emptyUserAnswers.set(routeDetails.OfficeOfTransitCountryPage(index), countryCode).success.value
       dataRetrievalWithData(userAnswers)
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
@@ -176,7 +177,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = emptyUserAnswers.set(OfficeOfTransitCountryPage(index), countryCode).success.value
+      val userAnswers = emptyUserAnswers.set(routeDetails.OfficeOfTransitCountryPage(index), countryCode).success.value
       dataRetrievalWithData(userAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

@@ -18,6 +18,7 @@ package pages
 
 import models.CommonAddress
 import pages.behaviours.PageBehaviours
+import pages.traderDetails.ConsigneeAddressPage
 
 class ConsigneeAddressPageSpec extends PageBehaviours {
 
