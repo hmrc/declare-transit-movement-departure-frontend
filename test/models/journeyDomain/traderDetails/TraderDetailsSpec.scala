@@ -23,7 +23,19 @@ import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber, ProcedureType, UserAnswers}
 import org.scalatest.TryValues
-import pages.{ConsignorEoriPage, _}
+import pages.traderDetails.{
+  AddConsigneePage,
+  AddConsignorPage,
+  ConsigneeAddressPage,
+  ConsigneeNamePage,
+  ConsignorAddressPage,
+  ConsignorNamePage,
+  IsConsigneeEoriKnownPage,
+  IsConsignorEoriKnownPage,
+  IsPrincipalEoriKnownPage,
+  WhatIsPrincipalEoriPage
+}
+import pages._
 
 class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 

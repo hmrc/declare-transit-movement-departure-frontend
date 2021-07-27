@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package pages.generalInformation
 
 import models.UserAnswers
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
-case object AddConsigneePage extends QuestionPage[Boolean] {
+case object DeclarationForSomeoneElsePage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "addConsignee"
+  override def toString: String = "declarationForSomeoneElse"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    val cleanedUpUserAnswers = value match {
       case Some(false) =>
         userAnswers
-          .remove(ConsigneeNamePage)
-          .flatMap(_.remove(ConsigneeAddressPage))
-          .flatMap(_.remove(WhatIsConsigneeEoriPage))
-          .flatMap(_.remove(IsConsigneeEoriKnownPage))
-      case _ => super.cleanup(value, userAnswers)
+          .remove(RepresentativeNamePage)
+          .flatMap(_.remove(RepresentativeCapacityPage))
+      case _ => Success(userAnswers)
     }
+
+    cleanedUpUserAnswers
+      .flatMap(
+        updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+      )
+  }
 }

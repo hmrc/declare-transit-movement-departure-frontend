@@ -16,10 +16,10 @@
 
 package pages.safetyAndSecurity
 
-import pages.QuestionPage
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object CommercialReferenceNumberAllItemsPage extends QuestionPage[String] {
+case object CommercialReferenceNumberAllItemsPage extends QuestionPage[String] with ClearAllAddItems[String] {
 
   override def path: JsPath = JsPath \ toString
 

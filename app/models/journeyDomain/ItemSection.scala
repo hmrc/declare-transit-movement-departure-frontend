@@ -23,8 +23,8 @@ import models.Index
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.ProducedDocument.deriveProducedDocuments
 import models.journeyDomain.addItems.ItemsSecurityTraderDetails
-import pages.ContainersUsedPage
 import pages.addItems.specialMentions.AddSpecialMentionPage
+import pages.generalInformation.ContainersUsedPage
 
 case class ItemSection(
   itemDetails: ItemDetails,

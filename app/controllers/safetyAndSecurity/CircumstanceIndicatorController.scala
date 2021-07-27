@@ -28,7 +28,7 @@ import pages.QuestionPage
 import pages.safetyAndSecurity.{AddPlaceOfUnloadingCodePage, CircumstanceIndicatorPage, PlaceOfUnloadingCodePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{Json, Reads, Writes}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
 import play.twirl.api.Html
 import renderer.Renderer
@@ -36,6 +36,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getCircumstanceIndicatorsAsJson
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -113,7 +114,10 @@ class CircumstanceIndicatorController @Inject() (
     renderer.render(template, json)
   }
 
-  private def updateUserAnswers[A](page: QuestionPage[A], value: A, userAnswers: UserAnswers)(implicit writes: Writes[A]): Future[UserAnswers] =
+  private def updateUserAnswers[A](page: QuestionPage[A], value: A, userAnswers: UserAnswers)(implicit
+    writes: Writes[A],
+    reads: Reads[A]
+  ): Future[UserAnswers] =
     for {
       updatedAnswers <- Future.fromTry(userAnswers.set(page, value))
       _              <- sessionRepository.set(updatedAnswers)

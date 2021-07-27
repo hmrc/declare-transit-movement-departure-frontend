@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.routeDetails
 
-import models.UserAnswers
+import models.reference.CountryCode
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object DeclarationForSomeoneElsePage extends QuestionPage[Boolean] {
+case object DestinationCountryPage extends QuestionPage[CountryCode] with ClearAllAddItems[CountryCode] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "declarationForSomeoneElse"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) =>
-        userAnswers
-          .remove(RepresentativeNamePage)
-          .flatMap(_.remove(RepresentativeCapacityPage))
-      case _ => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "destinationCountry"
 }

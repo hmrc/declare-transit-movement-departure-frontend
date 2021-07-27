@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package pages
+package queries
 
-import models.CommonAddress
-import play.api.libs.json.JsPath
+import pages.QuestionPage
+import play.api.libs.json.{JsArray, JsObject, JsPath}
 
-case object ConsignorAddressPage extends QuestionPage[CommonAddress] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "consignorAddress"
+object AllItemsQuery extends QuestionPage[JsArray] {
+  override def path: JsPath = JsPath \ Constants.items
 }

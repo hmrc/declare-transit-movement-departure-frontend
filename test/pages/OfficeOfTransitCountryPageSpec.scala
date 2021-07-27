@@ -19,6 +19,7 @@ package pages
 import models.Index
 import models.reference.CountryCode
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.OfficeOfTransitCountryPage
 
 class OfficeOfTransitCountryPageSpec extends PageBehaviours {
 
@@ -28,8 +29,8 @@ class OfficeOfTransitCountryPageSpec extends PageBehaviours {
 
     beRetrievable[CountryCode](OfficeOfTransitCountryPage(index))
 
-    beSettable[CountryCode](OfficeOfTransitCountryPage(index))
+    beSettable[CountryCode](routeDetails.OfficeOfTransitCountryPage(index))
 
-    beRemovable[CountryCode](OfficeOfTransitCountryPage(index))
+    beRemovable[CountryCode](routeDetails.OfficeOfTransitCountryPage(index))
   }
 }

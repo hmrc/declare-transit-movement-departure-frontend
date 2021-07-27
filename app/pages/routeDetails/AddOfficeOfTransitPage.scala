@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package pages.safetyAndSecurity
+package pages.routeDetails
 
-import models.UserAnswers
-import pages.{ClearAllAddItems, QuestionPage}
+import models.{Index, UserAnswers}
+import pages.{routeDetails, ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}
 
-case object AddCommercialReferenceNumberPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
+case object AddOfficeOfTransitPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "addCommercialReferenceNumber"
+  override def toString: String = "addOfficeOfTransit"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     val cleanedUpUserAnswers = value match {
       case Some(false) =>
         userAnswers
-          .remove(AddCommercialReferenceNumberAllItemsPage)
-          .flatMap(_.remove(CommercialReferenceNumberAllItemsPage))
+          .remove(OfficeOfTransitCountryPage(Index(0)))
+          .flatMap(_.remove(routeDetails.OfficeOfTransitCountryPage(Index(0))))
+          .flatMap(_.remove(ArrivalTimesAtOfficePage(Index(0))))
       case _ => Success(userAnswers)
     }
 

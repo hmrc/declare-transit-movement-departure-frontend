@@ -24,6 +24,7 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import models._
 import pages._
+import pages.routeDetails._
 import play.api.mvc.Call
 
 @Singleton

@@ -17,6 +17,7 @@
 package pages.movementDetails
 
 import pages.behaviours.PageBehaviours
+import pages.generalInformation.PreLodgeDeclarationPage
 
 class PreLodgeDeclarationPageSpec extends PageBehaviours {
 

@@ -17,10 +17,10 @@
 package pages.safetyAndSecurity
 
 import models.CommonAddress
-import pages.QuestionPage
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object SafetyAndSecurityConsignorAddressPage extends QuestionPage[CommonAddress] {
+case object SafetyAndSecurityConsignorAddressPage extends QuestionPage[CommonAddress] with ClearAllAddItems[CommonAddress] {
 
   override def path: JsPath = JsPath \ toString
 

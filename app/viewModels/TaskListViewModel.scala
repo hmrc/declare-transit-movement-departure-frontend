@@ -26,9 +26,11 @@ import models.journeyDomain.{UserAnswersReader, _}
 import models.journeyDomain.RouteDetails._
 import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers}
 import pages._
+import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
 import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.routeDetails.CountryOfDispatchPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
+import pages.traderDetails.{IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json._
 
 private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {

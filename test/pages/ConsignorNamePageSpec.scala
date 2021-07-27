@@ -17,6 +17,7 @@
 package pages
 
 import pages.behaviours.PageBehaviours
+import pages.traderDetails.ConsignorNamePage
 
 class ConsignorNamePageSpec extends PageBehaviours {
 

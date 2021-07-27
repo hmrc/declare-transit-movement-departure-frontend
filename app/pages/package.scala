@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package pages
+import models.UserAnswers
+import queries.{AllItemsQuery, Settable}
 
-import play.api.libs.json.JsPath
+import scala.util.{Success, Try}
 
-case object AddTransitOfficePage extends QuestionPage[Boolean] {
+package object pages {
 
-  override def path: JsPath = JsPath \ toString
+  trait ClearAllAddItems[T] extends Settable[T] {
 
-  override def toString: String = "addTransitOffice"
+    override def cleanup(value: Option[T], userAnswers: UserAnswers): Try[UserAnswers] =
+      userAnswers
+        .remove(AllItemsQuery)
+        .flatMap(
+          updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+        )
+  }
 }

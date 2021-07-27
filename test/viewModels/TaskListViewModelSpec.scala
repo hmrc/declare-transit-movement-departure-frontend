@@ -27,9 +27,18 @@ import models.userAnswerScenarios.{Scenario1, Scenario3}
 import models.{EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
+import pages.generalInformation.{
+  ContainersUsedPage,
+  DeclarationForSomeoneElsePage,
+  DeclarationPlacePage,
+  PreLodgeDeclarationPage,
+  RepresentativeCapacityPage,
+  RepresentativeNamePage
+}
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage, CountryOfDispatchPage, DestinationCountryPage, DestinationOfficePage}
 import pages.safetyAndSecurity._
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage, IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json.{JsObject, Json}
 
 import java.time.{LocalDate, LocalDateTime}

@@ -20,12 +20,14 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import derivable.DeriveNumberOfOfficeOfTransits
+
 import javax.inject.Inject
 import models.journeyDomain.RouteDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
 import models.{DeclarationType, Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
-import pages.{DeclarationTypePage, MovementDestinationCountryPage}
+import pages.DeclarationTypePage
+import pages.routeDetails.MovementDestinationCountryPage
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

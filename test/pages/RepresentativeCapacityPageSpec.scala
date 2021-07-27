@@ -18,6 +18,7 @@ package pages
 
 import models.RepresentativeCapacity
 import pages.behaviours.PageBehaviours
+import pages.generalInformation.RepresentativeCapacityPage
 
 class RepresentativeCapacitySpec extends PageBehaviours {
 

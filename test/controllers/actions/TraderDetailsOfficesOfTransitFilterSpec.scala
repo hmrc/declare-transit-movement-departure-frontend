@@ -21,7 +21,8 @@ import commonTestUtils.UserAnswersSpecHelper
 import models.reference.CountryCode
 import models.requests.DataRequest
 import models.{Index, NormalMode}
-import pages.{AddAnotherTransitOfficePage, AddSecurityDetailsPage, OfficeOfTransitCountryPage}
+import pages.routeDetails.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
+import pages.{routeDetails, AddSecurityDetailsPage}
 import play.api.mvc.Result
 import play.api.mvc.Results._
 import play.api.test.Helpers._
@@ -43,7 +44,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
           .unsafeSetVal(AddSecurityDetailsPage)(false)
           .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
 
         val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(9))
         val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
@@ -59,23 +60,23 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
 
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(false)
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(1)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(2)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(2)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(2)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(3)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(3)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(3)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(4)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(4)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(4)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(5)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(5)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(5)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(6)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(6)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(6)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(7)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(7)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(7)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(8)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(8)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(8)))("Test")
 
         val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(9))
@@ -117,7 +118,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
       "and the index is the next valid value, and the previous loops are all complete, must return OK" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(false)
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
 
         val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(1))
@@ -131,7 +132,7 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
       "and the index is not the next valid index, and the previous loops are all complete, must go to Add Transit Office page" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(false)
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
 
         val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(4))
@@ -146,9 +147,9 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
       "and the previous loop is not complete, must redirect to the OfficeOfTransitCountryController for the incomplete loop" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(false)
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("AR"))
 
         val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(4))
         val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
@@ -163,9 +164,9 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
       "and the index is for the current incomplete loop, must return OK" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(false)
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("AS"))
           .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TestData")
-          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("AB"))
+          .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("AB"))
 
         val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(1))
         val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)

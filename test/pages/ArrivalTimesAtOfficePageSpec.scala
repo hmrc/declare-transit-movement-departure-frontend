@@ -17,9 +17,9 @@
 package pages
 
 import java.time.LocalDateTime
-
 import models.Index
 import pages.behaviours.PageBehaviours
+import pages.routeDetails.ArrivalTimesAtOfficePage
 
 class ArrivalTimesAtOfficePageSpec extends PageBehaviours {
 

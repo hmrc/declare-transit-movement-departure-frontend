@@ -19,6 +19,7 @@ package pages
 import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.traderDetails.{AddConsignorPage, ConsignorAddressPage, ConsignorEoriPage, ConsignorNamePage}
 
 class AddConsignorPageSpec extends PageBehaviours {
 

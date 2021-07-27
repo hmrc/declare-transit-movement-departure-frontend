@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
-import models.Index
-import models.reference.CountryCode
+import models.CommonAddress
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
-import queries.Constants.routeDetailsOfficesOfTransit
 
-case class OfficeOfTransitCountryPage(index: Index) extends QuestionPage[CountryCode] {
+case object ConsignorAddressPage extends QuestionPage[CommonAddress] with ClearAllAddItems[CommonAddress] {
 
-  override def path: JsPath = JsPath \ routeDetailsOfficesOfTransit \ index.position \ toString
+  override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "officeOfTransitCountry"
+  override def toString: String = "consignorAddress"
 }

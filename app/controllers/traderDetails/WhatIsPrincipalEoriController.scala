@@ -24,7 +24,8 @@ import models.requests.DataRequest
 import models.{LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.{OfficeOfDeparturePage, PrincipalNamePage, ProcedureTypePage, WhatIsPrincipalEoriPage}
+import pages.traderDetails.{WhatIsPrincipalEoriPage, PrincipalNamePage}
+import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

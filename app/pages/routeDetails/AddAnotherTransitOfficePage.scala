@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.routeDetails
 
 import models.Index
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 import queries.Constants.routeDetailsOfficesOfTransit
 
-case class AddAnotherTransitOfficePage(index: Index) extends QuestionPage[String] {
+case class AddAnotherTransitOfficePage(index: Index) extends QuestionPage[String] with ClearAllAddItems[String] {
 
   override def path: JsPath = JsPath \ routeDetailsOfficesOfTransit \ index.position \ toString
 

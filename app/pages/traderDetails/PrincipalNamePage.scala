@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
-import models.reference.CountryOfDispatch
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object CountryOfDispatchPage extends QuestionPage[CountryOfDispatch] {
+case object PrincipalNamePage extends QuestionPage[String] with ClearAllAddItems[String] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "countryOfDispatch"
-
+  override def toString: String = "principalName"
 }

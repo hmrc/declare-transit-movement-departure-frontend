@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
+import models.CommonAddress
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object ConsignorEoriPage extends QuestionPage[String] {
+case object ConsigneeAddressPage extends QuestionPage[CommonAddress] with ClearAllAddItems[CommonAddress] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "consignorEori"
+  override def toString: String = "consigneeAddress"
 }

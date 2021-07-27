@@ -27,7 +27,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{MovementDestinationCountryPage, OfficeOfDeparturePage}
+import pages.OfficeOfDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -39,6 +39,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import controllers.{routes => mainRoutes}
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.userAnswerScenarios.Scenario1.UserAnswersSpecHelperOps
+import pages.routeDetails.MovementDestinationCountryPage
 
 import scala.concurrent.Future
 

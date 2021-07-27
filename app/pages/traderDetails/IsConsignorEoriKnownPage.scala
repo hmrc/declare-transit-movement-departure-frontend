@@ -14,13 +14,29 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
+import models.UserAnswers
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object ConsignorNamePage extends QuestionPage[String] {
+import scala.util.{Success, Try}
+
+case object IsConsignorEoriKnownPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "consignorName"
+  override def toString: String = "isConsignorEoriKnown"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    val cleanedUpUserAnswers = value match {
+      case Some(false) => userAnswers.remove(ConsignorEoriPage)
+      case _           => Success(userAnswers)
+    }
+
+    cleanedUpUserAnswers
+      .flatMap(
+        updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+      )
+  }
 }

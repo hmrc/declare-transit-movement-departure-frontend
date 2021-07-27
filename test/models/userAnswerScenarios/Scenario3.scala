@@ -68,6 +68,38 @@ import models.journeyDomain.{
 }
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
+import pages.generalInformation.{
+  ContainersUsedPage,
+  DeclarationForSomeoneElsePage,
+  DeclarationPlacePage,
+  PreLodgeDeclarationPage,
+  RepresentativeCapacityPage,
+  RepresentativeNamePage
+}
+import pages.routeDetails.{
+  AddAnotherTransitOfficePage,
+  AddTransitOfficePage,
+  ArrivalTimesAtOfficePage,
+  CountryOfDispatchPage,
+  DestinationCountryPage,
+  DestinationOfficePage,
+  MovementDestinationCountryPage,
+  OfficeOfTransitCountryPage
+}
+import pages.traderDetails.{
+  AddConsigneePage,
+  AddConsignorPage,
+  ConsigneeAddressPage,
+  ConsigneeNamePage,
+  ConsignorAddressPage,
+  ConsignorEoriPage,
+  ConsignorNamePage,
+  IsConsigneeEoriKnownPage,
+  IsConsignorEoriKnownPage,
+  IsPrincipalEoriKnownPage,
+  PrincipalAddressPage,
+  PrincipalNamePage
+}
 import play.api.libs.json.Json
 import java.time.LocalDateTime
 
@@ -85,27 +117,27 @@ case object Scenario3 extends UserAnswerScenario {
      * General Information Section
      * */
     .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
-    .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(true)
-    .unsafeSetVal(pages.ContainersUsedPage)(true)
-    .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
-    .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(true)
-    .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
-    .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
+    .unsafeSetVal(PreLodgeDeclarationPage)(true)
+    .unsafeSetVal(ContainersUsedPage)(true)
+    .unsafeSetVal(DeclarationPlacePage)("XX1 1XX")
+    .unsafeSetVal(DeclarationForSomeoneElsePage)(true)
+    .unsafeSetVal(RepresentativeNamePage)("John Doe")
+    .unsafeSetVal(RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
     /*
      * RouteDetails
      * */
-    .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
-    .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
-    .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
-    .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-    .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
-    .unsafeSetVal(pages.AddTransitOfficePage)(true)
-    .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-    .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
-    .unsafeSetVal(pages.AddTransitOfficePage)(false)
+    .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
+    .unsafeSetVal(DestinationCountryPage)(CountryCode("DC"))
+    .unsafeSetVal(MovementDestinationCountryPage)(CountryCode("MD"))
+    .unsafeSetVal(DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
+    .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+    .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+    .unsafeSetVal(ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+    .unsafeSetVal(AddTransitOfficePage)(true)
+    .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+    .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+    .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(false)
     /*
      * Transport Details
      * */
@@ -117,19 +149,19 @@ case object Scenario3 extends UserAnswerScenario {
     /*
      * Traders Details
      * */
-    .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
-    .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-    .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
-    .unsafeSetVal(pages.AddConsignorPage)(true)
-    .unsafeSetVal(pages.IsConsignorEoriKnownPage)(true)
-    .unsafeSetVal(pages.ConsignorEoriPage)("ConorEori")
-    .unsafeSetVal(pages.ConsignorNamePage)("ConsignorName")
-    .unsafeSetVal(pages.ConsignorAddressPage)(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
-    .unsafeSetVal(pages.AddConsigneePage)(true)
-    .unsafeSetVal(pages.IsConsigneeEoriKnownPage)(true)
+    .unsafeSetVal(IsPrincipalEoriKnownPage)(false)
+    .unsafeSetVal(PrincipalNamePage)("PrincipalName")
+    .unsafeSetVal(PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
+    .unsafeSetVal(AddConsignorPage)(true)
+    .unsafeSetVal(IsConsignorEoriKnownPage)(true)
+    .unsafeSetVal(ConsignorEoriPage)("ConorEori")
+    .unsafeSetVal(ConsignorNamePage)("ConsignorName")
+    .unsafeSetVal(ConsignorAddressPage)(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
+    .unsafeSetVal(AddConsigneePage)(true)
+    .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
     .unsafeSetVal(pages.WhatIsConsigneeEoriPage)("ConeeEori")
-    .unsafeSetVal(pages.ConsigneeNamePage)("ConsigneeName")
-    .unsafeSetVal(pages.ConsigneeAddressPage)(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
+    .unsafeSetVal(ConsigneeNamePage)("ConsigneeName")
+    .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
     /*
      * Safety & Security Details
      * */

@@ -21,6 +21,7 @@ import models.{CommonAddress, EoriNumber}
 import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.{UserAnswersReader, _}
 import pages._
+import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage}
 
 sealed trait PrincipalTraderDetails
 
