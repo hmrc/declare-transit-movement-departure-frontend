@@ -143,18 +143,20 @@ class TraderDetailsNavigator @Inject() () extends Navigator {
   private def reverseRouteToCall(mode: Mode)(f: (LocalReferenceNumber, Mode) => Call): UserAnswers => Option[Call] =
     ua => Some(f(ua.lrn, mode))
 
-  private def whatIsPrincipalEoriRoute(ua: UserAnswers, mode: Mode): Call =
+  private def whatIsPrincipalEoriRoute(ua: UserAnswers, mode: Mode): Call = {
+    val eoriRegex = "(?i)(gb|xi).*".r
     (ua.get(WhatIsPrincipalEoriPage), ua.get(ProcedureTypePage)) match {
-      case (Some(_), Some(Simplified))                                                                 => declarationTypeTIR(ua, mode)
-      case (Some(x), Some(Normal)) if x.toUpperCase.startsWith("GB") || x.toUpperCase.startsWith("XI") => declarationTypeTIR(ua, mode)
-      case _                                                                                           => routes.PrincipalNameController.onPageLoad(ua.lrn, mode)
+      case (Some(eoriRegex(_)), Some(Normal)) => procedureType(ua, mode, Normal)
+      case (Some(_), Some(Simplified))        => procedureType(ua, mode, Simplified)
+      case _                                  => routes.PrincipalNameController.onPageLoad(ua.lrn, mode)
     }
+  }
 
-  private def declarationTypeTIR(ua: UserAnswers, mode: Mode) =
-    (ua.get(DeclarationTypePage), mode) match {
-      case (Some(Option4), _) => routes.PrincipalNameController.onPageLoad(ua.lrn, mode)
-      case (_, NormalMode)    => routes.AddConsignorController.onPageLoad(ua.lrn, mode)
-      case (_, CheckMode)     => routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
+  private def procedureType(ua: UserAnswers, mode: Mode, procedureType: ProcedureType) =
+    (procedureType, mode) match {
+      case (Normal, _)     => routes.PrincipalNameController.onPageLoad(ua.lrn, mode)
+      case (_, NormalMode) => routes.AddConsignorController.onPageLoad(ua.lrn, mode)
+      case (_, CheckMode)  => routes.TraderDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
     }
 
   private def principalAddressRoute(ua: UserAnswers) =
