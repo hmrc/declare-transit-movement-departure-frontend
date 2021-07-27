@@ -52,7 +52,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(MovementDestinationCountryPage, NormalMode, userAnswers)
-                .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(answers.lrn, Index(0), NormalMode))
+                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -71,7 +71,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(MovementDestinationCountryPage, NormalMode, updatedAnswers)
-                .mustBe(routes.AddOfficeOfTransitController.onPageLoad(answers.lrn, NormalMode))
+                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
@@ -86,12 +86,12 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(MovementDestinationCountryPage, NormalMode, userAnswers)
-                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
+                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.lrn, NormalMode))
           }
         }
 
         "must go from Country of dispatch page to Destination Country page" in {
-          val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), None)
+
           forAll(arbitrary[UserAnswers]) {
             answers =>
               navigator
@@ -114,10 +114,27 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              val updatedAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+              val updatedAnswers = answers
+                .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+                .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
+
               navigator
                 .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
                 .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+          }
+        }
+
+        "must go from Destination Office Page to Check your answers page when Declaration Type is TIR" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+                .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+
+              navigator
+                .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
+                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
           }
         }
 
@@ -125,7 +142,10 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              val updatedAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+              val updatedAnswers = answers
+                .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+                .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
+
               navigator
                 .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
                 .mustBe(routes.AddOfficeOfTransitController.onPageLoad(updatedAnswers.lrn, NormalMode))
@@ -336,66 +356,30 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "Must go from Movement Destination Country to Destination Office when no TIR is found" in {
-
-        val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
+      "Must go from Movement Destination Country to Destination Office" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val userAnswers = answers
-              .set(DeclarationTypePage, generatedOption)
-              .toOption
-              .value
-
+            val updatedAnswers = answers
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+              .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
             navigator
-              .nextPage(MovementDestinationCountryPage, CheckMode, userAnswers)
-              .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, Index(0), CheckMode))
+              .nextPage(MovementDestinationCountryPage, NormalMode, updatedAnswers)
+              .mustBe(routes.DestinationOfficeController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
-      "Must go from Movement Destination Country to Destination Office when Not TIR found but XI is the destination office route" in {
-
-        val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
+      "Must go from Destination Office Page to Check Your answers" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val userAnswers = answers
-              .set(DeclarationTypePage, generatedOption)
-              .toOption
-              .value
-
-            val updatedAnswers = userAnswers
-              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+            val updatedAnswers = answers
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+              .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
 
             navigator
-              .nextPage(MovementDestinationCountryPage, CheckMode, updatedAnswers)
-              .mustBe(routes.AddOfficeOfTransitController.onPageLoad(answers.lrn, CheckMode))
-        }
-      }
-
-      "Must go from Movement Destination to Check your answers when a TIR declartion type is found" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val userAnswers = answers
-              .set(DeclarationTypePage, DeclarationType.Option4)
-              .toOption
-              .value
-
-            navigator
-              .nextPage(MovementDestinationCountryPage, CheckMode, userAnswers)
-              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
-        }
-      }
-
-      "Must go from Destination Office to Router Details Check Your Answers" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(DestinationOfficePage, CheckMode, answers)
-              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
-
+              .nextPage(DestinationOfficePage, CheckMode, updatedAnswers)
+              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
