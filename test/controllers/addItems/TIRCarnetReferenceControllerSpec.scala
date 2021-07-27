@@ -99,7 +99,7 @@ class TIRCarnetReferenceControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage(index, index), "answer").success.value
+      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage(index, index), "1234567890").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, tirCarnetReferenceRoute)
@@ -112,7 +112,7 @@ class TIRCarnetReferenceControllerSpec
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "answer"))
+      val filledForm = form.bind(Map("value" -> "1234567890"))
 
       val expectedJson = Json.obj(
         "form" -> filledForm,
@@ -138,7 +138,7 @@ class TIRCarnetReferenceControllerSpec
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "1234567890"))
 
       val result = route(app, request).value
 
@@ -158,7 +158,7 @@ class TIRCarnetReferenceControllerSpec
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "1234567890"))
 
       val result = route(app, request).value
 
@@ -174,7 +174,7 @@ class TIRCarnetReferenceControllerSpec
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "1234567890"))
 
       val result = route(app, request).value
 
@@ -234,7 +234,7 @@ class TIRCarnetReferenceControllerSpec
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "1234567890"))
 
       val result = route(app, request).value
 
