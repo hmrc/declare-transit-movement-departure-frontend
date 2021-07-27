@@ -294,7 +294,8 @@ case object Scenario7 extends UserAnswerScenario {
 
   private val routeDetails = RouteDetailsShortJourney(
     CountryOfDispatch(CountryCode("SC"), false),
-    CountryCode("DC")
+    CountryCode("DC"),
+    CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None)
   )
 
   private val transportDetails = TransportDetails(NonSpecialMode(4, Some(CountryCode("ND")), None), SameDetailsAtBorder)
