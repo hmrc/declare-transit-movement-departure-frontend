@@ -20,7 +20,7 @@ import cats.data._
 import cats.implicits._
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.{DeclarationType, Index, UserAnswers}
-import models.journeyDomain.RouteDetailsLongJourney.TransitInformation
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import pages._
 import java.time.LocalDateTime
@@ -36,25 +36,25 @@ trait RouteDetails {
 object RouteDetails {
 
   implicit val reader: ReaderT[EitherType, UserAnswers, RouteDetails] = DeclarationTypePage.reader.flatMap {
-    case DeclarationType.Option4 => UserAnswersReader[RouteDetailsShortJourney].widen[RouteDetails]
-    case _                       => UserAnswersReader[RouteDetailsLongJourney].widen[RouteDetails]
+    case DeclarationType.Option4 => UserAnswersReader[RouteDetailsWithoutTransitInformation].widen[RouteDetails]
+    case _                       => UserAnswersReader[RouteDetailsWithTransitInformation].widen[RouteDetails]
   }
 }
 
-case class RouteDetailsLongJourney(
+case class RouteDetailsWithTransitInformation(
   countryOfDispatch: CountryOfDispatch,
   destinationCountry: CountryCode,
   destinationOffice: CustomsOffice,
   transitInformation: Option[NonEmptyList[TransitInformation]]
 ) extends RouteDetails
 
-case class RouteDetailsShortJourney(
+case class RouteDetailsWithoutTransitInformation(
   countryOfDispatch: CountryOfDispatch,
   destinationCountry: CountryCode,
   destinationOffice: CustomsOffice
 ) extends RouteDetails
 
-object RouteDetailsLongJourney {
+object RouteDetailsWithTransitInformation {
 
   case class TransitInformation(
     transitOffice: String,
@@ -95,21 +95,21 @@ object RouteDetailsLongJourney {
       case _ => addOfficeOfTransit.map(Some.apply)
     }
 
-  implicit val longJourney: UserAnswersReader[RouteDetailsLongJourney] =
+  implicit val longJourney: UserAnswersReader[RouteDetailsWithTransitInformation] =
     (
       CountryOfDispatchPage.reader,
       DestinationCountryPage.reader,
       DestinationOfficePage.reader,
       UserAnswersReader[Option[NonEmptyList[TransitInformation]]]
-    ).tupled.map((RouteDetailsLongJourney.apply _).tupled)
+    ).tupled.map((RouteDetailsWithTransitInformation.apply _).tupled)
 }
 
-object RouteDetailsShortJourney {
+object RouteDetailsWithoutTransitInformation {
 
-  implicit val shortJourney: UserAnswersReader[RouteDetailsShortJourney] =
+  implicit val shortJourney: UserAnswersReader[RouteDetailsWithoutTransitInformation] =
     (
       CountryOfDispatchPage.reader,
       DestinationCountryPage.reader,
       DestinationOfficePage.reader
-    ).tupled.map((RouteDetailsShortJourney.apply _).tupled)
+    ).tupled.map((RouteDetailsWithoutTransitInformation.apply _).tupled)
 }

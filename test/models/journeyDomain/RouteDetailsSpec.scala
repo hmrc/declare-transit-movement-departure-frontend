@@ -19,7 +19,7 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
-import models.journeyDomain.RouteDetailsLongJourney.TransitInformation
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import org.scalacheck.Gen
 import pages._
@@ -35,7 +35,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
       val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
 
-      val expectedResult = RouteDetailsLongJourney(
+      val expectedResult = RouteDetailsWithTransitInformation(
         CountryOfDispatch(CountryCode("GB"), true),
         CountryCode("IT"),
         CustomsOffice("id", "name", CountryCode("IT"), None),
@@ -60,7 +60,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
     "Can parse a route detail short journey" in {
 
-      val expectedResult = RouteDetailsShortJourney(
+      val expectedResult = RouteDetailsWithoutTransitInformation(
         CountryOfDispatch(CountryCode("GB"), true),
         CountryCode("IT"),
         CustomsOffice("id", "name", CountryCode("IT"), None)
@@ -86,7 +86,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
         val dateNow = LocalDateTime.now()
 
-        val expectedResult = RouteDetailsLongJourney(
+        val expectedResult = RouteDetailsWithTransitInformation(
           CountryOfDispatch(CountryCode("GB"), true),
           CountryCode("IT"),
           CustomsOffice("id", "name", CountryCode("IT"), None),
@@ -103,14 +103,14 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
           .unsafeSetVal(ArrivalTimesAtOfficePage(index))(dateNow)
 
-        val result = UserAnswersReader[RouteDetailsLongJourney].run(userAnswers).right.value
+        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).right.value
 
         result mustBe expectedResult
       }
 
       "when safetyAndSecurityFlag is true when office of transit is not added" in {
 
-        val expectedResult = RouteDetailsLongJourney(
+        val expectedResult = RouteDetailsWithTransitInformation(
           CountryOfDispatch(CountryCode("GB"), true),
           CountryCode("IT"),
           CustomsOffice("XI", "name", CountryCode("XI"), None),
@@ -125,14 +125,14 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
           .unsafeSetVal(AddOfficeOfTransitPage)(false)
 
-        val result = UserAnswersReader[RouteDetailsLongJourney].run(userAnswers).right.value
+        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).right.value
 
         result mustBe expectedResult
       }
 
       "when safetyAndSecurityFlag is false and arrival time is not added" in {
 
-        val expectedResult = RouteDetailsLongJourney(
+        val expectedResult = RouteDetailsWithTransitInformation(
           CountryOfDispatch(CountryCode("GB"), true),
           CountryCode("IT"),
           CustomsOffice("id", "name", CountryCode("IT"), None),
@@ -148,7 +148,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
           .unsafeSetVal(AddOfficeOfTransitPage)(false)
 
-        val result = UserAnswersReader[RouteDetailsLongJourney].run(userAnswers).right.value
+        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).right.value
 
         result mustBe expectedResult
       }
@@ -181,7 +181,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
               .unsafeSetVal(ArrivalTimesAtOfficePage(index))(dateNow)
               .unsafeRemove(mandatoryPage)
 
-            val result = UserAnswersReader[RouteDetailsLongJourney].run(userAnswers).left.value
+            val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).left.value
 
             result.page mustBe mandatoryPage
         }
@@ -209,7 +209,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
               .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
               .unsafeRemove(mandatoryPage)
 
-            val result = UserAnswersReader[RouteDetailsLongJourney].run(userAnswers).left.value
+            val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).left.value
 
             result.page mustBe mandatoryPage
         }
@@ -223,7 +223,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
       "when all questions have been answered" in {
 
-        val expectedResult = RouteDetailsShortJourney(
+        val expectedResult = RouteDetailsWithoutTransitInformation(
           CountryOfDispatch(CountryCode("GB"), true),
           CountryCode("IT"),
           CustomsOffice("id", "name", CountryCode("IT"), None)
@@ -234,7 +234,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
 
-        val result = UserAnswersReader[RouteDetailsShortJourney].run(userAnswers).right.value
+        val result = UserAnswersReader[RouteDetailsWithoutTransitInformation].run(userAnswers).right.value
 
         result mustBe expectedResult
       }
@@ -258,7 +258,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
               .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
               .unsafeRemove(mandatoryPage)
 
-            val result = UserAnswersReader[RouteDetailsLongJourney].run(userAnswers).left.value
+            val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).left.value
 
             result.page mustBe mandatoryPage
         }

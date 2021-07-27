@@ -57,7 +57,7 @@ import models.journeyDomain.{
   PreTaskListDetails,
   PreviousReferences,
   RouteDetails,
-  RouteDetailsShortJourney,
+  RouteDetailsWithoutTransitInformation,
   SafetyAndSecurity,
   SpecialMentionDomain,
   StandardDocument,
@@ -292,7 +292,7 @@ case object Scenario7 extends UserAnswerScenario {
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))
 
-  private val routeDetails = RouteDetailsShortJourney(
+  private val routeDetails = RouteDetailsWithoutTransitInformation(
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None)

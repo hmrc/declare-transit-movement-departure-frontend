@@ -20,7 +20,7 @@ import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
-import models.journeyDomain.{JourneyDomain, RouteDetailsLongJourney}
+import models.journeyDomain.{JourneyDomain, RouteDetailsWithTransitInformation}
 import models.journeyDomain.TransportDetails.InlandMode.Rail
 import models.messages.InterchangeControlReference
 import models.messages.trader.TraderPrincipalWithEori
@@ -38,7 +38,7 @@ import repositories.InterchangeControlReferenceIdRepository
 import java.time.LocalDateTime
 
 import cats.data.NonEmptyList
-import models.journeyDomain.RouteDetailsLongJourney.TransitInformation
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.messages.customsoffice.CustomsOfficeTransit
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -585,7 +585,7 @@ class DeclarationRequestServiceSpec
 
               val result: Seq[CustomsOfficeTransit] = service.convert(scenario.userAnswers).futureValue.right.value.customsOfficeTransit
               val exepectedResult: Option[List[CustomsOfficeTransit]] =
-                scenario.toModel.routeDetails.asInstanceOf[RouteDetailsLongJourney].transitInformation.map {
+                scenario.toModel.routeDetails.asInstanceOf[RouteDetailsWithTransitInformation].transitInformation.map {
                   x =>
                     x.map {
                       case TransitInformation(transitOffice, arrivalTime) => CustomsOfficeTransit(transitOffice, arrivalTime)

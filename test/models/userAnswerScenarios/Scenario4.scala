@@ -26,7 +26,7 @@ import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.MovementDetails.{DeclarationForSomeoneElse, NormalMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
-import models.journeyDomain.RouteDetailsLongJourney.TransitInformation
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
 import models.journeyDomain.TransportDetails.DetailsAtBorder.SameDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.Rail
@@ -45,7 +45,7 @@ import models.journeyDomain.{
   PreTaskListDetails,
   PreviousReferences,
   RouteDetails,
-  RouteDetailsLongJourney,
+  RouteDetailsWithTransitInformation,
   SafetyAndSecurity,
   SpecialMentionDomain,
   StandardDocument,
@@ -226,7 +226,7 @@ case object Scenario4 extends UserAnswerScenario {
     .unsafeSetVal(pages.LiabilityAmountPage(Index(1)))("500")
     .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
 
-  private val routeDetails = RouteDetailsLongJourney(
+  private val routeDetails = RouteDetailsWithTransitInformation(
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),

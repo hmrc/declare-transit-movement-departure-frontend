@@ -28,7 +28,7 @@ import models.journeyDomain.GoodsSummary.{
   GoodSummarySimplifiedDetails
 }
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
-import models.journeyDomain.RouteDetailsLongJourney.TransitInformation
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
@@ -400,8 +400,8 @@ class DeclarationRequestService @Inject() (
         referenceNumber = preTaskList.officeOfDeparture.id
       ),
       routeDetails match {
-        case RouteDetailsLongJourney(_, _, _, transitInformation) => transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty)
-        case RouteDetailsShortJourney(_, _, _)                    => Seq.empty
+        case RouteDetailsWithTransitInformation(_, _, _, transitInformation) => transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty)
+        case RouteDetailsWithoutTransitInformation(_, _, _)                  => Seq.empty
       },
       CustomsOfficeDestination(
         referenceNumber = routeDetails.destinationOffice.id
