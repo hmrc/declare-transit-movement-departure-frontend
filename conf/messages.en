@@ -705,10 +705,12 @@ totalNetMass.error.invalidFormat =  The total net mass for item {0} in kilograms
 packageType.title = What package type has been used?
 packageType.heading = What package type has been used?
 packageType.error.required = Enter the package type that has been used
+packageType.checkYourAnswersLabel = Package type
 
 declareNumberOfPackages.title = Do you need to state how many of this package or item {0} has been used?
 declareNumberOfPackages.heading = Do you need to state how many of this package for item {0} has been used?
 declareNumberOfPackages.error.required = Select yes if you want to state how many of this package for item {0} has been used
+declareNumberOfPackages.checkYourAnswersLabel = Number of packages
 
 totalPieces.title = How many pieces have been used for item {0}?
 totalPieces.heading = How many pieces have been used for item {0}?
@@ -716,6 +718,7 @@ totalPieces.error.nonNumeric = How many pieces have been used for item {0} must 
 totalPieces.error.required = Enter how many pieces have been used for item {0}
 totalPieces.error.wholeNumber = How many pieces have been used for item {0} using whole numbers
 totalPieces.error.outOfRange = The pieces used for item {0} must be {1} or less
+totalPieces.checkYourAnswersLabel = Number of pieces
 
 addMark.title = Do you need to add a mark or number for package {0}?
 addMark.heading = Do you need to add a mark or number for package {0}?
