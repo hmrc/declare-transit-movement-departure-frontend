@@ -18,6 +18,9 @@ package navigation
 
 import controllers.routeDetails.routes
 import derivable.DeriveNumberOfOfficeOfTransits
+import models.DeclarationType.Option4
+import cats.implicits._
+
 import javax.inject.{Inject, Singleton}
 import models._
 import pages._
@@ -31,12 +34,12 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     case DestinationCountryPage =>
       ua => Some(routes.MovementDestinationCountryController.onPageLoad(ua.lrn, NormalMode))
     case MovementDestinationCountryPage =>
-      ua => Some(declarationTypeTIR(ua, NormalMode))
+      ua => Some(routes.DestinationOfficeController.onPageLoad(ua.lrn, NormalMode))
     case DestinationOfficePage =>
-      ua => Some(destinationOfficeRoute(ua, NormalMode))
-    case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, NormalMode))
+      ua => destinationOfficeRoute(ua, NormalMode)
     case OfficeOfTransitCountryPage(index) =>
       ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.lrn, index, NormalMode))
+    case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, NormalMode))
     case AddAnotherTransitOfficePage(index) =>
       ua => Some(redirectToAddTransitOfficeNextPage(ua, index, NormalMode))
     case AddTransitOfficePage =>
@@ -48,8 +51,6 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
   }
 
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case MovementDestinationCountryPage =>
-      ua => Some(declarationTypeTIR(ua, CheckMode))
     case OfficeOfTransitCountryPage(index) =>
       ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.lrn, index, CheckMode))
     case page if isRouteDetailsSectionPage(page) =>
@@ -58,12 +59,6 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     case _ =>
       _ => None
   }
-
-  def declarationTypeTIR(ua: UserAnswers, mode: Mode) =
-    ua.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
-      case _                             => destinationOfficeRoute(ua, mode)
-    }
 
   def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =
     (ua.get(AddOfficeOfTransitPage), mode) match {
@@ -74,10 +69,10 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     }
 
   def destinationOfficeRoute(ua: UserAnswers, mode: Mode) =
-    ua.get(OfficeOfDeparturePage) match {
-      case Some(x) if x.countryId.code.startsWith("XI") => routes.AddOfficeOfTransitController.onPageLoad(ua.lrn, mode)
-      case _                                            => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
-
+    (ua.get(OfficeOfDeparturePage), ua.get(DeclarationTypePage)).tupled.map {
+      case (_, Option4)                                                                => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
+      case (officeOfDeparture, _) if officeOfDeparture.countryId.code.startsWith("XI") => routes.AddOfficeOfTransitController.onPageLoad(ua.lrn, mode)
+      case _                                                                           => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
     }
 
   def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =
