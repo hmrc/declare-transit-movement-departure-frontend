@@ -39,6 +39,7 @@ import pages.traderDetails.{
   IsPrincipalEoriKnownPage,
   PrincipalAddressPage,
   PrincipalNamePage,
+  WhatIsConsigneeEoriPage,
   WhatIsPrincipalEoriPage
 }
 import pages._

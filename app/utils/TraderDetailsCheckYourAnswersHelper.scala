@@ -32,6 +32,7 @@ import pages.traderDetails.{
   IsPrincipalEoriKnownPage,
   PrincipalAddressPage,
   PrincipalNamePage,
+  WhatIsConsigneeEoriPage,
   WhatIsPrincipalEoriPage
 }
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}

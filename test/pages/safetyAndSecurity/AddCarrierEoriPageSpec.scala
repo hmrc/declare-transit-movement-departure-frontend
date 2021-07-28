@@ -30,6 +30,8 @@ class AddCarrierEoriPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AddCarrierEoriPage)
 
+    clearDownItems[Boolean](AddCarrierEoriPage)
+
     "cleanup" - {
 
       "must remove Carrier name and address details when they exist in userAnswers and AddCarrierEori is set to true" in {
@@ -38,6 +40,9 @@ class AddCarrierEoriPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result = userAnswers
+              .set(AddCarrierEoriPage, false)
+              .success
+              .value
               .set(CarrierNamePage, "test name")
               .success
               .value
@@ -58,6 +63,9 @@ class AddCarrierEoriPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result = userAnswers
+              .set(AddCarrierEoriPage, true)
+              .success
+              .value
               .set(CarrierEoriPage, "GB123456")
               .success
               .value

@@ -29,6 +29,8 @@ class AddPlaceOfUnloadingCodePageSpec extends PageBehaviours {
     beSettable[Boolean](AddPlaceOfUnloadingCodePage)
 
     beRemovable[Boolean](AddPlaceOfUnloadingCodePage)
+
+    clearDownItems[Boolean](AddPlaceOfUnloadingCodePage)
   }
 
   "cleanup" - {
@@ -38,6 +40,9 @@ class AddPlaceOfUnloadingCodePageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(AddPlaceOfUnloadingCodePage, true)
+            .success
+            .value
             .set(PlaceOfUnloadingCodePage, "value")
             .success
             .value

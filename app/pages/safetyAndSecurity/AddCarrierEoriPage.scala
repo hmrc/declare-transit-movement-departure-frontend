@@ -29,7 +29,6 @@ case object AddCarrierEoriPage extends QuestionPage[Boolean] with ClearAllAddIte
   override def toString: String = "addCarrierEori"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    println(value, userAnswers.get(CarrierEoriPage))
     val cleanedUpUserAnswers = value match {
       case Some(true) =>
         userAnswers
@@ -40,8 +39,6 @@ case object AddCarrierEoriPage extends QuestionPage[Boolean] with ClearAllAddIte
           .remove(CarrierEoriPage)
       case _ => Success(userAnswers)
     }
-
-    println("new", cleanedUpUserAnswers.map(_.get(CarrierEoriPage)))
 
     cleanedUpUserAnswers
       .flatMap(

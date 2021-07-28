@@ -27,5 +27,7 @@ class CarrierNamePageSpec extends PageBehaviours {
     beSettable[String](CarrierNamePage)
 
     beRemovable[String](CarrierNamePage)
+
+    clearDownItems[String](CarrierNamePage)
   }
 }

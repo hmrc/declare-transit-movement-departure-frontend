@@ -29,5 +29,6 @@ class SafetyAndSecurityConsigneeAddressPageSpec extends PageBehaviours {
 
     beRemovable[CommonAddress](SafetyAndSecurityConsigneeAddressPage)
 
+    clearDownItems[CommonAddress](SafetyAndSecurityConsigneeAddressPage)
   }
 }

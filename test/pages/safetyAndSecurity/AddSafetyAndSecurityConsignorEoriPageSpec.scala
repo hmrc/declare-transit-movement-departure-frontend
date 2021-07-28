@@ -29,6 +29,8 @@ class AddSafetyAndSecurityConsignorEoriPageSpec extends PageBehaviours {
     beSettable[Boolean](AddSafetyAndSecurityConsignorEoriPage)
 
     beRemovable[Boolean](AddSafetyAndSecurityConsignorEoriPage)
+
+    clearDownItems[Boolean](AddSafetyAndSecurityConsignorEoriPage)
   }
 
   "cleanup" - {
@@ -36,6 +38,9 @@ class AddSafetyAndSecurityConsignorEoriPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
+            .set(AddSafetyAndSecurityConsignorEoriPage, true)
+            .success
+            .value
             .set(SafetyAndSecurityConsignorEoriPage, "GB000000")
             .success
             .value
@@ -48,12 +53,15 @@ class AddSafetyAndSecurityConsignorEoriPageSpec extends PageBehaviours {
     }
   }
   "cleanup" - {
-    "must clean up the consignor name and address details on selecting option 'No' " in {
+    "must clean up the consignor name and address details on selecting option 'Yes' " in {
       val consignorAddress = arbitrary[CommonAddress].sample.value
 
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
+            .set(AddSafetyAndSecurityConsignorEoriPage, false)
+            .success
+            .value
             .set(SafetyAndSecurityConsignorNamePage, "TestName")
             .success
             .value

@@ -29,6 +29,8 @@ class AddTransportChargesPaymentMethodPageSpec extends PageBehaviours {
     beSettable[Boolean](AddTransportChargesPaymentMethodPage)
 
     beRemovable[Boolean](AddTransportChargesPaymentMethodPage)
+
+    clearDownItems[Boolean](AddTransportChargesPaymentMethodPage)
   }
 
   "cleanup" - {
@@ -38,6 +40,9 @@ class AddTransportChargesPaymentMethodPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(AddTransportChargesPaymentMethodPage, true)
+            .success
+            .value
             .set(TransportChargesPaymentMethodPage, "value")
             .success
             .value

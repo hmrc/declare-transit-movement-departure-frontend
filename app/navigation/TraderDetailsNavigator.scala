@@ -36,6 +36,7 @@ import pages.traderDetails.{
   IsPrincipalEoriKnownPage,
   PrincipalAddressPage,
   PrincipalNamePage,
+  WhatIsConsigneeEoriPage,
   WhatIsPrincipalEoriPage
 }
 import play.api.mvc.Call
