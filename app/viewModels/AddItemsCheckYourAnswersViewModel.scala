@@ -29,8 +29,7 @@ object AddItemsCheckYourAnswersViewModel {
             documentTypeList: DocumentTypeList,
             previousDocumentTypes: PreviousReferencesDocumentTypeList,
             specialMentionList: SpecialMentionList,
-            countryList: CountryList,
-            methodOfPaymentList: MethodOfPaymentList
+            countryList: CountryList
   ): AddItemsCheckYourAnswersViewModel = {
 
     val checkYourAnswersHelper = new AddItemsCheckYourAnswersHelper(userAnswers)
@@ -47,7 +46,7 @@ object AddItemsCheckYourAnswersViewModel {
         specialMentionsSection(specialMentionsCheckYourAnswers, index, specialMentionList)(userAnswers),
         documentsSection(checkYourAnswersHelper, index, documentTypeList)(userAnswers),
         referencesSection(checkYourAnswersHelper, index, previousDocumentTypes)(userAnswers),
-        securitySection(checkYourAnswersHelper, index, methodOfPaymentList),
+        securitySection(checkYourAnswersHelper, index),
         traderSecuritySection(checkYourAnswersHelper, countryList, index)
       )
     )
@@ -67,10 +66,10 @@ object AddItemsCheckYourAnswersViewModel {
     ).flatten
   )
 
-  private def securitySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index, methodOfPaymentList: MethodOfPaymentList) = Section(
+  private def securitySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Section(
     msg"addItems.checkYourAnswersLabel.safetyAndSecurity",
     Seq(
-      checkYourAnswersHelper.transportCharges(index, methodOfPaymentList),
+      checkYourAnswersHelper.transportCharges(index),
       checkYourAnswersHelper.commercialReferenceNumber(index),
       checkYourAnswersHelper.AddDangerousGoodsCode(index),
       checkYourAnswersHelper.dangerousGoodsCode(index)

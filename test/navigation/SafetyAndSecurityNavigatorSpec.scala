@@ -522,7 +522,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         "CheckYourAnswers page if 'true' and TransportChargesPaymentMethod answer exists" in {
 
           val updatedAnswers = emptyUserAnswers
-            .set(TransportChargesPaymentMethodPage, MethodOfPayment("code", "description")).success.value
+            .set(TransportChargesPaymentMethodPage, MethodOfPayment("code", Some("description"))).success.value
             .set(AddTransportChargesPaymentMethodPage, true).success.value
 
           navigator

@@ -34,7 +34,6 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
   private val previousReferencesDocumentTypeList = PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType("code", Some("name"))))
   private val specialMentionList = SpecialMentionList(Seq(SpecialMention("code", "name")))
   private val countryList = new CountryList(Seq(Country(CountryCode("FR"), "France")))
-  private val methodOfPaymentList = MethodOfPaymentList(Seq(MethodOfPayment("A", "Payment in cash")))
 
   private val updatedAnswers = emptyUserAnswers
     .set(ItemDescriptionPage(index), "test").success.value
@@ -46,7 +45,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     .set(ContainerNumberPage(itemIndex, containerIndex), arbitrary[String].sample.value).success.value
     .set(SpecialMentionTypePage(index, itemIndex), "code").success.value
 
-  private val data = AddItemsCheckYourAnswersViewModel(updatedAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList, countryList, methodOfPaymentList)
+  private val data = AddItemsCheckYourAnswersViewModel(updatedAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList, countryList)
 
 
   "AddItemsCheckYourAnswersViewModel" - {

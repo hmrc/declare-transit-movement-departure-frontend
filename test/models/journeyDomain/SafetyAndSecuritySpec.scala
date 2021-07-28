@@ -34,7 +34,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
     .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
     .unsafeSetVal(CircumstanceIndicatorPage)("circumstanceIndicator")
     .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
-    .unsafeSetVal(TransportChargesPaymentMethodPage)(MethodOfPayment("code", "description"))
+    .unsafeSetVal(TransportChargesPaymentMethodPage)(MethodOfPayment("code", Some("description")))
     .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
     .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
     .unsafeSetVal(CommercialReferenceNumberAllItemsPage)("commercialRefNumber")
@@ -76,7 +76,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
 
         val expectedResult = SafetyAndSecurity(
           Some("circumstanceIndicator"),
-          Some(MethodOfPayment("code", "description")),
+          Some(MethodOfPayment("code", Some("description"))),
           Some("commercialRefNumber"),
           Some("conveyanceRefNumber"),
           Some("placeOfUnloading"),

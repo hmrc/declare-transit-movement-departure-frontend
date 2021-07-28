@@ -50,8 +50,8 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with MockNunj
 
   private val methodOfPaymentList = MethodOfPaymentList(
     Seq(
-      MethodOfPayment("A", "Payment in cash"),
-      MethodOfPayment("B", "Payment by credit card")
+      MethodOfPayment("A", Some("Payment in cash")),
+      MethodOfPayment("B", Some("Payment by credit card"))
     )
   )
   private val form                                         = formProvider(methodOfPaymentList)
@@ -111,7 +111,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with MockNunj
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
-      val userAnswers = emptyUserAnswers.set(TransportChargesPaymentMethodPage, MethodOfPayment("A", "Payment in cash")).success.value
+      val userAnswers = emptyUserAnswers.set(TransportChargesPaymentMethodPage, MethodOfPayment("A", Some("Payment in cash"))).success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, transportChargesPaymentMethodRoute)

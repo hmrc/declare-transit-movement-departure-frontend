@@ -46,7 +46,7 @@ import viewModels.AddAnotherViewModel
 
 class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def transportCharges(itemIndex: Index, methodOfPaymentList: MethodOfPaymentList): Option[Row] = userAnswers.get(TransportChargesPage(itemIndex)) map {
+  def transportCharges(itemIndex: Index): Option[Row] = userAnswers.get(TransportChargesPage(itemIndex)) map {
     answer =>
       Row(
         key = Key(msg"transportCharges.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),

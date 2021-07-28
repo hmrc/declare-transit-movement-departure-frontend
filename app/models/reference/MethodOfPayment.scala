@@ -18,8 +18,14 @@ package models.reference
 
 import play.api.libs.json.{Json, OFormat}
 
-case class MethodOfPayment(code: String, description: String) {
-  override def toString = s"($code) $description"
+case class MethodOfPayment(code: String, description: Option[String]) {
+
+  //TODO remove option from the description parameter post go live
+  override def toString =
+    description match {
+      case Some(x) => s"($code) $x"
+      case None    => code
+    }
 }
 
 object MethodOfPayment {

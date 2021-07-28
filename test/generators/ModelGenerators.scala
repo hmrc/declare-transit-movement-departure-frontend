@@ -189,7 +189,7 @@ trait ModelGenerators {
       for {
         code        <- stringsWithLength(1)
         description <- stringsWithMaxLength(stringMaxLength)
-      } yield MethodOfPayment(code.toUpperCase, description)
+      } yield MethodOfPayment(code.toUpperCase, Some(description))
     }
 
 }
