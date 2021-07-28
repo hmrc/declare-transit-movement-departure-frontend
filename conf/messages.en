@@ -1457,9 +1457,10 @@ principalTirHolderId.error.characters = The principal’s TIR holder identificat
 tirCarnetReference.title = What is the TIR Carnet reference?
 tirCarnetReference.heading = What is the TIR Carnet reference?
 tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
-tirCarnetReference.error.required = Enter the TIR Carnet reference
-tirCarnetReference.error.length = The TIR Carnet reference must be 35 characters or less
-tirCarnetReference.error.invalid = The TIR Carnet reference must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+tirCarnetReference.error.required = Enter the reference for the TIR carnet
+tirCarnetReference.error.maxLength = The reference for the TIR Carnet must be 11 characters or less
+tirCarnetReference.error.minLength = The reference for the TIR Carnet must be 10 characters or more
+tirCarnetReference.error.invalidCharacters = The reference for the TIR Carnet must only include letters a to z and numbers 0 to 9
 
 addOfficeOfTransit.title = Do you need to add an office of transit?
 addOfficeOfTransit.heading = Do you need to add an office of transit?
