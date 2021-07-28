@@ -27,5 +27,7 @@ class CarrierEoriPageSpec extends PageBehaviours {
     beSettable[String](CarrierEoriPage)
 
     beRemovable[String](CarrierEoriPage)
+
+    clearDownItems[String](CarrierEoriPage)
   }
 }

@@ -40,6 +40,9 @@ class AddSecurityConsignorsEoriPageSpec extends SpecBase with PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(AddSecurityConsignorsEoriPage(index), false)
+            .success
+            .value
             .set(SecurityConsignorNamePage(index), "answer")
             .success
             .value
@@ -60,6 +63,9 @@ class AddSecurityConsignorsEoriPageSpec extends SpecBase with PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(AddSecurityConsignorsEoriPage(index), true)
+            .success
+            .value
             .set(SecurityConsignorEoriPage(index), "GB123456")
             .success
             .value

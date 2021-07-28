@@ -20,7 +20,7 @@ import cats.implicits._
 import models.{CommonAddress, EoriNumber}
 import models.journeyDomain.{UserAnswersReader, _}
 import pages._
-import pages.traderDetails.{ConsigneeAddressPage, ConsigneeNamePage, IsConsigneeEoriKnownPage}
+import pages.traderDetails.{ConsigneeAddressPage, ConsigneeNamePage, IsConsigneeEoriKnownPage, WhatIsConsigneeEoriPage}
 
 case class ConsigneeDetails(name: String, address: CommonAddress, eori: Option[EoriNumber])
 

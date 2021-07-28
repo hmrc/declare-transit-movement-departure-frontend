@@ -27,5 +27,7 @@ class CircumstanceIndicatorPageSpec extends PageBehaviours {
     beSettable[String](CircumstanceIndicatorPage)
 
     beRemovable[String](CircumstanceIndicatorPage)
+
+    clearDownItems[String](CircumstanceIndicatorPage)
   }
 }

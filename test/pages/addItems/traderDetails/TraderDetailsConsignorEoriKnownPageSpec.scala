@@ -40,6 +40,9 @@ class TraderDetailsConsignorEoriKnownPageSpec extends PageBehaviours with SpecBa
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(TraderDetailsConsignorEoriKnownPage(index), true)
+            .success
+            .value
             .set(TraderDetailsConsignorEoriNumberPage(index), "GB0010")
             .success
             .value

@@ -30,11 +30,16 @@ class AddSafetyAndSecurityConsigneeEoriPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AddSafetyAndSecurityConsigneeEoriPage)
 
+    clearDownItems[Boolean](AddSafetyAndSecurityConsigneeEoriPage)
+
     "cleanup" - {
       "must clean up the consignee eori details on selecting option 'No' " in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneeEoriPage, true)
+              .success
+              .value
               .set(SafetyAndSecurityConsigneeEoriPage, "GB000000")
               .success
               .value
@@ -53,6 +58,9 @@ class AddSafetyAndSecurityConsigneeEoriPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneeEoriPage, false)
+              .success
+              .value
               .set(SafetyAndSecurityConsigneeNamePage, "TestName")
               .success
               .value

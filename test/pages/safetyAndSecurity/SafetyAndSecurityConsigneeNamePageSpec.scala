@@ -27,5 +27,7 @@ class SafetyAndSecurityConsigneeNamePageSpec extends PageBehaviours {
     beSettable[String](SafetyAndSecurityConsigneeNamePage)
 
     beRemovable[String](SafetyAndSecurityConsigneeNamePage)
+
+    clearDownItems[String](SafetyAndSecurityConsigneeNamePage)
   }
 }

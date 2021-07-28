@@ -98,7 +98,8 @@ import pages.traderDetails.{
   IsConsignorEoriKnownPage,
   IsPrincipalEoriKnownPage,
   PrincipalAddressPage,
-  PrincipalNamePage
+  PrincipalNamePage,
+  WhatIsConsigneeEoriPage
 }
 import play.api.libs.json.Json
 import java.time.LocalDateTime
@@ -159,7 +160,7 @@ case object Scenario3 extends UserAnswerScenario {
     .unsafeSetVal(ConsignorAddressPage)(CommonAddress("ConorLine1", "ConorLine2", "ConorL3", Country(CountryCode("CN"), "SomethingCO")))
     .unsafeSetVal(AddConsigneePage)(true)
     .unsafeSetVal(IsConsigneeEoriKnownPage)(true)
-    .unsafeSetVal(pages.WhatIsConsigneeEoriPage)("ConeeEori")
+    .unsafeSetVal(WhatIsConsigneeEoriPage)("ConeeEori")
     .unsafeSetVal(ConsigneeNamePage)("ConsigneeName")
     .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("CN"), "SomethingCE")))
     /*
