@@ -40,3 +40,8 @@ POST       /:lrn/guarantee-details/add-another-guarantee                        
 
 GET        /:lrn/guarantee-details/:index/confirm-remove-guarantee                  controllers.guaranteeDetails.ConfirmRemoveGuaranteeController.onPageLoad(lrn: LocalReferenceNumber, index: Index)
 POST       /:lrn/guarantee-details/:index/confirm-remove-guarantee                  controllers.guaranteeDetails.ConfirmRemoveGuaranteeController.onSubmit(lrn: LocalReferenceNumber, index: Index)
+
+GET        /:lrn/guarantee-details/:index/tir-guarantee-reference                   controllers.guaranteeDetails.TIRGuaranteeReferenceController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/guarantee-details/:index/tir-guarantee-reference                   controllers.guaranteeDetails.TIRGuaranteeReferenceController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/guarantee-details/:index/change-tir-guarantee-reference            controllers.guaranteeDetails.TIRGuaranteeReferenceController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/guarantee-details/:index/change-tir-guarantee-reference            controllers.guaranteeDetails.TIRGuaranteeReferenceController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)

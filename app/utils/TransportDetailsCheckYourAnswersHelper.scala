@@ -228,5 +228,5 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       }
     } else None
 
-  def lrn: LocalReferenceNumber = userAnswers.id
+  def lrn: LocalReferenceNumber = userAnswers.lrn
 }

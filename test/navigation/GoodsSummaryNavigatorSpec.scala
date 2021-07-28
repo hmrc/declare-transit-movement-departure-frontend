@@ -45,7 +45,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AuthorisedLocationCodeController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AuthorisedLocationCodeController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -58,7 +58,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddCustomsApprovedLocationController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddCustomsApprovedLocationController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -71,7 +71,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -82,7 +82,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AuthorisedLocationCodePage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.ControlResultDateLimitController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.ControlResultDateLimitController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -93,7 +93,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AddCustomsApprovedLocationPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.CustomsApprovedLocationController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.CustomsApprovedLocationController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -106,7 +106,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AgreedLocationOfGoodsPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -120,7 +120,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddAgreedLocationOfGoodsPage, NormalMode, updatedAnswers)
-                .mustBe(goodsSummaryRoute.AgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, NormalMode))
+                .mustBe(goodsSummaryRoute.AgreedLocationOfGoodsController.onPageLoad(updatedAnswers.lrn, NormalMode))
           }
         }
         "to Add Seals page when user selects 'No'" in {
@@ -131,7 +131,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddAgreedLocationOfGoodsPage, NormalMode, updatedAnswers)
-                .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+                .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.lrn, NormalMode))
           }
         }
       }
@@ -143,7 +143,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AddCustomsApprovedLocationPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -155,7 +155,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(ControlResultDateLimitPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -166,7 +166,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(CustomsApprovedLocationPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -177,7 +177,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(SealsInformationPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedAnswers.id, sealIndex, NormalMode))
+              .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedAnswers.lrn, sealIndex, NormalMode))
         }
       }
 
@@ -190,7 +190,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(SealsInformationPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -201,7 +201,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(SealIdDetailsPage(sealIndex), NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.SealsInformationController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.SealsInformationController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -212,7 +212,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(ConfirmRemoveSealPage(), NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.SealsInformationController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.SealsInformationController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -230,7 +230,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddSealsPage, NormalMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedUserAnswers.id, sealIndex, NormalMode))
+                .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedUserAnswers.lrn, sealIndex, NormalMode))
           }
         }
 
@@ -248,7 +248,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddSealsPage, NormalMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedUserAnswers.id, seal2, NormalMode))
+                .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedUserAnswers.lrn, seal2, NormalMode))
           }
         }
 
@@ -265,7 +265,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddSealsPage, NormalMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.AddSealsLaterController.onPageLoad(updatedUserAnswers.id, NormalMode))
+                .mustBe(goodsSummaryRoute.AddSealsLaterController.onPageLoad(updatedUserAnswers.lrn, NormalMode))
           }
         }
 
@@ -278,7 +278,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddSealsPage, NormalMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.ConfirmRemoveSealsController.onPageLoad(updatedUserAnswers.id, NormalMode))
+                .mustBe(goodsSummaryRoute.ConfirmRemoveSealsController.onPageLoad(updatedUserAnswers.lrn, NormalMode))
           }
         }
 
@@ -291,7 +291,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AddSealsPage, NormalMode, updateAnswers)
-              .mustBe(goodsSummaryRoute.SealsInformationController.onPageLoad(updateAnswers.id, NormalMode))
+              .mustBe(goodsSummaryRoute.SealsInformationController.onPageLoad(updateAnswers.lrn, NormalMode))
           }
 
         }
@@ -305,7 +305,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           answers =>
                        navigator
               .nextPage(LoadingPlacePage , CheckMode, answers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -316,7 +316,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AuthorisedLocationCodePage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -329,7 +329,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AddCustomsApprovedLocationPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.id, CheckMode))
+              .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
       }
 
@@ -342,7 +342,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AddCustomsApprovedLocationPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -359,7 +359,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AddCustomsApprovedLocationPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.CustomsApprovedLocationController.onPageLoad(updatedAnswers.id, CheckMode))
+              .mustBe(goodsSummaryRoute.CustomsApprovedLocationController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
       }
 
@@ -371,7 +371,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(ControlResultDateLimitPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -382,7 +382,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(CustomsApprovedLocationPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -391,7 +391,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           answers =>
             navigator
               .nextPage(AddSealsLaterPage, CheckMode, answers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -402,7 +402,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(SealIdDetailsPage(sealIndex), CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.SealsInformationController.onPageLoad(updatedAnswers.id, CheckMode))
+              .mustBe(goodsSummaryRoute.SealsInformationController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
       }
 
@@ -413,7 +413,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(SealsInformationPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedAnswers.id, sealIndex, CheckMode))
+              .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedAnswers.lrn, sealIndex, CheckMode))
         }
       }
 
@@ -424,7 +424,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(SealsInformationPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -437,7 +437,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(ConfirmRemoveSealsPage, CheckMode, updatedAnswers)
-                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
           }
         }
 
@@ -449,7 +449,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(ConfirmRemoveSealsPage, CheckMode, updatedAnswers)
-                .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, CheckMode))
+                .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.lrn, CheckMode))
           }
         }
       }
@@ -465,7 +465,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddAgreedLocationOfGoodsPage, CheckMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedUserAnswers.id))
+                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedUserAnswers.lrn))
           }
         }
         "to Check your answers page when answer is 'Yes' and an answer exists for Agreed Location of Goods" in {
@@ -479,7 +479,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddAgreedLocationOfGoodsPage, CheckMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedUserAnswers.id))
+                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedUserAnswers.lrn))
           }
         }
 
@@ -494,7 +494,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddAgreedLocationOfGoodsPage, CheckMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.AgreedLocationOfGoodsController.onPageLoad(updatedUserAnswers.id, CheckMode))
+                .mustBe(goodsSummaryRoute.AgreedLocationOfGoodsController.onPageLoad(updatedUserAnswers.lrn, CheckMode))
           }
         }
       }
@@ -513,7 +513,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddSealsPage, CheckMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedUserAnswers.id, sealIndex, CheckMode))
+                .mustBe(goodsSummaryRoute.SealIdDetailsController.onPageLoad(updatedUserAnswers.lrn, sealIndex, CheckMode))
           }
         }
 
@@ -530,7 +530,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddSealsPage, CheckMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedUserAnswers.id))
+                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedUserAnswers.lrn))
           }
         }
 
@@ -547,7 +547,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddSealsPage, CheckMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.AddSealsLaterController.onPageLoad(updatedUserAnswers.id, CheckMode))
+                .mustBe(goodsSummaryRoute.AddSealsLaterController.onPageLoad(updatedUserAnswers.lrn, CheckMode))
           }
         }
 
@@ -564,7 +564,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddSealsPage, CheckMode, updatedUserAnswers)
-                .mustBe(goodsSummaryRoute.ConfirmRemoveSealsController.onPageLoad(updatedUserAnswers.id, CheckMode))
+                .mustBe(goodsSummaryRoute.ConfirmRemoveSealsController.onPageLoad(updatedUserAnswers.lrn, CheckMode))
           }
         }
       }
@@ -576,7 +576,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
             navigator
               .nextPage(AgreedLocationOfGoodsPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -589,7 +589,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(ConfirmRemoveSealsPage, CheckMode, updatedAnswers)
-                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+                .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
           }
         }
 
@@ -600,7 +600,7 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(ConfirmRemoveSealsPage, CheckMode, updatedAnswers)
-                .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.id, CheckMode))
+                .mustBe(goodsSummaryRoute.AddSealsController.onPageLoad(updatedAnswers.lrn, CheckMode))
           }
         }
       }

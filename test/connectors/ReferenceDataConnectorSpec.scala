@@ -374,6 +374,45 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
       }
     }
 
+    "getCountriesWithCustomsOffices" - {
+
+      "when there are no excluded coutries, must return Seq of Country when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY"))
+            .willReturn(okJson(countryListResponseJson))
+        )
+
+        val expectedResult: CountryList = CountryList(
+          Seq(
+            Country(CountryCode("GB"), "United Kingdom"),
+            Country(CountryCode("AD"), "Andorra")
+          )
+        )
+
+        connector.getCountriesWithCustomsOffices(Nil).futureValue mustEqual expectedResult
+      }
+
+      "when there are excluded coutries, then the excluded coutries must be sent as a query paramter and the request returns a Seq of Country when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&exclude=JE&exclude=AB"))
+            .willReturn(okJson(countryListResponseJson))
+        )
+
+        val expectedResult: CountryList = CountryList(
+          Seq(
+            Country(CountryCode("GB"), "United Kingdom"),
+            Country(CountryCode("AD"), "Andorra")
+          )
+        )
+
+        connector.getCountriesWithCustomsOffices(Seq(CountryCode("JE"), CountryCode("AB"))).futureValue mustEqual expectedResult
+      }
+
+      "must return an exception when an error response is returned" in {
+        checkErrorResponse(s"/$startUrl/countries?customsOfficeRole=ANY", connector.getCountriesWithCustomsOffices(Nil))
+      }
+    }
+
     "getTransitCountryList" - {
 
       "must return Seq of Country when successful" in {

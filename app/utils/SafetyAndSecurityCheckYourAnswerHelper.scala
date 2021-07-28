@@ -25,7 +25,7 @@ import viewModels.AddAnotherViewModel
 
 class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
 
-  private def lrn: LocalReferenceNumber = userAnswers.id
+  private def lrn: LocalReferenceNumber = userAnswers.lrn
 
   def addCarrierEori: Option[Row] = userAnswers.get(AddCarrierEoriPage) map {
     answer =>

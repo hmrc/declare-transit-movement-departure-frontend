@@ -65,7 +65,7 @@ class OfficeOfTransitCountryController @Inject() (
         (
           for {
             excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-            transitCountryList <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+            transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
             form = formProvider(transitCountryList)
             preparedForm = request.userAnswers
               .get(OfficeOfTransitCountryPage(index))
@@ -85,7 +85,7 @@ class OfficeOfTransitCountryController @Inject() (
       (
         for {
           excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          transitCountryList <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+          transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
           page <- OptionT.liftF(
             formProvider(transitCountryList)
               .bindFromRequest()

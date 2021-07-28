@@ -18,13 +18,14 @@ package viewModels
 
 import base.SpecBase
 import generators.Generators
+import models.DeclarationType.Option4
 import models.GuaranteeType.{guaranteeReferenceRoute, nonGuaranteeReferenceRoute, GuaranteeWaiver}
 import models.{GuaranteeType, Index}
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
-import pages.{AccessCodePage, DefaultAmountPage, DestinationOfficePage, LiabilityAmountPage, OfficeOfDeparturePage, OtherReferencePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
+import pages.{AccessCodePage, DeclarationTypePage, DefaultAmountPage, DestinationOfficePage, LiabilityAmountPage, OfficeOfDeparturePage, OtherReferencePage}
 import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
 
 class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
@@ -51,6 +52,18 @@ class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaC
       data.sections.length mustEqual 1
       data.sections.head.rows.length mustEqual 1
       data.sections.head.rows.head.value.content mustEqual Literal("test")
+    }
+
+    "display TIR Guarantee Reference number when selected and Index is 0 and DeclarationTypePage is Option4" in {
+
+      val updatedAnswers = emptyUserAnswers.set(TIRGuaranteeReferencePage(index), "test").success.value
+      val data           = GuaranteeDetailsCheckYourAnswersViewModel(updatedAnswers, Index(0))
+
+      data.sections.head.sectionTitle must not be defined
+      data.sections.length mustEqual 1
+      data.sections.head.rows.length mustEqual 1
+      data.sections.head.rows.head.value.content mustEqual Literal("test")
+
     }
 
     "display Other Reference when selected" in {

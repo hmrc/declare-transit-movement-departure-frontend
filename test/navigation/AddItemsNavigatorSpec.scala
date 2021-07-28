@@ -50,7 +50,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           answers =>
             navigator
               .nextPage(ItemDescriptionPage(index), NormalMode, answers)
-              .mustBe(routes.ItemTotalGrossMassController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(routes.ItemTotalGrossMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -60,7 +60,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           answers =>
             navigator
               .nextPage(ItemTotalGrossMassPage(index), NormalMode, answers)
-              .mustBe(routes.AddTotalNetMassController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(routes.AddTotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -73,7 +73,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .remove(TotalNetMassPage(index)).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.TotalNetMassController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(routes.TotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -86,7 +86,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .remove(TotalNetMassPage(index)).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.IsCommodityCodeKnownController.onPageLoad(answers.id, index, NormalMode))
+              .mustBe(routes.IsCommodityCodeKnownController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -103,7 +103,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   
                 navigator
                   .nextPage(IsCommodityCodeKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(traderRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -117,7 +117,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(IsCommodityCodeKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(traderRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -131,7 +131,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(IsCommodityCodeKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.PackageTypeController.onPageLoad(answers.id, index, Index(0), NormalMode))
+                  .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
             }
           }
 
@@ -145,7 +145,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(IsCommodityCodeKnownPage(index), true).success.value
                 navigator
                   .nextPage(IsCommodityCodeKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.CommodityCodeController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(routes.CommodityCodeController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
         }
@@ -161,7 +161,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(CommodityCodePage(index), NormalMode, updatedAnswers)
-                .mustBe(traderRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(traderRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -174,7 +174,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(CommodityCodePage(index), NormalMode, updatedAnswers)
-                .mustBe(traderRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(traderRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -188,7 +188,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(CommodityCodePage(index), NormalMode, updatedAnswers)
-                .mustBe(routes.PackageTypeController.onPageLoad(answers.id, index, Index(0), NormalMode))
+                .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
           }
         }
       }
@@ -206,7 +206,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsignorEoriKnownPage(index), true).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorEoriKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                  .mustBe(traderRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
             }
           }
 
@@ -217,7 +217,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsignorEoriKnownPage(index), false).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorEoriKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsignorNameController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                  .mustBe(traderRoutes.TraderDetailsConsignorNameController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
             }
           }
         }
@@ -227,7 +227,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(TraderDetailsConsignorEoriNumberPage(index), NormalMode, answers)
-                .mustBe(traderRoutes.TraderDetailsConsignorNameController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(traderRoutes.TraderDetailsConsignorNameController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -236,7 +236,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(TraderDetailsConsignorNamePage(index), NormalMode, answers)
-                .mustBe(traderRoutes.TraderDetailsConsignorAddressController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(traderRoutes.TraderDetailsConsignorAddressController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -249,7 +249,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(TraderDetailsConsignorAddressPage(index), NormalMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(traderRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -261,7 +261,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(TraderDetailsConsignorAddressPage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.PackageTypeController.onPageLoad(answers.id, index, Index(0), NormalMode))
+                  .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
             }
           }
         }
@@ -274,7 +274,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsigneeEoriKnownPage(index), true).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeEoriKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsigneeEoriNumberController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                  .mustBe(traderRoutes.TraderDetailsConsigneeEoriNumberController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
             }
           }
           
@@ -286,7 +286,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(TraderDetailsConsigneeNamePage(index)).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeEoriKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsigneeNameController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                  .mustBe(traderRoutes.TraderDetailsConsigneeNameController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
             }
           }
           
@@ -297,7 +297,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(TraderDetailsConsigneeEoriNumberPage(index), NormalMode, answers)
-                .mustBe(traderRoutes.TraderDetailsConsigneeNameController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(traderRoutes.TraderDetailsConsigneeNameController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -306,7 +306,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(TraderDetailsConsigneeNamePage(index), NormalMode, answers)
-                .mustBe(traderRoutes.TraderDetailsConsigneeAddressController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(traderRoutes.TraderDetailsConsigneeAddressController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -315,7 +315,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(TraderDetailsConsigneeAddressPage(index), NormalMode, answers)
-                .mustBe(routes.PackageTypeController.onPageLoad(answers.id, index, Index(0), NormalMode))
+                .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
           }
         }
       }
@@ -333,7 +333,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -346,7 +346,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -359,7 +359,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
         }
@@ -375,7 +375,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -388,7 +388,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -401,7 +401,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -416,7 +416,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
           "must go to AddMark if answer is 'No' and PackageType is bulk" in {
@@ -428,7 +428,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
           "must go to TotalPieces if answer is 'No' and PackageType is unpacked" in {
@@ -440,7 +440,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -455,7 +455,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(TotalPiecesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
         }
@@ -469,7 +469,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
           "must go to AddAnotherPackage if answers if 'No'" in {
@@ -480,7 +480,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
         }
@@ -494,7 +494,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(DeclareMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
         }
@@ -511,7 +511,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddAnotherPackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.PackageTypeController.onPageLoad(answers.id, index, nextPackageIndex, NormalMode))
+                  .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, NormalMode))
             }
           }
 
@@ -526,7 +526,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                     .remove(ContainersQuery(itemIndex, containerIndex)).success.value
                   navigator
                     .nextPage(AddAnotherPackagePage(itemIndex), NormalMode, updatedAnswers)
-                    .mustBe(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(updatedAnswers.id, itemIndex, NormalMode))
+                    .mustBe(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
               }
             }
 
@@ -539,7 +539,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                     .remove(ContainersQuery(itemIndex, containerIndex)).success.value
                 navigator
                   .nextPage(AddAnotherPackagePage(itemIndex), NormalMode, updatedAnswers)
-                  .mustBe(containerRoutes.ContainerNumberController.onPageLoad(updatedAnswers.id, itemIndex, containerIndex, NormalMode))
+                  .mustBe(containerRoutes.ContainerNumberController.onPageLoad(updatedAnswers.lrn, itemIndex, containerIndex, NormalMode))
               }
             }
 
@@ -552,7 +552,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                     .set(ContainerNumberPage(itemIndex, containerIndex), containerNumber).success.value
                   navigator
                     .nextPage(AddAnotherPackagePage(itemIndex), NormalMode, updatedAnswers)
-                    .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswers.id, itemIndex, NormalMode))
+                    .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
 
               }
             }
@@ -567,7 +567,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(ContainerNumberPage(itemIndex, containerIndex), containerNumber).success.value
                 navigator
                   .nextPage(ContainerNumberPage(itemIndex, containerIndex), NormalMode, updatedAnswers)
-                  .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswers.id, itemIndex, NormalMode))
+                  .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
             }
           }
         }
@@ -584,7 +584,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(RemovePackagePage(index), false).success.value
                 navigator
                   .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -598,7 +598,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(RemovePackagePage(index), true).success.value
                 navigator
                   .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -608,7 +608,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .set(RemovePackagePage(index), true).success.value
             navigator
               .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.PackageTypeController.onPageLoad(updatedAnswers.id, index, index, NormalMode))
+              .mustBe(routes.PackageTypeController.onPageLoad(updatedAnswers.lrn, index, index, NormalMode))
           }
         }
 
@@ -625,7 +625,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.id, index, referenceIndex, NormalMode))
+                .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.lrn, index, referenceIndex, NormalMode))
           }
         }
 
@@ -646,7 +646,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(ReferenceTypePage(index, referenceIndex), NormalMode, answers)
-                .mustBe(previousReferenceRoutes.PreviousReferenceController.onPageLoad(answers.id, index, referenceIndex, NormalMode))
+                .mustBe(previousReferenceRoutes.PreviousReferenceController.onPageLoad(answers.lrn, index, referenceIndex, NormalMode))
           }
         }
 
@@ -655,7 +655,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(PreviousReferencePage(index, referenceIndex), NormalMode, answers)
-                .mustBe(previousReferenceRoutes.AddExtraInformationController.onPageLoad(answers.id, index, referenceIndex, NormalMode))
+                .mustBe(previousReferenceRoutes.AddExtraInformationController.onPageLoad(answers.lrn, index, referenceIndex, NormalMode))
           }
         }
 
@@ -666,7 +666,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(AddExtraInformationPage(index, referenceIndex), NormalMode, updatedAnswer)
-                .mustBe(previousReferenceRoutes.ExtraInformationController.onPageLoad(answers.id, index, referenceIndex, NormalMode))
+                .mustBe(previousReferenceRoutes.ExtraInformationController.onPageLoad(answers.lrn, index, referenceIndex, NormalMode))
           }
         }
 
@@ -677,7 +677,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(AddExtraInformationPage(index, referenceIndex), NormalMode, updatedAnswer)
-                .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -688,7 +688,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(ExtraInformationPage(index, referenceIndex), NormalMode, updatedAnswer)
-                .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.id, index, NormalMode))
+                .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -702,7 +702,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswer)
-                  .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -729,7 +729,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                 val updatedAnswer = answers.set(AddAnotherItemPage, false).success.value
                 navigator
                   .nextPage(AddAnotherItemPage, NormalMode, updatedAnswer)
-                  .mustBe(mainRoutes.DeclarationSummaryController.onPageLoad(answers.id))
+                  .mustBe(mainRoutes.DeclarationSummaryController.onPageLoad(answers.lrn))
             }
           }
 
@@ -742,7 +742,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddAnotherItemPage, NormalMode, updatedAnswer)
-                  .mustBe(routes.ItemDescriptionController.onPageLoad(answers.id, Index(1), NormalMode))
+                  .mustBe(routes.ItemDescriptionController.onPageLoad(answers.lrn, Index(1), NormalMode))
             }
           }
         }
@@ -759,7 +759,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(ConfirmRemoveItemPage, false).success.value
                 navigator
                   .nextPage(ConfirmRemoveItemPage, NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherItemController.onPageLoad(updatedAnswers.id))
+                  .mustBe(routes.AddAnotherItemController.onPageLoad(updatedAnswers.lrn))
             }
           }
 
@@ -772,7 +772,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(ConfirmRemoveItemPage, true).success.value
                 navigator
                   .nextPage(ConfirmRemoveItemPage, NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherItemController.onPageLoad(updatedAnswers.id))
+                  .mustBe(routes.AddAnotherItemController.onPageLoad(updatedAnswers.lrn))
             }
           }
 
@@ -784,7 +784,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(ConfirmRemoveItemPage, true).success.value
                 navigator
                   .nextPage(ConfirmRemoveItemPage, NormalMode, updatedAnswers)
-                  .mustBe(routes.ItemDescriptionController.onPageLoad(updatedAnswers.id, index, NormalMode))
+                  .mustBe(routes.ItemDescriptionController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
             }
           }
         }
@@ -799,7 +799,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(ConfirmRemovePreviousAdministrativeReferencePage(index, referenceIndex), true).success.value
                 navigator
                   .nextPage(ConfirmRemovePreviousAdministrativeReferencePage(index, referenceIndex), NormalMode, updatedAnswer)
-                  .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -812,7 +812,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(ConfirmRemovePreviousAdministrativeReferencePage(index, referenceIndex), NormalMode, updatedAnswer)
-                  .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.id, index, index, NormalMode))
+                  .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -823,7 +823,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(ContainerNumberPage(index, containerIndex),"").success.value
                 navigator
                   .nextPage(ConfirmRemoveContainerPage(index, containerIndex), NormalMode, updatedAnswer)
-                  .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswer.id, index, NormalMode))
+                  .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswer.lrn, index, NormalMode))
             }
           }
 
@@ -834,7 +834,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(ContainersQuery(index, containerIndex)).success.value
                 navigator
                   .nextPage(ConfirmRemoveContainerPage(index, containerIndex), NormalMode, updatedAnswer)
-                  .mustBe(containerRoutes.ContainerNumberController.onPageLoad(updatedAnswer.id, index, Index(0), NormalMode))
+                  .mustBe(containerRoutes.ContainerNumberController.onPageLoad(updatedAnswer.lrn, index, Index(0), NormalMode))
             }
           }
 
@@ -843,7 +843,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               answers =>
                 navigator
                   .nextPage(AddAnotherContainerPage(index), NormalMode, answers)
-                  .mustBe(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(answers.id, index, NormalMode))
+                  .mustBe(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -855,7 +855,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddAdministrativeReferencePage(index), true).success.value
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(updatedAnswers.id, index, referenceIndex, NormalMode))
+                  .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(updatedAnswers.lrn, index, referenceIndex, NormalMode))
             }
           }
 
@@ -868,7 +868,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddTransportChargesPaymentMethodPage, false).success.value
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(updatedAnswers.id,itemIndex, NormalMode))
+                  .mustBe(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(updatedAnswers.lrn,itemIndex, NormalMode))
             }
           }
 
@@ -880,7 +880,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddSecurityDetailsPage, false).success.value
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
             }
           }
 
@@ -895,7 +895,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.id, itemIndex, NormalMode))
+                  .mustBe(controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
             }
           }
 
@@ -910,7 +910,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.id, itemIndex, NormalMode))
+                  .mustBe(controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
             }
           }
 
@@ -924,7 +924,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddTransportChargesPaymentMethodPage, false).success.value
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(updatedAnswers.id,itemIndex, NormalMode))
+                  .mustBe(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(updatedAnswers.lrn,itemIndex, NormalMode))
             }
           }
 
@@ -936,7 +936,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddSecurityDetailsPage, false).success.value
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
             }
           }
 
@@ -951,7 +951,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.id, itemIndex, NormalMode))
+                  .mustBe(controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
             }
           }
 
@@ -966,7 +966,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.id, itemIndex, NormalMode))
+                  .mustBe(controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
             }
           }
         }
@@ -980,7 +980,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           answers =>
             navigator
               .nextPage(ItemDescriptionPage(index), CheckMode, answers)
-              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
         }
       }
 
@@ -990,7 +990,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             val updatedAnswers = answers.set(ItemTotalGrossMassPage(index), 100.123).success.value
             navigator
               .nextPage(ItemTotalGrossMassPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
         }
       }
 
@@ -1000,7 +1000,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             val updatedAnswers = answers.set(TotalNetMassPage(index), "100").success.value
             navigator
               .nextPage(TotalNetMassPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
         }
       }
 
@@ -1013,7 +1013,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .remove(TotalNetMassPage(index)).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.TotalNetMassController.onPageLoad(answers.id, index, CheckMode))
+              .mustBe(routes.TotalNetMassController.onPageLoad(answers.lrn, index, CheckMode))
         }
       }
 
@@ -1026,7 +1026,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .set(TotalNetMassPage(index), "100.123").success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
         }
       }
 
@@ -1038,7 +1038,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .set(AddTotalNetMassPage(index), false).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
         }
       }
 
@@ -1047,7 +1047,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           answers =>
             navigator
               .nextPage(CommodityCodePage(index), CheckMode, answers)
-              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
         }
       }
 
@@ -1060,7 +1060,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .set(CommodityCodePage(index), "111111").success.value
             navigator
               .nextPage(IsCommodityCodeKnownPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
         }
       }
 
@@ -1073,7 +1073,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .remove(CommodityCodePage(index)).success.value
             navigator
               .nextPage(IsCommodityCodeKnownPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.CommodityCodeController.onPageLoad(answers.id, index, CheckMode))
+              .mustBe(routes.CommodityCodeController.onPageLoad(answers.lrn, index, CheckMode))
         }
       }
 
@@ -1086,7 +1086,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .remove(CommodityCodePage(index)).success.value
             navigator
               .nextPage(IsCommodityCodeKnownPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
         }
       }
 
@@ -1102,7 +1102,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(TraderDetailsConsignorEoriNumberPage(index)).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorEoriKnownPage(index), CheckMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(updatedAnswers.id, index, CheckMode))
+                  .mustBe(traderRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
             }
           }
 
@@ -1114,7 +1114,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(TraderDetailsConsignorNamePage(index)).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorEoriKnownPage(index), CheckMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsignorNameController.onPageLoad(updatedAnswers.id, index, CheckMode))
+                  .mustBe(traderRoutes.TraderDetailsConsignorNameController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
             }
           }
 
@@ -1126,7 +1126,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsignorEoriNumberPage(index), eoriNumber.value).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorEoriKnownPage(index), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
             }
           }
 
@@ -1138,7 +1138,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsignorNamePage(index), "name").success.value
                 navigator
                   .nextPage(TraderDetailsConsignorEoriKnownPage(index), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
             }
           }
         }
@@ -1151,7 +1151,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsignorNamePage(index), "Davey Jones").success.value
                 navigator
                   .nextPage(TraderDetailsConsignorEoriNumberPage(index), CheckMode, userAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
             }
           }
 
@@ -1162,7 +1162,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(TraderDetailsConsignorNamePage(index)).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorEoriNumberPage(index), CheckMode, userAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsignorNameController.onPageLoad(userAnswers.id, index, CheckMode))
+                  .mustBe(traderRoutes.TraderDetailsConsignorNameController.onPageLoad(userAnswers.lrn, index, CheckMode))
             }
           }
         }
@@ -1175,7 +1175,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(TraderDetailsConsignorAddressPage(index)).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorNamePage(index), CheckMode, userAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsignorAddressController.onPageLoad(userAnswers.id, index, CheckMode))
+                  .mustBe(traderRoutes.TraderDetailsConsignorAddressController.onPageLoad(userAnswers.lrn, index, CheckMode))
             }
           }
 
@@ -1186,7 +1186,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsignorAddressPage(index), address).success.value
                 navigator
                   .nextPage(TraderDetailsConsignorNamePage(index), CheckMode, userAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
             }
           }
         }
@@ -1197,7 +1197,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               answers =>
                 navigator
                   .nextPage(TraderDetailsConsignorAddressPage(index), CheckMode, answers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
             }
           }
         }
@@ -1212,7 +1212,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(TraderDetailsConsigneeEoriNumberPage(index)).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeEoriKnownPage(index), CheckMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsigneeEoriNumberController.onPageLoad(updatedAnswers.id, index, CheckMode))
+                  .mustBe(traderRoutes.TraderDetailsConsigneeEoriNumberController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
             }
           }
           
@@ -1224,7 +1224,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(TraderDetailsConsigneeNamePage(index)).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeEoriKnownPage(index), CheckMode, updatedAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsigneeNameController.onPageLoad(updatedAnswers.id, index, CheckMode))
+                  .mustBe(traderRoutes.TraderDetailsConsigneeNameController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
             }
           }
           
@@ -1236,7 +1236,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsigneeEoriNumberPage(index), eoriNumber.value).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeEoriKnownPage(index), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
             }
 
           }
@@ -1249,7 +1249,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsigneeNamePage(index), "value").success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeEoriKnownPage(index), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
             }
           }
         }
@@ -1263,7 +1263,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(TraderDetailsConsigneeEoriNumberPage(index), CheckMode, userAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
             }
           }
 
@@ -1275,7 +1275,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(TraderDetailsConsigneeEoriNumberPage(index), CheckMode, userAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsigneeNameController.onPageLoad(userAnswers.id, index, CheckMode))
+                  .mustBe(traderRoutes.TraderDetailsConsigneeNameController.onPageLoad(userAnswers.lrn, index, CheckMode))
             }
           }
         }
@@ -1288,7 +1288,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(TraderDetailsConsigneeAddressPage(index)).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeNamePage(index), CheckMode, userAnswers)
-                  .mustBe(traderRoutes.TraderDetailsConsigneeAddressController.onPageLoad(userAnswers.id, index, CheckMode))
+                  .mustBe(traderRoutes.TraderDetailsConsigneeAddressController.onPageLoad(userAnswers.lrn, index, CheckMode))
             }
           }
           
@@ -1299,7 +1299,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(TraderDetailsConsigneeAddressPage(index), address).success.value
                 navigator
                   .nextPage(TraderDetailsConsigneeNamePage(index), CheckMode, userAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
             }
           }
         }
@@ -1310,7 +1310,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               answers =>
                 navigator
                   .nextPage(TraderDetailsConsigneeAddressPage(index), CheckMode, answers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
             }
           }
         }
@@ -1329,7 +1329,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -1342,7 +1342,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -1355,7 +1355,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
         }
@@ -1370,7 +1370,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -1383,7 +1383,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -1396,7 +1396,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -1411,7 +1411,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
           "must go to AddMark if answer is 'No' and PackageType is bulk" in {
@@ -1423,7 +1423,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
           "must go to TotalPieces if answer is 'No' and PackageType is unpacked" in {
@@ -1435,7 +1435,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -1450,7 +1450,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(TotalPiecesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
         }
@@ -1464,7 +1464,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddMarkPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.id, index, index, CheckMode))
+                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
           "must go to CheckYourAnswers if answers if 'No'" in {
@@ -1475,7 +1475,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddMarkPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
             }
           }
         }
@@ -1489,7 +1489,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(DeclareMarkPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
             }
           }
         }
@@ -1506,7 +1506,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddAnotherPackagePage(index), CheckMode, updatedAnswers)
-                  .mustBe(routes.PackageTypeController.onPageLoad(answers.id, index, nextPackageIndex, CheckMode))
+                  .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, CheckMode))
             }
           }
           "must go to CheckYourAnswers if'No' and there are containers and containers not used" in {
@@ -1518,7 +1518,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(ContainerNumberPage(itemIndex, containerIndex), container).success.value
                 navigator
                   .nextPage(AddAnotherPackagePage(itemIndex), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, itemIndex))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex))
             }
           }
 
@@ -1530,7 +1530,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(ContainerNumberPage(itemIndex, containerIndex), container).success.value
                 navigator
                   .nextPage(AddAnotherPackagePage(itemIndex), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, itemIndex))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex))
             }
           }
 
@@ -1544,7 +1544,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .remove(ContainersQuery(itemIndex, containerIndex)).success.value
                 navigator
                   .nextPage(AddAnotherPackagePage(itemIndex), CheckMode, updatedAnswers)
-                  .mustBe(containerRoutes.ContainerNumberController.onPageLoad(answers.id, itemIndex, containerIndex, CheckMode))
+                  .mustBe(containerRoutes.ContainerNumberController.onPageLoad(answers.lrn, itemIndex, containerIndex, CheckMode))
             }
           }
 
@@ -1559,7 +1559,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                 .set(ContainerNumberPage(itemIndex, containerIndex), containerNumber).success.value
               navigator
                 .nextPage(ContainerNumberPage(itemIndex, containerIndex), CheckMode, updatedAnswers)
-                .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswers.id, itemIndex, CheckMode))
+                .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswers.lrn, itemIndex, CheckMode))
           }
         }
       }
@@ -1573,7 +1573,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                 .set(AddSecurityDetailsPage, false).success.value
               navigator
                 .nextPage(AddAdministrativeReferencePage(index), CheckMode, updatedAnswers)
-                .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.id, index))
+                .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
           }
         }
 
@@ -1582,7 +1582,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(ReferenceTypePage(index, referenceIndex), CheckMode, answers)
-                .mustBe(previousReferenceRoutes.PreviousReferenceController.onPageLoad(answers.id, index, referenceIndex, CheckMode))
+                .mustBe(previousReferenceRoutes.PreviousReferenceController.onPageLoad(answers.lrn, index, referenceIndex, CheckMode))
           }
         }
 
@@ -1591,7 +1591,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             answers =>
               navigator
                 .nextPage(PreviousReferencePage(index, referenceIndex), CheckMode, answers)
-                .mustBe(previousReferenceRoutes.AddExtraInformationController.onPageLoad(answers.id, index, referenceIndex, CheckMode))
+                .mustBe(previousReferenceRoutes.AddExtraInformationController.onPageLoad(answers.lrn, index, referenceIndex, CheckMode))
           }
         }
 
@@ -1602,7 +1602,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(AddExtraInformationPage(index, referenceIndex), CheckMode, updatedAnswer)
-                .mustBe(previousReferenceRoutes.ExtraInformationController.onPageLoad(answers.id, index, referenceIndex, CheckMode))
+                .mustBe(previousReferenceRoutes.ExtraInformationController.onPageLoad(answers.lrn, index, referenceIndex, CheckMode))
           }
         }
 
@@ -1613,7 +1613,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(AddExtraInformationPage(index, referenceIndex), CheckMode, updatedAnswer)
-                .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.id, index, CheckMode))
+                .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.lrn, index, CheckMode))
           }
         }
 
@@ -1624,7 +1624,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(ExtraInformationPage(index, referenceIndex), CheckMode, updatedAnswer)
-                .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+                .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
           }
         }
 
@@ -1637,7 +1637,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), CheckMode, updatedAnswer)
-                .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.id, index, index, CheckMode))
+                .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.lrn, index, index, CheckMode))
           }
         }
 
@@ -1650,7 +1650,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
               navigator
                 .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), CheckMode, updatedAnswer)
-                .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.id, index))
+                .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
           }
         }
 
@@ -1666,7 +1666,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(RemovePackagePage(index), false).success.value
                 navigator
                   .nextPage(RemovePackagePage(index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.id, index, CheckMode))
+                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, CheckMode))
             }
           }
 
@@ -1680,7 +1680,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                   .set(RemovePackagePage(index), true).success.value
                 navigator
                   .nextPage(RemovePackagePage(index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.id, index, CheckMode))
+                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, CheckMode))
             }
           }
 
@@ -1690,7 +1690,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               .set(RemovePackagePage(index), true).success.value
             navigator
               .nextPage(RemovePackagePage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.PackageTypeController.onPageLoad(updatedAnswers.id, index, index, CheckMode))
+              .mustBe(routes.PackageTypeController.onPageLoad(updatedAnswers.lrn, index, index, CheckMode))
           }
         }
 
@@ -1701,7 +1701,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                 .set(ContainerNumberPage(index, containerIndex),"").success.value
               navigator
                 .nextPage(ConfirmRemoveContainerPage(index, containerIndex), CheckMode, updatedAnswer)
-                .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswer.id, index, CheckMode))
+                .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswer.lrn, index, CheckMode))
           }
         }
 
@@ -1712,7 +1712,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
                 .remove(ContainersQuery(index, containerIndex)).success.value
               navigator
                 .nextPage(ConfirmRemoveContainerPage(index, containerIndex), CheckMode, updatedAnswer)
-                .mustBe(containerRoutes.ContainerNumberController.onPageLoad(updatedAnswer.id, index, Index(0), CheckMode))
+                .mustBe(containerRoutes.ContainerNumberController.onPageLoad(updatedAnswer.lrn, index, Index(0), CheckMode))
           }
         }
       }

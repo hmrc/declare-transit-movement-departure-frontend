@@ -34,6 +34,7 @@ object GuaranteeDetailsCheckYourAnswersViewModel {
     val liabilityAmount: Option[SummaryList.Row]    = checkYourAnswersHelper.liabilityAmount(index)
     val accessCode: Option[SummaryList.Row]         = checkYourAnswersHelper.accessCode(index)
     val defaultAmount: Option[SummaryList.Row]      = checkYourAnswersHelper.defaultAmount(index)
+    val tirReferenceAmount: Option[SummaryList.Row] = checkYourAnswersHelper.tirGuaranteeReference(index)
 
     val checkYourAnswersData = Seq(
       guaranteeType,
@@ -41,6 +42,7 @@ object GuaranteeDetailsCheckYourAnswersViewModel {
       otherReference,
       liabilityAmount,
       defaultAmount,
+      tirReferenceAmount,
       accessCode
     ).flatten
 

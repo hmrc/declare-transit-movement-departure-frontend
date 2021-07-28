@@ -20,6 +20,7 @@ import cats.data.NonEmptyList
 import cats.implicits._
 import logging.Logging
 import models.DeclarationType.Option4
+import models.GuaranteeType.TIR
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
   GoodSummaryDetails,
@@ -98,6 +99,9 @@ class DeclarationRequestService @Inject() (
         case GuaranteeDetails.GuaranteeOther(guaranteeType, otherReference) =>
           val guaranteeReferenceOther = GuaranteeReferenceWithOther(otherReference, None)
           Guarantee(guaranteeType.toString, Seq(guaranteeReferenceOther))
+        case GuaranteeDetails.GuaranteeTIR(tirReference) =>
+          val guaranteeReferenceTir = GuaranteeReferenceWithOther(tirReference, None)
+          Guarantee(TIR.toString, Seq(guaranteeReferenceTir))
       }
 
     def packages(packages: NonEmptyList[Packages]): NonEmptyList[models.messages.goodsitem.Package] =
@@ -150,9 +154,11 @@ class DeclarationRequestService @Inject() (
     def producedDocuments(producedDocument: Option[NonEmptyList[models.journeyDomain.ProducedDocument]]): Seq[goodsitem.ProducedDocument] =
       producedDocument
         .map(
-          _.toList.map(
-            x => goodsitem.ProducedDocument(x.documentType, Some(x.documentReference), x.extraInformation)
-          )
+          _.toList.map {
+            case StandardDocument(documentType, documentReference, extraInformation) =>
+              goodsitem.ProducedDocument(documentType, Some(documentReference), extraInformation)
+            case TIRDocument(tirReference, extraInformation) => goodsitem.ProducedDocument("952", Some(tirReference), Some(extraInformation))
+          }
         )
         .getOrElse(List.empty)
 
@@ -394,7 +400,7 @@ class DeclarationRequestService @Inject() (
       CustomsOfficeDeparture(
         referenceNumber = preTaskList.officeOfDeparture.id
       ),
-      customsOfficeTransit(routeDetails.transitInformation),
+      routeDetails.transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty),
       CustomsOfficeDestination(
         referenceNumber = routeDetails.destinationOffice.id
       ),

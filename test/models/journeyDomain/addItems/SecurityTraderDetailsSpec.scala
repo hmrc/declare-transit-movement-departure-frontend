@@ -20,7 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import models.reference._
 import models.{CommonAddress, EoriNumber}
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
 
@@ -193,6 +193,9 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
               .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(true)
               .unsafeSetVal(SecurityConsignorEoriPage(index))("testEori")
               .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+              .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+              .unsafeSetVal(CircumstanceIndicatorPage)("E")
 
             val expected = SecurityTraderEori(EoriNumber("testEori"))
             val result   = SecurityTraderDetails.consignorDetails(index).run(ua).isSuccessful
@@ -211,6 +214,9 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
               .unsafeSetVal(AddSecurityDetailsPage)(true)
               .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
               .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+              .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+              .unsafeSetVal(CircumstanceIndicatorPage)("E")
               .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
               .unsafeSetVal(SecurityConsignorAddressPage(index))(consigneeAddress)
 

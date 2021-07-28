@@ -20,7 +20,8 @@ import controllers.addItems.securityDetails.routes
 
 import javax.inject.{Inject, Singleton}
 import models._
-import pages.Page
+import models.reference.{CountryCode, CustomsOffice}
+import pages.{OfficeOfDeparturePage, Page}
 import pages.addItems.securityDetails._
 import pages.safetyAndSecurity.{
   AddCommercialReferenceNumberAllItemsPage,
@@ -37,43 +38,53 @@ class SecurityDetailsNavigator @Inject() () extends Navigator {
   //todo -update when Safety and Security section built
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case TransportChargesPage(index) => ua => transportChargesRoute(ua, index, NormalMode)
-    case CommercialReferenceNumberPage(index) => ua => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.id, index, NormalMode))
+    case CommercialReferenceNumberPage(index) => ua => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
     case AddDangerousGoodsCodePage(index) => ua => addDangerousGoodsCodeRoute(ua, index, NormalMode)
-    case DangerousGoodsCodePage(index) => ua => Some(dangerousGoodsCodeRoute(ua, index, NormalMode))
+    case DangerousGoodsCodePage(index) => ua => dangerousGoodsCodeRoute(ua, index, NormalMode)
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case TransportChargesPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
-    case CommercialReferenceNumberPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case TransportChargesPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
+    case CommercialReferenceNumberPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case AddDangerousGoodsCodePage(index) => ua => addDangerousGoodsCodeRoute(ua, index, CheckMode)
-    case DangerousGoodsCodePage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+    case DangerousGoodsCodePage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
   }
 
    private def addDangerousGoodsCodeRoute(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(AddDangerousGoodsCodePage(index)), ua.get(DangerousGoodsCodePage(index)), mode) match {
-      case (Some(true), _, NormalMode) => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.id, index, NormalMode))
-      case (Some(false), _, NormalMode) => Some(dangerousGoodsCodeRoute(ua, index, mode))
-      case (Some(true), None, CheckMode)    => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.id, index, CheckMode))
-      case (Some(_), _, CheckMode) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index))
+      case (Some(true), _, NormalMode) => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
+      case (Some(false), _, NormalMode) => dangerousGoodsCodeRoute(ua, index, mode)
+      case (Some(true), None, CheckMode)    => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.lrn, index, CheckMode))
+      case (Some(_), _, CheckMode) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     }
 
   private def transportChargesRoute(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(AddCommercialReferenceNumberAllItemsPage), mode) match {
-      case (Some(true), NormalMode) => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.id, index, NormalMode))
-      case (_, NormalMode) => Some(routes.CommercialReferenceNumberController.onPageLoad(ua.id, index, NormalMode))
+      case (Some(true), NormalMode) => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
+      case (_, NormalMode) => Some(routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, index, NormalMode))
     }
 
   private def dangerousGoodsCodeRoute(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(AddSafetyAndSecurityConsignorPage), ua.get(AddSafetyAndSecurityConsigneePage)) match {
-      case (Some(true), Some(true)) => controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.id, index)
-      case (Some(true), Some(false)) => circumstanceIndicatorCheck(ua, index, mode)
-      case (Some(false), _) => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsignorsEoriController.onPageLoad(ua.id, index, NormalMode)
+      case (Some(true), Some(true)) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
+      case (Some(true), Some(false)) => Some(circumstanceIndicatorCheck(ua, index, mode))
+      case (Some(false), _) => consignorCircumstanceIndicatorCheck(ua, index, mode)
     }
+
+  def consignorCircumstanceIndicatorCheck(userAnswers: UserAnswers, index:Index, mode: Mode) = {
+    userAnswers.get(OfficeOfDeparturePage).map {
+      case CustomsOffice(_, _, CountryCode("XI"), _)=> userAnswers.get(CircumstanceIndicatorPage) match {
+        case Some("E") => controllers.addItems.traderSecurityDetails.routes.SecurityConsignorEoriController.onPageLoad(userAnswers.lrn,index, mode)
+        case _ => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsignorsEoriController.onPageLoad(userAnswers.lrn,index, mode)
+      }
+      case _ => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsignorsEoriController.onPageLoad(userAnswers.lrn,index, mode)
+    }
+  }
 
   def circumstanceIndicatorCheck(ua: UserAnswers, index: Index, mode: Mode) =
     ua.get(CircumstanceIndicatorPage) match {
-      case Some("E") => controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(ua.id, index, mode)
-      case _         => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(ua.id, index, mode)
+      case Some("E") => controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(ua.lrn, index, mode)
+      case _         => controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(ua.lrn, index, mode)
     }
   // format: on
 }

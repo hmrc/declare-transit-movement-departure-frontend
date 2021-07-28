@@ -62,20 +62,4 @@ class GuaranteeTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropert
       }
     }
   }
-
-  "radios" - {
-    "must return options without TIR if TIR not selected" in {
-      val form        = new GuaranteeTypeFormProvider()()
-      val userAnswers = emptyUserAnswers
-      val radios      = GuaranteeType.radios(form, userAnswers)
-      radios.map(_.value) must not contain GuaranteeType.TIR.toString
-    }
-    "must return options with TIR if TIR selected" in {
-      val form = new GuaranteeTypeFormProvider()()
-      val userAnswers = emptyUserAnswers
-        .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
-      val radios = GuaranteeType.radios(form, userAnswers)
-      radios.map(_.value) must contain(GuaranteeType.TIR.toString)
-    }
-  }
 }

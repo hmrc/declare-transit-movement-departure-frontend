@@ -19,7 +19,7 @@ package generators
 import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages._
+import pages.{guaranteeDetails, _}
 import pages.addItems.{CommodityCodePage, ConfirmRemoveItemPage, _}
 import pages.addItems.traderDetails._
 import pages.addItems._
@@ -36,7 +36,7 @@ import pages.addItems.traderSecurityDetails.{
   SecurityConsignorEoriPage,
   SecurityConsignorNamePage
 }
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import pages.movementDetails.PreLodgeDeclarationPage
 import pages.safetyAndSecurity.{
   AddAnotherCountryOfRoutingPage,
@@ -75,18 +75,18 @@ trait UserAnswersEntryGenerators {
 
   self: Generators =>
 
+  implicit lazy val arbitraryAddOfficeOfTransitUserAnswersEntry: Arbitrary[(AddOfficeOfTransitPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[AddOfficeOfTransitPage.type#Data].map(Json.toJson(_))
+      } yield (AddOfficeOfTransitPage, value)
+    }
+
   implicit lazy val arbitraryPrincipalTirHolderIdPageUserAnswersEntry: Arbitrary[(PrincipalTirHolderIdPage.type, JsValue)] =
     Arbitrary {
       for {
         value <- arbitrary[PrincipalTirHolderIdPage.type#Data].map(Json.toJson(_))
       } yield (PrincipalTirHolderIdPage, value)
-    }
-
-  implicit lazy val arbitraryTIRCarnetReferenceUserAnswersEntry: Arbitrary[(TIRCarnetReferencePage.type, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[TIRCarnetReferencePage.type#Data].map(Json.toJson(_))
-      } yield (TIRCarnetReferencePage, value)
     }
 
   implicit lazy val arbitraryAgreedLocationOfGoodsUserAnswersEntry: Arbitrary[(AgreedLocationOfGoodsPage.type, JsValue)] =
@@ -262,6 +262,13 @@ trait UserAnswersEntryGenerators {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
       } yield (CountryOfRoutingPage(Index(0)), value)
+    }
+
+  implicit lazy val arbitraryTIRGuaranteeReferenceUserAnswersEntry: Arbitrary[(TIRGuaranteeReferencePage, JsValue)] =
+    Arbitrary {
+      for {
+        value <- nonEmptyString.map(Json.toJson(_))
+      } yield (guaranteeDetails.TIRGuaranteeReferencePage(Index(0)), value)
     }
 
   implicit lazy val arbitraryPlaceOfUnloadingCodeUserAnswersEntry: Arbitrary[(PlaceOfUnloadingCodePage.type, JsValue)] =
@@ -543,6 +550,13 @@ trait UserAnswersEntryGenerators {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
       } yield (ExtraInformationPage(Index(0), Index(0)), value)
+    }
+
+  implicit lazy val arbitraryTIRCarnetReferenceUserAnswersEntry: Arbitrary[(TIRCarnetReferencePage, JsValue)] =
+    Arbitrary {
+      for {
+        value <- nonEmptyString.map(Json.toJson(_))
+      } yield (TIRCarnetReferencePage(Index(0), Index(0)), value)
     }
 
   implicit lazy val arbitraryConfirmRemoveItemUserAnswersEntry: Arbitrary[(ConfirmRemoveItemPage.type, JsValue)] =

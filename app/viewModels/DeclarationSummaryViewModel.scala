@@ -25,7 +25,7 @@ import play.api.mvc.Call
 class DeclarationSummaryViewModel(serviceUrl: String, userAnswers: UserAnswers) {
   import DeclarationSummaryViewModel.nextPage
 
-  private val lrn: LocalReferenceNumber      = userAnswers.id
+  private val lrn: LocalReferenceNumber      = userAnswers.lrn
   private val sections: TaskListViewModel    = TaskListViewModel(userAnswers)
   private val backToTransitMovements: String = serviceUrl
 

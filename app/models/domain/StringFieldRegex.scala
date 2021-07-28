@@ -26,6 +26,7 @@ object StringFieldRegex {
   val liabilityAmountCharactersRegex       = "^$|^[0-9.]*$"
   val liabilityAmountFormatRegex           = "^$|([0-9]*(?:\\.[0-9]{1,2})?)$"
   val greaterThanZeroRegex                 = "^$|([1-9]{1}[0-9.]*)$"
+  val zeroOrGreaterThanOneRegex            = "^(0)$|^(0\\.0)$|^(0\\.00)$|^([1-9]{1}[0-9.]*)$"
   val validPostcodeCharactersRegex: String = "^[a-zA-Z\\s*0-9]*$"
   val postCodeRegex: String                = "^[a-zA-Z]{1,2}([0-9]{1,2}|[0-9][a-zA-Z])\\s*[0-9][a-zA-Z]{2}$"
   val eoriNumberRegex: String              = "^[a-zA-Z]{2}[0-9a-zA-Z]{1,15}"

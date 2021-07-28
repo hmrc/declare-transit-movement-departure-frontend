@@ -18,10 +18,13 @@ package controllers.addItems
 
 import controllers.actions._
 import forms.addItems.TIRCarnetReferenceFormProvider
-import models.{Index, LocalReferenceNumber, Mode}
+import logging.Logging
+import models.DeclarationType.Option4
+import models.{DeclarationType, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.Document
-import pages.TIRCarnetReferencePage
+import pages.DeclarationTypePage
+import pages.addItems.{DocumentTypePage, TIRCarnetReferencePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -46,7 +49,8 @@ class TIRCarnetReferenceController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
-    with NunjucksSupport {
+    with NunjucksSupport
+    with Logging {
 
   private val form     = formProvider()
   private val template = "tirCarnetReference.njk"
@@ -54,7 +58,7 @@ class TIRCarnetReferenceController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(TIRCarnetReferencePage) match {
+        val preparedForm = request.userAnswers.get(TIRCarnetReferencePage(itemIndex, documentIndex)) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
@@ -71,24 +75,33 @@ class TIRCarnetReferenceController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData).async {
       implicit request =>
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => {
+        request.userAnswers.get(DeclarationTypePage) match {
+          case Some(Option4) =>
+            form
+              .bindFromRequest()
+              .fold(
+                formWithErrors => {
+                  val json = Json.obj(
+                    "form" -> formWithErrors,
+                    "lrn"  -> lrn,
+                    "mode" -> mode
+                  )
 
-              val json = Json.obj(
-                "form" -> formWithErrors,
-                "lrn"  -> lrn,
-                "mode" -> mode
+                  renderer.render(template, json).map(BadRequest(_))
+                },
+                value =>
+                  for {
+                    ua1 <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage(documentIndex, itemIndex), value))
+                    ua2 <- Future.fromTry(ua1.set(DocumentTypePage(Index(0), Index(0)), "952"))
+                    _   <- sessionRepository.set(ua2)
+                  } yield Redirect(navigator.nextPage(TIRCarnetReferencePage(documentIndex, itemIndex), mode, ua2))
               )
-
-              renderer.render(template, json).map(BadRequest(_))
-            },
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(TIRCarnetReferencePage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(TIRCarnetReferencePage, mode, updatedAnswers))
-          )
+          case Some(otherOption) =>
+            logger.warn(s"[Controller][TIRCarnetReference][onPageLoad] Cannot create TIR carnet reference for ${otherOption.code}")
+            Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+          case None =>
+            logger.warn(s"[Controller][TIRCarnetReference][onPageLoad] DeclarationTypePage is missing")
+            Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        }
     }
 }

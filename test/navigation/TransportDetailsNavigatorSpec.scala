@@ -41,7 +41,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers = answers.set(ContainersUsedPage, true).toOption.value
             navigator
               .nextPage(InlandModePage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.AddIdAtDepartureController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.AddIdAtDepartureController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -52,7 +52,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers = answers.set(ContainersUsedPage, false).toOption.value
             navigator
               .nextPage(InlandModePage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.IdAtDepartureController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.IdAtDepartureController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -65,7 +65,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
                 val updatedAnswers = answers.set(InlandModePage, inlandModeAnswer).success.value
                 navigator
                   .nextPage(InlandModePage, NormalMode, updatedAnswers)
-                  .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(answers.id, NormalMode))
+                  .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(answers.lrn, NormalMode))
             }
         }
       }
@@ -78,7 +78,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(AddIdAtDeparturePage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.AddIdAtDepartureLaterController.onPageLoad(updatedAnswers.id))
+              .mustBe(transportDetailsRoute.AddIdAtDepartureLaterController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -96,7 +96,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(AddIdAtDeparturePage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.IdAtDepartureController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(transportDetailsRoute.IdAtDepartureController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -108,7 +108,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(AddIdAtDepartureLaterPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.NationalityAtDepartureController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.NationalityAtDepartureController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -120,7 +120,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(AddIdAtDepartureLaterPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.AddNationalityAtDepartureController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.AddNationalityAtDepartureController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -131,7 +131,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers = answers.set(ContainersUsedPage, false).toOption.value
             navigator
               .nextPage(IdAtDeparturePage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.NationalityAtDepartureController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.NationalityAtDepartureController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -142,7 +142,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers = answers.set(ContainersUsedPage, true).toOption.value
             navigator
               .nextPage(IdAtDeparturePage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.AddNationalityAtDepartureController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.AddNationalityAtDepartureController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -152,7 +152,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           answers =>
             navigator
               .nextPage(NationalityAtDeparturePage, NormalMode, answers)
-              .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -164,7 +164,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ChangeAtBorderPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -176,7 +176,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ChangeAtBorderPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.ModeAtBorderController.onPageLoad(updatedAnswers.id, NormalMode))
+              .mustBe(transportDetailsRoute.ModeAtBorderController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
@@ -186,7 +186,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           answers =>
             navigator
               .nextPage(ModeAtBorderPage, NormalMode, answers)
-              .mustBe(transportDetailsRoute.ModeCrossingBorderController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.ModeCrossingBorderController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -196,7 +196,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           answers =>
             navigator
               .nextPage(IdCrossingBorderPage, NormalMode, answers)
-              .mustBe(transportDetailsRoute.NationalityCrossingBorderController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.NationalityCrossingBorderController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -208,7 +208,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ModeCrossingBorderPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -222,7 +222,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ModeCrossingBorderPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.IdCrossingBorderController.onPageLoad(answers.id, NormalMode))
+              .mustBe(transportDetailsRoute.IdCrossingBorderController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -232,7 +232,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           answers =>
             navigator
               .nextPage(NationalityCrossingBorderPage, NormalMode, answers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -253,7 +253,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .value
             navigator
               .nextPage(InlandModePage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.AddIdAtDepartureController.onPageLoad(answers.id, CheckMode))
+              .mustBe(transportDetailsRoute.AddIdAtDepartureController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -266,7 +266,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
                 val updatedAnswers = answers.set(InlandModePage, inlandModeAnswer).success.value
                 navigator
                   .nextPage(InlandModePage, CheckMode, updatedAnswers)
-                  .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(answers.id, CheckMode))
+                  .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(answers.lrn, CheckMode))
             }
         }
       }
@@ -285,7 +285,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(AddIdAtDeparturePage, CheckMode, updatedUserAnswers)
-              .mustBe(transportDetailsRoute.IdAtDepartureController.onPageLoad(answers.id, CheckMode))
+              .mustBe(transportDetailsRoute.IdAtDepartureController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -295,7 +295,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           answers =>
             navigator
               .nextPage(NationalityAtDeparturePage, CheckMode, answers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -307,7 +307,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ChangeAtBorderPage, CheckMode, updatedUserAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -334,7 +334,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ChangeAtBorderPage, CheckMode, updatedUserAnswers)
-              .mustBe(transportDetailsRoute.ModeAtBorderController.onPageLoad(answers.id, CheckMode))
+              .mustBe(transportDetailsRoute.ModeAtBorderController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -352,7 +352,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ChangeAtBorderPage, CheckMode, updatedUserAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -363,7 +363,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers = answers.set(ModeCrossingBorderPage, "Foo").success.value
             navigator
               .nextPage(ModeAtBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -374,7 +374,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers = answers.remove(ModeCrossingBorderPage).success.value
             navigator
               .nextPage(ModeAtBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.ModeCrossingBorderController.onPageLoad(answers.id, CheckMode))
+              .mustBe(transportDetailsRoute.ModeCrossingBorderController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -385,7 +385,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers = answers.set(NationalityCrossingBorderPage, CountryCode("EN")).success.value
             navigator
               .nextPage(IdCrossingBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -396,7 +396,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             val updatedAnswers = answers.remove(NationalityCrossingBorderPage).success.value
             navigator
               .nextPage(IdCrossingBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.NationalityCrossingBorderController.onPageLoad(updatedAnswers.id, CheckMode))
+              .mustBe(transportDetailsRoute.NationalityCrossingBorderController.onPageLoad(updatedAnswers.lrn, CheckMode))
         }
       }
 
@@ -408,7 +408,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ModeCrossingBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -422,7 +422,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
             navigator
               .nextPage(ModeCrossingBorderPage, CheckMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.IdCrossingBorderController.onPageLoad(answers.id, CheckMode))
+              .mustBe(transportDetailsRoute.IdCrossingBorderController.onPageLoad(answers.lrn, CheckMode))
         }
       }
 
@@ -432,7 +432,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           answers =>
             navigator
               .nextPage(NationalityCrossingBorderPage, CheckMode, answers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }

@@ -66,7 +66,7 @@ class GuaranteeTypeController @Inject() (
           "form"   -> preparedForm,
           "mode"   -> mode,
           "lrn"    -> lrn,
-          "radios" -> GuaranteeType.radios(preparedForm, request.userAnswers)
+          "radios" -> GuaranteeType.radios(preparedForm)
         )
 
         renderer.render("guaranteeDetails/guaranteeType.njk", json).map(Ok(_))
@@ -87,7 +87,7 @@ class GuaranteeTypeController @Inject() (
                 "form"   -> formWithErrors,
                 "mode"   -> mode,
                 "lrn"    -> lrn,
-                "radios" -> GuaranteeType.radios(formWithErrors, request.userAnswers)
+                "radios" -> GuaranteeType.radios(formWithErrors)
               )
 
               renderer.render("guaranteeDetails/guaranteeType.njk", json).map(BadRequest(_))

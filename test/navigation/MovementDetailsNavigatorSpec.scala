@@ -41,7 +41,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
           answers =>
             navigator
               .nextPage(PreLodgeDeclarationPage, NormalMode, answers)
-              .mustBe(movementDetailsRoute.ContainersUsedPageController.onPageLoad(answers.id, NormalMode))
+              .mustBe(movementDetailsRoute.ContainersUsedPageController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -51,7 +51,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
           answers =>
             navigator
               .nextPage(ContainersUsedPage, NormalMode, answers)
-              .mustBe(movementDetailsRoute.DeclarationPlaceController.onPageLoad(answers.id, NormalMode))
+              .mustBe(movementDetailsRoute.DeclarationPlaceController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -61,7 +61,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
           answers =>
             navigator
               .nextPage(DeclarationPlacePage, NormalMode, answers)
-              .mustBe(movementDetailsRoute.DeclarationForSomeoneElseController.onPageLoad(answers.id, NormalMode))
+              .mustBe(movementDetailsRoute.DeclarationForSomeoneElseController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -73,7 +73,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(DeclarationForSomeoneElsePage, NormalMode, updatedUserAnswers)
-              .mustBe(movementDetailsRoute.RepresentativeNameController.onPageLoad(answers.id, NormalMode))
+              .mustBe(movementDetailsRoute.RepresentativeNameController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -85,7 +85,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(DeclarationForSomeoneElsePage, NormalMode, updatedUserAnswers)
-              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -95,7 +95,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
           answers =>
             navigator
               .nextPage(RepresentativeNamePage, NormalMode, answers)
-              .mustBe(movementDetailsRoute.RepresentativeCapacityController.onPageLoad(answers.id, NormalMode))
+              .mustBe(movementDetailsRoute.RepresentativeCapacityController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -105,7 +105,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
           answers =>
             navigator
               .nextPage(RepresentativeCapacityPage, NormalMode, answers)
-              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }
@@ -118,7 +118,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
           answers =>
             navigator
               .nextPage(PreLodgeDeclarationPage, CheckMode, answers)
-              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -132,7 +132,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(DeclarationForSomeoneElsePage, CheckMode, updatedUserAnswers)
-              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
 
@@ -146,7 +146,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(DeclarationForSomeoneElsePage, CheckMode, updatedUserAnswers)
-              .mustBe(movementDetailsRoute.RepresentativeNameController.onPageLoad(answers.id, NormalMode))
+              .mustBe(movementDetailsRoute.RepresentativeNameController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -158,7 +158,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
 
             navigator
               .nextPage(DeclarationForSomeoneElsePage, CheckMode, updatedUserAnswers)
-              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(movementDetailsRoute.MovementDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
         }
       }
     }

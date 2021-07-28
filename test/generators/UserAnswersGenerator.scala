@@ -47,7 +47,9 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
   val maxNumberOfGeneratedPageAnswers: Int = 1
 
   final val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    arbitraryPrincipalTirHolderIdPageUserAnswersEntry.arbitrary ::
+    arbitraryAddOfficeOfTransitUserAnswersEntry.arbitrary ::
+      arbitraryTIRGuaranteeReferenceUserAnswersEntry.arbitrary ::
+      arbitraryPrincipalTirHolderIdPageUserAnswersEntry.arbitrary ::
       arbitraryAgreedLocationOfGoodsUserAnswersEntry.arbitrary ::
       arbitraryTIRCarnetReferenceUserAnswersEntry.arbitrary ::
       arbitraryAgreedLocationOfGoodsUserAnswersEntry.arbitrary ::
@@ -270,7 +272,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
           case _   => Gen.mapOf(oneOf(generators))
         }
       } yield UserAnswers(
-        id = id,
+        lrn = id,
         eoriNumber = eoriNumber,
         data = data.foldLeft(Json.obj()) {
           case (obj, (path, value)) =>

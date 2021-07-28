@@ -17,8 +17,10 @@
 package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import commonTestUtils.UserAnswersSpecHelper
 import forms.addItems.TIRCarnetReferenceFormProvider
 import matchers.JsonMatchers
+import models.DeclarationType.{Option1, Option4}
 import models.NormalMode
 import navigation.annotations.Document
 import navigation.{FakeNavigator, Navigator}
@@ -26,7 +28,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TIRCarnetReferencePage
+import pages.DeclarationTypePage
+import pages.addItems.TIRCarnetReferencePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -38,7 +41,13 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class TIRCarnetReferenceControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class TIRCarnetReferenceControllerSpec
+    extends SpecBase
+    with MockNunjucksRendererApp
+    with MockitoSugar
+    with NunjucksSupport
+    with JsonMatchers
+    with UserAnswersSpecHelper {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -90,7 +99,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage, "answer").success.value
+      val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage(index, index), "1234567890").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, tirCarnetReferenceRoute)
@@ -103,7 +112,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with MockNunjucksRendere
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "answer"))
+      val filledForm = form.bind(Map("value" -> "1234567890"))
 
       val expectedJson = Json.obj(
         "form" -> filledForm,
@@ -118,15 +127,18 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with MockNunjucksRendere
 
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must redirect to the next page when valid data is submitted when DeclarationType is TIR" in {
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(DeclarationTypePage)(Option4)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
+      dataRetrievalWithData(userAnswers)
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "1234567890"))
 
       val result = route(app, request).value
 
@@ -135,12 +147,50 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with MockNunjucksRendere
 
     }
 
+    "must redirect Session Expired when DeclarationType is not TIR" in {
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(DeclarationTypePage)(Option1)
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      dataRetrievalWithData(userAnswers)
+
+      val request =
+        FakeRequest(POST, tirCarnetReferenceRoute)
+          .withFormUrlEncodedBody(("value", "1234567890"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect Session Expired when DeclarationType is not defined" in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      dataRetrievalWithData(emptyUserAnswers)
+
+      val request =
+        FakeRequest(POST, tirCarnetReferenceRoute)
+          .withFormUrlEncodedBody(("value", "1234567890"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+    }
+
     "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(DeclarationTypePage)(Option4)
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(POST, tirCarnetReferenceRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))
@@ -184,7 +234,7 @@ class TIRCarnetReferenceControllerSpec extends SpecBase with MockNunjucksRendere
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "1234567890"))
 
       val result = route(app, request).value
 

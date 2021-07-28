@@ -38,7 +38,7 @@ import models.ProcedureType.Normal
 import models.RepresentativeCapacity.Direct
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryNormalDetailsWithoutPreLodge
-import models.journeyDomain.GuaranteeDetails.GuaranteeReference
+import models.journeyDomain.GuaranteeDetails.GuaranteeTIR
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.MovementDetails.{DeclarationForSomeoneElse, NormalMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
@@ -50,24 +50,21 @@ import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPerson
 import models.journeyDomain.traderDetails.{PrincipalTraderPersonalInfo, TraderDetails}
 import models.journeyDomain.{
   Container,
-  CurrencyCode,
-  DefaultLiabilityAmount,
   GoodsSummary,
   ItemDetails,
   ItemSection,
   Itinerary,
   JourneyDomain,
-  OtherLiabilityAmount,
   PreTaskListDetails,
   PreviousReferences,
-  ProducedDocument,
   RouteDetails,
   SafetyAndSecurity,
   SpecialMentionDomain,
+  StandardDocument,
   TransportDetails
 }
 import models.reference._
-import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
+import models.{CommonAddress, DeclarationType, EoriNumber, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
 
 import java.time.LocalDateTime
@@ -82,6 +79,7 @@ case object Scenario7 extends UserAnswerScenario {
   val userAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
     .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
     .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
+    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
     /*
      * General Information Section
      * */
@@ -96,18 +94,10 @@ case object Scenario7 extends UserAnswerScenario {
      * RouteDetails
      * */
     .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
     .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
     .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
     .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
-    .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-    .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
-    .unsafeSetVal(pages.AddTransitOfficePage)(true)
-    .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
-    .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(1)))("TOP12342")
-    .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
-    .unsafeSetVal(pages.AddTransitOfficePage)(false)
+    .unsafeSetVal(pages.AddOfficeOfTransitPage)(false)
     /*
      * Transport Details
      * */
@@ -294,15 +284,9 @@ case object Scenario7 extends UserAnswerScenario {
     /*
      * guarantee Details
      */
-    .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(0)))(GuaranteeType.ComprehensiveGuarantee)
-    .unsafeSetVal(pages.guaranteeDetails.GuaranteeReferencePage(Index(0)))("GUA1Ref")
-    .unsafeSetVal(pages.DefaultAmountPage(Index(0)))(true)
-    .unsafeSetVal(pages.AccessCodePage(Index(0)))("1234")
+    .unsafeSetVal(pages.guaranteeDetails.TIRGuaranteeReferencePage(Index(0)))("GUA1Ref")
     .unsafeSetVal(pages.AddAnotherGuaranteePage)(true)
-    .unsafeSetVal(pages.guaranteeDetails.GuaranteeTypePage(Index(1)))(GuaranteeType.GuaranteeWaiver)
-    .unsafeSetVal(pages.guaranteeDetails.GuaranteeReferencePage(Index(1)))("GUA2Ref")
-    .unsafeSetVal(pages.LiabilityAmountPage(Index(1)))("500")
-    .unsafeSetVal(pages.AccessCodePage(Index(1)))("4321")
+    .unsafeSetVal(pages.guaranteeDetails.TIRGuaranteeReferencePage(Index(1)))("GUA2Ref")
 
   private val preTaskListDetails =
     PreTaskListDetails(lrn, Normal, CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None), Option2, true)
@@ -313,8 +297,10 @@ case object Scenario7 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
-                 List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
+    Some(
+      NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
+                   List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
+      )
     )
   )
 
@@ -353,8 +339,8 @@ case object Scenario7 extends UserAnswerScenario {
     ),
     producedDocuments = Some(
       NonEmptyList(
-        ProducedDocument("G1D1", "G1D1Ref", Some("G1D1Info")),
-        List(ProducedDocument("G1D2", "G1D2Ref", None))
+        StandardDocument("G1D1", "G1D1Ref", Some("G1D1Info")),
+        List(StandardDocument("G1D2", "G1D2Ref", None))
       )
     ),
     itemSecurityTraderDetails = Some(
@@ -384,7 +370,7 @@ case object Scenario7 extends UserAnswerScenario {
     containers = Some(NonEmptyList(Container("GD2CN1NUM1"), List.empty)),
     specialMentions =
       Some(NonEmptyList(SpecialMentionDomain("GD2S1", "GD2S1Info", CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None)), List.empty)),
-    producedDocuments = Some(NonEmptyList(ProducedDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
+    producedDocuments = Some(NonEmptyList(StandardDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
     itemSecurityTraderDetails = Some(
       ItemsSecurityTraderDetails(
         Some("U"),
@@ -405,8 +391,8 @@ case object Scenario7 extends UserAnswerScenario {
     GoodsSummary(Some("LoadPLace"), GoodSummaryNormalDetailsWithoutPreLodge(None, Some("CUSAPPLOC")), List(SealDomain("SEAL1"), SealDomain("SEAL2")))
 
   private val guarantee = NonEmptyList(
-    GuaranteeReference(GuaranteeType.ComprehensiveGuarantee, "GUA1Ref", DefaultLiabilityAmount, "1234"),
-    List(GuaranteeReference(GuaranteeType.GuaranteeWaiver, "GUA2Ref", OtherLiabilityAmount("500", CurrencyCode.GBP), "4321"))
+    GuaranteeTIR("GUA1Ref"),
+    List(GuaranteeTIR("GUA2Ref"))
   )
 
   private val safetyAndSecurity = Some(

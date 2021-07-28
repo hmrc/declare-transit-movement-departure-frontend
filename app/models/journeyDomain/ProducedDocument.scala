@@ -19,15 +19,33 @@ package models.journeyDomain
 import cats.data.{NonEmptyList, ReaderT}
 import cats.implicits._
 import derivable.DeriveNumberOfDocuments
+import models.DeclarationType.Option4
 import models.reference.CircumstanceIndicator
 import models.{Index, UserAnswers}
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, DeclarationTypePage}
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
 
-final case class ProducedDocument(documentType: String, documentReference: String, extraInformation: Option[String])
+sealed trait ProducedDocument
+
+final case class StandardDocument(documentType: String, documentReference: String, extraInformation: Option[String]) extends ProducedDocument
+
+final case class TIRDocument(carnetReference: String, extraInformation: String) extends ProducedDocument
 
 object ProducedDocument {
+
+  private def producedDocumentsWithTIR(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
+    DeclarationTypePage
+      .filterMandatoryDependent(_ == Option4) {
+        DeriveNumberOfDocuments(itemIndex).mandatoryNonEmptyListReader.flatMap {
+          _.zipWithIndex
+            .traverse[UserAnswersReader, ProducedDocument]({
+              case (_, 0)     => ProducedDocument.tirDocumentReader(itemIndex, Index(0)).widen[ProducedDocument]
+              case (_, index) => ProducedDocument.standardDocumentReader(itemIndex, Index(index)).widen[ProducedDocument]
+            })
+        }
+      }
+      .map(_.some)
 
   private def producedDocumentsWithConditionalIndicator(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
     AddSecurityDetailsPage
@@ -41,7 +59,7 @@ object ProducedDocument {
                 _.zipWithIndex
                   .traverse[UserAnswersReader, ProducedDocument]({
                     case (_, index) =>
-                      ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+                      ProducedDocument.standardDocumentReader(itemIndex, Index(index)).widen[ProducedDocument]
                   })
               }
             }
@@ -59,7 +77,7 @@ object ProducedDocument {
               _.zipWithIndex
                 .traverse[UserAnswersReader, ProducedDocument]({
                   case (_, index) =>
-                    ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+                    ProducedDocument.standardDocumentReader(itemIndex, Index(index)).widen[ProducedDocument]
                 })
             }
           }
@@ -73,26 +91,33 @@ object ProducedDocument {
         _.zipWithIndex
           .traverse[UserAnswersReader, ProducedDocument]({
             case (_, index) =>
-              ProducedDocument.producedDocumentReader(itemIndex, Index(index))
+              ProducedDocument.standardDocumentReader(itemIndex, Index(index)).widen[ProducedDocument]
           })
       }
     }
 
   def deriveProducedDocuments(itemIndex: Index): ReaderT[EitherType, UserAnswers, Option[NonEmptyList[ProducedDocument]]] =
     if (itemIndex.position == 0) {
-      producedDocumentsWithConditionalIndicator(itemIndex) orElse
+      producedDocumentsWithTIR(itemIndex) orElse
+        producedDocumentsWithConditionalIndicator(itemIndex) orElse
         producedDocumentsWithoutConditionalIndicator(itemIndex) orElse
         producedDocumentsOther(itemIndex)
     } else {
       producedDocumentsOther(itemIndex)
     }
 
-  def producedDocumentReader(index: Index, referenceIndex: Index): UserAnswersReader[ProducedDocument] =
+  def standardDocumentReader(index: Index, referenceIndex: Index): UserAnswersReader[StandardDocument] =
     (
       DocumentTypePage(index, referenceIndex).reader,
       DocumentReferencePage(index, referenceIndex).reader,
       addExtraInformationAnswer(index, referenceIndex)
-    ).tupled.map((ProducedDocument.apply _).tupled)
+    ).tupled.map((StandardDocument.apply _).tupled)
+
+  def tirDocumentReader(index: Index, documentIndex: Index): UserAnswersReader[TIRDocument] =
+    (
+      TIRCarnetReferencePage(index, documentIndex).reader,
+      DocumentExtraInformationPage(index, documentIndex).reader
+    ).tupled.map((TIRDocument.apply _).tupled)
 
   private def addExtraInformationAnswer(index: Index, referenceIndex: Index): UserAnswersReader[Option[String]] =
     AddExtraDocumentInformationPage(index, referenceIndex).filterOptionalDependent(identity) {

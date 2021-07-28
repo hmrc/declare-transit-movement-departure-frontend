@@ -17,11 +17,12 @@
 package utils
 
 import controllers.guaranteeDetails.routes
+import models.DeclarationType.Option4
 import models.GuaranteeType.guaranteeReferenceRoute
 import models._
 import models.reference.CountryCode
 import pages._
-import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
+import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 
@@ -44,21 +45,28 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         )
     }
 
-  def guaranteeType(index: Index): Option[Row] = userAnswers.get(GuaranteeTypePage(index)) map {
+  def guaranteeType(index: Index): Option[Row] = userAnswers.get(GuaranteeTypePage(index)) flatMap {
     answer =>
       val gtName = GuaranteeType.getId(answer.toString)
-      Row(
-        key = Key(msg"guaranteeType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(msg"guaranteeType.$gtName"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeType.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-guarantee-type")
+
+      (userAnswers.get(DeclarationTypePage), index) match {
+        case (Some(Option4), Index(0)) => None
+        case _ =>
+          Some(
+            Row(
+              key = Key(msg"guaranteeType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              value = Value(msg"guaranteeType.$gtName"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeType.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-guarantee-type")
+                )
+              )
+            )
           )
-        )
-      )
+      }
   }
 
   def accessCode(index: Index): Option[Row] = userAnswers.get(AccessCodePage(index)) map {
@@ -92,6 +100,26 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         )
       )
   }
+
+  def tirLiabilityAmount(index: Index): Option[Row] =
+    (userAnswers.get(DeclarationTypePage), userAnswers.get(LiabilityAmountPage(index)), index) match {
+      case (Some(Option4), Some(value), Index(0)) =>
+        Some(
+          Row(
+            key = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+            value = Value(lit"$value"),
+            actions = List(
+              Action(
+                content = msg"site.edit",
+                href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
+                visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"liabilityAmount.checkYourAnswersLabel")),
+                attributes = Map("id" -> "change-liability-amount")
+              )
+            )
+          )
+        )
+      case _ => None
+    }
 
   def liabilityAmount(index: Index): Option[Row] =
     (userAnswers.get(OfficeOfDeparturePage), userAnswers.get(DestinationOfficePage), userAnswers.get(GuaranteeTypePage(index))) match {
@@ -140,28 +168,75 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def guaranteeRows(index: Index): Option[Row] =
-    userAnswers.get(GuaranteeTypePage(index)).map {
-      answer =>
-        Row(
-          key = Key(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}"),
-          value = Value(lit""),
-          actions = List(
-            Action(
-              content = msg"site.change",
-              href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.id, index).url,
-              visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-              attributes = Map("id" -> s"""change-guarantee-${index.display}""")
-            ),
-            Action(
-              content = msg"site.delete",
-              href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.id, index).url,
-              visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-              attributes = Map("id" -> s"""remove-guarantee-${index.display}""")
-            )
+  def tirGuaranteeReference(index: Index): Option[Row] = userAnswers.get(TIRGuaranteeReferencePage(index)) map {
+    answer =>
+      Row(
+        key = Key(msg"tirGuaranteeReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$answer"),
+        actions = List(
+          Action(
+            content = msg"site.edit",
+            href = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"tirGuaranteeReference.checkYourAnswersLabel")),
+            attributes = Map("id" -> "change-tir-guarantee-reference")
           )
         )
+      )
+  }
+
+  def guaranteeRows(index: Index, isTir: Boolean): Option[Row] =
+    if (isTir) {
+      userAnswers.get(TIRGuaranteeReferencePage(index)).map {
+        answer =>
+          Row(
+            key = Key(msg"$answer"),
+            value = Value(lit""),
+            actions = List(
+              Action(
+                content = msg"site.change",
+                href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
+                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"$answer")),
+                attributes = Map("id" -> s"""change-tir-carnet-${index.display}""")
+              )
+            ) ++ {
+              if (index.position != 0) {
+                List(
+                  Action(
+                    content = msg"site.delete",
+                    href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.lrn, index).url,
+                    visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"$answer")),
+                    attributes = Map("id" -> s"""remove-tir-carnet-${index.display}""")
+                  )
+                )
+              } else {
+                List.empty
+              }
+            }
+          )
+      }
+    } else {
+      userAnswers.get(GuaranteeTypePage(index)).map {
+        answer =>
+          Row(
+            key = Key(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}"),
+            value = Value(lit""),
+            actions = List(
+              Action(
+                content = msg"site.change",
+                href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
+                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
+                attributes = Map("id" -> s"""change-guarantee-${index.display}""")
+              ),
+              Action(
+                content = msg"site.delete",
+                href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.lrn, index).url,
+                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
+                attributes = Map("id" -> s"""remove-guarantee-${index.display}""")
+              )
+            )
+          )
+      }
     }
 
-  def lrn: LocalReferenceNumber = userAnswers.id
+  def lrn: LocalReferenceNumber = userAnswers.lrn
 }
