@@ -24,11 +24,7 @@ import viewModels.sections.Section
 
 object SafetyAndSecurityCheckYourAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers,
-            countries: CountryList,
-            circumstanceIndicators: CircumstanceIndicatorList,
-            methodOfPaymentList: MethodOfPaymentList
-  ): Seq[Section] = {
+  def apply(userAnswers: UserAnswers, countries: CountryList, circumstanceIndicators: CircumstanceIndicatorList): Seq[Section] = {
     val cyah = new SafetyAndSecurityCheckYourAnswerHelper(userAnswers)
 
     val countriesOfRoutingRows: Seq[SummaryList.Row] = List.range(0, userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)).flatMap {
@@ -42,7 +38,7 @@ object SafetyAndSecurityCheckYourAnswersViewModel {
           cyah.addCircumstanceIndicator,
           cyah.circumstanceIndicator(circumstanceIndicators),
           cyah.addTransportChargesPaymentMethod,
-          cyah.transportChargesPaymentMethod(methodOfPaymentList),
+          cyah.transportChargesPaymentMethod,
           cyah.addCommercialReferenceNumber,
           cyah.addCommercialReferenceNumberAllItems,
           cyah.commercialReferenceNumberAllItems,

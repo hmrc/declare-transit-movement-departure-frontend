@@ -420,17 +420,11 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def transportChargesPaymentMethod(methodOfPaymentList: MethodOfPaymentList): Option[Row] = userAnswers.get(TransportChargesPaymentMethodPage) map {
+  def transportChargesPaymentMethod(): Option[Row] = userAnswers.get(TransportChargesPaymentMethodPage) map {
     answer =>
-      val methodOfPayment = methodOfPaymentList
-        .getMethodOfPayment(answer)
-        .map(
-          method => s"(${method.code}) ${method.description}"
-        )
-        .getOrElse(answer)
       Row(
         key = Key(msg"transportChargesPaymentMethod.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$methodOfPayment"),
+        value = Value(lit"${answer.toString}"),
         actions = List(
           Action(
             content = msg"site.edit",

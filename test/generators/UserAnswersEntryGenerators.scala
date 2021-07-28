@@ -316,7 +316,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryTransportChargesPaymentMethodUserAnswersEntry: Arbitrary[(TransportChargesPaymentMethodPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[TransportChargesPaymentMethodPage.type#Data].map(Json.toJson(_))
+        value <- nonEmptyString.map(Json.toJson(_))
       } yield (TransportChargesPaymentMethodPage, value)
     }
 

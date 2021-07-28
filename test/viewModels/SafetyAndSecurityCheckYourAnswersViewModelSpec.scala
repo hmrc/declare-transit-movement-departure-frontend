@@ -38,7 +38,7 @@ class SafetyAndSecurityCheckYourAnswersViewModelSpec extends SpecBase with Gener
     .set(AddTransportChargesPaymentMethodPage, true)
     .success
     .value
-    .set(TransportChargesPaymentMethodPage, "answer")
+    .set(TransportChargesPaymentMethodPage, MethodOfPayment("A", "Payment in cash"))
     .success
     .value
     .set(AddCommercialReferenceNumberPage, true)
@@ -113,7 +113,7 @@ class SafetyAndSecurityCheckYourAnswersViewModelSpec extends SpecBase with Gener
   // scalastyle:on
 
   private val data: Seq[Section] =
-    SafetyAndSecurityCheckYourAnswersViewModel(setSafetyAndSecurityCarrier, countryList, circumstanceIndicatorsList, methodOfPaymentList)
+    SafetyAndSecurityCheckYourAnswersViewModel(setSafetyAndSecurityCarrier, countryList, circumstanceIndicatorsList)
 
   "SafetyAndSecurityCheckYourAnswersViewModel" - {
 

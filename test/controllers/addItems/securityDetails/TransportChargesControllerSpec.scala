@@ -118,7 +118,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
       when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
-      val userAnswers = emptyUserAnswers.set(TransportChargesPage(index), "A").success.value
+      val userAnswers = emptyUserAnswers.set(TransportChargesPage(index), MethodOfPayment("A", "Payment in cash")).success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, transportChargesRoute)

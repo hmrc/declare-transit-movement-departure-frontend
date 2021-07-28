@@ -16,10 +16,11 @@
 
 package pages.safetyAndSecurity
 
+import models.reference.MethodOfPayment
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object TransportChargesPaymentMethodPage extends QuestionPage[String] {
+case object TransportChargesPaymentMethodPage extends QuestionPage[MethodOfPayment] {
 
   override def path: JsPath = JsPath \ toString
 

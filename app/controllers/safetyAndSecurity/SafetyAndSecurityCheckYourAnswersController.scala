@@ -57,10 +57,9 @@ class SafetyAndSecurityCheckYourAnswersController @Inject() (
           for {
             countries              <- referenceDataConnector.getCountryList()
             circumstanceIndicators <- referenceDataConnector.getCircumstanceIndicatorList()
-            methodOfPaymentList    <- referenceDataConnector.getMethodOfPaymentList()
           } yield {
             val sections: Seq[Section] =
-              SafetyAndSecurityCheckYourAnswersViewModel(request.userAnswers, countries, circumstanceIndicators, methodOfPaymentList)
+              SafetyAndSecurityCheckYourAnswersViewModel(request.userAnswers, countries, circumstanceIndicators)
 
             Json.obj(
               "lrn"                           -> lrn,

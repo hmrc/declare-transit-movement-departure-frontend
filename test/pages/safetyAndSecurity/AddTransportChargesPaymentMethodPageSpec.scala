@@ -17,6 +17,7 @@
 package pages.safetyAndSecurity
 
 import models.UserAnswers
+import models.reference.MethodOfPayment
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -38,7 +39,7 @@ class AddTransportChargesPaymentMethodPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
-            .set(TransportChargesPaymentMethodPage, "value")
+            .set(TransportChargesPaymentMethodPage, MethodOfPayment("code", "description"))
             .success
             .value
             .set(AddTransportChargesPaymentMethodPage, false)
