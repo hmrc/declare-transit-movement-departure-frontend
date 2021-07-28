@@ -16,12 +16,14 @@
 
 package models.reference
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Reads._
+import play.api.libs.json.{Json, Reads, _}
 
 case class MethodOfPayment(code: String, description: Option[String]) {
 
   //TODO remove option from the description parameter post go live
-  override def toString =
+  override def toString: String =
     description match {
       case Some(x) => s"($code) $x"
       case None    => code
@@ -29,5 +31,18 @@ case class MethodOfPayment(code: String, description: Option[String]) {
 }
 
 object MethodOfPayment {
-  implicit val format: OFormat[MethodOfPayment] = Json.format[MethodOfPayment]
+
+  implicit val writes: OWrites[MethodOfPayment] = Json.writes[MethodOfPayment]
+
+  implicit val reads: Reads[MethodOfPayment] = {
+    __.read[String].map(MethodOfPayment(_, None)).orElse {
+      (
+        (__ \ "code").read[String] and
+        (__ \ "description").read[String]
+      ) {
+        (code, description) => MethodOfPayment(code, Some(description))
+      }
+    }
+  }
+
 }
