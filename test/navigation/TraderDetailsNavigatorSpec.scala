@@ -81,7 +81,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'GB' and Declaration type is not TIR " in {
+          "must go from Principal name page to Add consignor page if principals EORI starts with prefix 'GB' and Declaration type is not TIR " in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
@@ -96,7 +96,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'gb' and Declaration type is not TIR" in {
+          "must go from Principal name  page to Add consignor page if principals EORI starts with prefix 'gb' and Declaration type is not TIR" in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
@@ -111,7 +111,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Add consignor page if principals EORI starts with prefix 'XI' and Declaration type is not TIR" in {
+          "must go from Principal name page to Add consignor page if principals EORI starts with prefix 'XI' and Declaration type is not TIR" in {
 
             forAll(genNormalProcedureUserAnswers) {
               answers =>
@@ -233,7 +233,7 @@ class TraderDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks 
             }
           }
 
-          "must go from Principal eori page to Principal name page" in {
+          "must go from Principal  eori page to Add consignor  page" in {
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val ua = answers
