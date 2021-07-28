@@ -18,10 +18,10 @@ package services
 
 import config.FrontendAppConfig
 import connectors.BetaAuthorizationConnector
-import javax.inject.Inject
 import models.BetaEoriNumber
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
 class IsDeparturesEnabledService @Inject() (
@@ -30,7 +30,7 @@ class IsDeparturesEnabledService @Inject() (
 ) {
 
   def isDeparturesEnabled(eori: String)(implicit hc: HeaderCarrier): Future[Boolean] =
-    if (appConfig.isDeparturesEnabled && appConfig.isPrivateBetaEnabled) {
+    if (appConfig.isDeparturesEnabled) {
       betaAuthorizationConnector.getBetaUser(BetaEoriNumber(eori))
     } else {
       Future.successful(appConfig.isDeparturesEnabled)

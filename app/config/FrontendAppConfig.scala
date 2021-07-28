@@ -34,9 +34,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val betaAuthorizationUrl: String = configuration.get[Service]("microservice.services.transit-movements-trader-authorization").fullServiceUrl
 
-  val isDeparturesEnabled: Boolean  = configuration.getOptional[Boolean]("microservice.services.features.isDeparturesEnabled").getOrElse(false)
-  val isPrivateBetaEnabled: Boolean = configuration.getOptional[Boolean]("microservice.services.features.isPrivateBetaEnabled").getOrElse(false)
-  val isNIJourneyEnabled: Boolean   = configuration.getOptional[Boolean]("microservice.services.features.isNIJourneyEnabled").getOrElse(false)
+  val isDeparturesEnabled: Boolean = configuration.getOptional[Boolean]("microservice.services.features.isDeparturesEnabled").getOrElse(false)
+  val isNIJourneyEnabled: Boolean  = configuration.getOptional[Boolean]("microservice.services.features.isNIJourneyEnabled").getOrElse(false)
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
   lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.referenceData").fullServiceUrl
 

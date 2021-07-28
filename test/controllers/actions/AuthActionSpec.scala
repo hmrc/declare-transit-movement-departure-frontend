@@ -357,9 +357,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         when(mockBetaAuthorizationService.isDeparturesEnabled(any())(any()))
           .thenReturn(Future.successful(true))
 
-        val app: Application = new GuiceApplicationBuilder()
-          .configure(Configuration("privateBetaToggle" -> true))
-          .build()
+        val app: Application = new GuiceApplicationBuilder().build()
 
         setNoExistingUserAnswers()
 
@@ -388,9 +386,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
         when(mockBetaAuthorizationService.isDeparturesEnabled(any())(any()))
           .thenReturn(Future.successful(false))
 
-        val app: Application = new GuiceApplicationBuilder()
-          .configure(Configuration("privateBetaToggle" -> true))
-          .build()
+        val app: Application = new GuiceApplicationBuilder().build()
 
         setNoExistingUserAnswers()
 

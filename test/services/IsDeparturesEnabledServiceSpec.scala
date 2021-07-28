@@ -49,7 +49,6 @@ class IsDeparturesEnabledServiceSpec extends SpecBase with MockServiceApp with B
           super
             .guiceApplicationBuilder()
             .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> true))
-            .configure(Configuration("microservice.services.features.isPrivateBetaEnabled" -> true))
             .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
             .build()
 
@@ -67,7 +66,6 @@ class IsDeparturesEnabledServiceSpec extends SpecBase with MockServiceApp with B
           super
             .guiceApplicationBuilder()
             .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> true))
-            .configure(Configuration("microservice.services.features.isPrivateBetaEnabled" -> false))
             .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
             .build()
 
@@ -102,7 +100,6 @@ class IsDeparturesEnabledServiceSpec extends SpecBase with MockServiceApp with B
           super
             .guiceApplicationBuilder()
             .configure(Configuration("microservice.services.features.isDeparturesEnabled" -> true))
-            .configure(Configuration("microservice.services.features.isPrivateBetaEnabled" -> true))
             .overrides(bind[BetaAuthorizationConnector].toInstance(mockBetaAuthorizationConnector))
             .build()
 
