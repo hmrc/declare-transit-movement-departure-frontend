@@ -86,20 +86,6 @@ object UserAnswers {
     )(UserAnswers.apply _)
   }
 
-  val legacyReads: Reads[UserAnswers] = {
-
-    import play.api.libs.functional.syntax._
-    (
-      (__ \ "_id").read[LocalReferenceNumber] and
-        (__ \ "eoriNumber").read[EoriNumber] and
-        (__ \ "data").read[JsObject] and
-        (__ \ "lastUpdated").read(MongoDateTimeFormats.localDateTimeRead) and
-        (__ \ "_id").read[Id]
-    )(UserAnswers.apply _).map(
-      ua => ua.copy(id = Id())
-    )
-  }
-
   implicit lazy val writes: OWrites[UserAnswers] = {
 
     import play.api.libs.functional.syntax._
