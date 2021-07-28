@@ -17,8 +17,9 @@
 package viewModels
 
 import base.SpecBase
-import models.reference.{Country, CountryCode, DocumentType, MethodOfPayment, PreviousReferencesDocumentType, SpecialMention}
-import models.{CountryList, DocumentTypeList, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList}
+import models.reference.{Country, CountryCode, DocumentType, MethodOfPayment, PackageType, PreviousReferencesDocumentType, SpecialMention}
+import models.{DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
+import models.{CountryList, DocumentTypeList, SpecialMentionList}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
@@ -44,8 +45,24 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     .set(CommodityCodePage(index), "111111").success.value
     .set(ContainerNumberPage(itemIndex, containerIndex), arbitrary[String].sample.value).success.value
     .set(SpecialMentionTypePage(index, itemIndex), "code").success.value
+    .set(PackageTypePage(index, itemIndex), PackageType("AB", "Description") ).success.value
+    .set(HowManyPackagesPage(index, itemIndex), 123).success.value
 
   private val data = AddItemsCheckYourAnswersViewModel(updatedAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList, countryList)
+
+  private val updatedAnswersWithUnpackedPackages = emptyUserAnswers
+    .set(ItemDescriptionPage(index), "test").success.value
+    .set(ItemTotalGrossMassPage(index), 100.00).success.value
+    .set(AddTotalNetMassPage(index), true).success.value
+    .set(TotalNetMassPage(index), "20").success.value
+    .set(IsCommodityCodeKnownPage(index), true).success.value
+    .set(CommodityCodePage(index), "111111").success.value
+    .set(ContainerNumberPage(itemIndex, containerIndex), arbitrary[String].sample.value).success.value
+    .set(SpecialMentionTypePage(index, itemIndex), "code").success.value
+    .set(PackageTypePage(index, itemIndex), PackageType("NE", "Description") ).success.value
+    .set(TotalPiecesPage(index, itemIndex), 123).success.value
+
+  private val dataWithUnpackedPackes = AddItemsCheckYourAnswersViewModel(updatedAnswersWithUnpackedPackages, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList, countryList)
 
 
   "AddItemsCheckYourAnswersViewModel" - {
@@ -68,6 +85,16 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     "special mentions have title and contain all rows" in {
       data.sections(5).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.specialMentions"
       data.sections(5).rows.length mustEqual 1
+    }
+
+    "packages section have title and contain all rows when package type is not unpacked" in {
+      data.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
+      data.sections(3).rows.length mustEqual 2
+    }
+
+    "packages section have title and contain all rows when package type is unpacked" in {
+      dataWithUnpackedPackes.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
+      dataWithUnpackedPackes.sections(3).rows.length mustEqual 2
     }
   }
   // format: on

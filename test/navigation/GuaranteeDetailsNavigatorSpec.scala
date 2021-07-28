@@ -254,13 +254,41 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
     }
 
     "From OtherDetailsLiabilityAmount" - {
-      "to AccessCode page when an amount is entered" in {
+      "to AccessCode page when an amount greater than 0.99' is entered" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers: UserAnswers = answers.set(LiabilityAmountPage(index), "1234").success.value
+            val updatedAnswers: UserAnswers = answers.set(LiabilityAmountPage(index), "1.00").success.value
             navigator
               .nextPage(OtherReferenceLiabilityAmountPage(index), NormalMode, updatedAnswers)
               .mustBe(guaranteeDetailsRoute.AccessCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+        }
+      }
+
+      "to Default Amount page when an amount of '0' is entered" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers.set(LiabilityAmountPage(index), "0").success.value
+            navigator
+              .nextPage(OtherReferenceLiabilityAmountPage(index), NormalMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.DefaultAmountController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+        }
+      }
+      "to Default Amount page when an amount of '0.0' is entered" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers.set(LiabilityAmountPage(index), "0.0").success.value
+            navigator
+              .nextPage(OtherReferenceLiabilityAmountPage(index), NormalMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.DefaultAmountController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+        }
+      }
+      "to Default Amount page when an amount of '0.00' is entered" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers: UserAnswers = answers.set(LiabilityAmountPage(index), "0.00").success.value
+            navigator
+              .nextPage(OtherReferenceLiabilityAmountPage(index), NormalMode, updatedAnswers)
+              .mustBe(guaranteeDetailsRoute.DefaultAmountController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
     }
@@ -599,7 +627,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers: UserAnswers = answers
-              .set(LiabilityAmountPage(index), "1,23").success.value
+              .set(LiabilityAmountPage(index), "1.23").success.value
               .set(AccessCodePage(index), "1111").success.value
             navigator
               .nextPage(OtherReferenceLiabilityAmountPage(index), CheckMode, updatedAnswers)
@@ -610,7 +638,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers: UserAnswers = answers
-              .set(LiabilityAmountPage(index), "1,23").success.value
+              .set(LiabilityAmountPage(index), "1.23").success.value
               .remove(AccessCodePage(index)).success.value
             navigator
               .nextPage(OtherReferenceLiabilityAmountPage(index), CheckMode, updatedAnswers)
