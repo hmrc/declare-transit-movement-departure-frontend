@@ -61,11 +61,9 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
   }
 
   def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =
-    (ua.get(AddOfficeOfTransitPage), mode) match {
-      case (Some(true), NormalMode) => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), NormalMode)
-      case (Some(true), CheckMode)  => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), CheckMode)
-      case (Some(false), _)         => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
-
+    ua.get(AddOfficeOfTransitPage) match {
+      case Some(true)  => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
+      case Some(false) => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
     }
 
   def destinationOfficeRoute(ua: UserAnswers, mode: Mode) =
