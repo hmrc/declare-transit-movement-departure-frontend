@@ -32,17 +32,17 @@ case class MethodOfPayment(code: String, description: Option[String]) {
 
 object MethodOfPayment {
 
+  //TODO revert to OFormat post go live
   implicit val writes: OWrites[MethodOfPayment] = Json.writes[MethodOfPayment]
 
-  implicit val reads: Reads[MethodOfPayment] = {
+  implicit val reads: Reads[MethodOfPayment] =
     __.read[String].map(MethodOfPayment(_, None)).orElse {
       (
         (__ \ "code").read[String] and
-        (__ \ "description").read[String]
+          (__ \ "description").read[String]
       ) {
         (code, description) => MethodOfPayment(code, Some(description))
       }
     }
-  }
 
 }
