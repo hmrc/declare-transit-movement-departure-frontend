@@ -17,7 +17,7 @@
 package viewModels
 
 import derivable._
-import models.{CountryList, DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
+import models.{CountryList, DocumentTypeList, Index, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
 import uk.gov.hmrc.viewmodels.{MessageInterpolators, SummaryList}
 import utils.{AddItemsCheckYourAnswersHelper, SpecialMentionsCheckYourAnswers}
 import viewModels.sections.Section

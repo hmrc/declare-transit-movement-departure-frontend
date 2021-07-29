@@ -653,8 +653,8 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
         )
         val expectResult = MethodOfPaymentList(
           Seq(
-            MethodOfPayment("A", "Payment in cash"),
-            MethodOfPayment("B", "Payment by credit card")
+            MethodOfPayment("A", Some("Payment in cash")),
+            MethodOfPayment("B", Some("Payment by credit card"))
           )
         )
         connector.getMethodOfPaymentList().futureValue mustEqual expectResult

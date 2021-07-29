@@ -135,7 +135,7 @@ package object utils {
       methodOfPayment =>
         Json.obj(
           "value"    -> methodOfPayment.code,
-          "text"     -> s"(${methodOfPayment.code}) ${methodOfPayment.description}",
+          "text"     -> s"${methodOfPayment.toString}",
           "selected" -> value.contains(methodOfPayment)
         )
     }

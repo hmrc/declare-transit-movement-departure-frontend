@@ -20,12 +20,13 @@ import cats.implicits._
 import models.Index
 import models.journeyDomain.addItems.SecurityTraderDetails._
 import models.journeyDomain.{UserAnswersReader, _}
+import models.reference.MethodOfPayment
 import pages.AddSecurityDetailsPage
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.safetyAndSecurity._
 
 final case class ItemsSecurityTraderDetails(
-  methodOfPayment: Option[String],
+  methodOfPayment: Option[MethodOfPayment],
   commercialReferenceNumber: Option[String],
   dangerousGoodsCode: Option[String],
   consignor: Option[SecurityTraderDetails],
@@ -45,7 +46,7 @@ object ItemsSecurityTraderDetails {
       ).tupled.map((ItemsSecurityTraderDetails.apply _).tupled)
     }
 
-  private def methodOfPaymentPage(index: Index): UserAnswersReader[Option[String]] =
+  private def methodOfPaymentPage(index: Index): UserAnswersReader[Option[MethodOfPayment]] =
     AddTransportChargesPaymentMethodPage.filterOptionalDependent(_ == false) {
       TransportChargesPage(index).reader
     }

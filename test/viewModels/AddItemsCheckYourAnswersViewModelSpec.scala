@@ -17,7 +17,7 @@
 package viewModels
 
 import base.SpecBase
-import models.reference.{Country, CountryCode, DocumentType, PackageType, PreviousReferencesDocumentType, SpecialMention}
+import models.reference.{Country, CountryCode, DocumentType, MethodOfPayment, PackageType, PreviousReferencesDocumentType, SpecialMention}
 import models.{DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
 import models.{CountryList, DocumentTypeList, SpecialMentionList}
 import org.scalacheck.Arbitrary.arbitrary
@@ -34,7 +34,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
   private val documentTypeList = DocumentTypeList(Seq(DocumentType("code", "name", true)))
   private val previousReferencesDocumentTypeList = PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType("code", Some("name"))))
   private val specialMentionList = SpecialMentionList(Seq(SpecialMention("code", "name")))
-  val countryList = new CountryList(Seq(Country(CountryCode("FR"), "France")))
+  private val countryList = new CountryList(Seq(Country(CountryCode("FR"), "France")))
 
   private val updatedAnswers = emptyUserAnswers
     .set(ItemDescriptionPage(index), "test").success.value
