@@ -566,8 +566,8 @@ class DeclarationRequestServiceSpec
         }
       }
 
-      "customs office transit" - {
-        "must be empty is declaration type is option 4 (TIR)" in {
+      "Customs Office Transit" - {
+        "Must be empty if Declaration Type is Option 4 (TIR)" in {
 
           when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
           when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
@@ -577,7 +577,7 @@ class DeclarationRequestServiceSpec
           result mustBe Seq.empty
         }
 
-        "populated if any declaration type" in {
+        "Must be Populated if Declaration Type is Option 1,2 or 3" in {
           forAll(genUserAnswerScenario) {
             scenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
