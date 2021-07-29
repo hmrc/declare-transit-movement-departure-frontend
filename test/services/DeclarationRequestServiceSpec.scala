@@ -30,21 +30,7 @@ import models.{CommonAddress, Index}
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
-import pages.{
-  AddAgreedLocationOfGoodsPage,
-  AddCustomsApprovedLocationPage,
-  AgreedLocationOfGoodsPage,
-  ChangeAtBorderPage,
-  CustomsApprovedLocationPage,
-  IdAtDeparturePage,
-  IdCrossingBorderPage,
-  InlandModePage,
-  ItemTotalGrossMassPage,
-  ModeAtBorderPage,
-  ModeCrossingBorderPage,
-  NationalityAtDeparturePage,
-  NationalityCrossingBorderPage
-}
+import pages._
 import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
 import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage}
 import play.api.inject.bind

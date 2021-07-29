@@ -18,23 +18,7 @@ package utils
 
 import controllers.traderDetails.routes
 import models.{CheckMode, LocalReferenceNumber, UserAnswers}
-import pages._
-import pages.traderDetails.{
-  AddConsigneePage,
-  AddConsignorPage,
-  ConsigneeAddressPage,
-  ConsigneeNamePage,
-  ConsignorAddressPage,
-  ConsignorEoriPage,
-  ConsignorNamePage,
-  IsConsigneeEoriKnownPage,
-  IsConsignorEoriKnownPage,
-  IsPrincipalEoriKnownPage,
-  PrincipalAddressPage,
-  PrincipalNamePage,
-  WhatIsConsigneeEoriPage,
-  WhatIsPrincipalEoriPage
-}
+import pages.traderDetails._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 

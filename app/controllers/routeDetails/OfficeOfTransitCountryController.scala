@@ -26,7 +26,6 @@ import models.reference.Country
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import pages.routeDetails
 import pages.routeDetails.OfficeOfTransitCountryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -69,7 +68,7 @@ class OfficeOfTransitCountryController @Inject() (
             transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
             form = formProvider(transitCountryList)
             preparedForm = request.userAnswers
-              .get(routeDetails.OfficeOfTransitCountryPage(index))
+              .get(OfficeOfTransitCountryPage(index))
               .flatMap(transitCountryList.getCountry)
               .map(form.fill)
               .getOrElse(form)
@@ -94,9 +93,9 @@ class OfficeOfTransitCountryController @Inject() (
                 formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.fullList, Results.BadRequest),
                 value =>
                   for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(routeDetails.OfficeOfTransitCountryPage(index), value.code))
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfTransitCountryPage(index), value.code))
                     _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(routeDetails.OfficeOfTransitCountryPage(index), mode, updatedAnswers))
+                  } yield Redirect(navigator.nextPage(OfficeOfTransitCountryPage(index), mode, updatedAnswers))
               )
           )
         } yield page

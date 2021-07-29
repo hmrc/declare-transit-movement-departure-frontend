@@ -20,8 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import models.reference.CountryCode
 import models.{Index, UserAnswers}
-import pages.routeDetails
-import pages.routeDetails.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
+import pages.routeDetails._
 
 class DeriveOfficesOfTransitIdsSpec extends SpecBase with UserAnswersSpecHelper {
 
@@ -38,9 +37,9 @@ class DeriveOfficesOfTransitIdsSpec extends SpecBase with UserAnswersSpecHelper 
       val userAnswers = emptyUserAnswers
         .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
         .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("officeId0")
-        .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
+        .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
         .unsafeSetVal(AddAnotherTransitOfficePage(Index(1)))("officeId1")
-        .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(2)))(CountryCode("GB"))
+        .unsafeSetVal(OfficeOfTransitCountryPage(Index(2)))(CountryCode("GB"))
         .unsafeSetVal(AddAnotherTransitOfficePage(Index(2)))("officeId2")
       val result = userAnswers.get(DeriveOfficesOfTransitIds).value
       result must contain theSameElementsInOrderAs Seq("officeId0", "officeId1", "officeId2")
@@ -48,16 +47,16 @@ class DeriveOfficesOfTransitIdsSpec extends SpecBase with UserAnswersSpecHelper 
 
     "when there is a single incomplete loop and Offices Of Transit hasn't been answered, returns None" in {
       val userAnswers = emptyUserAnswers
-        .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("TT"))
+        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("TT"))
       val result = userAnswers.get(DeriveOfficesOfTransitIds).value
       result mustBe Seq.empty
     }
 
     "when there complete loops and an incomplete loop, returns a list with an office id" in {
       val userAnswers = emptyUserAnswers
-        .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
+        .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
         .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("officeId0")
-        .unsafeSetVal(routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
+        .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
       val result = userAnswers.get(DeriveOfficesOfTransitIds).value
       result mustBe List("officeId0")
     }

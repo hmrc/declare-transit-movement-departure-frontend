@@ -23,22 +23,7 @@ import models.ProcedureType.{Normal, Simplified}
 import javax.inject.{Inject, Singleton}
 import models._
 import pages._
-import pages.traderDetails.{
-  AddConsigneePage,
-  AddConsignorPage,
-  ConsigneeAddressPage,
-  ConsigneeNamePage,
-  ConsignorAddressPage,
-  ConsignorEoriPage,
-  ConsignorNamePage,
-  IsConsigneeEoriKnownPage,
-  IsConsignorEoriKnownPage,
-  IsPrincipalEoriKnownPage,
-  PrincipalAddressPage,
-  PrincipalNamePage,
-  WhatIsConsigneeEoriPage,
-  WhatIsPrincipalEoriPage
-}
+import pages.traderDetails._
 import play.api.mvc.Call
 
 @Singleton

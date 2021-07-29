@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package pages
+package pages.traderDetails
 
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object PrincipalTirHolderIdPage extends QuestionPage[String] {
+class PrincipalTirHolderIdSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "PrincipalTirHolderIdPage" - {
 
-  override def toString: String = "principalTirHolderIdPage"
+    beRetrievable[String](PrincipalTirHolderIdPage)
+
+    beSettable[String](PrincipalTirHolderIdPage)
+
+    beRemovable[String](PrincipalTirHolderIdPage)
+
+    clearDownItems[String](PrincipalTirHolderIdPage)
+  }
 }
