@@ -208,7 +208,7 @@ case object Scenario1 extends UserAnswerScenario {
     .unsafeSetVal(pages.addItems.IsNonEuOfficePage)(false)
     .unsafeSetVal(pages.addItems.AddExtraInformationPage(firstGoodItem, Index(1)))(false)
     .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(firstGoodItem))(false)
-    .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(firstGoodItem))(MethodOfPayment("T", Some("description")))
+    .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(firstGoodItem))(MethodOfPayment("T", "description"))
     .unsafeSetVal(pages.addItems.securityDetails.CommercialReferenceNumberPage(firstGoodItem))("GD1CRN")
     .unsafeSetVal(pages.addItems.securityDetails.AddDangerousGoodsCodePage(firstGoodItem))(true)
     .unsafeSetVal(pages.addItems.securityDetails.DangerousGoodsCodePage(firstGoodItem))("GD1C")
@@ -265,7 +265,7 @@ case object Scenario1 extends UserAnswerScenario {
     .unsafeSetVal(pages.addItems.AddExtraInformationPage(secondGoodItem, Index(0)))(true)
     .unsafeSetVal(pages.addItems.ExtraInformationPage(secondGoodItem, Index(0)))("GD2PR1Info")
     .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(secondGoodItem))(false)
-    .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(secondGoodItem))(MethodOfPayment("U", Some("description")))
+    .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(secondGoodItem))(MethodOfPayment("U", "description"))
     .unsafeSetVal(pages.addItems.securityDetails.CommercialReferenceNumberPage(secondGoodItem))("GD2CRN")
     .unsafeSetVal(pages.addItems.securityDetails.AddDangerousGoodsCodePage(secondGoodItem))(false)
     .unsafeSetVal(pages.addItems.traderSecurityDetails.AddSecurityConsignorsEoriPage(secondGoodItem))(false)
@@ -360,7 +360,7 @@ case object Scenario1 extends UserAnswerScenario {
     ),
     itemSecurityTraderDetails = Some(
       ItemsSecurityTraderDetails(
-        Some(MethodOfPayment("T", Some("description"))),
+        Some(MethodOfPayment("T", "description")),
         Some("GD1CRN"),
         Some("GD1C"),
         Some(SecurityTraderEori(EoriNumber("GD1SECCONOR"))),
@@ -389,7 +389,7 @@ case object Scenario1 extends UserAnswerScenario {
     producedDocuments = Some(NonEmptyList(StandardDocument("G2D1", "G2D1Ref", Some("G2D1Info")), List.empty)),
     itemSecurityTraderDetails = Some(
       ItemsSecurityTraderDetails(
-        Some(MethodOfPayment("U", Some("description"))),
+        Some(MethodOfPayment("U", "description")),
         Some("GD2CRN"),
         None,
         Some(

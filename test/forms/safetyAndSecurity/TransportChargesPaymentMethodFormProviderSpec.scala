@@ -28,8 +28,8 @@ class TransportChargesPaymentMethodFormProviderSpec extends StringFieldBehaviour
 
   private val methodOfPaymentList = MethodOfPaymentList(
     Seq(
-      MethodOfPayment("A", Some("Payment in cash")),
-      MethodOfPayment("B", Some("Payment by credit card"))
+      MethodOfPayment("A", "Payment in cash"),
+      MethodOfPayment("B", "Payment by credit card")
     )
   )
   private val form = new TransportChargesPaymentMethodFormProvider()(methodOfPaymentList)

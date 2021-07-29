@@ -206,7 +206,7 @@ case object Scenario3 extends UserAnswerScenario {
     .unsafeSetVal(pages.addItems.PreviousReferencePage(firstGoodItem, Index(1)))("GD1PR2Ref")
     .unsafeSetVal(pages.addItems.AddExtraInformationPage(firstGoodItem, Index(1)))(false)
     .unsafeSetVal(pages.addItems.AddAnotherPreviousAdministrativeReferencePage(firstGoodItem))(false)
-    .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(firstGoodItem))(MethodOfPayment("M", Some("description")))
+    .unsafeSetVal(pages.addItems.securityDetails.TransportChargesPage(firstGoodItem))(MethodOfPayment("M", "description"))
     .unsafeSetVal(pages.addItems.securityDetails.CommercialReferenceNumberPage(firstGoodItem))("GD1CRN")
     .unsafeSetVal(pages.addItems.securityDetails.AddDangerousGoodsCodePage(firstGoodItem))(true)
     .unsafeSetVal(pages.addItems.securityDetails.DangerousGoodsCodePage(firstGoodItem))("GD1C")
@@ -291,7 +291,7 @@ case object Scenario3 extends UserAnswerScenario {
         )
       ),
       Some(NonEmptyList(StandardDocument("G1D1", "G1D1Ref", Some("G1D1Info")), List(StandardDocument("G1D2", "G1D2Ref", None)))),
-      Some(ItemsSecurityTraderDetails(Some(MethodOfPayment("M", Some("description"))), Some("GD1CRN"), Some("GD1C"), None, None)),
+      Some(ItemsSecurityTraderDetails(Some(MethodOfPayment("M", "description")), Some("GD1CRN"), Some("GD1C"), None, None)),
       Some(NonEmptyList(PreviousReferences("GD1PR1", "GD1PR1Ref", Some("GD1PR1Info")), List(PreviousReferences("GD1PR2", "GD1PR2Ref", None))))
     ),
     List.empty
