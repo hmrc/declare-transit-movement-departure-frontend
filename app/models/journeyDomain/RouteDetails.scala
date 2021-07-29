@@ -23,14 +23,7 @@ import models.Index
 import models.journeyDomain.RouteDetails.TransitInformation
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import pages._
-import pages.routeDetails.{
-  AddAnotherTransitOfficePage,
-  AddOfficeOfTransitPage,
-  ArrivalTimesAtOfficePage,
-  CountryOfDispatchPage,
-  DestinationCountryPage,
-  DestinationOfficePage
-}
+import pages.routeDetails._
 
 import java.time.LocalDateTime
 

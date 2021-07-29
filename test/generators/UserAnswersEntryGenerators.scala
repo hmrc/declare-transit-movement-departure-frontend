@@ -36,73 +36,11 @@ import pages.addItems.traderSecurityDetails.{
   SecurityConsignorEoriPage,
   SecurityConsignorNamePage
 }
-import pages.generalInformation.{
-  ContainersUsedPage,
-  DeclarationForSomeoneElsePage,
-  DeclarationPlacePage,
-  PreLodgeDeclarationPage,
-  RepresentativeCapacityPage,
-  RepresentativeNamePage
-}
+import pages.generalInformation._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.routeDetails.{
-  AddAnotherTransitOfficePage,
-  AddOfficeOfTransitPage,
-  AddTransitOfficePage,
-  ArrivalTimesAtOfficePage,
-  CountryOfDispatchPage,
-  DestinationCountryPage,
-  DestinationOfficePage,
-  MovementDestinationCountryPage,
-  OfficeOfTransitCountryPage
-}
-import pages.safetyAndSecurity.{
-  AddAnotherCountryOfRoutingPage,
-  AddCarrierEoriPage,
-  AddCarrierPage,
-  AddCircumstanceIndicatorPage,
-  AddCommercialReferenceNumberAllItemsPage,
-  AddCommercialReferenceNumberPage,
-  AddConveyanceReferenceNumberPage,
-  AddPlaceOfUnloadingCodePage,
-  AddSafetyAndSecurityConsigneeEoriPage,
-  AddSafetyAndSecurityConsigneePage,
-  AddSafetyAndSecurityConsignorEoriPage,
-  AddSafetyAndSecurityConsignorPage,
-  AddTransportChargesPaymentMethodPage,
-  CarrierAddressPage,
-  CarrierEoriPage,
-  CarrierNamePage,
-  CircumstanceIndicatorPage,
-  CommercialReferenceNumberAllItemsPage,
-  ConfirmRemoveCountryPage,
-  ConveyanceReferenceNumberPage,
-  CountryOfRoutingPage,
-  PlaceOfUnloadingCodePage,
-  SafetyAndSecurityConsigneeAddressPage,
-  SafetyAndSecurityConsigneeEoriPage,
-  SafetyAndSecurityConsigneeNamePage,
-  SafetyAndSecurityConsignorAddressPage,
-  SafetyAndSecurityConsignorEoriPage,
-  SafetyAndSecurityConsignorNamePage,
-  TransportChargesPaymentMethodPage
-}
-import pages.traderDetails.{
-  AddConsigneePage,
-  AddConsignorPage,
-  ConsigneeAddressPage,
-  ConsigneeNamePage,
-  ConsignorAddressPage,
-  ConsignorEoriPage,
-  ConsignorNamePage,
-  IsConsigneeEoriKnownPage,
-  IsConsignorEoriKnownPage,
-  IsPrincipalEoriKnownPage,
-  PrincipalAddressPage,
-  PrincipalNamePage,
-  WhatIsConsigneeEoriPage,
-  WhatIsPrincipalEoriPage
-}
+import pages.routeDetails._
+import pages.safetyAndSecurity._
+import pages.traderDetails._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {

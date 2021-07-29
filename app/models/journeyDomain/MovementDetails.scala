@@ -21,14 +21,7 @@ import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.MovementDetails.DeclarationForSomeoneElseAnswer
 import models.{DeclarationType, RepresentativeCapacity}
 import pages._
-import pages.generalInformation.{
-  ContainersUsedPage,
-  DeclarationForSomeoneElsePage,
-  DeclarationPlacePage,
-  PreLodgeDeclarationPage,
-  RepresentativeCapacityPage,
-  RepresentativeNamePage
-}
+import pages.generalInformation._
 
 sealed trait MovementDetails {
   val containersUsed: Boolean

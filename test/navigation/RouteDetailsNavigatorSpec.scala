@@ -25,18 +25,8 @@ import models._
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{routeDetails, _}
-import pages.routeDetails.{
-  AddAnotherTransitOfficePage,
-  AddOfficeOfTransitPage,
-  AddTransitOfficePage,
-  ArrivalTimesAtOfficePage,
-  CountryOfDispatchPage,
-  DestinationCountryPage,
-  DestinationOfficePage,
-  MovementDestinationCountryPage,
-  OfficeOfTransitCountryPage
-}
+import pages._
+import pages.routeDetails._
 import queries.OfficeOfTransitQuery
 
 class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
@@ -357,9 +347,8 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
-              .nextPage(routeDetails.OfficeOfTransitCountryPage(index), CheckMode, answers)
+              .nextPage(OfficeOfTransitCountryPage(index), CheckMode, answers)
               .mustBe(routes.AddAnotherTransitOfficeController.onPageLoad(answers.lrn, index, CheckMode))
-
         }
       }
     }

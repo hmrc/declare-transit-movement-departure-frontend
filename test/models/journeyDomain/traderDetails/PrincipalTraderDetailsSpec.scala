@@ -23,7 +23,7 @@ import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber, ProcedureType}
 import org.scalatest.TryValues
 import pages._
-import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage}
+import pages.traderDetails._
 
 class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 

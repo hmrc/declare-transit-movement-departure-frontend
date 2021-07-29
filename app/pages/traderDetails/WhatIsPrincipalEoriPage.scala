@@ -17,7 +17,7 @@
 package pages.traderDetails
 
 import models.UserAnswers
-import pages.{ClearAllAddItems, PrincipalTirHolderIdPage, QuestionPage}
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}

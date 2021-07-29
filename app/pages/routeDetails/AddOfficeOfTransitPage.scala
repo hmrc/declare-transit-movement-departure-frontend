@@ -17,7 +17,7 @@
 package pages.routeDetails
 
 import models.{Index, UserAnswers}
-import pages.{routeDetails, ClearAllAddItems, QuestionPage}
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}
@@ -33,7 +33,7 @@ case object AddOfficeOfTransitPage extends QuestionPage[Boolean] with ClearAllAd
       case Some(false) =>
         userAnswers
           .remove(OfficeOfTransitCountryPage(Index(0)))
-          .flatMap(_.remove(routeDetails.OfficeOfTransitCountryPage(Index(0))))
+          .flatMap(_.remove(OfficeOfTransitCountryPage(Index(0))))
           .flatMap(_.remove(ArrivalTimesAtOfficePage(Index(0))))
       case _ => Success(userAnswers)
     }
