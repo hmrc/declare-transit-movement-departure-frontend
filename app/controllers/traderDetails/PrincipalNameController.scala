@@ -88,4 +88,5 @@ class PrincipalNameController @Inject() (
             } yield Redirect(navigator.nextPage(PrincipalNamePage, mode, updatedAnswers))
         )
   }
+
 }

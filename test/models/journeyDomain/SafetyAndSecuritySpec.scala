@@ -20,7 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
-import models.reference.{Country, CountryCode, CustomsOffice}
+import models.reference.{Country, CountryCode, CustomsOffice, MethodOfPayment}
 import models.{CommonAddress, EoriNumber, Index}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
@@ -34,7 +34,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
     .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
     .unsafeSetVal(CircumstanceIndicatorPage)("circumstanceIndicator")
     .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
-    .unsafeSetVal(TransportChargesPaymentMethodPage)("transportChargesPaymentMethod")
+    .unsafeSetVal(TransportChargesPaymentMethodPage)(MethodOfPayment("code", Some("description")))
     .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
     .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
     .unsafeSetVal(CommercialReferenceNumberAllItemsPage)("commercialRefNumber")
@@ -76,7 +76,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
 
         val expectedResult = SafetyAndSecurity(
           Some("circumstanceIndicator"),
-          Some("transportChargesPaymentMethod"),
+          Some(MethodOfPayment("code", Some("description"))),
           Some("commercialRefNumber"),
           Some("conveyanceRefNumber"),
           Some("placeOfUnloading"),

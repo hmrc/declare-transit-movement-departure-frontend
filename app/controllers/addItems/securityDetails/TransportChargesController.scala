@@ -68,7 +68,9 @@ class TransportChargesController @Inject() (
 
             val preparedForm = request.userAnswers
               .get(TransportChargesPage(itemIndex))
-              .flatMap(payments.getMethodOfPayment)
+              .flatMap(
+                x => payments.getMethodOfPayment(x.code)
+              )
               .map(form.fill)
               .getOrElse(form)
 
@@ -110,7 +112,7 @@ class TransportChargesController @Inject() (
                 },
                 value =>
                   for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportChargesPage(itemIndex), value.code))
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportChargesPage(itemIndex), value))
                     _              <- sessionRepository.set(updatedAnswers)
                   } yield Redirect(navigator.nextPage(TransportChargesPage(itemIndex), mode, updatedAnswers))
               )

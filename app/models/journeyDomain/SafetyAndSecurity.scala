@@ -20,14 +20,14 @@ import cats.data._
 import cats.implicits._
 import models.journeyDomain.Itinerary.readItineraries
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.{CountryCode, CustomsOffice, MethodOfPayment}
 import models.{CommonAddress, EoriNumber, UserAnswers}
 import pages.{ModeAtBorderPage, OfficeOfDeparturePage}
 import pages.safetyAndSecurity._
 
 case class SafetyAndSecurity(
   circumstanceIndicator: Option[String],
-  paymentMethod: Option[String],
+  paymentMethod: Option[MethodOfPayment],
   commercialReferenceNumber: Option[String],
   conveyanceReferenceNumber: Option[String],
   placeOfUnloading: Option[String],
@@ -69,7 +69,7 @@ object SafetyAndSecurity {
       CircumstanceIndicatorPage.reader
     }
 
-  private def paymentMethod: UserAnswersReader[Option[String]] =
+  private def paymentMethod: UserAnswersReader[Option[MethodOfPayment]] =
     AddTransportChargesPaymentMethodPage.filterOptionalDependent(identity) {
       TransportChargesPaymentMethodPage.reader
     }

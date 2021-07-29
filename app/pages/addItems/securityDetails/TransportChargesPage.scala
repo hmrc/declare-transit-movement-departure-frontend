@@ -17,11 +17,12 @@
 package pages.addItems.securityDetails
 
 import models.Index
+import models.reference.MethodOfPayment
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import queries.Constants.items
 
-case class TransportChargesPage(itemIndex: Index) extends QuestionPage[String] {
+case class TransportChargesPage(itemIndex: Index) extends QuestionPage[MethodOfPayment] {
 
   override def path: JsPath = JsPath \ items \ itemIndex.position \ toString
 

@@ -17,7 +17,7 @@
 package viewModels
 
 import derivable._
-import models.{CountryList, DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
+import models.{CountryList, DocumentTypeList, Index, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
 import uk.gov.hmrc.viewmodels.{MessageInterpolators, SummaryList}
 import utils.{AddItemsCheckYourAnswersHelper, SpecialMentionsCheckYourAnswers}
 import viewModels.sections.Section
@@ -115,7 +115,11 @@ object AddItemsCheckYourAnswersViewModel {
     val packageRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfPackages(index)).getOrElse(0)).flatMap {
         packagePosition =>
-          checkYourAnswersHelper.packageRow(index, Index(packagePosition), userAnswers)
+          Seq(
+            checkYourAnswersHelper.packageRow(index, Index(packagePosition), userAnswers),
+            checkYourAnswersHelper.totalPieces(index, Index(packagePosition), userAnswers),
+            checkYourAnswersHelper.numberOfPackages(index, Index(packagePosition), userAnswers)
+          ).flatten
       }
 
     Section(

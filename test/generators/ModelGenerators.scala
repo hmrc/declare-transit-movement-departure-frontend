@@ -184,6 +184,14 @@ trait ModelGenerators {
       } yield Address(buildingAndStreet, city, postcode)
     }
 
+  implicit lazy val arbitraryMethodOfPayment: Arbitrary[MethodOfPayment] =
+    Arbitrary {
+      for {
+        code        <- stringsWithLength(1)
+        description <- stringsWithMaxLength(stringMaxLength)
+      } yield MethodOfPayment(code.toUpperCase, Some(description))
+    }
+
 }
 
 object ModelGenerators extends ModelGenerators with Generators

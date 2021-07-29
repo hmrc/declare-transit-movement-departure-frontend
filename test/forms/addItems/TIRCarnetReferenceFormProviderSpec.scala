@@ -16,17 +16,19 @@
 
 package forms.addItems
 
-import forms.Constants.tirCarnetReferenceMaxLength
+import forms.Constants.{tirCarnetReferenceMaxLength, tirCarnetReferenceMinLength}
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
 class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "tirCarnetReference.error.required"
-  val lengthKey   = "tirCarnetReference.error.length"
-  val invalidKey  = "tirCarnetReference.error.invalid"
-  val maxLength   = tirCarnetReferenceMaxLength
-  val form        = new TIRCarnetReferenceFormProvider()()
+  val requiredKey  = "tirCarnetReference.error.required"
+  val maxLengthKey = "tirCarnetReference.error.maxLength"
+  val minLengthKey = "tirCarnetReference.error.minLength"
+  val invalidKey   = "tirCarnetReference.error.invalidCharacters"
+  val maxLength    = tirCarnetReferenceMaxLength
+  val minLength    = tirCarnetReferenceMinLength
+  val form         = new TIRCarnetReferenceFormProvider()()
 
   ".value" - {
 
@@ -42,7 +44,14 @@ class TIRCarnetReferenceFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, maxLengthKey, Seq(maxLength))
+    )
+
+    behave like fieldWithMinLength(
+      form,
+      fieldName,
+      minLength = minLength,
+      lengthError = FormError(fieldName, minLengthKey, Seq(minLength))
     )
 
     behave like mandatoryField(

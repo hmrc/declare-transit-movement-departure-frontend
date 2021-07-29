@@ -50,7 +50,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     answer =>
       Row(
         key = Key(msg"transportCharges.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
+        value = Value(lit"${answer.toString}"),
         actions = List(
           Action(
             content = msg"site.edit",
@@ -547,14 +547,46 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     userAnswers.get(PackageTypePage(itemIndex, packageIndex)).map {
       answer =>
         Row(
-          key = Key(lit"$answer"),
-          value = Value(lit""),
+          key = Key(msg"packageType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+          value = Value(lit"$answer"),
           actions = List(
             Action(
               content = msg"site.change",
               href = routes.PackageTypeController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer.toString)),
               attributes = Map("id" -> s"""change-package-${packageIndex.display}""")
+            )
+          )
+        )
+    }
+
+  def numberOfPackages(itemIndex: Index, packageIndex: Index, userAnswers: UserAnswers): Option[Row] =
+    userAnswers.get(HowManyPackagesPage(itemIndex, packageIndex)).map {
+      answer =>
+        Row(
+          key = Key(msg"declareNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+          value = Value(lit"$answer"),
+          actions = List(
+            Action(
+              content = msg"site.edit",
+              href = routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
+              visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declareNumberOfPackages.checkYourAnswersLabel"))
+            )
+          )
+        )
+    }
+
+  def totalPieces(itemIndex: Index, packageIndex: Index, userAnswers: UserAnswers): Option[Row] =
+    userAnswers.get(TotalPiecesPage(itemIndex, packageIndex)).map {
+      answer =>
+        Row(
+          key = Key(msg"totalPieces.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+          value = Value(lit"$answer"),
+          actions = List(
+            Action(
+              content = msg"site.edit",
+              href = routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
+              visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalPieces.checkYourAnswersLabel"))
             )
           )
         )

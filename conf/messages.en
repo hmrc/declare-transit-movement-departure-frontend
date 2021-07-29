@@ -705,10 +705,12 @@ totalNetMass.error.invalidFormat =  The total net mass for item {0} in kilograms
 packageType.title = What package type has been used?
 packageType.heading = What package type has been used?
 packageType.error.required = Enter the package type that has been used
+packageType.checkYourAnswersLabel = Package type
 
 declareNumberOfPackages.title = Do you need to state how many of this package or item {0} has been used?
 declareNumberOfPackages.heading = Do you need to state how many of this package for item {0} has been used?
 declareNumberOfPackages.error.required = Select yes if you want to state how many of this package for item {0} has been used
+declareNumberOfPackages.checkYourAnswersLabel = Number of packages
 
 totalPieces.title = How many pieces have been used for item {0}?
 totalPieces.heading = How many pieces have been used for item {0}?
@@ -716,6 +718,7 @@ totalPieces.error.nonNumeric = How many pieces have been used for item {0} must 
 totalPieces.error.required = Enter how many pieces have been used for item {0}
 totalPieces.error.wholeNumber = How many pieces have been used for item {0} using whole numbers
 totalPieces.error.outOfRange = The pieces used for item {0} must be {1} or less
+totalPieces.checkYourAnswersLabel = Number of pieces
 
 addMark.title = Do you need to add a mark or number for package {0}?
 addMark.heading = Do you need to add a mark or number for package {0}?
@@ -1454,9 +1457,10 @@ principalTirHolderId.error.characters = The principal’s TIR holder identificat
 tirCarnetReference.title = What is the TIR Carnet reference?
 tirCarnetReference.heading = What is the TIR Carnet reference?
 tirCarnetReference.checkYourAnswersLabel = TIR Carnet reference
-tirCarnetReference.error.required = Enter the TIR Carnet reference
-tirCarnetReference.error.length = The TIR Carnet reference must be 35 characters or less
-tirCarnetReference.error.invalid = The TIR Carnet reference must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+tirCarnetReference.error.required = Enter the reference for the TIR carnet
+tirCarnetReference.error.maxLength = The reference for the TIR Carnet must be 11 characters or less
+tirCarnetReference.error.minLength = The reference for the TIR Carnet must be 10 characters or more
+tirCarnetReference.error.invalidCharacters = The reference for the TIR Carnet must only include letters a to z and numbers 0 to 9
 
 addOfficeOfTransit.title = Do you need to add an office of transit?
 addOfficeOfTransit.heading = Do you need to add an office of transit?

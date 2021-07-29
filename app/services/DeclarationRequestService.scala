@@ -125,7 +125,7 @@ class DeclarationRequestService @Inject() (
             netMass = itemSection.itemDetails.totalNetMass.map(BigDecimal(_)),
             countryOfDispatch = None, // Not required, defined at header level
             countryOfDestination = None, // Not required, defined at header level
-            methodOfPayment = collectWhen(goodsItems.size > 1)(itemSection.itemSecurityTraderDetails.flatMap(_.methodOfPayment)),
+            methodOfPayment = collectWhen(goodsItems.size > 1)(itemSection.itemSecurityTraderDetails.flatMap(_.methodOfPayment.map(_.code))),
             commercialReferenceNumber = collectWhen(goodsItems.size > 1)(itemSection.itemSecurityTraderDetails.flatMap(_.commercialReferenceNumber)),
             dangerousGoodsCode = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
@@ -382,7 +382,7 @@ class DeclarationRequestService @Inject() (
         decDatHEA383 = dateTimeOfPrep.toLocalDate,
         decPlaHEA394 = movementDetails.declarationPlacePage,
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
-        traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
+        traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod.map(_.code)) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
         comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber) orElse headerCommercialReferenceNumberFromItemDetails(journeyDomain.itemDetails),
         secHEA358 = if (preTaskList.addSecurityDetails) {
           Some(safetyAndSecurityFlag(preTaskList.addSecurityDetails))
@@ -497,7 +497,7 @@ class DeclarationRequestService @Inject() (
       itemSectionsDetails.map {
         _.itemSecurityTraderDetails.flatMap {
           itemsSecurityTraderDetails =>
-            itemsSecurityTraderDetails.methodOfPayment
+            itemsSecurityTraderDetails.methodOfPayment.map(_.code)
         }
       }.head
     }
