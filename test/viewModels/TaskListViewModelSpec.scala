@@ -17,13 +17,11 @@
 package viewModels
 
 import base.{GeneratorSpec, SpecBase}
-import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import generators.{ModelGenerators, UserAnswersGenerator}
 import models.DeclarationType.{Option1, Option2, Option4}
 import models.ProcedureType.{Normal, Simplified}
 import models.RepresentativeCapacity.Direct
-import models.journeyDomain.{GoodsSummary, MovementDetails, PreviousReferences, UserAnswersReader}
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.userAnswerScenarios.{Scenario1, Scenario3}
 import models.{EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
@@ -879,8 +877,6 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         }
 
         "when add custom approved location page has been answered" in {
-          val isSecurityDefined = false
-          val procedureType     = ProcedureType.Normal
 
           forAll(arb[Boolean]) {
             pageAnswer =>
@@ -1127,6 +1123,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       .unsafeSetVal(CountryOfDispatchPage)(CountryOfDispatch(CountryCode("GB"), true))
       .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
       .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
+      .unsafeSetVal(DeclarationTypePage)(Option1)
       .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
       .unsafeSetVal(ArrivalTimesAtOfficePage(index))(LocalDateTime.now)
 

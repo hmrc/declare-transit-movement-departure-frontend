@@ -20,12 +20,12 @@ import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
-import models.journeyDomain.JourneyDomain
+import models.journeyDomain.{JourneyDomain, RouteDetailsWithTransitInformation}
 import models.journeyDomain.TransportDetails.InlandMode.Rail
 import models.messages.InterchangeControlReference
 import models.messages.trader.TraderPrincipalWithEori
 import models.reference.{Country, CountryCode}
-import models.userAnswerScenarios.Scenario1
+import models.userAnswerScenarios.{Scenario1, Scenario7}
 import models.{CommonAddress, Index}
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
@@ -35,8 +35,12 @@ import pages.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage,
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
-
 import java.time.LocalDateTime
+
+import cats.data.NonEmptyList
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
+import models.messages.customsoffice.CustomsOfficeTransit
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -558,6 +562,37 @@ class DeclarationRequestServiceSpec
                 countryCode = Some("XI"),
                 principalTirHolderId = None
               )
+          }
+        }
+      }
+
+      "Customs Office Transit" - {
+        "Must be empty if Declaration Type is Option 4 (TIR)" in {
+
+          when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+          val result = service.convert(Scenario7.userAnswers).futureValue.right.value.customsOfficeTransit
+
+          result mustBe Seq.empty
+        }
+
+        "Must be Populated if Declaration Type is Option 1,2 or 3" in {
+          forAll(genUserAnswerScenario) {
+            scenario =>
+              when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
+              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+
+              val result: Seq[CustomsOfficeTransit] = service.convert(scenario.userAnswers).futureValue.right.value.customsOfficeTransit
+              val exepectedResult: Option[List[CustomsOfficeTransit]] =
+                scenario.toModel.routeDetails.asInstanceOf[RouteDetailsWithTransitInformation].transitInformation.map {
+                  x =>
+                    x.map {
+                      case TransitInformation(transitOffice, arrivalTime) => CustomsOfficeTransit(transitOffice, arrivalTime)
+                    }.toList
+                }
+
+              result mustBe exepectedResult.value
           }
         }
       }

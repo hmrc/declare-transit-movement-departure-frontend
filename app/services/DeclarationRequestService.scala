@@ -19,7 +19,6 @@ package services
 import cats.data.NonEmptyList
 import cats.implicits._
 import logging.Logging
-import models.DeclarationType.Option4
 import models.GuaranteeType.TIR
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
@@ -29,7 +28,7 @@ import models.journeyDomain.GoodsSummary.{
   GoodSummarySimplifiedDetails
 }
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
-import models.journeyDomain.RouteDetails.TransitInformation
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
@@ -400,7 +399,10 @@ class DeclarationRequestService @Inject() (
       CustomsOfficeDeparture(
         referenceNumber = preTaskList.officeOfDeparture.id
       ),
-      routeDetails.transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty),
+      routeDetails match {
+        case RouteDetailsWithTransitInformation(_, _, _, transitInformation) => transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty)
+        case RouteDetailsWithoutTransitInformation(_, _, _)                  => Seq.empty
+      },
       CustomsOfficeDestination(
         referenceNumber = routeDetails.destinationOffice.id
       ),
