@@ -38,7 +38,7 @@ class SafetyAndSecurityCheckYourAnswersViewModelSpec extends SpecBase with Gener
     .set(AddTransportChargesPaymentMethodPage, true)
     .success
     .value
-    .set(TransportChargesPaymentMethodPage, MethodOfPayment("A", Some("Payment in cash")))
+    .set(TransportChargesPaymentMethodPage, MethodOfPayment("A", "Payment in cash"))
     .success
     .value
     .set(AddCommercialReferenceNumberPage, true)
@@ -109,7 +109,7 @@ class SafetyAndSecurityCheckYourAnswersViewModelSpec extends SpecBase with Gener
 
   val countryList                = new CountryList(Seq(Country(CountryCode("FR"), "France")))
   val circumstanceIndicatorsList = CircumstanceIndicatorList(Seq(CircumstanceIndicator("C", "Road mode of transport")))
-  val methodOfPaymentList        = MethodOfPaymentList(Seq(MethodOfPayment("A", Some("Payment in cash"))))
+  val methodOfPaymentList        = MethodOfPaymentList(Seq(MethodOfPayment("A", "Payment in cash")))
   // scalastyle:on
 
   private val data: Seq[Section] =

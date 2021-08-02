@@ -53,7 +53,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       "when add security details is true and all optional answers are defined without consignor and consignee" in {
 
         val expectedResult = ItemsSecurityTraderDetails(
-          Some(MethodOfPayment("code", Some("description"))),
+          Some(MethodOfPayment("code", "description")),
           Some("commercialReferenceNumber"),
           Some("dangerousGoodsCode"),
           None,
@@ -62,7 +62,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
 
         val userAnswers = itemSecurityTraderDetailsUa
           .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-          .unsafeSetVal(TransportChargesPage(index))(MethodOfPayment("code", Some("description")))
+          .unsafeSetVal(TransportChargesPage(index))(MethodOfPayment("code", "description"))
           .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
           .unsafeSetVal(CommercialReferenceNumberPage(index))("commercialReferenceNumber")
           .unsafeSetVal(AddDangerousGoodsCodePage(index))(true)

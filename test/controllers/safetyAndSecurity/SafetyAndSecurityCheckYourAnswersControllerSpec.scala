@@ -45,7 +45,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec extends SpecBase with Mock
   private val mockReferenceDataConnector = mock[ReferenceDataConnector]
   val countries                          = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   val circumstanceIndicatorsList         = CircumstanceIndicatorList(Seq(CircumstanceIndicator("C", "Road mode of transport")))
-  val methodOfPaymentList                = MethodOfPaymentList(Seq(MethodOfPayment("A", Some("Payment in cash"))))
+  val methodOfPaymentList                = MethodOfPaymentList(Seq(MethodOfPayment("A", "Payment in cash")))
 
   lazy val safetyAndSecurityRoute = routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(lrn).url
 
