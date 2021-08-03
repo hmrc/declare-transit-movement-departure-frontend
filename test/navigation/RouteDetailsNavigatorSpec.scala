@@ -26,7 +26,9 @@ import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
+import pages.routeDetails._
 import queries.OfficeOfTransitQuery
+import org.scalacheck.Gen
 
 class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
@@ -37,8 +39,26 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
     "in Normal mode" - {
 
       "Route Details section" - {
+
+        "Must go from Movement Destination Country to Destination Office when Declaration Type is not Option 4 (TIR)" in {
+
+          val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val userAnswers = answers
+                .set(DeclarationTypePage, generatedOption)
+                .toOption
+                .value
+
+              navigator
+                .nextPage(MovementDestinationCountryPage, NormalMode, userAnswers)
+                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.lrn, NormalMode))
+          }
+        }
+
         "must go from Country of dispatch page to Destination Country page" in {
-          val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), None)
+
           forAll(arbitrary[UserAnswers]) {
             answers =>
               navigator
@@ -57,32 +77,42 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "must go from Movement Destination Country page to Destination Office page" in {
+        "Must go from Destination Office Page to Office Of Transit Country Controller when Country Code is GB" in {
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              navigator
-                .nextPage(MovementDestinationCountryPage, NormalMode, answers)
-                .mustBe(routes.DestinationOfficeController.onPageLoad(answers.lrn, NormalMode))
-          }
-        }
+              val updatedAnswers = answers
+                .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+                .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
 
-        "must go from Destination Office Page to Office Of Transit Country page when not an EU movement eg 'gb' " in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val updatedAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
               navigator
                 .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
                 .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
           }
         }
 
-        "must go from Destination Office Page to Add Office Of Transit page when an EU movement eg'NI' " in {
+        "Must go from Destination Office Page to Check Your Answers page when Declaration Type is Option 4 (TIR)" in {
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
-              val updatedAnswers = answers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+              val updatedAnswers = answers
+                .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+                .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
+
+              navigator
+                .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
+                .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
+          }
+        }
+
+        "Must go from Destination Office Page to Add Office Of Transit page when Country Code is XI" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedAnswers = answers
+                .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+                .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option2)
+
               navigator
                 .nextPage(DestinationOfficePage, NormalMode, updatedAnswers)
                 .mustBe(routes.AddOfficeOfTransitController.onPageLoad(updatedAnswers.lrn, NormalMode))
@@ -257,7 +287,6 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
         }
       }
-
     }
 
     "in Check mode" - {
@@ -298,22 +327,26 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
+            val updatedAnswers = answers
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+              .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
             navigator
-              .nextPage(MovementDestinationCountryPage, CheckMode, answers)
-              .mustBe(routes.DestinationOfficeController.onPageLoad(answers.lrn, CheckMode))
-
+              .nextPage(MovementDestinationCountryPage, NormalMode, updatedAnswers)
+              .mustBe(routes.DestinationOfficeController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
-
       }
 
-      "Must go from Destination Office to Router Details Check Your Answers" in {
+      "Must go from Destination Office Page to Check Your Answers" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            navigator
-              .nextPage(DestinationOfficePage, CheckMode, answers)
-              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
+            val updatedAnswers = answers
+              .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+              .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option1)
 
+            navigator
+              .nextPage(DestinationOfficePage, CheckMode, updatedAnswers)
+              .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -348,7 +381,6 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(OfficeOfTransitCountryPage(index), CheckMode, answers)
               .mustBe(routes.AddAnotherTransitOfficeController.onPageLoad(answers.lrn, index, CheckMode))
-
         }
       }
     }

@@ -29,6 +29,8 @@ class AddConveyanceReferenceNumberPageSpec extends PageBehaviours {
     beSettable[Boolean](AddConveyanceReferenceNumberPage)
 
     beRemovable[Boolean](AddConveyanceReferenceNumberPage)
+
+    clearDownItems[Boolean](AddConveyanceReferenceNumberPage)
   }
 
   "cleanup" - {
@@ -38,6 +40,9 @@ class AddConveyanceReferenceNumberPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(AddConveyanceReferenceNumberPage, true)
+            .success
+            .value
             .set(ConveyanceReferenceNumberPage, "value")
             .success
             .value

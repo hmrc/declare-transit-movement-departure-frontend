@@ -29,6 +29,8 @@ class AddCommercialReferenceNumberAllItemsPageSpec extends PageBehaviours {
     beSettable[Boolean](AddCommercialReferenceNumberAllItemsPage)
 
     beRemovable[Boolean](AddCommercialReferenceNumberAllItemsPage)
+
+    clearDownItems[Boolean](AddCommercialReferenceNumberAllItemsPage)
   }
 
   "cleanup" - {
@@ -38,6 +40,9 @@ class AddCommercialReferenceNumberAllItemsPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(AddCommercialReferenceNumberAllItemsPage, true)
+            .success
+            .value
             .set(CommercialReferenceNumberAllItemsPage, "value")
             .success
             .value

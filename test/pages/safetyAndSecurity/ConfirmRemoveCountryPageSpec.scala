@@ -27,5 +27,7 @@ class ConfirmRemoveCountryPageSpec extends PageBehaviours {
     beSettable[Boolean](ConfirmRemoveCountryPage)
 
     beRemovable[Boolean](ConfirmRemoveCountryPage)
+
+    clearDownItems[Boolean](ConfirmRemoveCountryPage)
   }
 }

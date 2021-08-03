@@ -16,16 +16,19 @@
 
 package pages.safetyAndSecurity
 
+import models.reference.MethodOfPayment
 import pages.behaviours.PageBehaviours
 
 class TransportChargesPaymentMethodPageSpec extends PageBehaviours {
 
   "TransportChargesPaymentMethodPage" - {
 
-    beRetrievable[String](TransportChargesPaymentMethodPage)
+    beRetrievable[MethodOfPayment](TransportChargesPaymentMethodPage)
 
-    beSettable[String](TransportChargesPaymentMethodPage)
+    beSettable[MethodOfPayment](TransportChargesPaymentMethodPage)
 
-    beRemovable[String](TransportChargesPaymentMethodPage)
+    beRemovable[MethodOfPayment](TransportChargesPaymentMethodPage)
+
+    clearDownItems[MethodOfPayment](TransportChargesPaymentMethodPage)
   }
 }

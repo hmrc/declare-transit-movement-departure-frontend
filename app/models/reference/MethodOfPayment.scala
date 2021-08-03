@@ -16,9 +16,11 @@
 
 package models.reference
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Json, _}
 
-case class MethodOfPayment(code: String, description: String)
+case class MethodOfPayment(code: String, description: String) {
+  override def toString = s"($code) $description"
+}
 
 object MethodOfPayment {
   implicit val format: OFormat[MethodOfPayment] = Json.format[MethodOfPayment]

@@ -28,8 +28,15 @@ import models.requests.DataRequest
 import models.{DependentSection, EoriNumber, ProcedureType, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import pages.movementDetails.PreLodgeDeclarationPage
 import pages._
+import pages.generalInformation.{
+  ContainersUsedPage,
+  DeclarationForSomeoneElsePage,
+  DeclarationPlacePage,
+  PreLodgeDeclarationPage,
+  RepresentativeCapacityPage,
+  RepresentativeNamePage
+}
 import play.api.mvc.{AnyContent, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

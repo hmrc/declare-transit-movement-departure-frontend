@@ -33,6 +33,8 @@ class AddSafetyAndSecurityConsignorPageSpec extends SpecBase with PageBehaviours
 
     beRemovable[Boolean](AddSafetyAndSecurityConsignorPage)
 
+    clearDownItems[Boolean](AddSafetyAndSecurityConsignorPage)
+
     "cleanup" - {
       "must clean up the consignor details on selecting option 'No' " in {
         val consignorAddress = arbitrary[CommonAddress].sample.value
@@ -40,6 +42,9 @@ class AddSafetyAndSecurityConsignorPageSpec extends SpecBase with PageBehaviours
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsignorPage, true)
+              .success
+              .value
               .set(AddSafetyAndSecurityConsignorEoriPage, false)
               .success
               .value

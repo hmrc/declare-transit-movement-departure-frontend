@@ -1473,3 +1473,10 @@ tirGuaranteeReference.checkYourAnswersLabel = TIR guarantee reference
 tirGuaranteeReference.error.required = Enter the reference for the TIR guarantee
 tirGuaranteeReference.error.length = The reference for the TIR guarantee must be 35 characters or less
 tirGuaranteeReference.error.invalid = The reference for the TIR guarantee must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
+
+confirmStartAddItems.title = Are you ready to start adding items?
+confirmStartAddItems.heading = Are you ready to start adding items?
+confirmStartAddItems.info.nonSafety = Make sure the answers in general information, route, and trader details sections are correct. Changing any answers in these sections will reset this section.
+confirmStartAddItems.info.safety = Make sure the answers in general information, route, trader details, and safety and security sections are correct. Changing any answers in these sections will reset this section.
+confirmStartAddItems.error.required = Select yes if you are ready to start adding items
+

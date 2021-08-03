@@ -17,11 +17,12 @@
 package navigation
 
 import controllers.movementDetails.routes
+
 import javax.inject.{Inject, Singleton}
 import models.ProcedureType._
 import models._
 import pages._
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.generalInformation._
 import play.api.mvc.Call
 
 @Singleton

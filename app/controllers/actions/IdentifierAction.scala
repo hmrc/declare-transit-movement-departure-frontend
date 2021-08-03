@@ -27,7 +27,6 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Results._
 import play.api.mvc._
 import renderer.Renderer
-import services.IsDeparturesEnabledService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
@@ -44,7 +43,6 @@ class AuthenticatedIdentifierAction @Inject() (
   config: FrontendAppConfig,
   val parser: BodyParsers.Default,
   enrolmentStoreConnector: EnrolmentStoreConnector,
-  isDeparturesEnabledService: IsDeparturesEnabledService,
   renderer: Renderer
 )(implicit val executionContext: ExecutionContext)
     extends IdentifierAction
@@ -62,10 +60,7 @@ class AuthenticatedIdentifierAction @Inject() (
             enrolment <- enrolments.enrolments.filter(_.isActivated).find(_.key.equals(config.enrolmentKey))
           } yield enrolment.getIdentifier(config.enrolmentIdentifierKey) match {
             case Some(eoriNumber) =>
-              isDeparturesEnabledService.isDeparturesEnabled(eoriNumber.value).flatMap {
-                case true  => block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
-                case false => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
-              }
+              block(IdentifierRequest(request, EoriNumber(prefixGBIfMissing(eoriNumber.value))))
             case _ => Future.successful(Redirect(routes.UnauthorisedController.onPageLoad()))
           }).getOrElse(checkForGroupEnrolment(maybeGroupId, config)(hc, request))
       }

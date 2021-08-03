@@ -19,7 +19,6 @@ package services
 import cats.data.NonEmptyList
 import cats.implicits._
 import logging.Logging
-import models.DeclarationType.Option4
 import models.GuaranteeType.TIR
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
@@ -29,7 +28,7 @@ import models.journeyDomain.GoodsSummary.{
   GoodSummarySimplifiedDetails
 }
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
-import models.journeyDomain.RouteDetails.TransitInformation
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{NewDetailsAtBorder, SameDetailsAtBorder}
 import models.journeyDomain.TransportDetails.{DetailsAtBorder, InlandMode, ModeCrossingBorder}
@@ -126,7 +125,7 @@ class DeclarationRequestService @Inject() (
             netMass = itemSection.itemDetails.totalNetMass.map(BigDecimal(_)),
             countryOfDispatch = None, // Not required, defined at header level
             countryOfDestination = None, // Not required, defined at header level
-            methodOfPayment = collectWhen(goodsItems.size > 1)(itemSection.itemSecurityTraderDetails.flatMap(_.methodOfPayment)),
+            methodOfPayment = collectWhen(goodsItems.size > 1)(itemSection.itemSecurityTraderDetails.flatMap(_.methodOfPayment.map(_.code))),
             commercialReferenceNumber = collectWhen(goodsItems.size > 1)(itemSection.itemSecurityTraderDetails.flatMap(_.commercialReferenceNumber)),
             dangerousGoodsCode = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
@@ -383,7 +382,7 @@ class DeclarationRequestService @Inject() (
         decDatHEA383 = dateTimeOfPrep.toLocalDate,
         decPlaHEA394 = movementDetails.declarationPlacePage,
         speCirIndHEA1 = safetyAndSecurity.flatMap(_.circumstanceIndicator),
-        traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
+        traChaMetOfPayHEA1 = safetyAndSecurity.flatMap(_.paymentMethod.map(_.code)) orElse headerPaymentMethodFromItemDetails(journeyDomain.itemDetails),
         comRefNumHEA = safetyAndSecurity.flatMap(_.commercialReferenceNumber) orElse headerCommercialReferenceNumberFromItemDetails(journeyDomain.itemDetails),
         secHEA358 = if (preTaskList.addSecurityDetails) {
           Some(safetyAndSecurityFlag(preTaskList.addSecurityDetails))
@@ -400,7 +399,10 @@ class DeclarationRequestService @Inject() (
       CustomsOfficeDeparture(
         referenceNumber = preTaskList.officeOfDeparture.id
       ),
-      routeDetails.transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty),
+      routeDetails match {
+        case RouteDetailsWithTransitInformation(_, _, _, transitInformation) => transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty)
+        case RouteDetailsWithoutTransitInformation(_, _, _)                  => Seq.empty
+      },
       CustomsOfficeDestination(
         referenceNumber = routeDetails.destinationOffice.id
       ),
@@ -495,7 +497,7 @@ class DeclarationRequestService @Inject() (
       itemSectionsDetails.map {
         _.itemSecurityTraderDetails.flatMap {
           itemsSecurityTraderDetails =>
-            itemsSecurityTraderDetails.methodOfPayment
+            itemsSecurityTraderDetails.methodOfPayment.map(_.code)
         }
       }.head
     }

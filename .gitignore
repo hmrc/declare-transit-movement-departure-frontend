@@ -35,6 +35,7 @@ bin
 *.iws
 migrations
 .bloop/
+.bsp
 .metals/
 .vscode/
 project/metals.sbt

@@ -18,12 +18,14 @@ package controllers.traderDetails
 
 import controllers.actions._
 import forms.WhatIsPrincipalEoriFormProvider
-import models.ProcedureType.Simplified
+import models.ProcedureType.{Normal, Simplified}
 import models.reference.{CountryCode, CustomsOffice}
-import models.{LocalReferenceNumber, Mode}
+import models.requests.DataRequest
+import models.{LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.{OfficeOfDeparturePage, ProcedureTypePage, WhatIsPrincipalEoriPage}
+import pages.traderDetails.{PrincipalNamePage, WhatIsPrincipalEoriPage}
+import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -99,4 +101,5 @@ class WhatIsPrincipalEoriController @Inject() (
 
       }
   }
+
 }

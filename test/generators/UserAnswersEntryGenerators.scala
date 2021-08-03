@@ -19,7 +19,7 @@ package generators
 import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages.{guaranteeDetails, _}
+import pages.{guaranteeDetails, routeDetails, _}
 import pages.addItems.{CommodityCodePage, ConfirmRemoveItemPage, _}
 import pages.addItems.traderDetails._
 import pages.addItems._
@@ -36,44 +36,23 @@ import pages.addItems.traderSecurityDetails.{
   SecurityConsignorEoriPage,
   SecurityConsignorNamePage
 }
+import pages.generalInformation._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.movementDetails.PreLodgeDeclarationPage
-import pages.safetyAndSecurity.{
-  AddAnotherCountryOfRoutingPage,
-  AddCarrierEoriPage,
-  AddCarrierPage,
-  AddCircumstanceIndicatorPage,
-  AddCommercialReferenceNumberAllItemsPage,
-  AddCommercialReferenceNumberPage,
-  AddConveyanceReferenceNumberPage,
-  AddPlaceOfUnloadingCodePage,
-  AddSafetyAndSecurityConsigneeEoriPage,
-  AddSafetyAndSecurityConsigneePage,
-  AddSafetyAndSecurityConsignorEoriPage,
-  AddSafetyAndSecurityConsignorPage,
-  AddTransportChargesPaymentMethodPage,
-  CarrierAddressPage,
-  CarrierEoriPage,
-  CarrierNamePage,
-  CircumstanceIndicatorPage,
-  CommercialReferenceNumberAllItemsPage,
-  ConfirmRemoveCountryPage,
-  ConveyanceReferenceNumberPage,
-  CountryOfRoutingPage,
-  PlaceOfUnloadingCodePage,
-  SafetyAndSecurityConsigneeAddressPage,
-  SafetyAndSecurityConsigneeEoriPage,
-  SafetyAndSecurityConsigneeNamePage,
-  SafetyAndSecurityConsignorAddressPage,
-  SafetyAndSecurityConsignorEoriPage,
-  SafetyAndSecurityConsignorNamePage,
-  TransportChargesPaymentMethodPage
-}
+import pages.routeDetails._
+import pages.safetyAndSecurity._
+import pages.traderDetails._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {
 
   self: Generators =>
+
+  implicit lazy val arbitraryConfirmAddItemsPageUserAnswersEntry: Arbitrary[(ConfirmStartAddItemsPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        value <- arbitrary[ConfirmStartAddItemsPage.type#Data].map(Json.toJson(_))
+      } yield (ConfirmStartAddItemsPage, value)
+    }
 
   implicit lazy val arbitraryAddOfficeOfTransitUserAnswersEntry: Arbitrary[(AddOfficeOfTransitPage.type, JsValue)] =
     Arbitrary {
@@ -107,7 +86,7 @@ trait UserAnswersEntryGenerators {
     Arbitrary {
       for {
         value <- nonEmptyString.map(Json.toJson(_))
-      } yield (OfficeOfTransitCountryPage(Index(0)), value)
+      } yield (routeDetails.OfficeOfTransitCountryPage(Index(0)), value)
     }
 
   implicit lazy val arbitraryLoadingPlaceUserAnswersEntry: Arbitrary[(LoadingPlacePage.type, JsValue)] =
@@ -316,7 +295,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryTransportChargesPaymentMethodUserAnswersEntry: Arbitrary[(TransportChargesPaymentMethodPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- arbitrary[TransportChargesPaymentMethodPage.type#Data].map(Json.toJson(_))
+        value <- nonEmptyString.map(Json.toJson(_))
       } yield (TransportChargesPaymentMethodPage, value)
     }
 

@@ -23,22 +23,26 @@ import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
 import controllers.addItems.{routes => addItemsRoutes}
 import controllers.{routes => mainRoutes}
 import derivable._
+import logging.Logging
 import models._
 import models.reference.PackageType.{bulkCodes, unpackedCodes}
 import pages._
 import pages.addItems.containers._
 import pages.addItems.traderDetails._
 import pages.addItems.{AddAnotherPreviousAdministrativeReferencePage, _}
+import pages.generalInformation.ContainersUsedPage
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AddItemsNavigator @Inject() () extends Navigator {
+class AddItemsNavigator @Inject() () extends Navigator with Logging {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case ConfirmStartAddItemsPage => confirmStartAddItemsRoutes
     case ItemDescriptionPage(index) => ua => Some(addItemsRoutes.ItemTotalGrossMassController.onPageLoad(ua.lrn, index, NormalMode))
     case ItemTotalGrossMassPage(index) => ua => Some(addItemsRoutes.AddTotalNetMassController.onPageLoad(ua.lrn, index, NormalMode))
     case AddTotalNetMassPage(index) => ua => addTotalNetMassRoute(index, ua, NormalMode)
@@ -116,6 +120,15 @@ class AddItemsNavigator @Inject() () extends Navigator {
     case AddAnotherContainerPage(itemIndex) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
     case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, CheckMode))
     case AddAnotherPreviousAdministrativeReferencePage(itemIndex) => ua => addAnotherPreviousAdministrativeReferenceRoute(itemIndex, ua, CheckMode)
+  }
+
+  private def confirmStartAddItemsRoutes(ua: UserAnswers): Option[Call] = {
+    ua.get(ConfirmStartAddItemsPage) match {
+      case Some(true)  => Some(addItemsRoutes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), NormalMode))
+      case Some(false) => Some(mainRoutes.DeclarationSummaryController.onPageLoad(ua.lrn))
+      case None        => logger.error("[confirmStartAddItemsRoutes] no ConfirmStartAddItemsPage was found")
+        Some(mainRoutes.SessionExpiredController.onPageLoad())
+    }
   }
 
   private def consigneeName(ua: UserAnswers, index: Index, mode: Mode) =

@@ -25,7 +25,8 @@ import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.{AccessCodePage, DeclarationTypePage, DefaultAmountPage, DestinationOfficePage, LiabilityAmountPage, OfficeOfDeparturePage, OtherReferencePage}
+import pages.routeDetails.DestinationOfficePage
+import pages.{AccessCodePage, DeclarationTypePage, DefaultAmountPage, LiabilityAmountPage, OfficeOfDeparturePage, OtherReferencePage}
 import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
 
 class GuaranteeDetailsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

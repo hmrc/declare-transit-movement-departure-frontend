@@ -17,6 +17,7 @@
 package pages.safetyAndSecurity
 
 import models.UserAnswers
+import models.reference.MethodOfPayment
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -29,6 +30,8 @@ class AddTransportChargesPaymentMethodPageSpec extends PageBehaviours {
     beSettable[Boolean](AddTransportChargesPaymentMethodPage)
 
     beRemovable[Boolean](AddTransportChargesPaymentMethodPage)
+
+    clearDownItems[Boolean](AddTransportChargesPaymentMethodPage)
   }
 
   "cleanup" - {
@@ -38,7 +41,10 @@ class AddTransportChargesPaymentMethodPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
-            .set(TransportChargesPaymentMethodPage, "value")
+            .set(AddTransportChargesPaymentMethodPage, true)
+            .success
+            .value
+            .set(TransportChargesPaymentMethodPage, MethodOfPayment("code", "description"))
             .success
             .value
             .set(AddTransportChargesPaymentMethodPage, false)

@@ -23,7 +23,7 @@ import models.reference.Country
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import pages.DestinationCountryPage
+import pages.routeDetails.DestinationCountryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json

@@ -29,6 +29,8 @@ class AddCarrierPageSpec extends PageBehaviours {
     beSettable[Boolean](AddCarrierPage)
 
     beRemovable[Boolean](AddCarrierPage)
+
+    clearDownItems[Boolean](AddCarrierPage)
   }
 
   "cleanup" - {
@@ -39,6 +41,9 @@ class AddCarrierPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
+            .set(AddCarrierPage, true)
+            .success
+            .value
             .set(AddCarrierEoriPage, true)
             .success
             .value

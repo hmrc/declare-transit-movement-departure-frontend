@@ -18,7 +18,7 @@ package models.journeyDomain.addItems
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import models.reference.{Country, CountryCode, CustomsOffice}
+import models.reference.{Country, CountryCode, CustomsOffice, MethodOfPayment}
 import models.{CommonAddress, EoriNumber}
 import org.scalacheck.Gen
 import org.scalatest.TryValues
@@ -53,7 +53,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       "when add security details is true and all optional answers are defined without consignor and consignee" in {
 
         val expectedResult = ItemsSecurityTraderDetails(
-          Some("methodOfPayment"),
+          Some(MethodOfPayment("code", "description")),
           Some("commercialReferenceNumber"),
           Some("dangerousGoodsCode"),
           None,
@@ -62,7 +62,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
 
         val userAnswers = itemSecurityTraderDetailsUa
           .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
-          .unsafeSetVal(TransportChargesPage(index))("methodOfPayment")
+          .unsafeSetVal(TransportChargesPage(index))(MethodOfPayment("code", "description"))
           .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
           .unsafeSetVal(CommercialReferenceNumberPage(index))("commercialReferenceNumber")
           .unsafeSetVal(AddDangerousGoodsCodePage(index))(true)

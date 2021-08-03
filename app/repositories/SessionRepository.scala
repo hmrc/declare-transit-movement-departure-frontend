@@ -50,18 +50,9 @@ private[repositories] class DefaultSessionRepository @Inject() (
         .map(_.value.map(_.as[UserAnswers]))
     }
 
-    def legacyUserAnswerF: Future[Option[UserAnswers]] = sessionCollection().flatMap {
-      _.findAndUpdate(legacySelector, modifier)
-        .map(_.value.map(_.as[UserAnswers](UserAnswers.legacyReads)))
-    }
     for {
       userAnswers <- userAnswersF
-      result <-
-        if (userAnswers.isEmpty) {
-          legacyUserAnswerF
-        } else {
-          Future.successful(userAnswers)
-        }
+      result      <- Future.successful(userAnswers)
     } yield result
 
   }

@@ -38,19 +38,23 @@ final case class UserAnswers(
   def get[A, B](derivable: Derivable[A, B])(implicit rds: Reads[A]): Option[B] =
     get(derivable: Gettable[A]).map(derivable.derive)
 
-  def set[A](page: QuestionPage[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
+  def set[A](page: QuestionPage[A], value: A)(implicit writes: Writes[A], reads: Reads[A]): Try[UserAnswers] = {
 
-    val updatedData = data.setObject(page.path, Json.toJson(value)) match {
+    lazy val updatedData = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
         Success(jsValue)
       case JsError(errors) =>
         Failure(JsResultException(errors))
     }
 
-    updatedData.flatMap {
-      d =>
-        val updatedAnswers = copy(data = d)
-        page.cleanup(Some(value), updatedAnswers)
+    lazy val cleanup: JsObject => Try[UserAnswers] = d => {
+      val updatedAnswers = copy(data = d)
+      page.cleanup(Some(value), updatedAnswers)
+    }
+
+    get(page) match {
+      case Some(`value`) => Success(this)
+      case _             => updatedData flatMap cleanup
     }
   }
 
@@ -84,20 +88,6 @@ object UserAnswers {
         (__ \ "lastUpdated").read(MongoDateTimeFormats.localDateTimeRead) and
         (__ \ "_id").read[Id]
     )(UserAnswers.apply _)
-  }
-
-  val legacyReads: Reads[UserAnswers] = {
-
-    import play.api.libs.functional.syntax._
-    (
-      (__ \ "_id").read[LocalReferenceNumber] and
-        (__ \ "eoriNumber").read[EoriNumber] and
-        (__ \ "data").read[JsObject] and
-        (__ \ "lastUpdated").read(MongoDateTimeFormats.localDateTimeRead) and
-        (__ \ "_id").read[Id]
-    )(UserAnswers.apply _).map(
-      ua => ua.copy(id = Id())
-    )
   }
 
   implicit lazy val writes: OWrites[UserAnswers] = {

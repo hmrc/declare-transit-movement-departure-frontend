@@ -16,7 +16,7 @@
 
 package pages.behaviours
 
-import generators.Generators
+import generators.{Generators, UserAnswersGenerator}
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -26,8 +26,16 @@ import org.scalatest.{OptionValues, TryValues}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
 import play.api.libs.json._
+import queries.AllItemsQuery
 
-trait PageBehaviours extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues with TryValues {
+trait PageBehaviours
+    extends AnyFreeSpec
+    with Matchers
+    with ScalaCheckPropertyChecks
+    with Generators
+    with OptionValues
+    with TryValues
+    with UserAnswersGenerator {
 
   class BeRetrievable[A] {
 
@@ -116,9 +124,33 @@ trait PageBehaviours extends AnyFreeSpec with Matchers with ScalaCheckPropertyCh
       }
   }
 
+  class ClearDownItems[A] {
+
+    def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit =
+      "must be able to remove items section from UserAnswers" in {
+
+        val gen = for {
+          page        <- genP
+          userAnswers <- genUserAnswerScenario
+          newValue <- arbitrary[A].suchThat(
+            a => !userAnswers.userAnswers.get(page).contains(a)
+          )
+        } yield (page, userAnswers.userAnswers, newValue)
+
+        forAll(gen) {
+          case (page, userAnswers, newValue) =>
+            val updatedAnswers = userAnswers.set(page, newValue).success.value
+            updatedAnswers.get(page).value mustEqual newValue
+            updatedAnswers.get(AllItemsQuery) must not be defined
+        }
+      }
+  }
+
   def beRetrievable[A]: BeRetrievable[A] = new BeRetrievable[A]
 
   def beSettable[A]: BeSettable[A] = new BeSettable[A]
 
   def beRemovable[A]: BeRemovable[A] = new BeRemovable[A]
+
+  def clearDownItems[A]: ClearDownItems[A] = new ClearDownItems[A]
 }

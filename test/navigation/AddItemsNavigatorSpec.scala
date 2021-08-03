@@ -33,7 +33,9 @@ import pages._
 import pages.addItems._
 import pages.addItems.containers._
 import pages.addItems.traderDetails._
+import pages.generalInformation.ContainersUsedPage
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 import queries.{ContainersQuery, _}
 
 class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
@@ -43,6 +45,38 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
   "Add Items section" - {
 
     "in normal mode" - {
+      "must go from confirm start add items page to item description page if answer is true" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeSetVal(ConfirmStartAddItemsPage)(true)
+            navigator
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
+              .mustBe(routes.ItemDescriptionController.onPageLoad(answers.lrn, index, NormalMode))
+        }
+      }
+
+      "must go from confirm start add items page to task list if answer is false" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeSetVal(ConfirmStartAddItemsPage)(false)
+            navigator
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
+              .mustBe(mainRoutes.DeclarationSummaryController.onPageLoad(answers.lrn))
+        }
+      }
+
+      "must go from confirm start add items page to session expiry page if no answer is present" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.unsafeRemove(ConfirmStartAddItemsPage)
+            navigator
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
+              .mustBe(mainRoutes.SessionExpiredController.onPageLoad())
+        }
+      }
 
       "must go from item description page to total gross mass page" in {
 
@@ -863,9 +897,10 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddAdministrativeReferencePage(index), false).success.value
                   .set(AddSecurityDetailsPage, true).success.value
                   .set(AddTransportChargesPaymentMethodPage, false).success.value
+                  .set(AddAdministrativeReferencePage(index), false).success.value
+                  
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
                   .mustBe(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(updatedAnswers.lrn,itemIndex, NormalMode))
@@ -876,8 +911,9 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddAdministrativeReferencePage(index), false).success.value
                   .set(AddSecurityDetailsPage, false).success.value
+                  .set(AddAdministrativeReferencePage(index), false).success.value
+                  
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
                   .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
@@ -889,10 +925,11 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddAdministrativeReferencePage(index), false).success.value
                   .set(AddSecurityDetailsPage, true).success.value
                   .set(AddTransportChargesPaymentMethodPage, true).success.value
                   .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
+                  .set(AddAdministrativeReferencePage(index), false).success.value
+                  
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
                   .mustBe(controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
@@ -904,10 +941,11 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddAdministrativeReferencePage(index), false).success.value
                   .set(AddSecurityDetailsPage, true).success.value
                   .set(AddTransportChargesPaymentMethodPage, true).success.value
                   .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
+                  .set(AddAdministrativeReferencePage(index), false).success.value
+                  
                 navigator
                   .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
                   .mustBe(controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
@@ -919,9 +957,10 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
                   .set(AddSecurityDetailsPage, true).success.value
                   .set(AddTransportChargesPaymentMethodPage, false).success.value
+                  .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+                  
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
                   .mustBe(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(updatedAnswers.lrn,itemIndex, NormalMode))
@@ -932,8 +971,9 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
                   .set(AddSecurityDetailsPage, false).success.value
+                  .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+                  
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
                   .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
@@ -945,10 +985,11 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
                   .set(AddSecurityDetailsPage, true).success.value
                   .set(AddTransportChargesPaymentMethodPage, true).success.value
                   .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
+                  .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+                  
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
                   .mustBe(controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
@@ -960,10 +1001,11 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
                   .set(AddSecurityDetailsPage, true).success.value
                   .set(AddTransportChargesPaymentMethodPage, true).success.value
                   .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
+                  .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+                  
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
                   .mustBe(controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))

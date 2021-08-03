@@ -50,7 +50,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     answer =>
       Row(
         key = Key(msg"transportCharges.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
+        value = Value(lit"${answer.toString}"),
         actions = List(
           Action(
             content = msg"site.edit",

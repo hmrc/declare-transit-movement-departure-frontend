@@ -30,7 +30,10 @@ import pages.addItems._
 import pages.addItems.containers.ContainerNumberPage
 import pages.addItems.securityDetails.AddDangerousGoodsCodePage
 import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
+import pages.generalInformation.ContainersUsedPage
+import pages.routeDetails.CountryOfDispatchPage
 import pages.safetyAndSecurity._
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 
 class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

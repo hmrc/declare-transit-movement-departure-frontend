@@ -17,7 +17,6 @@
 package controllers.routeDetails
 
 import java.time.{LocalDateTime, ZoneOffset}
-
 import base.{GeneratorSpec, MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
@@ -32,7 +31,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage}
+import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}

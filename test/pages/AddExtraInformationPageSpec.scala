@@ -42,6 +42,9 @@ class AddExtraInformationPageSpec extends PageBehaviours with ScalaCheckProperty
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val result = answers
+              .set(AddExtraInformationPage(itemIndex, referenceIndex), true)
+              .success
+              .value
               .set(ExtraInformationPage(itemIndex, referenceIndex), "test")
               .success
               .value
@@ -57,6 +60,9 @@ class AddExtraInformationPageSpec extends PageBehaviours with ScalaCheckProperty
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val result = answers
+              .set(AddExtraInformationPage(itemIndex, referenceIndex), false)
+              .success
+              .value
               .set(ExtraInformationPage(itemIndex, referenceIndex), "test")
               .success
               .value

@@ -21,7 +21,7 @@ import forms.RepresentativeCapacityFormProvider
 import models.{LocalReferenceNumber, Mode, RepresentativeCapacity}
 import navigation.Navigator
 import navigation.annotations.MovementDetails
-import pages.RepresentativeCapacityPage
+import pages.generalInformation.RepresentativeCapacityPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

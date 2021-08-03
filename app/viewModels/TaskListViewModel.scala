@@ -18,19 +18,20 @@ package viewModels
 
 import cats.data.NonEmptyList
 import cats.implicits._
-import controllers.movementDetails.routes
 import models.DeclarationType.Option4
 import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
-import models.{CheckMode, DependentSection, Index, Mode, NormalMode, ProcedureType, UserAnswers, ValidateTaskListViewLogger}
+import models.journeyDomain.RouteDetails._
+import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers}
 import pages._
+import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
 import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.routeDetails.CountryOfDispatchPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
+import pages.traderDetails.{IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json._
-import play.api.mvc.Call
 
 private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
 
@@ -131,7 +132,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
         ItemDescriptionPage(Index(0)).reader,
         controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(0), NormalMode).url
       )
-      .ifNotStarted(controllers.addItems.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(0), NormalMode).url)
+      .ifNotStarted(controllers.addItems.routes.ConfirmStartAddItemsController.onPageLoad(userAnswers.lrn).url)
 
   private def goodsSummaryStartPage(procedureType: Option[ProcedureType], safetyAndSecurity: Option[Boolean], prelodgedDeclaration: Option[Boolean]): String =
     (procedureType, safetyAndSecurity, prelodgedDeclaration) match {
