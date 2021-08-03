@@ -27,5 +27,7 @@ class PlaceOfUnloadingCodePageSpec extends PageBehaviours {
     beSettable[String](PlaceOfUnloadingCodePage)
 
     beRemovable[String](PlaceOfUnloadingCodePage)
+
+    clearDownItems[String](PlaceOfUnloadingCodePage)
   }
 }

@@ -25,7 +25,7 @@ import models._
 import pages._
 import play.api.mvc.Call
 import controllers.LoadingPlaceController
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.generalInformation.PreLodgeDeclarationPage
 
 @Singleton
 class GoodsSummaryNavigator @Inject() () extends Navigator {

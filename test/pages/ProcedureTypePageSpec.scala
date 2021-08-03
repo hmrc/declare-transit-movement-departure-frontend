@@ -20,7 +20,7 @@ import models.ProcedureType._
 import models.{ProcedureType, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.generalInformation.PreLodgeDeclarationPage
 
 class ProcedureTypeSpec extends PageBehaviours {
   // format: off

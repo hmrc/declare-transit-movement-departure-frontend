@@ -18,7 +18,7 @@ package pages
 
 import models.ProcedureType.Simplified
 import models.{ProcedureType, UserAnswers}
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.generalInformation.PreLodgeDeclarationPage
 import play.api.libs.json.JsPath
 
 import scala.util.Try

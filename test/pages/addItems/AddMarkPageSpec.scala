@@ -37,6 +37,9 @@ class AddMarkPageSpec extends PageBehaviours with SpecBase {
         userAnswers =>
           val result =
             userAnswers
+              .set(AddMarkPage(index, index), true)
+              .success
+              .value
               .set(DeclareMarkPage(index, index), "mark")
               .success
               .value

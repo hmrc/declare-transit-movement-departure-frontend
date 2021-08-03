@@ -28,5 +28,7 @@ class TransportChargesPaymentMethodPageSpec extends PageBehaviours {
     beSettable[MethodOfPayment](TransportChargesPaymentMethodPage)
 
     beRemovable[MethodOfPayment](TransportChargesPaymentMethodPage)
+
+    clearDownItems[MethodOfPayment](TransportChargesPaymentMethodPage)
   }
 }

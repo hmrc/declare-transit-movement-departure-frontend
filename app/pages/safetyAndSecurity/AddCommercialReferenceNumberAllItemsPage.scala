@@ -17,22 +17,28 @@
 package pages.safetyAndSecurity
 
 import models.UserAnswers
-import pages.QuestionPage
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
-case object AddCommercialReferenceNumberAllItemsPage extends QuestionPage[Boolean] {
+case object AddCommercialReferenceNumberAllItemsPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "addCommercialReferenceNumberAllItems"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    val cleanedUpUserAnswers = value match {
       case Some(false) =>
         userAnswers
           .remove(CommercialReferenceNumberAllItemsPage)
-      case _ => super.cleanup(value, userAnswers)
+      case _ => Success(userAnswers)
     }
+
+    cleanedUpUserAnswers
+      .flatMap(
+        updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+      )
+  }
 }

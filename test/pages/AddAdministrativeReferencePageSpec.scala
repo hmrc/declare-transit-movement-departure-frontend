@@ -41,6 +41,9 @@ class AddAdministrativeReferencePageSpec extends PageBehaviours with ScalaCheckP
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val result = answers
+              .set(AddAdministrativeReferencePage(index), true)
+              .success
+              .value
               .set(ReferenceTypePage(index, referenceIndex), "test")
               .success
               .value
@@ -60,11 +63,16 @@ class AddAdministrativeReferencePageSpec extends PageBehaviours with ScalaCheckP
         }
       }
 
-      "must keep the previous references pages on selecting option 'No' " in {
+      "must keep the previous references pages on selecting option 'Yes' " in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val result = answers.set(PreviousReferencePage(index, referenceIndex), "test").success.value
-            answers.set(AddAdministrativeReferencePage(index), true).success.value
+            val result = answers
+              .set(PreviousReferencePage(index, referenceIndex), "test")
+              .success
+              .value
+              .set(AddAdministrativeReferencePage(index), true)
+              .success
+              .value
 
             result.get(PreviousReferencePage(index, index)) mustBe defined
         }

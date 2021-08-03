@@ -23,7 +23,7 @@ import models.reference.{Country, CountryOfDispatch}
 import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import pages.CountryOfDispatchPage
+import pages.routeDetails.CountryOfDispatchPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json

@@ -27,5 +27,7 @@ class SafetyAndSecurityConsignorEoriPageSpec extends PageBehaviours {
     beSettable[String](SafetyAndSecurityConsignorEoriPage)
 
     beRemovable[String](SafetyAndSecurityConsignorEoriPage)
+
+    clearDownItems[String](SafetyAndSecurityConsignorEoriPage)
   }
 }

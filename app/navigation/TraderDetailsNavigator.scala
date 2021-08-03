@@ -23,6 +23,7 @@ import models.ProcedureType.{Normal, Simplified}
 import javax.inject.{Inject, Singleton}
 import models._
 import pages._
+import pages.traderDetails._
 import play.api.mvc.Call
 
 @Singleton

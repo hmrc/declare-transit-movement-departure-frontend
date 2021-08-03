@@ -30,8 +30,9 @@ import models.{CommonAddress, Index}
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
-import pages.movementDetails.PreLodgeDeclarationPage
-import pages.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage, _}
+import pages._
+import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
+import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, PrincipalNamePage, WhatIsPrincipalEoriPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
@@ -150,8 +151,6 @@ class DeclarationRequestServiceSpec
                   .unsafeSetVal(CustomsApprovedLocationPage)("customsApprovedLocation")
 
                 val result = service.convert(userAnswers).futureValue
-
-//                result mustBe "customsApprovedLocation"
 
                 result.right.value.header.cusSubPlaHEA66.value mustBe "customsApprovedLocation"
                 result.right.value.header.autLocOfGooCodHEA41 mustBe None

@@ -27,5 +27,7 @@ class CommercialReferenceNumberAllItemsPageSpec extends PageBehaviours {
     beSettable[String](CommercialReferenceNumberAllItemsPage)
 
     beRemovable[String](CommercialReferenceNumberAllItemsPage)
+
+    clearDownItems[String](CommercialReferenceNumberAllItemsPage)
   }
 }

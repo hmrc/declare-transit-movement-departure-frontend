@@ -23,7 +23,7 @@ import models.DeclarationType.{Option2, Option3}
 import models.Index
 import models.reference.{CountryCode, CountryOfDispatch}
 import pages.addItems._
-import pages.{CountryOfDispatchPage, DeclarationTypePage}
+import pages.DeclarationTypePage
 
 final case class PreviousReferences(
   referenceType: String,

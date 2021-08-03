@@ -27,5 +27,7 @@ class ConveyanceReferenceNumberPageSpec extends PageBehaviours {
     beSettable[String](ConveyanceReferenceNumberPage)
 
     beRemovable[String](ConveyanceReferenceNumberPage)
+
+    clearDownItems[String](ConveyanceReferenceNumberPage)
   }
 }

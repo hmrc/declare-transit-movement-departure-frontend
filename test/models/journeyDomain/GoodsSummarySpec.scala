@@ -24,7 +24,7 @@ import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{GoodSummaryNormalDetailsWithPreLodge, GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
 import org.scalacheck.Gen
 import pages._
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.generalInformation.PreLodgeDeclarationPage
 
 import java.time.LocalDate
 

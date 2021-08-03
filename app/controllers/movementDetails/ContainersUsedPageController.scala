@@ -21,7 +21,7 @@ import forms.ContainersUsedPageFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.MovementDetails
-import pages.ContainersUsedPage
+import pages.generalInformation.ContainersUsedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

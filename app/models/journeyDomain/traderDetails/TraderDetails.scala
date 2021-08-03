@@ -18,7 +18,7 @@ package models.journeyDomain.traderDetails
 
 import cats.implicits._
 import models.journeyDomain.{UserAnswersReader, _}
-import pages.{AddConsigneePage, AddConsignorPage}
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 
 case class TraderDetails(
   principalTraderDetails: PrincipalTraderDetails,

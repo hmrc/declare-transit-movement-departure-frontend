@@ -27,9 +27,11 @@ import models.userAnswerScenarios.{Scenario1, Scenario3}
 import models.{EoriNumber, GuaranteeType, Index, NormalMode, ProcedureType, Status}
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
+import pages.generalInformation._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.movementDetails.PreLodgeDeclarationPage
+import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage, CountryOfDispatchPage, DestinationCountryPage, DestinationOfficePage}
 import pages.safetyAndSecurity._
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage, IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json.{JsObject, Json}
 
 import java.time.{LocalDate, LocalDateTime}
@@ -776,19 +778,19 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
       "when dependent section is complete" - {
 
-        "when the status is Not started, links to the first page" in {
+        "when the status is Not started, links to the confirm start add item page" in {
 
           val userAnswers = dependantSections
             .unsafeSetVal(AddSecurityDetailsPage)(true)
 
           val viewModel = TaskListViewModel(userAnswers)
 
-          val expectedHref: String = controllers.addItems.routes.ItemDescriptionController.onPageLoad(lrn, Index(0), NormalMode).url
+          val expectedHref: String = controllers.addItems.routes.ConfirmStartAddItemsController.onPageLoad(lrn).url
 
           viewModel.getHref(addItemsSectionName).value mustEqual expectedHref
         }
 
-        "when the status is InProgress, links to the first page" in {
+        "when the status is InProgress, links to the item description page" in {
 
           val updatedUserAnswers = dependantSections
             .unsafeSetVal(AddSecurityDetailsPage)(true)

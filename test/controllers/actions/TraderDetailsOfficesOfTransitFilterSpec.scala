@@ -21,7 +21,8 @@ import commonTestUtils.UserAnswersSpecHelper
 import models.reference.CountryCode
 import models.requests.DataRequest
 import models.{Index, NormalMode}
-import pages.{AddAnotherTransitOfficePage, AddSecurityDetailsPage, OfficeOfTransitCountryPage}
+import pages.routeDetails.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPage}
+import pages.AddSecurityDetailsPage
 import play.api.mvc.Result
 import play.api.mvc.Results._
 import play.api.test.Helpers._
