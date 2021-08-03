@@ -1432,7 +1432,7 @@ officeOfTransitCountry.heading = Which country is the office of transit in?
 officeOfTransitCountry.checkYourAnswersLabel = officeOfTransitCountry
 officeOfTransitCountry.paragraph = This is where the goods and accompanying documents are presented. If there is no office of transit, enter the office of destination or port of arrival.
 officeOfTransitCountry.error.required = Enter the country the office of transit is in
-
+officeOfTransitCountry.error.no-transit-office=You cannot use this country as it does not have any offices of transit
 addAgreedLocationOfGoods.title = Do you need to add an agreed location for the goods?
 addAgreedLocationOfGoods.heading = Do you need to add an agreed location for the goods?
 addAgreedLocationOfGoods.checkYourAnswersLabel = Add an agreed location for the goods
