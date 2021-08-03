@@ -19,7 +19,6 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.DestinationCountryFormProvider
-import javax.inject.Inject
 import models.reference.Country
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -31,11 +30,10 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
-import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
-
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DestinationCountryController @Inject() (

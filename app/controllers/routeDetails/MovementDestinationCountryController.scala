@@ -18,7 +18,6 @@ package controllers.routeDetails
 
 import cats.data.OptionT
 import cats.implicits._
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.MovementDestinationCountryFormProvider
 import logging.Logging
