@@ -106,7 +106,7 @@ class OfficeOfTransitCountryController @Inject() (
                           index,
                           mode,
                           formProvider(transitCountryList)
-                            .withError(FormError("value", "officeOfTransitCountry.error.no-transit-office"))
+                            .withError(FormError("value", "officeOfTransitCountry.error.noTransitOffice"))
                             .fill(value),
                           transitCountryList.fullList,
                           Results.BadRequest
