@@ -16,6 +16,7 @@
 
 package controllers.routeDetails
 
+import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.DestinationCountryFormProvider
 import javax.inject.Inject
@@ -44,7 +45,7 @@ class DestinationCountryController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  countriesService: CountriesService,
+  referenceDataConnector: ReferenceDataConnector,
   formProvider: DestinationCountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -55,7 +56,7 @@ class DestinationCountryController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      countriesService.getDestinationCountryList(userAnswers = request.userAnswers) flatMap {
+      referenceDataConnector.getCountryList() flatMap {
         countries =>
           val form = formProvider(countries)
 
@@ -71,7 +72,7 @@ class DestinationCountryController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      countriesService.getDestinationCountryList(userAnswers = request.userAnswers) flatMap {
+      referenceDataConnector.getCountryList() flatMap {
         countries =>
           formProvider(countries)
             .bindFromRequest()

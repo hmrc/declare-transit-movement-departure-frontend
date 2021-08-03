@@ -49,28 +49,28 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAns
   }
 
   "CountriesService" - {
-    "Call EU Country list if TIR is selection" in {
+    "Call EU Membership list if TIR is selection" in {
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
 
-      when(mockRefDataConnector.getEUCountryList()(any(), any())).thenReturn(Future.successful(expectedResult))
+      when(mockRefDataConnector.getCountriesWithCustomsOfficesAndEuMembership(any())(any(), any())).thenReturn(Future.successful(expectedResult))
 
-      service.getDestinationCountryList(userAnswers).futureValue mustBe expectedResult
+      service.getDestinationCountryList(userAnswers, Seq.empty).futureValue mustBe expectedResult
 
-      verify(mockRefDataConnector, times(0)).getCountryList()(any(), any())
-      verify(mockRefDataConnector, times(1)).getEUCountryList()(any(), any())
+      verify(mockRefDataConnector, times(0)).getCountriesWithCustomsOfficesAndCTCMembership(any())(any(), any())
+      verify(mockRefDataConnector, times(1)).getCountriesWithCustomsOfficesAndEuMembership(any())(any(), any())
     }
 
-    "Call All Country list if TIR is not selection" in {
+    "Call CTC Membership list if TIR is not selection" in {
       val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
       val userAnswers     = emptyUserAnswers.unsafeSetVal(DeclarationTypePage)(generatedOption)
 
-      when(mockRefDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(expectedResult))
+      when(mockRefDataConnector.getCountriesWithCustomsOfficesAndCTCMembership(any())(any(), any())).thenReturn(Future.successful(expectedResult))
 
-      service.getDestinationCountryList(userAnswers).futureValue mustBe expectedResult
+      service.getDestinationCountryList(userAnswers, Seq.empty).futureValue mustBe expectedResult
 
-      verify(mockRefDataConnector, times(1)).getCountryList()(any(), any())
-      verify(mockRefDataConnector, times(0)).getEUCountryList()(any(), any())
+      verify(mockRefDataConnector, times(1)).getCountriesWithCustomsOfficesAndCTCMembership(any())(any(), any())
+      verify(mockRefDataConnector, times(0)).getCountriesWithCustomsOfficesAndEuMembership(any())(any(), any())
     }
   }
 }

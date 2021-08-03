@@ -19,7 +19,6 @@ package services
 import connectors.DepartureMovementConnector
 import javax.inject.Inject
 import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage, DepartureId, GuaranteeNotValidMessage}
-import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}

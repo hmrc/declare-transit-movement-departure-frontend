@@ -48,9 +48,31 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[Country]](serviceUrl).map(CountryList(_))
   }
 
-  def getEUCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/eu-countries"
-    http.GET[Seq[Country]](serviceUrl).map(CountryList(_))
+  def getCountriesWithCustomsOfficesAndCTCMembership(
+    excludeCountries: Seq[CountryCode]
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/countries"
+
+    val customsOfficeQuery    = Seq("customsOfficeRole" -> "ANY")
+    val membership            = Seq("membership" -> "ctc")
+    val excludeCountriesQuery = excludeCountries.map(_.code).map("exclude" -> _)
+
+    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery ++ membership
+    http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
+  }
+
+  def getCountriesWithCustomsOfficesAndEuMembership(
+    excludeCountries: Seq[CountryCode]
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+
+    val serviceUrl = s"${config.referenceDataUrl}/countries"
+
+    val customsOfficeQuery    = Seq("customsOfficeRole" -> "ANY")
+    val membership            = Seq("membership" -> "eu")
+    val excludeCountriesQuery = excludeCountries.map(_.code).map("exclude" -> _)
+
+    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery ++ membership
+    http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
   }
 
   def getCountriesWithCustomsOffices(excludeCountries: Seq[CountryCode])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {

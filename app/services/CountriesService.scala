@@ -18,6 +18,7 @@ package services
 
 import connectors.ReferenceDataConnector
 import javax.inject.Inject
+import models.reference.CountryCode
 import models.{CountryList, DeclarationType, UserAnswers}
 import pages.DeclarationTypePage
 import uk.gov.hmrc.http.HeaderCarrier
@@ -26,9 +27,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
-  def getDestinationCountryList(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[CountryList] =
+  def getDestinationCountryList(userAnswers: UserAnswers, excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
     userAnswers.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => referenceDataConnector.getEUCountryList()
-      case _                             => referenceDataConnector.getCountryList()
+      case Some(DeclarationType.Option4) => referenceDataConnector.getCountriesWithCustomsOfficesAndEuMembership(excludedCountries)
+      case _                             => referenceDataConnector.getCountriesWithCustomsOfficesAndCTCMembership(excludedCountries)
     }
 }

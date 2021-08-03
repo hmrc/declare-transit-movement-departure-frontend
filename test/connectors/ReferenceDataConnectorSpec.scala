@@ -329,7 +329,6 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
     }
 
     "getCountryList" - {
-
       "must return Seq of Country when successful" in {
         server.stubFor(
           get(urlEqualTo(s"/$startUrl/countries-full-list"))
@@ -342,20 +341,18 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
             Country(CountryCode("AD"), "Andorra")
           )
         )
-
         connector.getCountryList.futureValue mustEqual expectedResult
       }
 
       "must return an exception when an error response is returned" in {
-
         checkErrorResponse(s"/$startUrl/countries-full-list", connector.getCountryList)
       }
     }
 
-    "GetEUCountries" - {
-      "must return Seq of EU Countries when successful" in {
+    "getCountriesWithCustomsOfficesAndCTCMembership" - {
+      "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/eu-countries"))
+          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&membership=ctc"))
             .willReturn(okJson(countryListResponseJson))
         )
 
@@ -365,12 +362,24 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
             Country(CountryCode("AD"), "Andorra")
           )
         )
-
-        connector.getEUCountryList.futureValue mustEqual expectedResult
+        connector.getCountriesWithCustomsOfficesAndCTCMembership(Seq.empty).futureValue mustEqual expectedResult
       }
+    }
 
-      "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/eu-countries", connector.getEUCountryList)
+    "getCountriesWithCustomsOfficesAndEuMembership" - {
+      "must return Seq of EU Countries when successful" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&membership=eu"))
+            .willReturn(okJson(countryListResponseJson))
+        )
+
+        val expectedResult: CountryList = CountryList(
+          Seq(
+            Country(CountryCode("GB"), "United Kingdom"),
+            Country(CountryCode("AD"), "Andorra")
+          )
+        )
+        connector.getCountriesWithCustomsOfficesAndEuMembership(Seq.empty).futureValue mustEqual expectedResult
       }
     }
 
