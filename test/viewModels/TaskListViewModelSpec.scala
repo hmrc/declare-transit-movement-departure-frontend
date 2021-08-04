@@ -877,6 +877,8 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         }
 
         "when add custom approved location page has been answered" in {
+          val isSecurityDefined = false
+          val procedureType     = ProcedureType.Normal
 
           forAll(arb[Boolean]) {
             pageAnswer =>
@@ -949,23 +951,6 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
             .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
             .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
             .unsafeSetVal(AddSealsPage)(false)
-
-          val viewModel = TaskListViewModel(normalGoodsSummary)
-
-          viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.Completed
-
-        }
-
-        "procedure type is 'Normal' when all the answers wirh seals are completed" in {
-
-          val normalGoodsSummary = dependantSections
-            .unsafeSetVal(ProcedureTypePage)(Normal)
-            .unsafeSetVal(PreLodgeDeclarationPage)(false)
-            .unsafeSetVal(AddSecurityDetailsPage)(true)
-            .unsafeSetVal(LoadingPlacePage)("loadingPlace")
-            .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
-            .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
-            .unsafeSetVal(AddSealsPage)(true)
 
           val viewModel = TaskListViewModel(normalGoodsSummary)
 
@@ -1312,3 +1297,4 @@ object TaskListViewModelSpec {
 
   }
 }
+
