@@ -104,7 +104,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       "navigation" - {
         "when the status is Not started and 'Procedure Type is Normal', links to the first page" in {
           val userAnswers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-          val viewModel = TaskListViewModel(userAnswers)
+          val viewModel   = TaskListViewModel(userAnswers)
 
           val expectedHref: String = controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(lrn, NormalMode).url
 
@@ -113,7 +113,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
         "when the status is Not started and 'Procedure Type is Simplified', links to the first page" in {
           val userAnswers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-          val viewModel = TaskListViewModel(userAnswers)
+          val viewModel   = TaskListViewModel(userAnswers)
 
           val expectedHref: String = controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
 
@@ -434,7 +434,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       "navigation" - {
         "when the status is Not started and 'Procedure Type is Normal', links to the first page" in {
           val userAnswers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Normal)
-          val viewModel = TaskListViewModel(userAnswers)
+          val viewModel   = TaskListViewModel(userAnswers)
 
           val expectedHref: String = controllers.traderDetails.routes.IsPrincipalEoriKnownController.onPageLoad(lrn, NormalMode).url
 
@@ -443,7 +443,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
         "when the status is Not started and 'Procedure Type is Simplified', links to the first page" in {
           val userAnswers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
-          val viewModel = TaskListViewModel(userAnswers)
+          val viewModel   = TaskListViewModel(userAnswers)
 
           val expectedHref: String = controllers.traderDetails.routes.WhatIsPrincipalEoriController.onPageLoad(lrn, NormalMode).url
 
@@ -847,14 +847,14 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
       "is Not started when there are no answers for the section" in {
         val updatedUserAnswers = emptyUserAnswers.set(ProcedureTypePage, ProcedureType.Simplified).success.value
-        val viewModel = TaskListViewModel(updatedUserAnswers)
+        val viewModel          = TaskListViewModel(updatedUserAnswers)
 
         viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.NotStarted
       }
 
       "is Cannot start yet when there are no answers for the section" in {
         val updatedUserAnswers = emptyUserAnswers.set(ProcedureTypePage, ProcedureType.Normal).success.value
-        val viewModel = TaskListViewModel(updatedUserAnswers)
+        val viewModel          = TaskListViewModel(updatedUserAnswers)
 
         viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.CannotStartYet
       }
