@@ -877,8 +877,6 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
         }
 
         "when add custom approved location page has been answered" in {
-          val isSecurityDefined = false
-          val procedureType     = ProcedureType.Normal
 
           forAll(arb[Boolean]) {
             pageAnswer =>
