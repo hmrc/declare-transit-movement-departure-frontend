@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.ItemDescriptionFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.AddItems
+import navigation.annotations.ItemDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -51,7 +51,7 @@ class ItemDescriptionControllerSpec extends SpecBase with MockNunjucksRendererAp
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[ItemDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "ItemDescription Controller" - {
 

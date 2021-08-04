@@ -33,6 +33,7 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[TraderDetails]).to(classOf[TraderDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[GoodsSummary]).to(classOf[GoodsSummaryNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[GuaranteeDetails]).to(classOf[GuaranteeDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[ItemDetails]).to(classOf[ItemDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[SpecialMentions]).to(classOf[SpecialMentionsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[AddItems]).to(classOf[AddItemsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[Document]).to(classOf[DocumentNavigator])

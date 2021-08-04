@@ -16,6 +16,7 @@
 
 package navigation
 
+import cats.implicits._
 import controllers.addItems.containers.{routes => containerRoutes}
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.specialMentions.{routes => specialMentionsRoutes}
@@ -28,7 +29,7 @@ import models.reference.PackageType.{bulkCodes, unpackedCodes}
 import pages._
 import pages.addItems.containers._
 import pages.addItems.traderDetails._
-import pages.addItems.{AddAnotherPreviousAdministrativeReferencePage, _}
+import pages.addItems._
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import play.api.mvc.Call
 
@@ -39,14 +40,9 @@ class AddItemsNavigator @Inject() () extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case ItemDescriptionPage(index) => ua => Some(addItemsRoutes.ItemTotalGrossMassController.onPageLoad(ua.lrn, index, NormalMode))
-    case ItemTotalGrossMassPage(index) => ua => Some(addItemsRoutes.AddTotalNetMassController.onPageLoad(ua.lrn, index, NormalMode))
-    case AddTotalNetMassPage(index) => ua => addTotalNetMassRoute(index, ua, NormalMode)
-    case TotalNetMassPage(index) => ua => Some(addItemsRoutes.IsCommodityCodeKnownController.onPageLoad(ua.lrn, index, NormalMode))
-    case IsCommodityCodeKnownPage(index) => ua => isCommodityKnownRouteNormalMode(index, ua)
+
     case AddAnotherItemPage => ua => Some(addAnotherItemRoute(ua))
     case ConfirmRemoveItemPage => ua => Some(removeItem(NormalMode)(ua))
-    case CommodityCodePage(index) => ua => commodityCodeRouteNormalMode(index, ua)
     case PackageTypePage(itemIndex, packageIndex) => ua => packageType(itemIndex, packageIndex, ua, NormalMode)
     case HowManyPackagesPage(itemIndex, packageIndex) => ua => howManyPackages(itemIndex, packageIndex, ua, NormalMode)
     case DeclareNumberOfPackagesPage(itemIndex, packageIndex) => ua => declareNumberOfPackages(itemIndex, packageIndex, ua, NormalMode)
@@ -142,10 +138,9 @@ class AddItemsNavigator @Inject() () extends Navigator {
     }
 
   private def consignorAddressNormalMode(ua: UserAnswers, index: Index) =
-    ua.get(AddConsigneePage) match {
-      case Some(false) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
-      case Some(true) => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
-      case None => None
+    ua.get(AddConsigneePage).map {
+      case false => traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode)
+      case true => addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode)
     }
 
   private def consignorName(ua: UserAnswers, index: Index, mode: Mode) =
@@ -197,11 +192,10 @@ class AddItemsNavigator @Inject() () extends Navigator {
     }
 
   private def commodityCodeRouteNormalMode(index: Index, ua: UserAnswers) =
-    (ua.get(AddConsignorPage), ua.get(AddConsigneePage)) match {
-      case (Some(false), _) => Some(traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(true), Some(false)) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(true), Some(true)) => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
-      case _ => None
+    (ua.get(AddConsignorPage), ua.get(AddConsigneePage)).tupled.map {
+      case (false, _) => Some(traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
+      case (true, false) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
+      case (true, true) => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
     }
 
   private def addTotalNetMassRoute(index: Index, ua: UserAnswers, mode: Mode) =
