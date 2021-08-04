@@ -52,9 +52,9 @@ class AddItemsNavigator @Inject() () extends Navigator {
     case DeclareNumberOfPackagesPage(itemIndex, packageIndex) => ua => declareNumberOfPackages(itemIndex, packageIndex, ua, NormalMode)
     case TotalPiecesPage(itemIndex, packageIndex) => ua => Some(addItemsRoutes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
     case AddMarkPage(itemIndex, packageIndex) => ua => addMark(itemIndex, packageIndex, ua, NormalMode)
-    case DeclareMarkPage(itemIndex, packageIndex) => ua => Some(addItemsRoutes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
+    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
     case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackage(itemIndex, ua, NormalMode)
-    case TraderDetailsConsignorEoriKnownPage(index) => ua => consignorEoriKnown(ua, index, NormalMode)
+    case TraderDetailsConsignorEoriKnownPage(index) => ua => consignorEoriKnownNormalMode(ua, index)
     case TraderDetailsConsignorEoriNumberPage(index) => ua => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, NormalMode))
     case TraderDetailsConsignorNamePage(index) => ua => Some(traderDetailsRoutes.TraderDetailsConsignorAddressController.onPageLoad(ua.lrn, index, NormalMode))
     case TraderDetailsConsignorAddressPage(index) => ua => consignorAddressNormalMode(ua, index)
@@ -65,17 +65,17 @@ class AddItemsNavigator @Inject() () extends Navigator {
     case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
     case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackage(itemIndex, ua, NormalMode)
     case RemovePackagePage(itemIndex) => ua => Some(removePackage(itemIndex, NormalMode)(ua))
-    case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, referenceIndex) => ua => Some(removePreviousAdministrativeReference(itemIndex, NormalMode)(ua))
+    case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, _) => ua => Some(removePreviousAdministrativeReference(itemIndex, NormalMode)(ua))
     case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePage(itemIndex, ua, NormalMode)
     case ReferenceTypePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.lrn, itemIndex, referenceIndex, NormalMode))
     case PreviousReferencePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.lrn, itemIndex, referenceIndex, NormalMode))
     case AddExtraInformationPage(itemIndex, referenceIndex) => ua => addExtraInformationPage(ua, itemIndex, referenceIndex, NormalMode)
     case ExtraInformationPage(itemIndex, _) => ua => Some(previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, NormalMode))
     case AddAnotherPreviousAdministrativeReferencePage(itemIndex) => ua => addAnotherPreviousAdministrativeReferenceRoute(itemIndex, ua, NormalMode)
-    case ContainerNumberPage(itemIndex, containerIndex) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, NormalMode))
+    case ContainerNumberPage(itemIndex, _) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, NormalMode))
     case AddAnotherContainerPage(itemIndex) => ua => Some(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(ua.lrn, itemIndex, NormalMode))
     case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, NormalMode))
-    case ContainerNumberPage(itemIndex, containerIndex) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, NormalMode))
+    case ContainerNumberPage(itemIndex, _) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, NormalMode))
     case AddAnotherContainerPage(itemIndex) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
     case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, NormalMode))
   }
@@ -90,12 +90,12 @@ class AddItemsNavigator @Inject() () extends Navigator {
     case DeclareNumberOfPackagesPage(itemIndex, packageIndex) => ua => declareNumberOfPackages(itemIndex, packageIndex, ua, CheckMode)
     case TotalPiecesPage(itemIndex, packageIndex) => ua => Some(addItemsRoutes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
     case AddMarkPage(itemIndex, packageIndex) => ua => addMark(itemIndex, packageIndex, ua, CheckMode)
-    case DeclareMarkPage(itemIndex, packageIndex) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
+    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
     case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackage(itemIndex, ua, CheckMode)
     case ItemDescriptionPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case ItemTotalGrossMassPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case AddTotalNetMassPage(index) => ua => addTotalNetMassRoute(index, ua, CheckMode)
-    case TraderDetailsConsignorEoriKnownPage(index) => ua => consignorEoriKnown(ua, index, CheckMode)
+    case TraderDetailsConsignorEoriKnownPage(index) => ua => consignorEoriKnownCheckMode(ua, index)
     case TraderDetailsConsignorEoriNumberPage(index) => ua => consignorEoriNumberCheckMode(ua, index)
     case TraderDetailsConsignorNamePage(index) => ua => consignorName(ua, index, CheckMode)
     case TraderDetailsConsignorAddressPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
@@ -103,7 +103,7 @@ class AddItemsNavigator @Inject() () extends Navigator {
     case TraderDetailsConsigneeEoriNumberPage(index) => ua => consigneeEoriNumberCheckMode(ua, index)
     case TraderDetailsConsigneeNamePage(index) => ua => consigneeName(ua, index, CheckMode)
     case TraderDetailsConsigneeAddressPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-    case DeclareMarkPage(itemIndex, packageIndex) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
+    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
     case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackage(itemIndex, ua, CheckMode)
     case RemovePackagePage(itemIndex) => ua => Some(removePackage(itemIndex, CheckMode)(ua))
     case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePage(itemIndex, ua, CheckMode)
@@ -111,8 +111,8 @@ class AddItemsNavigator @Inject() () extends Navigator {
     case PreviousReferencePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.lrn, itemIndex, referenceIndex, CheckMode))
     case AddExtraInformationPage(itemIndex, referenceIndex) => ua => addExtraInformationPage(ua, itemIndex, referenceIndex, CheckMode)
     case ExtraInformationPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
-    case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, referenceIndex) => ua => Some(removePreviousAdministrativeReference(itemIndex, CheckMode)(ua))
-    case ContainerNumberPage(itemIndex, containerIndex) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, CheckMode))
+    case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, _) => ua => Some(removePreviousAdministrativeReference(itemIndex, CheckMode)(ua))
+    case ContainerNumberPage(itemIndex, _) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, CheckMode))
     case AddAnotherContainerPage(itemIndex) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
     case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, CheckMode))
     case AddAnotherPreviousAdministrativeReferencePage(itemIndex) => ua => addAnotherPreviousAdministrativeReferenceRoute(itemIndex, ua, CheckMode)
@@ -131,10 +131,12 @@ class AddItemsNavigator @Inject() () extends Navigator {
     }
 
   private def consigneeEoriKnown(ua: UserAnswers, index: Index, mode: Mode) =
-    (ua.get(TraderDetailsConsigneeEoriKnownPage(index)), ua.get(TraderDetailsConsigneeEoriNumberPage(index)), ua.get(TraderDetailsConsigneeNamePage(index)), mode) match {
+    (ua.get(TraderDetailsConsigneeEoriKnownPage(index)),
+      ua.get(TraderDetailsConsigneeEoriNumberPage(index)),
+      ua.get(TraderDetailsConsigneeNamePage(index)), mode) match {
       case (Some(true), _, _, NormalMode) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriNumberController.onPageLoad(ua.lrn, index, mode))
-      case (Some(false), _, _, NormalMode) => Some(traderDetailsRoutes.TraderDetailsConsigneeNameController.onPageLoad(ua.lrn, index, mode))
       case (Some(true), None, _, CheckMode) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriNumberController.onPageLoad(ua.lrn, index, mode))
+      case (Some(false), _, _, NormalMode) => Some(traderDetailsRoutes.TraderDetailsConsigneeNameController.onPageLoad(ua.lrn, index, mode))
       case (Some(false), _, None, CheckMode) => Some(traderDetailsRoutes.TraderDetailsConsigneeNameController.onPageLoad(ua.lrn, index, mode))
       case _ => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     }
@@ -158,23 +160,22 @@ class AddItemsNavigator @Inject() () extends Navigator {
       case _ => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, CheckMode))
     }
 
-  private def consignorEoriKnown(ua: UserAnswers, index: Index, mode: Mode) =
-    (ua.get(TraderDetailsConsignorEoriKnownPage(index)), ua.get(TraderDetailsConsignorEoriNumberPage(index)), ua.get(TraderDetailsConsignorNamePage(index)), mode) match {
-      case (Some(true), None, _, _) => Some(traderDetailsRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(ua.lrn, index, mode))
-      case (Some(true), _, _, NormalMode) => Some(traderDetailsRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(ua.lrn, index, mode))
-      case (Some(true), _, _, CheckMode) => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-      case (Some(false), _, _, NormalMode) => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, mode))
-      case (Some(false), _, Some(value), CheckMode) => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-      case (Some(false), _, None, CheckMode) => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, mode))
-      case _ if mode == CheckMode => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, CheckMode))
+  private def consignorEoriKnownNormalMode(ua: UserAnswers, index: Index) =
+    (ua.get(TraderDetailsConsignorEoriKnownPage(index)),
+      ua.get(TraderDetailsConsignorEoriNumberPage(index)),
+      ua.get(TraderDetailsConsignorNamePage(index))) match {
+      case (Some(true), _, _) => Some(traderDetailsRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(ua.lrn, index, NormalMode))
+      case (Some(false), _, _) => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, NormalMode))
       case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
-  private def addItemsSameConsignorForAllItems(ua: UserAnswers, index: Index, mode: Mode) =
-    ua.get(TraderDetailsConsignorEoriKnownPage(index)) match {
-      case None => Some(traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.lrn, index, mode))
-      case _ if mode == CheckMode => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-      case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
+  private def consignorEoriKnownCheckMode(ua: UserAnswers, index: Index) =
+    (ua.get(TraderDetailsConsignorEoriKnownPage(index)),
+      ua.get(TraderDetailsConsignorEoriNumberPage(index)),
+      ua.get(TraderDetailsConsignorNamePage(index))) match {
+      case (Some(true), None, _) => Some(traderDetailsRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(ua.lrn, index, CheckMode))
+      case (Some(false), _, None) => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, CheckMode))
+      case _ => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     }
 
   private def isCommodityKnownRouteNormalMode(index: Index, ua: UserAnswers) =
@@ -188,7 +189,6 @@ class AddItemsNavigator @Inject() () extends Navigator {
       case (Some(false), Some(true), Some(true)) => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
       case _ => None
     }
-
 
   private def isCommodityKnownRouteCheckMode(index: Index, ua: UserAnswers) =
     (ua.get(IsCommodityCodeKnownPage(index)), ua.get(CommodityCodePage(index))) match {
@@ -216,10 +216,8 @@ class AddItemsNavigator @Inject() () extends Navigator {
   private def addAnotherItemRoute(userAnswers: UserAnswers): Call = {
     val count = userAnswers.get(DeriveNumberOfItems).getOrElse(0)
     userAnswers.get(AddAnotherItemPage) match {
-      case Some(true) =>
-        addItemsRoutes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(count), NormalMode)
-      case _ =>
-        mainRoutes.DeclarationSummaryController.onPageLoad(userAnswers.lrn)
+      case Some(true) => addItemsRoutes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(count), NormalMode)
+      case _ => mainRoutes.DeclarationSummaryController.onPageLoad(userAnswers.lrn)
     }
   }
 
@@ -235,28 +233,23 @@ class AddItemsNavigator @Inject() () extends Navigator {
         Some(addItemsRoutes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
       case Some(packageType) if unpackedCodes.contains(packageType.code) =>
         Some(addItemsRoutes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
-      case Some(_) =>
-        Some(addItemsRoutes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
-      case _ =>
-        Some(mainRoutes.SessionExpiredController.onPageLoad())
+      case Some(_) => Some(addItemsRoutes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
+      case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
-  def howManyPackages(itemIndex: Index, packageIndex: Index, ua: UserAnswers, mode: Mode): Option[Call]  =
+  def howManyPackages(itemIndex: Index, packageIndex: Index, ua: UserAnswers, mode: Mode): Option[Call] =
     (ua.get(HowManyPackagesPage(itemIndex, packageIndex)), ua.get(PackageTypePage(itemIndex, packageIndex))) match {
       case (Some(_), Some(packageType)) if bulkCodes.contains(packageType.code) =>
         Some(addItemsRoutes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
       case (Some(_), Some(packageType)) if unpackedCodes.contains(packageType.code) =>
         Some(addItemsRoutes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
-      case (Some(_), Some(_)) =>
-        Some(addItemsRoutes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
-      case _ =>
-        Some(mainRoutes.SessionExpiredController.onPageLoad())
+      case (Some(_), Some(_)) => Some(addItemsRoutes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
+      case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
   def declareNumberOfPackages(itemIndex: Index, packageIndex: Index, ua: UserAnswers, mode: Mode): Option[Call] =
     (ua.get(DeclareNumberOfPackagesPage(itemIndex, packageIndex)), ua.get(PackageTypePage(itemIndex, packageIndex))) match {
-      case (Some(true), _) =>
-        Some(addItemsRoutes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
+      case (Some(true), _) => Some(addItemsRoutes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
       case (Some(false), Some(packageType)) if bulkCodes.contains(packageType.code) =>
         Some(addItemsRoutes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, mode))
       case (Some(false), Some(packageType)) if unpackedCodes.contains(packageType.code) =>
@@ -301,14 +294,32 @@ class AddItemsNavigator @Inject() () extends Navigator {
     ua.get(AddAdministrativeReferencePage(itemIndex)) map {
       case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(referenceIndex), mode)
       case _ if mode == CheckMode => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
-      case _ => (ua.get(AddSecurityDetailsPage), ua.get(AddTransportChargesPaymentMethodPage)) match {
-        case (Some(true), Some(false)) => controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode)
-        case (Some(true), Some(true)) => ua.get(AddCommercialReferenceNumberAllItemsPage) match {
-          case Some(true) => controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, itemIndex, NormalMode)
-          case Some(false) => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, itemIndex, NormalMode)
-        }
-        case _ => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
-      }
+      case _ => securityDetailsAndTransportCharges(itemIndex, ua)
+    }
+  }
+
+  private def securityDetailsAndTransportCharges(itemIndex: Index, ua: UserAnswers) = {
+    (ua.get(AddSecurityDetailsPage), ua.get(AddTransportChargesPaymentMethodPage)) match {
+      case (Some(true), Some(false)) => controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode)
+      case (Some(true), Some(true)) => addReferenceNumberAllItems(itemIndex, ua)
+      case _ => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
+    }
+  }
+
+  private def addAnotherPreviousAdministrativeReferenceRoute(itemIndex: Index, ua: UserAnswers, mode: Mode): Option[Call] = {
+    val newReferenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)).getOrElse(0)
+    ua.get(AddAnotherPreviousAdministrativeReferencePage(itemIndex)) map {
+      case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(newReferenceIndex), mode)
+      case _ if mode == CheckMode => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
+      case _ => securityDetailsAndTransportCharges(itemIndex, ua)
+    }
+  }
+
+  private def addReferenceNumberAllItems(itemIndex: Index, ua: UserAnswers) = {
+    ua.get(AddCommercialReferenceNumberAllItemsPage) match {
+      case Some(true) => controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, itemIndex, NormalMode)
+      case Some(false) => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, itemIndex, NormalMode)
+      case _ => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, itemIndex, NormalMode)
     }
   }
 
@@ -319,24 +330,6 @@ class AddItemsNavigator @Inject() () extends Navigator {
       case false =>
         previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, mode)
     }
-
-
-  private def addAnotherPreviousAdministrativeReferenceRoute(itemIndex: Index, ua: UserAnswers, mode: Mode): Option[Call] = {
-    val newReferenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)).getOrElse(0)
-    ua.get(AddAnotherPreviousAdministrativeReferencePage(itemIndex)) map {
-      case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(newReferenceIndex), mode)
-      case _ if mode == CheckMode => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
-      case _ => (ua.get(AddSecurityDetailsPage), ua.get(AddTransportChargesPaymentMethodPage)) match {
-        case (Some(true), Some(false)) => controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode)
-        case (Some(true), Some(true)) => ua.get(AddCommercialReferenceNumberAllItemsPage) match {
-          case Some(true) => controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, itemIndex, NormalMode)
-          case Some(false) => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, itemIndex, NormalMode)
-          case _ => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, itemIndex, NormalMode)
-        }
-        case _ => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
-      }
-    }
-  }
 
   private def removePreviousAdministrativeReference(itemIndex: Index, mode: Mode)(ua: UserAnswers) =
     ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)) match {

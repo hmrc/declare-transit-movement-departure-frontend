@@ -699,6 +699,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
               answers =>
                 val updatedAnswer = answers
                   .remove(PreviousReferencesQuery(index)).success.value
+                  .set(AddSecurityDetailsPage, true).success.value
                   .set(AddAnotherPreviousAdministrativeReferencePage(index), true).success.value
 
                 navigator
@@ -707,16 +708,16 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             }
           }
 
-          "must go to ReferenceType page when user selects 'No'" in {
+          "must go to CYA page when user selects 'No'" in {
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswer = answers
-                  .remove(PreviousReferencesQuery(index)).success.value
                   .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+                  .set(AddSecurityDetailsPage, false).success.value
 
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswer)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswer.lrn, index))
             }
           }
 
