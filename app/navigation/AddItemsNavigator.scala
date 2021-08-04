@@ -161,11 +161,9 @@ class AddItemsNavigator @Inject() () extends Navigator {
     }
 
   private def consignorEoriKnownNormalMode(ua: UserAnswers, index: Index) =
-    (ua.get(TraderDetailsConsignorEoriKnownPage(index)),
-      ua.get(TraderDetailsConsignorEoriNumberPage(index)),
-      ua.get(TraderDetailsConsignorNamePage(index))) match {
-      case (Some(true), _, _) => Some(traderDetailsRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(false), _, _) => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, NormalMode))
+    ua.get(TraderDetailsConsignorEoriKnownPage(index)) match {
+      case Some(true) => Some(traderDetailsRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(ua.lrn, index, NormalMode))
+      case Some(false) => Some(traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(ua.lrn, index, NormalMode))
       case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
