@@ -20,7 +20,6 @@ import java.time.LocalDate
 
 import cats.implicits._
 import derivable.DeriveNumberOfSeals
-
 import models.ProcedureType.{Normal, Simplified}
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
