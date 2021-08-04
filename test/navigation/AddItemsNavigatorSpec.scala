@@ -629,15 +629,16 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
           }
         }
 
-        "must go from 'add administrative reference' page to 'user selected yes for safety and security' page when selected 'No'" ignore {
+        "must go from 'add administrative reference' page to AddItemsCheckYourAnswers Page when 'user selected 'No' " in {
           forAll(arbitrary[UserAnswers]) {
             answers =>
               val updatedAnswers = answers
                 .set(AddAdministrativeReferencePage(index), false).success.value
+                .set(AddSecurityDetailsPage, false).success.value
 
               navigator
                 .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
-                .mustBe(???) // TODO need to replace with  user selected yes for safety and security
+                .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
           }
         }
 
@@ -706,7 +707,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
             }
           }
 
-          "must go to ReferenceType page when user selects 'No'" ignore {
+          "must go to ReferenceType page when user selects 'No'" in {
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswer = answers
@@ -715,7 +716,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
                 navigator
                   .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswer)
-                  .mustBe(???) //TODO must got to safety and security journey
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
             }
           }
 

@@ -956,6 +956,23 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
         }
 
+        "procedure type is 'Normal' when all the answers wirh seals are completed" in {
+
+          val normalGoodsSummary = dependantSections
+            .unsafeSetVal(ProcedureTypePage)(Normal)
+            .unsafeSetVal(PreLodgeDeclarationPage)(false)
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(LoadingPlacePage)("loadingPlace")
+            .unsafeSetVal(AddCustomsApprovedLocationPage)(true)
+            .unsafeSetVal(CustomsApprovedLocationPage)("approvedLocation")
+            .unsafeSetVal(AddSealsPage)(true)
+
+          val viewModel = TaskListViewModel(normalGoodsSummary)
+
+          viewModel.getStatus(goodsSummarySectionName).value mustEqual Status.Completed
+
+        }
+
         "procedure type is 'Simplified' when all the answers are completed" in {
 
           val simplfiedGoodsSummary = dependantSections
