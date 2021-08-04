@@ -38,16 +38,16 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
   import TaskListViewModelSpec._
 
-  private val movementSectionName = "declarationSummary.section.movementDetails"
-  private val tradersSectionName = "declarationSummary.section.tradersDetails"
-  private val transportSectionName = "declarationSummary.section.transport"
-  private val routeSectionName = "declarationSummary.section.routes"
-  private val addItemsSectionName = "declarationSummary.section.addItems"
-  private val goodsSummarySectionName = "declarationSummary.section.goodsSummary"
-  private val guaranteeSectionName = "declarationSummary.section.guarantee"
+  private val movementSectionName          = "declarationSummary.section.movementDetails"
+  private val tradersSectionName           = "declarationSummary.section.tradersDetails"
+  private val transportSectionName         = "declarationSummary.section.transport"
+  private val routeSectionName             = "declarationSummary.section.routes"
+  private val addItemsSectionName          = "declarationSummary.section.addItems"
+  private val goodsSummarySectionName      = "declarationSummary.section.goodsSummary"
+  private val guaranteeSectionName         = "declarationSummary.section.guarantee"
   private val safetyAndSecuritySectionName = "declarationSummary.section.safetyAndSecurity"
 
-  private val normalDeclarationUa = Scenario1.userAnswers
+  private val normalDeclarationUa     = Scenario1.userAnswers
   private val simplifiedDeclarationUa = Scenario3.userAnswers
 
   "TaskListViewModelSpec" - {
