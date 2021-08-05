@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.AddExtraInformationFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.addItems.AddItems
+import navigation.annotations.addItems.AddItemsAdminReference
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -53,7 +53,7 @@ class AddExtraInformationControllerSpec extends SpecBase with MockNunjucksRender
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsAdminReference]).toInstance(new FakeNavigator(onwardRoute)))
 
   "AddExtraInformation Controller" - {
 

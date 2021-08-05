@@ -23,7 +23,7 @@ import forms.ReferenceTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.PreviousReferencesDocumentType
 import models.{NormalMode, PreviousReferencesDocumentTypeList}
-import navigation.annotations.addItems.AddItems
+import navigation.annotations.addItems.{AddItems, AddItemsAdminReference}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -65,7 +65,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsAdminReference]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
   override def beforeEach(): Unit = {

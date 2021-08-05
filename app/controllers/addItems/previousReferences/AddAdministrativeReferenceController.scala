@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.AddAdministrativeReferenceFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItems
+import navigation.annotations.addItems.AddItemsAdminReference
 import pages.addItems
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddAdministrativeReferenceController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @AddItemsAdminReference navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

@@ -22,7 +22,7 @@ import forms.ReferenceTypeFormProvider
 import models.reference.PreviousReferencesDocumentType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItems
+import navigation.annotations.addItems.{AddItems, AddItemsAdminReference}
 import pages.addItems.ReferenceTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ReferenceTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @AddItemsAdminReference navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
