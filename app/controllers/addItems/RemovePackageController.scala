@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.RemovePackageFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.AddItemsPackagesInfo
 import pages.addItems.RemovePackagePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RemovePackageController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @AddItemsPackagesInfo navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
@@ -108,7 +108,9 @@ class RemovePackageController @Inject() (
                     updatedAnswers <- Future.fromTry(request.userAnswers.remove(PackagesQuery(itemIndex, packageIndex)))
                     _              <- sessionRepository.set(updatedAnswers)
                   } yield updatedAnswers
-                } else { Future.successful(request.userAnswers) }
+                } else {
+                  Future.successful(request.userAnswers)
+                }
               updatedAnswers.map(
                 userAnswers => Redirect(navigator.nextPage(RemovePackagePage(itemIndex), mode, userAnswers))
               )

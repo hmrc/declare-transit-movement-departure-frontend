@@ -22,7 +22,7 @@ import forms.addItems.PackageTypeFormProvider
 import models.reference.PackageType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.AddItemsPackagesInfo
 import pages.PackageTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -46,7 +46,7 @@ class PackageTypeController @Inject() (
   checkDependentSection: CheckDependentSectionAction,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
-  @AddItems navigator: Navigator,
+  @AddItemsPackagesInfo navigator: Navigator,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: PackageTypeFormProvider
 )(implicit ec: ExecutionContext)

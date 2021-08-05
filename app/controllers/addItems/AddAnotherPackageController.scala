@@ -21,7 +21,7 @@ import derivable.DeriveNumberOfPackages
 import forms.addItems.AddAnotherPackageFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.AddItemsPackagesInfo
 import pages.addItems.AddAnotherPackagePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherPackageController @Inject() (
   override val messagesApi: MessagesApi,
-  @AddItems navigator: Navigator,
+  @AddItemsPackagesInfo navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

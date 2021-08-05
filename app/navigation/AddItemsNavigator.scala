@@ -41,18 +41,6 @@ class AddItemsNavigator @Inject() () extends Navigator {
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case AddAnotherItemPage => ua => Some(addAnotherItemRoute(ua))
-    case ConfirmRemoveItemPage => ua => Some(removeItem(NormalMode)(ua))
-    case PackageTypePage(itemIndex, packageIndex) => ua => packageType(itemIndex, packageIndex, ua, NormalMode)
-    case HowManyPackagesPage(itemIndex, packageIndex) => ua => howManyPackages(itemIndex, packageIndex, ua, NormalMode)
-    case DeclareNumberOfPackagesPage(itemIndex, packageIndex) => ua => declareNumberOfPackages(itemIndex, packageIndex, ua, NormalMode)
-    case TotalPiecesPage(itemIndex, packageIndex) => ua => Some(addItemsRoutes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
-    case AddMarkPage(itemIndex, packageIndex) => ua => addMark(itemIndex, packageIndex, ua, NormalMode)
-    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
-    case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackage(itemIndex, ua, NormalMode)
-    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
-    case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackage(itemIndex, ua, NormalMode)
-    case RemovePackagePage(itemIndex) => ua => Some(removePackage(itemIndex, NormalMode)(ua))
     case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, _) => ua => Some(removePreviousAdministrativeReference(itemIndex, NormalMode)(ua))
     case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePage(itemIndex, ua, NormalMode)
     case ReferenceTypePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.lrn, itemIndex, referenceIndex, NormalMode))
@@ -70,17 +58,7 @@ class AddItemsNavigator @Inject() () extends Navigator {
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case PackageTypePage(itemIndex, packageIndex) => ua => packageType(itemIndex, packageIndex, ua, CheckMode)
-    case HowManyPackagesPage(itemIndex, packageIndex) => ua => howManyPackages(itemIndex, packageIndex, ua, CheckMode)
-    case DeclareNumberOfPackagesPage(itemIndex, packageIndex) => ua => declareNumberOfPackages(itemIndex, packageIndex, ua, CheckMode)
-    case TotalPiecesPage(itemIndex, packageIndex) => ua => Some(addItemsRoutes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
-    case AddMarkPage(itemIndex, packageIndex) => ua => addMark(itemIndex, packageIndex, ua, CheckMode)
-    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
-    case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackage(itemIndex, ua, CheckMode)
-    case ItemDescriptionPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
-    case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackage(itemIndex, ua, CheckMode)
-    case RemovePackagePage(itemIndex) => ua => Some(removePackage(itemIndex, CheckMode)(ua))
+
     case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePage(itemIndex, ua, CheckMode)
     case ReferenceTypePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.lrn, itemIndex, referenceIndex, CheckMode))
     case PreviousReferencePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.lrn, itemIndex, referenceIndex, CheckMode))
