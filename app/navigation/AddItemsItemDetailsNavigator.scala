@@ -22,7 +22,6 @@ import models._
 import pages._
 import pages.addItems.CommodityCodePage
 import play.api.mvc.Call
-import cats.implicits._
 
 import javax.inject.{Inject, Singleton}
 
@@ -70,10 +69,10 @@ class AddItemsItemDetailsNavigator @Inject() () extends Navigator {
     }
 
   private def commodityCodeRouteNormalMode(index: Index, ua: UserAnswers) =
-    (ua.get(AddConsignorPage), ua.get(AddConsigneePage)).tupled.map {
-      case (false, _)    => traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.lrn, index, NormalMode)
-      case (true, false) => traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode)
-      case (true, true)  => addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode)
+    (ua.get(AddConsignorPage), ua.get(AddConsigneePage)) match {
+      case (Some(false), _)          => Some(traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
+      case (Some(true), Some(false)) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
+      case (Some(true), Some(true))  => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
     }
 
   private def isCommodityKnownRouteCheckMode(index: Index, ua: UserAnswers) =
