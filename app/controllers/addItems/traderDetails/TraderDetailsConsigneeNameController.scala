@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.traderDetails.TraderDetailsConsigneeNameFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.AddItemsItemDetails
 import pages.addItems.traderDetails.TraderDetailsConsigneeNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TraderDetailsConsigneeNameController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @AddItemsItemDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

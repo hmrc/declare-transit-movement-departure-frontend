@@ -27,9 +27,9 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.addItems._
 
-class ItemDetailsCheckModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
+class AddItemsAddItemsItemDetailsCheckModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off
-  val navigator = new ItemDetailsNavigator
+  val navigator = new AddItemsItemDetailsNavigator
 
   "Add Items section" - {
 

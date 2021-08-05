@@ -18,27 +18,18 @@ package navigation
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import controllers.addItems.containers.{routes => containerRoutes}
-import controllers.addItems.previousReferences.{routes => previousReferenceRoutes}
 import controllers.addItems.routes
-import controllers.addItems.specialMentions.{routes => specialMentionsRoutes}
 import controllers.addItems.traderDetails.{routes => traderRoutes}
-import controllers.{routes => mainRoutes}
 import generators.Generators
-import models.reference.PackageType
-import models.{CheckMode, CommonAddress, Index, NormalMode, UserAnswers}
+import models.{Index, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.addItems._
-import pages.addItems.containers._
-import pages.addItems.traderDetails._
-import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
-import queries._
 
-class ItemDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
+class AddItemsAddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off
-  val navigator = new ItemDetailsNavigator
+  val navigator = new AddItemsItemDetailsNavigator
 
   "Add Items section" - {
 

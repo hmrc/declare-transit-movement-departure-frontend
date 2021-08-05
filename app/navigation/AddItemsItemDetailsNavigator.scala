@@ -27,7 +27,7 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ItemDetailsNavigator @Inject() () extends Navigator {
+class AddItemsItemDetailsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case ItemDescriptionPage(index)      => ua => Some(addItemsRoutes.ItemTotalGrossMassController.onPageLoad(ua.lrn, index, NormalMode))

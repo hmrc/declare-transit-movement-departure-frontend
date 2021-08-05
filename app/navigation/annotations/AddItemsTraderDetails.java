@@ -42,5 +42,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 @BindingAnnotation
-public @interface ItemDetails {
+public @interface AddItemsTraderDetails {
 }
