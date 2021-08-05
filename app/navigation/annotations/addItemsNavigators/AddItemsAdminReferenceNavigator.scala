@@ -40,12 +40,11 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
     case PreviousReferencePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.lrn, itemIndex, referenceIndex, NormalMode))
     case AddExtraInformationPage(itemIndex, referenceIndex) => ua => addExtraInformationPage(ua, itemIndex, referenceIndex, NormalMode)
     case ExtraInformationPage(itemIndex, _) => ua => Some(previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, NormalMode))
-    case AddAnotherPreviousAdministrativeReferencePage(itemIndex) => ua => addAnotherPreviousAdministrativeReferenceRoute(itemIndex, ua, NormalMode)
+    case AddAnotherPreviousAdministrativeReferencePage(itemIndex) => ua => addAnotherPreviousAdministrativeReferenceNormalModeRoute(itemIndex, ua)
 
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-
 
     case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePage(itemIndex, ua, CheckMode)
     case ReferenceTypePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.lrn, itemIndex, referenceIndex, CheckMode))
@@ -53,7 +52,7 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
     case AddExtraInformationPage(itemIndex, referenceIndex) => ua => addExtraInformationPage(ua, itemIndex, referenceIndex, CheckMode)
     case ExtraInformationPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
     case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, _) => ua => Some(removePreviousAdministrativeReference(itemIndex, CheckMode)(ua))
-    case AddAnotherPreviousAdministrativeReferencePage(itemIndex) => ua => addAnotherPreviousAdministrativeReferenceRoute(itemIndex, ua, CheckMode)
+    case AddAnotherPreviousAdministrativeReferencePage(itemIndex) => ua => addAnotherPreviousAdministrativeReferenceCheckModeRoute(itemIndex, ua)
 
   }
 
@@ -74,12 +73,19 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
     }
   }
 
-  private def addAnotherPreviousAdministrativeReferenceRoute(itemIndex: Index, ua: UserAnswers, mode: Mode): Option[Call] = {
+  private def addAnotherPreviousAdministrativeReferenceNormalModeRoute(itemIndex: Index, ua: UserAnswers): Option[Call] = {
     val newReferenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)).getOrElse(0)
     ua.get(AddAnotherPreviousAdministrativeReferencePage(itemIndex)) map {
-      case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(newReferenceIndex), mode)
-      case _ if mode == CheckMode => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
+      case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(newReferenceIndex), NormalMode)
       case _ => securityDetailsAndTransportCharges(itemIndex, ua)
+    }
+  }
+
+  private def addAnotherPreviousAdministrativeReferenceCheckModeRoute(itemIndex: Index, ua: UserAnswers): Option[Call] = {
+    val newReferenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)).getOrElse(0)
+    ua.get(AddAnotherPreviousAdministrativeReferencePage(itemIndex)) map {
+      case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(newReferenceIndex), CheckMode)
+      case _ => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
     }
   }
 
@@ -104,7 +110,6 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
       case None | Some(0) => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(0), mode)
       case _ => previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, mode)
     }
-
 
   // format: on
 }
