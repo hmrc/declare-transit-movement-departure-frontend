@@ -17,10 +17,7 @@
 package connectors
 
 import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.github.tomakehurst.wiremock.client.WireMock.okJson
-import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
 import models.reference._
 import models.{
@@ -40,6 +37,9 @@ import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.mvc.Http.HeaderNames.CONTENT_TYPE
+import play.mvc.Http.MimeTypes.JSON
+import play.mvc.Http.Status._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -247,7 +247,11 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
       |]
       |""".stripMargin
 
-  val errorResponses: Gen[Int] = Gen.chooseNum(400, 599)
+  val errorResponses: Gen[Int] = Gen
+    .chooseNum(400, 599)
+    .map(
+      x => if (x == 404) x + 1 else x
+    )
 
   "Reference Data" - {
 
@@ -324,6 +328,21 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
           )
 
         connector.getCustomsOfficesOfTheCountry(CountryCode("GB"), Seq("TRA")).futureValue mustBe expectedResult
+      }
+
+      "must return a successful future response when CustomsOffice is not found" in {
+        server.stubFor(
+          get(urlEqualTo(s"/$startUrl/customs-offices/AR?role=TRA")).willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+              .withHeader(CONTENT_TYPE, JSON)
+          )
+        )
+
+        val expectedResult =
+          CustomsOfficeList(Nil)
+
+        connector.getCustomsOfficesOfTheCountry(CountryCode("AR"), Seq("TRA")).futureValue mustBe expectedResult
       }
 
       "must return an exception when an error response is returned" in {
@@ -690,7 +709,7 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
 
   }
 
-  private def checkErrorResponse(url: String, result: Future[_]): Assertion =
+  private def checkErrorResponse(url: String, result: => Future[_]): Assertion =
     forAll(errorResponses) {
       errorResponse =>
         server.stubFor(
@@ -705,4 +724,5 @@ class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler wit
           _ mustBe an[Exception]
         }
     }
+
 }
