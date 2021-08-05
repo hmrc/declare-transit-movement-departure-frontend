@@ -22,7 +22,7 @@ import forms.addItems.containers.AddAnotherContainerFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.AddItemsContainer
 import pages.addItems.containers.AddAnotherContainerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherContainerController @Inject() (
   override val messagesApi: MessagesApi,
-  @AddItems navigator: Navigator,
+  @AddItemsContainer navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

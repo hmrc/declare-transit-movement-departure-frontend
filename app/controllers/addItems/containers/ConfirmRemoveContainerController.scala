@@ -21,7 +21,7 @@ import derivable.DeriveNumberOfContainers
 import forms.addItems.containers.ConfirmRemoveContainerFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.AddItemsContainer
 import pages.addItems.containers.{ConfirmRemoveContainerPage, ContainerNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConfirmRemoveContainerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @AddItemsContainer navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   checkDependentSection: CheckDependentSectionAction,
