@@ -22,7 +22,7 @@ import forms.addItems.containers.AddAnotherContainerFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsContainer
+import navigation.annotations.addItemsAnnotations.AddItemsContainer
 import pages.addItems.containers.AddAnotherContainerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -53,7 +53,7 @@ class AddAnotherContainerController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItems/containers/addAnotherContainer.njk"
+  private val template = "addItemsAnnotations/containers/addAnotherContainer.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

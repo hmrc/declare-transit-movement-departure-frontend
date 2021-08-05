@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.ConfirmRemovePreviousAdministrativeReferenceFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.addItemsAnnotations.AddItems
 import pages.addItems.ConfirmRemovePreviousAdministrativeReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -51,7 +51,7 @@ class ConfirmRemovePreviousAdministrativeReferenceController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItems/confirmRemovePreviousAdministrativeReference.njk"
+  private val template = "addItemsAnnotations/confirmRemovePreviousAdministrativeReference.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

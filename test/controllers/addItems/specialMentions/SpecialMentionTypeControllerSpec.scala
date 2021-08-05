@@ -22,7 +22,7 @@ import forms.addItems.specialMentions.SpecialMentionTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.SpecialMention
 import models.{NormalMode, SpecialMentionList}
-import navigation.annotations.SpecialMentions
+import navigation.annotations.addItemsAnnotations.AddItemsSpecialMentions
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -53,7 +53,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
     )
   )
   private val form     = formProvider(specialMentionList, itemIndex)
-  private val template = "addItems/specialMentions/specialMentionType.njk"
+  private val template = "addItemsAnnotations/specialMentions/specialMentionType.njk"
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
@@ -62,7 +62,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
   "SpecialMentionType Controller" - {

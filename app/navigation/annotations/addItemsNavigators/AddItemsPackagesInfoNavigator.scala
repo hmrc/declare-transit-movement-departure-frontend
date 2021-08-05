@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.annotations.addItemsNavigators
 
 import controllers.addItems.containers.{routes => containerRoutes}
-import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.specialMentions.{routes => specialMentionsRoutes}
 import controllers.addItems.{routes => addItemsRoutes}
 import controllers.{routes => mainRoutes}
 import derivable._
 import models._
 import models.reference.PackageType.{bulkCodes, unpackedCodes}
+import navigation.Navigator
 import pages._
 import pages.addItems._
-import pages.addItems.containers._
-import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}

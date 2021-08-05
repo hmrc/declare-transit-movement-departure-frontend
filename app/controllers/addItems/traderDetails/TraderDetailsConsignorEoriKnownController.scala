@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.traderDetails.TraderDetailsConsignorEoriKnownFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsItemDetails
+import navigation.annotations.addItemsAnnotations.AddItemsItemDetails
 import pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -49,7 +49,7 @@ class TraderDetailsConsignorEoriKnownController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/traderDetails/traderDetailsConsignorEoriKnown.njk"
+  private val template = "addItemsAnnotations/traderDetails/traderDetailsConsignorEoriKnown.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

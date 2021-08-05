@@ -22,7 +22,7 @@ import forms.addItems.PackageTypeFormProvider
 import models.reference.PackageType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsPackagesInfo
+import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
 import pages.PackageTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -79,7 +79,7 @@ class PackageTypeController @Inject() (
               "packageTypes" -> packageTypeList(preparedForm.value, packageTypes.packageTypeList)
             )
 
-            renderer.render("addItems/packageType.njk", json).map(Ok(_))
+            renderer.render("addItemsAnnotations/packageType.njk", json).map(Ok(_))
         }
     }
 
@@ -104,7 +104,7 @@ class PackageTypeController @Inject() (
                     "packageTypes" -> packageTypeList(form.value, packageTypes.packageTypeList)
                   )
 
-                  renderer.render("addItems/packageType.njk", json).map(BadRequest(_))
+                  renderer.render("addItemsAnnotations/packageType.njk", json).map(BadRequest(_))
                 },
                 value => {
                   val userAnswers = request.userAnswers.get(PackageTypePage(itemIndex, packageIndex)).map(_ == value) match {

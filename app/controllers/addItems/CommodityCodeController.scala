@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.CommodityCodeFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsItemDetails
+import navigation.annotations.addItemsAnnotations.AddItemsItemDetails
 import pages.addItems
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -67,7 +67,7 @@ class CommodityCodeController @Inject() (
           "mode"  -> mode
         )
 
-        renderer.render("addItems/commodityCode.njk", json).map(Ok(_))
+        renderer.render("addItemsAnnotations/commodityCode.njk", json).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
@@ -88,7 +88,7 @@ class CommodityCodeController @Inject() (
                 "mode"  -> mode
               )
 
-              renderer.render("addItems/commodityCode.njk", json).map(BadRequest(_))
+              renderer.render("addItemsAnnotations/commodityCode.njk", json).map(BadRequest(_))
             },
             value =>
               for {

@@ -49,7 +49,7 @@ class SecurityConsignorEoriController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/traderSecurityDetails/securityConsignorEori.njk"
+  private val template = "addItemsAnnotations/traderSecurityDetails/securityConsignorEori.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

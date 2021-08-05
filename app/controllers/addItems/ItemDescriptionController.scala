@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.ItemDescriptionFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsItemDetails
+import navigation.annotations.addItemsAnnotations.AddItemsItemDetails
 import pages.ItemDescriptionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json

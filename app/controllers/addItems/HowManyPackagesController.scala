@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.HowManyPackagesFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsPackagesInfo
+import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
 import pages.addItems.HowManyPackagesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -69,7 +69,7 @@ class HowManyPackagesController @Inject() (
           "displayIndex" -> itemIndex.display
         )
 
-        renderer.render("addItems/howManyPackages.njk", json).map(Ok(_))
+        renderer.render("addItemsAnnotations/howManyPackages.njk", json).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
@@ -92,7 +92,7 @@ class HowManyPackagesController @Inject() (
                 "displayIndex" -> itemIndex.display
               )
 
-              renderer.render("addItems/howManyPackages.njk", json).map(BadRequest(_))
+              renderer.render("addItemsAnnotations/howManyPackages.njk", json).map(BadRequest(_))
             },
             value =>
               for {

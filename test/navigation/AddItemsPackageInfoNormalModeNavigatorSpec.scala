@@ -24,6 +24,7 @@ import controllers.addItems.specialMentions.{routes => specialMentionsRoutes}
 import generators.Generators
 import models.reference.PackageType
 import models.{Index, NormalMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsPackagesInfoNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._

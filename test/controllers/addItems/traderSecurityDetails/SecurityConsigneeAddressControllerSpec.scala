@@ -52,7 +52,7 @@ class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksR
   private val form         = formProvider(countries, "GB")
 
   lazy val securityConsigneeAddressRoute = routes.SecurityConsigneeAddressController.onPageLoad(lrn, index, NormalMode).url
-  private val template                   = "addItems/traderSecurityDetails/securityConsigneeAddress.njk"
+  private val template                   = "addItemsAnnotations/traderSecurityDetails/securityConsigneeAddress.njk"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

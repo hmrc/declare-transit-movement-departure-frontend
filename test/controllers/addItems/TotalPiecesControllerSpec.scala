@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.TotalPiecesFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.AddItemsPackagesInfo
+import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -78,7 +78,7 @@ class TotalPiecesControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItems/totalPieces.njk"
+      templateCaptor.getValue mustEqual "addItemsAnnotations/totalPieces.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -107,7 +107,7 @@ class TotalPiecesControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItems/totalPieces.njk"
+      templateCaptor.getValue mustEqual "addItemsAnnotations/totalPieces.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -149,7 +149,7 @@ class TotalPiecesControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItems/totalPieces.njk"
+      templateCaptor.getValue mustEqual "addItemsAnnotations/totalPieces.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 

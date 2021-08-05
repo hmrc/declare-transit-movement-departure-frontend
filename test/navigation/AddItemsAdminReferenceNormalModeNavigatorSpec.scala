@@ -24,6 +24,7 @@ import controllers.addItems.containers.{routes => containerRoutes}
 import controllers.addItems.previousReferences.{routes => previousReferenceRoutes}
 import controllers.addItems.routes
 import models.{Index, NormalMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsAdminReferenceNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import pages.AddSecurityDetailsPage
 import pages.addItems._

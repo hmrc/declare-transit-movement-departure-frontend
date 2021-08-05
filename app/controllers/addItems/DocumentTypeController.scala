@@ -22,7 +22,7 @@ import forms.addItems.DocumentTypeFormProvider
 import models.reference.DocumentType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Document
+import navigation.annotations.addItemsAnnotations.AddItemsDocument
 import pages.addItems
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DocumentTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @Document navigator: Navigator,
+  @AddItemsDocument navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
@@ -54,7 +54,7 @@ class DocumentTypeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/documentType.njk"
+  private val template = "addItemsAnnotations/documentType.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

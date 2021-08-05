@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.DocumentReferenceFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.Document
+import navigation.annotations.addItemsAnnotations.AddItemsDocument
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -45,14 +45,14 @@ class DocumentReferenceControllerSpec extends SpecBase with MockNunjucksRenderer
 
   private val formProvider = new DocumentReferenceFormProvider()
   private val form         = formProvider(index)
-  private val template     = "addItems/documentReference.njk"
+  private val template     = "addItemsAnnotations/documentReference.njk"
 
   lazy val documentReferenceRoute = routes.DocumentReferenceController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
 
   "DocumentReference Controller" - {
 

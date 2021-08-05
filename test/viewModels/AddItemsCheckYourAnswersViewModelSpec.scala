@@ -73,27 +73,27 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     }
     
     "details section have title and contain all rows" in {
-      data.sections(0).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.itemDetails"
+      data.sections(0).sectionTitle.get mustBe msg"addItemsAnnotations.checkYourAnswersLabel.itemDetails"
       data.sections(0).rows.length mustEqual 6
     }
 
     "containers sections have title and contain all rows" in {
-      data.sections(4).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.containers"
+      data.sections(4).sectionTitle.get mustBe msg"addItemsAnnotations.checkYourAnswersLabel.containers"
       data.sections(4).rows.length mustEqual 1
     }
 
     "special mentions have title and contain all rows" in {
-      data.sections(5).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.specialMentions"
+      data.sections(5).sectionTitle.get mustBe msg"addItemsAnnotations.checkYourAnswersLabel.specialMentions"
       data.sections(5).rows.length mustEqual 1
     }
 
     "packages section have title and contain all rows when package type is not unpacked" in {
-      data.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
+      data.sections(3).sectionTitle.get mustBe msg"addItemsAnnotations.checkYourAnswersLabel.packages"
       data.sections(3).rows.length mustEqual 2
     }
 
     "packages section have title and contain all rows when package type is unpacked" in {
-      dataWithUnpackedPackes.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
+      dataWithUnpackedPackes.sections(3).sectionTitle.get mustBe msg"addItemsAnnotations.checkYourAnswersLabel.packages"
       dataWithUnpackedPackes.sections(3).rows.length mustEqual 2
     }
   }

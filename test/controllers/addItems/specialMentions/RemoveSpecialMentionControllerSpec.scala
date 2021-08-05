@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.specialMentions.RemoveSpecialMentionFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.SpecialMentions
+import navigation.annotations.addItemsAnnotations.AddItemsSpecialMentions
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -44,14 +44,14 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
 
   private val formProvider = new RemoveSpecialMentionFormProvider()
   private val form         = formProvider()
-  private val template     = "addItems/specialMentions/removeSpecialMention.njk"
+  private val template     = "addItemsAnnotations/specialMentions/removeSpecialMention.njk"
 
   lazy val removeSpecialMentionRoute = routes.RemoveSpecialMentionController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
 
   "RemoveSpecialMention Controller" - {
 

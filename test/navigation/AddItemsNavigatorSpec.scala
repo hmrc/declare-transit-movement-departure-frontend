@@ -22,6 +22,7 @@ import controllers.addItems.routes
 import controllers.{routes => mainRoutes}
 import generators.Generators
 import models.{Index, NormalMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._

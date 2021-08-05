@@ -22,7 +22,7 @@ import logging.Logging
 import models.DeclarationType.Option4
 import models.{DeclarationType, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Document
+import navigation.annotations.addItemsAnnotations.AddItemsDocument
 import pages.DeclarationTypePage
 import pages.addItems.{DocumentTypePage, TIRCarnetReferencePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TIRCarnetReferenceController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @Document navigator: Navigator,
+  @AddItemsDocument navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

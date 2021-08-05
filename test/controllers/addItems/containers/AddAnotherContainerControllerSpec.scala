@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.containers.AddAnotherContainerFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.AddItemsContainer
+import navigation.annotations.addItemsAnnotations.AddItemsContainer
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -43,7 +43,7 @@ class AddAnotherContainerControllerSpec extends SpecBase with MockNunjucksRender
 
   private val formProvider = new AddAnotherContainerFormProvider()
   private val form         = formProvider()
-  private val template     = "addItems/containers/addAnotherContainer.njk"
+  private val template     = "addItemsAnnotations/containers/addAnotherContainer.njk"
 
   private def expectedJson(form: Form[_]) = Json.obj(
     "form"           -> form,

@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.containers.ContainerNumberFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsContainer
+import navigation.annotations.addItemsAnnotations.AddItemsContainer
 import pages.addItems.containers.ContainerNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -50,7 +50,7 @@ class ContainerNumberController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItems/containers/containerNumber.njk"
+  private val template = "addItemsAnnotations/containers/containerNumber.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, containerIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

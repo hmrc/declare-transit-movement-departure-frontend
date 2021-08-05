@@ -50,7 +50,7 @@ class AddSecurityConsignorsEoriController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItems/traderSecurityDetails/addSecurityConsignorsEori.njk"
+  private val template = "addItemsAnnotations/traderSecurityDetails/addSecurityConsignorsEori.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

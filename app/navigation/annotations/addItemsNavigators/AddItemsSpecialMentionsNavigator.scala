@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.annotations.addItemsNavigators
 
 import controllers.addItems.specialMentions.routes
 import controllers.addItems.{routes => addItemRoutes}
@@ -22,6 +22,7 @@ import derivable.{DeriveNumberOfDocuments, DeriveNumberOfSpecialMentions}
 import models.DeclarationType.Option4
 import models.reference.CircumstanceIndicator
 import models.{CheckMode, Index, Mode, NormalMode, UserAnswers}
+import navigation.Navigator
 import pages.addItems.specialMentions._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
 import pages.{AddSecurityDetailsPage, DeclarationTypePage, Page}
@@ -30,7 +31,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class SpecialMentionsNavigator @Inject() () extends Navigator {
+class AddItemsSpecialMentionsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] =
     Seq(

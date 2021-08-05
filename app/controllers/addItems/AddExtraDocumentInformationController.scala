@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.AddExtraDocumentInformationFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Document
+import navigation.annotations.addItemsAnnotations.AddItemsDocument
 import pages.addItems.AddExtraDocumentInformationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddExtraDocumentInformationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @Document navigator: Navigator,
+  @AddItemsDocument navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
@@ -49,7 +49,7 @@ class AddExtraDocumentInformationController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/addExtraDocumentInformation.njk"
+  private val template = "addItemsAnnotations/addExtraDocumentInformation.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

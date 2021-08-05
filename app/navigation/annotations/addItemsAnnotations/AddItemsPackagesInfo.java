@@ -30,7 +30,7 @@
  * limitations under the License.
  */
 
-package navigation.annotations;
+package navigation.annotations.addItemsAnnotations;
 
 import com.google.inject.BindingAnnotation;
 
@@ -42,5 +42,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 @BindingAnnotation
-public @interface AddItemsTraderDetails {
+public @interface AddItemsPackagesInfo {
 }

@@ -23,7 +23,7 @@ import forms.addItems.AddAnotherDocumentFormProvider
 import matchers.JsonMatchers
 import models.reference.DocumentType
 import models.{DocumentTypeList, NormalMode}
-import navigation.annotations.{AddItems, Document}
+import navigation.annotations.addItemsAnnotations.AddItemsDocument
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -46,7 +46,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
 
   private val formProvider                                 = new AddAnotherDocumentFormProvider()
   private val form                                         = formProvider(index)
-  private val template                                     = "addItems/addAnotherDocument.njk"
+  private val template                                     = "addItemsAnnotations/addAnotherDocument.njk"
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   val documentType1: DocumentType                          = DocumentType("1", "11", true)
   val documentType2: DocumentType                          = DocumentType("2", "22", true)
@@ -56,7 +56,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
 
   "AddAnotherDocument Controller" - {
@@ -84,7 +84,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
         "heading"   -> msg"addAnotherDocument.heading.plural".withArgs(1),
         "radios"    -> Radios.yesNo(form("value"))
       )
-      templateCaptor.getValue mustEqual "addItems/addAnotherDocument.njk"
+      templateCaptor.getValue mustEqual "addItemsAnnotations/addAnotherDocument.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
     }
@@ -135,7 +135,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
         "radios"    -> Radios.yesNo(boundForm("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItems/addAnotherDocument.njk"
+      templateCaptor.getValue mustEqual "addItemsAnnotations/addAnotherDocument.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
     }

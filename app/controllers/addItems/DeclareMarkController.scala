@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.DeclareMarkFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsPackagesInfo
+import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
 import pages.addItems.{DeclareMarkPage, HowManyPackagesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -70,7 +70,7 @@ class DeclareMarkController @Inject() (
           "displayIndex" -> packageIndex.display
         )
 
-        renderer.render("addItems/declareMark.njk", json).map(Ok(_))
+        renderer.render("addItemsAnnotations/declareMark.njk", json).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
@@ -94,7 +94,7 @@ class DeclareMarkController @Inject() (
                 "displayIndex" -> packageIndex.display
               )
 
-              renderer.render("addItems/declareMark.njk", json).map(BadRequest(_))
+              renderer.render("addItemsAnnotations/declareMark.njk", json).map(BadRequest(_))
             },
             value =>
               for {

@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.traderDetails.TraderDetailsConsigneeNameFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.AddItemsItemDetails
+import navigation.annotations.addItemsAnnotations.AddItemsItemDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -44,7 +44,7 @@ class TraderDetailsConsigneeNameControllerSpec extends SpecBase with MockNunjuck
 
   private val formProvider = new TraderDetailsConsigneeNameFormProvider()
   private val form         = formProvider(index)
-  private val template     = "addItems/traderDetails/traderDetailsConsigneeName.njk"
+  private val template     = "addItemsAnnotations/traderDetails/traderDetailsConsigneeName.njk"
 
   lazy val traderDetailsConsigneeNameRoute = routes.TraderDetailsConsigneeNameController.onPageLoad(lrn, index, NormalMode).url
 

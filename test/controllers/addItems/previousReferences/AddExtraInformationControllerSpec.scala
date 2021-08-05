@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.AddExtraInformationFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.addItemsAnnotations.AddItems
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -45,7 +45,7 @@ class AddExtraInformationControllerSpec extends SpecBase with MockNunjucksRender
 
   private val formProvider = new AddExtraInformationFormProvider()
   private val form         = formProvider()
-  private val template     = "addItems/addExtraInformation.njk"
+  private val template     = "addItemsAnnotations/addExtraInformation.njk"
 
   lazy val addExtraInformationRoute        = routes.AddExtraInformationController.onPageLoad(lrn, index, referenceIndex, NormalMode).url
   lazy val addAdministrativeReferenceRoute = routes.AddAdministrativeReferenceController.onPageLoad(lrn, index, NormalMode).url

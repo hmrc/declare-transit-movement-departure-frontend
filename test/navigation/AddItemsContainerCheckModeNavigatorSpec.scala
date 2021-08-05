@@ -21,6 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.containers.{routes => containerRoutes}
 import generators.Generators
 import models.{CheckMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsContainerNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.containers._

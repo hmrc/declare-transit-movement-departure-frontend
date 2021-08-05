@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.ConfirmRemoveDocumentFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.Document
+import navigation.annotations.addItemsAnnotations.AddItemsDocument
 import pages.addItems.ConfirmRemoveDocumentPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConfirmRemoveDocumentController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @Document navigator: Navigator,
+  @AddItemsDocument navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
@@ -51,7 +51,7 @@ class ConfirmRemoveDocumentController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItems/confirmRemoveDocument.njk"
+  private val template = "addItemsAnnotations/confirmRemoveDocument.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

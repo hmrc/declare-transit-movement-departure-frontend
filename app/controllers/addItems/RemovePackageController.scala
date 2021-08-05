@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.RemovePackageFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.AddItemsPackagesInfo
+import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
 import pages.addItems.RemovePackagePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -50,7 +50,7 @@ class RemovePackageController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/removePackage.njk"
+  private val template = "addItemsAnnotations/removePackage.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

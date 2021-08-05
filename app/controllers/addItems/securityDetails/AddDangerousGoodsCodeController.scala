@@ -49,7 +49,7 @@ class AddDangerousGoodsCodeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/securityDetails/addDangerousGoodsCode.njk"
+  private val template = "addItemsAnnotations/securityDetails/addDangerousGoodsCode.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

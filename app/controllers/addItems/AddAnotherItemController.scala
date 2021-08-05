@@ -22,7 +22,7 @@ import forms.addItems.AddAnotherItemFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.addItemsAnnotations.AddItems
 import pages.addItems.AddAnotherItemPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -104,6 +104,6 @@ class AddAnotherItemController @Inject() (
       "radios"    -> Radios.yesNo(form("value"))
     )
 
-    renderer.render("addItems/addAnotherItem.njk", json)
+    renderer.render("addItemsAnnotations/addAnotherItem.njk", json)
   }
 }

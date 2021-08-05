@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.specialMentions.AddSpecialMentionFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.SpecialMentions
+import navigation.annotations.addItemsAnnotations.AddItemsSpecialMentions
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -44,14 +44,14 @@ class AddSpecialMentionControllerSpec extends SpecBase with MockNunjucksRenderer
 
   private val formProvider = new AddSpecialMentionFormProvider()
   private val form         = formProvider(itemIndex)
-  private val template     = "addItems/specialMentions/addSpecialMention.njk"
+  private val template     = "addItemsAnnotations/specialMentions/addSpecialMention.njk"
 
   lazy val addSpecialMentionRoute = routes.AddSpecialMentionController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
 
   "AddSpecialMention Controller" - {
 

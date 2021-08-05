@@ -23,7 +23,7 @@ import forms.addItems.AddAnotherDocumentFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode, NormalMode}
 import navigation.Navigator
-import navigation.annotations.Document
+import navigation.annotations.addItemsAnnotations.AddItemsDocument
 import pages.addItems.AddAnotherDocumentPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -42,7 +42,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddAnotherDocumentController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @Document navigator: Navigator,
+  @AddItemsDocument navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
@@ -106,7 +106,7 @@ class AddAnotherDocumentController @Inject() (
           "radios"       -> Radios.yesNo(form("value"))
         )
 
-        renderer.render("addItems/addAnotherDocument.njk", json)
+        renderer.render("addItemsAnnotations/addAnotherDocument.njk", json)
     }
   }
 }

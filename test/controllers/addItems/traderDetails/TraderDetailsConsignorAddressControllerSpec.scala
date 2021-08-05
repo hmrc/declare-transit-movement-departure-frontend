@@ -23,7 +23,7 @@ import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, CountryList, NormalMode}
-import navigation.annotations.AddItemsItemDetails
+import navigation.annotations.addItemsAnnotations.AddItemsItemDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -92,7 +92,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
         "index" -> index.display
       )
 
-      templateCaptor.getValue mustEqual "addItems/traderDetails/traderDetailsConsignorAddress.njk"
+      templateCaptor.getValue mustEqual "addItemsAnnotations/traderDetails/traderDetailsConsignorAddress.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -141,7 +141,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
         "index" -> index.display
       )
 
-      templateCaptor.getValue mustEqual "addItems/traderDetails/traderDetailsConsignorAddress.njk"
+      templateCaptor.getValue mustEqual "addItemsAnnotations/traderDetails/traderDetailsConsignorAddress.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -197,7 +197,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
         "index" -> index.display
       )
 
-      templateCaptor.getValue mustEqual "addItems/traderDetails/traderDetailsConsignorAddress.njk"
+      templateCaptor.getValue mustEqual "addItemsAnnotations/traderDetails/traderDetailsConsignorAddress.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 

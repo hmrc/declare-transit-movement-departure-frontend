@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.ConfirmRemoveItemFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.addItemsAnnotations.AddItems
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -45,7 +45,7 @@ class ConfirmRemoveItemControllerSpec extends SpecBase with MockNunjucksRenderer
 
   private val formProvider = new ConfirmRemoveItemFormProvider()
   private val form         = formProvider()
-  private val template     = "addItems/confirmRemoveItem.njk"
+  private val template     = "addItemsAnnotations/confirmRemoveItem.njk"
 
   lazy val removeItemRoute = routes.ConfirmRemoveItemController.onPageLoad(lrn, index).url
 

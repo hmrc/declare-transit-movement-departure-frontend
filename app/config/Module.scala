@@ -20,6 +20,26 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
 import navigation.annotations._
+import navigation.annotations.addItemsAnnotations.{
+  AddItems,
+  AddItemsAdminReference,
+  AddItemsContainer,
+  AddItemsDocument,
+  AddItemsItemDetails,
+  AddItemsPackagesInfo,
+  AddItemsSpecialMentions,
+  AddItemsTraderDetails
+}
+import navigation.annotations.addItemsNavigators.{
+  AddItemsAdminReferenceNavigator,
+  AddItemsContainerNavigator,
+  AddItemsDocumentNavigator,
+  AddItemsItemDetailsNavigator,
+  AddItemsNavigator,
+  AddItemsPackagesInfoNavigator,
+  AddItemsSpecialMentionsNavigator,
+  AddItemsTraderDetailsNavigator
+}
 import services.{DateTimeService, DateTimeServiceImpl}
 
 class Module extends AbstractModule {
@@ -38,9 +58,9 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[AddItemsAdminReference]).to(classOf[AddItemsAdminReferenceNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[AddItemsTraderDetails]).to(classOf[AddItemsTraderDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[AddItemsContainer]).to(classOf[AddItemsContainerNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[SpecialMentions]).to(classOf[SpecialMentionsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsSpecialMentions]).to(classOf[AddItemsSpecialMentionsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[AddItems]).to(classOf[AddItemsNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[Document]).to(classOf[DocumentNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsDocument]).to(classOf[AddItemsDocumentNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[SecurityDetails]).to(classOf[SecurityDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[TradersSecurityDetails]).to(classOf[TradersSecurityDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[SafetyAndSecurity]).to(classOf[SafetyAndSecurityNavigator])

@@ -21,7 +21,7 @@ import derivable.DeriveNumberOfPackages
 import forms.addItems.AddAnotherPackageFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsPackagesInfo
+import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
 import pages.addItems.AddAnotherPackagePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -77,7 +77,7 @@ class AddAnotherPackageController @Inject() (
           "packageRows" -> packageRows
         )
 
-        renderer.render("addItems/addAnotherPackage.njk", json).map(Ok(_))
+        renderer.render("addItemsAnnotations/addAnotherPackage.njk", json).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
@@ -106,7 +106,7 @@ class AddAnotherPackageController @Inject() (
                 "packageRows" -> packageRows
               )
 
-              renderer.render("addItems/addAnotherPackage.njk", json).map(BadRequest(_))
+              renderer.render("addItemsAnnotations/addAnotherPackage.njk", json).map(BadRequest(_))
             },
             value =>
               for {

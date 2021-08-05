@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.annotations.addItemsNavigators
 
 import controllers.addItems.routes
 import derivable.{DeriveNumberOfDocuments, DeriveNumberOfPreviousAdministrativeReferences}
 import models.{CheckMode, DeclarationType, Index, Mode, NormalMode, UserAnswers}
+import navigation.Navigator
 import pages.addItems._
 import pages.{DeclarationTypePage, Page}
 import play.api.mvc.Call
@@ -26,7 +27,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DocumentNavigator @Inject() () extends Navigator {
+class AddItemsDocumentNavigator @Inject() () extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {

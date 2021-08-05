@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.annotations.addItemsNavigators
 
 import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
 import controllers.addItems.{routes => addItemsRoutes}
 import models._
+import navigation.Navigator
 import pages._
 import pages.addItems.CommodityCodePage
 import play.api.mvc.Call

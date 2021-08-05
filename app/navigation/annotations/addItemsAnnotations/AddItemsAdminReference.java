@@ -30,7 +30,7 @@
  * limitations under the License.
  */
 
-package navigation.annotations;
+package navigation.annotations.addItemsAnnotations;
 
 import com.google.inject.BindingAnnotation;
 

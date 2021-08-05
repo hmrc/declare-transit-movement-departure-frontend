@@ -26,6 +26,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.containers._
 import controllers.addItems.specialMentions.{routes => specialMentions}
 import derivable.DeriveNumberOfContainers
+import navigation.annotations.addItemsNavigators.AddItemsContainerNavigator
 
 class AddItemsContainerNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off

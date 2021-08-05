@@ -23,7 +23,7 @@ import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsItemDetails
+import navigation.annotations.addItemsAnnotations.AddItemsItemDetails
 import pages.addItems.traderDetails.{TraderDetailsConsignorAddressPage, TraderDetailsConsignorNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -54,7 +54,7 @@ class TraderDetailsConsignorAddressController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/traderDetails/traderDetailsConsignorAddress.njk"
+  private val template = "addItemsAnnotations/traderDetails/traderDetailsConsignorAddress.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.ConfirmRemovePreviousAdministrativeReferenceFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.addItemsAnnotations.AddItems
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -50,7 +50,7 @@ class ConfirmRemovePreviousAdministrativeReferenceControllerSpec
 
   private val formProvider = new ConfirmRemovePreviousAdministrativeReferenceFormProvider()
   private val form         = formProvider()
-  private val template     = "addItems/confirmRemovePreviousAdministrativeReference.njk"
+  private val template     = "addItemsAnnotations/confirmRemovePreviousAdministrativeReference.njk"
 
   lazy val confirmRemovePreviousAdministrativeReferenceRoute =
     routes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, NormalMode).url

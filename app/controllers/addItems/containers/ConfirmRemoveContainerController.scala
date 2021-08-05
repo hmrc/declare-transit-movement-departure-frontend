@@ -21,7 +21,7 @@ import derivable.DeriveNumberOfContainers
 import forms.addItems.containers.ConfirmRemoveContainerFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItemsContainer
+import navigation.annotations.addItemsAnnotations.AddItemsContainer
 import pages.addItems.containers.{ConfirmRemoveContainerPage, ContainerNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -52,7 +52,7 @@ class ConfirmRemoveContainerController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItems/containers/confirmRemoveContainer.njk"
+  private val template = "addItemsAnnotations/containers/confirmRemoveContainer.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, containerIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

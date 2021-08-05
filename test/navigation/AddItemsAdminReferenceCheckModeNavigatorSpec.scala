@@ -22,6 +22,7 @@ import controllers.addItems.previousReferences.{routes => previousReferenceRoute
 import controllers.addItems.routes
 import generators.Generators
 import models.{CheckMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsAdminReferenceNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.AddSecurityDetailsPage

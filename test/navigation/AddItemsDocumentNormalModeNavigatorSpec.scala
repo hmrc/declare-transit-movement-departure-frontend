@@ -21,14 +21,15 @@ import controllers.addItems.previousReferences.{routes => previousReferencesRout
 import controllers.addItems.routes
 import generators.Generators
 import models.{CheckMode, DeclarationType, NormalMode}
+import navigation.annotations.addItemsNavigators.AddItemsDocumentNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.DeclarationTypePage
 import pages.addItems._
 import queries.DocumentQuery
 
-class DocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
   // format: off
-  val navigator = new DocumentNavigator
+  val navigator = new AddItemsDocumentNavigator
 
   "Document navigator" - {
     "in Normal Mode" - {

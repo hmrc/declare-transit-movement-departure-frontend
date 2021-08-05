@@ -22,6 +22,7 @@ import controllers.addItems.routes
 import controllers.addItems.traderDetails.{routes => traderRoutes}
 import generators.Generators
 import models.{CheckMode, CommonAddress, Index, NormalMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsTraderDetailsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._

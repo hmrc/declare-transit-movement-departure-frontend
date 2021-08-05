@@ -53,7 +53,7 @@ object AddItemsCheckYourAnswersViewModel {
   }
 
   private def traderSecuritySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, countryList: CountryList, index: Index) = Section(
-    msg"addItems.checkYourAnswersLabel.security",
+    msg"addItemsAnnotations.checkYourAnswersLabel.security",
     Seq(
       checkYourAnswersHelper.addSecurityConsignorsEori(index),
       checkYourAnswersHelper.securityConsignorEori(index),
@@ -67,7 +67,7 @@ object AddItemsCheckYourAnswersViewModel {
   )
 
   private def securitySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Section(
-    msg"addItems.checkYourAnswersLabel.safetyAndSecurity",
+    msg"addItemsAnnotations.checkYourAnswersLabel.safetyAndSecurity",
     Seq(
       checkYourAnswersHelper.transportCharges(index),
       checkYourAnswersHelper.commercialReferenceNumber(index),
@@ -77,7 +77,7 @@ object AddItemsCheckYourAnswersViewModel {
   )
 
   private def itemsDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Section(
-    msg"addItems.checkYourAnswersLabel.itemDetails",
+    msg"addItemsAnnotations.checkYourAnswersLabel.itemDetails",
     Seq(
       checkYourAnswersHelper.itemDescription(index),
       checkYourAnswersHelper.itemTotalGrossMass(index),
@@ -89,8 +89,8 @@ object AddItemsCheckYourAnswersViewModel {
   )
 
   private def traderConsignorDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Section(
-    msg"addItems.checkYourAnswersLabel.traderDetails",
-    msg"addItems.checkYourAnswersLabel.traderDetails.consignor",
+    msg"addItemsAnnotations.checkYourAnswersLabel.traderDetails",
+    msg"addItemsAnnotations.checkYourAnswersLabel.traderDetails.consignor",
     Seq(
       checkYourAnswersHelper.traderDetailsConsignorEoriKnown(index),
       checkYourAnswersHelper.traderDetailsConsignorEoriNumber(index),
@@ -101,7 +101,7 @@ object AddItemsCheckYourAnswersViewModel {
 
   private def traderConsigneeDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Section(
     None,
-    Some(msg"addItems.checkYourAnswersLabel.traderDetails.consignee"),
+    Some(msg"addItemsAnnotations.checkYourAnswersLabel.traderDetails.consignee"),
     Seq(
       checkYourAnswersHelper.traderDetailsConsigneeEoriKnown(index),
       checkYourAnswersHelper.traderDetailsConsigneeEoriNumber(index),
@@ -123,9 +123,9 @@ object AddItemsCheckYourAnswersViewModel {
       }
 
     Section(
-      msg"addItems.checkYourAnswersLabel.packages",
+      msg"addItemsAnnotations.checkYourAnswersLabel.packages",
       packageRows,
-      checkYourAnswersHelper.addAnotherPackage(index, msg"addItems.checkYourAnswersLabel.packages.addRemove")
+      checkYourAnswersHelper.addAnotherPackage(index, msg"addItemsAnnotations.checkYourAnswersLabel.packages.addRemove")
     )
   }
 
@@ -140,9 +140,9 @@ object AddItemsCheckYourAnswersViewModel {
       }
 
     Section(
-      msg"addItems.checkYourAnswersLabel.references",
+      msg"addItemsAnnotations.checkYourAnswersLabel.references",
       Seq(checkYourAnswersHelper.addAdministrativeReference(index).toSeq, referencesRows).flatten,
-      checkYourAnswersHelper.addAnotherPreviousReferences(index, msg"addItems.checkYourAnswersLabel.references.addRemove")
+      checkYourAnswersHelper.addAnotherPreviousReferences(index, msg"addItemsAnnotations.checkYourAnswersLabel.references.addRemove")
     )
   }
 
@@ -156,9 +156,9 @@ object AddItemsCheckYourAnswersViewModel {
       }
 
     Section(
-      msg"addItems.checkYourAnswersLabel.documents",
+      msg"addItemsAnnotations.checkYourAnswersLabel.documents",
       Seq(checkYourAnswersHelper.addDocuments(index).toSeq, documentRows).flatten,
-      checkYourAnswersHelper.addAnotherDocument(index, msg"addItems.checkYourAnswersLabel.documents.addRemove")
+      checkYourAnswersHelper.addAnotherDocument(index, msg"addItemsAnnotations.checkYourAnswersLabel.documents.addRemove")
     )
   }
 
@@ -170,9 +170,9 @@ object AddItemsCheckYourAnswersViewModel {
       }
 
     Section(
-      msg"addItems.checkYourAnswersLabel.containers",
+      msg"addItemsAnnotations.checkYourAnswersLabel.containers",
       containerRows,
-      checkYourAnswersHelper.addAnotherContainer(index, msg"addItems.checkYourAnswersLabel.containers.addRemove")
+      checkYourAnswersHelper.addAnotherContainer(index, msg"addItemsAnnotations.checkYourAnswersLabel.containers.addRemove")
     )
   }
 
@@ -186,9 +186,9 @@ object AddItemsCheckYourAnswersViewModel {
       }
 
     Section(
-      msg"addItems.checkYourAnswersLabel.specialMentions",
+      msg"addItemsAnnotations.checkYourAnswersLabel.specialMentions",
       Seq(checkYourAnswersHelper.addSpecialMention(index).toSeq, containerRows).flatten,
-      checkYourAnswersHelper.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions.addRemove")
+      checkYourAnswersHelper.addAnother(index, msg"addItemsAnnotations.checkYourAnswersLabel.specialMentions.addRemove")
     )
   }
 

@@ -27,6 +27,7 @@ import controllers.{routes => mainRoutes}
 import generators.Generators
 import models.reference.PackageType
 import models.{CheckMode, CommonAddress, Index, NormalMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsPackagesInfoNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._

@@ -22,7 +22,7 @@ import forms.ReferenceTypeFormProvider
 import models.reference.PreviousReferencesDocumentType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.addItemsAnnotations.AddItems
 import pages.addItems.ReferenceTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -54,7 +54,7 @@ class ReferenceTypeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/referenceType.njk"
+  private val template = "addItemsAnnotations/referenceType.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
