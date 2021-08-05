@@ -41,14 +41,14 @@ class AddItemsNavigator @Inject() () extends Navigator {
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
+    case ConfirmRemoveItemPage => ua => Some(removeItem(NormalMode)(ua))
     case AddAnotherItemPage => ua => Some(addAnotherItemRoute(ua))
-
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
+    case ConfirmRemoveItemPage => ua => Some(removeItem(CheckMode)(ua))
     case AddAnotherItemPage => ua => Some(addAnotherItemRoute(ua))
-
   }
 
   private def addAnotherItemRoute(userAnswers: UserAnswers): Call = {

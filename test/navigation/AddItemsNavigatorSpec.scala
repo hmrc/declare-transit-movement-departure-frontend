@@ -18,22 +18,40 @@ package navigation
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import controllers.addItems.containers.{routes => containerRoutes}
+import controllers.addItems.routes
+import controllers.{routes => mainRoutes}
 import generators.Generators
-import models.{NormalMode, UserAnswers}
+import models.{Index, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.addItems.containers._
+import pages._
+import pages.addItems._
 
 class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off
   val navigator = new AddItemsNavigator
 
-  "Add Items section" - {
-
-???
-
-
+  "must go from AddAnotherItem page to" - {
+    "ItemDescription page if the answer is 'Yes'" in {
+      forAll(arbitrary[UserAnswers]) {
+        answers =>
+          val updatedAnswer = answers.set(AddAnotherItemPage, false).success.value
+          navigator
+            .nextPage(AddAnotherItemPage, NormalMode, updatedAnswer)
+            .mustBe(mainRoutes.DeclarationSummaryController.onPageLoad(answers.lrn))
+      }
     }
+    "task list page if the answer is 'No'" in {
+      forAll(arbitrary[UserAnswers]) {
+        answers =>
+          val updatedAnswer = answers
+            .set(AddAnotherItemPage, true).success.value
+            .set(ItemDescriptionPage(index), "test").success.value
+          navigator
+            .nextPage(AddAnotherItemPage, NormalMode, updatedAnswer)
+            .mustBe(routes.ItemDescriptionController.onPageLoad(answers.lrn, Index(1), NormalMode))
+      }
+    }
+  }
   // format: on
 }

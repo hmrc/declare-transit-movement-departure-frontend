@@ -30,7 +30,7 @@ import queries.PreviousReferencesQuery
 
 class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off
-  val navigator = new AddItemsNavigator
+  val navigator = new AddItemsAdminReferenceNavigator
 
   "Add Items section" - {
 
