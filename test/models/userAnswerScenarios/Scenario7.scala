@@ -79,24 +79,24 @@ case object Scenario7 extends UserAnswerScenario {
     .unsafeSetVal(pages.ProcedureTypePage)(ProcedureType.Normal)
     .unsafeSetVal(pages.AddSecurityDetailsPage)(true)
     .unsafeSetVal(pages.OfficeOfDeparturePage)(CustomsOffice("OOD1234A", "OfficeOfDeparturePage", CountryCode("XI"), None))
+    .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option4)
     /*
      * General Information Section
      * */
-    .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option4)
-    .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(false)
-    .unsafeSetVal(pages.ContainersUsedPage)(true)
-    .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
-    .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(true)
-    .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
-    .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
+    .unsafeSetVal(pages.generalInformation.PreLodgeDeclarationPage)(false)
+    .unsafeSetVal(pages.generalInformation.ContainersUsedPage)(true)
+    .unsafeSetVal(pages.generalInformation.DeclarationPlacePage)("XX1 1XX")
+    .unsafeSetVal(pages.generalInformation.DeclarationForSomeoneElsePage)(true)
+    .unsafeSetVal(pages.generalInformation.RepresentativeNamePage)("John Doe")
+    .unsafeSetVal(pages.generalInformation.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
     /*
      * RouteDetails
      * */
-    .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
-    .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
-    .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
-    .unsafeSetVal(pages.AddOfficeOfTransitPage)(false)
+    .unsafeSetVal(pages.routeDetails.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
+    .unsafeSetVal(pages.routeDetails.DestinationCountryPage)(CountryCode("DC"))
+    .unsafeSetVal(pages.routeDetails.MovementDestinationCountryPage)(CountryCode("MD"))
+    .unsafeSetVal(pages.routeDetails.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
+    .unsafeSetVal(pages.routeDetails.AddOfficeOfTransitPage)(false)
     /*
      * Transport Details
      * */
@@ -108,12 +108,12 @@ case object Scenario7 extends UserAnswerScenario {
     /*
      * Traders Details
      * */
-    .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
-    .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-    .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
-    .unsafeSetVal(pages.PrincipalTirHolderIdPage)("GBR/123/1234567")
-    .unsafeSetVal(pages.AddConsignorPage)(false)
-    .unsafeSetVal(pages.AddConsigneePage)(false)
+    .unsafeSetVal(pages.traderDetails.IsPrincipalEoriKnownPage)(false)
+    .unsafeSetVal(pages.traderDetails.PrincipalNamePage)("PrincipalName")
+    .unsafeSetVal(pages.traderDetails.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
+    .unsafeSetVal(pages.traderDetails.PrincipalTirHolderIdPage)("GBR/123/1234567")
+    .unsafeSetVal(pages.traderDetails.AddConsignorPage)(false)
+    .unsafeSetVal(pages.traderDetails.AddConsigneePage)(false)
     /*
      * Safety & Security Details
      * */

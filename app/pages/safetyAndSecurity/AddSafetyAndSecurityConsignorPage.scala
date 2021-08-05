@@ -17,25 +17,31 @@
 package pages.safetyAndSecurity
 
 import models.UserAnswers
-import pages.QuestionPage
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
-case object AddSafetyAndSecurityConsignorPage extends QuestionPage[Boolean] {
+case object AddSafetyAndSecurityConsignorPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "addSafetyAndSecurityConsignor"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    val cleanedUpUserAnswers = value match {
       case Some(false) =>
         userAnswers
           .remove(AddSafetyAndSecurityConsignorEoriPage)
           .flatMap(_.remove(SafetyAndSecurityConsignorEoriPage))
           .flatMap(_.remove(SafetyAndSecurityConsignorNamePage))
           .flatMap(_.remove(SafetyAndSecurityConsignorAddressPage))
-      case _ => super.cleanup(value, userAnswers)
+      case _ => Success(userAnswers)
     }
+
+    cleanedUpUserAnswers
+      .flatMap(
+        updatedUserAnswers => super.cleanup(value, updatedUserAnswers)
+      )
+  }
 }

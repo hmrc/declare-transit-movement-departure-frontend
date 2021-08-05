@@ -22,11 +22,14 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.OfficeOfTransitCountryFormProvider
 import logging.Logging
-import models.reference.Country
-import models.{Index, LocalReferenceNumber, Mode}
+import models.reference.{Country, CountryCode}
+import models.requests.DataRequest
+import models.{CustomsOfficeList, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import pages.OfficeOfTransitCountryPage
+import play.api.data.{Form, FormError}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import pages.routeDetails.OfficeOfTransitCountryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -93,9 +96,24 @@ class OfficeOfTransitCountryController @Inject() (
                 formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.fullList, Results.BadRequest),
                 value =>
                   for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(OfficeOfTransitCountryPage(index), value.code))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(OfficeOfTransitCountryPage(index), mode, updatedAnswers))
+                    customsOfficeList <- referenceDataConnector.getCustomsOfficesOfTheCountry(value.code, transitOfficeRoles)
+                    result <-
+                      if (customsOfficeList.getAll.nonEmpty) {
+                        redirect(index, request, value, mode)
+                      } else {
+                        renderPage(
+                          lrn,
+                          index,
+                          mode,
+                          formProvider(transitCountryList)
+                            .withError(FormError("value", "officeOfTransitCountry.error.noTransitOffice"))
+                            .fill(value),
+                          transitCountryList.fullList,
+                          Results.BadRequest
+                        )
+                      }
+
+                  } yield result
               )
           )
         } yield page
@@ -104,6 +122,13 @@ class OfficeOfTransitCountryController @Inject() (
         Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
   }
+
+  private def redirect(index: Index, request: DataRequest[AnyContent], value: Country, mode: Mode) =
+    for {
+      updatedAnswers <- Future
+        .fromTry(request.userAnswers.set(OfficeOfTransitCountryPage(index), value.code))
+      _ <- sessionRepository.set(updatedAnswers)
+    } yield Redirect(navigator.nextPage(OfficeOfTransitCountryPage(index), mode, updatedAnswers))
 
   private def renderPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(implicit
     request: Request[AnyContent]
@@ -115,7 +140,6 @@ class OfficeOfTransitCountryController @Inject() (
       "countries"   -> countryJsonList(form.value, countries),
       "onSubmitUrl" -> routes.OfficeOfTransitCountryController.onSubmit(lrn, index, mode).url
     )
-
     renderer.render("officeOfTransitCountry.njk", json).map(status(_))
   }
 }

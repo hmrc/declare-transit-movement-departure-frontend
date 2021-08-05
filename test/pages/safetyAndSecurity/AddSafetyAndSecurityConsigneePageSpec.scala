@@ -30,6 +30,8 @@ class AddSafetyAndSecurityConsigneePageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AddSafetyAndSecurityConsigneePage)
 
+    clearDownItems[Boolean](AddSafetyAndSecurityConsigneePage)
+
     "cleanup" - {
       "must clean up the consignee details on selecting option 'No' " in {
         val consigneeAddress = arbitrary[CommonAddress].sample.value
@@ -37,6 +39,9 @@ class AddSafetyAndSecurityConsigneePageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
+              .set(AddSafetyAndSecurityConsigneePage, true)
+              .success
+              .value
               .set(AddSafetyAndSecurityConsigneeEoriPage, false)
               .success
               .value

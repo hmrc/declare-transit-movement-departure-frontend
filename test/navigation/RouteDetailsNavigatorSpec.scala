@@ -26,6 +26,7 @@ import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
+import pages.routeDetails._
 import queries.OfficeOfTransitQuery
 import org.scalacheck.Gen
 
@@ -380,7 +381,6 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(OfficeOfTransitCountryPage(index), CheckMode, answers)
               .mustBe(routes.AddAnotherTransitOfficeController.onPageLoad(answers.lrn, index, CheckMode))
-
         }
       }
     }

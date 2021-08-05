@@ -25,6 +25,7 @@ import org.scalacheck.Gen
 import org.scalatest.TryValues
 import pages._
 import pages.addItems.traderDetails._
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 
 class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 

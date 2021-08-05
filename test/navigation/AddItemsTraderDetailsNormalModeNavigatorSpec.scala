@@ -27,6 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.addItems.traderDetails._
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 
 class AddItemsTraderDetailsNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off

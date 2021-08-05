@@ -27,5 +27,7 @@ class AddAnotherCountryOfRoutingPageSpec extends PageBehaviours {
     beSettable[Boolean](AddAnotherCountryOfRoutingPage)
 
     beRemovable[Boolean](AddAnotherCountryOfRoutingPage)
+
+    clearDownItems[Boolean](AddAnotherCountryOfRoutingPage)
   }
 }

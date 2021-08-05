@@ -28,5 +28,7 @@ class CarrierAddressPageSpec extends PageBehaviours {
     beSettable[CommonAddress](CarrierAddressPage)
 
     beRemovable[CommonAddress](CarrierAddressPage)
+
+    clearDownItems[CommonAddress](CarrierAddressPage)
   }
 }

@@ -34,6 +34,7 @@ import pages._
 import pages.addItems._
 import pages.addItems.containers._
 import pages.addItems.traderDetails._
+import pages.generalInformation.ContainersUsedPage
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import queries.{ContainersQuery, _}
 

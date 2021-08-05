@@ -23,6 +23,7 @@ import models.{DeclarationType, Index, UserAnswers}
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import pages._
+import pages.routeDetails._
 import java.time.LocalDateTime
 
 trait RouteDetails {

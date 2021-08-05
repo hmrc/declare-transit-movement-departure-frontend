@@ -29,16 +29,22 @@ class AddCircumstanceIndicatorPageSpec extends PageBehaviours {
     beSettable[Boolean](AddCircumstanceIndicatorPage)
 
     beRemovable[Boolean](AddCircumstanceIndicatorPage)
+
+    clearDownItems[Boolean](AddCircumstanceIndicatorPage)
   }
 
   "cleanup" - {
 
-    "must remove PlaceOfUnloadingCodePage when AddCircumstanceIndicatorPage is false" in {
+    //TODO: Arghhh
+    "must remove CircumstanceIndicatorPage when AddCircumstanceIndicatorPage is false" in {
 
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val result = userAnswers
-            .set(PlaceOfUnloadingCodePage, "value")
+            .set(AddCircumstanceIndicatorPage, true)
+            .success
+            .value
+            .set(CircumstanceIndicatorPage, "value")
             .success
             .value
             .set(AddCircumstanceIndicatorPage, false)

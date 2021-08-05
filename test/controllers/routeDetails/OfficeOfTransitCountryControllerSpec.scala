@@ -21,14 +21,14 @@ import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import forms.OfficeOfTransitCountryFormProvider
 import matchers.JsonMatchers
-import models.{CountryList, NormalMode}
+import models.{CountryList, CustomsOfficeList, NormalMode}
 import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{OfficeOfDeparturePage, OfficeOfTransitCountryPage}
+import pages.OfficeOfDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -39,6 +39,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import controllers.{routes => mainRoutes}
 import models.reference.{Country, CountryCode, CustomsOffice}
+import pages.routeDetails.OfficeOfTransitCountryPage
 
 import scala.concurrent.Future
 
@@ -54,10 +55,13 @@ class OfficeOfTransitCountryControllerSpec
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val countries    = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val formProvider = new OfficeOfTransitCountryFormProvider()
-  private val form         = formProvider(countries)
-  private val template     = "officeOfTransitCountry.njk"
+  private val countries                         = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
+  private val formProvider                      = new OfficeOfTransitCountryFormProvider()
+  private val form                              = formProvider(countries)
+  private val template                          = "officeOfTransitCountry.njk"
+  private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
+  private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("JE"), None)
+  private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
 
   lazy val officeOfTransitCountryRoute = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, NormalMode).url
 
@@ -212,7 +216,8 @@ class OfficeOfTransitCountryControllerSpec
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
+      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
+        .thenReturn(Future.successful(customsOffices))
       when(mockReferenceDataConnector.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))

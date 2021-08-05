@@ -29,5 +29,7 @@ class CountryOfRoutingPageSpec extends PageBehaviours {
     beSettable[CountryCode](CountryOfRoutingPage(Index(0)))
 
     beRemovable[CountryCode](CountryOfRoutingPage(Index(0)))
+
+    clearDownItems[CountryCode](CountryOfRoutingPage(Index(0)))
   }
 }

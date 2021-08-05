@@ -21,9 +21,7 @@ import logging.Logging
 import models.QueryGroupsEnrolmentsResponseModel
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-
 import javax.inject.Inject
-//import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}

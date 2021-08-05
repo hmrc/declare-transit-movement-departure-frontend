@@ -86,27 +86,27 @@ case object Scenario1 extends UserAnswerScenario {
      * General Information Section
      * */
     .unsafeSetVal(pages.DeclarationTypePage)(DeclarationType.Option2)
-    .unsafeSetVal(pages.movementDetails.PreLodgeDeclarationPage)(false)
-    .unsafeSetVal(pages.ContainersUsedPage)(true)
-    .unsafeSetVal(pages.DeclarationPlacePage)("XX1 1XX")
-    .unsafeSetVal(pages.DeclarationForSomeoneElsePage)(true)
-    .unsafeSetVal(pages.RepresentativeNamePage)("John Doe")
-    .unsafeSetVal(pages.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
+    .unsafeSetVal(pages.generalInformation.PreLodgeDeclarationPage)(false)
+    .unsafeSetVal(pages.generalInformation.ContainersUsedPage)(true)
+    .unsafeSetVal(pages.generalInformation.DeclarationPlacePage)("XX1 1XX")
+    .unsafeSetVal(pages.generalInformation.DeclarationForSomeoneElsePage)(true)
+    .unsafeSetVal(pages.generalInformation.RepresentativeNamePage)("John Doe")
+    .unsafeSetVal(pages.generalInformation.RepresentativeCapacityPage)(RepresentativeCapacity.Direct)
     /*
      * RouteDetails
      * */
-    .unsafeSetVal(pages.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
-    .unsafeSetVal(pages.DestinationCountryPage)(CountryCode("DC"))
-    .unsafeSetVal(pages.MovementDestinationCountryPage)(CountryCode("MD"))
-    .unsafeSetVal(pages.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
-    .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
-    .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
-    .unsafeSetVal(pages.AddTransitOfficePage)(true)
-    .unsafeSetVal(pages.OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
-    .unsafeSetVal(pages.AddAnotherTransitOfficePage(Index(1)))("TOP12342")
-    .unsafeSetVal(pages.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
-    .unsafeSetVal(pages.AddTransitOfficePage)(false)
+    .unsafeSetVal(pages.routeDetails.CountryOfDispatchPage)(CountryOfDispatch(CountryCode("SC"), false))
+    .unsafeSetVal(pages.routeDetails.DestinationCountryPage)(CountryCode("DC"))
+    .unsafeSetVal(pages.routeDetails.MovementDestinationCountryPage)(CountryCode("MD"))
+    .unsafeSetVal(pages.routeDetails.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
+    .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
+    .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
+    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+    .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(true)
+    .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
+    .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(1)))("TOP12342")
+    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+    .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(false)
     /*
      * Transport Details
      * */
@@ -118,11 +118,11 @@ case object Scenario1 extends UserAnswerScenario {
     /*
      * Traders Details
      * */
-    .unsafeSetVal(pages.IsPrincipalEoriKnownPage)(false)
-    .unsafeSetVal(pages.PrincipalNamePage)("PrincipalName")
-    .unsafeSetVal(pages.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
-    .unsafeSetVal(pages.AddConsignorPage)(false)
-    .unsafeSetVal(pages.AddConsigneePage)(false)
+    .unsafeSetVal(pages.traderDetails.IsPrincipalEoriKnownPage)(false)
+    .unsafeSetVal(pages.traderDetails.PrincipalNamePage)("PrincipalName")
+    .unsafeSetVal(pages.traderDetails.PrincipalAddressPage)(CommonAddress("PrincipalStreet", "PrincipalTown", "AA1 1AA", Country(CountryCode("FR"), "France")))
+    .unsafeSetVal(pages.traderDetails.AddConsignorPage)(false)
+    .unsafeSetVal(pages.traderDetails.AddConsigneePage)(false)
     /*
      * Safety & Security Details
      * */

@@ -39,6 +39,9 @@ class DeclareNumberOfPackagesPageSpec extends PageBehaviours with SpecBase {
           userAnswers =>
             val result =
               userAnswers
+                .set(DeclareNumberOfPackagesPage(index, index), true)
+                .success
+                .value
                 .set(HowManyPackagesPage(index, index), 123)
                 .success
                 .value

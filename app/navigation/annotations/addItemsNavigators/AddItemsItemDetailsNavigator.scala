@@ -22,6 +22,7 @@ import models._
 import navigation.Navigator
 import pages._
 import pages.addItems.CommodityCodePage
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}

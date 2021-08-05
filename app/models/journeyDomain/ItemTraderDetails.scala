@@ -22,6 +22,7 @@ import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.{CommonAddress, EoriNumber, Index, UserAnswers}
 import pages._
 import pages.addItems.traderDetails._
+import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 
 case class ItemTraderDetails(consignor: Option[RequiredDetails], consignee: Option[RequiredDetails])
 

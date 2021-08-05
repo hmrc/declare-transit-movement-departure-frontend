@@ -30,6 +30,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.addItems._
 import pages.addItems.containers._
+import pages.generalInformation.ContainersUsedPage
 import queries._
 
 class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {

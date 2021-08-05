@@ -16,10 +16,10 @@
 
 package pages.safetyAndSecurity
 
-import pages.QuestionPage
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object ConfirmRemoveCountryPage extends QuestionPage[Boolean] {
+case object ConfirmRemoveCountryPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 

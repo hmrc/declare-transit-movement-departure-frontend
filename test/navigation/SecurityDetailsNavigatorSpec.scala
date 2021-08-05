@@ -90,15 +90,16 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddDangerousGoodsCodePage(index), false)
-              .success
-              .value
               .set(AddSafetyAndSecurityConsignorPage, true)
               .success
               .value
               .set(AddSafetyAndSecurityConsigneePage, true)
               .success
               .value
+              .set(AddDangerousGoodsCodePage(index), false)
+              .success
+              .value
+
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
@@ -109,9 +110,6 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddDangerousGoodsCodePage(index), false)
-              .success
-              .value
               .set(AddSafetyAndSecurityConsignorPage, true)
               .success
               .value
@@ -121,6 +119,10 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
               .set(CircumstanceIndicatorPage, "E")
               .success
               .value
+              .set(AddDangerousGoodsCodePage(index), false)
+              .success
+              .value
+
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.traderSecurityDetails.routes.SecurityConsigneeEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
@@ -131,9 +133,6 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddDangerousGoodsCodePage(index), false)
-              .success
-              .value
               .set(AddSafetyAndSecurityConsignorPage, true)
               .success
               .value
@@ -143,6 +142,10 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
               .set(CircumstanceIndicatorPage, "B")
               .success
               .value
+              .set(AddDangerousGoodsCodePage(index), false)
+              .success
+              .value
+
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
@@ -153,9 +156,6 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddDangerousGoodsCodePage(index), false)
-              .success
-              .value
               .set(AddSafetyAndSecurityConsignorPage, true)
               .success
               .value
@@ -165,6 +165,10 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
               .set(AddCircumstanceIndicatorPage, false)
               .success
               .value
+              .set(AddDangerousGoodsCodePage(index), false)
+              .success
+              .value
+
             navigator
               .nextPage(AddDangerousGoodsCodePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.traderSecurityDetails.routes.AddSecurityConsigneesEoriController.onPageLoad(updatedAnswers.lrn, index, NormalMode))

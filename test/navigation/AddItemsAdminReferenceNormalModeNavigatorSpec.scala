@@ -18,19 +18,18 @@ package navigation
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import generators.Generators
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import controllers.addItems.containers.{routes => containerRoutes}
 import controllers.addItems.previousReferences.{routes => previousReferenceRoutes}
 import controllers.addItems.routes
+import derivable.DeriveNumberOfPreviousAdministrativeReferences
+import generators.Generators
 import models.{Index, NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsAdminReferenceNavigator
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.AddSecurityDetailsPage
 import pages.addItems._
-import pages.addItems.containers._
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
-import queries.{ContainersQuery, PreviousReferencesQuery}
+import queries.PreviousReferencesQuery
 
 class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off
@@ -164,9 +163,10 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddAdministrativeReferencePage(index), false).success.value
               .set(AddSecurityDetailsPage, true).success.value
               .set(AddTransportChargesPaymentMethodPage, false).success.value
+              .set(AddAdministrativeReferencePage(index), false).success.value
+
             navigator
               .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
@@ -190,10 +190,11 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddAdministrativeReferencePage(index), false).success.value
               .set(AddSecurityDetailsPage, true).success.value
               .set(AddTransportChargesPaymentMethodPage, true).success.value
               .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
+              .set(AddAdministrativeReferencePage(index), false).success.value
+
             navigator
               .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
@@ -205,10 +206,11 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddAdministrativeReferencePage(index), false).success.value
               .set(AddSecurityDetailsPage, true).success.value
               .set(AddTransportChargesPaymentMethodPage, true).success.value
               .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
+              .set(AddAdministrativeReferencePage(index), false).success.value
+
             navigator
               .nextPage(AddAdministrativeReferencePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
@@ -220,9 +222,10 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
               .set(AddSecurityDetailsPage, true).success.value
               .set(AddTransportChargesPaymentMethodPage, false).success.value
+              .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+
             navigator
               .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
@@ -246,10 +249,11 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
               .set(AddSecurityDetailsPage, true).success.value
               .set(AddTransportChargesPaymentMethodPage, true).success.value
               .set(AddCommercialReferenceNumberAllItemsPage, false).success.value
+              .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+
             navigator
               .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
@@ -261,10 +265,11 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers
-              .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
               .set(AddSecurityDetailsPage, true).success.value
               .set(AddTransportChargesPaymentMethodPage, true).success.value
               .set(AddCommercialReferenceNumberAllItemsPage, true).success.value
+              .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+
             navigator
               .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswers)
               .mustBe(controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
