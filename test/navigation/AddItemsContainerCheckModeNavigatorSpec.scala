@@ -25,9 +25,9 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.containers._
 
-class AddItemsContainerChecklModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
+class AddItemsContainerCheckModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off
-  val navigator = new AddItemsNavigator
+  val navigator = new AddItemsContainerNavigator
 
   "Add Items section" - {
 

@@ -31,18 +31,7 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
 
   "Add Items section" - {
 
-    "containerNumber" - {
-      "must go from containerNumber to addAnotherContainer" in {
-        forAll(arbitrary[UserAnswers], arbitrary[String]) {
-          (answers, containerNumber) =>
-            val updatedAnswers = answers
-              .set(ContainerNumberPage(itemIndex, containerIndex), containerNumber).success.value
-            navigator
-              .nextPage(ContainerNumberPage(itemIndex, containerIndex), NormalMode, updatedAnswers)
-              .mustBe(containerRoutes.AddAnotherContainerController.onPageLoad(updatedAnswers.lrn, itemIndex, NormalMode))
-        }
-      }
-    }
+???
 
 
     }
