@@ -43,7 +43,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
   "Add Items section" - {
 
-     "in check mode" - {
+    "in check mode" - {
 
       "PackageJourney" - {
 

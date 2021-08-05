@@ -36,9 +36,7 @@ class AddItemsTraderDetailsCheckModeNavigatorSpec extends SpecBase with ScalaChe
 
     "in check mode" - {
 
-      //Trader details
       "Trader Details" - {
-        //Consignor
         "must go from ConsignorEoriKnown to" - {
           "ConsignorEoriNumber when true and EoriNumber is empty" in {
             forAll(arbitrary[UserAnswers]) {

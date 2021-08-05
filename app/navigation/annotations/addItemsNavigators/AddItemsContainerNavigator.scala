@@ -29,7 +29,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AddItemsContainerNavigator @Inject() () extends Navigator {
+class AddItemsContainerNavigator @Inject()() extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
@@ -46,7 +46,7 @@ class AddItemsContainerNavigator @Inject() () extends Navigator {
     case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, CheckMode))
   }
 
-  private def confirmRemoveContainerRoute(ua: UserAnswers, index: Index, mode:Mode) =
+  private def confirmRemoveContainerRoute(ua: UserAnswers, index: Index, mode: Mode) =
     ua.get(DeriveNumberOfContainers(index)).getOrElse(0) match {
       case 0 => containerRoutes.ContainerNumberController.onPageLoad(ua.lrn, index, Index(0), mode)
       case _ => containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, index, mode)

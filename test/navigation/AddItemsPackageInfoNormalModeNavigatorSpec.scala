@@ -280,7 +280,6 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
         }
 
 
-
         "RemovePackage" - {
 
           "must go to AddAnotherPackage page when 'No' is selected and there are more than one package" in {

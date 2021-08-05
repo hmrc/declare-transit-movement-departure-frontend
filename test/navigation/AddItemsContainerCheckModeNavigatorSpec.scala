@@ -47,6 +47,6 @@ class AddItemsContainerCheckModeNavigatorSpec extends SpecBase with ScalaCheckPr
     }
 
 
-    }
+  }
   // format: on
 }

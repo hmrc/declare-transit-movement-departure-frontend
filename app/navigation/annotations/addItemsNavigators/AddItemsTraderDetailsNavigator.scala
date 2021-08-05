@@ -28,7 +28,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AddItemsTraderDetailsNavigator @Inject() () extends Navigator {
+class AddItemsTraderDetailsNavigator @Inject()() extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
@@ -55,7 +55,7 @@ class AddItemsTraderDetailsNavigator @Inject() () extends Navigator {
     case TraderDetailsConsigneeEoriNumberPage(index) => ua => consigneeEoriNumberCheckMode(ua, index)
     case TraderDetailsConsigneeNamePage(index) => ua => consigneeName(ua, index)
     case TraderDetailsConsigneeAddressPage(index) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-    }
+  }
 
   private def consigneeName(ua: UserAnswers, index: Index) =
     ua.get(TraderDetailsConsigneeAddressPage(index)) match {
@@ -83,7 +83,7 @@ class AddItemsTraderDetailsNavigator @Inject() () extends Navigator {
       ua.get(TraderDetailsConsigneeEoriNumberPage(index)),
       ua.get(TraderDetailsConsigneeNamePage(index))) match {
       case (Some(true), None, _) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriNumberController.onPageLoad(ua.lrn, index, CheckMode))
-     case (Some(false), _, None) => Some(traderDetailsRoutes.TraderDetailsConsigneeNameController.onPageLoad(ua.lrn, index, CheckMode))
+      case (Some(false), _, None) => Some(traderDetailsRoutes.TraderDetailsConsigneeNameController.onPageLoad(ua.lrn, index, CheckMode))
       case _ => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     }
 

@@ -37,7 +37,6 @@ class AddItemsTraderDetailsNormalModeNavigatorSpec extends SpecBase with ScalaCh
     "in normal mode" - {
 
       "Trader Details" - {
-        //Consignor
         "must go from ConsignorEoriKnown to" - {
           "ConsignorEoriNumber when true" in {
             forAll(arbitrary[UserAnswers]) {

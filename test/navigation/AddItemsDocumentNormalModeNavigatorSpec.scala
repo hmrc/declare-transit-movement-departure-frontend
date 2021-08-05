@@ -49,14 +49,14 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
 
         "Reference Type page when user selects 'No', and declaration type is T2 and office of departure country is non-EU" in {
 
-              val updatedAnswers = emptyUserAnswers
-                .set(AddDocumentsPage(index), false).success.value
-                .set(DeclarationTypePage, DeclarationType.Option2).success.value
-                .set(IsNonEuOfficePage, true).success.value
-              navigator
-                .nextPage(AddDocumentsPage(index), NormalMode, updatedAnswers)
-                .mustBe(previousReferencesRoutes.ReferenceTypeController.onPageLoad(updatedAnswers.lrn, index, referenceIndex, NormalMode))
-          }
+          val updatedAnswers = emptyUserAnswers
+            .set(AddDocumentsPage(index), false).success.value
+            .set(DeclarationTypePage, DeclarationType.Option2).success.value
+            .set(IsNonEuOfficePage, true).success.value
+          navigator
+            .nextPage(AddDocumentsPage(index), NormalMode, updatedAnswers)
+            .mustBe(previousReferencesRoutes.ReferenceTypeController.onPageLoad(updatedAnswers.lrn, index, referenceIndex, NormalMode))
+        }
 
         "Reference Type page when user selects 'No', and declaration type is T2F and office of departure country is non-EU" in {
 
@@ -134,25 +134,25 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
 
         "Add Administrative Reference page when user selects 'No' and is in EU" in {
 
-              val updatedAnswers = emptyUserAnswers
-                .set(AddAnotherDocumentPage(index), false).success.value
-                .set(IsNonEuOfficePage, false).success.value
-              navigator
-                .nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers)
-                .mustBe(previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
-          }
+          val updatedAnswers = emptyUserAnswers
+            .set(AddAnotherDocumentPage(index), false).success.value
+            .set(IsNonEuOfficePage, false).success.value
+          navigator
+            .nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers)
+            .mustBe(previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+        }
 
         "Reference Type page when user selects 'No', and declaration type is T2 and office of departure country is non-EU" in {
 
-              val updatedAnswers = emptyUserAnswers
-                .set(AddAnotherDocumentPage(index), false).success.value
-                .set(DeclarationTypePage, DeclarationType.Option2).success.value
-                .set(IsNonEuOfficePage, true).success.value
+          val updatedAnswers = emptyUserAnswers
+            .set(AddAnotherDocumentPage(index), false).success.value
+            .set(DeclarationTypePage, DeclarationType.Option2).success.value
+            .set(IsNonEuOfficePage, true).success.value
 
-              navigator
-                .nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers)
-                .mustBe(previousReferencesRoutes.ReferenceTypeController.onPageLoad(updatedAnswers.lrn, index, referenceIndex, NormalMode))
-            }
+          navigator
+            .nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers)
+            .mustBe(previousReferencesRoutes.ReferenceTypeController.onPageLoad(updatedAnswers.lrn, index, referenceIndex, NormalMode))
+        }
         "Reference Type page when user selects 'No', and declaration type is T2F and office of departure country is non-EU" in {
 
           val updatedAnswers = emptyUserAnswers

@@ -54,56 +54,56 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           "its a TIR declaration type and " +
           "its the first document on the first item" in {
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(DeclarationTypePage)(Option4)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(DeclarationTypePage)(Option4)
 
-            navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
-          }
+          navigator
+            .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
+        }
 
         "to standard add document journey when false and " +
           "its a TIR declaration type and " +
           "its not the first document on the first item" in {
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(false)
-              .unsafeSetVal(DeclarationTypePage)(Option4)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddSecurityDetailsPage)(false)
+            .unsafeSetVal(DeclarationTypePage)(Option4)
 
-            navigator
-              .nextPage(AddSpecialMentionPage(Index(1)), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, Index(1), NormalMode))
+          navigator
+            .nextPage(AddSpecialMentionPage(Index(1)), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, Index(1), NormalMode))
 
-          }
+        }
 
         "to standard add document journey when false and " +
           "its a TIR declaration type and " +
           "its the first document but not the first item" in {
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(DocumentTypePage(index, referenceIndex))("documentType")
-              .unsafeSetVal(DocumentReferencePage(index, referenceIndex))("documentReference")
-              .unsafeSetVal(AddExtraDocumentInformationPage(index, referenceIndex))(true)
-              .unsafeSetVal(DocumentExtraInformationPage(index, referenceIndex))("documentExtraInformation")
-              .unsafeSetVal(DeclarationTypePage)(Option4)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(DocumentTypePage(index, referenceIndex))("documentType")
+            .unsafeSetVal(DocumentReferencePage(index, referenceIndex))("documentReference")
+            .unsafeSetVal(AddExtraDocumentInformationPage(index, referenceIndex))(true)
+            .unsafeSetVal(DocumentExtraInformationPage(index, referenceIndex))("documentExtraInformation")
+            .unsafeSetVal(DeclarationTypePage)(Option4)
 
-            navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
-          }
+          navigator
+            .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
+        }
 
         "to AddDocuments when set to false and safety " +
           "and security is selected as 'No'" in {
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddSecurityDetailsPage)(false)
-              .unsafeSetVal(DeclarationTypePage)(Option1)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddSecurityDetailsPage)(false)
+            .unsafeSetVal(DeclarationTypePage)(Option1)
 
-            navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
-          }
+          navigator
+            .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
+        }
 
         "to DocumentType when set to false " +
           "and AddSecurityDetailsPage is 'Yes' " +
@@ -111,67 +111,67 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           "and it is the first Item " +
           "and AddCommercialReferenceNumberPage is false" in {
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
-              .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-              .unsafeSetVal(DeclarationTypePage)(Option1)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(DeclarationTypePage)(Option1)
 
-            navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
-          }
+          navigator
+            .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
+        }
 
         "to AddDocumentType when set to false and AddSecurityDetailsPage is 'Yes' " +
           "and  AddCircumstanceIndicatorPage is 'No' and it is the not the first Item " +
           "and AddCommercialReferenceNumberPage is false" in {
 
-            val nextIndex = Index(1)
+          val nextIndex = Index(1)
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
-              .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-              .unsafeSetVal(DeclarationTypePage)(Option1)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(DeclarationTypePage)(Option1)
 
-            navigator
-              .nextPage(AddSpecialMentionPage(nextIndex), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, nextIndex, NormalMode))
-          }
+          navigator
+            .nextPage(AddSpecialMentionPage(nextIndex), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, nextIndex, NormalMode))
+        }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and " +
           "AddCircumstanceIndicatorPage is 'Yes' and " +
           "CircumstanceIndicator is either E, D, C and B && AddCommercialReferenceNumberPage is false" in {
 
-            val circumstanceIndicator = Gen.oneOf(CircumstanceIndicator.conditionalIndicators).sample.value
+          val circumstanceIndicator = Gen.oneOf(CircumstanceIndicator.conditionalIndicators).sample.value
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
-              .unsafeSetVal(CircumstanceIndicatorPage)(circumstanceIndicator)
-              .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-              .unsafeSetVal(DeclarationTypePage)(Option1)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)(circumstanceIndicator)
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(DeclarationTypePage)(Option1)
 
-            navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
-          }
+          navigator
+            .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
+        }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and " +
           "AddCircumstanceIndicatorPage is 'Yes' and " +
           "CircumstanceIndicator other then E, D, C and B" in {
 
-            val userAnswers = emptyUserAnswers
-              .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
-              .unsafeSetVal(CircumstanceIndicatorPage)("something")
-              .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
-              .unsafeSetVal(DeclarationTypePage)(Option1)
+          val userAnswers = emptyUserAnswers
+            .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
+            .unsafeSetVal(CircumstanceIndicatorPage)("something")
+            .unsafeSetVal(AddSecurityDetailsPage)(true)
+            .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
+            .unsafeSetVal(DeclarationTypePage)(Option1)
 
-            navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
-          }
+          navigator
+            .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
+        }
 
       }
 
