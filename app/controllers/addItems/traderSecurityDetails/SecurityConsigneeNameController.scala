@@ -49,7 +49,7 @@ class SecurityConsigneeNameController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItemsAnnotations/traderSecurityDetails/securityConsigneeName.njk"
+  private val template = "addItems/traderSecurityDetails/securityConsigneeName.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

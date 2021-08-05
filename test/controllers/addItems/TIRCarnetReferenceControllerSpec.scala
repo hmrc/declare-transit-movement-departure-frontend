@@ -22,7 +22,7 @@ import forms.addItems.TIRCarnetReferenceFormProvider
 import matchers.JsonMatchers
 import models.DeclarationType.{Option1, Option4}
 import models.NormalMode
-import navigation.annotations.addItemsAnnotations.AddItemsDocument
+import navigation.annotations.addItems.AddItemsDocument
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

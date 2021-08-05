@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.addItems.AddAnotherItemFormProvider
 import matchers.JsonMatchers
-import navigation.annotations.addItemsAnnotations.AddItems
+import navigation.annotations.addItems.AddItems
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -78,7 +78,7 @@ class AddAnotherItemControllerSpec extends SpecBase with MockNunjucksRendererApp
         "radios"    -> Radios.yesNo(form("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/addAnotherItem.njk"
+      templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
     }
@@ -126,7 +126,7 @@ class AddAnotherItemControllerSpec extends SpecBase with MockNunjucksRendererApp
         "radios"    -> Radios.yesNo(boundForm("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/addAnotherItem.njk"
+      templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
     }

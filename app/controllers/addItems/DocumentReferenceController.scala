@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.DocumentReferenceFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsDocument
+import navigation.annotations.addItems.AddItemsDocument
 import pages.addItems.DocumentReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -49,7 +49,7 @@ class DocumentReferenceController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItemsAnnotations/documentReference.njk"
+  private val template = "addItems/documentReference.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

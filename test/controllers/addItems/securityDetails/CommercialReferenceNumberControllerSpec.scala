@@ -45,7 +45,7 @@ class CommercialReferenceNumberControllerSpec extends SpecBase with MockNunjucks
 
   private val formProvider = new CommercialReferenceNumberFormProvider()
   private val form         = formProvider()
-  private val template     = "addItemsAnnotations/securityDetails/commercialReferenceNumber.njk"
+  private val template     = "addItems/securityDetails/commercialReferenceNumber.njk"
 
   lazy val commercialReferenceNumberRoute = routes.CommercialReferenceNumberController.onPageLoad(lrn, index, NormalMode).url
 

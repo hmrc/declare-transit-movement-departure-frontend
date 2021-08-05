@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.DeclareNumberOfPackagesFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import pages.addItems.DeclareNumberOfPackagesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -70,7 +70,7 @@ class DeclareNumberOfPackagesController @Inject() (
           "itemIndex" -> itemIndex.display
         )
 
-        renderer.render("addItemsAnnotations/declareNumberOfPackages.njk", json).map(Ok(_))
+        renderer.render("addItems/declareNumberOfPackages.njk", json).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
@@ -94,7 +94,7 @@ class DeclareNumberOfPackagesController @Inject() (
                 "itemIndex" -> itemIndex.display
               )
 
-              renderer.render("addItemsAnnotations/declareNumberOfPackages.njk", json).map(BadRequest(_))
+              renderer.render("addItems/declareNumberOfPackages.njk", json).map(BadRequest(_))
             },
             value => {
               val userAnswers = request.userAnswers.get(DeclareNumberOfPackagesPage(itemIndex, packageIndex)).map(_ == value) match {

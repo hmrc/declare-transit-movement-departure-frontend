@@ -23,7 +23,7 @@ import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode, NormalMode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItems
+import navigation.annotations.addItems.AddItems
 import pages.addItems.AddAnotherPreviousAdministrativeReferencePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -108,7 +108,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
           "radios"        -> Radios.yesNo(form("value"))
         )
 
-        renderer.render("addItemsAnnotations/addAnotherPreviousAdministrativeReference.njk", json)
+        renderer.render("addItems/addAnotherPreviousAdministrativeReference.njk", json)
     }
   }
 }

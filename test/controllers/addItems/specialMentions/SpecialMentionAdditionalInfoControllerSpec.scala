@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.specialMentions.SpecialMentionAdditionalInfoFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.addItemsAnnotations.AddItemsSpecialMentions
+import navigation.annotations.addItems.AddItemsSpecialMentions
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -44,7 +44,7 @@ class SpecialMentionAdditionalInfoControllerSpec extends SpecBase with MockNunju
 
   private val formProvider = new SpecialMentionAdditionalInfoFormProvider()
   private val form         = formProvider(itemIndex, referenceIndex)
-  private val template     = "addItemsAnnotations/specialMentions/specialMentionAdditionalInfo.njk"
+  private val template     = "addItems/specialMentions/specialMentionAdditionalInfo.njk"
 
   lazy val specialMentionAdditionalInfoRoute = routes.SpecialMentionAdditionalInfoController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
 

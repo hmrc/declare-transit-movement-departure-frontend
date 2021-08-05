@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.DeclareMarkFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -76,7 +76,7 @@ class DeclareMarkControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "lrn"  -> lrn
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/declareMark.njk"
+      templateCaptor.getValue mustEqual "addItems/declareMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -105,7 +105,7 @@ class DeclareMarkControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/declareMark.njk"
+      templateCaptor.getValue mustEqual "addItems/declareMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -146,7 +146,7 @@ class DeclareMarkControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/declareMark.njk"
+      templateCaptor.getValue mustEqual "addItems/declareMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 

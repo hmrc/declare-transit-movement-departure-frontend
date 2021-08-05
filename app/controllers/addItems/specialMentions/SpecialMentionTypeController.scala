@@ -22,7 +22,7 @@ import forms.addItems.specialMentions.SpecialMentionTypeFormProvider
 import models.reference.SpecialMention
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsSpecialMentions
+import navigation.annotations.addItems.AddItemsSpecialMentions
 import pages.addItems.specialMentions.SpecialMentionTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -54,7 +54,7 @@ class SpecialMentionTypeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItemsAnnotations/specialMentions/specialMentionType.njk"
+  private val template = "addItems/specialMentions/specialMentionType.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

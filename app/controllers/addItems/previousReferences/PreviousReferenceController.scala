@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.PreviousReferenceFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItems
+import navigation.annotations.addItems.AddItems
 import pages.addItems
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -50,7 +50,7 @@ class PreviousReferenceController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItemsAnnotations/previousReference.njk"
+  private val template = "addItems/previousReference.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

@@ -49,7 +49,7 @@ class CommercialReferenceNumberController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItemsAnnotations/securityDetails/commercialReferenceNumber.njk"
+  private val template = "addItems/securityDetails/commercialReferenceNumber.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

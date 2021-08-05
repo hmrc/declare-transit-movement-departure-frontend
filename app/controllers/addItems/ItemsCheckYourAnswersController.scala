@@ -46,7 +46,7 @@ class ItemsCheckYourAnswersController @Inject() (
     with ValidateReaderLogger
     with I18nSupport {
 
-  private val template = "addItemsAnnotations/itemsCheckYourAnswers.njk"
+  private val template = "addItems/itemsCheckYourAnswers.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] =
     (identify

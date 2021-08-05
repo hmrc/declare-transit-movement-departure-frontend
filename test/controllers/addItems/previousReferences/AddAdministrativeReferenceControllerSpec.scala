@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.AddAdministrativeReferenceFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.addItemsAnnotations.AddItems
+import navigation.annotations.addItems.AddItems
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -45,7 +45,7 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
 
   private val formProvider = new AddAdministrativeReferenceFormProvider()
   private val form         = formProvider()
-  private val template     = "addItemsAnnotations/addAdministrativeReference.njk"
+  private val template     = "addItems/addAdministrativeReference.njk"
 
   lazy val addAdministrativeReferenceRoute = routes.AddAdministrativeReferenceController.onPageLoad(lrn, index, NormalMode).url
 

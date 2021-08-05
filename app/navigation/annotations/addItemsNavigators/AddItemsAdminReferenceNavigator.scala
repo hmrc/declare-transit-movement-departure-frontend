@@ -29,13 +29,13 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AddItemsAdminReferenceNavigator @Inject()() extends Navigator {
+class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
 
   // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
     case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, _) => ua => Some(removePreviousAdministrativeReference(itemIndex, NormalMode)(ua))
-    case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePage(itemIndex, ua, NormalMode)
+    case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePageNormalMode(itemIndex, ua)
     case ReferenceTypePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.lrn, itemIndex, referenceIndex, NormalMode))
     case PreviousReferencePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.lrn, itemIndex, referenceIndex, NormalMode))
     case AddExtraInformationPage(itemIndex, referenceIndex) => ua => addExtraInformationPage(ua, itemIndex, referenceIndex, NormalMode)
@@ -46,7 +46,7 @@ class AddItemsAdminReferenceNavigator @Inject()() extends Navigator {
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePage(itemIndex, ua, CheckMode)
+    case AddAdministrativeReferencePage(itemIndex) => ua => addAdministrativeReferencePageCheckMode(itemIndex, ua)
     case ReferenceTypePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.lrn, itemIndex, referenceIndex, CheckMode))
     case PreviousReferencePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.lrn, itemIndex, referenceIndex, CheckMode))
     case AddExtraInformationPage(itemIndex, referenceIndex) => ua => addExtraInformationPage(ua, itemIndex, referenceIndex, CheckMode)
@@ -56,13 +56,36 @@ class AddItemsAdminReferenceNavigator @Inject()() extends Navigator {
 
   }
 
-  private def addAdministrativeReferencePage(itemIndex: Index, ua: UserAnswers, mode: Mode): Option[Call] = {
+  private def addAdministrativeReferencePageNormalMode(itemIndex: Index, ua: UserAnswers): Option[Call] = {
     val referenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)).getOrElse(0)
     ua.get(AddAdministrativeReferencePage(itemIndex)) map {
-      case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(referenceIndex), mode)
-      case _ if mode == CheckMode => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
-      case _ => securityDetailsAndTransportCharges(itemIndex, ua)
+      case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(referenceIndex), NormalMode)
+      case _ => matchSecurityDetailsAndAddTransportCharges(itemIndex, ua)
     }
+  }
+
+  private def matchSecurityDetailsAndAddTransportCharges(itemIndex: Index, ua: UserAnswers) = {
+    (ua.get(AddSecurityDetailsPage), ua.get(AddTransportChargesPaymentMethodPage)) match {
+      case (Some(true), Some(false)) => controllers.addItems.securityDetails.routes.TransportChargesController.onPageLoad(ua.lrn, itemIndex, NormalMode)
+      case (Some(true), Some(true)) => addCommercialRefNumverAllItems(itemIndex, ua)
+      case _ => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
+    }
+  }
+
+  private def addCommercialRefNumverAllItems(itemIndex: Index, ua: UserAnswers) = {
+    ua.get(AddCommercialReferenceNumberAllItemsPage) match {
+      case Some(true) => controllers.addItems.securityDetails.routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, itemIndex, NormalMode)
+      case Some(false) => controllers.addItems.securityDetails.routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, itemIndex, NormalMode)
+    }
+  }
+
+  private def addAdministrativeReferencePageCheckMode(itemIndex: Index, ua: UserAnswers): Option[Call] = {
+    val referenceIndex = ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)).getOrElse(0)
+    ua.get(AddAdministrativeReferencePage(itemIndex)) map {
+      case true => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(referenceIndex), CheckMode)
+      case _ => addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex)
+
+      }
   }
 
   private def securityDetailsAndTransportCharges(itemIndex: Index, ua: UserAnswers) = {

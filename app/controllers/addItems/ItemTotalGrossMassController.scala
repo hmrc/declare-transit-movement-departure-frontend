@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.ItemTotalGrossMassFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsItemDetails
+import navigation.annotations.addItems.AddItemsItemDetails
 import pages.ItemTotalGrossMassPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json

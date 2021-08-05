@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.ConfirmRemoveDocumentFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsDocument
+import navigation.annotations.addItems.AddItemsDocument
 import pages.addItems.ConfirmRemoveDocumentPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -51,7 +51,7 @@ class ConfirmRemoveDocumentController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItemsAnnotations/confirmRemoveDocument.njk"
+  private val template = "addItems/confirmRemoveDocument.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

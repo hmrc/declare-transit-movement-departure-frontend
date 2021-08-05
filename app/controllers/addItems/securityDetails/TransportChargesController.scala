@@ -54,7 +54,7 @@ class TransportChargesController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItemsAnnotations/securityDetails/transportCharges.njk"
+  private val template = "addItems/securityDetails/transportCharges.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

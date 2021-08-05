@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.specialMentions.RemoveSpecialMentionFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsSpecialMentions
+import navigation.annotations.addItems.AddItemsSpecialMentions
 import pages.addItems.specialMentions.RemoveSpecialMentionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -51,7 +51,7 @@ class RemoveSpecialMentionController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItemsAnnotations/specialMentions/removeSpecialMention.njk"
+  private val template = "addItems/specialMentions/removeSpecialMention.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

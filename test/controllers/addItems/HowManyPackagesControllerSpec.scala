@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.HowManyPackagesFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -78,7 +78,7 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/howManyPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/howManyPackages.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -107,7 +107,7 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/howManyPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/howManyPackages.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -149,7 +149,7 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/howManyPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/howManyPackages.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 

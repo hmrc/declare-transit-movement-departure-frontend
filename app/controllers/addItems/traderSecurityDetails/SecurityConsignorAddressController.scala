@@ -54,7 +54,7 @@ class SecurityConsignorAddressController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItemsAnnotations/traderSecurityDetails/securityConsignorAddress.njk"
+  private val template = "addItems/traderSecurityDetails/securityConsignorAddress.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

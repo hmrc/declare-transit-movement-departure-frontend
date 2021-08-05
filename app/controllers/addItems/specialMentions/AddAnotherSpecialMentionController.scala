@@ -23,7 +23,7 @@ import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsSpecialMentions
+import navigation.annotations.addItems.AddItemsSpecialMentions
 import pages.addItems.specialMentions.AddAnotherSpecialMentionPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -57,7 +57,7 @@ class AddAnotherSpecialMentionController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItemsAnnotations/specialMentions/addAnotherSpecialMention.njk"
+  private val template = "addItems/specialMentions/addAnotherSpecialMention.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

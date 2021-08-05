@@ -23,7 +23,7 @@ import forms.addItems.DocumentTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.DocumentType
 import models.{DocumentTypeList, NormalMode}
-import navigation.annotations.addItemsAnnotations.AddItemsDocument
+import navigation.annotations.addItems.AddItemsDocument
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -54,7 +54,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
     )
   )
   private val form     = formProvider(documentTypeList)
-  private val template = "addItemsAnnotations/documentType.njk"
+  private val template = "addItems/documentType.njk"
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 

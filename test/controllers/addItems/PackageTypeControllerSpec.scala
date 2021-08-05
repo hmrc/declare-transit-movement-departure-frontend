@@ -23,7 +23,7 @@ import forms.addItems.PackageTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.PackageType
 import models.{NormalMode, PackageTypeList}
-import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -101,7 +101,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
       val jsonCaptorWithoutConfig = jsonCaptor.getValue - configKey
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/packageType.njk"
+      templateCaptor.getValue mustEqual "addItems/packageType.njk"
       jsonCaptorWithoutConfig mustEqual expectedJson
     }
 
@@ -141,7 +141,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
       val jsonCaptorWithoutConfig = jsonCaptor.getValue - configKey
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/packageType.njk"
+      templateCaptor.getValue mustEqual "addItems/packageType.njk"
       jsonCaptorWithoutConfig mustEqual expectedJson
     }
 
@@ -204,7 +204,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/packageType.njk"
+      templateCaptor.getValue mustEqual "addItems/packageType.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 

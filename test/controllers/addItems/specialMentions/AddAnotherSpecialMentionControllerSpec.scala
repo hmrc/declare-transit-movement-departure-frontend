@@ -21,7 +21,7 @@ import connectors.ReferenceDataConnector
 import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, SpecialMentionList, UserAnswers}
-import navigation.annotations.addItemsAnnotations.AddItemsSpecialMentions
+import navigation.annotations.addItems.AddItemsSpecialMentions
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -45,7 +45,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
 
   private val formProvider = new AddAnotherSpecialMentionFormProvider()
   private val form         = formProvider()
-  private val template     = "addItemsAnnotations/specialMentions/addAnotherSpecialMention.njk"
+  private val template     = "addItems/specialMentions/addAnotherSpecialMention.njk"
 
   lazy val addAnotherSpecialMentionRoute = routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, NormalMode).url
 

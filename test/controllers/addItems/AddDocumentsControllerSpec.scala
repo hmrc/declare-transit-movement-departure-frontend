@@ -35,7 +35,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import controllers.{routes => mainRoutes}
-import navigation.annotations.addItemsAnnotations.AddItemsDocument
+import navigation.annotations.addItems.AddItemsDocument
 
 import scala.concurrent.Future
 
@@ -45,7 +45,7 @@ class AddDocumentsControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
   private val formProvider = new AddDocumentsFormProvider()
   private val form         = formProvider(index)
-  private val template     = "addItemsAnnotations/addDocuments.njk"
+  private val template     = "addItems/addDocuments.njk"
 
   lazy val addDocumentsRoute = routes.AddDocumentsController.onPageLoad(lrn, itemIndex, NormalMode).url
 

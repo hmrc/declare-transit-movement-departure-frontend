@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.PreviousReferenceFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.addItemsAnnotations.AddItems
+import navigation.annotations.addItems.AddItems
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -45,7 +45,7 @@ class PreviousReferenceControllerSpec extends SpecBase with MockNunjucksRenderer
 
   private val formProvider = new PreviousReferenceFormProvider()
   private val form         = formProvider()
-  private val template     = "addItemsAnnotations/previousReference.njk"
+  private val template     = "addItems/previousReference.njk"
 
   lazy val previousReferenceRoute = routes.PreviousReferenceController.onPageLoad(lrn, index, referenceIndex, NormalMode).url
 

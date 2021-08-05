@@ -81,7 +81,7 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRend
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey - "sections"
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/itemsCheckYourAnswers.njk"
+      templateCaptor.getValue mustEqual "addItems/itemsCheckYourAnswers.njk"
       jsonWithoutConfig mustBe expectedJson
     }
   }

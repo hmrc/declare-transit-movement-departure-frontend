@@ -35,7 +35,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import controllers.{routes => mainRoutes}
-import navigation.annotations.addItemsAnnotations.AddItemsDocument
+import navigation.annotations.addItems.AddItemsDocument
 
 import scala.concurrent.Future
 
@@ -45,7 +45,7 @@ class ConfirmRemoveDocumentControllerSpec extends SpecBase with MockNunjucksRend
 
   private val formProvider = new ConfirmRemoveDocumentFormProvider()
   private val form         = formProvider()
-  private val template     = "addItemsAnnotations/confirmRemoveDocument.njk"
+  private val template     = "addItems/confirmRemoveDocument.njk"
 
   lazy val confirmRemoveDocumentRoute = routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 

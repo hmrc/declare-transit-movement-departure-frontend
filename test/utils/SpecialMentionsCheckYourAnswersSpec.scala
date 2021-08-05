@@ -125,10 +125,10 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
 
         val cya = new SpecialMentionsCheckYourAnswers(emptyUserAnswers)
 
-        cya.addAnother(index, msg"addItemsAnnotations.checkYourAnswersLabel.specialMentions") mustBe
+        cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
             controllers.addItems.specialMentions.routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
-            msg"addItemsAnnotations.checkYourAnswersLabel.specialMentions"
+            msg"addItems.checkYourAnswersLabel.specialMentions"
           )
 
       }

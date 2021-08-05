@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.AddAdministrativeReferenceFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItems
+import navigation.annotations.addItems.AddItems
 import pages.addItems
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -50,7 +50,7 @@ class AddAdministrativeReferenceController @Inject() (
     with NunjucksSupport {
 
   private val form     = formProvider()
-  private val template = "addItemsAnnotations/addAdministrativeReference.njk"
+  private val template = "addItems/addAdministrativeReference.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

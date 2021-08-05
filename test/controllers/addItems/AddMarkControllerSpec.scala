@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.AddMarkFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -78,7 +78,7 @@ class AddMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with M
         "radios" -> Radios.yesNo(form("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/addMark.njk"
+      templateCaptor.getValue mustEqual "addItems/addMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -108,7 +108,7 @@ class AddMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with M
         "radios" -> Radios.yesNo(filledForm("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/addMark.njk"
+      templateCaptor.getValue mustEqual "addItems/addMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
     }
@@ -174,7 +174,7 @@ class AddMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with M
         "radios" -> Radios.yesNo(boundForm("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/addMark.njk"
+      templateCaptor.getValue mustEqual "addItems/addMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
     }

@@ -45,7 +45,7 @@ class AddDangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRend
 
   private val formProvider = new AddDangerousGoodsCodeFormProvider()
   private val form         = formProvider()
-  private val template     = "addItemsAnnotations/securityDetails/addDangerousGoodsCode.njk"
+  private val template     = "addItems/securityDetails/addDangerousGoodsCode.njk"
 
   lazy val addDangerousGoodsCodeRoute = routes.AddDangerousGoodsCodeController.onPageLoad(lrn, index, NormalMode).url
 

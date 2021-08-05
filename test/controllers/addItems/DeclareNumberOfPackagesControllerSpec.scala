@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.DeclareNumberOfPackagesFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.addItemsAnnotations.AddItemsPackagesInfo
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -77,7 +77,7 @@ class DeclareNumberOfPackagesControllerSpec extends SpecBase with MockNunjucksRe
         "radios" -> Radios.yesNo(form("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/declareNumberOfPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/declareNumberOfPackages.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -107,7 +107,7 @@ class DeclareNumberOfPackagesControllerSpec extends SpecBase with MockNunjucksRe
         "radios" -> Radios.yesNo(filledForm("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/declareNumberOfPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/declareNumberOfPackages.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -172,7 +172,7 @@ class DeclareNumberOfPackagesControllerSpec extends SpecBase with MockNunjucksRe
         "radios" -> Radios.yesNo(boundForm("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/declareNumberOfPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/declareNumberOfPackages.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 

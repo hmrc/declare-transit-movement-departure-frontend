@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
 import navigation.annotations._
-import navigation.annotations.addItemsAnnotations.{
+import navigation.annotations.addItems.{
   AddItems,
   AddItemsAdminReference,
   AddItemsContainer,

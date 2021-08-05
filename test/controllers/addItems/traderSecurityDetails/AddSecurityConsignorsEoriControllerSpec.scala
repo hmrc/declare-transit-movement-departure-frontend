@@ -45,7 +45,7 @@ class AddSecurityConsignorsEoriControllerSpec extends SpecBase with MockNunjucks
 
   private val formProvider = new AddSecurityConsignorsEoriFormProvider()
   private val form         = formProvider()
-  private val template     = "addItemsAnnotations/traderSecurityDetails/addSecurityConsignorsEori.njk"
+  private val template     = "addItems/traderSecurityDetails/addSecurityConsignorsEori.njk"
 
   lazy val addSecurityConsignorsEoriRoute = routes.AddSecurityConsignorsEoriController.onPageLoad(lrn, index, NormalMode).url
 

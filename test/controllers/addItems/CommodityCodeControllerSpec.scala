@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.CommodityCodeFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.addItemsAnnotations.AddItemsItemDetails
+import navigation.annotations.addItems.AddItemsItemDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -76,7 +76,7 @@ class CommodityCodeControllerSpec extends SpecBase with MockNunjucksRendererApp 
         "lrn"  -> lrn
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/commodityCode.njk"
+      templateCaptor.getValue mustEqual "addItems/commodityCode.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -106,7 +106,7 @@ class CommodityCodeControllerSpec extends SpecBase with MockNunjucksRendererApp 
         "mode"  -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/commodityCode.njk"
+      templateCaptor.getValue mustEqual "addItems/commodityCode.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -147,7 +147,7 @@ class CommodityCodeControllerSpec extends SpecBase with MockNunjucksRendererApp 
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "addItemsAnnotations/commodityCode.njk"
+      templateCaptor.getValue mustEqual "addItems/commodityCode.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 

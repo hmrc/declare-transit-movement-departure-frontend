@@ -120,7 +120,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
 
   private val itemDetails =
     taskListDsl
-      .sectionName("declarationSummary.section.addItemsAnnotations")
+      .sectionName("declarationSummary.section.addItems")
       .ifDependentSectionCompleted(dependentSectionReader(DependentSection.ItemDetails, userAnswers))
       .ifCompleted(
         UserAnswersReader[NonEmptyList[ItemSection]],

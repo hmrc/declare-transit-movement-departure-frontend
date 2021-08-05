@@ -51,7 +51,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
   val dangerousGoodsCodes = DangerousGoodsCodeList(Seq(dangerousGoodsCode1, dangerousGoodsCode2))
 
   private val form     = new DangerousGoodsCodeFormProvider()(dangerousGoodsCodes)
-  private val template = "addItemsAnnotations/securityDetails/dangerousGoodsCode.njk"
+  private val template = "addItems/securityDetails/dangerousGoodsCode.njk"
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 

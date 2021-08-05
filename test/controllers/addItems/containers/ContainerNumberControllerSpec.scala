@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.containers.ContainerNumberFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.addItemsAnnotations.AddItemsContainer
+import navigation.annotations.addItems.AddItemsContainer
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -44,7 +44,7 @@ class ContainerNumberControllerSpec extends SpecBase with MockNunjucksRendererAp
 
   private val formProvider = new ContainerNumberFormProvider()
   private val form         = formProvider()
-  private val template     = "addItemsAnnotations/containers/containerNumber.njk"
+  private val template     = "addItems/containers/containerNumber.njk"
 
   private lazy val containerNumberRoute = routes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, NormalMode).url
 

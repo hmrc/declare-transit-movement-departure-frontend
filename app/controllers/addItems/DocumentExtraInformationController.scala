@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.DocumentExtraInformationFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsDocument
+import navigation.annotations.addItems.AddItemsDocument
 import pages.addItems.DocumentExtraInformationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -48,7 +48,7 @@ class DocumentExtraInformationController @Inject() (
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
-  private val template = "addItemsAnnotations/documentExtraInformation.njk"
+  private val template = "addItems/documentExtraInformation.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify

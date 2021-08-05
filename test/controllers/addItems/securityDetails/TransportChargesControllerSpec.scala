@@ -54,7 +54,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
     )
   )
   private val form     = formProvider(methodOfPaymentList)
-  private val template = "addItemsAnnotations/securityDetails/transportCharges.njk"
+  private val template = "addItems/securityDetails/transportCharges.njk"
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 

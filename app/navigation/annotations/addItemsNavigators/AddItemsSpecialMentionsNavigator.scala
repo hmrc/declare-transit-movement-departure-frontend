@@ -31,7 +31,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AddItemsSpecialMentionsNavigator @Inject()() extends Navigator {
+class AddItemsSpecialMentionsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] =
     Seq(
@@ -49,7 +49,7 @@ class AddItemsSpecialMentionsNavigator @Inject()() extends Navigator {
           case (Some(true), specialMentionCount) if specialMentionCount == 0 =>
             Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, Index(specialMentionCount), CheckMode))
           case (Some(true), _) => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, CheckMode))
-          case _ => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex))
+          case _               => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex))
         }
     case SpecialMentionTypePage(itemIndex, referenceIndex) =>
       userAnswers => Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, CheckMode))
@@ -59,7 +59,7 @@ class AddItemsSpecialMentionsNavigator @Inject()() extends Navigator {
       userAnswers =>
         userAnswers.get(AddAnotherSpecialMentionPage(itemIndex)) match {
           case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, Index(count(itemIndex)(userAnswers)), CheckMode))
-          case _ => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex))
+          case _          => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex))
         }
     case RemoveSpecialMentionPage(itemIndex, _) =>
       userAnswers =>
@@ -75,7 +75,7 @@ class AddItemsSpecialMentionsNavigator @Inject()() extends Navigator {
       userAnswers =>
         userAnswers.get(AddSpecialMentionPage(itemIndex)) match {
           case Some(true) => Some(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, Index(count(itemIndex)(userAnswers)), NormalMode))
-          case _ => documentsJourney(userAnswers, itemIndex, NormalMode)
+          case _          => documentsJourney(userAnswers, itemIndex, NormalMode)
         }
   }
 
@@ -108,15 +108,15 @@ class AddItemsSpecialMentionsNavigator @Inject()() extends Navigator {
 
   private def showDocumentTypePage(userAnswers: UserAnswers, itemIndex: Index): Option[Boolean] =
     (userAnswers.get(AddSecurityDetailsPage),
-      userAnswers.get(AddCircumstanceIndicatorPage),
-      userAnswers.get(AddCommercialReferenceNumberPage),
-      itemIndex.position == 0
+     userAnswers.get(AddCircumstanceIndicatorPage),
+     userAnswers.get(AddCommercialReferenceNumberPage),
+     itemIndex.position == 0
     ) match {
       case (Some(true), Some(false), Some(false), true) => Some(true)
       case (Some(true), Some(true), Some(false), true) =>
         userAnswers.get(CircumstanceIndicatorPage) map (CircumstanceIndicator.conditionalIndicators.contains(_))
       case (Some(_), _, _, _) => Some(false)
-      case _ => None
+      case _                  => None
     }
 
   private def documentsJourney(userAnswers: UserAnswers, itemIndex: Index, mode: Mode): Option[Call] = {
@@ -128,7 +128,7 @@ class AddItemsSpecialMentionsNavigator @Inject()() extends Navigator {
         Some(addItemRoutes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode))
       case _ =>
         showDocumentTypePage(userAnswers, itemIndex).map {
-          case true => addItemRoutes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode)
+          case true  => addItemRoutes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode)
           case false => addItemRoutes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, mode)
         }
     }

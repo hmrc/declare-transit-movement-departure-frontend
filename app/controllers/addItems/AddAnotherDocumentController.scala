@@ -23,7 +23,7 @@ import forms.addItems.AddAnotherDocumentFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode, NormalMode}
 import navigation.Navigator
-import navigation.annotations.addItemsAnnotations.AddItemsDocument
+import navigation.annotations.addItems.AddItemsDocument
 import pages.addItems.AddAnotherDocumentPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -106,7 +106,7 @@ class AddAnotherDocumentController @Inject() (
           "radios"       -> Radios.yesNo(form("value"))
         )
 
-        renderer.render("addItemsAnnotations/addAnotherDocument.njk", json)
+        renderer.render("addItems/addAnotherDocument.njk", json)
     }
   }
 }
