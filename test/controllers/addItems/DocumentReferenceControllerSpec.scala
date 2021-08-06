@@ -47,7 +47,7 @@ class DocumentReferenceControllerSpec extends SpecBase with MockNunjucksRenderer
   private val form         = formProvider(index)
   private val template     = "addItems/documentReference.njk"
 
-  lazy val documentReferenceRoute = routes.DocumentReferenceController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  lazy val documentReferenceRoute = controllers.addItems.documents.routes.DocumentReferenceController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

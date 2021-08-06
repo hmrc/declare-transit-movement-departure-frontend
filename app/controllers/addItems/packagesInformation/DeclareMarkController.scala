@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.packagesInformation
 
 import controllers.actions._
-import forms.addItems.DeclareNumberOfPackagesFormProvider
+import forms.addItems.DeclareMarkFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsPackagesInfo
-import pages.addItems.DeclareNumberOfPackagesPage
+import pages.addItems.{DeclareMarkPage, HowManyPackagesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclareNumberOfPackagesController @Inject() (
+class DeclareMarkController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItemsPackagesInfo navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
-  checkDependentSection: CheckDependentSectionAction,
   requireData: DataRequiredAction,
-  formProvider: DeclareNumberOfPackagesFormProvider,
+  checkDependentSection: CheckDependentSectionAction,
+  formProvider: DeclareMarkFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -55,22 +55,22 @@ class DeclareNumberOfPackagesController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val form = formProvider(itemIndex.display)
+        val getNumberOfPackages = request.userAnswers.get(HowManyPackagesPage(itemIndex, packageIndex))
+        val form                = formProvider(getNumberOfPackages, packageIndex.display)
 
-        val preparedForm = request.userAnswers.get(DeclareNumberOfPackagesPage(itemIndex, packageIndex)) match {
+        val preparedForm = request.userAnswers.get(DeclareMarkPage(itemIndex, packageIndex)) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
 
         val json = Json.obj(
-          "form"      -> preparedForm,
-          "mode"      -> mode,
-          "lrn"       -> lrn,
-          "radios"    -> Radios.yesNo(preparedForm("value")),
-          "itemIndex" -> itemIndex.display
+          "form"         -> preparedForm,
+          "lrn"          -> lrn,
+          "mode"         -> mode,
+          "displayIndex" -> packageIndex.display
         )
 
-        renderer.render("addItems/declareNumberOfPackages.njk", json).map(Ok(_))
+        renderer.render("addItems/declareMark.njk", json).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
@@ -79,7 +79,8 @@ class DeclareNumberOfPackagesController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val form = formProvider(itemIndex.display)
+        val getNumberOfPackages = request.userAnswers.get(HowManyPackagesPage(itemIndex, packageIndex))
+        val form                = formProvider(getNumberOfPackages, packageIndex.display)
 
         form
           .bindFromRequest()
@@ -87,30 +88,19 @@ class DeclareNumberOfPackagesController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form"      -> formWithErrors,
-                "mode"      -> mode,
-                "lrn"       -> lrn,
-                "radios"    -> Radios.yesNo(formWithErrors("value")),
-                "itemIndex" -> itemIndex.display
+                "form"         -> formWithErrors,
+                "lrn"          -> lrn,
+                "mode"         -> mode,
+                "displayIndex" -> packageIndex.display
               )
 
-              renderer.render("addItems/declareNumberOfPackages.njk", json).map(BadRequest(_))
+              renderer.render("addItems/declareMark.njk", json).map(BadRequest(_))
             },
-            value => {
-              val userAnswers = request.userAnswers.get(DeclareNumberOfPackagesPage(itemIndex, packageIndex)).map(_ == value) match {
-                case Some(true) => Future.successful(request.userAnswers)
-                case _ =>
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclareNumberOfPackagesPage(itemIndex, packageIndex), value))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield updatedAnswers
-              }
-
-              userAnswers.map {
-                ua =>
-                  Redirect(navigator.nextPage(DeclareNumberOfPackagesPage(itemIndex, packageIndex), mode, ua))
-              }
-            }
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclareMarkPage(itemIndex, packageIndex), value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(DeclareMarkPage(itemIndex, packageIndex), mode, updatedAnswers))
           )
     }
 }

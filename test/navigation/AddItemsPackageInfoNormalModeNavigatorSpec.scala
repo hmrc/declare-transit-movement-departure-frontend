@@ -54,7 +54,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -67,7 +67,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -80,7 +80,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
         }
@@ -96,7 +96,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -109,7 +109,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -122,7 +122,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -137,7 +137,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
           "must go to AddMark if answer is 'No' and PackageType is bulk" in {
@@ -149,7 +149,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
           "must go to TotalPieces if answer is 'No' and PackageType is unpacked" in {
@@ -161,7 +161,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
 
@@ -176,7 +176,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(TotalPiecesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
         }
@@ -190,7 +190,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(AddMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
             }
           }
           "must go to AddAnotherPackage if answers if 'No'" in {
@@ -201,7 +201,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(AddMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
         }
@@ -215,7 +215,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
         }
@@ -232,7 +232,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(AddAnotherPackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, NormalMode))
             }
           }
 
@@ -293,7 +293,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
                   .set(RemovePackagePage(index), false).success.value
                 navigator
                   .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -307,7 +307,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
                   .set(RemovePackagePage(index), true).success.value
                 navigator
                   .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -317,7 +317,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
               .set(RemovePackagePage(index), true).success.value
             navigator
               .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.PackageTypeController.onPageLoad(updatedAnswers.lrn, index, index, NormalMode))
+              .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(updatedAnswers.lrn, index, index, NormalMode))
           }
         }
 

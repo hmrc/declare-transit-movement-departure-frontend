@@ -33,10 +33,10 @@ class AddItemsItemDetailsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case ConfirmStartAddItemsPage        => ua => confirmStartAddItemsRoute(ua)
-    case ItemDescriptionPage(index)      => ua => Some(addItemsRoutes.ItemTotalGrossMassController.onPageLoad(ua.lrn, index, NormalMode))
-    case ItemTotalGrossMassPage(index)   => ua => Some(addItemsRoutes.AddTotalNetMassController.onPageLoad(ua.lrn, index, NormalMode))
+    case ItemDescriptionPage(index)      => ua => Some(controllers.addItems.itemDetails.routes.ItemTotalGrossMassController.onPageLoad(ua.lrn, index, NormalMode))
+    case ItemTotalGrossMassPage(index)   => ua => Some(controllers.addItems.itemDetails.routes.AddTotalNetMassController.onPageLoad(ua.lrn, index, NormalMode))
     case AddTotalNetMassPage(index)      => ua => addTotalNetMassRouteNormalMode(index, ua)
-    case TotalNetMassPage(index)         => ua => Some(addItemsRoutes.IsCommodityCodeKnownController.onPageLoad(ua.lrn, index, NormalMode))
+    case TotalNetMassPage(index)         => ua => Some(controllers.addItems.itemDetails.routes.IsCommodityCodeKnownController.onPageLoad(ua.lrn, index, NormalMode))
     case IsCommodityCodeKnownPage(index) => ua => isCommodityKnownRouteNormalMode(index, ua)
     case CommodityCodePage(index)        => ua => commodityCodeRouteNormalMode(index, ua)
   }
@@ -52,42 +52,44 @@ class AddItemsItemDetailsNavigator @Inject() () extends Navigator {
 
   private def confirmStartAddItemsRoute(ua: UserAnswers) =
     ua.get(ConfirmStartAddItemsPage) match {
-      case Some(true) => Some(addItemsRoutes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), NormalMode))
+      case Some(true) => Some(controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), NormalMode))
       case _          => Some(routes.DeclarationSummaryController.onPageLoad(ua.lrn))
     }
 
   private def addTotalNetMassRouteNormalMode(index: Index, ua: UserAnswers) =
     (ua.get(AddTotalNetMassPage(index)), ua.get(TotalNetMassPage(index))) match {
-      case (Some(false), _)   => Some(addItemsRoutes.IsCommodityCodeKnownController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(true), None) => Some(addItemsRoutes.TotalNetMassController.onPageLoad(ua.lrn, index, NormalMode))
+      case (Some(false), _)   => Some(controllers.addItems.itemDetails.routes.IsCommodityCodeKnownController.onPageLoad(ua.lrn, index, NormalMode))
+      case (Some(true), None) => Some(controllers.addItems.itemDetails.routes.TotalNetMassController.onPageLoad(ua.lrn, index, NormalMode))
       case _                  => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     }
 
   private def addTotalNetMassRouteCheckMode(index: Index, ua: UserAnswers) =
     (ua.get(AddTotalNetMassPage(index)), ua.get(TotalNetMassPage(index))) match {
-      case (Some(true), None) => Some(addItemsRoutes.TotalNetMassController.onPageLoad(ua.lrn, index, CheckMode))
+      case (Some(true), None) => Some(controllers.addItems.itemDetails.routes.TotalNetMassController.onPageLoad(ua.lrn, index, CheckMode))
       case _                  => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     }
 
   private def isCommodityKnownRouteNormalMode(index: Index, ua: UserAnswers) =
     (ua.get(IsCommodityCodeKnownPage(index)), ua.get(AddConsignorPage), ua.get(AddConsigneePage)) match {
-      case (Some(true), _, _)                     => Some(addItemsRoutes.CommodityCodeController.onPageLoad(ua.lrn, index, NormalMode))
+      case (Some(true), _, _)                     => Some(controllers.addItems.itemDetails.routes.CommodityCodeController.onPageLoad(ua.lrn, index, NormalMode))
       case (Some(false), Some(false), _)          => Some(traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
       case (Some(false), Some(true), Some(false)) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(false), Some(true), Some(true))  => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
-      case _                                      => None
+      case (Some(false), Some(true), Some(true)) =>
+        Some(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
+      case _ => None
     }
 
   private def commodityCodeRouteNormalMode(index: Index, ua: UserAnswers) =
     (ua.get(AddConsignorPage), ua.get(AddConsigneePage)) match {
       case (Some(false), _)          => Some(traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
       case (Some(true), Some(false)) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(true), Some(true))  => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
+      case (Some(true), Some(true)) =>
+        Some(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
     }
 
   private def isCommodityKnownRouteCheckMode(index: Index, ua: UserAnswers) =
     (ua.get(IsCommodityCodeKnownPage(index)), ua.get(CommodityCodePage(index))) match {
-      case (Some(true), None)    => Some(addItemsRoutes.CommodityCodeController.onPageLoad(ua.lrn, index, CheckMode))
+      case (Some(true), None)    => Some(controllers.addItems.itemDetails.routes.CommodityCodeController.onPageLoad(ua.lrn, index, CheckMode))
       case (Some(true), Some(_)) => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
       case (Some(false), _)      => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
       case _                     => None

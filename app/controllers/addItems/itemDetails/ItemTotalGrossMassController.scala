@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.itemDetails
 
 import controllers.actions._
 import forms.ItemTotalGrossMassFormProvider

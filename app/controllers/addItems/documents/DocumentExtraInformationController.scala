@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.documents
 
 import controllers.actions._
-import forms.addItems.AddDocumentsFormProvider
+import forms.addItems.DocumentExtraInformationFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
-import pages.addItems.AddDocumentsPage
+import pages.addItems.DocumentExtraInformationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddDocumentsController @Inject() (
+class DocumentExtraInformationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItemsDocument navigator: Navigator,
@@ -41,64 +41,63 @@ class AddDocumentsController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddDocumentsFormProvider,
+  formProvider: DocumentExtraInformationFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
+  private val template = "addItems/documentExtraInformation.njk"
 
-  private val template = "addItems/addDocuments.njk"
-
-  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(AddDocumentsPage(itemIndex)) match {
-          case None        => formProvider(itemIndex)
-          case Some(value) => formProvider(itemIndex).fill(value)
+        val preparedForm = request.userAnswers.get(DocumentExtraInformationPage(index, documentIndex)) match {
+          case None        => formProvider(index)
+          case Some(value) => formProvider(index).fill(value)
         }
 
         val json = Json.obj(
-          "form"   -> preparedForm,
-          "mode"   -> mode,
-          "lrn"    -> lrn,
-          "index"  -> itemIndex.display,
-          "radios" -> Radios.yesNo(preparedForm("value"))
+          "form"          -> preparedForm,
+          "lrn"           -> lrn,
+          "index"         -> index.display,
+          "documentIndex" -> documentIndex.display,
+          "mode"          -> mode
         )
 
         renderer.render(template, json).map(Ok(_))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(itemIndex)
+        formProvider(index)
           .bindFromRequest()
           .fold(
             formWithErrors => {
 
               val json = Json.obj(
-                "form"   -> formWithErrors,
-                "mode"   -> mode,
-                "lrn"    -> lrn,
-                "index"  -> itemIndex.display,
-                "radios" -> Radios.yesNo(formWithErrors("value"))
+                "form"          -> formWithErrors,
+                "lrn"           -> lrn,
+                "index"         -> index.display,
+                "documentIndex" -> documentIndex.display,
+                "mode"          -> mode
               )
 
               renderer.render(template, json).map(BadRequest(_))
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddDocumentsPage(itemIndex), value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(DocumentExtraInformationPage(index, documentIndex), value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(AddDocumentsPage(itemIndex), mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(DocumentExtraInformationPage(index, documentIndex), mode, updatedAnswers))
           )
     }
 }

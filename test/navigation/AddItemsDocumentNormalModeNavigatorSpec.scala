@@ -75,7 +75,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
             .set(AddDocumentsPage(index), true).success.value
           navigator
             .nextPage(AddDocumentsPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.DocumentTypeController.onPageLoad(updatedAnswers.lrn, index, index, NormalMode))
+            .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(updatedAnswers.lrn, index, index, NormalMode))
         }
       }
 
@@ -84,7 +84,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
           .set(DocumentTypePage(index, documentIndex), "test").success.value
         navigator
           .nextPage(DocumentTypePage(index, documentIndex), NormalMode, updatedAnswers)
-          .mustBe(routes.DocumentReferenceController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
+          .mustBe(controllers.addItems.documents.routes.DocumentReferenceController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
       }
 
       "DocumentReferencePage must go to AddExtraDocumentInformation page" in {
@@ -92,7 +92,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
           .set(DocumentReferencePage(index, documentIndex), "test").success.value
         navigator
           .nextPage(DocumentReferencePage(index, documentIndex), NormalMode, updatedAnswers)
-          .mustBe(routes.AddExtraDocumentInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
+          .mustBe(controllers.addItems.documents.routes.AddExtraDocumentInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
       }
 
       "AddExtraDocumentInformation page must go to" - {
@@ -102,7 +102,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
             .set(AddExtraDocumentInformationPage(index, documentIndex), true).success.value
           navigator
             .nextPage(AddExtraDocumentInformationPage(index, documentIndex), NormalMode, updatedAnswers)
-            .mustBe(routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
+            .mustBe(controllers.addItems.documents.routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
         }
 
         "AddAnotherDocument page when user selects 'No' " in {
@@ -110,7 +110,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
             .set(AddExtraDocumentInformationPage(index, documentIndex), false).success.value
           navigator
             .nextPage(AddExtraDocumentInformationPage(index, documentIndex), NormalMode, updatedAnswers)
-            .mustBe(routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+            .mustBe(controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
         }
       }
 
@@ -119,7 +119,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
           .set(DocumentExtraInformationPage(index, documentIndex), "test").success.value
         navigator
           .nextPage(DocumentExtraInformationPage(index, documentIndex), NormalMode, updatedAnswers)
-          .mustBe(routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+          .mustBe(controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
       }
 
       "AddAnotherDocument page must go to" - {
@@ -129,7 +129,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
             .set(AddAnotherDocumentPage(index), true).success.value
           navigator
             .nextPage(AddAnotherDocumentPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.DocumentTypeController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
+            .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
         }
 
         "Add Administrative Reference page when user selects 'No' and is in EU" in {
@@ -173,7 +173,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
             .set(ConfirmRemoveDocumentPage(index, documentIndex), false).success.value
           navigator
             .nextPage(ConfirmRemoveDocumentPage(index, documentIndex), NormalMode, updatedAnswers)
-            .mustBe(routes.AddDocumentsController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+            .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
 
         }
         "AddDocument page when user selects 'Yes'" in {
@@ -181,7 +181,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
             .set(ConfirmRemoveDocumentPage(index, documentIndex), true).success.value
           navigator
             .nextPage(ConfirmRemoveDocumentPage(index, documentIndex), NormalMode, updatedAnswers)
-            .mustBe(routes.AddDocumentsController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+            .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
 
         }
       }
@@ -193,7 +193,7 @@ class AddItemsDocumentNormalModeNavigatorSpec extends SpecBase with ScalaCheckPr
 
         navigator
           .nextPage(TIRCarnetReferencePage(index, documentIndex), NormalMode, updatedAnswers)
-          .mustBe(routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
+          .mustBe(controllers.addItems.documents.routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, NormalMode))
       }
     }
 

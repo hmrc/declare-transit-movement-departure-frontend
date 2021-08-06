@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.documents
 
 import controllers.actions._
 import forms.addItems.TIRCarnetReferenceFormProvider
 import logging.Logging
 import models.DeclarationType.Option4
-import models.{DeclarationType, Index, LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
 import pages.DeclarationTypePage

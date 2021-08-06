@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.documents
 
 import controllers.actions._
-import forms.addItems.DeclareMarkFormProvider
+import forms.addItems.AddExtraDocumentInformationFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItemsPackagesInfo
-import pages.addItems.{DeclareMarkPage, HowManyPackagesPage}
+import navigation.annotations.addItems.AddItemsDocument
+import pages.addItems.AddExtraDocumentInformationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeclareMarkController @Inject() (
+class AddExtraDocumentInformationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItemsPackagesInfo navigator: Navigator,
+  @AddItemsDocument navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: DeclareMarkFormProvider,
+  formProvider: AddExtraDocumentInformationFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,58 +49,58 @@ class DeclareMarkController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
+  private val template = "addItems/addExtraDocumentInformation.njk"
+
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val getNumberOfPackages = request.userAnswers.get(HowManyPackagesPage(itemIndex, packageIndex))
-        val form                = formProvider(getNumberOfPackages, packageIndex.display)
-
-        val preparedForm = request.userAnswers.get(DeclareMarkPage(itemIndex, packageIndex)) match {
-          case None        => form
-          case Some(value) => form.fill(value)
+        val preparedForm = request.userAnswers.get(AddExtraDocumentInformationPage(index, documentIndex)) match {
+          case None        => formProvider(index)
+          case Some(value) => formProvider(index).fill(value)
         }
 
         val json = Json.obj(
-          "form"         -> preparedForm,
-          "lrn"          -> lrn,
-          "mode"         -> mode,
-          "displayIndex" -> packageIndex.display
+          "form"          -> preparedForm,
+          "mode"          -> mode,
+          "lrn"           -> lrn,
+          "index"         -> index.display,
+          "documentIndex" -> documentIndex.display,
+          "radios"        -> Radios.yesNo(preparedForm("value"))
         )
 
-        renderer.render("addItems/declareMark.njk", json).map(Ok(_))
+        renderer.render(template, json).map(Ok(_))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val getNumberOfPackages = request.userAnswers.get(HowManyPackagesPage(itemIndex, packageIndex))
-        val form                = formProvider(getNumberOfPackages, packageIndex.display)
-
-        form
+        formProvider(index)
           .bindFromRequest()
           .fold(
             formWithErrors => {
 
               val json = Json.obj(
-                "form"         -> formWithErrors,
-                "lrn"          -> lrn,
-                "mode"         -> mode,
-                "displayIndex" -> packageIndex.display
+                "form"          -> formWithErrors,
+                "mode"          -> mode,
+                "lrn"           -> lrn,
+                "index"         -> index.display,
+                "documentIndex" -> documentIndex.display,
+                "radios"        -> Radios.yesNo(formWithErrors("value"))
               )
 
-              renderer.render("addItems/declareMark.njk", json).map(BadRequest(_))
+              renderer.render(template, json).map(BadRequest(_))
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclareMarkPage(itemIndex, packageIndex), value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddExtraDocumentInformationPage(index, documentIndex), value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(DeclareMarkPage(itemIndex, packageIndex), mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(AddExtraDocumentInformationPage(index, documentIndex), mode, updatedAnswers))
           )
     }
 }

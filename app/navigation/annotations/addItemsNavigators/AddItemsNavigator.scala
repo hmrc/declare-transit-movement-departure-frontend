@@ -46,15 +46,15 @@ class AddItemsNavigator @Inject() () extends Navigator {
   private def addAnotherItemRoute(userAnswers: UserAnswers): Call = {
     val count = userAnswers.get(DeriveNumberOfItems).getOrElse(0)
     userAnswers.get(AddAnotherItemPage) match {
-      case Some(true) => addItemsRoutes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(count), NormalMode)
+      case Some(true) =>  controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(count), NormalMode)
       case _ => mainRoutes.DeclarationSummaryController.onPageLoad(userAnswers.lrn)
     }
   }
 
   private def removeItem(mode: Mode)(ua: UserAnswers) =
     ua.get(DeriveNumberOfItems) match {
-      case None | Some(0) => addItemsRoutes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), mode)
-      case _ => addItemsRoutes.AddAnotherItemController.onPageLoad(ua.lrn)
+      case None | Some(0) => controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), mode)
+      case _ => controllers.addItems.routes.AddAnotherItemController.onPageLoad(ua.lrn)
     }
 
 

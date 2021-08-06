@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.packagesInformation
 
 import controllers.actions._
-import forms.addItems.RemovePackageFormProvider
-import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
+import forms.addItems.AddMarkFormProvider
+import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsPackagesInfo
-import pages.addItems.RemovePackagePage
+import pages.addItems.AddMarkPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import queries.PackagesQuery
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -34,7 +33,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemovePackageController @Inject() (
+class AddMarkController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItemsPackagesInfo navigator: Navigator,
@@ -42,15 +41,13 @@ class RemovePackageController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: RemovePackageFormProvider,
+  formProvider: AddMarkFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
-
-  private val template = "addItems/removePackage.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
@@ -60,21 +57,20 @@ class RemovePackageController @Inject() (
       implicit request =>
         val form = formProvider(packageIndex.display)
 
-        val preparedForm = request.userAnswers.get(RemovePackagePage(itemIndex)) match {
+        val preparedForm = request.userAnswers.get(AddMarkPage(itemIndex, packageIndex)) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
 
         val json = Json.obj(
           "form"         -> preparedForm,
-          "itemIndex"    -> itemIndex.display,
-          "packageIndex" -> packageIndex.display,
           "mode"         -> mode,
           "lrn"          -> lrn,
-          "radios"       -> Radios.yesNo(preparedForm("value"))
+          "radios"       -> Radios.yesNo(preparedForm("value")),
+          "displayIndex" -> packageIndex.display
         )
 
-        renderer.render(template, json).map(Ok(_))
+        renderer.render("addItems/addMark.njk", json).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
@@ -92,28 +88,28 @@ class RemovePackageController @Inject() (
 
               val json = Json.obj(
                 "form"         -> formWithErrors,
-                "itemIndex"    -> itemIndex.display,
-                "packageIndex" -> packageIndex.display,
                 "mode"         -> mode,
                 "lrn"          -> lrn,
-                "radios"       -> Radios.yesNo(formWithErrors("value"))
+                "radios"       -> Radios.yesNo(formWithErrors("value")),
+                "displayIndex" -> packageIndex.display
               )
 
-              renderer.render(template, json).map(BadRequest(_))
+              renderer.render("addItems/addMark.njk", json).map(BadRequest(_))
             },
             value => {
-              val updatedAnswers: Future[UserAnswers] =
-                if (value) {
+              val userAnswers = request.userAnswers.get(AddMarkPage(itemIndex, packageIndex)).map(_ == value) match {
+                case Some(true) => Future.successful(request.userAnswers)
+                case _ =>
                   for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.remove(PackagesQuery(itemIndex, packageIndex)))
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(AddMarkPage(itemIndex, packageIndex), value))
                     _              <- sessionRepository.set(updatedAnswers)
                   } yield updatedAnswers
-                } else {
-                  Future.successful(request.userAnswers)
-                }
-              updatedAnswers.map(
-                userAnswers => Redirect(navigator.nextPage(RemovePackagePage(itemIndex), mode, userAnswers))
-              )
+              }
+
+              userAnswers.map {
+                ua =>
+                  Redirect(navigator.nextPage(AddMarkPage(itemIndex, packageIndex), mode, ua))
+              }
             }
           )
     }

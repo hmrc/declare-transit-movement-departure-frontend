@@ -54,7 +54,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val packageTypeRoute: String = routes.PackageTypeController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val packageTypeRoute: String = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

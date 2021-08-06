@@ -48,7 +48,7 @@ class TotalPiecesControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
   val validAnswer = 1
 
-  lazy val totalPiecesRoute = routes.TotalPiecesController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val totalPiecesRoute = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

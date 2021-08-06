@@ -46,7 +46,7 @@ class IsCommodityCodeKnownControllerSpec extends SpecBase with MockNunjucksRende
   val formProvider = new IsCommodityCodeKnownFormProvider()
   val form         = formProvider(index)
 
-  lazy val isCommodityCodeKnownRoute = routes.IsCommodityCodeKnownController.onPageLoad(lrn, index, NormalMode).url
+  lazy val isCommodityCodeKnownRoute = controllers.addItems.itemDetails.routes.IsCommodityCodeKnownController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

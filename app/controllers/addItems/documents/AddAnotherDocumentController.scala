@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.documents
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfDocuments
 import forms.addItems.AddAnotherDocumentFormProvider
 import models.requests.DataRequest
-import models.{DependentSection, Index, LocalReferenceNumber, Mode, NormalMode}
+import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
 import pages.addItems.AddAnotherDocumentPage

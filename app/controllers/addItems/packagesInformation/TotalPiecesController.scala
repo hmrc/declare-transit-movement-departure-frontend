@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.packagesInformation
 
 import controllers.actions._
-import forms.addItems.AddTotalNetMassFormProvider
+import forms.addItems.TotalPiecesFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItemsItemDetails
-import pages.AddTotalNetMassPage
+import navigation.annotations.addItems.AddItemsPackagesInfo
+import pages.addItems.TotalPiecesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
+import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddTotalNetMassController @Inject() (
+class TotalPiecesController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItemsItemDetails navigator: Navigator,
+  @AddItemsPackagesInfo navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddTotalNetMassFormProvider,
+  formProvider: TotalPiecesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,54 +49,56 @@ class AddTotalNetMassController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(AddTotalNetMassPage(index)) match {
-          case None        => formProvider(index: Index)
-          case Some(value) => formProvider(index: Index).fill(value)
+        val form = formProvider(itemIndex.display)
+
+        val preparedForm = request.userAnswers.get(TotalPiecesPage(itemIndex, packageIndex)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
         }
 
         val json = Json.obj(
-          "form"   -> preparedForm,
-          "mode"   -> mode,
-          "lrn"    -> lrn,
-          "index"  -> index.display,
-          "radios" -> Radios.yesNo(preparedForm("value"))
+          "form"         -> preparedForm,
+          "lrn"          -> lrn,
+          "mode"         -> mode,
+          "displayIndex" -> itemIndex.display
         )
 
-        renderer.render("addTotalNetMass.njk", json).map(Ok(_))
+        renderer.render("addItems/totalPieces.njk", json).map(Ok(_))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(index: Index)
+        val form = formProvider(itemIndex.display)
+
+        form
           .bindFromRequest()
           .fold(
             formWithErrors => {
 
               val json = Json.obj(
-                "form"   -> formWithErrors,
-                "mode"   -> mode,
-                "lrn"    -> lrn,
-                "index"  -> index.display,
-                "radios" -> Radios.yesNo(formWithErrors("value"))
+                "form"         -> formWithErrors,
+                "lrn"          -> lrn,
+                "mode"         -> mode,
+                "displayIndex" -> itemIndex.display
               )
 
-              renderer.render("addTotalNetMass.njk", json).map(BadRequest(_))
+              renderer.render("addItems/totalPieces.njk", json).map(BadRequest(_))
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddTotalNetMassPage(index), value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(TotalPiecesPage(itemIndex, packageIndex), value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(AddTotalNetMassPage(index), mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(TotalPiecesPage(itemIndex, packageIndex), mode, updatedAnswers))
           )
     }
 }

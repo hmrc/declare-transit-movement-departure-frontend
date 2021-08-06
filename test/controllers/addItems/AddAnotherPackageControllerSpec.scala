@@ -51,7 +51,7 @@ class AddAnotherPackageControllerSpec extends SpecBase with MockNunjucksRenderer
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
 
-  lazy val addAnotherPackageRoute = routes.AddAnotherPackageController.onPageLoad(lrn, index, NormalMode).url
+  lazy val addAnotherPackageRoute = controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(lrn, index, NormalMode).url
 
   "AddAnotherPackage Controller" - {
 

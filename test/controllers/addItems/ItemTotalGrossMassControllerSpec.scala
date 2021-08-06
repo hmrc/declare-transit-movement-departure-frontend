@@ -46,7 +46,7 @@ class ItemTotalGrossMassControllerSpec extends SpecBase with MockNunjucksRendere
   val formProvider = new ItemTotalGrossMassFormProvider()
   val form         = formProvider(index)
 
-  lazy val itemTotalGrossMassRoute = routes.ItemTotalGrossMassController.onPageLoad(lrn, index, NormalMode).url
+  lazy val itemTotalGrossMassRoute = controllers.addItems.itemDetails.routes.ItemTotalGrossMassController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

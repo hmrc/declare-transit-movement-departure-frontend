@@ -23,7 +23,7 @@ import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, CountryList, NormalMode}
-import navigation.annotations.addItems.AddItemsItemDetails
+import navigation.annotations.addItems.{AddItemsItemDetails, AddItemsTraderDetails}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -58,7 +58,7 @@ class TraderDetailsConsignorAddressControllerSpec extends SpecBase with MockNunj
     super
       .guiceApplicationBuilder()
       .overrides(
-        bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsItemDetails]).toInstance(new FakeNavigator(onwardRoute)),
+        bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsTraderDetails]).toInstance(new FakeNavigator(onwardRoute)),
         bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector)
       )
 

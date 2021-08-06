@@ -785,7 +785,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           val viewModel = TaskListViewModel(userAnswers)
 
-          val expectedHref: String = controllers.addItems.routes.ConfirmStartAddItemsController.onPageLoad(lrn).url
+          val expectedHref: String = controllers.addItems.itemDetails.routes.ConfirmStartAddItemsController.onPageLoad(lrn).url
 
           viewModel.getHref(addItemsSectionName).value mustEqual expectedHref
         }
@@ -798,7 +798,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           val viewModel = TaskListViewModel(updatedUserAnswers)
 
-          val expectedHref: String = controllers.addItems.routes.ItemDescriptionController.onPageLoad(lrn, Index(0), NormalMode).url
+          val expectedHref: String = controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(lrn, Index(0), NormalMode).url
 
           viewModel.getHref(addItemsSectionName).value mustEqual expectedHref
         }

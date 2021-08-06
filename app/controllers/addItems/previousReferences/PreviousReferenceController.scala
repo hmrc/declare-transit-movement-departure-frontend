@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.PreviousReferenceFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.{AddItems, AddItemsAdminReference}
+import navigation.annotations.addItems.AddItemsAdminReference
 import pages.addItems
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json

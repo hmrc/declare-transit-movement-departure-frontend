@@ -125,11 +125,11 @@ class AddItemsSpecialMentionsNavigator @Inject() () extends Navigator {
 
     userAnswers.get(DeclarationTypePage).flatMap {
       case Option4 if itemIndex.position == 0 && documentIndex.position == 0 =>
-        Some(addItemRoutes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode))
+        Some(controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode))
       case _ =>
         showDocumentTypePage(userAnswers, itemIndex).map {
-          case true  => addItemRoutes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode)
-          case false => addItemRoutes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, mode)
+          case true  => controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, mode)
+          case false => controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, mode)
         }
     }
   }

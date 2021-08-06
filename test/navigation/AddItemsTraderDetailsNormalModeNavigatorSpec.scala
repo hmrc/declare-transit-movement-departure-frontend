@@ -103,7 +103,7 @@ class AddItemsTraderDetailsNormalModeNavigatorSpec extends SpecBase with ScalaCh
 
                 navigator
                   .nextPage(TraderDetailsConsignorAddressPage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
             }
           }
         }
@@ -157,7 +157,7 @@ class AddItemsTraderDetailsNormalModeNavigatorSpec extends SpecBase with ScalaCh
             answers =>
               navigator
                 .nextPage(TraderDetailsConsigneeAddressPage(index), NormalMode, answers)
-                .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
+                .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
           }
         }
       }

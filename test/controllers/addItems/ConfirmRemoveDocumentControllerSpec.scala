@@ -47,7 +47,8 @@ class ConfirmRemoveDocumentControllerSpec extends SpecBase with MockNunjucksRend
   private val form         = formProvider()
   private val template     = "addItems/confirmRemoveDocument.njk"
 
-  lazy val confirmRemoveDocumentRoute = routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  lazy val confirmRemoveDocumentRoute =
+    controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

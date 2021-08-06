@@ -46,7 +46,8 @@ class DeclareNumberOfPackagesControllerSpec extends SpecBase with MockNunjucksRe
   val formProvider = new DeclareNumberOfPackagesFormProvider()
   val form         = formProvider(index.display)
 
-  lazy val declareNumberOfPackagesRoute = routes.DeclareNumberOfPackagesController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val declareNumberOfPackagesRoute =
+    controllers.addItems.packagesInformation.routes.DeclareNumberOfPackagesController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

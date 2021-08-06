@@ -47,7 +47,7 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with MockNunjucksRende
   private val form         = formProvider()
   private val template     = "addItems/confirmStartAddItems.njk"
 
-  lazy val startAddItemsRoute = routes.ConfirmStartAddItemsController.onPageLoad(lrn).url
+  lazy val startAddItemsRoute = controllers.addItems.itemDetails.routes.ConfirmStartAddItemsController.onPageLoad(lrn).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

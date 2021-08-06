@@ -55,7 +55,7 @@ class TIRCarnetReferenceControllerSpec
   private val form         = formProvider()
   private val template     = "tirCarnetReference.njk"
 
-  lazy val tirCarnetReferenceRoute = controllers.addItems.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val tirCarnetReferenceRoute = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

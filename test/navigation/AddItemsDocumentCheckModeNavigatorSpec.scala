@@ -51,7 +51,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
 
         navigator
           .nextPage(AddDocumentsPage(index), CheckMode, updatedAnswers)
-          .mustBe(routes.DocumentTypeController.onPageLoad(updatedAnswers.lrn, index, index, CheckMode))
+          .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(updatedAnswers.lrn, index, index, CheckMode))
       }
 
       "AddDocumentPage must go to ItemsCheckYourAnswersPage when user selects 'yes' when previously selected Yes" in {
@@ -70,7 +70,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
         .set(DocumentTypePage(index, documentIndex), "Test").success.value
       navigator
         .nextPage(DocumentTypePage(index, documentIndex), CheckMode, updatedAnswers)
-        .mustBe(routes.DocumentReferenceController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
+        .mustBe(controllers.addItems.documents.routes.DocumentReferenceController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
     }
 
     "DocumentReferencePage must go to AddExtraDocumentInformationPage" in {
@@ -78,7 +78,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
         .set(DocumentReferencePage(index, documentIndex), "Test").success.value
       navigator
         .nextPage(DocumentReferencePage(index, documentIndex), CheckMode, updatedAnswers)
-        .mustBe(controllers.addItems.routes.AddExtraDocumentInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
+        .mustBe(controllers.addItems.documents.routes.AddExtraDocumentInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
     }
 
 
@@ -88,7 +88,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
           .set(AddExtraDocumentInformationPage(index, documentIndex), false).success.value
         navigator
           .nextPage(AddExtraDocumentInformationPage(index, documentIndex), CheckMode, updatedAnswers)
-          .mustBe(routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
+          .mustBe(controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
       }
 
       "DocumentExtraInformationPage if user selects 'Yes'" in {
@@ -96,7 +96,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
           .set(AddExtraDocumentInformationPage(index, documentIndex), true).success.value
         navigator
           .nextPage(AddExtraDocumentInformationPage(index, documentIndex), CheckMode, updatedAnswers)
-          .mustBe(routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
+          .mustBe(controllers.addItems.documents.routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
       }
     }
 
@@ -105,7 +105,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
         .set(DocumentExtraInformationPage(index, documentIndex), "Test").success.value
       navigator
         .nextPage(DocumentExtraInformationPage(index, documentIndex), CheckMode, updatedAnswers)
-        .mustBe(controllers.addItems.routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
+        .mustBe(controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
     }
 
     "AddAnotherDocumentPage must go to" - {
@@ -114,7 +114,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
           .set(AddDocumentsPage(index), true).success.value
         navigator
           .nextPage(AddDocumentsPage(index), CheckMode, updatedAnswers)
-          .mustBe(controllers.addItems.routes.DocumentTypeController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
+          .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
       }
 
       "ItemDetailsCheckYourAnswers if user selects 'No'" in {
@@ -130,7 +130,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
         .set(ConfirmRemoveDocumentPage(index, documentIndex), false).success.value
       navigator
         .nextPage(ConfirmRemoveDocumentPage(index, documentIndex), CheckMode, updatedAnswers)
-        .mustBe(routes.AddDocumentsController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
+        .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
 
     }
     "Confirm remove Document page must go to AddDocument page when user selects yes" in {
@@ -138,7 +138,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
         .set(ConfirmRemoveDocumentPage(index, documentIndex), true).success.value
       navigator
         .nextPage(ConfirmRemoveDocumentPage(index, documentIndex), CheckMode, updatedAnswers)
-        .mustBe(routes.AddDocumentsController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
+        .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
     }
 
     "TIRCarnetReference page must go to DocumentExtraInformation page" in {
@@ -148,7 +148,7 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
 
       navigator
         .nextPage(TIRCarnetReferencePage(index, documentIndex), CheckMode, updatedAnswers)
-        .mustBe(routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
+        .mustBe(controllers.addItems.documents.routes.DocumentExtraInformationController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
     }
   }
   // format: on

@@ -47,7 +47,7 @@ class AddDocumentsControllerSpec extends SpecBase with MockNunjucksRendererApp w
   private val form         = formProvider(index)
   private val template     = "addItems/addDocuments.njk"
 
-  lazy val addDocumentsRoute = routes.AddDocumentsController.onPageLoad(lrn, itemIndex, NormalMode).url
+  lazy val addDocumentsRoute = controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(lrn, itemIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

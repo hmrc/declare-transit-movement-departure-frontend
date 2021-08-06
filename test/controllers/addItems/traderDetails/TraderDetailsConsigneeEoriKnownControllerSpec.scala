@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.traderDetails.TraderDetailsConsigneeEoriKnownFormProvider
 import matchers.JsonMatchers
 import models.{Index, NormalMode, UserAnswers}
-import navigation.annotations.addItems.AddItemsItemDetails
+import navigation.annotations.addItems.AddItemsTraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -51,7 +51,7 @@ class TraderDetailsConsigneeEoriKnownControllerSpec extends SpecBase with MockNu
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsItemDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsTraderDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "TraderDetailsConsigneeEoriKnown Controller" - {
 

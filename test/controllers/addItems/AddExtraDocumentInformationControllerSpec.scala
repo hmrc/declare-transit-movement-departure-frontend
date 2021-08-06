@@ -47,7 +47,8 @@ class AddExtraDocumentInformationControllerSpec extends SpecBase with MockNunjuc
   private val form         = formProvider(index)
   private val template     = "addItems/addExtraDocumentInformation.njk"
 
-  lazy val addExtraDocumentInformationRoute = routes.AddExtraDocumentInformationController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  lazy val addExtraDocumentInformationRoute =
+    controllers.addItems.documents.routes.AddExtraDocumentInformationController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

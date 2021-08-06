@@ -46,7 +46,7 @@ class AddMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with M
   val formProvider = new AddMarkFormProvider()
   val form         = formProvider(index.display)
 
-  lazy val addMarkRoute = routes.AddMarkController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val addMarkRoute = controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

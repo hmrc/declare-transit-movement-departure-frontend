@@ -46,7 +46,7 @@ class DeclareMarkControllerSpec extends SpecBase with MockNunjucksRendererApp wi
   val formProvider = new DeclareMarkFormProvider()
   val form         = formProvider(None, index.display)
 
-  lazy val declareMarkRoute = routes.DeclareMarkController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val declareMarkRoute = controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

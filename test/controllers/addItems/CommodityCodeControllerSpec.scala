@@ -46,7 +46,7 @@ class CommodityCodeControllerSpec extends SpecBase with MockNunjucksRendererApp 
   val formProvider = new CommodityCodeFormProvider()
   val form         = formProvider(index)
 
-  lazy val commodityCodeRoute = routes.CommodityCodeController.onPageLoad(lrn, index, NormalMode).url
+  lazy val commodityCodeRoute = controllers.addItems.itemDetails.routes.CommodityCodeController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

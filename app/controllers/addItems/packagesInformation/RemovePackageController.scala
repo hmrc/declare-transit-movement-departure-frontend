@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.addItems.previousReferences
+package controllers.addItems.packagesInformation
 
 import controllers.actions._
-import forms.AddExtraInformationFormProvider
-import models.{DependentSection, Index, LocalReferenceNumber, Mode}
+import forms.addItems.RemovePackageFormProvider
+import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItemsAdminReference
-import pages.addItems.AddExtraInformationPage
+import navigation.annotations.addItems.AddItemsPackagesInfo
+import pages.addItems.RemovePackagePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import queries.PackagesQuery
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -33,15 +34,15 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddExtraInformationController @Inject() (
+class RemovePackageController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItemsAdminReference navigator: Navigator,
+  @AddItemsPackagesInfo navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddExtraInformationFormProvider,
+  formProvider: RemovePackageFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,59 +50,71 @@ class AddExtraInformationController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
-  private val template = "addItems/addExtraInformation.njk"
+  private val template = "addItems/removePackage.njk"
 
-  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(AddExtraInformationPage(itemIndex, referenceIndex)) match {
+        val form = formProvider(packageIndex.display)
+
+        val preparedForm = request.userAnswers.get(RemovePackagePage(itemIndex)) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
 
         val json = Json.obj(
-          "form"           -> preparedForm,
-          "mode"           -> mode,
-          "index"          -> itemIndex.display,
-          "referenceIndex" -> referenceIndex.display,
-          "lrn"            -> lrn,
-          "radios"         -> Radios.yesNo(preparedForm("value"))
+          "form"         -> preparedForm,
+          "itemIndex"    -> itemIndex.display,
+          "packageIndex" -> packageIndex.display,
+          "mode"         -> mode,
+          "lrn"          -> lrn,
+          "radios"       -> Radios.yesNo(preparedForm("value"))
         )
 
         renderer.render(template, json).map(Ok(_))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
+        val form = formProvider(packageIndex.display)
+
         form
           .bindFromRequest()
           .fold(
             formWithErrors => {
 
               val json = Json.obj(
-                "form"           -> formWithErrors,
-                "mode"           -> mode,
-                "index"          -> itemIndex.display,
-                "referenceIndex" -> referenceIndex.display,
-                "lrn"            -> lrn,
-                "radios"         -> Radios.yesNo(formWithErrors("value"))
+                "form"         -> formWithErrors,
+                "itemIndex"    -> itemIndex.display,
+                "packageIndex" -> packageIndex.display,
+                "mode"         -> mode,
+                "lrn"          -> lrn,
+                "radios"       -> Radios.yesNo(formWithErrors("value"))
               )
 
               renderer.render(template, json).map(BadRequest(_))
             },
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddExtraInformationPage(itemIndex, referenceIndex), value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(AddExtraInformationPage(itemIndex, referenceIndex), mode, updatedAnswers))
+            value => {
+              val updatedAnswers: Future[UserAnswers] =
+                if (value) {
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.remove(PackagesQuery(itemIndex, packageIndex)))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield updatedAnswers
+                } else {
+                  Future.successful(request.userAnswers)
+                }
+              updatedAnswers.map(
+                userAnswers => Redirect(navigator.nextPage(RemovePackagePage(itemIndex), mode, userAnswers))
+              )
+            }
           )
     }
 }

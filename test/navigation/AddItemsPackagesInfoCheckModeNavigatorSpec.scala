@@ -59,7 +59,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -72,7 +72,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -85,7 +85,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
         }
@@ -100,7 +100,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -113,7 +113,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -126,7 +126,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(HowManyPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -141,7 +141,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
           "must go to AddMark if answer is 'No' and PackageType is bulk" in {
@@ -153,7 +153,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
           "must go to TotalPieces if answer is 'No' and PackageType is unpacked" in {
@@ -165,7 +165,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareNumberOfPackagesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
 
@@ -180,7 +180,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(TotalPiecesPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
         }
@@ -194,7 +194,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(AddMarkPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, CheckMode))
             }
           }
           "must go to CheckYourAnswers if answers if 'No'" in {
@@ -236,7 +236,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(AddAnotherPackagePage(index), CheckMode, updatedAnswers)
-                  .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, CheckMode))
             }
           }
           "must go to CheckYourAnswers if'No' and there are containers and containers not used" in {

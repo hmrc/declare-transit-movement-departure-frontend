@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.documents
 
 import controllers.actions._
-import forms.addItems.AddExtraDocumentInformationFormProvider
+import forms.addItems.ConfirmRemoveDocumentFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
-import pages.addItems.AddExtraDocumentInformationPage
+import pages.addItems.ConfirmRemoveDocumentPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import queries.DocumentQuery
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -33,7 +34,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddExtraDocumentInformationController @Inject() (
+class ConfirmRemoveDocumentController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItemsDocument navigator: Navigator,
@@ -41,7 +42,7 @@ class AddExtraDocumentInformationController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddExtraDocumentInformationFormProvider,
+  formProvider: ConfirmRemoveDocumentFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,24 +50,25 @@ class AddExtraDocumentInformationController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/addExtraDocumentInformation.njk"
+  private val form     = formProvider()
+  private val template = "addItems/confirmRemoveDocument.njk"
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(AddExtraDocumentInformationPage(index, documentIndex)) match {
-          case None        => formProvider(index)
-          case Some(value) => formProvider(index).fill(value)
+        val preparedForm = request.userAnswers.get(ConfirmRemoveDocumentPage(itemIndex, documentIndex)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
         }
 
         val json = Json.obj(
           "form"          -> preparedForm,
           "mode"          -> mode,
           "lrn"           -> lrn,
-          "index"         -> index.display,
+          "index"         -> itemIndex.display,
           "documentIndex" -> documentIndex.display,
           "radios"        -> Radios.yesNo(preparedForm("value"))
         )
@@ -74,13 +76,13 @@ class AddExtraDocumentInformationController @Inject() (
         renderer.render(template, json).map(Ok(_))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(index)
+        form
           .bindFromRequest()
           .fold(
             formWithErrors => {
@@ -89,7 +91,7 @@ class AddExtraDocumentInformationController @Inject() (
                 "form"          -> formWithErrors,
                 "mode"          -> mode,
                 "lrn"           -> lrn,
-                "index"         -> index.display,
+                "index"         -> itemIndex.display,
                 "documentIndex" -> documentIndex.display,
                 "radios"        -> Radios.yesNo(formWithErrors("value"))
               )
@@ -97,10 +99,14 @@ class AddExtraDocumentInformationController @Inject() (
               renderer.render(template, json).map(BadRequest(_))
             },
             value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddExtraDocumentInformationPage(index, documentIndex), value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(AddExtraDocumentInformationPage(index, documentIndex), mode, updatedAnswers))
+              if (value) {
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.remove(DocumentQuery(itemIndex, documentIndex)))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(ConfirmRemoveDocumentPage(itemIndex, documentIndex), mode, updatedAnswers))
+              } else {
+                Future.successful(Redirect((navigator.nextPage(ConfirmRemoveDocumentPage(itemIndex, documentIndex), mode, request.userAnswers))))
+              }
           )
     }
 }

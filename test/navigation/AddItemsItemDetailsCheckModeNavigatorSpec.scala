@@ -74,7 +74,7 @@ class AddItemsItemDetailsCheckModeNavigatorSpec extends SpecBase with ScalaCheck
               .remove(TotalNetMassPage(index)).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.TotalNetMassController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
+              .mustBe(controllers.addItems.itemDetails.routes.TotalNetMassController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
 
@@ -134,7 +134,7 @@ class AddItemsItemDetailsCheckModeNavigatorSpec extends SpecBase with ScalaCheck
               .remove(CommodityCodePage(index)).success.value
             navigator
               .nextPage(IsCommodityCodeKnownPage(index), CheckMode, updatedAnswers)
-              .mustBe(routes.CommodityCodeController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
+              .mustBe(controllers.addItems.itemDetails.routes.CommodityCodeController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
         }
       }
 

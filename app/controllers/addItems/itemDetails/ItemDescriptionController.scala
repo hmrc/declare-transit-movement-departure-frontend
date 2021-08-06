@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.itemDetails
 
 import controllers.actions._
-import forms.TotalNetMassFormProvider
+import forms.ItemDescriptionFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsItemDetails
-import pages.TotalNetMassPage
+import pages.ItemDescriptionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,7 +33,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TotalNetMassController @Inject() (
+class ItemDescriptionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @AddItemsItemDetails navigator: Navigator,
@@ -41,7 +41,7 @@ class TotalNetMassController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: TotalNetMassFormProvider,
+  formProvider: ItemDescriptionFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -55,7 +55,7 @@ class TotalNetMassController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(TotalNetMassPage(index)) match {
+        val preparedForm = request.userAnswers.get(ItemDescriptionPage(index)) match {
           case None        => formProvider(index)
           case Some(value) => formProvider(index).fill(value)
         }
@@ -67,7 +67,7 @@ class TotalNetMassController @Inject() (
           "mode"  -> mode
         )
 
-        renderer.render("totalNetMass.njk", json).map(Ok(_))
+        renderer.render("itemDescription.njk", json).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
@@ -88,13 +88,13 @@ class TotalNetMassController @Inject() (
                 "mode"  -> mode
               )
 
-              renderer.render("totalNetMass.njk", json).map(BadRequest(_))
+              renderer.render("itemDescription.njk", json).map(BadRequest(_))
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(TotalNetMassPage(index), value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ItemDescriptionPage(index), value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(TotalNetMassPage(index), mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(ItemDescriptionPage(index), mode, updatedAnswers))
           )
     }
 }

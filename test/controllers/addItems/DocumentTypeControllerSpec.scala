@@ -58,7 +58,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val documentTypeRoute = routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  lazy val documentTypeRoute = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

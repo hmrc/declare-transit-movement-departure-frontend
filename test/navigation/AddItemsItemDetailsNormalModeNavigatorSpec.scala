@@ -45,7 +45,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
               .set(ConfirmStartAddItemsPage, true).success.value
             navigator
               .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.routes.ItemDescriptionController.onPageLoad(updatedAnswers.lrn, Index(0), NormalMode))
+              .mustBe(controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(updatedAnswers.lrn, Index(0), NormalMode))
         }
       }
       "must go from Confirm start add items page to Pre Task List page when selected 'Yes'" in {
@@ -66,7 +66,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
           answers =>
             navigator
               .nextPage(ItemDescriptionPage(index), NormalMode, answers)
-              .mustBe(controllers.addItems.routes.ItemTotalGrossMassController.onPageLoad(answers.lrn, index, NormalMode))
+              .mustBe(controllers.addItems.itemDetails.routes.ItemTotalGrossMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -76,7 +76,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
           answers =>
             navigator
               .nextPage(ItemTotalGrossMassPage(index), NormalMode, answers)
-              .mustBe(controllers.addItems.routes.AddTotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
+              .mustBe(controllers.addItems.itemDetails.routes.AddTotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -89,7 +89,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
               .remove(TotalNetMassPage(index)).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.routes.TotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
+              .mustBe(controllers.addItems.itemDetails.routes.TotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -102,7 +102,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
               .remove(TotalNetMassPage(index)).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.routes.IsCommodityCodeKnownController.onPageLoad(answers.lrn, index, NormalMode))
+              .mustBe(controllers.addItems.itemDetails.routes.IsCommodityCodeKnownController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -147,7 +147,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(IsCommodityCodeKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
             }
           }
 
@@ -161,7 +161,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
                   .set(IsCommodityCodeKnownPage(index), true).success.value
                 navigator
                   .nextPage(IsCommodityCodeKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.routes.CommodityCodeController.onPageLoad(answers.lrn, index, NormalMode))
+                  .mustBe(controllers.addItems.itemDetails.routes.CommodityCodeController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
         }
@@ -206,7 +206,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
               navigator
                 .nextPage(CommodityCodePage(index), NormalMode, updatedAnswers)
-                .mustBe(controllers.addItems.routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
+                .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
           }
         }
       }

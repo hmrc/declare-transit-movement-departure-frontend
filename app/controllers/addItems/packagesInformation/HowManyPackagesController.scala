@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.packagesInformation
 
 import controllers.actions._
-import forms.addItems.CommodityCodeFormProvider
+import forms.addItems.HowManyPackagesFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItemsItemDetails
-import pages.addItems
+import navigation.annotations.addItems.AddItemsPackagesInfo
+import pages.addItems.HowManyPackagesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,15 +33,15 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CommodityCodeController @Inject() (
+class HowManyPackagesController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItemsItemDetails navigator: Navigator,
+  @AddItemsPackagesInfo navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: CommodityCodeFormProvider,
+  formProvider: HowManyPackagesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,52 +49,56 @@ class CommodityCodeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(addItems.CommodityCodePage(index)) match {
-          case None        => formProvider(index)
-          case Some(value) => formProvider(index).fill(value)
+        val form = formProvider(itemIndex.display)
+
+        val preparedForm = request.userAnswers.get(HowManyPackagesPage(itemIndex, packageIndex)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
         }
 
         val json = Json.obj(
-          "form"  -> preparedForm,
-          "lrn"   -> lrn,
-          "index" -> index.display,
-          "mode"  -> mode
+          "form"         -> preparedForm,
+          "lrn"          -> lrn,
+          "mode"         -> mode,
+          "displayIndex" -> itemIndex.display
         )
 
-        renderer.render("addItems/commodityCode.njk", json).map(Ok(_))
+        renderer.render("addItems/howManyPackages.njk", json).map(Ok(_))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(index)
+        val form = formProvider(itemIndex.display)
+
+        form
           .bindFromRequest()
           .fold(
             formWithErrors => {
 
               val json = Json.obj(
-                "form"  -> formWithErrors,
-                "lrn"   -> lrn,
-                "index" -> index.display,
-                "mode"  -> mode
+                "form"         -> formWithErrors,
+                "lrn"          -> lrn,
+                "mode"         -> mode,
+                "displayIndex" -> itemIndex.display
               )
 
-              renderer.render("addItems/commodityCode.njk", json).map(BadRequest(_))
+              renderer.render("addItems/howManyPackages.njk", json).map(BadRequest(_))
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(addItems.CommodityCodePage(index), value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(HowManyPackagesPage(itemIndex, packageIndex), value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(addItems.CommodityCodePage(index), mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(HowManyPackagesPage(itemIndex, packageIndex), mode, updatedAnswers))
           )
     }
 }

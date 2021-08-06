@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.packagesInformation
 
 import connectors.ReferenceDataConnector
 import controllers.actions._

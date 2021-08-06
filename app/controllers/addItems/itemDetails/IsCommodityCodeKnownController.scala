@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.itemDetails
 
 import controllers.actions._
-import forms.addItems.DocumentReferenceFormProvider
+import forms.IsCommodityCodeKnownFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItemsDocument
-import pages.addItems.DocumentReferencePage
+import navigation.annotations.addItems.AddItemsItemDetails
+import pages.IsCommodityCodeKnownPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DocumentReferenceController @Inject() (
+class IsCommodityCodeKnownController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItemsDocument navigator: Navigator,
+  @AddItemsItemDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: DocumentReferenceFormProvider,
+  formProvider: IsCommodityCodeKnownFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,52 +49,54 @@ class DocumentReferenceController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val template = "addItems/documentReference.njk"
-
-  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val preparedForm = request.userAnswers.get(DocumentReferencePage(itemIndex, documentIndex)) match {
-          case None        => formProvider(itemIndex)
-          case Some(value) => formProvider(itemIndex).fill(value)
+        val preparedForm = request.userAnswers.get(IsCommodityCodeKnownPage(index)) match {
+          case None        => formProvider(index)
+          case Some(value) => formProvider(index).fill(value)
         }
 
         val json = Json.obj(
-          "form" -> preparedForm,
-          "lrn"  -> lrn,
-          "mode" -> mode
+          "form"   -> preparedForm,
+          "mode"   -> mode,
+          "lrn"    -> lrn,
+          "index"  -> index.display,
+          "radios" -> Radios.yesNo(preparedForm("value"))
         )
 
-        renderer.render(template, json).map(Ok(_))
+        renderer.render("isCommodityCodeKnown.njk", json).map(Ok(_))
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(itemIndex)
+        formProvider(index)
           .bindFromRequest()
           .fold(
             formWithErrors => {
 
               val json = Json.obj(
-                "form" -> formWithErrors,
-                "lrn"  -> lrn,
-                "mode" -> mode
+                "form"   -> formWithErrors,
+                "mode"   -> mode,
+                "lrn"    -> lrn,
+                "index"  -> index.display,
+                "radios" -> Radios.yesNo(formWithErrors("value"))
               )
 
-              renderer.render(template, json).map(BadRequest(_))
+              renderer.render("isCommodityCodeKnown.njk", json).map(BadRequest(_))
             },
             value =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(DocumentReferencePage(itemIndex, documentIndex), value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(IsCommodityCodeKnownPage(index), value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(DocumentReferencePage(itemIndex, documentIndex), mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(IsCommodityCodeKnownPage(index), mode, updatedAnswers))
           )
     }
 }

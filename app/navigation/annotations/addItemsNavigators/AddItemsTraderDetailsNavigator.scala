@@ -42,7 +42,7 @@ class AddItemsTraderDetailsNavigator @Inject() () extends Navigator {
     case TraderDetailsConsigneeEoriKnownPage(index) => ua => consigneeEoriKnownNormalMode(ua, index)
     case TraderDetailsConsigneeEoriNumberPage(index) => ua => Some(traderDetailsRoutes.TraderDetailsConsigneeNameController.onPageLoad(ua.lrn, index, NormalMode))
     case TraderDetailsConsigneeNamePage(index) => ua => Some(traderDetailsRoutes.TraderDetailsConsigneeAddressController.onPageLoad(ua.lrn, index, NormalMode))
-    case TraderDetailsConsigneeAddressPage(index) => ua => Some(addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
+    case TraderDetailsConsigneeAddressPage(index) => ua => Some(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
 
   }
 
@@ -91,7 +91,7 @@ class AddItemsTraderDetailsNavigator @Inject() () extends Navigator {
   private def consignorAddressNormalMode(ua: UserAnswers, index: Index) =
     ua.get(AddConsigneePage).map {
       case false => traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode)
-      case true => addItemsRoutes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode)
+      case true => controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode)
     }
 
   private def consignorName(ua: UserAnswers, index: Index) =
