@@ -18,6 +18,7 @@ package navigation.annotations.addItemsNavigators
 
 import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
 import controllers.addItems.{routes => addItemsRoutes}
+import controllers.routes
 import models._
 import navigation.Navigator
 import pages._
@@ -31,7 +32,7 @@ import javax.inject.{Inject, Singleton}
 class AddItemsItemDetailsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case ConfirmStartAddItemsPage        => ua => Some(addItemsRoutes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), NormalMode))
+    case ConfirmStartAddItemsPage        => ua => confirmStartAddItemsRoute(ua)
     case ItemDescriptionPage(index)      => ua => Some(addItemsRoutes.ItemTotalGrossMassController.onPageLoad(ua.lrn, index, NormalMode))
     case ItemTotalGrossMassPage(index)   => ua => Some(addItemsRoutes.AddTotalNetMassController.onPageLoad(ua.lrn, index, NormalMode))
     case AddTotalNetMassPage(index)      => ua => addTotalNetMassRouteNormalMode(index, ua)
@@ -48,6 +49,12 @@ class AddItemsItemDetailsNavigator @Inject() () extends Navigator {
     case CommodityCodePage(index)        => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case TotalNetMassPage(index)         => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
   }
+
+  private def confirmStartAddItemsRoute(ua: UserAnswers) =
+    ua.get(ConfirmStartAddItemsPage) match {
+      case Some(true) => Some(addItemsRoutes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), NormalMode))
+      case _          => Some(routes.DeclarationSummaryController.onPageLoad(ua.lrn))
+    }
 
   private def addTotalNetMassRouteNormalMode(index: Index, ua: UserAnswers) =
     (ua.get(AddTotalNetMassPage(index)), ua.get(TotalNetMassPage(index))) match {

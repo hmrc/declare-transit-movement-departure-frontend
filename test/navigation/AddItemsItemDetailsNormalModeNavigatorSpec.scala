@@ -20,6 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.routes
 import controllers.addItems.traderDetails.{routes => traderRoutes}
+import controllers.routes
 import generators.Generators
 import models.{Index, NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsItemDetailsNavigator
@@ -36,13 +37,26 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
   "Add Items section" - {
 
     "in normal mode" - {
-      "must go from Confirm start add items page to Item description page" in {
+      "must go from Confirm start add items page to Item description page when selected 'Yes'" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
+            val updatedAnswers = answers
+              .set(ConfirmStartAddItemsPage, true).success.value
             navigator
-              .nextPage(ConfirmStartAddItemsPage, NormalMode, answers)
-              .mustBe(routes.ItemDescriptionController.onPageLoad(answers.lrn, Index(0), NormalMode))
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
+              .mustBe(controllers.addItems.routes.ItemDescriptionController.onPageLoad(updatedAnswers.lrn, Index(0), NormalMode))
+        }
+      }
+      "must go from Confirm start add items page to Pre Task List page when selected 'Yes'" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(ConfirmStartAddItemsPage, false).success.value
+            navigator
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, updatedAnswers)
+              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -52,7 +66,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
           answers =>
             navigator
               .nextPage(ItemDescriptionPage(index), NormalMode, answers)
-              .mustBe(routes.ItemTotalGrossMassController.onPageLoad(answers.lrn, index, NormalMode))
+              .mustBe(controllers.addItems.routes.ItemTotalGrossMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -62,7 +76,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
           answers =>
             navigator
               .nextPage(ItemTotalGrossMassPage(index), NormalMode, answers)
-              .mustBe(routes.AddTotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
+              .mustBe(controllers.addItems.routes.AddTotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -75,7 +89,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
               .remove(TotalNetMassPage(index)).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.TotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
+              .mustBe(controllers.addItems.routes.TotalNetMassController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -88,7 +102,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
               .remove(TotalNetMassPage(index)).success.value
             navigator
               .nextPage(AddTotalNetMassPage(index), NormalMode, updatedAnswers)
-              .mustBe(routes.IsCommodityCodeKnownController.onPageLoad(answers.lrn, index, NormalMode))
+              .mustBe(controllers.addItems.routes.IsCommodityCodeKnownController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 
@@ -133,7 +147,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(IsCommodityCodeKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
+                  .mustBe(controllers.addItems.routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
             }
           }
 
@@ -147,7 +161,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
                   .set(IsCommodityCodeKnownPage(index), true).success.value
                 navigator
                   .nextPage(IsCommodityCodeKnownPage(index), NormalMode, updatedAnswers)
-                  .mustBe(routes.CommodityCodeController.onPageLoad(answers.lrn, index, NormalMode))
+                  .mustBe(controllers.addItems.routes.CommodityCodeController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
         }
@@ -192,7 +206,7 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
               navigator
                 .nextPage(CommodityCodePage(index), NormalMode, updatedAnswers)
-                .mustBe(routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
+                .mustBe(controllers.addItems.routes.PackageTypeController.onPageLoad(answers.lrn, index, Index(0), NormalMode))
           }
         }
       }
