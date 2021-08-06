@@ -32,27 +32,27 @@ class AddItemsTradersSecurityDetailsNavigator @Inject() () extends Navigator {
   // format: off
   //todo -update when Security Trader Details section done
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddSecurityConsignorsEoriPage(index) => ua => addSecurityConsignorsEoriRoute(ua, index, NormalMode)
+    case AddSecurityConsignorsEoriPage(index) => ua => addSecurityConsignorsEoriNormalModeRoute(ua, index)
     case SecurityConsignorNamePage(index) => ua => Some(routes.SecurityConsignorAddressController.onPageLoad(ua.lrn, index, NormalMode))
     case SecurityConsignorEoriPage(index) => ua => securityConsignorEoriRoute(ua, index, NormalMode)
     case SecurityConsignorAddressPage(index) => ua => securityConsignorEoriRoute(ua, index, NormalMode)
-    case AddSecurityConsigneesEoriPage(index) => ua => addSecurityConsigneesEoriRoute(ua, index, NormalMode)
+    case AddSecurityConsigneesEoriPage(index) => ua => addSecurityConsigneesEoriNormalModeRoute(ua, index)
     case SecurityConsigneeNamePage(index) => ua => Some(routes.SecurityConsigneeAddressController.onPageLoad(ua.lrn, index, NormalMode))
     case SecurityConsigneeAddressPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case SecurityConsigneeEoriPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case AddSecurityConsignorsEoriPage(index) => ua => addSecurityConsignorsEoriRoute(ua, index, CheckMode)
+    case AddSecurityConsignorsEoriPage(index) => ua => addSecurityConsignorsEoriCheckModeRoute(ua, index)
     case SecurityConsignorEoriPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case SecurityConsignorNamePage(index) => ua => securityConsignorNameRoute(ua, index)
     case SecurityConsignorAddressPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-    case AddSecurityConsigneesEoriPage(index) => ua => addSecurityConsigneesEoriRoute(ua, index, CheckMode)
+    case AddSecurityConsigneesEoriPage(index) => ua => addSecurityConsigneesEoriCheckModeRoute(ua, index)
     case SecurityConsigneeEoriPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case SecurityConsigneeAddressPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
   }
 
-  private def securityConsignorNameRoute(ua: UserAnswers, index: Index) = 
+  private def securityConsignorNameRoute(ua: UserAnswers, index: Index) =
     ua.get(SecurityConsignorAddressPage(index)) match {
       case Some(_) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
       case None => Some(routes.SecurityConsignorAddressController.onPageLoad(ua.lrn, index, CheckMode))
@@ -65,35 +65,41 @@ class AddItemsTradersSecurityDetailsNavigator @Inject() () extends Navigator {
       case Some(false) => Some(circumstanceIndicatorCheck(ua, index, mode))
     }
 
-  private def addSecurityConsignorsEoriRoute(ua: UserAnswers, index: Index, mode: Mode) =
-    (ua.get(AddSecurityConsignorsEoriPage(index)), mode) match {
-      case (Some(true), NormalMode) =>
+  private def addSecurityConsignorsEoriNormalModeRoute(ua: UserAnswers, index: Index) =
+    ua.get(AddSecurityConsignorsEoriPage(index)) match {
+      case Some(true) =>
         Some(routes.SecurityConsignorEoriController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(false), NormalMode) =>
+      case Some(false) =>
         Some(routes.SecurityConsignorNameController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(true), CheckMode) if (ua.get(SecurityConsignorEoriPage(index)).isDefined)
+      }
+  private def addSecurityConsignorsEoriCheckModeRoute(ua: UserAnswers, index: Index) =
+    (ua.get(AddSecurityConsignorsEoriPage(index))) match {
+
+      case Some(true) if (ua.get(SecurityConsignorEoriPage(index)).isDefined)
       => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-      case (Some(true), CheckMode) => Some(routes.SecurityConsignorEoriController.onPageLoad(ua.lrn, index, CheckMode))
-      case (Some(false), CheckMode) if (ua.get(SecurityConsignorNamePage(index)).isDefined)
+      case Some(true) => Some(routes.SecurityConsignorEoriController.onPageLoad(ua.lrn, index, CheckMode))
+      case Some(false) if (ua.get(SecurityConsignorNamePage(index)).isDefined)
       => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-      case (Some(false), CheckMode) => Some(routes.SecurityConsignorNameController.onPageLoad(ua.lrn, index, CheckMode))
+      case Some(false) => Some(routes.SecurityConsignorNameController.onPageLoad(ua.lrn, index, CheckMode))
     }
 
-  private def addSecurityConsigneesEoriRoute(ua: UserAnswers, index: Index, mode: Mode) =
-    (ua.get(AddSecurityConsigneesEoriPage(index)), mode) match {
-      case (Some(true), NormalMode) =>
+  private def addSecurityConsigneesEoriNormalModeRoute(ua: UserAnswers, index: Index) =
+    ua.get(AddSecurityConsigneesEoriPage(index)) match {
+      case Some(true) =>
         Some(routes.SecurityConsigneeEoriController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(false), NormalMode) =>
+      case Some(false) =>
         Some(routes.SecurityConsigneeNameController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(true), CheckMode) if (ua.get(SecurityConsigneeEoriPage(index)).isDefined)
+     }
+
+  private def addSecurityConsigneesEoriCheckModeRoute(ua: UserAnswers, index: Index) =
+    ua.get(AddSecurityConsigneesEoriPage(index)) match {
+      case Some(true) if (ua.get(SecurityConsigneeEoriPage(index)).isDefined)
       => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-      case (Some(true), CheckMode) => Some(routes.SecurityConsigneeEoriController.onPageLoad(ua.lrn, index, CheckMode))
-      case (Some(false), CheckMode) if (ua.get(SecurityConsigneeNamePage(index)).isDefined)
+      case Some(true) => Some(routes.SecurityConsigneeEoriController.onPageLoad(ua.lrn, index, CheckMode))
+      case Some(false) if ua.get(SecurityConsigneeNamePage(index)).isDefined
       => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-      case (Some(false), CheckMode) => Some(routes.SecurityConsigneeNameController.onPageLoad(ua.lrn, index, CheckMode))
+      case Some(false) => Some(routes.SecurityConsigneeNameController.onPageLoad(ua.lrn, index, CheckMode))
     }
-
-
 
   def circumstanceIndicatorCheck(ua: UserAnswers, index: Index, mode: Mode) =
     ua.get(CircumstanceIndicatorPage) match {

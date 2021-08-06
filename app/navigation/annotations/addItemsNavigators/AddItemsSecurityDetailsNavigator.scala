@@ -20,6 +20,7 @@ import controllers.addItems.securityDetails.routes
 import models._
 import models.reference.{CountryCode, CustomsOffice}
 import navigation.Navigator
+import pages.addItems.ConfirmStartAddItemsPage
 import pages.addItems.securityDetails._
 import pages.safetyAndSecurity.{
   AddCommercialReferenceNumberAllItemsPage,

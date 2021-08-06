@@ -21,7 +21,7 @@ import controllers.addItems.{routes => addItemsRoutes}
 import models._
 import navigation.Navigator
 import pages._
-import pages.addItems.CommodityCodePage
+import pages.addItems.{CommodityCodePage, ConfirmStartAddItemsPage}
 import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 import play.api.mvc.Call
 
@@ -31,6 +31,7 @@ import javax.inject.{Inject, Singleton}
 class AddItemsItemDetailsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
+    case ConfirmStartAddItemsPage        => ua => Some(addItemsRoutes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), NormalMode))
     case ItemDescriptionPage(index)      => ua => Some(addItemsRoutes.ItemTotalGrossMassController.onPageLoad(ua.lrn, index, NormalMode))
     case ItemTotalGrossMassPage(index)   => ua => Some(addItemsRoutes.AddTotalNetMassController.onPageLoad(ua.lrn, index, NormalMode))
     case AddTotalNetMassPage(index)      => ua => addTotalNetMassRouteNormalMode(index, ua)

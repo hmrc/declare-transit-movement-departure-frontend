@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.ConfirmStartAddItemsFormProvider
 import matchers.JsonMatchers
 import models.UserAnswers
-import navigation.annotations.addItems.AddItems
+import navigation.annotations.addItems.AddItemsItemDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -52,7 +52,7 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with MockNunjucksRende
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsItemDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "ConfirmStartAddItem controller" - {
     "must return OK and the correct view for a GET" in {

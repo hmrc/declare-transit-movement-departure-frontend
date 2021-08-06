@@ -36,6 +36,15 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
   "Add Items section" - {
 
     "in normal mode" - {
+      "must go from Confirm start add items page to Item description page" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(ConfirmStartAddItemsPage, NormalMode, answers)
+              .mustBe(routes.ItemDescriptionController.onPageLoad(answers.lrn, Index(0), NormalMode))
+        }
+      }
 
       "must go from item description page to total gross mass page" in {
 

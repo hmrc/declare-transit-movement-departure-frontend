@@ -21,7 +21,7 @@ import forms.ConfirmStartAddItemsFormProvider
 import logging.Logging
 import models.{DependentSection, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
-import navigation.annotations.addItems.AddItems
+import navigation.annotations.addItems.AddItemsItemDetails
 import pages.AddSecurityDetailsPage
 import pages.addItems.ConfirmStartAddItemsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConfirmStartAddItemsController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @AddItemsItemDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   checkDependentSection: CheckDependentSectionAction,
