@@ -17,23 +17,18 @@
 package navigation
 
 import base.SpecBase
+import controllers.addItems.securityDetails._
 import generators.Generators
 import models.{CheckMode, NormalMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsSecurityDetailsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.securityDetails._
-import controllers.addItems.securityDetails._
-import pages.safetyAndSecurity.{
-  AddCircumstanceIndicatorPage,
-  AddCommercialReferenceNumberAllItemsPage,
-  AddSafetyAndSecurityConsigneePage,
-  AddSafetyAndSecurityConsignorPage,
-  CircumstanceIndicatorPage
-}
+import pages.safetyAndSecurity._
 
-class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class AddItemsSecurityDetailsNavigatorNormalModeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  val navigator = new SecurityDetailsNavigator
+  val navigator = new AddItemsSecurityDetailsNavigator
 
   "In Normal mode" - {
 
@@ -271,73 +266,5 @@ class SecurityDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
       }
     }
   }
-  "In CheckMode" - {
 
-    "Must go from TransportChargesPage to AddItemsCheckYourAnswersPage" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          navigator
-            .nextPage(TransportChargesPage(index), CheckMode, answers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
-      }
-    }
-  }
-
-  "Must go from CommercialReferenceNumberPage to AddItemsCheckYourAnswersPage" in {
-    forAll(arbitrary[UserAnswers]) {
-      answers =>
-        navigator
-          .nextPage(CommercialReferenceNumberPage(index), CheckMode, answers)
-          .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
-    }
-  }
-
-  "Must go from AddDangerousGoodsCodePage" - {
-    "to AddItemsCheckYourAnswersPage when user selects 'No'" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddDangerousGoodsCodePage(index), false)
-            .success
-            .value
-          navigator
-            .nextPage(AddDangerousGoodsCodePage(index), CheckMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
-      }
-    }
-
-    "to AddItemsCheckYourAnswersPage when user selects 'Yes' and an answer for DangerousGoodsCodePage already exists" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(DangerousGoodsCodePage(index), "test")
-            .success
-            .value
-            .set(AddDangerousGoodsCodePage(index), true)
-            .success
-            .value
-
-          navigator
-            .nextPage(AddDangerousGoodsCodePage(index), CheckMode, updatedAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
-      }
-    }
-
-    "to DangerousGoodsCodePage when user selects 'Yes' and no answer for DangerousGoodsCodePage already exists" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .remove(DangerousGoodsCodePage(index))
-            .success
-            .value
-            .set(AddDangerousGoodsCodePage(index), true)
-            .success
-            .value
-
-          navigator
-            .nextPage(AddDangerousGoodsCodePage(index), CheckMode, updatedAnswers)
-            .mustBe(routes.DangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
-      }
-    }
-  }
 }

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.annotations.addItemsNavigators
 
 import controllers.addItems.securityDetails.routes
-
-import javax.inject.{Inject, Singleton}
 import models._
 import models.reference.{CountryCode, CustomsOffice}
-import pages.{OfficeOfDeparturePage, Page}
+import navigation.Navigator
 import pages.addItems.securityDetails._
 import pages.safetyAndSecurity.{
   AddCommercialReferenceNumberAllItemsPage,
@@ -29,39 +27,46 @@ import pages.safetyAndSecurity.{
   AddSafetyAndSecurityConsignorPage,
   CircumstanceIndicatorPage
 }
+import pages.{OfficeOfDeparturePage, Page}
 import play.api.mvc.Call
 
+import javax.inject.{Inject, Singleton}
+
 @Singleton
-class SecurityDetailsNavigator @Inject() () extends Navigator {
+class AddItemsSecurityDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
   //todo -update when Safety and Security section built
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case TransportChargesPage(index) => ua => transportChargesRoute(ua, index, NormalMode)
+    case TransportChargesPage(index) => ua => transportChargesRoute(ua, index)
     case CommercialReferenceNumberPage(index) => ua => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
-    case AddDangerousGoodsCodePage(index) => ua => addDangerousGoodsCodeRoute(ua, index, NormalMode)
+    case AddDangerousGoodsCodePage(index) => ua => addDangerousGoodsCodeNormalModeRoute(ua, index)
     case DangerousGoodsCodePage(index) => ua => dangerousGoodsCodeRoute(ua, index, NormalMode)
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case TransportChargesPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     case CommercialReferenceNumberPage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
-    case AddDangerousGoodsCodePage(index) => ua => addDangerousGoodsCodeRoute(ua, index, CheckMode)
+    case AddDangerousGoodsCodePage(index) => ua => addDangerousGoodsCodeCheckModeRoute(ua, index)
     case DangerousGoodsCodePage(index) => ua => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
   }
 
-   private def addDangerousGoodsCodeRoute(ua: UserAnswers, index: Index, mode: Mode) =
-    (ua.get(AddDangerousGoodsCodePage(index)), ua.get(DangerousGoodsCodePage(index)), mode) match {
-      case (Some(true), _, NormalMode) => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
-      case (Some(false), _, NormalMode) => dangerousGoodsCodeRoute(ua, index, mode)
-      case (Some(true), None, CheckMode)    => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.lrn, index, CheckMode))
-      case (Some(_), _, CheckMode) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
+   private def addDangerousGoodsCodeNormalModeRoute(ua: UserAnswers, index: Index) =
+    (ua.get(AddDangerousGoodsCodePage(index)), ua.get(DangerousGoodsCodePage(index))) match {
+      case (Some(true), _) => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
+      case (Some(false), _) => dangerousGoodsCodeRoute(ua, index, NormalMode)
     }
 
-  private def transportChargesRoute(ua: UserAnswers, index: Index, mode: Mode) =
-    (ua.get(AddCommercialReferenceNumberAllItemsPage), mode) match {
-      case (Some(true), NormalMode) => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
-      case (_, NormalMode) => Some(routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, index, NormalMode))
+  private def addDangerousGoodsCodeCheckModeRoute(ua: UserAnswers, index: Index) =
+    (ua.get(AddDangerousGoodsCodePage(index)), ua.get(DangerousGoodsCodePage(index))) match {
+        case (Some(true), None)    => Some(routes.DangerousGoodsCodeController.onPageLoad(ua.lrn, index, CheckMode))
+      case (Some(_), _) => Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
+    }
+
+  private def transportChargesRoute(ua: UserAnswers, index: Index) =
+    (ua.get(AddCommercialReferenceNumberAllItemsPage)) match {
+      case Some(true) => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
+      case _ => Some(routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, index, NormalMode))
     }
 
   private def dangerousGoodsCodeRoute(ua: UserAnswers, index: Index, mode: Mode) =

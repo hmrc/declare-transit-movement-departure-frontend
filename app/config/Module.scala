@@ -37,8 +37,10 @@ import navigation.annotations.addItemsNavigators.{
   AddItemsItemDetailsNavigator,
   AddItemsNavigator,
   AddItemsPackagesInfoNavigator,
+  AddItemsSecurityDetailsNavigator,
   AddItemsSpecialMentionsNavigator,
-  AddItemsTraderDetailsNavigator
+  AddItemsTraderDetailsNavigator,
+  AddItemsTradersSecurityDetailsNavigator
 }
 import services.{DateTimeService, DateTimeServiceImpl}
 
@@ -61,8 +63,8 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[AddItemsSpecialMentions]).to(classOf[AddItemsSpecialMentionsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[AddItems]).to(classOf[AddItemsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[AddItemsDocument]).to(classOf[AddItemsDocumentNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[SecurityDetails]).to(classOf[SecurityDetailsNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[TradersSecurityDetails]).to(classOf[TradersSecurityDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[SecurityDetails]).to(classOf[AddItemsSecurityDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[TradersSecurityDetails]).to(classOf[AddItemsTradersSecurityDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[SafetyAndSecurity]).to(classOf[SafetyAndSecurityNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[SafetyAndSecurityTraderDetails]).to(classOf[SafetyAndSecurityTraderDetailsNavigator])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

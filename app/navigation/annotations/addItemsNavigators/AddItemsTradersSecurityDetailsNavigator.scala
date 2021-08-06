@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.annotations.addItemsNavigators
 
 import controllers.addItems.traderSecurityDetails.routes
 import models._
+import navigation.Navigator
 import pages.Page
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
@@ -26,7 +27,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TradersSecurityDetailsNavigator @Inject() () extends Navigator {
+class AddItemsTradersSecurityDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
   //todo -update when Security Trader Details section done
