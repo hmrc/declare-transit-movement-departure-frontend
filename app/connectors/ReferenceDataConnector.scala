@@ -23,7 +23,6 @@ import javax.inject.Inject
 import models._
 import models.reference._
 
-
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import play.api.http.Status.{NOT_FOUND, OK}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
