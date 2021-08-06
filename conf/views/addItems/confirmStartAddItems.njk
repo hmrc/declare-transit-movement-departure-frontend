@@ -29,7 +29,7 @@
         {% endif %}
 
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
-        <form action="{{ routes.controllers.addItems.ConfirmStartAddItemsController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.itemDetails.ConfirmStartAddItemsController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
