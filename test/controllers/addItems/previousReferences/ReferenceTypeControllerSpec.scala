@@ -23,7 +23,7 @@ import forms.ReferenceTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.PreviousReferencesDocumentType
 import models.{NormalMode, PreviousReferencesDocumentTypeList}
-import navigation.annotations.addItems.{AddItems, AddItemsAdminReference}
+import navigation.annotations.addItems.AddItemsAdminReference
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}

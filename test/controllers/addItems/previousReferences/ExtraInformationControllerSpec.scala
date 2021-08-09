@@ -21,7 +21,7 @@ import controllers.{routes => mainItems}
 import forms.ExtraInformationFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.addItems.{AddItems, AddItemsAdminReference}
+import navigation.annotations.addItems.AddItemsAdminReference
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

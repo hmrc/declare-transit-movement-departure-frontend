@@ -20,7 +20,6 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.previousReferences.{routes => previousReferenceRoutes}
 import controllers.addItems.routes
-import derivable.DeriveNumberOfPreviousAdministrativeReferences
 import generators.Generators
 import models.{Index, NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsAdminReferenceNavigator
@@ -103,7 +102,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         }
       }
 
-      "must go to ReferenceType page when user selects 'No'" ignore {
+      "must go to CYA page when user selects 'No'" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswer = answers
@@ -112,7 +111,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
 
             navigator
               .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswer)
-              .mustBe(???) //TODO must got to safety and security journey
+              .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswer.lrn, index))
         }
       }
 

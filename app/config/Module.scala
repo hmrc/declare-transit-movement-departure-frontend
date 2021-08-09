@@ -20,28 +20,9 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
 import navigation.annotations._
-import navigation.annotations.addItems.{
-  AddItems,
-  AddItemsAdminReference,
-  AddItemsContainer,
-  AddItemsDocument,
-  AddItemsItemDetails,
-  AddItemsPackagesInfo,
-  AddItemsSpecialMentions,
-  AddItemsTraderDetails
-}
-import navigation.annotations.addItemsNavigators.{
-  AddItemsAdminReferenceNavigator,
-  AddItemsContainerNavigator,
-  AddItemsDocumentNavigator,
-  AddItemsItemDetailsNavigator,
-  AddItemsNavigator,
-  AddItemsPackagesInfoNavigator,
-  AddItemsSecurityDetailsNavigator,
-  AddItemsSpecialMentionsNavigator,
-  AddItemsTraderDetailsNavigator,
-  AddItemsTradersSecurityDetailsNavigator
-}
+import navigation.annotations.addItems._
+import navigation.annotations.addItemsNavigators._
+
 import services.{DateTimeService, DateTimeServiceImpl}
 
 class Module extends AbstractModule {

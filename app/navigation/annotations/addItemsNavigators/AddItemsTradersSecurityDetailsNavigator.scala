@@ -30,7 +30,6 @@ import javax.inject.{Inject, Singleton}
 class AddItemsTradersSecurityDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
-  //todo -update when Security Trader Details section done
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case AddSecurityConsignorsEoriPage(index) => ua => addSecurityConsignorsEoriNormalModeRoute(ua, index)
     case SecurityConsignorNamePage(index) => ua => Some(routes.SecurityConsignorAddressController.onPageLoad(ua.lrn, index, NormalMode))

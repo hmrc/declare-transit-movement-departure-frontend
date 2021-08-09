@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.traderDetails.TraderDetailsConsignorEoriNumberFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.addItems.{AddItemsItemDetails, AddItemsTraderDetails}
+import navigation.annotations.addItems.AddItemsTraderDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
