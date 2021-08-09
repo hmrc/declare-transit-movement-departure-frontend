@@ -106,8 +106,6 @@ class AddItemsItemDetailsNormalModeNavigatorSpec extends SpecBase with ScalaChec
         }
       }
 
-      //Commodity Code to Trader Details
-
       "must go from IsCommodityCodeKnownPage" - {
         "when the answer is 'No' to" - {
           "Consignor's Eori when there is no Consignor for all items" in {
