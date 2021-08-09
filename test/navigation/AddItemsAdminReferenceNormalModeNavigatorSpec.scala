@@ -102,12 +102,13 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         }
       }
 
-      "must go to CYA page when user selects 'No'" in {
+      "must go to CYA page when user selects 'No' and Add Security page is 'No' " in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswer = answers
               .remove(PreviousReferencesQuery(index)).success.value
               .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+              .set(AddSecurityDetailsPage, false).success.value
 
             navigator
               .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), NormalMode, updatedAnswer)
