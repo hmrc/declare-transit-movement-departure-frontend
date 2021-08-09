@@ -76,6 +76,5 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
       verify(mockRefDataConnector, times(0)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any())
 
     }
-
   }
 }

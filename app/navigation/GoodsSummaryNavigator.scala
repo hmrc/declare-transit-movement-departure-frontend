@@ -24,7 +24,6 @@ import models.ProcedureType.{Normal, Simplified}
 import models._
 import pages._
 import play.api.mvc.Call
-import controllers.LoadingPlaceController
 import pages.generalInformation.PreLodgeDeclarationPage
 
 @Singleton

@@ -22,13 +22,29 @@ import logging.Logging
 import javax.inject.Inject
 import models._
 import models.reference._
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import play.api.http.Status.{NOT_FOUND, OK}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) extends Logging {
+
+  implicit val responseHandlerCustomsOfficeList: HttpReads[CustomsOfficeList] =
+    (method: String, url: String, response: HttpResponse) =>
+      response.status match {
+        case OK =>
+          CustomsOfficeList(
+            response.json
+              .as[Seq[CustomsOffice]]
+          )
+        case NOT_FOUND =>
+          CustomsOfficeList(Nil)
+        case other =>
+          logger.info(s"[ReferenceDataConnector][getCustomsOfficesOfTheCountry] Invalid downstream status $other")
+          throw new IllegalStateException(s"Invalid Downstream Status $other")
+      }
 
   private def roleQueryParams(roles: Seq[String]): Seq[(String, String)] = roles.map("role" -> _)
 
@@ -42,26 +58,39 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     hc: HeaderCarrier
   ): Future[CustomsOfficeList] = {
     val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}"
-    http.GET[HttpResponse](serviceUrl, roleQueryParams(roles)).map {
-      response =>
-        response.status match {
-          case OK =>
-            CustomsOfficeList(
-              response.json
-                .as[Seq[CustomsOffice]]
-            )
-          case NOT_FOUND =>
-            CustomsOfficeList(Nil)
-          case other =>
-            logger.info(s"[ReferenceDataConnector][getCustomsOfficesOfTheCountry] Invalid downstream status $other")
-            throw new IllegalStateException(s"Invalid Downstream Status $other")
-        }
-    }
+    http.GET[CustomsOfficeList](serviceUrl, roleQueryParams(roles))
   }
 
   def getCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries-full-list"
     http.GET[Seq[Country]](serviceUrl).map(CountryList(_))
+  }
+
+  def getCountriesWithCustomsOfficesAndCTCMembership(
+    excludeCountries: Seq[CountryCode]
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+    val serviceUrl = s"${config.referenceDataUrl}/countries"
+
+    val customsOfficeQuery    = Seq("customsOfficeRole" -> "ANY")
+    val membership            = Seq("membership" -> "ctc")
+    val excludeCountriesQuery = excludeCountries.map(_.code).map("exclude" -> _)
+
+    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery ++ membership
+    http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
+  }
+
+  def getCountriesWithCustomsOfficesAndEuMembership(
+    excludeCountries: Seq[CountryCode]
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+
+    val serviceUrl = s"${config.referenceDataUrl}/countries"
+
+    val customsOfficeQuery    = Seq("customsOfficeRole" -> "ANY")
+    val membership            = Seq("membership" -> "eu")
+    val excludeCountriesQuery = excludeCountries.map(_.code).map("exclude" -> _)
+
+    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery ++ membership
+    http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
   }
 
   def getCountriesWithCustomsOffices(excludeCountries: Seq[CountryCode])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {

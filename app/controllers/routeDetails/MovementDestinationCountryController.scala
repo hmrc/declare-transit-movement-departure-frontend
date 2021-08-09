@@ -18,7 +18,6 @@ package controllers.routeDetails
 
 import cats.data.OptionT
 import cats.implicits._
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.MovementDestinationCountryFormProvider
 import logging.Logging
@@ -37,8 +36,9 @@ import services.ExcludedCountriesService.routeDetailsExcludedCountries
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
-
 import javax.inject.Inject
+import services.CountriesService
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class MovementDestinationCountryController @Inject() (
@@ -48,7 +48,7 @@ class MovementDestinationCountryController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: MovementDestinationCountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -63,7 +63,7 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countries         <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
+          countries         <- OptionT.liftF(countriesService.getDestinationCountryList(request.userAnswers, excludedCountries))
           preparedForm = request.userAnswers
             .get(MovementDestinationCountryPage)
             .flatMap(countries.getCountry)
@@ -82,7 +82,7 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countries         <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
+          countries         <- OptionT.liftF(countriesService.getDestinationCountryList(request.userAnswers, excludedCountries))
           page <- OptionT.liftF(
             formProvider(countries)
               .bindFromRequest()
