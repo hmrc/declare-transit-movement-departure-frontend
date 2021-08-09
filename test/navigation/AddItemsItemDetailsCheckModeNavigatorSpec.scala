@@ -19,9 +19,8 @@ package navigation
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.routes
-import controllers.addItems.traderDetails.{routes => traderRoutes}
 import generators.Generators
-import models.{CheckMode, Index, NormalMode, UserAnswers}
+import models.{CheckMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsItemDetailsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

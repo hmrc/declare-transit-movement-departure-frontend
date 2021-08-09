@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.addItems.traderSecurityDetails.routes
 import generators.Generators
-import models.{CheckMode, CommonAddress, NormalMode, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsTradersSecurityDetailsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

@@ -17,13 +17,11 @@
 package navigation
 
 import base.SpecBase
-import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.routes
 import generators.Generators
-import models.{CheckMode, DeclarationType, NormalMode}
+import models.CheckMode
 import navigation.annotations.addItemsNavigators.AddItemsDocumentNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.DeclarationTypePage
 import pages.addItems._
 import queries.DocumentQuery
 

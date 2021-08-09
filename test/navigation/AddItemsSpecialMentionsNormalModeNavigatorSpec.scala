@@ -22,14 +22,14 @@ import controllers.addItems.specialMentions.routes
 import generators.Generators
 import models.DeclarationType.{Option1, Option4}
 import models.reference.CircumstanceIndicator
-import models.{CheckMode, Index, NormalMode}
+import models.{Index, NormalMode}
 import navigation.annotations.addItemsNavigators.AddItemsSpecialMentionsNavigator
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.addItems.{AddExtraDocumentInformationPage, DocumentExtraInformationPage, DocumentReferencePage, DocumentTypePage}
-import pages.{AddSecurityDetailsPage, DeclarationTypePage}
 import pages.addItems.specialMentions._
+import pages.addItems.{AddExtraDocumentInformationPage, DocumentExtraInformationPage, DocumentReferencePage, DocumentTypePage}
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
+import pages.{AddSecurityDetailsPage, DeclarationTypePage}
 
 class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 

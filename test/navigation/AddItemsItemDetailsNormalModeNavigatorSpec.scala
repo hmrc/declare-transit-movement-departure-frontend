@@ -18,9 +18,7 @@ package navigation
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import controllers.addItems.routes
 import controllers.addItems.traderDetails.{routes => traderRoutes}
-import controllers.routes
 import generators.Generators
 import models.{Index, NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsItemDetailsNavigator

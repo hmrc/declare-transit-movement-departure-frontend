@@ -19,12 +19,11 @@ package navigation
 import base.SpecBase
 import controllers.addItems.traderSecurityDetails.routes
 import generators.Generators
-import models.{CheckMode, CommonAddress, NormalMode, UserAnswers}
+import models.{CheckMode, CommonAddress, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsTradersSecurityDetailsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.traderSecurityDetails._
-import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, CircumstanceIndicatorPage}
 
 class AddItemsTradersSecurityDetailsNavigatorCheckModeSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

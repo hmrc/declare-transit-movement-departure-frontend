@@ -19,14 +19,13 @@ package navigation
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.containers.{routes => containerRoutes}
+import controllers.addItems.specialMentions.{routes => specialMentions}
 import generators.Generators
-import models.{Index, NormalMode, UserAnswers}
+import models.{NormalMode, UserAnswers}
+import navigation.annotations.addItemsNavigators.AddItemsContainerNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.containers._
-import controllers.addItems.specialMentions.{routes => specialMentions}
-import derivable.DeriveNumberOfContainers
-import navigation.annotations.addItemsNavigators.AddItemsContainerNavigator
 
 class AddItemsContainerNormalModeNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
   // format: off

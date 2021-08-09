@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.addItems.securityDetails._
 import generators.Generators
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsSecurityDetailsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

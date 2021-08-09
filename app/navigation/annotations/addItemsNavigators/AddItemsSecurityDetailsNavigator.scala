@@ -37,7 +37,6 @@ import javax.inject.{Inject, Singleton}
 class AddItemsSecurityDetailsNavigator @Inject() () extends Navigator {
 
   // format: off
-  //todo -update when Safety and Security section built
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case TransportChargesPage(index) => ua => transportChargesRoute(ua, index)
     case CommercialReferenceNumberPage(index) => ua => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))

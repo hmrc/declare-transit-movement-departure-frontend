@@ -18,14 +18,12 @@ package navigation
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import controllers.addItems.routes
 import controllers.addItems.traderDetails.{routes => traderRoutes}
 import generators.Generators
-import models.{CheckMode, CommonAddress, Index, NormalMode, UserAnswers}
+import models.{Index, NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsTraderDetailsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages._
 import pages.addItems.traderDetails._
 import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 
