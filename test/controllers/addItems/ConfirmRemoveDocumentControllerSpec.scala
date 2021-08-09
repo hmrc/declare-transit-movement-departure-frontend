@@ -20,7 +20,6 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.ConfirmRemoveDocumentFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.{AddItems, Document}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -36,6 +35,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import controllers.{routes => mainRoutes}
+import navigation.annotations.addItems.AddItemsDocument
 
 import scala.concurrent.Future
 
@@ -47,12 +47,13 @@ class ConfirmRemoveDocumentControllerSpec extends SpecBase with MockNunjucksRend
   private val form         = formProvider()
   private val template     = "addItems/confirmRemoveDocument.njk"
 
-  lazy val confirmRemoveDocumentRoute = routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  lazy val confirmRemoveDocumentRoute =
+    controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
 
   "ConfirmRemoveDocument Controller" - {
 

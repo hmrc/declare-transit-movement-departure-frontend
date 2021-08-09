@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.specialMentions.AddSpecialMentionFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.SpecialMentions
+import navigation.annotations.addItems.AddItemsSpecialMentions
 import pages.addItems.specialMentions.AddSpecialMentionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddSpecialMentionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @SpecialMentions navigator: Navigator,
+  @AddItemsSpecialMentions navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

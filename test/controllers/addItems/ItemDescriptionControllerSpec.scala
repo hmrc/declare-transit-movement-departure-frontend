@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.ItemDescriptionFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsItemDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -46,12 +46,12 @@ class ItemDescriptionControllerSpec extends SpecBase with MockNunjucksRendererAp
   val formProvider = new ItemDescriptionFormProvider()
   val form         = formProvider(index)
 
-  lazy val itemDescriptionRoute = routes.ItemDescriptionController.onPageLoad(lrn, index, NormalMode).url
+  lazy val itemDescriptionRoute = controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsItemDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "ItemDescription Controller" - {
 

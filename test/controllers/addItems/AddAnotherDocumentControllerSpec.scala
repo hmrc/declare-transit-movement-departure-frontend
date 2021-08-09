@@ -23,7 +23,7 @@ import forms.addItems.AddAnotherDocumentFormProvider
 import matchers.JsonMatchers
 import models.reference.DocumentType
 import models.{DocumentTypeList, NormalMode}
-import navigation.annotations.{AddItems, Document}
+import navigation.annotations.addItems.AddItemsDocument
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -51,12 +51,12 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
   val documentType1: DocumentType                          = DocumentType("1", "11", true)
   val documentType2: DocumentType                          = DocumentType("2", "22", true)
   val documentTypeList: DocumentTypeList                   = DocumentTypeList(Seq(documentType1, documentType2))
-  lazy val addAnotherDocumentRoute                         = routes.AddAnotherDocumentController.onPageLoad(lrn, index, NormalMode).url
+  lazy val addAnotherDocumentRoute                         = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
 
   "AddAnotherDocument Controller" - {

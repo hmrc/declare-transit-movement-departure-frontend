@@ -40,7 +40,7 @@
           {{ messages("packageType.heading") }}
         </h1>
 
-        <form action="{{ routes.controllers.addItems.PackageTypeController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.packagesInformation.PackageTypeController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

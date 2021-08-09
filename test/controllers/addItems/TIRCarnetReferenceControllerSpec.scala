@@ -22,7 +22,7 @@ import forms.addItems.TIRCarnetReferenceFormProvider
 import matchers.JsonMatchers
 import models.DeclarationType.{Option1, Option4}
 import models.NormalMode
-import navigation.annotations.Document
+import navigation.annotations.addItems.AddItemsDocument
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -55,12 +55,12 @@ class TIRCarnetReferenceControllerSpec
   private val form         = formProvider()
   private val template     = "tirCarnetReference.njk"
 
-  lazy val tirCarnetReferenceRoute = controllers.addItems.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val tirCarnetReferenceRoute = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
 
   "TIRCarnetReference Controller" - {
 

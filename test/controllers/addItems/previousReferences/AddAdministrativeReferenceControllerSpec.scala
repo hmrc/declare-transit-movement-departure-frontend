@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.AddAdministrativeReferenceFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsAdminReference
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -52,7 +52,7 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsAdminReference]).toInstance(new FakeNavigator(onwardRoute)))
 
   "AddAdministrativeReference Controller" - {
 

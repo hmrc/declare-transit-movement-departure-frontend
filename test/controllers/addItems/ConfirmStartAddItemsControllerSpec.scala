@@ -17,27 +17,25 @@
 package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.addItems.ConfirmRemoveItemFormProvider
+import controllers.{routes => mainRoutes}
+import forms.ConfirmStartAddItemsFormProvider
 import matchers.JsonMatchers
 import models.UserAnswers
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsItemDetails
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
-import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.Call
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
+import org.scalatestplus.mockito.MockitoSugar
 import pages.AddSecurityDetailsPage
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
+import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.GET
-import play.api.test.Helpers._
+import play.api.test.Helpers.{GET, _}
 import play.twirl.api.Html
-import controllers.{routes => mainRoutes}
-import forms.ConfirmStartAddItemsFormProvider
+import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
@@ -49,12 +47,12 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with MockNunjucksRende
   private val form         = formProvider()
   private val template     = "addItems/confirmStartAddItems.njk"
 
-  lazy val startAddItemsRoute = routes.ConfirmStartAddItemsController.onPageLoad(lrn).url
+  lazy val startAddItemsRoute = controllers.addItems.itemDetails.routes.ConfirmStartAddItemsController.onPageLoad(lrn).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsItemDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "ConfirmStartAddItem controller" - {
     "must return OK and the correct view for a GET" in {

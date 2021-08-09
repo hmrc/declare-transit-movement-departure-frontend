@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.AddTotalNetMassFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsItemDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -46,12 +46,12 @@ class AddTotalNetMassControllerSpec extends SpecBase with MockNunjucksRendererAp
   val formProvider = new AddTotalNetMassFormProvider()
   val form         = formProvider(index)
 
-  lazy val addTotalNetMassRoute = routes.AddTotalNetMassController.onPageLoad(lrn, index, NormalMode).url
+  lazy val addTotalNetMassRoute = controllers.addItems.itemDetails.routes.AddTotalNetMassController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsItemDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "AddTotalNetMass Controller" - {
 

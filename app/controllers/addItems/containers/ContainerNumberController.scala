@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.addItems.containers.ContainerNumberFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsContainer
 import pages.addItems.containers.ContainerNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ContainerNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  @AddItems navigator: Navigator,
+  @AddItemsContainer navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,

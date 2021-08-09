@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.AddMarkFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -46,12 +46,12 @@ class AddMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with M
   val formProvider = new AddMarkFormProvider()
   val form         = formProvider(index.display)
 
-  lazy val addMarkRoute = routes.AddMarkController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val addMarkRoute = controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
 
   "AddMark Controller" - {
 

@@ -32,7 +32,7 @@
           {{ messages("declareMark.heading", displayIndex) }}
         </h1>
 
-        <form action="{{ routes.controllers.addItems.DeclareMarkController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.packagesInformation.DeclareMarkController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

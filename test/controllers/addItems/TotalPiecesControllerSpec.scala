@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.TotalPiecesFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -48,12 +48,12 @@ class TotalPiecesControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
   val validAnswer = 1
 
-  lazy val totalPiecesRoute = routes.TotalPiecesController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val totalPiecesRoute = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
 
   "TotalPieces Controller" - {
 

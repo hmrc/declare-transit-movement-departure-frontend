@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.DeclareNumberOfPackagesFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -46,12 +46,13 @@ class DeclareNumberOfPackagesControllerSpec extends SpecBase with MockNunjucksRe
   val formProvider = new DeclareNumberOfPackagesFormProvider()
   val form         = formProvider(index.display)
 
-  lazy val declareNumberOfPackagesRoute = routes.DeclareNumberOfPackagesController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val declareNumberOfPackagesRoute =
+    controllers.addItems.packagesInformation.routes.DeclareNumberOfPackagesController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
 
   "DeclareNumberOfPackages Controller" - {
 

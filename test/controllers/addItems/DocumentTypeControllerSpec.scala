@@ -23,7 +23,7 @@ import forms.addItems.DocumentTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.DocumentType
 import models.{DocumentTypeList, NormalMode}
-import navigation.annotations.Document
+import navigation.annotations.addItems.AddItemsDocument
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -58,12 +58,12 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val documentTypeRoute = routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  lazy val documentTypeRoute = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
   override def beforeEach(): Unit = {

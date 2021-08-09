@@ -20,7 +20,6 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import forms.addItems.DocumentExtraInformationFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.Document
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -36,6 +35,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import controllers.{routes => mainRoutes}
+import navigation.annotations.addItems.AddItemsDocument
 
 import scala.concurrent.Future
 
@@ -47,12 +47,13 @@ class DocumentExtraInformationControllerSpec extends SpecBase with MockNunjucksR
   private val form         = formProvider(index)
   private val template     = "addItems/documentExtraInformation.njk"
 
-  lazy val documentExtraInformationRoute = routes.DocumentExtraInformationController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  lazy val documentExtraInformationRoute =
+    controllers.addItems.documents.routes.DocumentExtraInformationController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[Document]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
 
   "DocumentExtraInformation Controller" - {
 

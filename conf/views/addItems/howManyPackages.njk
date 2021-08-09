@@ -33,7 +33,7 @@
           {{ messages("howManyPackages.heading", displayIndex) }}
         </h1>
 
-        <form action="{{ routes.controllers.addItems.HowManyPackagesController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.packagesInformation.HowManyPackagesController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

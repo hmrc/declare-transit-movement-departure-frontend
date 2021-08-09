@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.addItems.DocumentExtraInformationController.onSubmit(lrn, index, documentIndex, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.documents.DocumentExtraInformationController.onSubmit(lrn, index, documentIndex, mode).url }}" method="post">
           <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
           {{ csrf() | safe }}

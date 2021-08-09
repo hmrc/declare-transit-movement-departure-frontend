@@ -20,6 +20,9 @@ import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
 import navigation.annotations._
+import navigation.annotations.addItems._
+import navigation.annotations.addItemsNavigators._
+
 import services.{DateTimeService, DateTimeServiceImpl}
 
 class Module extends AbstractModule {
@@ -33,11 +36,16 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[TraderDetails]).to(classOf[TraderDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[GoodsSummary]).to(classOf[GoodsSummaryNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[GuaranteeDetails]).to(classOf[GuaranteeDetailsNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[SpecialMentions]).to(classOf[SpecialMentionsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsItemDetails]).to(classOf[AddItemsItemDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsPackagesInfo]).to(classOf[AddItemsPackagesInfoNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsAdminReference]).to(classOf[AddItemsAdminReferenceNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsTraderDetails]).to(classOf[AddItemsTraderDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsContainer]).to(classOf[AddItemsContainerNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsSpecialMentions]).to(classOf[AddItemsSpecialMentionsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[AddItems]).to(classOf[AddItemsNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[Document]).to(classOf[DocumentNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[SecurityDetails]).to(classOf[SecurityDetailsNavigator])
-    bind(classOf[Navigator]).annotatedWith(classOf[TradersSecurityDetails]).to(classOf[TradersSecurityDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[AddItemsDocument]).to(classOf[AddItemsDocumentNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[SecurityDetails]).to(classOf[AddItemsSecurityDetailsNavigator])
+    bind(classOf[Navigator]).annotatedWith(classOf[TradersSecurityDetails]).to(classOf[AddItemsTradersSecurityDetailsNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[SafetyAndSecurity]).to(classOf[SafetyAndSecurityNavigator])
     bind(classOf[Navigator]).annotatedWith(classOf[SafetyAndSecurityTraderDetails]).to(classOf[SafetyAndSecurityTraderDetailsNavigator])
     bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl])

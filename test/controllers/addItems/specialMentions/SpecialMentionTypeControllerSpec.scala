@@ -22,7 +22,7 @@ import forms.addItems.specialMentions.SpecialMentionTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.SpecialMention
 import models.{NormalMode, SpecialMentionList}
-import navigation.annotations.SpecialMentions
+import navigation.annotations.addItems.AddItemsSpecialMentions
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -62,7 +62,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
   "SpecialMentionType Controller" - {

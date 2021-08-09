@@ -92,7 +92,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         List(
           Action(
             content = msg"site.change",
-            href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(documentType)),
             attributes = Map("id" -> s"""change-document-${index.display}""")
           )
@@ -101,13 +101,13 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         List(
           Action(
             content = msg"site.change",
-            href = routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(documentType)),
             attributes = Map("id" -> s"""change-document-${index.display}""")
           ),
           Action(
             content = msg"site.delete",
-            href = routes.ConfirmRemoveDocumentController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"addAnotherDocument.documentList.delete.hidden".withArgs(documentType)),
             attributes = Map("id" -> s"""remove-document-${index.display}""")
           )
@@ -158,7 +158,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.AddDocumentsController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(lrn, itemIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addDocuments.checkYourAnswersLabel"))
           )
         )
@@ -173,7 +173,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.DocumentReferenceController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.DocumentReferenceController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"documentReference.checkYourAnswersLabel"))
           )
         )
@@ -188,7 +188,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.DocumentExtraInformationController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.DocumentExtraInformationController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"documentExtraInformation.checkYourAnswersLabel"))
           )
         )
@@ -335,7 +335,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.CommodityCodeController.onPageLoad(lrn, index, CheckMode).url,
+            href = controllers.addItems.itemDetails.routes.CommodityCodeController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"commodityCode.checkYourAnswersLabel")),
             attributes = Map("id" -> "change-commodity-code")
           )
@@ -351,7 +351,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.TotalNetMassController.onPageLoad(lrn, index, CheckMode).url,
+            href = controllers.addItems.itemDetails.routes.TotalNetMassController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalNetMass.checkYourAnswersLabel".withArgs(index.display))),
             attributes = Map("id" -> "change-total-net-mass")
           )
@@ -367,7 +367,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.IsCommodityCodeKnownController.onPageLoad(lrn, index, CheckMode).url,
+            href = controllers.addItems.itemDetails.routes.IsCommodityCodeKnownController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isCommodityCodeKnown.checkYourAnswersLabel")),
             attributes = Map("id" -> "change-is-commodity-known")
           )
@@ -383,7 +383,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.AddTotalNetMassController.onPageLoad(lrn, index, CheckMode).url,
+            href = controllers.addItems.itemDetails.routes.AddTotalNetMassController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addTotalNetMass.checkYourAnswersLabel")),
             attributes = Map("id" -> "change-add-total-net-mass")
           )
@@ -399,7 +399,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.ItemTotalGrossMassController.onPageLoad(lrn, index, CheckMode).url,
+            href = controllers.addItems.itemDetails.routes.ItemTotalGrossMassController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"itemTotalGrossMass.checkYourAnswersLabel")),
             attributes = Map("id" -> "change-item-total-gross-mass")
           )
@@ -415,7 +415,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.ItemDescriptionController.onPageLoad(lrn, index, CheckMode).url,
+            href = controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(lrn, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"itemDescription.checkYourAnswersLabel")),
             attributes = Map("id" -> "change-item-description")
           )
@@ -552,7 +552,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.change",
-              href = routes.PackageTypeController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
+              href = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer.toString)),
               attributes = Map("id" -> s"""change-package-${packageIndex.display}""")
             )
@@ -569,7 +569,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.edit",
-              href = routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
+              href = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declareNumberOfPackages.checkYourAnswersLabel"))
             )
           )
@@ -585,7 +585,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.edit",
-              href = routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
+              href = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalPieces.checkYourAnswersLabel"))
             )
           )
@@ -594,7 +594,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def addAnotherPackage(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
-    val addAnotherPackageHref = routes.AddAnotherPackageController.onPageLoad(lrn, itemIndex, CheckMode).url
+    val addAnotherPackageHref = controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(lrn, itemIndex, CheckMode).url
 
     AddAnotherViewModel(addAnotherPackageHref, content)
   }
@@ -623,7 +623,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.edit",
-              href = routes.AddExtraDocumentInformationController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+              href = controllers.addItems.documents.routes.AddExtraDocumentInformationController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addExtraDocumentInformation.checkYourAnswersLabel"))
             )
           )
@@ -632,7 +632,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def addAnotherDocument(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
-    val addAnotherDocumentHref = routes.AddAnotherDocumentController.onPageLoad(lrn, itemIndex, CheckMode).url
+    val addAnotherDocumentHref = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, itemIndex, CheckMode).url
 
     AddAnotherViewModel(addAnotherDocumentHref, content)
   }
@@ -644,7 +644,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         List(
           Action(
             content = msg"site.change",
-            href = routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
             attributes = Map("id" -> s"""change-document-${documentIndex.display}""")
           )
@@ -653,7 +653,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         List(
           Action(
             content = msg"site.change",
-            href = routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
             attributes = Map("id" -> s"""change-document-${documentIndex.display}""")
           )
@@ -682,7 +682,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+            href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"confirmRemoveDocument.checkYourAnswersLabel"))
           )
         )

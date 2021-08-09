@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.AddAnotherPackageFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -49,9 +49,9 @@ class AddAnotherPackageControllerSpec extends SpecBase with MockNunjucksRenderer
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
 
-  lazy val addAnotherPackageRoute = routes.AddAnotherPackageController.onPageLoad(lrn, index, NormalMode).url
+  lazy val addAnotherPackageRoute = controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(lrn, index, NormalMode).url
 
   "AddAnotherPackage Controller" - {
 

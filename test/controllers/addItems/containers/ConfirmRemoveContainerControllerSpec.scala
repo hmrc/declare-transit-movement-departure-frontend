@@ -17,16 +17,16 @@
 package controllers.addItems.containers
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import controllers.{routes => mainRoutes}
 import forms.addItems.containers.ConfirmRemoveContainerFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, UserAnswers}
-import navigation.annotations.AddItems
+import models.NormalMode
+import navigation.annotations.addItems.AddItemsContainer
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.addItems.containers.ConfirmRemoveContainerPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -35,7 +35,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-import controllers.{routes => mainRoutes}
 
 import scala.concurrent.Future
 
@@ -52,7 +51,7 @@ class ConfirmRemoveContainerControllerSpec extends SpecBase with MockNunjucksRen
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsContainer]).toInstance(new FakeNavigator(onwardRoute)))
 
   "ConfirmRemoveContainer Controller" - {
 

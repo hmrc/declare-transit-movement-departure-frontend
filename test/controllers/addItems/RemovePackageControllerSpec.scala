@@ -21,7 +21,7 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.RemovePackageFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
-import navigation.annotations.AddItems
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -46,12 +46,12 @@ class RemovePackageControllerSpec extends SpecBase with MockNunjucksRendererApp 
   private val form         = formProvider(index.display)
   private val template     = "addItems/removePackage.njk"
 
-  lazy val removePackageRoute = routes.RemovePackageController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val removePackageRoute = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItems]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
 
   "RemovePackage Controller" - {
 
