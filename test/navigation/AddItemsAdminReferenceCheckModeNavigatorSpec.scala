@@ -96,7 +96,7 @@ class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCh
 
           navigator
             .nextPage(ExtraInformationPage(index, referenceIndex), CheckMode, updatedAnswer)
-            .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
+            .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.lrn, index, CheckMode))
       }
     }
 

@@ -50,7 +50,7 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
     case ReferenceTypePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.PreviousReferenceController.onPageLoad(ua.lrn, itemIndex, referenceIndex, CheckMode))
     case PreviousReferencePage(itemIndex, referenceIndex) => ua => Some(previousReferencesRoutes.AddExtraInformationController.onPageLoad(ua.lrn, itemIndex, referenceIndex, CheckMode))
     case AddExtraInformationPage(itemIndex, referenceIndex) => ua => addExtraInformationPage(ua, itemIndex, referenceIndex, CheckMode)
-    case ExtraInformationPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
+    case ExtraInformationPage(itemIndex, _) => ua => Some(previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, CheckMode))
     case ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, _) => ua => Some(removePreviousAdministrativeReference(itemIndex, CheckMode)(ua))
     case AddAnotherPreviousAdministrativeReferencePage(itemIndex) => ua => addAnotherPreviousAdministrativeReferenceCheckModeRoute(itemIndex, ua)
 
