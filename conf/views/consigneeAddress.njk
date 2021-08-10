@@ -52,7 +52,8 @@
             id: "AddressLine1",
             name: "AddressLine1",
             value: form.AddressLine1.value,
-            errorMessage: form.AddressLine1.error
+            errorMessage: form.AddressLine1.error,
+            autocomplete: "address-line1"
           }) }}
 
           {{ govukInput({
@@ -63,7 +64,8 @@
             id: "AddressLine2",
             name: "AddressLine2",
             value: form.AddressLine2.value,
-            errorMessage: form.AddressLine2.error
+            errorMessage: form.AddressLine2.error,
+            autocomplete: "address-line2"
           }) }}
 
           {{ govukInput({
@@ -74,7 +76,8 @@
             id: "AddressLine3",
             name: "AddressLine3",
             value: form.AddressLine3.value,
-            errorMessage: form.AddressLine3.error
+            errorMessage: form.AddressLine3.error,
+            autocomplete: "postal-code"
           }) }}
 
           {{ govukSelect({
