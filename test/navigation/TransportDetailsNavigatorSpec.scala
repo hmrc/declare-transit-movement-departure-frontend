@@ -292,6 +292,16 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
+      "must go from IdAtDeparture page to CYA page " in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(IdAtDeparturePage, CheckMode, answers)
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
+        }
+      }
+
       "must go from NationalityAtDeparturePage to TransportDetailsCheckYourAnswers Page" in {
 
         forAll(arbitrary[UserAnswers]) {
