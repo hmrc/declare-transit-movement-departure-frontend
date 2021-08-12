@@ -47,8 +47,8 @@ POST       /:lrn/transport-details/change-mode-at-border                  contro
 
 GET        /:lrn/transport-details/add-nationality-at-departure                       controllers.transportDetails.AddNationalityAtDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/transport-details/add-nationality-at-departure                       controllers.transportDetails.AddNationalityAtDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/transport-details/add-nationality-at-departure                       controllers.transportDetails.AddNationalityAtDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/transport-details/add-nationality-at-departure                       controllers.transportDetails.AddNationalityAtDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/transport-details/change-add-nationality-at-departure                       controllers.transportDetails.AddNationalityAtDepartureController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/transport-details/change-add-nationality-at-departure                       controllers.transportDetails.AddNationalityAtDepartureController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/transport-details/check-your-answers                       controllers.transportDetails.TransportDetailsCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber)
 

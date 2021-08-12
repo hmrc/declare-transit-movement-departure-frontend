@@ -101,17 +101,13 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
-      "must go from AddIdAtDepartureLater page to change at border page if Inland Mode is 2,5 or 7" in {
+      "must go from AddIdAtDepartureLater page to Change at Border page" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers
-              .set(InlandModePage, "2")
-              .success
-              .value
             navigator
-              .nextPage(AddIdAtDepartureLaterPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(updatedAnswers.lrn, NormalMode))
+              .nextPage(AddIdAtDepartureLaterPage, NormalMode, answers)
+              .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 
@@ -292,13 +288,14 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
-      "must go from IdAtDeparture page to CYA page " in {
+      "must go from IdAtDeparture page to CYA page when inland mode is 2 ,5 or 7" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
+            val updatedAnswers = answers.set(InlandModePage, "2").success.value
             navigator
-              .nextPage(IdAtDeparturePage, CheckMode, answers)
-              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(answers.lrn))
+              .nextPage(IdAtDeparturePage, CheckMode, updatedAnswers)
+              .mustBe(transportDetailsRoute.TransportDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 

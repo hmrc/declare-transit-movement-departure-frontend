@@ -51,7 +51,7 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
     case ChangeAtBorderPage =>
       ua => Some(changeAtBorderRoute(ua, NormalMode))
     case AddNationalityAtDeparturePage =>
-      ua => Some(addNationalityAtDepartureRoute(ua, NormalMode))
+      ua => Some(addNationalityAtDepartureRoute(ua))
     case _ =>
       _ => None
   }
@@ -62,7 +62,7 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
     case AddIdAtDeparturePage =>
       ua => Some(addIdAtDepartureRoute(ua, CheckMode))
     case IdAtDeparturePage =>
-      ua => Some(routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
+      ua => Some(idAtDepartureCheckModeRoute(ua))
     case AddIdAtDepartureLaterPage =>
       ua => Some(routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
     case NationalityAtDeparturePage =>
@@ -76,11 +76,17 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
     case ModeCrossingBorderPage =>
       ua => Some(modeCrossingBorderRoute(ua, CheckMode))
     case AddNationalityAtDeparturePage =>
-      ua => Some(addNationalityAtDepartureRoute(ua, CheckMode))
+      ua => Some(addNationalityAtDepartureCheckModeRoute(ua))
     case NationalityCrossingBorderPage =>
       ua => Some(routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
 
   }
+
+  private def addIdAtDepartureLaterRoute(ua: UserAnswers): Call =
+    ua.get(ChangeAtBorderPage) match {
+      case Some(_) => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
+      case _       => routes.ChangeAtBorderController.onPageLoad(ua.lrn, NormalMode)
+    }
 
   private def addIdAtDepartureRoute(ua: UserAnswers, mode: Mode): Call =
     ua.get(AddIdAtDeparturePage) match {
@@ -89,11 +95,17 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
       case _           => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
     }
 
-  private def addNationalityAtDepartureRoute(ua: UserAnswers, mode: Mode): Call =
+  private def addNationalityAtDepartureRoute(ua: UserAnswers): Call =
     ua.get(AddNationalityAtDeparturePage) match {
-      case Some(true)  => routes.NationalityAtDepartureController.onPageLoad(ua.lrn, mode)
-      case Some(false) => routes.ChangeAtBorderController.onPageLoad(ua.lrn, mode)
+      case Some(true)  => routes.NationalityAtDepartureController.onPageLoad(ua.lrn, NormalMode)
+      case Some(false) => routes.ChangeAtBorderController.onPageLoad(ua.lrn, NormalMode)
       case _           => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
+    }
+
+  private def addNationalityAtDepartureCheckModeRoute(ua: UserAnswers): Call =
+    ua.get(AddNationalityAtDeparturePage) match {
+      case Some(true) => routes.NationalityAtDepartureController.onPageLoad(ua.lrn, CheckMode)
+      case _          => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
     }
 
   private def changeAtBorderRoute(ua: UserAnswers, mode: Mode): Call =
@@ -128,6 +140,14 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
         routes.ChangeAtBorderController.onPageLoad(ua.lrn, NormalMode)
       case (Some(_), Some(true))  => routes.AddNationalityAtDepartureController.onPageLoad(ua.lrn, NormalMode)
       case (Some(_), Some(false)) => routes.NationalityAtDepartureController.onPageLoad(ua.lrn, NormalMode)
+    }
+
+  private def idAtDepartureCheckModeRoute(ua: UserAnswers): Call =
+    (ua.get(InlandModePage), ua.get(ContainersUsedPage)) match {
+      case (Some(inlandMode), _) if ModeCrossingBorder.isExemptFromNationality(inlandMode) =>
+        routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
+      case (Some(_), Some(_)) if ua.get(NationalityAtDeparturePage).nonEmpty => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
+      case _                                                                 => routes.AddNationalityAtDepartureController.onPageLoad(ua.lrn, CheckMode)
     }
 
   private def inlandModeRoute(ua: UserAnswers, mode: Mode): Call =
