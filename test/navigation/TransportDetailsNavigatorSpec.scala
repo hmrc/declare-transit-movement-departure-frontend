@@ -101,46 +101,48 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         }
       }
 
-      "must go from AddIdAtDepartureLater page to NationalityAtDeparture Page if selected no to using containers" in {
+      "must go from AddIdAtDepartureLater page to change at border page if Inland Mode is 2,5 or 7" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.set(ContainersUsedPage, false).toOption.value
-
+            val updatedAnswers = answers
+              .set(InlandModePage, "2")
+              .success
+              .value
             navigator
               .nextPage(AddIdAtDepartureLaterPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.NationalityAtDepartureController.onPageLoad(answers.lrn, NormalMode))
+              .mustBe(transportDetailsRoute.ChangeAtBorderController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
-      "must go from AddIdAtDepartureLater page to AddNationalityAtDeparture Page if selected yes to using containers" in {
+      "must go from IdAtDeparture page to NationalityAtDeparture Page if selected no to using containers and inland mode is not 2,5 or 7" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.set(ContainersUsedPage, true).toOption.value
-
-            navigator
-              .nextPage(AddIdAtDepartureLaterPage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.AddNationalityAtDepartureController.onPageLoad(answers.lrn, NormalMode))
-        }
-      }
-
-      "must go from IdAtDeparture page to NationalityAtDeparture Page if selected no to using containers" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            val updatedAnswers = answers.set(ContainersUsedPage, false).toOption.value
+            val updatedAnswers = answers
+              .set(InlandModePage, "1")
+              .toOption
+              .value
+              .set(ContainersUsedPage, false)
+              .toOption
+              .value
             navigator
               .nextPage(IdAtDeparturePage, NormalMode, updatedAnswers)
-              .mustBe(transportDetailsRoute.NationalityAtDepartureController.onPageLoad(answers.lrn, NormalMode))
+              .mustBe(transportDetailsRoute.NationalityAtDepartureController.onPageLoad(updatedAnswers.lrn, NormalMode))
         }
       }
 
-      "must go from IdAtDeparture page to AddNationalityAtDeparture Page if selected yes to using containers" in {
+      "must go from IdAtDeparture page to AddNationalityAtDeparture Page if selected yes to using containers and inland mode is not 2,5 or 7" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
-            val updatedAnswers = answers.set(ContainersUsedPage, true).toOption.value
+            val updatedAnswers = answers
+              .set(ContainersUsedPage, true)
+              .toOption
+              .value
+              .set(InlandModePage, "1")
+              .toOption
+              .value
             navigator
               .nextPage(IdAtDeparturePage, NormalMode, updatedAnswers)
               .mustBe(transportDetailsRoute.AddNationalityAtDepartureController.onPageLoad(answers.lrn, NormalMode))

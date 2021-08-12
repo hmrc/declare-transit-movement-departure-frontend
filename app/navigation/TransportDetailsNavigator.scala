@@ -31,11 +31,11 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case AddIdAtDepartureLaterPage =>
-      ua => Some(addIdAtDepartureLaterRoute(ua, NormalMode))
+      ua => Some(routes.ChangeAtBorderController.onPageLoad(ua.lrn, NormalMode))
     case InlandModePage =>
       ua => Some(inlandModeRoute(ua, NormalMode))
     case IdAtDeparturePage =>
-      ua => Some(idAtDepartureRoute(ua, NormalMode))
+      ua => Some(idAtDepartureRoute(ua))
     case NationalityAtDeparturePage =>
       ua => Some(routes.ChangeAtBorderController.onPageLoad(ua.lrn, NormalMode))
     case ModeAtBorderPage =>
@@ -62,9 +62,9 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
     case AddIdAtDeparturePage =>
       ua => Some(addIdAtDepartureRoute(ua, CheckMode))
     case IdAtDeparturePage =>
-      ua => Some(idAtDepartureRoute(ua, CheckMode))
+      ua => Some(routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
     case AddIdAtDepartureLaterPage =>
-      ua => Some(addIdAtDepartureLaterRoute(ua, CheckMode))
+      ua => Some(routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
     case NationalityAtDeparturePage =>
       ua => Some(routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
     case ChangeAtBorderPage =>
@@ -122,20 +122,12 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
       case _ => routes.IdCrossingBorderController.onPageLoad(ua.lrn, mode)
     }
 
-  private def addIdAtDepartureLaterRoute(ua: UserAnswers, mode: Mode): Call =
-    (ua.get(ContainersUsedPage), ua.get(InlandModePage)) match {
-      case (_, Some(inlandMode)) if ModeCrossingBorder.isExemptFromNationality(inlandMode) => routes.ChangeAtBorderController.onPageLoad(ua.lrn, mode)
-      case (Some(true), _)                                                                 => routes.AddNationalityAtDepartureController.onPageLoad(ua.lrn, mode)
-      case (Some(false) | None, _)                                                         => routes.NationalityAtDepartureController.onPageLoad(ua.lrn, mode)
-      case _                                                                               => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
-    }
-
-  private def idAtDepartureRoute(ua: UserAnswers, mode: Mode): Call =
-    (ua.get(ContainersUsedPage), ua.get(InlandModePage)) match {
-      case (_, Some(inlandMode)) if ModeCrossingBorder.isExemptFromNationality(inlandMode) => routes.ChangeAtBorderController.onPageLoad(ua.lrn, mode)
-      case (Some(true), _)                                                                 => routes.AddNationalityAtDepartureController.onPageLoad(ua.lrn, mode)
-      case (Some(false) | None, _)                                                         => routes.NationalityAtDepartureController.onPageLoad(ua.lrn, mode)
-      case _                                                                               => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
+  private def idAtDepartureRoute(ua: UserAnswers): Call =
+    (ua.get(InlandModePage), ua.get(ContainersUsedPage)) match {
+      case (Some(inlandMode), Some(true)) if ModeCrossingBorder.isExemptFromNationality(inlandMode) =>
+        routes.ChangeAtBorderController.onPageLoad(ua.lrn, NormalMode)
+      case (Some(_), Some(true))  => routes.AddNationalityAtDepartureController.onPageLoad(ua.lrn, NormalMode)
+      case (Some(_), Some(false)) => routes.NationalityAtDepartureController.onPageLoad(ua.lrn, NormalMode)
     }
 
   private def inlandModeRoute(ua: UserAnswers, mode: Mode): Call =
