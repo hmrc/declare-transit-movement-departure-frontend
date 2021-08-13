@@ -32,7 +32,7 @@ class AddIdAtDeparturePageSpec extends PageBehaviours {
 
     "cleanup" - {
 
-      "must remove IdAtDeparturePage, AddNationalityAtDeparturePage,NationalityAtDeparturePage changes to 'No'" in {
+      "must remove IdAtDeparturePage, AddNationalityAtDeparturePage,NationalityAtDeparturePage when AddIdAtDeparture changes to 'No'" in {
 
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>

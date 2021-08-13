@@ -32,7 +32,7 @@ class AddNationalityAtDeparturePageSpec extends PageBehaviours {
 
     "cleanup" - {
 
-      "must remove NationalityAtDeparturePage when NationalityAtDeparturePage  changes to 'No'" in {
+      "must remove NationalityAtDeparturePage when AddNationalityAtDeparturePage changes to 'No'" in {
 
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
