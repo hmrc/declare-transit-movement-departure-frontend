@@ -82,12 +82,6 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
 
   }
 
-  private def addIdAtDepartureLaterRoute(ua: UserAnswers): Call =
-    ua.get(ChangeAtBorderPage) match {
-      case Some(_) => routes.TransportDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
-      case _       => routes.ChangeAtBorderController.onPageLoad(ua.lrn, NormalMode)
-    }
-
   private def addIdAtDepartureRoute(ua: UserAnswers, mode: Mode): Call =
     ua.get(AddIdAtDeparturePage) match {
       case Some(true)  => routes.IdAtDepartureController.onPageLoad(ua.lrn, mode)
