@@ -16,12 +16,21 @@
 
 package pages.generalInformation
 
-import pages.{ClearAllAddItems, QuestionPage}
+import models.UserAnswers
+import pages.{AddIdAtDeparturePage, ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object ContainersUsedPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "containersUsed"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) => userAnswers.remove(AddIdAtDeparturePage)
+      case _           => super.cleanup(value, userAnswers)
+    }
 }
