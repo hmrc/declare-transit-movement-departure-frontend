@@ -16,12 +16,11 @@
 
 package pages.generalInformation
 
-import models.UserAnswers
+import base.SpecBase
 import pages.behaviours.PageBehaviours
-import org.scalacheck.Arbitrary.arbitrary
 import pages.{AddIdAtDeparturePage, AddNationalityAtDeparturePage}
 
-class ContainersUsedPageSpec extends PageBehaviours {
+class ContainersUsedPageSpec extends PageBehaviours with SpecBase {
 
   "ContainersUsedPage" - {
 
@@ -35,15 +34,18 @@ class ContainersUsedPageSpec extends PageBehaviours {
 
       "must remove AddIdAtDeparturePage and AddNationalityAtDeparturePage when Containers used is No userAnswers" in {
 
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result = userAnswers
-              .set(ContainersUsedPage, false)
-              .success
-              .value
-            result.get(AddIdAtDeparturePage) must not be defined
-            result.get(AddNationalityAtDeparturePage) must not be defined
-        }
+        val result = emptyUserAnswers
+          .set(AddIdAtDeparturePage, true)
+          .success
+          .value
+          .set(AddNationalityAtDeparturePage, true)
+          .success
+          .value
+          .set(ContainersUsedPage, false)
+          .success
+          .value
+        result.get(AddIdAtDeparturePage) must not be defined
+        result.get(AddNationalityAtDeparturePage) must not be defined
       }
     }
   }

@@ -16,11 +16,13 @@
 
 package pages
 
+import base.SpecBase
 import models.UserAnswers
+import models.reference.CountryCode
 import pages.behaviours.PageBehaviours
 import org.scalacheck.Arbitrary.arbitrary
 
-class AddIdAtDeparturePageSpec extends PageBehaviours {
+class AddIdAtDeparturePageSpec extends PageBehaviours with SpecBase {
 
   "AddIdAtDeparturePage" - {
 
@@ -34,16 +36,22 @@ class AddIdAtDeparturePageSpec extends PageBehaviours {
 
       "must remove IdAtDeparturePage, AddNationalityAtDeparturePage,NationalityAtDeparturePage when AddIdAtDeparture changes to 'No'" in {
 
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result = userAnswers
-              .set(AddIdAtDeparturePage, false)
-              .success
-              .value
-            result.get(IdAtDeparturePage) must not be defined
-            result.get(AddNationalityAtDeparturePage) must not be defined
-            result.get(NationalityAtDeparturePage) must not be defined
-        }
+        val result = emptyUserAnswers
+          .set(IdAtDeparturePage, "id")
+          .success
+          .value
+          .set(AddNationalityAtDeparturePage, true)
+          .success
+          .value
+          .set(NationalityAtDeparturePage, CountryCode("GB"))
+          .success
+          .value
+          .set(AddIdAtDeparturePage, false)
+          .success
+          .value
+        result.get(IdAtDeparturePage) must not be defined
+        result.get(AddNationalityAtDeparturePage) must not be defined
+        result.get(NationalityAtDeparturePage) must not be defined
       }
     }
   }
