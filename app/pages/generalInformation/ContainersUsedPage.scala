@@ -17,7 +17,7 @@
 package pages.generalInformation
 
 import models.UserAnswers
-import pages.{AddIdAtDeparturePage, ClearAllAddItems, QuestionPage}
+import pages.{AddIdAtDeparturePage, AddNationalityAtDeparturePage, ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
 import scala.util.Try
@@ -31,6 +31,8 @@ case object ContainersUsedPage extends QuestionPage[Boolean] with ClearAllAddIte
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) => userAnswers.remove(AddIdAtDeparturePage)
+        .flatMap(_.remove(AddNationalityAtDeparturePage))
+
       case _           => super.cleanup(value, userAnswers)
     }
 }
