@@ -20,30 +20,28 @@ import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
-class InlandModePageSpec extends PageBehaviours {
+class AddNationalityAtDeparturePageSpec extends PageBehaviours {
 
-  "InlandModePage" - {
+  "AddNationalityAtDeparturePage" - {
 
-    beRetrievable[String](InlandModePage)
+    beRetrievable[Boolean](AddNationalityAtDeparturePage)
 
-    beSettable[String](InlandModePage)
+    beSettable[Boolean](AddNationalityAtDeparturePage)
 
-    beRemovable[String](InlandModePage)
+    beRemovable[Boolean](AddNationalityAtDeparturePage)
 
     "cleanup" - {
 
-      "must remove AddIdAtDeparturePage,IdAtDeparturePage, AddNationalityAtDeparturePage, NationalityAtDeparturePage whenInland Mode is changes to 5" in {
+      "must remove NationalityAtDeparturePage when NationalityAtDeparturePage  changes to 'No'" in {
 
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result = userAnswers
-              .set(InlandModePage, "5")
+              .set(AddNationalityAtDeparturePage, false)
               .success
               .value
-            result.get(AddIdAtDeparturePage) must not be defined
-            result.get(IdAtDeparturePage) must not be defined
-            result.get(AddNationalityAtDeparturePage) must not be defined
             result.get(NationalityAtDeparturePage) must not be defined
+
         }
       }
     }

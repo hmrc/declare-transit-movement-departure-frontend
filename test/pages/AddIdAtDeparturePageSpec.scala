@@ -16,7 +16,9 @@
 
 package pages
 
+import models.UserAnswers
 import pages.behaviours.PageBehaviours
+import org.scalacheck.Arbitrary.arbitrary
 
 class AddIdAtDeparturePageSpec extends PageBehaviours {
 
@@ -27,5 +29,22 @@ class AddIdAtDeparturePageSpec extends PageBehaviours {
     beSettable[Boolean](AddIdAtDeparturePage)
 
     beRemovable[Boolean](AddIdAtDeparturePage)
+
+    "cleanup" - {
+
+      "must remove IdAtDeparturePage, AddNationalityAtDeparturePage,NationalityAtDeparturePage changes to 'No'" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result = userAnswers
+              .set(AddIdAtDeparturePage, false)
+              .success
+              .value
+            result.get(IdAtDeparturePage) must not be defined
+            result.get(AddNationalityAtDeparturePage) must not be defined
+            result.get(NationalityAtDeparturePage) must not be defined
+        }
+      }
+    }
   }
 }
