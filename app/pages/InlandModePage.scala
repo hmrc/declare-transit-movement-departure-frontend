@@ -16,11 +16,27 @@
 
 package pages
 
+import models.UserAnswers
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object InlandModePage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "inlandMode"
+
+  override def cleanup(value: Option[String], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some("5") | Some("50") | Some("7") | Some("70") =>
+        userAnswers
+          .remove(AddIdAtDeparturePage)
+          .flatMap(_.remove(IdAtDeparturePage))
+          .flatMap(_.remove(AddNationalityAtDeparturePage))
+          .flatMap(_.remove(NationalityAtDeparturePage))
+
+      case _ => super.cleanup(value, userAnswers)
+    }
+
 }

@@ -29,7 +29,11 @@ case object AddIdAtDeparturePage extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(IdAtDeparturePage)
-      case _           => super.cleanup(value, userAnswers)
+      case Some(false) =>
+        userAnswers
+          .remove(IdAtDeparturePage)
+          .flatMap(_.remove(AddNationalityAtDeparturePage))
+          .flatMap(_.remove(NationalityAtDeparturePage))
+      case _ => super.cleanup(value, userAnswers)
     }
 }

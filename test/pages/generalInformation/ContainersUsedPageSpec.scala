@@ -16,9 +16,11 @@
 
 package pages.generalInformation
 
+import base.SpecBase
 import pages.behaviours.PageBehaviours
+import pages.{AddIdAtDeparturePage, AddNationalityAtDeparturePage}
 
-class ContainersUsedPageSpec extends PageBehaviours {
+class ContainersUsedPageSpec extends PageBehaviours with SpecBase {
 
   "ContainersUsedPage" - {
 
@@ -28,6 +30,23 @@ class ContainersUsedPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](ContainersUsedPage)
 
-    clearDownItems[Boolean](ContainersUsedPage)
+    "cleanup" - {
+
+      "must remove AddIdAtDeparturePage and AddNationalityAtDeparturePage when Containers used is No userAnswers" in {
+
+        val result = emptyUserAnswers
+          .set(AddIdAtDeparturePage, true)
+          .success
+          .value
+          .set(AddNationalityAtDeparturePage, true)
+          .success
+          .value
+          .set(ContainersUsedPage, false)
+          .success
+          .value
+        result.get(AddIdAtDeparturePage) must not be defined
+        result.get(AddNationalityAtDeparturePage) must not be defined
+      }
+    }
   }
 }
