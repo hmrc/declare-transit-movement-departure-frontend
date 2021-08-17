@@ -28,11 +28,13 @@
         {% endif %}
 
         <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
-
+          <legend>
           <h1 class="govuk-heading-xl">{{messages('otherReference.heading')}}<h1>
+          </legend>
 
           {{ govukInput({
             classes: "govuk-input govuk-input--width-20",
@@ -53,6 +55,7 @@
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

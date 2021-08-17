@@ -28,9 +28,12 @@
         {% endif %}
 
         <form action="{{ routes.controllers.guaranteeDetails.TIRGuaranteeReferenceController.onSubmit(lrn, mode).url }}" method="post">
+
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
+        <fieldset>
 
           {{ csrf() | safe }}
+          <legend>
 
           {{ govukInput ({
             label: {
@@ -44,12 +47,14 @@
             class: "govuk-input--width-10",
             errorMessage: form.value.error
           }) }}
+          </legend>
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

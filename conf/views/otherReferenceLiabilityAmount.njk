@@ -30,12 +30,14 @@
         {% endif %}
 
          <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn, mode).url }}" method="post">
+         <fieldset>
          <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
-
-
+          <legend>
           <h1 class="govuk-heading-xl"> {{messages('liabilityAmount.heading')}}<h1>
+          </legend>
+
           <p class="govuk-body"> {{messages('liabilityAmount.paragraph')}}<p>
 
                {{ hmrcInputCurrency({
@@ -55,6 +57,7 @@
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

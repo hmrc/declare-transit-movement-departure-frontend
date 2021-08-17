@@ -35,13 +35,16 @@
         {% endif %}
 
         <form action="{{ routes.controllers.transportDetails.NationalityCrossingBorderController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
         <span class="govuk-caption-xl">{{messages('transportDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
-
+          <legend>
             <h1 class="govuk-heading-xl">
-                            {{ messages("nationalityCrossingBorder.heading") }}
-                          </h1>
+              {{ messages("nationalityCrossingBorder.heading") }}
+            </h1>
+           </legend>
+
 
                   {{ govukSelect({
                                       classes: "govuk-input--width-20 autocomplete",
@@ -55,6 +58,7 @@
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

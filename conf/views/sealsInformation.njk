@@ -28,9 +28,11 @@
           }) }}
         {% endif %}
         <form action="{{ routes.controllers.goodsSummary.SealsInformationController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
           {{ csrf() | safe }}
+          <legend>
 
           <h1 class="govuk-heading-xl">{{ heading }}</h1>
 
@@ -38,6 +40,7 @@
                       classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
                       rows: seals
                   }) }}
+          </legend>
 
           <h1 class="govuk-heading-m">
             {{messages('sealsInformation.radio.label')}}
@@ -56,6 +59,7 @@
             attributes: {id:"submit"}
           }) }}
 
+        </field>
         </form>
 
       </div>

@@ -40,9 +40,10 @@
         </h1>
 
         <form action="{{ routes.controllers.OfficeOfDepartureController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
 
           {{ csrf() | safe }}
-
+          <legend>
           {{ govukSelect({
             classes: "govuk-input--width-20 autocomplete",
             label: {
@@ -58,12 +59,14 @@
             errorMessage: form.value.error,
             items: customsOffices
           }) }}
+          </legend>
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

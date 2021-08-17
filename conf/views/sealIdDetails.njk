@@ -28,9 +28,11 @@
         {% endif %}
 
         <form action="{{ routes.controllers.goodsSummary.SealIdDetailsController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
           {{ csrf() | safe }}
+          <legend>
 
           {{ govukInput({
             label: {
@@ -44,12 +46,14 @@
             classes: "govuk-input--width-20",
             errorMessage: form.value.error
           }) }}
+          </legend>
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

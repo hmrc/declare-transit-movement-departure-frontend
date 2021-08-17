@@ -28,9 +28,11 @@
         {% endif %}
 
         <form action="{{ routes.controllers.addItems.documents.TIRCarnetReferenceController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
           {{ csrf() | safe }}
+          <legend>
 
           {{ govukInput ({
             label: {
@@ -44,12 +46,14 @@
             class: "govuk-input--width-10",
             errorMessage: form.value.error
           }) }}
+          </legend>
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

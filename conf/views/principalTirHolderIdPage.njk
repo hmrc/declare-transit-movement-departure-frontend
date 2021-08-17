@@ -28,8 +28,10 @@
         {% endif %}
 
         <form action="{{ routes.controllers.traderDetails.PrincipalTirHolderIdController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
 
           {{ csrf() | safe }}
+          <legend>
 
           {{ govukInput({
             label: {
@@ -45,12 +47,14 @@
             },
             errorMessage: form.value.error
           }) }}
+          </legend>
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

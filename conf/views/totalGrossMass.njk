@@ -28,11 +28,14 @@
         {% endif %}
 
         <form action="{{ routes.controllers.goodsSummary.TotalGrossMassController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
+        <legend>
         <h1 class="govuk-heading-xl"> {{messages('totalGrossMass.heading')}}<h1>
+        </legend>
 
-          {{ csrf() | safe }}
+        {{ csrf() | safe }}
 
         <span class="govuk-hint">{{messages('totalGrossMass.paragraph')}}</span>
 
@@ -49,7 +52,7 @@
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
-
+        </fieldset>
         </form>
 
       </div>

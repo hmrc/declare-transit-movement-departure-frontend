@@ -41,11 +41,11 @@
         </h1>
 
         <form action="{{ routes.controllers.routeDetails.OfficeOfTransitCountryController.onSubmit(lrn, mode).url }}" method="post">
-
+        <fieldset>
         <p class="govuk-body">{{ messages('officeOfTransitCountry.paragraph') }}</p>
 
           {{ csrf() | safe }}
-
+          <legend>
           {{ govukSelect({
             classes: "govuk-input--width-20
             autocomplete",
@@ -55,12 +55,14 @@
             errorMessage: form.value.error,
             items: countries
           }) }}
+          </legend>
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

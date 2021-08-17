@@ -35,14 +35,16 @@
         {% endif %}
 
         <form action="{{ routes.controllers.traderDetails.PrincipalAddressController.onSubmit(lrn, mode).url }}" method="post">
-
+        <fieldset>
         <span class="govuk-caption-xl">{{messages('traderDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
+          <legend>
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("principalAddress.heading", principalName) }}
-        </h1>
+          <h1 class="govuk-heading-xl">
+            {{ messages("principalAddress.heading", principalName) }}
+          </h1>
+          </legend>
 
           {{ govukInput({
             classes: "govuk-!-width-two-thirds",
@@ -98,6 +100,7 @@
               attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

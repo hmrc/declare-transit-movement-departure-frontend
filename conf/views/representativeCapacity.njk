@@ -28,9 +28,11 @@
         {% endif %}
 
         <form action="{{ routes.controllers.movementDetails.RepresentativeCapacityController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
         <span class="govuk-caption-xl">{{messages('movementDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
+          <legend>
 
           {{ govukRadios({
             name: 'value',
@@ -44,12 +46,14 @@
             items: radios,
             errorMessage: form.value.error
           }) }}
+          </legend>
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>

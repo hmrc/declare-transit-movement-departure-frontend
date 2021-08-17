@@ -28,8 +28,10 @@
         {% endif %}
 
         <form action="{{ routes.controllers.ProcedureTypeController.onSubmit(lrn, mode).url }}" method="post">
+        <fieldset>
 
           {{ csrf() | safe }}
+          <legend>
 
           {{ govukRadios({
             name: 'value',
@@ -43,12 +45,14 @@
             items: radios,
             errorMessage: form.value.error
           }) }}
+          </legend>
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {i d:"submit"}
           }) }}
 
+        </fieldset>
         </form>
 
       </div>
