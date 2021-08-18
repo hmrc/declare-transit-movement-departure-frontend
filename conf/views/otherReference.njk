@@ -28,7 +28,6 @@
         {% endif %}
 
         <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceController.onSubmit(lrn, mode).url }}" method="post">
-        <fieldset>
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
@@ -55,9 +54,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>

@@ -28,7 +28,6 @@
         {% endif %}
 
         <form action="{{ routes.controllers.traderDetails.WhatIsConsigneeEoriController.onSubmit(lrn, mode).url }}" method="post">
-        <fieldset>
         <span class="govuk-caption-xl">{{messages('traderDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
@@ -52,9 +51,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>

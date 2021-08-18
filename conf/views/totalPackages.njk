@@ -28,12 +28,11 @@
         {% endif %}
 
         <form action="{{ routes.controllers.goodsSummary.TotalPackagesController.onSubmit(lrn, mode).url }}" method="post">
-        <fieldset>
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
           {{ csrf() | safe }}
-          <legend>
 
+          <legend>
           <h1 class="govuk-heading-xl">
             {{ messages("totalPackages.heading") }}
           </h1>
@@ -54,9 +53,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        <fieldset>
         </form>
-
       </div>
     </div>
   </div>

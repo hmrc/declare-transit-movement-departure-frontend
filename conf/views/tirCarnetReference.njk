@@ -28,12 +28,10 @@
         {% endif %}
 
         <form action="{{ routes.controllers.addItems.documents.TIRCarnetReferenceController.onSubmit(lrn, mode).url }}" method="post">
-        <fieldset>
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
           {{ csrf() | safe }}
           <legend>
-
           {{ govukInput ({
             label: {
               text: messages('tirCarnetReference.heading'),
@@ -53,9 +51,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>

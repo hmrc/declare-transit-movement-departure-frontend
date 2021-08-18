@@ -28,11 +28,9 @@
         {% endif %}
 
         <form action="{{ routes.controllers.traderDetails.PrincipalTirHolderIdController.onSubmit(lrn, mode).url }}" method="post">
-        <fieldset>
 
           {{ csrf() | safe }}
           <legend>
-
           {{ govukInput({
             label: {
               text: messages('principalTirHolderId.heading'),
@@ -54,9 +52,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>

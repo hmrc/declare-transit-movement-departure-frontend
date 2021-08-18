@@ -35,11 +35,10 @@
         {% endif %}
 
         <form action="{{ routes.controllers.transportDetails.NationalityCrossingBorderController.onSubmit(lrn, mode).url }}" method="post">
-        <fieldset>
         <span class="govuk-caption-xl">{{messages('transportDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
-          <legend>
+           <legend>
             <h1 class="govuk-heading-xl">
               {{ messages("nationalityCrossingBorder.heading") }}
             </h1>
@@ -58,9 +57,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>

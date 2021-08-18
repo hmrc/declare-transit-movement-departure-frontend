@@ -28,9 +28,7 @@
         {% endif %}
 
         <form action="{{ routes.controllers.guaranteeDetails.TIRGuaranteeReferenceController.onSubmit(lrn, mode).url }}" method="post">
-
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
-        <fieldset>
 
           {{ csrf() | safe }}
           <legend>
@@ -54,9 +52,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>

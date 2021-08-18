@@ -40,7 +40,6 @@
         </h1>
 
         <form action="{{ routes.controllers.OfficeOfDepartureController.onSubmit(lrn, mode).url }}" method="post">
-        <fieldset>
 
           {{ csrf() | safe }}
           <legend>
@@ -66,9 +65,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>

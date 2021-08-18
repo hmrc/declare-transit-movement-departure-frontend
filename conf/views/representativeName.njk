@@ -28,12 +28,10 @@
         {% endif %}
 
         <form action="{{ routes.controllers.movementDetails.RepresentativeNameController.onSubmit(mode).url }}" method="post">
-        <fieldset>
         <span class="govuk-caption-xl">{{messages('movementDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
           <legend>
-
           {{ govukInput({
             label: {
               text: messages('representativeName.heading'),
@@ -52,9 +50,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>
