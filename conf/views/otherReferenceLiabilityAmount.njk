@@ -30,7 +30,6 @@
         {% endif %}
 
          <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn, mode).url }}" method="post">
-         <fieldset>
          <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
@@ -51,13 +50,11 @@
                     })
                   }}
 
-
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
       </div>
     </div>

@@ -41,7 +41,6 @@
         </h1>
 
         <form action="{{ routes.controllers.routeDetails.OfficeOfTransitCountryController.onSubmit(lrn, mode).url }}" method="post">
-        <fieldset>
         <p class="govuk-body">{{ messages('officeOfTransitCountry.paragraph') }}</p>
 
           {{ csrf() | safe }}
@@ -62,9 +61,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        </fieldset>
         </form>
-
       </div>
     </div>
   </div>
