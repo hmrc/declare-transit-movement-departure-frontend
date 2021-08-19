@@ -31,7 +31,7 @@ class TotalPiecesFormProvider @Inject() extends Mappings {
         "totalPieces.error.wholeNumber",
         "totalPieces.error.nonNumeric",
         Seq(itemIndex.toString)
-      ).verifying(inRangeWithIndex(itemIndex, minimumNumberOfPieces, maximumNumberOfPieces, "totalPieces.error.outOfRange"))
+      ).verifying(inRange(itemIndex, minimumNumberOfPieces, maximumNumberOfPieces, "totalPieces.error.outOfRange"))
     )
   }
 }
