@@ -42,12 +42,12 @@
           {{ csrf() | safe }}
 
           {% call govukFieldset({
-                     legend: {
-                       text: messages("principalAddress.heading", principalName),
-                       classes: "govuk-fieldset__legend--l",
-                       isPageHeading: true
-                     }
-                   }) %}
+            legend: {
+              text: messages("principalAddress.heading", principalName),
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+              }
+            }) %}
 
           {{ govukInput({
             classes: "govuk-!-width-two-thirds",
