@@ -22,13 +22,16 @@ import play.api.data.Form
 
 class TotalPiecesFormProvider @Inject() extends Mappings {
 
-  def apply(itemIndex: Int): Form[Int] =
+  def apply(itemIndex: Int): Form[Int] = {
+    val minimumNumberOfPieces = 1
+    val maximumNumberOfPieces = 99999
     Form(
       "value" -> int(
         "totalPieces.error.required",
         "totalPieces.error.wholeNumber",
         "totalPieces.error.nonNumeric",
         Seq(itemIndex.toString)
-      ).verifying(inRange(itemIndex, 99999, "totalPieces.error.outOfRange"))
+      ).verifying(inRangeWithIndex(itemIndex, minimumNumberOfPieces, maximumNumberOfPieces, "totalPieces.error.outOfRange"))
     )
+  }
 }

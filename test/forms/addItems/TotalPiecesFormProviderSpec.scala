@@ -21,14 +21,15 @@ import play.api.data.FormError
 
 class TotalPiecesFormProviderSpec extends IntFieldBehaviours {
 
-  private val form = new TotalPiecesFormProvider()(1)
-
   ".value" - {
 
     val fieldName          = "value"
-    val minimum            = 0
+    val minimum            = 1
     val maximum            = 99999
     val validDataGenerator = intsInRangeWithCommas(minimum, maximum)
+    val itemIndex          = 1
+
+    val form = new TotalPiecesFormProvider()(itemIndex)
 
     behave like fieldThatBindsValidData(
       form,
@@ -48,7 +49,7 @@ class TotalPiecesFormProviderSpec extends IntFieldBehaviours {
       fieldName,
       minimum = minimum,
       maximum = maximum,
-      expectedError = FormError(fieldName, "totalPieces.error.outOfRange", Seq(1, maximum))
+      expectedError = FormError(fieldName, "totalPieces.error.outOfRange", Seq(itemIndex, maximum))
     )
 
     behave like mandatoryField(
