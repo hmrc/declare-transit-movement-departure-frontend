@@ -38,11 +38,15 @@
         <form action="{{ routes.controllers.traderDetails.ConsigneeAddressController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('traderDetails.preHeading')}}</span>
 
-          {{ csrf() | safe }}
+        {{ csrf() | safe }}
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("consigneeAddress.heading", consigneeName) }}
-        </h1>
+        {% call govukFieldset({
+          legend: {
+          text: messages("consigneeAddress.heading", consigneeName),
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+          }
+        }) %}
 
           {{ govukInput ({
             classes: "govuk-!-width-two-thirds",
@@ -98,6 +102,7 @@
               attributes: {id:"submit"}
           }) }}
 
+        {% endcall %}
         </form>
 
       </div>

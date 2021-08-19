@@ -40,9 +40,13 @@
 
           {{ csrf() | safe }}
 
-          <h1 class="govuk-heading-xl">
-                    {{ messages("safetyAndSecurityConsignorAddress.heading", consignorName) }}
-                  </h1>
+          {% call govukFieldset({
+            legend: {
+              text: messages("safetyAndSecurityConsignorAddress.heading", consignorName)),
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          }) %}
 
           {{ govukInput({
             classes: "govuk-!-width-two-thirds",
@@ -97,6 +101,7 @@
             attributes: {id:"submit"}
           }) }}
 
+        {% endcall %}
         </form>
 
       </div>
