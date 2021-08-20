@@ -29,6 +29,6 @@ class HowManyPackagesFormProvider @Inject() extends Mappings {
         "howManyPackages.error.wholeNumber",
         "howManyPackages.error.nonNumeric",
         Seq(itemIndex.toString)
-      ).verifying(inRange(0, 9999, "howManyPackages.error.outOfRange"))
+      ).verifying(inRange(itemIndex, 0, 9999, "howManyPackages.error.outOfRange"))
     )
 }

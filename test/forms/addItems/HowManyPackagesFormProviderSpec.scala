@@ -21,14 +21,15 @@ import play.api.data.FormError
 
 class HowManyPackagesFormProviderSpec extends IntFieldBehaviours {
 
-  private val form = new HowManyPackagesFormProvider()(1)
-
   ".value" - {
 
     val fieldName          = "value"
     val minimum            = 0
     val maximum            = 9999
     val validDataGenerator = intsInRangeWithCommas(minimum, maximum)
+    val itemIndex          = 1
+
+    val form = new HowManyPackagesFormProvider()(itemIndex)
 
     behave like fieldThatBindsValidData(
       form,
@@ -48,7 +49,7 @@ class HowManyPackagesFormProviderSpec extends IntFieldBehaviours {
       fieldName,
       minimum = minimum,
       maximum = maximum,
-      expectedError = FormError(fieldName, "howManyPackages.error.outOfRange", Seq(0, maximum))
+      expectedError = FormError(fieldName, "howManyPackages.error.outOfRange", Seq(itemIndex, maximum))
     )
 
     behave like mandatoryField(
