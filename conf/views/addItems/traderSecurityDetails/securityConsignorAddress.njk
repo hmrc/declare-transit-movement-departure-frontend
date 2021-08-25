@@ -6,6 +6,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
+{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
 {% block pageTitle %}
   {{ title(messages("securityConsignorAddress.title"), form.errors) }}
