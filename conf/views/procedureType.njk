@@ -30,8 +30,8 @@
         <form action="{{ routes.controllers.ProcedureTypeController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
-          {{ govukRadios({
 
+          {{ govukRadios({
             name: 'value',
             fieldset: {
               legend: {

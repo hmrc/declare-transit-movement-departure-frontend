@@ -43,15 +43,10 @@
             {{messages('sealsInformation.radio.label')}}
           </h1>
 
+
           {{ govukRadios({
+            classes: "govuk-radios--inline",
             name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('sealsInformation.radio')
-                isPageHeading: false,
-                classes: "govuk-radios--inline",
-                }
-            },
             items: radios,
             errorMessage: form.value.error
           }) }}
