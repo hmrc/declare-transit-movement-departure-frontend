@@ -31,12 +31,11 @@
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
         <h1 class="govuk-heading-xl"> {{messages('commodityCode.heading', index)}}<h1>
 
-          {{ csrf() | safe }}
+        {{ csrf() | safe }}
 
         <span class="govuk-hint">{{messages('commodityCode.hintText')}}</span>
 
           {{ govukInput({
-
             id: "value",
             name: "value",
             value: form.value.value,
