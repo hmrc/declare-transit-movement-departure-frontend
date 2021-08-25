@@ -40,13 +40,9 @@
 
           {{ csrf() | safe }}
 
-          {% call govukFieldset({
-            legend: {
-              text: messages("consignorAddress.heading", consignorName),
-              classes: "govuk-fieldset__legend--l",
-              isPageHeading: true
-            }
-          }) %}
+        <h1 class="govuk-heading-xl">
+          {{ messages("consignorAddress.heading", consignorName) }}
+        </h1>
 
           {{ govukInput ({
             classes: "govuk-!-width-two-thirds",
@@ -101,7 +97,6 @@
               attributes: {id:"submit"}
           }) }}
 
-        {% endcall %}
         </form>
 
       </div>

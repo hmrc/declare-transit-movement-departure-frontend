@@ -38,39 +38,35 @@
         <form action="{{ routes.controllers.safetyAndSecurity.SafetyAndSecurityConsigneeAddressController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('safetyAndSecurity.preHeading')}}</span>
 
-        {{ csrf() | safe }}
+          {{ csrf() | safe }}
 
-        {% call govukFieldset({
-          legend: {
-            text: messages("safetyAndSecurityConsigneeAddress.heading", consigneeName)),
-            classes: "govuk-fieldset__legend--l",
-            isPageHeading: true
-          }
-        }) %}
+        <h1 class="govuk-heading-xl">
+          {{ messages("safetyAndSecurityConsigneeAddress.heading", consigneeName) }}
+         </h1>
 
-        {{ govukInput ({
-          classes: "govuk-!-width-two-thirds",
-          label: {
-            text: messages('safetyAndSecurityConsigneeAddress.AddressLine1')
-          },
-          id: "AddressLine1",
-          name: "AddressLine1",
-          value: form.AddressLine1.value,
-          errorMessage: form.AddressLine1.error,
-          autocomplete: "address-line1"
-        }) }}
+          {{ govukInput ({
+            classes: "govuk-!-width-two-thirds",
+            label: {
+              text: messages('safetyAndSecurityConsigneeAddress.AddressLine1')
+              },
+              id: "AddressLine1",
+              name: "AddressLine1",
+              value: form.AddressLine1.value,
+              errorMessage: form.AddressLine1.error,
+              autocomplete: "address-line1"
+            }) }}
 
-        {{ govukInput({
-          classes: "govuk-!-width-two-thirds",
-          label: {
-            text: messages('safetyAndSecurityConsigneeAddress.AddressLine2')
-          },
-            id: "AddressLine2",
-            name: "AddressLine2",
-            value: form.AddressLine2.value,
-            errorMessage: form.AddressLine2.error,
-            autocomplete: "address-line2"
-        }) }}
+         {{ govukInput({
+           classes: "govuk-!-width-two-thirds",
+           label: {
+             text: messages('safetyAndSecurityConsigneeAddress.AddressLine2')
+             },
+             id: "AddressLine2",
+             name: "AddressLine2",
+             value: form.AddressLine2.value,
+             errorMessage: form.AddressLine2.error,
+             autocomplete: "address-line2"
+          }) }}
 
           {{ govukInput({
             classes: "govuk-!-width-two-thirds",
@@ -101,7 +97,6 @@
             attributes: {id:"submit"}
           }) }}
 
-        {% endcall %}
         </form>
 
       </div>
