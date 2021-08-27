@@ -58,7 +58,7 @@ trait Constraints {
         }
     }
 
-  protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
+  protected def inRange[A](itemIndex: A, minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
     Constraint {
       input =>
         import ev._
@@ -66,7 +66,7 @@ trait Constraints {
         if (input >= minimum && input <= maximum) {
           Valid
         } else {
-          Invalid(errorKey, minimum, maximum)
+          Invalid(errorKey, itemIndex, maximum)
         }
     }
 
