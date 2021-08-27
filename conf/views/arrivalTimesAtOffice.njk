@@ -32,6 +32,8 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
+        <form action="{{ routes.controllers.routeDetails.ArrivalTimesAtOfficeController.onSubmit(lrn, mode).url }}" method="post">
+
         {% call govukFieldset({
           legend: {
             text: messages("arrivalTimesAtOffice.heading"),
@@ -39,8 +41,6 @@
             isPageHeading: true
           }
         }) %}
-
-        <form action="{{ routes.controllers.routeDetails.ArrivalTimesAtOfficeController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
