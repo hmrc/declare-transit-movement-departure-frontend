@@ -39,14 +39,16 @@
                       rows: seals
                   }) }}
 
-          <h1 class="govuk-heading-m">
-            {{messages('sealsInformation.radio.label')}}
-          </h1>
-
-
           {{ govukRadios({
-            classes: "govuk-radios--inline",
             name: 'value',
+            classes: "govuk-radios--inline",
+            fieldset: {
+              legend: {
+                text: messages('sealsInformation.radio.label'),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+                }
+            },
             items: radios,
             errorMessage: form.value.error
           }) }}

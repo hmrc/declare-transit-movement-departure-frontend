@@ -6,6 +6,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
+{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
 {% block pageTitle %}
   {{ title(messages("securityConsignorAddress.title"), form.errors) }}
@@ -39,9 +40,13 @@
 
           {{ csrf() | safe }}
 
-         <h1 class="govuk-heading-xl">
-            {{ messages("securityConsignorAddress.heading", consignorName) }}
-          </h1>
+          {% call govukFieldset({
+            legend: {
+              text: messages("securityConsignorAddress.heading", consignorName),
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          }) %}
 
          {{ govukInput ({
                               classes: "govuk-!-width-two-thirds",
@@ -97,6 +102,7 @@
             attributes: {id:"submit"}
           }) }}
 
+        {% endcall %}
         </form>
 
       </div>
