@@ -7,6 +7,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/dateTime.njk"                      import dateTime as dateTimeMacro %}
 {% from "macros/title.njk"                         import title %}
+{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
 {% block pageTitle %}
   {{ title(messages("arrivalTimesAtOffice.title"), form.errors) }}
@@ -31,9 +32,13 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("arrivalTimesAtOffice.heading") }}
-        </h1>
+        {% call govukFieldset({
+          legend: {
+            text: messages("arrivalTimesAtOffice.heading"),
+            classes: "govuk-fieldset__legend--xl",
+            isPageHeading: true
+          }
+        }) %}
 
         <form action="{{ routes.controllers.routeDetails.ArrivalTimesAtOfficeController.onSubmit(lrn, mode).url }}" method="post">
 
@@ -51,6 +56,7 @@
             attributes: {id:"submit"}
           }) }}
 
+        {% endcall %}
         </form>
 
       </div>

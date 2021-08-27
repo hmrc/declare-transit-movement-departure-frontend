@@ -5,6 +5,7 @@
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
+{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
 {% block pageTitle %}
   {{ title(messages("controlResultDateLimit.title"), form.errors) }}
@@ -27,16 +28,22 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.goodsSummary.ControlResultDateLimitController.onSubmit(lrn, mode).url }}" method="post">
-
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
-        <h1 class="govuk-heading-xl"> {{messages('controlResultDateLimit.heading')}}<h1>
+        {% call govukFieldset({
+          legend: {
+            text: messages("controlResultDateLimit.heading"),
+            classes: "govuk-fieldset__legend--xl",
+            isPageHeading: true
+          }
+        }) %}
 
         <p class = "govuk-body"> {{messages('controlResultDateLimit.paragraph1')}}</p>
         <p class = "govuk-body"> {{messages('controlResultDateLimit.paragraph2')}}
            <a  href= "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/tax-credits-enquiries" target="_blank"> {{ messages("technicalDifficulties.contact.link") }}</a>.
         </p>
+
+        <form action="{{ routes.controllers.goodsSummary.ControlResultDateLimitController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
@@ -53,6 +60,7 @@
             attributes: {id:"submit"}
           }) }}
 
+        {% endcall %}
         </form>
 
       </div>
