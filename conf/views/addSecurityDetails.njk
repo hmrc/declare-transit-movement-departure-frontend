@@ -34,6 +34,7 @@
         <h1 class="govuk-heading-xl">{{messages('addSecurityDetails.heading')}}</h1>
 
           {{ govukRadios({
+            idPrefix: messages('addSecurityDetails.heading'),
             name: 'value',
             fieldset: {
               legend: {

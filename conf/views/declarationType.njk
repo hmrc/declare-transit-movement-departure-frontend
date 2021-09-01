@@ -35,6 +35,7 @@
           {{ csrf() | safe }}
 
           {{ govukRadios({
+            idPrefix: messages('declarationType.heading'),
             name: 'value',
             fieldset: {
               legend: {
