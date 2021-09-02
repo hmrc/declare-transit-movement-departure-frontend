@@ -30,7 +30,6 @@
         <form action="{{ routes.controllers.DeclarationTypeController.onSubmit(lrn, mode).url }}" method="post">
 
         <span class="govuk-caption-xl">{{messages('movementDetails.preHeading')}}</span>
-        <h1 class="govuk-heading-xl"> {{ messages("declarationType.heading") }} </h1>
 
           {{ csrf() | safe }}
 
@@ -39,10 +38,15 @@
             name: 'value',
             fieldset: {
               legend: {
-                text: messages('declarationType.paragraph'),
-                isPageHeading: false,
-                classes: "govuk-label--medium"
+                text: messages("declarationType.heading"),
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
               }
+            },
+            hint: {
+              text: messages('declarationType.paragraph'),
+              classes: "govuk-label--medium"
+
             },
             items: radios,
             errorMessage: form.value.error
