@@ -6,7 +6,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
-
+{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
 {% block pageTitle %}
   {{ title(messages("carrierAddress.title", carrierName), form.errors) }}
@@ -40,9 +40,13 @@
 
           {{ csrf() | safe }}
 
-            <h1 class="govuk-heading-xl">
-                    {{ messages("carrierAddress.heading", carrierName) }}
-                  </h1>
+          {% call govukFieldset({
+            legend: {
+              text: messages("carrierAddress.heading", carrierName),
+              classes: "govuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          }) %}
 
           {{ govukInput ({
             classes: "govuk-!-width-two-thirds",
@@ -92,6 +96,8 @@
                         value: form.country.value,
                         errorMessage: form.country.error
                       }) }}
+
+        {% endcall %}
 
           {{ govukButton({
             text: messages("site.continue"),

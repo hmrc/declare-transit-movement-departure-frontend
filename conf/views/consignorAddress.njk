@@ -96,12 +96,13 @@
             errorMessage: form.country.error
           }) }}
 
+        {% endcall %}
+
           {{ govukButton({
             text: messages("site.continue"),
               attributes: {id:"submit"}
           }) }}
 
-        {% endcall %}
         </form>
 
       </div>
