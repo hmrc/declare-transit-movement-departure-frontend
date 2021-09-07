@@ -27,7 +27,6 @@ import xml.XMLWrites._
 
 import scala.xml.NodeSeq
 
-//format off
 class GoodsItemSecurityConsigneeSpec
     extends AnyFreeSpec
     with Matchers
@@ -36,7 +35,6 @@ class GoodsItemSecurityConsigneeSpec
     with StreamlinedXmlEquality
     with OptionValues {
 
-  //format off
   "goodsItemSecurityConsignee" - {
 
     "must deserialize ItemsSecurityConsigneeWithEori" in {
@@ -94,4 +92,3 @@ class GoodsItemSecurityConsigneeSpec
     }
   }
 }
-//format on

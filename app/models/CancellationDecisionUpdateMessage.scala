@@ -17,7 +17,7 @@
 package models
 
 import cats.syntax.all._
-import com.lucidchart.open.xtract.{XmlReader, __}
+import com.lucidchart.open.xtract.{__, XmlReader}
 import models.XMLReads._
 import play.api.libs.json.{Json, OWrites}
 

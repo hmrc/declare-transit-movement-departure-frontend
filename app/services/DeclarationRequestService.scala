@@ -21,7 +21,12 @@ import cats.implicits._
 import logging.Logging
 import models.GuaranteeType.TIR
 import models.domain.SealDomain
-import models.journeyDomain.GoodsSummary.{GoodSummaryDetails, GoodSummaryNormalDetailsWithPreLodge, GoodSummaryNormalDetailsWithoutPreLodge, GoodSummarySimplifiedDetails}
+import models.journeyDomain.GoodsSummary.{
+  GoodSummaryDetails,
+  GoodSummaryNormalDetailsWithPreLodge,
+  GoodSummaryNormalDetailsWithoutPreLodge,
+  GoodSummarySimplifiedDetails
+}
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.SafetyAndSecurity.SecurityTraderDetails

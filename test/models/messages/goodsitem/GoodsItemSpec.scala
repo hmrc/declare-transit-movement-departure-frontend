@@ -30,7 +30,7 @@ import scala.xml.NodeSeq
 class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with MessagesModelGenerators with StreamlinedXmlEquality with OptionValues {
 
   "GoodsItemSpec" - {
-    //format off
+
     "must serialize GoodsItem to xml" in {
 
       forAll(arbitrary[GoodsItem]) {
@@ -136,7 +136,6 @@ class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
           result mustBe data
       }
     }
-    //format on
   }
 
   def specialMention(specialMention: SpecialMention): NodeSeq = specialMention match {

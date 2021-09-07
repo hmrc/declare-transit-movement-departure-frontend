@@ -22,7 +22,16 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import generators.MessagesModelGenerators
 import helper.WireMockServerHandler
 import models.messages.DeclarationRequest
-import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage, GuaranteeNotValidMessage, InvalidGuaranteeCode, InvalidGuaranteeReasonCode, MessagesLocation, MessagesSummary, RejectionError}
+import models.{
+  CancellationDecisionUpdateMessage,
+  DeclarationRejectionMessage,
+  GuaranteeNotValidMessage,
+  InvalidGuaranteeCode,
+  InvalidGuaranteeReasonCode,
+  MessagesLocation,
+  MessagesSummary,
+  RejectionError
+}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

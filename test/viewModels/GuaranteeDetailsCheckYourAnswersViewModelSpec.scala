@@ -18,7 +18,7 @@ package viewModels
 
 import base.SpecBase
 import generators.Generators
-import models.GuaranteeType.{GuaranteeWaiver, nonGuaranteeReferenceRoute}
+import models.GuaranteeType.{nonGuaranteeReferenceRoute, GuaranteeWaiver}
 import models.reference.{CountryCode, CustomsOffice}
 import models.{GuaranteeType, Index}
 import org.scalacheck.Gen

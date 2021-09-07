@@ -18,7 +18,7 @@ package viewModels.sections
 
 import play.api.i18n.Messages
 import play.api.libs.functional.syntax.{unlift, _}
-import play.api.libs.json.{OWrites, __}
+import play.api.libs.json.{__, OWrites}
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels.Text
 import viewModels.AddAnotherViewModel

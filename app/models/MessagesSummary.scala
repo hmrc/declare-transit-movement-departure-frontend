@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Reads, __}
+import play.api.libs.json.{__, Reads}
 
 case class MessagesSummary(departureId: DepartureId, messagesLocation: MessagesLocation)
 

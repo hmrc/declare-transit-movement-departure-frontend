@@ -36,7 +36,7 @@ import play.twirl.api.Html
 import renderer.Renderer
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
 import uk.gov.hmrc.auth.{core => authClient}
 import uk.gov.hmrc.http.HeaderCarrier
 

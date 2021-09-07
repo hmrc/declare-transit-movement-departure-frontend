@@ -21,7 +21,12 @@ import models._
 import models.reference.{CountryCode, CustomsOffice}
 import navigation.Navigator
 import pages.addItems.securityDetails._
-import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
+import pages.safetyAndSecurity.{
+  AddCommercialReferenceNumberAllItemsPage,
+  AddSafetyAndSecurityConsigneePage,
+  AddSafetyAndSecurityConsignorPage,
+  CircumstanceIndicatorPage
+}
 import pages.{OfficeOfDeparturePage, Page}
 import play.api.mvc.Call
 

@@ -17,7 +17,7 @@
 package models.messages.goodsitem
 
 import cats.syntax.all._
-import com.lucidchart.open.xtract.{XmlReader, __}
+import com.lucidchart.open.xtract.{__, XmlReader}
 import xml.XMLWrites
 
 import scala.xml.NodeSeq

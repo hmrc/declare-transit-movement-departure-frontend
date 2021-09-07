@@ -26,7 +26,6 @@ import xml.XMLWrites.XMLWritesOps
 
 import scala.xml.NodeSeq
 
-//format off
 class SecurityDetailsSubmissionSpec
     extends AnyFreeSpec
     with Matchers
@@ -56,4 +55,3 @@ class SecurityDetailsSubmissionSpec
     }
   }
 }
-//format on

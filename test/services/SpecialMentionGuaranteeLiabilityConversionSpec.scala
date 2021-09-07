@@ -19,7 +19,7 @@ package services
 import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import generators.ModelGenerators
-import models.GuaranteeType.{GuaranteeNotRequired, GuaranteeWaiver, nonGuaranteeReferenceRoute}
+import models.GuaranteeType.{nonGuaranteeReferenceRoute, GuaranteeNotRequired, GuaranteeWaiver}
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.{CurrencyCode, DefaultLiabilityAmount, OtherLiabilityAmount}
 import models.messages.goodsitem.SpecialMentionGuaranteeLiabilityAmount

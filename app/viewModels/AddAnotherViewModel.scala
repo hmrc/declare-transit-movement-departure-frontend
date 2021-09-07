@@ -18,16 +18,15 @@ package viewModels
 
 import play.api.i18n.Messages
 import play.api.libs.functional.syntax.{unlift, _}
-import play.api.libs.json.{OWrites, __}
+import play.api.libs.json.{__, OWrites}
 import uk.gov.hmrc.viewmodels.Text
 
 case class AddAnotherViewModel(href: String, content: Text)
 
 object AddAnotherViewModel {
 
-  implicit def writes(implicit messages: Messages): OWrites[AddAnotherViewModel] =
-    (
-      (__ \ "href").write[String] and
-        (__ \ "content").write[Text]
-    )(unlift(AddAnotherViewModel.unapply))
+  implicit def writes(implicit messages: Messages): OWrites[AddAnotherViewModel] = (
+    (__ \ "href").write[String] and
+      (__ \ "content").write[Text]
+  )(unlift(AddAnotherViewModel.unapply))
 }

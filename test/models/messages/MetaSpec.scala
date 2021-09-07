@@ -32,7 +32,6 @@ import scala.xml.NodeSeq
 
 class MetaSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with MessagesModelGenerators with StreamlinedXmlEquality with OptionValues {
 
-  //format off
   "MetaSpec" - {
 
     val syntaxIdentifier     = "UNOC"
@@ -122,5 +121,4 @@ class MetaSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks w
       }
     }
   }
-  // format: on
 }

@@ -16,7 +16,7 @@
 
 package models.messages
 
-import com.lucidchart.open.xtract.{XmlReader, __}
+import com.lucidchart.open.xtract.{__, XmlReader}
 import xml.XMLWrites
 
 case class Itinerary(countryCode: String)

@@ -16,7 +16,7 @@
 
 package models.messages.trader
 
-import com.lucidchart.open.xtract.{XmlReader, __}
+import com.lucidchart.open.xtract.{__, XmlReader}
 import xml.XMLWrites
 
 case class TraderAuthorisedConsignee(eori: String)

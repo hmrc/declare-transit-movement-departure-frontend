@@ -17,7 +17,7 @@
 package models.messages.header
 
 import cats.syntax.all._
-import com.lucidchart.open.xtract.{XmlReader, __}
+import com.lucidchart.open.xtract.{__, XmlReader}
 import models.messages.escapeXml
 import xml.XMLWrites
 

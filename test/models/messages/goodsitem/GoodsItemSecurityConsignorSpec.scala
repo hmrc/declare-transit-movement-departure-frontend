@@ -27,7 +27,6 @@ import xml.XMLWrites._
 
 import scala.xml.NodeSeq
 
-//format off
 class GoodsItemSecurityConsignorSpec
     extends AnyFreeSpec
     with Matchers
@@ -96,4 +95,3 @@ class GoodsItemSecurityConsignorSpec
     }
   }
 }
-//format on
