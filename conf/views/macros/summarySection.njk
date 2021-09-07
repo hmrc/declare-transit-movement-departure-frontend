@@ -10,13 +10,14 @@
 
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__value govuk-!-width-one-half">
-                        {% if section.status == "completed" %}
-                           <a class="govuk-link" href={{ section.href }}>{{ messages(section.name, messages("site.taskList.edit")) }}</a>
-                        {% elif section.status == "cannotStartYet" %}
-                            <p class="govuk-body">{{ messages(section.name + ".cannotStart") }}</p>
-                        {% else %}
-                            <a class="govuk-link" href={{ section.href }}>{{ messages(section.name, messages("site.taskList.add")) }}</a>
-                        {% endif %}
+                        {% switch section.status %}
+                            {% case "completed" %}
+                                <a class="govuk-link" href={{ section.href }}>{{ messages(section.name, messages("site.taskList.edit")) }}</a>
+                            {% case "cannotStartYet" %}
+                                <p class="govuk-body">{{ messages(section.name + ".cannotStart") }}</p>
+                            {% default %}
+                                <a class="govuk-link" href={{ section.href }}>{{ messages(section.name, messages("site.taskList.add")) }}</a>
+                        {% endswitch %}
                     </dt>
 
                     <dd class="govuk-summary-list__actions">
