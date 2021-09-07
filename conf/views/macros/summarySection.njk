@@ -1,33 +1,30 @@
 {% macro summarySection(sectionTitle, sections) %}
 
-   {% if sectionTitle %}
+    {% if sectionTitle %}
         <h2 class="govuk-heading-m">{{ sectionTitle }}</h2>
-   {%  endif %}
+    {%  endif %}
 
     <div class="govuk-summary-sectionRows__row">
-       <dl class="govuk-summary-list govuk-summary-list govuk-!-margin-bottom-9">
+        <dl class="govuk-summary-list govuk-summary-list govuk-!-margin-bottom-9">
             {% for section in sections %}
 
                 <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__value govuk-!-width-one-half">
+                    <dt class="govuk-summary-list__value govuk-!-width-one-half">
                         {% if section.status == "completed" %}
-                           <a class="govuk-link" href={{section.href}} >{{ messages(section.name, messages("site.taskList.edit")) }}
-                            <span class="govuk-visually-hidden"> {{ messages(section.name, messages("site.taskList.edit")) }}</span></a>
+                           <a class="govuk-link" href={{ section.href }}>{{ messages(section.name, messages("site.taskList.edit")) }}</a>
                         {% elif section.status == "cannotStartYet" %}
-                            <p class="govuk-body">{{ messages(section.name+".cannotStart") }}
-                             <span class="govuk-visually-hidden"> {{ messages(section.name+".cannotStart") }}</span></p>
+                            <p class="govuk-body">{{ messages(section.name + ".cannotStart") }}</p>
                         {% else %}
-                           <a class="govuk-link" href={{section.href}} >{{ messages(section.name, messages("site.taskList.add")) }}
-                            <span class="govuk-visually-hidden"> {{ messages(section.name, messages("site.taskList.add")) }}</span></a>
+                            <a class="govuk-link" href={{ section.href }}>{{ messages(section.name, messages("site.taskList.add")) }}</a>
                         {% endif %}
-                  </dt>
+                    </dt>
 
                     <dd class="govuk-summary-list__actions">
-                        {{ messages("site."+section.status) }}
+                        {{ messages("site." + section.status) }}
                     </dd>
                 </div>
-             {% endfor %}
-          </dl>
-       </div>
+            {% endfor %}
+        </dl>
+    </div>
 
 {% endmacro %}

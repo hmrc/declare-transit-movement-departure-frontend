@@ -19,23 +19,23 @@
           {{ messages("declarationSummary.heading") }}
         </h1>
 
-         {{ summarySectionMacro(messages("declarationSummary.departureDetails"), sections) }}
+        {{ summarySectionMacro(messages("declarationSummary.departureDetails"), sections) }}
 
           {% if isDeclarationComplete %}
             <form action="{{ onSubmitUrl }}" method="post">
-                {{ csrf() | safe }}
+              {{ csrf() | safe }}
 
-                <h2 class="govuk-heading-m">{{ messages("declarationSummary.submissionSubheader") }}</h2>
+              <h2 class="govuk-heading-m">{{ messages("declarationSummary.submissionSubheader") }}</h2>
 
-                <p class="govuk-body">
-                    {{ messages("declarationSummary.submissionHonestyPledge") }}
-                </p>
+              <p class="govuk-body">
+                {{ messages("declarationSummary.submissionHonestyPledge") }}
+              </p>
 
-                {{ govukButton({
-                  text: messages("declarationSummary.confirmAndSend"),
-                  preventDoubleClick: true,
-                  attributes: {id:"submit"}
-                }) }}
+              {{ govukButton({
+                text: messages("declarationSummary.confirmAndSend"),
+                preventDoubleClick: true,
+                attributes: {id:"submit"}
+              }) }}
             </form>
          {% endif %}
 
