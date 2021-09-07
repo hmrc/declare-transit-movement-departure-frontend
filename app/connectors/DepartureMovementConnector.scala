@@ -18,19 +18,18 @@ package connectors
 
 import com.lucidchart.open.xtract.XmlReader
 import config.FrontendAppConfig
-
-import javax.inject.Inject
-import xml.XMLWrites._
+import logging.Logging
 import models.messages.DeclarationRequest
 import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage, DepartureId, GuaranteeNotValidMessage, MessagesSummary, ResponseMessage}
 import play.api.http.HeaderNames
 import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import xml.XMLWrites._
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
-import logging.Logging
 
 class DepartureMovementConnector @Inject() (val appConfig: FrontendAppConfig, http: HttpClient)(implicit ec: ExecutionContext) extends Logging {
   private val channel: String = "web"

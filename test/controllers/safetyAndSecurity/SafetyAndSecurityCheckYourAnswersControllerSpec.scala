@@ -18,7 +18,10 @@ package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
+import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
+import models.reference.{CircumstanceIndicator, Country, CountryCode, MethodOfPayment}
+import models.{CircumstanceIndicatorList, CountryList, MethodOfPaymentList, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -32,9 +35,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import controllers.{routes => mainRoutes}
-import models.{CircumstanceIndicatorList, CountryList, MethodOfPaymentList, NormalMode}
-import models.reference.{CircumstanceIndicator, Country, CountryCode, MethodOfPayment}
 
 import scala.concurrent.Future
 

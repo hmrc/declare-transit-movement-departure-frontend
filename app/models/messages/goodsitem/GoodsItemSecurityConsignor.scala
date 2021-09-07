@@ -17,8 +17,7 @@
 package models.messages.goodsitem
 
 import cats.implicits.catsSyntaxTuple5Semigroupal
-import com.lucidchart.open.xtract.{__, XmlReader}
-import models.LanguageCodeEnglish
+import com.lucidchart.open.xtract.{XmlReader, __}
 import xml.XMLWrites
 //format off
 trait GoodsItemSecurityConsignor

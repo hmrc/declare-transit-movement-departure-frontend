@@ -16,12 +16,12 @@
 
 package repositories
 
-import java.time.LocalDateTime
-import javax.inject.{Inject, Singleton}
-import models.{EoriNumber, Id, LocalReferenceNumber, MongoDateTimeFormats, UserAnswers}
+import models.{EoriNumber, LocalReferenceNumber, MongoDateTimeFormats, UserAnswers}
 import play.api.libs.json._
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
 
+import java.time.LocalDateTime
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

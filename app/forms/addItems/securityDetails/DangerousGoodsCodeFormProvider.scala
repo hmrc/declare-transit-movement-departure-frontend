@@ -17,10 +17,11 @@
 package forms.addItems.securityDetails
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.DangerousGoodsCodeList
 import models.reference.DangerousGoodsCode
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class DangerousGoodsCodeFormProvider @Inject() extends Mappings {
 

@@ -20,9 +20,9 @@ import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import models.reference._
 import models.{CommonAddress, EoriNumber}
-import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
+import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
 
 class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

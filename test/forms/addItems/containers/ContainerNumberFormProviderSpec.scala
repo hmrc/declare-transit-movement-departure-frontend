@@ -17,9 +17,7 @@
 package forms.addItems.containers
 
 import forms.behaviours.StringFieldBehaviours
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class ContainerNumberFormProviderSpec extends StringFieldBehaviours {
 

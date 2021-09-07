@@ -21,9 +21,8 @@ import cats.implicits._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
 import models.DeclarationType.{Option2, Option3}
 import models.Index
-import models.reference.{CountryCode, CountryOfDispatch}
-import pages.addItems._
 import pages.DeclarationTypePage
+import pages.addItems._
 
 final case class PreviousReferences(
   referenceType: String,

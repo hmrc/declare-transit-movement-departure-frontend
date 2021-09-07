@@ -18,11 +18,12 @@ package navigation
 
 import controllers.safetyAndSecurity.routes
 import derivable.DeriveNumberOfCountryOfRouting
-import javax.inject.{Inject, Singleton}
 import models._
-import pages.safetyAndSecurity.{PlaceOfUnloadingCodePage, _}
+import pages.safetyAndSecurity._
 import pages.{ModeAtBorderPage, Page}
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class SafetyAndSecurityNavigator @Inject() () extends Navigator {

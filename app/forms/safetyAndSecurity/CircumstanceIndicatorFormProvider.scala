@@ -17,10 +17,11 @@
 package forms.safetyAndSecurity
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.CircumstanceIndicatorList
 import models.reference.CircumstanceIndicator
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class CircumstanceIndicatorFormProvider @Inject() extends Mappings {
 

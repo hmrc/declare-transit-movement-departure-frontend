@@ -19,6 +19,7 @@ package controllers.safetyAndSecurity
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
+import models.journeyDomain.SafetyAndSecurity
 import models.{DependentSection, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
@@ -29,8 +30,6 @@ import viewModels.SafetyAndSecurityCheckYourAnswersViewModel
 import viewModels.sections.Section
 
 import javax.inject.Inject
-import models.journeyDomain.SafetyAndSecurity
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class SafetyAndSecurityCheckYourAnswersController @Inject() (

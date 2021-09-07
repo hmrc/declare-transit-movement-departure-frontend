@@ -18,11 +18,11 @@ package services
 
 import cats.implicits._
 import connectors.DepartureMovementConnector
-import javax.inject.Inject
-import models.journeyDomain.ReaderError
 import models.UserAnswers
+import models.journeyDomain.ReaderError
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationSubmissionService @Inject() (

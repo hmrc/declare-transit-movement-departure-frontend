@@ -18,13 +18,12 @@ package models.journeyDomain.traderDetails
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import models.ProcedureType.Simplified
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, ProcedureType, UserAnswers}
+import models.{CommonAddress, EoriNumber, ProcedureType}
 import org.scalatest.TryValues
-import pages.traderDetails._
 import pages._
+import pages.traderDetails._
 
 class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 

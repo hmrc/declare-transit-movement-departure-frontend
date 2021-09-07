@@ -16,24 +16,13 @@
 
 package connectors
 
-import java.time.LocalDate
-
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import generators.MessagesModelGenerators
 import helper.WireMockServerHandler
 import models.messages.DeclarationRequest
-import models.{
-  CancellationDecisionUpdateMessage,
-  DeclarationRejectionMessage,
-  GuaranteeNotValidMessage,
-  InvalidGuaranteeCode,
-  InvalidGuaranteeReasonCode,
-  MessagesLocation,
-  MessagesSummary,
-  RejectionError
-}
+import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage, GuaranteeNotValidMessage, InvalidGuaranteeCode, InvalidGuaranteeReasonCode, MessagesLocation, MessagesSummary, RejectionError}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -43,6 +32,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 
+import java.time.LocalDate
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 

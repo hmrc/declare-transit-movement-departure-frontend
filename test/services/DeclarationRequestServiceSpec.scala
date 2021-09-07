@@ -20,9 +20,11 @@ import base.{GeneratorSpec, MockServiceApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
-import models.journeyDomain.{JourneyDomain, RouteDetailsWithTransitInformation}
+import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
 import models.journeyDomain.TransportDetails.InlandMode.Rail
+import models.journeyDomain.{JourneyDomain, RouteDetailsWithTransitInformation}
 import models.messages.InterchangeControlReference
+import models.messages.customsoffice.CustomsOfficeTransit
 import models.messages.trader.TraderPrincipalWithEori
 import models.reference.{Country, CountryCode}
 import models.userAnswerScenarios.{Scenario1, Scenario7}
@@ -36,12 +38,8 @@ import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, Prin
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
+
 import java.time.LocalDateTime
-
-import cats.data.NonEmptyList
-import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
-import models.messages.customsoffice.CustomsOfficeTransit
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

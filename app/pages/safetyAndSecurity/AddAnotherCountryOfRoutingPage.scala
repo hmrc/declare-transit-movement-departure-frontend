@@ -16,8 +16,7 @@
 
 package pages.safetyAndSecurity
 
-import pages.QuestionPage
-import pages.ClearAllAddItems
+import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 
 case object AddAnotherCountryOfRoutingPage extends QuestionPage[Boolean] with ClearAllAddItems[Boolean] {

@@ -16,10 +16,11 @@
 
 package forms
 
-import javax.inject.Inject
 import forms.mappings.Mappings
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
 import play.api.data.Form
+import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
+import javax.inject.Inject
 
 class DeclarationPlaceFormProvider @Inject() extends Mappings {
 

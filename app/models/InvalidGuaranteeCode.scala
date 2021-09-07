@@ -16,7 +16,7 @@
 
 package models
 
-import com.lucidchart.open.xtract.{__, XmlReader}
+import com.lucidchart.open.xtract.{XmlReader, __}
 import play.api.libs.json.{Json, Writes}
 
 sealed abstract class InvalidGuaranteeCode(val value: String)

@@ -19,8 +19,8 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import org.scalacheck.Gen
-import pages.addItems.CommodityCodePage
 import pages._
+import pages.addItems.CommodityCodePage
 
 class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

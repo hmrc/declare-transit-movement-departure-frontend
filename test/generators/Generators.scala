@@ -16,12 +16,12 @@
 
 package generators
 
-import java.time._
-
 import cats.data.NonEmptyList
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
 import org.scalacheck.{Arbitrary, Gen, Shrink}
+
+import java.time._
 
 // TODO: Move away from mixing style to using objects
 trait Generators extends UserAnswersGenerator with ModelGenerators {

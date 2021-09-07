@@ -18,13 +18,13 @@ package navigation
 
 import controllers.goodsSummary.routes
 import derivable.DeriveNumberOfSeals
-
-import javax.inject.{Inject, Singleton}
 import models.ProcedureType.{Normal, Simplified}
 import models._
 import pages._
-import play.api.mvc.Call
 import pages.generalInformation.PreLodgeDeclarationPage
+import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class GoodsSummaryNavigator @Inject() () extends Navigator {

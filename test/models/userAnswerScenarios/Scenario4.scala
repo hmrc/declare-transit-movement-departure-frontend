@@ -32,28 +32,11 @@ import models.journeyDomain.TransportDetails.DetailsAtBorder.SameDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.Rail
 import models.journeyDomain.addItems.ItemsSecurityTraderDetails
 import models.journeyDomain.traderDetails.{PrincipalTraderPersonalInfo, TraderDetails}
-import models.journeyDomain.{
-  Container,
-  CurrencyCode,
-  DefaultLiabilityAmount,
-  GoodsSummary,
-  ItemDetails,
-  ItemSection,
-  Itinerary,
-  JourneyDomain,
-  OtherLiabilityAmount,
-  PreTaskListDetails,
-  PreviousReferences,
-  RouteDetails,
-  RouteDetailsWithTransitInformation,
-  SafetyAndSecurity,
-  SpecialMentionDomain,
-  StandardDocument,
-  TransportDetails
-}
+import models.journeyDomain.{Container, CurrencyCode, DefaultLiabilityAmount, GoodsSummary, ItemDetails, ItemSection, Itinerary, JourneyDomain, OtherLiabilityAmount, PreTaskListDetails, PreviousReferences, RouteDetailsWithTransitInformation, SafetyAndSecurity, SpecialMentionDomain, StandardDocument, TransportDetails}
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
+
 import java.time.LocalDateTime
 
 case object Scenario4 extends UserAnswerScenario {

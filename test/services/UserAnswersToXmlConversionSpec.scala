@@ -17,8 +17,8 @@
 package services
 
 import commonTestUtils.UserAnswersSpecHelper
-import models.userAnswerScenarios.{Scenario1, Scenario2, Scenario3, Scenario4, Scenario5, Scenario6, Scenario7}
 import models.messages.InterchangeControlReference
+import models.userAnswerScenarios._
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.EitherValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}

@@ -20,18 +20,7 @@ import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
 import models.reference._
-import models.{
-  CircumstanceIndicatorList,
-  CountryList,
-  CustomsOfficeList,
-  DangerousGoodsCodeList,
-  DocumentTypeList,
-  MethodOfPaymentList,
-  PackageTypeList,
-  PreviousReferencesDocumentTypeList,
-  SpecialMentionList,
-  TransportModeList
-}
+import models.{CircumstanceIndicatorList, CountryList, CustomsOfficeList, DangerousGoodsCodeList, DocumentTypeList, MethodOfPaymentList, PackageTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList, TransportModeList}
 import org.scalacheck.Gen
 import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

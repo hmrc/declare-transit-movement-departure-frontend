@@ -16,16 +16,16 @@
 
 package navigation
 
+import cats.implicits._
 import controllers.routeDetails.routes
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.DeclarationType.Option4
-import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
 import models._
 import pages._
 import pages.routeDetails._
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class RouteDetailsNavigator @Inject() () extends Navigator {

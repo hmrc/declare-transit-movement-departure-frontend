@@ -16,10 +16,11 @@
 
 package forms
 
-import javax.inject.Inject
 import forms.mappings.Mappings
 import models.LocalReferenceNumber
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class LocalReferenceNumberFormProvider @Inject() extends Mappings {
 

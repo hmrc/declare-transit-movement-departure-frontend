@@ -20,6 +20,7 @@ import controllers.actions._
 import forms.AgreedLocationOfGoodsFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
+import navigation.annotations.GoodsSummary
 import pages.AgreedLocationOfGoodsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -28,7 +29,6 @@ import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import navigation.annotations.GoodsSummary
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

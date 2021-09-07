@@ -16,12 +16,12 @@
 
 package forms.mappings
 
-import java.time.{LocalDate, LocalDateTime}
-
 import models.{Enumerable, LocalReferenceNumber}
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.data.format.Formats.ignoredFormat
+
+import java.time.{LocalDate, LocalDateTime}
 
 trait Mappings extends Formatters with Constraints {
 

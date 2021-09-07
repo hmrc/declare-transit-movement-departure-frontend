@@ -22,7 +22,6 @@ import navigation._
 import navigation.annotations._
 import navigation.annotations.addItems._
 import navigation.annotations.addItemsNavigators._
-
 import services.{DateTimeService, DateTimeServiceImpl}
 
 class Module extends AbstractModule {

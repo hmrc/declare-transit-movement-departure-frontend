@@ -16,7 +16,6 @@
 
 package models.journeyDomain
 
-import java.time.LocalDate
 import cats.implicits._
 import derivable.DeriveNumberOfSeals
 import models.ProcedureType.{Normal, Simplified}
@@ -24,6 +23,8 @@ import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.GoodSummaryDetails
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
+
+import java.time.LocalDate
 
 case class GoodsSummary(
   loadingPlace: Option[String],

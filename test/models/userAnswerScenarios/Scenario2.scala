@@ -28,19 +28,11 @@ import models.journeyDomain.TransportDetails.DetailsAtBorder.NewDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.NonSpecialMode
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.ModeWithNationality
 import models.journeyDomain.traderDetails.{ConsigneeDetails, ConsignorDetails, PrincipalTraderEoriInfo, TraderDetails}
-import models.journeyDomain.{
-  GoodsSummary,
-  ItemDetails,
-  ItemSection,
-  JourneyDomain,
-  PreTaskListDetails,
-  RouteDetails,
-  RouteDetailsWithTransitInformation,
-  TransportDetails
-}
+import models.journeyDomain.{GoodsSummary, ItemDetails, ItemSection, JourneyDomain, PreTaskListDetails, RouteDetailsWithTransitInformation, TransportDetails}
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, UserAnswers}
 import play.api.libs.json.Json
+
 import java.time.{LocalDate, LocalDateTime}
 
 case object Scenario2 extends UserAnswerScenario {

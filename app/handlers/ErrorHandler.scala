@@ -16,7 +16,6 @@
 
 package handlers
 
-import javax.inject.{Inject, Singleton}
 import models.requests.DataRequest
 import play.api.http.HeaderNames.CACHE_CONTROL
 import play.api.http.HttpErrorHandler
@@ -31,6 +30,7 @@ import uk.gov.hmrc.nunjucks.NunjucksSupport
 import uk.gov.hmrc.play.bootstrap.http.ApplicationException
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 // NOTE: There should be changes to bootstrap to make this easier, the API in bootstrap should allow a `Future[Html]` rather than just an `Html`

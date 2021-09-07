@@ -17,10 +17,8 @@
 package pages
 
 import base.SpecBase
-import models.UserAnswers
 import models.reference.CountryCode
 import pages.behaviours.PageBehaviours
-import org.scalacheck.Arbitrary.arbitrary
 
 class AddIdAtDeparturePageSpec extends PageBehaviours with SpecBase {
 

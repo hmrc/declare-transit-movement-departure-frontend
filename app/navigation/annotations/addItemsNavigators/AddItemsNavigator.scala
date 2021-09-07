@@ -16,7 +16,6 @@
 
 package navigation.annotations.addItemsNavigators
 
-import controllers.addItems.{routes => addItemsRoutes}
 import controllers.{routes => mainRoutes}
 import derivable._
 import models._

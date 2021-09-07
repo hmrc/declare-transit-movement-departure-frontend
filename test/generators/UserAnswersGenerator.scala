@@ -17,7 +17,7 @@
 package generators
 
 import models.UserAnswers
-import models.userAnswerScenarios.{Scenario1, Scenario2, Scenario3, Scenario4, UserAnswerScenario}
+import models.userAnswerScenarios._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues

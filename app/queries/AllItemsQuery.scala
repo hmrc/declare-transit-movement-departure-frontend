@@ -17,7 +17,7 @@
 package queries
 
 import pages.QuestionPage
-import play.api.libs.json.{JsArray, JsObject, JsPath}
+import play.api.libs.json.{JsArray, JsPath}
 
 object AllItemsQuery extends QuestionPage[JsArray] {
   override def path: JsPath = JsPath \ Constants.items

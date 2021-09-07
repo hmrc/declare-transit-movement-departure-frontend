@@ -19,7 +19,7 @@ package controllers.guaranteeDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import forms.guaranteeDetails.GuaranteeTypeFormProvider
 import matchers.JsonMatchers
-import models.{GuaranteeType, Index, NormalMode}
+import models.{GuaranteeType, NormalMode}
 import navigation.annotations.GuaranteeDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

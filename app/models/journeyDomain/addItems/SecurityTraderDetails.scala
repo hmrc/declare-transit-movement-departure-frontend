@@ -20,9 +20,9 @@ import cats.implicits._
 import models.journeyDomain._
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CommonAddress, EoriNumber, Index}
-import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
 import pages.addItems.traderSecurityDetails._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddSafetyAndSecurityConsigneePage, AddSafetyAndSecurityConsignorPage, CircumstanceIndicatorPage}
+import pages.{AddSecurityDetailsPage, OfficeOfDeparturePage}
 
 sealed trait SecurityTraderDetails
 

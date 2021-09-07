@@ -18,7 +18,6 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import models.UserAnswers
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{SameDetailsAtBorder, _}
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, _}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}

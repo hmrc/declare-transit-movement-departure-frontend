@@ -20,15 +20,11 @@ import base.{GeneratorSpec, SpecBase}
 import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
-import models.{CommonAddress, Index}
-import models.journeyDomain.ItemTraderDetails.RequiredDetails
+import models.Index
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
-import models.journeyDomain.addItems.{ItemsSecurityTraderDetails, SecurityPersonalInformation}
-import models.reference.{Country, CountryCode, PackageType}
+import models.reference.PackageType
 import models.userAnswerScenarios.Scenario1
-import org.scalacheck.Gen
-import pages.addItems.{AddMarkPage, DeclareMarkPage, HowManyPackagesPage, TotalPiecesPage}
-import pages.{AddSecurityDetailsPage, ItemTotalGrossMassPage, PackageTypePage}
+import pages.{AddSecurityDetailsPage, ItemTotalGrossMassPage}
 
 class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGenerator with UserAnswersSpecHelper {
 

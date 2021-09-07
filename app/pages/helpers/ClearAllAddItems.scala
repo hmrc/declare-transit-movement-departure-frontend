@@ -18,6 +18,7 @@ package pages
 
 import models.UserAnswers
 import queries.{AllItemsQuery, Settable}
+
 import scala.util.Try
 
 trait ClearAllAddItems[T] extends Settable[T] {

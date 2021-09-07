@@ -19,11 +19,10 @@ package models.journeyDomain
 import cats.data.NonEmptyList
 import cats.implicits._
 import derivable.DeriveNumberOfGuarantees
-import models.{GuaranteeType, Index}
-import DefaultLiabilityAmount._
 import models.DeclarationType.Option4
-import models.GuaranteeType.{guaranteeReferenceRoute, TIR}
-import models.journeyDomain.GuaranteeDetails.{GuaranteeOther, GuaranteeReference}
+import models.GuaranteeType.guaranteeReferenceRoute
+import models.journeyDomain.DefaultLiabilityAmount._
+import models.{GuaranteeType, Index}
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 

@@ -20,14 +20,14 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.OtherReferenceLiabilityAmountFormProvider
 import matchers.JsonMatchers
-import models.{Index, NormalMode}
+import models.NormalMode
 import navigation.annotations.GuaranteeDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{LiabilityAmountPage, OtherReferenceLiabilityAmountPage}
+import pages.LiabilityAmountPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}

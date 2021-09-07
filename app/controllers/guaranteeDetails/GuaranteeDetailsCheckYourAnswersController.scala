@@ -18,8 +18,7 @@ package controllers.guaranteeDetails
 
 import cats.data.NonEmptyList
 import controllers.actions._
-import javax.inject.Inject
-import models.journeyDomain.{GuaranteeDetails, MovementDetails}
+import models.journeyDomain.GuaranteeDetails
 import models.{DependentSection, Index, LocalReferenceNumber, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -29,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.GuaranteeDetailsCheckYourAnswersViewModel
 import viewModels.sections.Section
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class GuaranteeDetailsCheckYourAnswersController @Inject() (

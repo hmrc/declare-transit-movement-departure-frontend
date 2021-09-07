@@ -19,7 +19,7 @@ package models.messages
 import cats.data.NonEmptyList
 import cats.syntax.all._
 import com.lucidchart.open.xtract.XmlReader.strictReadSeq
-import com.lucidchart.open.xtract.{__, XmlReader}
+import com.lucidchart.open.xtract.{XmlReader, __}
 import models.messages.customsoffice.{CustomsOfficeDeparture, CustomsOfficeDestination, CustomsOfficeTransit}
 import models.messages.goodsitem.GoodsItem
 import models.messages.guarantee.Guarantee

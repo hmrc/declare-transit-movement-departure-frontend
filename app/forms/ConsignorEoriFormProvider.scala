@@ -17,12 +17,12 @@
 package forms
 
 import forms.Constants.maxLengthEoriNumber
-
-import javax.inject.Inject
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.{eoriNumberRegex, stringFieldRegex}
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
+import javax.inject.Inject
 
 class ConsignorEoriFormProvider @Inject() extends Mappings {
 

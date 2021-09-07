@@ -16,7 +16,6 @@
 
 package models
 
-import pages.DeclarationTypePage
 import play.api.data.Form
 import uk.gov.hmrc.viewmodels._
 

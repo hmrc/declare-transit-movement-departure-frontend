@@ -16,14 +16,13 @@
 
 package utils
 
-import java.io.StringReader
-import java.net.URL
-
-import javax.xml.parsers.SAXParserFactory
-import javax.xml.validation.Schema
 import org.xml.sax.InputSource
 import org.xml.sax.helpers.DefaultHandler
 
+import java.io.StringReader
+import java.net.URL
+import javax.xml.parsers.SAXParserFactory
+import javax.xml.validation.Schema
 import scala.util.Try
 import scala.xml.factory.XMLLoader
 import scala.xml.{Elem, SAXParseException, SAXParser}

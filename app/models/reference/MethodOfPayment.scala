@@ -16,7 +16,7 @@
 
 package models.reference
 
-import play.api.libs.json.{Json, _}
+import play.api.libs.json._
 
 case class MethodOfPayment(code: String, description: String) {
   override def toString = s"($code) $description"

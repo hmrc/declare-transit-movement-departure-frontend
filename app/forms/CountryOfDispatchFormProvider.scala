@@ -17,10 +17,11 @@
 package forms
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.CountryList
 import models.reference.Country
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class CountryOfDispatchFormProvider @Inject() extends Mappings {
 

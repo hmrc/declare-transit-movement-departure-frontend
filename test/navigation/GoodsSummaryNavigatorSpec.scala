@@ -16,7 +16,6 @@
 
 package navigation
 
-import java.time.LocalDate
 import base.SpecBase
 import controllers.goodsSummary.{routes => goodsSummaryRoute}
 import generators.Generators
@@ -29,6 +28,8 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
 import queries.SealsQuery
+
+import java.time.LocalDate
 
 class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

@@ -21,7 +21,6 @@ import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import models.DeclarationType.{Option1, Option2, Option3}
 import models.{DeclarationType, Index}
-import models.reference.{CountryCode, CountryOfDispatch}
 import org.scalacheck.Gen
 import pages.addItems._
 import pages.{DeclarationTypePage, QuestionPage}

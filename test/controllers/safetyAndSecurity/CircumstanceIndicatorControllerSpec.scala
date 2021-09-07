@@ -21,10 +21,9 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CircumstanceIndicatorFormProvider
 import matchers.JsonMatchers
-import models.ProcedureType.Normal
-import models.{CheckMode, CircumstanceIndicatorList, NormalMode}
 import models.reference.CircumstanceIndicator
 import models.userAnswerScenarios.Scenario1.UserAnswersSpecHelperOps
+import models.{CheckMode, CircumstanceIndicatorList, NormalMode}
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -32,7 +31,6 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 import pages.safetyAndSecurity.{CircumstanceIndicatorPage, PlaceOfUnloadingCodePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder

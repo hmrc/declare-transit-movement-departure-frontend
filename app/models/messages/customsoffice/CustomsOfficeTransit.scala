@@ -17,7 +17,7 @@
 package models.messages.customsoffice
 
 import cats.syntax.all._
-import com.lucidchart.open.xtract.{__, XmlReader}
+import com.lucidchart.open.xtract.{XmlReader, __}
 import models.XMLReads._
 import utils.Format
 import xml.XMLWrites

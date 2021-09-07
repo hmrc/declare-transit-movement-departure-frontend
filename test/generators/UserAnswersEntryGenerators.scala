@@ -19,28 +19,18 @@ package generators
 import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages.{guaranteeDetails, routeDetails, _}
-import pages.addItems.{CommodityCodePage, ConfirmRemoveItemPage, _}
-import pages.addItems.traderDetails._
-import pages.addItems._
-import pages.addItems.specialMentions._
 import pages.addItems.containers.{AddAnotherContainerPage, ConfirmRemoveContainerPage, ContainerNumberPage}
 import pages.addItems.securityDetails._
-import pages.addItems.traderSecurityDetails.{
-  AddSecurityConsigneesEoriPage,
-  AddSecurityConsignorsEoriPage,
-  SecurityConsigneeAddressPage,
-  SecurityConsigneeEoriPage,
-  SecurityConsigneeNamePage,
-  SecurityConsignorAddressPage,
-  SecurityConsignorEoriPage,
-  SecurityConsignorNamePage
-}
+import pages.addItems.specialMentions._
+import pages.addItems.traderDetails._
+import pages.addItems.traderSecurityDetails._
+import pages.addItems._
 import pages.generalInformation._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import pages.routeDetails._
 import pages.safetyAndSecurity._
 import pages.traderDetails._
+import pages._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators {

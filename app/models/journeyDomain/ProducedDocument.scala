@@ -22,9 +22,9 @@ import derivable.DeriveNumberOfDocuments
 import models.DeclarationType.Option4
 import models.reference.CircumstanceIndicator
 import models.{Index, UserAnswers}
-import pages.{AddSecurityDetailsPage, DeclarationTypePage}
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCircumstanceIndicatorPage, AddCommercialReferenceNumberPage, CircumstanceIndicatorPage}
+import pages.{AddSecurityDetailsPage, DeclarationTypePage}
 
 sealed trait ProducedDocument
 

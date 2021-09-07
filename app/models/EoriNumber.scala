@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{__, JsString, Reads, Writes}
+import play.api.libs.json.{JsString, Reads, Writes, __}
 
 case class EoriNumber(value: String)
 

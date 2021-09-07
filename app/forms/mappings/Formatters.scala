@@ -16,9 +16,9 @@
 
 package forms.mappings
 
+import models.{Enumerable, LocalReferenceNumber}
 import play.api.data.FormError
 import play.api.data.format.Formatter
-import models.{Enumerable, LocalReferenceNumber}
 
 import scala.util.control.Exception.nonFatalCatch
 

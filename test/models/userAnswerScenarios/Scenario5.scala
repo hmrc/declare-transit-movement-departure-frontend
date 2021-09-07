@@ -27,34 +27,16 @@ import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.MovementDetails.{DeclarationForSomeoneElse, NormalMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
-import models.journeyDomain.RouteDetailsWithTransitInformation._
 import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
 import models.journeyDomain.TransportDetails.DetailsAtBorder.SameDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.Rail
 import models.journeyDomain.addItems.ItemsSecurityTraderDetails
 import models.journeyDomain.traderDetails.{PrincipalTraderPersonalInfo, TraderDetails}
-import models.journeyDomain.{
-  Container,
-  CurrencyCode,
-  DefaultLiabilityAmount,
-  GoodsSummary,
-  ItemDetails,
-  ItemSection,
-  Itinerary,
-  JourneyDomain,
-  OtherLiabilityAmount,
-  PreTaskListDetails,
-  PreviousReferences,
-  RouteDetails,
-  RouteDetailsWithTransitInformation,
-  SafetyAndSecurity,
-  SpecialMentionDomain,
-  StandardDocument,
-  TransportDetails
-}
+import models.journeyDomain.{Container, CurrencyCode, DefaultLiabilityAmount, GoodsSummary, ItemDetails, ItemSection, Itinerary, JourneyDomain, OtherLiabilityAmount, PreTaskListDetails, PreviousReferences, RouteDetailsWithTransitInformation, SafetyAndSecurity, SpecialMentionDomain, StandardDocument, TransportDetails}
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
+
 import java.time.LocalDateTime
 
 case object Scenario5 extends UserAnswerScenario {

@@ -17,10 +17,11 @@
 package forms.addItems
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
+import javax.inject.Inject
 
 class DeclareMarkFormProvider @Inject() extends Mappings {
 

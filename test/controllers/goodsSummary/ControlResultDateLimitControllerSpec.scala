@@ -16,8 +16,6 @@
 
 package controllers.goodsSummary
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.ControlResultDateLimitFormProvider
@@ -39,6 +37,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 
+import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
 class ControlResultDateLimitControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {

@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.reference.PackageType
 import org.scalacheck.Gen
-import pages.addItems.{DeclareMarkPage, TotalPiecesPage, _}
+import pages.addItems._
 import pages.{PackageTypePage, QuestionPage}
 
 class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {

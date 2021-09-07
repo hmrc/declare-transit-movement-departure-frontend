@@ -25,7 +25,7 @@ import models._
 import models.reference.CountryCode
 import pages.guaranteeDetails._
 import pages.routeDetails.DestinationOfficePage
-import pages.{AddAnotherGuaranteePage, _}
+import pages._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}

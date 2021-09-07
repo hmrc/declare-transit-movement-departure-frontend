@@ -18,8 +18,8 @@ package models.journeyDomain
 
 import cats.implicits._
 import models.ProcedureType.{Normal, Simplified}
+import models.RepresentativeCapacity
 import models.journeyDomain.MovementDetails.DeclarationForSomeoneElseAnswer
-import models.{DeclarationType, RepresentativeCapacity}
 import pages._
 import pages.generalInformation._
 

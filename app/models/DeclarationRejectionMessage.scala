@@ -16,12 +16,13 @@
 
 package models
 
-import java.time.LocalDate
 import cats.syntax.all._
-import com.lucidchart.open.xtract.{__, XmlReader}
-import play.api.libs.json.{Json, OWrites}
 import com.lucidchart.open.xtract.XmlReader.strictReadSeq
+import com.lucidchart.open.xtract.{XmlReader, __}
 import models.XMLReads._
+import play.api.libs.json.{Json, OWrites}
+
+import java.time.LocalDate
 
 case class DeclarationRejectionMessage(reference: String, rejectionDate: LocalDate, reason: Option[String], errors: Seq[RejectionError])
 

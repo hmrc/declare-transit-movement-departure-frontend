@@ -18,9 +18,9 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import models.domain.StringFieldRegex._
+import models.messages.guarantee.Guarantee.Constants._
 import org.scalacheck.Gen
 import play.api.data.{Field, FormError}
-import models.messages.guarantee.Guarantee.Constants._
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class LiabilityAmountFormProviderSpec extends StringFieldBehaviours {

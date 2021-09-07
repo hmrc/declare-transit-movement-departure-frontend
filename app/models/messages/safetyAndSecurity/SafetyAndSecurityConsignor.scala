@@ -17,7 +17,7 @@
 package models.messages.safetyAndSecurity
 
 import cats.syntax.all._
-import com.lucidchart.open.xtract.{__, XmlReader}
+import com.lucidchart.open.xtract.{XmlReader, __}
 import xml.XMLWrites
 
 sealed trait SafetyAndSecurityConsignor

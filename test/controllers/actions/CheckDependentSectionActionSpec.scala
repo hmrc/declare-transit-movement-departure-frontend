@@ -22,21 +22,12 @@ import generators.Generators
 import models.DeclarationType.Option1
 import models.ProcedureType.Normal
 import models.RepresentativeCapacity.Direct
-import models.journeyDomain.PreTaskListDetails
 import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
-import models.{DependentSection, EoriNumber, ProcedureType, UserAnswers}
-import org.scalacheck.Arbitrary.arbitrary
+import models.{DependentSection, EoriNumber, UserAnswers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import pages._
-import pages.generalInformation.{
-  ContainersUsedPage,
-  DeclarationForSomeoneElsePage,
-  DeclarationPlacePage,
-  PreLodgeDeclarationPage,
-  RepresentativeCapacityPage,
-  RepresentativeNamePage
-}
+import pages.generalInformation._
 import play.api.mvc.{AnyContent, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

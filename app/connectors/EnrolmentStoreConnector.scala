@@ -21,9 +21,9 @@ import logging.Logging
 import models.QueryGroupsEnrolmentsResponseModel
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import javax.inject.Inject
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class EnrolmentStoreConnector @Inject() (val config: FrontendAppConfig, val http: HttpClient)(implicit ec: ExecutionContext) extends Logging {

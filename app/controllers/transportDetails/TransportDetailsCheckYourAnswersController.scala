@@ -19,6 +19,7 @@ package controllers.transportDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
+import models.journeyDomain.TransportDetails
 import models.{DependentSection, LocalReferenceNumber, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -27,10 +28,8 @@ import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.TransportDetailsCheckYourAnswersViewModel
 import viewModels.sections.Section
-import javax.inject.Inject
-import models.journeyDomain.TransportDetails
-import models.journeyDomain.traderDetails.TraderDetails
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class TransportDetailsCheckYourAnswersController @Inject() (

@@ -16,8 +16,6 @@
 
 package models
 
-import java.time.LocalDate
-
 import com.lucidchart.open.xtract.XmlReader
 import generators.Generators
 import org.scalatest.OptionValues
@@ -25,6 +23,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
+import java.time.LocalDate
 import scala.xml.Elem
 
 class CancellationDecisionUpdateMessageSpec extends AnyFreeSpec with Generators with ScalaCheckPropertyChecks with Matchers with OptionValues {

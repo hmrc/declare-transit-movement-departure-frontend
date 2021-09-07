@@ -17,6 +17,7 @@
 package models
 
 import play.api.libs.json._
+
 import java.util.UUID
 
 final case class Id(uuid: String)

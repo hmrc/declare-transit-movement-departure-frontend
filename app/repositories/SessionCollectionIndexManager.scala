@@ -17,12 +17,11 @@
 package repositories
 
 import logging.Logging
-
-import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import reactivemongo.api.indexes.IndexType
 import reactivemongo.bson.BSONDocument
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

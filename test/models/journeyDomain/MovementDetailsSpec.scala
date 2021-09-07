@@ -24,14 +24,7 @@ import models.RepresentativeCapacity.Direct
 import models.journeyDomain.MovementDetails.{DeclarationForSelf, DeclarationForSomeoneElse, NormalMovementDetails, SimplifiedMovementDetails}
 import org.scalacheck.Gen
 import pages._
-import pages.generalInformation.{
-  ContainersUsedPage,
-  DeclarationForSomeoneElsePage,
-  DeclarationPlacePage,
-  PreLodgeDeclarationPage,
-  RepresentativeCapacityPage,
-  RepresentativeNamePage
-}
+import pages.generalInformation._
 
 class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

@@ -16,11 +16,12 @@
 
 package forms
 
-import javax.inject.Inject
 import forms.mappings.Mappings
 import models.TransportModeList
 import models.reference.TransportMode
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class ModeCrossingBorderFormProvider @Inject() extends Mappings {
 

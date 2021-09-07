@@ -17,6 +17,7 @@
 package controllers.traderDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import controllers.{routes => mainRoutes}
 import forms.PrincipalTirHolderIdFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
@@ -35,7 +36,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import controllers.{routes => mainRoutes}
 
 import scala.concurrent.Future
 

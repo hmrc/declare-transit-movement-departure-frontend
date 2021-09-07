@@ -19,7 +19,7 @@ package controllers
 import base.{MockNunjucksRendererApp, SpecBase}
 import matchers.JsonMatchers.containJson
 import models.InvalidGuaranteeCode.G01
-import models.{DepartureId, GuaranteeNotValidMessage, InvalidGuaranteeReasonCode}
+import models.{GuaranteeNotValidMessage, InvalidGuaranteeReasonCode}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, times, verify, when}

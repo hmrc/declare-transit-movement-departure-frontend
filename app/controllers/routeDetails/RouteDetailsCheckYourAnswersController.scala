@@ -20,8 +20,6 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import derivable.DeriveNumberOfOfficeOfTransits
-
-import javax.inject.Inject
 import models.journeyDomain.RouteDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
@@ -30,6 +28,7 @@ import pages.DeclarationTypePage
 import pages.routeDetails.MovementDestinationCountryPage
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.http.HeaderCarrier
@@ -37,8 +36,8 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import utils.RouteDetailsCheckYourAnswersHelper
 import viewModels.sections.Section
-import play.api.libs.json.Json
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RouteDetailsCheckYourAnswersController @Inject() (

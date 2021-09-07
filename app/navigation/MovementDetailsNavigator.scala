@@ -17,13 +17,12 @@
 package navigation
 
 import controllers.movementDetails.routes
-
-import javax.inject.{Inject, Singleton}
-import models.ProcedureType._
 import models._
 import pages._
 import pages.generalInformation._
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class MovementDetailsNavigator @Inject() () extends Navigator {

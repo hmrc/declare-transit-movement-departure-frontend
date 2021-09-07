@@ -19,14 +19,14 @@ package controllers.actions
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.{EnrolmentStoreConnector}
+import connectors.EnrolmentStoreConnector
 import controllers.actions.AuthActionSpec._
 import controllers.routes
 import matchers.JsonMatchers.containJson
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
-import play.api.{Application, Configuration}
+import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -36,7 +36,7 @@ import play.twirl.api.Html
 import renderer.Renderer
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.auth.{core => authClient}
 import uk.gov.hmrc.http.HeaderCarrier
 

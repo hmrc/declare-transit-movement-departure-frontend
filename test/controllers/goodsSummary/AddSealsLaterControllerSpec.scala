@@ -18,6 +18,7 @@ package controllers.goodsSummary
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import matchers.JsonMatchers
+import models.NormalMode
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -26,7 +27,6 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import models.NormalMode
 
 import scala.concurrent.Future
 

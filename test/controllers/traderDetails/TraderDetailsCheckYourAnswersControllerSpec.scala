@@ -17,8 +17,8 @@
 package controllers.traderDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import matchers.JsonMatchers
 import controllers.{routes => mainRoutes}
+import matchers.JsonMatchers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}

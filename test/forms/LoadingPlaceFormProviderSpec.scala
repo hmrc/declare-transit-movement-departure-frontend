@@ -16,10 +16,9 @@
 
 package forms
 
-import forms.Constants.loadingPlaceMaxLength
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
 import models.messages.header.Header.Constants.placeOfLoadingGoodsCodeLength
+import play.api.data.FormError
 
 class LoadingPlaceFormProviderSpec extends StringFieldBehaviours {
 

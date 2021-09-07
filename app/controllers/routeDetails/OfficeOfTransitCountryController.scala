@@ -22,15 +22,13 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.OfficeOfTransitCountryFormProvider
 import logging.Logging
-import models.reference.{Country, CountryCode}
+import models.reference.Country
 import models.requests.DataRequest
-import models.{CustomsOfficeList, Index, LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import play.api.data.{Form, FormError}
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import pages.routeDetails.OfficeOfTransitCountryPage
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc._
