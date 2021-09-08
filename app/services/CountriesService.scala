@@ -17,12 +17,12 @@
 package services
 
 import connectors.ReferenceDataConnector
-import javax.inject.Inject
 import models.reference.CountryCode
 import models.{CountryList, DeclarationType, UserAnswers}
 import pages.DeclarationTypePage
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {

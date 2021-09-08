@@ -18,14 +18,12 @@ package models
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import forms.guaranteeDetails.GuaranteeTypeFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.OptionValues
-import pages.DeclarationTypePage
 import play.api.libs.json.{JsError, JsString, Json}
 
 class GuaranteeTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with SpecBase with UserAnswersSpecHelper {

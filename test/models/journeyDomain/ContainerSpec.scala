@@ -32,7 +32,7 @@ class ContainerSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelp
 
         val result = UserAnswersReader[Container](Container.containerReader(index, referenceIndex)).run(userAnswers)
 
-        result.right.value mustEqual expectedResult
+        result.value mustEqual expectedResult
       }
     }
 

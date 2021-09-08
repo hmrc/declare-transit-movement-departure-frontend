@@ -17,7 +17,7 @@
 package forms
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.{principalTirHolderIdCharRegex, principalTirHolderIdFormatRegex, stringFieldRegex}
+import models.domain.StringFieldRegex.{principalTirHolderIdCharRegex, principalTirHolderIdFormatRegex}
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
 

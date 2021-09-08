@@ -25,9 +25,8 @@ case class AddAnotherViewModel(href: String, content: Text)
 
 object AddAnotherViewModel {
 
-  implicit def writes(implicit messages: Messages): OWrites[AddAnotherViewModel] =
-    (
-      (__ \ "href").write[String] and
-        (__ \ "content").write[Text]
-    )(unlift(AddAnotherViewModel.unapply))
+  implicit def writes(implicit messages: Messages): OWrites[AddAnotherViewModel] = (
+    (__ \ "href").write[String] and
+      (__ \ "content").write[Text]
+  )(unlift(AddAnotherViewModel.unapply))
 }

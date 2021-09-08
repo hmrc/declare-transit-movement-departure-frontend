@@ -17,8 +17,8 @@
 package base
 
 import generators.Generators
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalacheck.{Arbitrary, Gen}
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 trait GeneratorSpec extends ScalaCheckPropertyChecks with Generators {
   self: SpecBase =>

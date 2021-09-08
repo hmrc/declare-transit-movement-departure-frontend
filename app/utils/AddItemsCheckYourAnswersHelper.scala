@@ -29,17 +29,8 @@ import pages.addItems._
 import pages.addItems.containers._
 import pages.addItems.securityDetails._
 import pages.addItems.traderDetails._
-import pages.addItems.traderSecurityDetails.{
-  AddSecurityConsigneesEoriPage,
-  AddSecurityConsignorsEoriPage,
-  SecurityConsigneeAddressPage,
-  SecurityConsigneeEoriPage,
-  SecurityConsigneeNamePage,
-  SecurityConsignorAddressPage,
-  SecurityConsignorEoriPage,
-  SecurityConsignorNamePage
-}
-import pages.{addItems, _}
+import pages.addItems.traderSecurityDetails._
+import pages._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel

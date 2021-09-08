@@ -18,9 +18,8 @@ package models.messages.goodsitem
 
 import cats.implicits.catsSyntaxTuple5Semigroupal
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.LanguageCodeEnglish
 import xml.XMLWrites
-//format off
+
 trait GoodsItemSecurityConsignor
 
 object GoodsItemSecurityConsignor {
@@ -75,4 +74,3 @@ object ItemsSecurityConsignorWithoutEori {
   ).mapN(apply)
 
 }
-//format on

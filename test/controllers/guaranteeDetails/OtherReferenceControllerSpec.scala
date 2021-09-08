@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.OtherReferenceFormProvider
 import matchers.JsonMatchers
-import models.{Index, NormalMode}
+import models.NormalMode
 import navigation.annotations.GuaranteeDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

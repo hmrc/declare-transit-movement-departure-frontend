@@ -47,7 +47,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
           val expectedResult =
             RequiredDetails("name", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description")), None)
 
-          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).value
 
           result.consignor.value mustEqual expectedResult
         }
@@ -70,7 +70,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             Some(EoriNumber("eoriNumber1"))
           )
 
-          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).value
 
           result.consignor.value mustEqual expectedResult
         }
@@ -83,7 +83,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(TraderDetailsConsignorEoriKnownPage(index))(true)
             .unsafeSetVal(TraderDetailsConsignorEoriNumberPage(index))("eoriNumber1")
 
-          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).value
 
           result.consignor must be(None)
         }
@@ -155,7 +155,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
           val expectedResult =
             RequiredDetails("name", CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "description")), None)
 
-          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).value
 
           result.consignee.value mustEqual expectedResult
         }
@@ -178,7 +178,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             Some(EoriNumber("eoriNumber1"))
           )
 
-          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).value
 
           result.consignee.value mustEqual expectedResult
         }
@@ -191,7 +191,7 @@ class ItemTraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(TraderDetailsConsigneeEoriKnownPage(index))(true)
             .unsafeSetVal(TraderDetailsConsigneeEoriNumberPage(index))("eoriNumber1")
 
-          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[ItemTraderDetails](ItemTraderDetails.userAnswersParser(index)).run(userAnswers).value
 
           result.consignee must be(None)
         }

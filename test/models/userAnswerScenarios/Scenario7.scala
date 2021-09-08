@@ -56,7 +56,6 @@ import models.journeyDomain.{
   JourneyDomain,
   PreTaskListDetails,
   PreviousReferences,
-  RouteDetails,
   RouteDetailsWithoutTransitInformation,
   SafetyAndSecurity,
   SpecialMentionDomain,
@@ -66,7 +65,6 @@ import models.journeyDomain.{
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
-import java.time.LocalDateTime
 
 case object Scenario7 extends UserAnswerScenario {
 

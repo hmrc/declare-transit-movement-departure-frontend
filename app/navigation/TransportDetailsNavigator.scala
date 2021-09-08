@@ -17,14 +17,14 @@
 package navigation
 
 import controllers.transportDetails.routes
-
-import javax.inject.{Inject, Singleton}
 import models._
 import models.journeyDomain.TransportDetails.InlandMode._
 import models.journeyDomain.TransportDetails.ModeCrossingBorder
 import pages._
 import pages.generalInformation.ContainersUsedPage
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class TransportDetailsNavigator @Inject() () extends Navigator {

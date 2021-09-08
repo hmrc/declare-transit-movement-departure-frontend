@@ -17,11 +17,9 @@
 package navigation
 
 import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
 import controllers.routes
 import generators.Generators
 import models._
-import models.reference.{CountryCode, CountryOfDispatch}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._

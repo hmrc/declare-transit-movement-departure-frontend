@@ -21,8 +21,8 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
-import models.{CommonAddress, CountryList, NormalMode}
 import models.reference.{Country, CountryCode}
+import models.{CommonAddress, CountryList, NormalMode}
 import navigation.annotations.{SafetyAndSecurity, SafetyAndSecurityTraderDetails}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

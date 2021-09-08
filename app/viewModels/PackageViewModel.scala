@@ -16,7 +16,6 @@
 
 package viewModels
 
-import controllers.addItems.routes
 import models.{Index, Mode, UserAnswers}
 import pages.PackageTypePage
 import uk.gov.hmrc.viewmodels.MessageInterpolators

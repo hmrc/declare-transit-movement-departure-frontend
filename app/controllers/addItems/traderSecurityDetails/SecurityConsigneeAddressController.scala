@@ -44,6 +44,7 @@ class SecurityConsigneeAddressController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  requireName: NameRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -59,28 +60,26 @@ class SecurityConsigneeAddressController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen requireName(SecurityConsigneeNamePage(index))).async {
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>
-            request.userAnswers.get(SecurityConsigneeNamePage(index)) match {
-              case Some(consigneeName) =>
-                val preparedForm = request.userAnswers.get(SecurityConsigneeAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consigneeName).fill(value)
-                  case None        => formProvider(countries, consigneeName)
-                }
-
-                val json = Json.obj(
-                  "form"          -> preparedForm,
-                  "lrn"           -> lrn,
-                  "index"         -> index.display,
-                  "mode"          -> mode,
-                  "consigneeName" -> consigneeName,
-                  "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
-                )
-
-                renderer.render(template, json).map(Ok(_))
+            val preparedForm = request.userAnswers.get(SecurityConsigneeAddressPage(index)) match {
+              case Some(value) => formProvider(countries, request.name).fill(value)
+              case None        => formProvider(countries, request.name)
             }
+
+            val json = Json.obj(
+              "form"          -> preparedForm,
+              "lrn"           -> lrn,
+              "index"         -> index.display,
+              "mode"          -> mode,
+              "consigneeName" -> request.name,
+              "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+            )
+
+            renderer.render(template, json).map(Ok(_))
         }
     }
 
@@ -88,40 +87,38 @@ class SecurityConsigneeAddressController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen requireName(SecurityConsigneeNamePage(index))).async {
       implicit request =>
-        request.userAnswers.get(SecurityConsigneeNamePage(index)) match {
-          case Some(consigneeName) =>
-            referenceDataConnector.getCountryList() flatMap {
-              countries =>
-                formProvider(countries, consigneeName)
-                  .bindFromRequest()
-                  .fold(
-                    formWithErrors => {
-                      val countryValue: Option[Country] =
-                        formWithErrors.data.get("country").flatMap {
-                          country =>
-                            countries.getCountry(CountryCode(country))
-                        }
+        referenceDataConnector.getCountryList() flatMap {
+          countries =>
+            formProvider(countries, request.name)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => {
+                  val countryValue: Option[Country] =
+                    formWithErrors.data.get("country").flatMap {
+                      country =>
+                        countries.getCountry(CountryCode(country))
+                    }
 
-                      val json = Json.obj(
-                        "form"          -> formWithErrors,
-                        "lrn"           -> lrn,
-                        "mode"          -> mode,
-                        "index"         -> index.display,
-                        "consigneeName" -> consigneeName,
-                        "countries"     -> countryJsonList(countryValue, countries.fullList)
-                      )
-
-                      renderer.render(template, json).map(BadRequest(_))
-                    },
-                    value =>
-                      for {
-                        updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityConsigneeAddressPage(index), value))
-                        _              <- sessionRepository.set(updatedAnswers)
-                      } yield Redirect(navigator.nextPage(SecurityConsigneeAddressPage(index), mode, updatedAnswers))
+                  val json = Json.obj(
+                    "form"          -> formWithErrors,
+                    "lrn"           -> lrn,
+                    "mode"          -> mode,
+                    "index"         -> index.display,
+                    "consigneeName" -> request.name,
+                    "countries"     -> countryJsonList(countryValue, countries.fullList)
                   )
-            }
+
+                  renderer.render(template, json).map(BadRequest(_))
+                },
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityConsigneeAddressPage(index), value))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(SecurityConsigneeAddressPage(index), mode, updatedAnswers))
+              )
         }
     }
 }

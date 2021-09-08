@@ -60,7 +60,6 @@ import models.journeyDomain.{
   OtherLiabilityAmount,
   PreTaskListDetails,
   PreviousReferences,
-  RouteDetails,
   RouteDetailsWithTransitInformation,
   SafetyAndSecurity,
   SpecialMentionDomain,
@@ -70,6 +69,7 @@ import models.journeyDomain.{
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
+
 import java.time.LocalDateTime
 
 case object Scenario6 extends UserAnswerScenario {

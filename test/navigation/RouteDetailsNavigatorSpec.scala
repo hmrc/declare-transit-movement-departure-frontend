@@ -24,11 +24,11 @@ import generators.Generators
 import models._
 import models.reference.{CountryCode, CustomsOffice}
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.routeDetails._
 import queries.OfficeOfTransitQuery
-import org.scalacheck.Gen
 
 class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with UserAnswersSpecHelper {
 
@@ -130,7 +130,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "must go from Add Office Of Transit page to CYA Page when user selects 'Yes' " in {
+        "must go from Add Office Of Transit page to CYA Page when user selects 'No' " in {
 
           forAll(arbitrary[UserAnswers]) {
             answers =>
@@ -138,6 +138,17 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
               navigator
                 .nextPage(AddOfficeOfTransitPage, NormalMode, updatedAnswers)
                 .mustBe(routes.RouteDetailsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
+          }
+        }
+
+        "must go from Add Office Of Transit page to session expired when selection undefined " in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              lazy val updatedAnswers = answers.unsafeRemove(AddOfficeOfTransitPage)
+              navigator
+                .nextPage(AddOfficeOfTransitPage, NormalMode, updatedAnswers)
+                .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
           }
         }
 
@@ -370,6 +381,18 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(AddOfficeOfTransitPage, CheckMode, updatedAnswers)
               .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(updatedAnswers.lrn, Index(0), CheckMode))
+
+        }
+      }
+
+      "Must go from Add Office of Transit to session expired when selection undefined " in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            lazy val updatedAnswers = answers.unsafeRemove(AddOfficeOfTransitPage)
+            navigator
+              .nextPage(AddOfficeOfTransitPage, CheckMode, updatedAnswers)
+              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
 
         }
       }

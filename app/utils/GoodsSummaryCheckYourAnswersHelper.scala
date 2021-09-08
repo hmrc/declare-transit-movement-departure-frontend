@@ -18,7 +18,7 @@ package utils
 
 import controllers.goodsSummary.routes
 import models.{CheckMode, LocalReferenceNumber, UserAnswers}
-import pages.{AddCustomsApprovedLocationPage, AuthorisedLocationCodePage, _}
+import pages._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels._

@@ -17,9 +17,11 @@
 package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import controllers.{routes => mainRoutes}
 import forms.addItems.DocumentExtraInformationFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
+import navigation.annotations.addItems.AddItemsDocument
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -34,8 +36,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import controllers.{routes => mainRoutes}
-import navigation.annotations.addItems.AddItemsDocument
 
 import scala.concurrent.Future
 

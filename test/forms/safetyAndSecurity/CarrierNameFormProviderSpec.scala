@@ -17,10 +17,7 @@
 package forms.safetyAndSecurity
 
 import forms.behaviours.StringFieldBehaviours
-import models.domain.StringFieldRegex.stringFieldRegex
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class CarrierNameFormProviderSpec extends StringFieldBehaviours {
 

@@ -18,13 +18,13 @@ package models.messages
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import xml.XMLWrites._
 import models.messages.trader.TraderAuthorisedConsignee
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{OptionValues, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import xml.XMLWrites._
 
 class TraderAuthorisedConsigneeSpec
     extends AnyFreeSpec

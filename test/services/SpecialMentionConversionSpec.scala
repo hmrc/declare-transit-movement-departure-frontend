@@ -22,7 +22,7 @@ import generators.ModelGenerators
 import models.GuaranteeType.GuaranteeWaiver
 import models.journeyDomain.GuaranteeDetails.GuaranteeReference
 import models.journeyDomain.{DefaultLiabilityAmount, SpecialMentionDomain}
-import models.messages.goodsitem.{SpecialMentionExportFromGB, SpecialMentionGuaranteeLiabilityAmount, SpecialMentionNoCountry}
+import models.messages.goodsitem.{SpecialMentionExportFromGB, SpecialMentionGuaranteeLiabilityAmount}
 import models.reference.{CountryCode, CustomsOffice}
 
 class SpecialMentionConversionSpec extends SpecBase with GeneratorSpec with ModelGenerators {

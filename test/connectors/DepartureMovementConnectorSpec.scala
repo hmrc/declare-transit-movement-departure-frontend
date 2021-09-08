@@ -16,8 +16,6 @@
 
 package connectors
 
-import java.time.LocalDate
-
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -43,6 +41,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 
+import java.time.LocalDate
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 

@@ -17,10 +17,11 @@
 package forms
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.PreviousReferencesDocumentTypeList
 import models.reference.PreviousReferencesDocumentType
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class ReferenceTypeFormProvider @Inject() extends Mappings {
 

@@ -29,7 +29,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.generalInformation._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
-import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage, CountryOfDispatchPage, DestinationCountryPage, DestinationOfficePage}
+import pages.routeDetails._
 import pages.safetyAndSecurity._
 import pages.traderDetails.{AddConsigneePage, AddConsignorPage, IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json.{JsObject, Json}

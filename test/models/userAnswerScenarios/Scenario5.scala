@@ -27,7 +27,6 @@ import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.journeyDomain.MovementDetails.{DeclarationForSomeoneElse, NormalMovementDetails}
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.journeyDomain.RouteDetailsWithTransitInformation.TransitInformation
-import models.journeyDomain.RouteDetailsWithTransitInformation._
 import models.journeyDomain.SafetyAndSecurity.{PersonalInformation, TraderEori}
 import models.journeyDomain.TransportDetails.DetailsAtBorder.SameDetailsAtBorder
 import models.journeyDomain.TransportDetails.InlandMode.Rail
@@ -45,7 +44,6 @@ import models.journeyDomain.{
   OtherLiabilityAmount,
   PreTaskListDetails,
   PreviousReferences,
-  RouteDetails,
   RouteDetailsWithTransitInformation,
   SafetyAndSecurity,
   SpecialMentionDomain,
@@ -55,6 +53,7 @@ import models.journeyDomain.{
 import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
+
 import java.time.LocalDateTime
 
 case object Scenario5 extends UserAnswerScenario {

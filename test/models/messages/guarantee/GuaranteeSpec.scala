@@ -16,14 +16,14 @@
 
 package models.messages.guarantee
 
+import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import org.scalatest.{OptionValues, StreamlinedXmlEquality}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import org.scalatest.{OptionValues, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalacheck.Arbitrary.arbitrary
 import xml.XMLWrites._
-import com.lucidchart.open.xtract.XmlReader
 
 import scala.xml.NodeSeq
 

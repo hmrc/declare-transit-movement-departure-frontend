@@ -17,12 +17,12 @@
 package services
 
 import connectors.DepartureMovementConnector
-import javax.inject.Inject
+import logging.Logging
 import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage, DepartureId, GuaranteeNotValidMessage}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import logging.Logging
 
 class DepartureMessageService @Inject() (connectors: DepartureMovementConnector) extends Logging {
 

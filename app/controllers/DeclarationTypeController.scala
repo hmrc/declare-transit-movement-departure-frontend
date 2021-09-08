@@ -18,11 +18,10 @@ package controllers
 
 import controllers.actions._
 import forms.DeclarationTypeFormProvider
-import models.{DeclarationType, Index, LocalReferenceNumber, Mode}
+import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.DeclarationTypePage
-import pages.addItems.DocumentTypePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

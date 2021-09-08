@@ -19,8 +19,8 @@ package models.journeyDomain
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import org.scalacheck.Gen
-import pages.addItems.CommodityCodePage
 import pages._
+import pages.addItems.CommodityCodePage
 
 class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
@@ -40,7 +40,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(itemDetailsUa)
 
-      result.right.value mustEqual expectedResult
+      result.value mustEqual expectedResult
     }
 
     "when add total net mass is false" in {
@@ -51,7 +51,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
 
-      result.right.value mustEqual expectedResult
+      result.value mustEqual expectedResult
     }
 
     "when is commodity code known is false" in {
@@ -62,7 +62,7 @@ class ItemDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
       val result = UserAnswersReader[ItemDetails](ItemDetails.itemDetailsReader(index)).run(userAnswers)
 
-      result.right.value mustEqual expectedResult
+      result.value mustEqual expectedResult
     }
 
   }

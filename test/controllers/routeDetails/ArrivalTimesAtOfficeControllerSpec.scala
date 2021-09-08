@@ -16,7 +16,6 @@
 
 package controllers.routeDetails
 
-import java.time.{LocalDateTime, ZoneOffset}
 import base.{GeneratorSpec, MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
@@ -29,7 +28,6 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
-import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
 import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage}
 import play.api.inject.bind
@@ -42,6 +40,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import viewModels.DateTimeInput
 
+import java.time.{LocalDateTime, ZoneOffset}
 import scala.concurrent.Future
 
 class ArrivalTimesAtOfficeControllerSpec

@@ -19,15 +19,15 @@ package controllers
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.OfficeOfDepartureFormProvider
-import models.{CountryList, CustomsOfficeList, LocalReferenceNumber, Mode}
+import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
+import navigation.annotations.PreTaskListDetails
 import pages.OfficeOfDeparturePage
+import pages.addItems.IsNonEuOfficePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
-import navigation.annotations.PreTaskListDetails
-import pages.addItems.IsNonEuOfficePage
 import repositories.SessionRepository
 import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController

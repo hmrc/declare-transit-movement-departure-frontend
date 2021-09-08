@@ -19,12 +19,12 @@ package navigation
 import controllers.traderDetails.routes
 import models.DeclarationType.Option4
 import models.ProcedureType.{Normal, Simplified}
-
-import javax.inject.{Inject, Singleton}
 import models._
 import pages._
 import pages.traderDetails._
 import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class TraderDetailsNavigator @Inject() () extends Navigator {

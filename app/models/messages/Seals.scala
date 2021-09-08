@@ -19,7 +19,6 @@ package models.messages
 import cats.syntax.all._
 import com.lucidchart.open.xtract.XmlReader.seq
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.LanguageCodeEnglish
 import xml.XMLWrites
 
 case class Seals(numberOfSeals: Int, SealId: Seq[String])

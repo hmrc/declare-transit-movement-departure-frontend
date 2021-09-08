@@ -21,8 +21,8 @@ import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CountryOfRoutingFormProvider
 import matchers.JsonMatchers
-import models.{CountryList, NormalMode}
 import models.reference.{Country, CountryCode}
+import models.{CountryList, NormalMode}
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor

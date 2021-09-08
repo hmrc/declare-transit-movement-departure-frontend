@@ -18,19 +18,19 @@ package models.messages.goodsitem
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import xml.XMLWrites._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{OptionValues, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import xml.XMLWrites._
 
 import scala.xml.NodeSeq
 
 class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with MessagesModelGenerators with StreamlinedXmlEquality with OptionValues {
 
   "GoodsItemSpec" - {
-    //format off
+
     "must serialize GoodsItem to xml" in {
 
       forAll(arbitrary[GoodsItem]) {
@@ -136,7 +136,6 @@ class GoodsItemSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
           result mustBe data
       }
     }
-    //format on
   }
 
   def specialMention(specialMention: SpecialMention): NodeSeq = specialMention match {

@@ -67,7 +67,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
           .unsafeSetVal(AddCarrierPage)(false)
           .unsafeSetVal(CountryOfRoutingPage(Index(0)))(CountryCode("GB"))
 
-        val result = UserAnswersReader[SafetyAndSecurity].run(minimalSafetyAndSecurityUa).right.value
+        val result = UserAnswersReader[SafetyAndSecurity].run(minimalSafetyAndSecurityUa).value
 
         result mustBe expectedResult
       }
@@ -86,7 +86,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
           NonEmptyList.fromListUnsafe(List(Itinerary(CountryCode("GB"))))
         )
 
-        val result = UserAnswersReader[SafetyAndSecurity].run(fullSafetyAndSecurityUa).right.value
+        val result = UserAnswersReader[SafetyAndSecurity].run(fullSafetyAndSecurityUa).value
 
         result mustBe expectedResult
       }
@@ -100,7 +100,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
             .unsafeSetVal(CommercialReferenceNumberAllItemsPage)("commercialRefNumber")
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.commercialReferenceNumber.value mustBe "commercialRefNumber"
         }
@@ -111,7 +111,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.commercialReferenceNumber mustBe None
         }
@@ -122,7 +122,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
             .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.commercialReferenceNumber mustBe None
         }
@@ -138,7 +138,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(ModeAtBorderPage)(modeAtBorder)
             .unsafeSetVal(ConveyanceReferenceNumberPage)("conveyanceReferenceNumber")
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.conveyanceReferenceNumber.value mustBe "conveyanceReferenceNumber"
 
@@ -157,7 +157,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(ModeAtBorderPage)(modeAtBorder)
             .unsafeSetVal(AddConveyanceReferenceNumberPage)(false)
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.conveyanceReferenceNumber mustBe None
         }
@@ -173,7 +173,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(AddPlaceOfUnloadingCodePage)(true)
             .unsafeSetVal(PlaceOfUnloadingCodePage)("placeOfUnloading")
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.placeOfUnloading.value mustBe "placeOfUnloading"
         }
@@ -187,7 +187,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(CircumstanceIndicatorPage)(circumstanceIndicator)
             .unsafeSetVal(PlaceOfUnloadingCodePage)("placeOfUnloading")
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.placeOfUnloading.value mustBe "placeOfUnloading"
         }
@@ -199,7 +199,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(CircumstanceIndicatorPage)("E")
             .unsafeSetVal(AddPlaceOfUnloadingCodePage)(false)
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.placeOfUnloading mustBe None
         }
@@ -216,7 +216,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(AddSafetyAndSecurityConsignorEoriPage)(true)
             .unsafeSetVal(SafetyAndSecurityConsignorEoriPage)("eoriNumber")
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.consignor.value mustBe expectedResult
         }
@@ -231,7 +231,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(SafetyAndSecurityConsignorNamePage)("consignorName")
             .unsafeSetVal(SafetyAndSecurityConsignorAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.consignor.value mustBe expectedResult
         }
@@ -241,7 +241,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
           val userAnswers = fullSafetyAndSecurityUa
             .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.consignor mustBe None
         }
@@ -262,7 +262,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
               .unsafeSetVal(AddPlaceOfUnloadingCodePage)(false)
               .unsafeSetVal(SafetyAndSecurityConsigneeEoriPage)("eoriNumber")
 
-            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
             result.consignee.value mustBe expectedResult
           }
@@ -283,7 +283,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
               .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(true)
               .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
 
-            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
             result.consignee.value mustBe expectedResult
           }
@@ -305,7 +305,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
               .unsafeSetVal(SafetyAndSecurityConsigneeNamePage)("consigneeName")
               .unsafeSetVal(SafetyAndSecurityConsigneeAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
 
-            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+            val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
             result.consignee.value mustBe expectedResult
           }
@@ -319,7 +319,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(true)
             .unsafeSetVal(SafetyAndSecurityConsigneeEoriPage)("eoriNumber")
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.consignee.value mustBe expectedResult
         }
@@ -334,7 +334,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(SafetyAndSecurityConsigneeNamePage)("consigneeName")
             .unsafeSetVal(SafetyAndSecurityConsigneeAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.consignee.value mustBe expectedResult
         }
@@ -344,7 +344,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
           val userAnswers = fullSafetyAndSecurityUa
             .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.consignee mustBe None
         }
@@ -361,7 +361,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(AddCarrierEoriPage)(true)
             .unsafeSetVal(CarrierEoriPage)("eoriNumber")
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.carrier.value mustBe expectedResult
         }
@@ -376,7 +376,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
             .unsafeSetVal(CarrierNamePage)("carrierName")
             .unsafeSetVal(CarrierAddressPage)(CommonAddress("line1", "line2", "postalCode", Country(CountryCode("GB"), "description")))
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.carrier.value mustBe expectedResult
         }
@@ -386,7 +386,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
           val userAnswers = fullSafetyAndSecurityUa
             .unsafeSetVal(AddCarrierPage)(false)
 
-          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).right.value
+          val result = UserAnswersReader[SafetyAndSecurity].run(userAnswers).value
 
           result.carrier mustBe None
         }

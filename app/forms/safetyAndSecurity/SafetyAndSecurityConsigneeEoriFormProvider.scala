@@ -18,10 +18,10 @@ package forms.safetyAndSecurity
 
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
-
-import javax.inject.Inject
 import play.api.data.Form
 import uk.gov.hmrc.play.mappers.StopOnFirstFail
+
+import javax.inject.Inject
 
 class SafetyAndSecurityConsigneeEoriFormProvider @Inject() extends Mappings {
 

@@ -19,7 +19,6 @@ package models.messages.goodsitem
 import cats.syntax.all._
 import com.lucidchart.open.xtract.XmlReader.{seq, strictReadSeq}
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.LanguageCodeEnglish
 import utils.BigDecimalXMLReader._
 import xml.XMLWrites
 import xml.XMLWrites._

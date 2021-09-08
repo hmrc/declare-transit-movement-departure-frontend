@@ -19,8 +19,10 @@ package controllers.routeDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
+import controllers.{routes => mainRoutes}
 import forms.OfficeOfTransitCountryFormProvider
 import matchers.JsonMatchers
+import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}
 import navigation.annotations.RouteDetails
 import navigation.{FakeNavigator, Navigator}
@@ -29,6 +31,7 @@ import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.OfficeOfDeparturePage
+import pages.routeDetails.OfficeOfTransitCountryPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -37,9 +40,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import controllers.{routes => mainRoutes}
-import models.reference.{Country, CountryCode, CustomsOffice}
-import pages.routeDetails.OfficeOfTransitCountryPage
 
 import scala.concurrent.Future
 

@@ -32,13 +32,13 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import services.ExcludedCountriesService.routeDetailsExcludedCountries
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
-import javax.inject.Inject
-import services.CountriesService
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class MovementDestinationCountryController @Inject() (

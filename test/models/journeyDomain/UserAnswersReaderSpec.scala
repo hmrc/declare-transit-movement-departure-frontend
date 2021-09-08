@@ -76,7 +76,7 @@ class UserAnswersReaderSpec extends SpecBase {
   "reader" - {
     "when a reader for a gettable is run" - {
       "passes and reads data when present" in {
-        passingGettable1.reader.run(testData).right.value mustEqual 1
+        passingGettable1.reader.run(testData).value mustEqual 1
       }
 
       "fails when not present" in {
@@ -89,11 +89,11 @@ class UserAnswersReaderSpec extends SpecBase {
   "optionalReader" - {
     "when a reader for a gettable" - {
       "passes when the data is defined" in {
-        passingGettable1.optionalReader.run(testData).right.value mustEqual Some(1)
+        passingGettable1.optionalReader.run(testData).value mustBe Some(1)
       }
 
       "passes when the data is not defined" in {
-        failingGettable.optionalReader.run(testData).right.value mustBe None
+        failingGettable.optionalReader.run(testData).value mustBe None
       }
     }
   }
@@ -105,9 +105,9 @@ class UserAnswersReaderSpec extends SpecBase {
           passingGettable2.reader
         }
 
-        val result = testReaders.run(testData).right.value
+        val result = testReaders.run(testData)
 
-        result.value mustEqual TestData(1, "asdf")
+        result.value mustBe Some(TestData(1, "asdf"))
       }
 
       "and the second reader has data that is missing, then the full reader fails" in {
@@ -115,9 +115,9 @@ class UserAnswersReaderSpec extends SpecBase {
           failingGettable.reader
         }
 
-        val result = testReaders.run(testData).isLeft
+        val result = testReaders.run(testData)
 
-        result mustBe true
+        result.isLeft mustBe true
       }
     }
 
@@ -127,9 +127,9 @@ class UserAnswersReaderSpec extends SpecBase {
           passingGettable2.reader
         }
 
-        val result = testReaders.run(testData).isLeft
+        val result = testReaders.run(testData)
 
-        result mustBe true
+        result.isLeft mustBe true
       }
 
       "when the full reader fails due to not matching predicate" in {
@@ -137,9 +137,9 @@ class UserAnswersReaderSpec extends SpecBase {
           passingGettable2.reader
         }
 
-        val result = testReaders.run(testData).right.value
+        val result = testReaders.run(testData)
 
-        result mustEqual None
+        result.value mustBe None
       }
     }
   }
@@ -151,9 +151,9 @@ class UserAnswersReaderSpec extends SpecBase {
           passingGettable2.reader
         }
 
-        val result = testReaders.run(testData).right.value
+        val result = testReaders.run(testData)
 
-        result mustEqual TestData(1, "asdf")
+        result.value mustEqual TestData(1, "asdf")
       }
 
       "and the second reader has data that is missing, then the full reader fails" in {
@@ -161,9 +161,9 @@ class UserAnswersReaderSpec extends SpecBase {
           failingGettable.reader
         }
 
-        val result = testReaders.run(testData).isLeft
+        val result = testReaders.run(testData)
 
-        result mustBe true
+        result.isLeft mustBe true
       }
     }
 
@@ -173,9 +173,9 @@ class UserAnswersReaderSpec extends SpecBase {
           passingGettable2.reader
         }
 
-        val result = testReaders.run(testData).isLeft
+        val result = testReaders.run(testData)
 
-        result mustBe true
+        result.isLeft mustBe true
       }
 
       "when the full reader fails due to not matching predicate" in {
@@ -183,16 +183,16 @@ class UserAnswersReaderSpec extends SpecBase {
           passingGettable2.reader
         }
 
-        val result = testReaders.run(testData).isLeft
+        val result = testReaders.run(testData)
 
-        result mustEqual true
+        result.isLeft mustEqual true
       }
     }
   }
 
   "mandatoryNonEmptyListReader" - {
     "passes and converts list to nonEmptyList" in {
-      passingGettable3.mandatoryNonEmptyListReader.run(testData).right.value mustBe NonEmptyList("listEntry1", List("listEntry2", "listEntry3"))
+      passingGettable3.mandatoryNonEmptyListReader.run(testData).value mustBe NonEmptyList("listEntry1", List("listEntry2", "listEntry3"))
     }
 
     "fails list is empty" in {
@@ -206,11 +206,11 @@ class UserAnswersReaderSpec extends SpecBase {
 
   "optionalNonEmptyListReader" - {
     "passes and converts list to nonEmptyList" in {
-      passingGettable3.optionalNonEmptyListReader.run(testData).right.value.value mustBe NonEmptyList("listEntry1", List("listEntry2", "listEntry3"))
+      passingGettable3.optionalNonEmptyListReader.run(testData).value.value mustBe NonEmptyList("listEntry1", List("listEntry2", "listEntry3"))
     }
 
     "returns None when list is empty" in {
-      passingGettable3.optionalNonEmptyListReader.run(testDataWithEmptyList).right.value mustBe None
+      passingGettable3.optionalNonEmptyListReader.run(testDataWithEmptyList).value mustBe None
     }
 
     "fails when gettable cannot be found" in {
@@ -222,14 +222,14 @@ class UserAnswersReaderSpec extends SpecBase {
     "when the first reader passes" - {
       "then we return the value of the reader when the predicate passes" in {
         val testReaders = passingGettable1.returnOptionalDependant(_ == 1)
-        val result      = testReaders.run(testData).right.value
+        val result      = testReaders.run(testData)
 
-        result mustBe Some(1)
+        result.value mustBe Some(1)
       }
 
       "then return None when the predicate fails" in {
         val testReaders = passingGettable1.returnOptionalDependant(_ != 1)
-        val result      = testReaders.run(testData).right
+        val result      = testReaders.run(testData)
 
         result.value mustBe None
       }
@@ -238,9 +238,9 @@ class UserAnswersReaderSpec extends SpecBase {
     "when the first reader fails" - {
       "then the full reader fails" in {
         val testReaders = failingGettable.returnOptionalDependant(_ == 1)
-        val result      = testReaders.run(testData).isLeft
+        val result      = testReaders.run(testData)
 
-        result mustBe true
+        result.isLeft mustBe true
       }
 
     }
@@ -250,25 +250,25 @@ class UserAnswersReaderSpec extends SpecBase {
     "when the first reader passes" - {
       "then we return the value of the reader when the predicate passes" in {
         val testReaders = passingGettable1.returnMandatoryDependent(_ == 1)
-        val result      = testReaders.run(testData).right.value
+        val result      = testReaders.run(testData)
 
-        result mustBe 1
+        result.value mustBe 1
       }
 
       "then fail when the predicate fails" in {
         val testReaders = passingGettable1.returnMandatoryDependent(_ != 1)
-        val result      = testReaders.run(testData).isLeft
+        val result      = testReaders.run(testData)
 
-        result mustBe true
+        result.isLeft mustBe true
       }
     }
 
     "when the first reader fails" - {
       "then the full reader fails" in {
         val testReaders = failingGettable.returnMandatoryDependent(_ == 1)
-        val result      = testReaders.run(testData).isLeft
+        val result      = testReaders.run(testData)
 
-        result mustBe true
+        result.isLeft mustBe true
       }
 
     }

@@ -18,9 +18,7 @@ package forms.addItems
 
 import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class DocumentReferenceFormProviderSpec extends SpecBase with StringFieldBehaviours {
 

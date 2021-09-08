@@ -17,23 +17,12 @@
 package navigation
 
 import base.SpecBase
-import commonTestUtils.UserAnswersSpecHelper
 import controllers.movementDetails.{routes => movementDetailsRoute}
 import generators.Generators
-import models.DeclarationType.Option1
 import models._
-import models.ProcedureType._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages._
-import pages.generalInformation.{
-  ContainersUsedPage,
-  DeclarationForSomeoneElsePage,
-  DeclarationPlacePage,
-  PreLodgeDeclarationPage,
-  RepresentativeCapacityPage,
-  RepresentativeNamePage
-}
+import pages.generalInformation._
 
 class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 

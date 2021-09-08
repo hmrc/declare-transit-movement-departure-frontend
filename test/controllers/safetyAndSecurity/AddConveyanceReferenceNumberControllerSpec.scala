@@ -21,7 +21,7 @@ import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.AddConveyancerReferenceNumberFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.annotations.{PreTaskListDetails, SafetyAndSecurity}
+import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

@@ -18,13 +18,11 @@ package controllers.traderDetails
 
 import controllers.actions._
 import forms.WhatIsPrincipalEoriFormProvider
-import models.ProcedureType.{Normal, Simplified}
-import models.reference.{CountryCode, CustomsOffice}
-import models.requests.DataRequest
-import models.{LocalReferenceNumber, Mode, UserAnswers}
+import models.ProcedureType.Simplified
+import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
-import pages.traderDetails.{PrincipalNamePage, WhatIsPrincipalEoriPage}
+import pages.traderDetails.WhatIsPrincipalEoriPage
 import pages.{OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json

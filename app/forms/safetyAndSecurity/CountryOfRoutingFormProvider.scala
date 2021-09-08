@@ -17,10 +17,11 @@
 package forms.safetyAndSecurity
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.CountryList
 import models.reference.Country
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class CountryOfRoutingFormProvider @Inject() extends Mappings {
 

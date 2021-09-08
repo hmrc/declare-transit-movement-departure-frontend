@@ -17,9 +17,10 @@
 package forms.guaranteeDetails
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.GuaranteeType
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class GuaranteeTypeFormProvider @Inject() extends Mappings {
 

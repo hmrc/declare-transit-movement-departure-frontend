@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.WhatIsPrincipalEoriFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import models.reference.{CountryCode, CustomsOffice}
 import navigation.annotations.TraderDetails
 import navigation.{FakeNavigator, Navigator}
@@ -40,7 +40,6 @@ import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
-import scala.util.Try
 
 class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 

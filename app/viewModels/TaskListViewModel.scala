@@ -21,9 +21,9 @@ import cats.implicits._
 import models.DeclarationType.Option4
 import models.DependentSection._
 import models.ProcedureType.{Normal, Simplified}
+import models.journeyDomain.RouteDetails._
 import models.journeyDomain.traderDetails.TraderDetails
 import models.journeyDomain.{UserAnswersReader, _}
-import models.journeyDomain.RouteDetails._
 import models.{DependentSection, Index, NormalMode, ProcedureType, UserAnswers}
 import pages._
 import pages.generalInformation.{ContainersUsedPage, PreLodgeDeclarationPage}
@@ -32,6 +32,8 @@ import pages.routeDetails.CountryOfDispatchPage
 import pages.safetyAndSecurity.AddCircumstanceIndicatorPage
 import pages.traderDetails.{IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json._
+
+import scala.language.existentials
 
 private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
 
@@ -202,31 +204,27 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
       )
       .ifNotStarted(guaranteeDetailsStartPage(userAnswers))
 
-  private val safetyAndSecurityDetails =
-    userAnswers
-      .get(AddSecurityDetailsPage)
-      .map({
-        case true =>
-          Seq(
-            taskListDsl
-              .sectionName("declarationSummary.section.safetyAndSecurity")
-              .ifDependentSectionCompleted(dependentSectionReader(DependentSection.SafetyAndSecurity, userAnswers))
-              .ifCompleted(
-                UserAnswersReader[SafetyAndSecurity],
-                controllers.safetyAndSecurity.routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(lrn).url
-              )
-              .ifInProgress(
-                AddCircumstanceIndicatorPage.reader,
-                controllers.safetyAndSecurity.routes.AddCircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url
-              )
-              .ifNotStarted(controllers.safetyAndSecurity.routes.AddCircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url)
+  private val safetyAndSecurityDetails = userAnswers.get(AddSecurityDetailsPage) match {
+    case Some(true) =>
+      Seq(
+        taskListDsl
+          .sectionName("declarationSummary.section.safetyAndSecurity")
+          .ifDependentSectionCompleted(dependentSectionReader(DependentSection.SafetyAndSecurity, userAnswers))
+          .ifCompleted(
+            UserAnswersReader[SafetyAndSecurity],
+            controllers.safetyAndSecurity.routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(lrn).url
           )
+          .ifInProgress(
+            AddCircumstanceIndicatorPage.reader,
+            controllers.safetyAndSecurity.routes.AddCircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url
+          )
+          .ifNotStarted(controllers.safetyAndSecurity.routes.AddCircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url)
+      )
 
-        case _ => Seq.empty
-      })
-      .getOrElse(Seq.empty)
+    case _ => Seq.empty
+  }
 
-  private val sections = Seq(
+  private val sections: Seq[TaskListDsl[_, _, _]] = Seq(
     movementDetails,
     routeDetails,
     traderDetails,

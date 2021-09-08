@@ -18,13 +18,12 @@ package models.journeyDomain.traderDetails
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import models.ProcedureType.Simplified
 import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
-import models.{CommonAddress, EoriNumber, ProcedureType, UserAnswers}
+import models.{CommonAddress, EoriNumber, ProcedureType}
 import org.scalatest.TryValues
-import pages.traderDetails._
 import pages._
+import pages.traderDetails._
 
 class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
 
@@ -47,7 +46,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
           None
         )
 
-        val result = UserAnswersReader[TraderDetails].run(traderDetailsUa).right.value
+        val result = UserAnswersReader[TraderDetails].run(traderDetailsUa).value
 
         result mustBe expectedResult
       }
@@ -66,7 +65,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
           .unsafeSetVal(ConsignorNamePage)("consignorName")
           .unsafeSetVal(ConsignorAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
 
-        val result = UserAnswersReader[TraderDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[TraderDetails].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -85,7 +84,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
           .unsafeSetVal(ConsigneeNamePage)("consigneeName")
           .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
 
-        val result = UserAnswersReader[TraderDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[TraderDetails].run(userAnswers).value
 
         result mustBe expectedResult
       }

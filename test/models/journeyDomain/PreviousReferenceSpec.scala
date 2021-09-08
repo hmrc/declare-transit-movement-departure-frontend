@@ -21,7 +21,6 @@ import cats.data.NonEmptyList
 import commonTestUtils.UserAnswersSpecHelper
 import models.DeclarationType.{Option1, Option2, Option3}
 import models.{DeclarationType, Index}
-import models.reference.{CountryCode, CountryOfDispatch}
 import org.scalacheck.Gen
 import pages.addItems._
 import pages.{DeclarationTypePage, QuestionPage}
@@ -49,7 +48,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
 
         val result = UserAnswersReader[PreviousReferences](PreviousReferences.previousReferenceReader(index, referenceIndex)).run(previousReferenceUa)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
 
       "when AddExtraInformation is false" in {
@@ -60,7 +59,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
 
         val result = UserAnswersReader[PreviousReferences](PreviousReferences.previousReferenceReader(index, referenceIndex)).run(userAnswers)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
     }
 
@@ -107,7 +106,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
 
               val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)
 
-              result.right.value.value mustBe expectedResult
+              result.value.value mustBe expectedResult
           }
         }
 
@@ -128,7 +127,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)
 
-          result.right.value.value mustBe expectedResult
+          result.value.value mustBe expectedResult
         }
 
       "when all mandatory pages have been answered " +
@@ -143,7 +142,7 @@ class PreviousReferenceSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           val result = UserAnswersReader[Option[NonEmptyList[PreviousReferences]]](PreviousReferences.derivePreviousReferences(index)).run(userAnswers)
 
-          result.right.value mustBe None
+          result.value mustBe None
         }
     }
 

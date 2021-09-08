@@ -17,18 +17,16 @@
 package navigation
 
 import controllers.movementDetails.routes
-
-import javax.inject.{Inject, Singleton}
-import models.ProcedureType._
 import models._
 import pages._
 import pages.generalInformation._
 import play.api.mvc.Call
 
+import javax.inject.{Inject, Singleton}
+
 @Singleton
 class MovementDetailsNavigator @Inject() () extends Navigator {
 
-  // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case PreLodgeDeclarationPage       => ua => Some(routes.ContainersUsedPageController.onPageLoad(ua.lrn, NormalMode))
     case ContainersUsedPage            => ua => Some(routes.DeclarationPlaceController.onPageLoad(ua.lrn, NormalMode))
@@ -49,5 +47,4 @@ class MovementDetailsNavigator @Inject() () extends Navigator {
       case (Some(true), _, NormalMode)   => routes.RepresentativeNameController.onPageLoad(ua.lrn, NormalMode)
       case _                             => routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
     }
-  // format: on
 }

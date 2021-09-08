@@ -18,17 +18,15 @@ package models.messages.goodsitem
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import models.LanguageCodeEnglish
-import org.scalatest.{OptionValues, StreamlinedXmlEquality}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import org.scalatest.{OptionValues, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalacheck.Arbitrary.arbitrary
 import xml.XMLWrites._
 
 import scala.xml.NodeSeq
 
-//format off
 class GoodsItemSecurityConsigneeSpec
     extends AnyFreeSpec
     with Matchers
@@ -37,7 +35,6 @@ class GoodsItemSecurityConsigneeSpec
     with StreamlinedXmlEquality
     with OptionValues {
 
-  //format off
   "goodsItemSecurityConsignee" - {
 
     "must deserialize ItemsSecurityConsigneeWithEori" in {
@@ -95,4 +92,3 @@ class GoodsItemSecurityConsigneeSpec
     }
   }
 }
-//format on

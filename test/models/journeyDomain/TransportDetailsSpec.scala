@@ -18,7 +18,6 @@ package models.journeyDomain
 
 import base.{GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
-import models.UserAnswers
 import models.journeyDomain.TransportDetails.DetailsAtBorder.{SameDetailsAtBorder, _}
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, _}
 import models.journeyDomain.TransportDetails.ModeCrossingBorder.{ModeExemptNationality, ModeWithNationality}
@@ -47,7 +46,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(AddIdAtDeparturePage)(false)
               .unsafeSetVal(ChangeAtBorderPage)(false)
 
-            val result = UserAnswersReader[TransportDetails].run(userAnswers).right.value
+            val result = UserAnswersReader[TransportDetails].run(userAnswers).value
 
             result mustBe expectedResult
         }
@@ -66,7 +65,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(AddIdAtDeparturePage)(false)
               .unsafeSetVal(ChangeAtBorderPage)(false)
 
-            val result = UserAnswersReader[TransportDetails].run(userAnswers).right.value
+            val result = UserAnswersReader[TransportDetails].run(userAnswers).value
 
             result mustBe expectedResult
         }
@@ -87,7 +86,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(AddIdAtDeparturePage)(false)
               .unsafeSetVal(ChangeAtBorderPage)(false)
 
-            val result = UserAnswersReader[TransportDetails].run(userAnswers).right.value
+            val result = UserAnswersReader[TransportDetails].run(userAnswers).value
 
             result mustBe expectedResult
         }
@@ -119,7 +118,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(AddIdAtDeparturePage)(true)
               .unsafeSetVal(IdAtDeparturePage)("departureId")
 
-            val result = UserAnswersReader[Rail].run(userAnswers).right.value
+            val result = UserAnswersReader[Rail].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -132,7 +131,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(InlandModePage)("1")
               .unsafeSetVal(AddIdAtDeparturePage)(false)
 
-            val result = UserAnswersReader[Rail].run(userAnswers).right.value
+            val result = UserAnswersReader[Rail].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -181,7 +180,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(InlandModePage)("2")
 
-            val result = UserAnswersReader[Mode5or7].run(userAnswers).right.value
+            val result = UserAnswersReader[Mode5or7].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -209,7 +208,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(InlandModePage)("3")
 
-            val result = UserAnswersReader[NonSpecialMode].run(userAnswers).right.value
+            val result = UserAnswersReader[NonSpecialMode].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -223,7 +222,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(NationalityAtDeparturePage)(CountryCode("code"))
               .unsafeSetVal(IdAtDeparturePage)("departureId")
 
-            val result = UserAnswersReader[NonSpecialMode].run(userAnswers).right.value
+            val result = UserAnswersReader[NonSpecialMode].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -254,7 +253,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
             .unsafeSetVal(ModeAtBorderPage)("1")
             .unsafeSetVal(ModeCrossingBorderPage)("2")
 
-          val result = UserAnswersReader[DetailsAtBorder].run(userAnswers).right.value
+          val result = UserAnswersReader[DetailsAtBorder].run(userAnswers).value
 
           result mustBe expectedResult
         }
@@ -264,7 +263,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(ChangeAtBorderPage)(false)
 
-          val result = UserAnswersReader[DetailsAtBorder].run(userAnswers).right.value
+          val result = UserAnswersReader[DetailsAtBorder].run(userAnswers).value
 
           result mustBe an[SameDetailsAtBorder.type]
         }
@@ -292,7 +291,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
               .unsafeSetVal(ModeAtBorderPage)("1")
               .unsafeSetVal(ModeCrossingBorderPage)("2")
 
-            val result = UserAnswersReader[NewDetailsAtBorder].run(userAnswers).right.value
+            val result = UserAnswersReader[NewDetailsAtBorder].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -323,7 +322,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
                   val userAnswers = emptyUserAnswers
                     .unsafeSetVal(ModeCrossingBorderPage)(exemptNationalityCode.toString)
 
-                  val result = UserAnswersReader[ModeCrossingBorder].run(userAnswers).right.value
+                  val result = UserAnswersReader[ModeCrossingBorder].run(userAnswers).value
 
                   result mustBe expectedResult
               }
@@ -342,7 +341,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
                     .unsafeSetVal(NationalityCrossingBorderPage)(CountryCode("code"))
                     .unsafeSetVal(IdCrossingBorderPage)("idCrossing")
 
-                  val result = UserAnswersReader[ModeCrossingBorder].run(userAnswers).right.value
+                  val result = UserAnswersReader[ModeCrossingBorder].run(userAnswers).value
 
                   result mustBe expectedResult
               }

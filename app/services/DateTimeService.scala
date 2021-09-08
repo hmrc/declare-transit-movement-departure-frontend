@@ -16,10 +16,10 @@
 
 package services
 
-import java.time.LocalDateTime
-
 import com.google.inject.Singleton
 import utils.Format
+
+import java.time.LocalDateTime
 
 @Singleton
 @deprecated("Use a clock with java.time instead", "")

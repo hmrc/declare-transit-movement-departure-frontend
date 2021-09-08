@@ -57,7 +57,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val result = UserAnswersReader[StandardDocument](ProducedDocument.standardDocumentReader(index, referenceIndex)).run(producedDocumentUa)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
         "when AddExtraDocumentInformationPage is false" in {
@@ -68,7 +68,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val result = UserAnswersReader[StandardDocument](ProducedDocument.standardDocumentReader(index, referenceIndex)).run(userAnswers)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
       }
 
@@ -101,7 +101,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val result = UserAnswersReader[TIRDocument](ProducedDocument.tirDocumentReader(index, referenceIndex)).run(producedDocumentsWithTIR)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
       }
 
@@ -137,7 +137,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(producedDocumentsWithTIR)
 
-          result.right.value.value mustBe expectedResult
+          result.value.value mustBe expectedResult
         }
 
       "must return List of standard documents when " +
@@ -158,7 +158,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-          result.right.value.value mustBe expectedResult
+          result.value.value mustBe expectedResult
         }
 
       "must return List of standard documents when " +
@@ -183,7 +183,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-          result.right.value.value mustBe expectedResult
+          result.value.value mustBe expectedResult
         }
 
       "must return List of standard documents when AddSecurityDetailsPage is false and AddDocumentsPage is true" in {
@@ -201,7 +201,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-        result.right.value.value mustBe expectedResult
+        result.value.value mustBe expectedResult
       }
 
       "must return List of standard documents when AddCommercialReferenceNumberPage is true and addDocumentsPage is true" in {
@@ -219,7 +219,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-        result.right.value.value mustBe expectedResult
+        result.value.value mustBe expectedResult
       }
 
       "must return List of standard documents when Index position is not 0 and AddDocumentsPage is true" in {
@@ -237,7 +237,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(Index(1))).run(userAnswers)
 
-        result.right.value.value mustBe expectedResult
+        result.value.value mustBe expectedResult
       }
 
       "must return List of standard documents when " +
@@ -269,7 +269,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-          result.right.value.value mustBe expectedResult
+          result.value.value mustBe expectedResult
         }
 
       "must return None when " +
@@ -296,7 +296,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-          result.right.value mustBe None
+          result.value mustBe None
         }
 
       "must return None when AddSecurityDetailsPage is false and AddDocumentsPage is false" in {
@@ -309,7 +309,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-        result.right.value mustBe None
+        result.value mustBe None
       }
 
       "must return None when AddCommercialReferenceNumberPage is true and addDocumentsPage is false" in {
@@ -322,7 +322,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(index)).run(userAnswers)
 
-        result.right.value mustBe None
+        result.value mustBe None
       }
 
       "must return None when Index position is not 0 and AddDocumentsPage is false" in {
@@ -336,7 +336,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result = UserAnswersReader[Option[NonEmptyList[ProducedDocument]]](ProducedDocument.deriveProducedDocuments(Index(1))).run(userAnswers)
 
-        result.right.value mustBe None
+        result.value mustBe None
       }
     }
   }

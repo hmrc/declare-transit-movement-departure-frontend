@@ -17,8 +17,8 @@
 package models.journeyDomain.traderDetails
 
 import cats.implicits._
-import models.{CommonAddress, EoriNumber}
 import models.journeyDomain.{UserAnswersReader, _}
+import models.{CommonAddress, EoriNumber}
 import pages.traderDetails.{ConsignorAddressPage, ConsignorEoriPage, ConsignorNamePage, IsConsignorEoriKnownPage}
 
 case class ConsignorDetails(name: String, address: CommonAddress, eori: Option[EoriNumber])

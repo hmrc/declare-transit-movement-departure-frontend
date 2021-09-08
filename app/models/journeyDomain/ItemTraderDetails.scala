@@ -20,7 +20,6 @@ import cats.data._
 import cats.implicits._
 import models.journeyDomain.ItemTraderDetails.RequiredDetails
 import models.{CommonAddress, EoriNumber, Index, UserAnswers}
-import pages._
 import pages.addItems.traderDetails._
 import pages.traderDetails.{AddConsigneePage, AddConsignorPage}
 

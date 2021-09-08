@@ -16,10 +16,10 @@
 
 package navigation
 
+import controllers.routes
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import play.api.mvc.Call
-import controllers.routes
 
 trait Navigator {
   type RouteMapping = PartialFunction[Page, UserAnswers => Option[Call]]

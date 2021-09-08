@@ -22,8 +22,6 @@ import org.jsoup.nodes.Document
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import renderer.Renderer
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 

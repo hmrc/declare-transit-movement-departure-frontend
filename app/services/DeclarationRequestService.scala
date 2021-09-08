@@ -37,11 +37,11 @@ import models.journeyDomain.traderDetails._
 import models.journeyDomain.{GuaranteeDetails, ItemSection, Itinerary, JourneyDomain, Packages, UserAnswersReader, _}
 import models.messages._
 import models.messages.customsoffice.{CustomsOfficeDeparture, CustomsOfficeDestination, CustomsOfficeTransit}
-import models.messages.goodsitem.{BulkPackage, GoodsItem, RegularPackage, UnpackedPackage, _}
+import models.messages.goodsitem._
 import models.messages.guarantee.{Guarantee, GuaranteeReferenceWithGrn, GuaranteeReferenceWithOther}
 import models.messages.header.{Header, Transport}
 import models.messages.safetyAndSecurity._
-import models.messages.trader.{TraderConsignor, TraderPrincipal, TraderPrincipalWithEori, TraderPrincipalWithoutEori, _}
+import models.messages.trader._
 import models.{CommonAddress, EoriNumber, UserAnswers}
 import repositories.InterchangeControlReferenceIdRepository
 

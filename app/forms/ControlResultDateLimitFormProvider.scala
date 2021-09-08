@@ -16,12 +16,12 @@
 
 package forms
 
+import forms.mappings.Mappings
+import play.api.data.Form
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
-import forms.mappings.Mappings
 import javax.inject.Inject
-import play.api.data.Form
 
 class ControlResultDateLimitFormProvider @Inject() extends Mappings {
 

@@ -16,12 +16,9 @@
 
 package controllers
 
-import java.time.LocalDate
-
-import base.SpecBase
-import base.MockNunjucksRendererApp
+import base.{MockNunjucksRendererApp, SpecBase}
 import matchers.JsonMatchers
-import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage}
+import models.CancellationDecisionUpdateMessage
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
@@ -34,6 +31,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.DepartureMessageService
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class CancellationDecisionUpdateControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {

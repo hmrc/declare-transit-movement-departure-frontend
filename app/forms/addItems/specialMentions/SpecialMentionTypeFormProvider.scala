@@ -17,10 +17,11 @@
 package forms.addItems.specialMentions
 
 import forms.mappings.Mappings
-import javax.inject.Inject
-import models.{Index, SpecialMentionList}
 import models.reference.SpecialMention
+import models.{Index, SpecialMentionList}
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class SpecialMentionTypeFormProvider @Inject() extends Mappings {
 

@@ -20,7 +20,6 @@ import controllers.actions._
 import derivable.DeriveNumberOfGuarantees
 import forms.AddAnotherGuaranteeFormProvider
 import models.DeclarationType.Option4
-import models.journeyDomain.GettableAsReaderOps
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, NormalMode, UserAnswers}
 import navigation.Navigator

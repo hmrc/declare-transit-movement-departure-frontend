@@ -17,10 +17,11 @@
 package forms.safetyAndSecurity
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.MethodOfPaymentList
 import models.reference.MethodOfPayment
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class TransportChargesPaymentMethodFormProvider @Inject() extends Mappings {
 

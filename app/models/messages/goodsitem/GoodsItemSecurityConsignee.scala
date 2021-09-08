@@ -18,7 +18,6 @@ package models.messages.goodsitem
 
 import cats.implicits.catsSyntaxTuple5Semigroupal
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.LanguageCodeEnglish
 import xml.XMLWrites
 
 trait GoodsItemSecurityConsignee
@@ -31,7 +30,6 @@ object GoodsItemSecurityConsignee {
 }
 
 final case class ItemsSecurityConsigneeWithEori(eori: String) extends GoodsItemSecurityConsignee
-//format off
 
 object ItemsSecurityConsigneeWithEori {
 
@@ -76,4 +74,3 @@ object ItemsSecurityConsigneeWithoutEori {
   ).mapN(apply)
 
 }
-//format on

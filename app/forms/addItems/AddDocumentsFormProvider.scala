@@ -17,9 +17,10 @@
 package forms.addItems
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.Index
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class AddDocumentsFormProvider @Inject() extends Mappings {
 

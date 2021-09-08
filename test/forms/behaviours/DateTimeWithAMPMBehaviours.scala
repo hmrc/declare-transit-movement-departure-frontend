@@ -16,11 +16,11 @@
 
 package forms.behaviours
 
-import java.time.format.DateTimeFormatter
-import java.time.{LocalDateTime, ZoneOffset}
-
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
+
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneOffset}
 
 class DateTimeWithAMPMBehaviours extends FieldBehaviours {
 

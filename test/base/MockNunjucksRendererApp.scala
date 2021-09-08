@@ -19,9 +19,9 @@ package base
 import controllers.actions._
 import models.UserAnswers
 import models.requests.{DataRequest, IdentifierRequest, OptionalDataRequest}
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito
 import org.mockito.Mockito.when
-import org.mockito.ArgumentMatchers._
 import org.scalatest.{BeforeAndAfterEach, TestSuite}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -100,6 +100,7 @@ trait MockNunjucksRendererApp extends GuiceOneAppPerSuite with BeforeAndAfterEac
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[CheckDependentSectionAction].to[FakeDependencyCheckActionFilter],
+        bind[NameRequiredAction].to[FakeNameRequiredAction],
         bind[IdentifierAction].to[FakeIdentifierAction],
         bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider),
         bind[NunjucksRenderer].toInstance(mockRenderer),

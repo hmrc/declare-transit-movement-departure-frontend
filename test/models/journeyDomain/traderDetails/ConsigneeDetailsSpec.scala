@@ -22,7 +22,6 @@ import models.journeyDomain.UserAnswersReader
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, EoriNumber}
 import org.scalatest.TryValues
-
 import pages.traderDetails._
 
 class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues with UserAnswersSpecHelper {
@@ -44,7 +43,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
         val expectedResult = ConsigneeDetails("consigneeName", expectedAddress, Some(EoriNumber("eoriNumber")))
 
-        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -61,7 +60,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
         val expectedResult = ConsigneeDetails("consigneeName", expectedAddress, None)
 
-        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).value
 
         result mustBe expectedResult
 

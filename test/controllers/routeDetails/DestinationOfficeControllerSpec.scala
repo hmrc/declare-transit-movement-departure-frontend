@@ -21,7 +21,6 @@ import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.DestinationOfficeFormProvider
-import generators.Generators
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}
@@ -31,8 +30,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.routeDetails.{DestinationOfficePage, MovementDestinationCountryPage}
 import pages.OfficeOfDeparturePage
+import pages.routeDetails.{DestinationOfficePage, MovementDestinationCountryPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}

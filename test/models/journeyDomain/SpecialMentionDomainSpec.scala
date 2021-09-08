@@ -40,7 +40,7 @@ class SpecialMentionDomainSpec extends SpecBase with GeneratorSpec with UserAnsw
         val result: EitherType[SpecialMentionDomain] =
           UserAnswersReader[SpecialMentionDomain](SpecialMentionDomain.specialMentionsReader(index, referenceIndex)).run(userAnswers)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
 
       }
     }

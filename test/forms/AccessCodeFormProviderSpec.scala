@@ -17,14 +17,11 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import org.scalacheck.Gen
-import play.api.data.{Field, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.data.FormError
 
 class AccessCodeFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey      = "accessCode.error.required"
-  private val lengthKey        = "accessCode.error.length"
   private val accessCodeLength = 4
   private val invalidKey       = "accessCode.error.invalidCharacters"
   private val form             = new AccessCodeFormProvider()()

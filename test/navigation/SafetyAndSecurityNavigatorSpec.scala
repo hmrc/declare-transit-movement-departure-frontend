@@ -19,9 +19,8 @@ package navigation
 import base.SpecBase
 import controllers.safetyAndSecurity.routes
 import generators.Generators
-import models.reference.{Country, CountryCode, MethodOfPayment}
-import models.Index
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.reference.{CountryCode, MethodOfPayment}
+import models.{CheckMode, Index, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck._

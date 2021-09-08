@@ -19,11 +19,10 @@ package controllers.safetyAndSecurity
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
-import derivable.DeriveNumberOfCountryOfRouting
 import forms.safetyAndSecurity.AddAnotherCountryOfRoutingFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
-import models.{CountryList, Index, NormalMode}
+import models.{CountryList, NormalMode}
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -38,8 +37,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-import utils.countryJsonList
-import viewModels.SafetyAndSecurityCheckYourAnswersViewModel
 
 import scala.concurrent.Future
 

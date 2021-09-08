@@ -18,8 +18,8 @@ package derivable
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
+import models.Index
 import models.reference.CountryCode
-import models.{Index, UserAnswers}
 import pages.routeDetails._
 
 class DeriveOfficesOfTransitIdsSpec extends SpecBase with UserAnswersSpecHelper {

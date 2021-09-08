@@ -22,7 +22,6 @@ import navigation._
 import navigation.annotations._
 import navigation.annotations.addItems._
 import navigation.annotations.addItemsNavigators._
-
 import services.{DateTimeService, DateTimeServiceImpl}
 
 class Module extends AbstractModule {
@@ -52,6 +51,7 @@ class Module extends AbstractModule {
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[CheckDependentSectionAction]).to(classOf[CheckDependentSectionActionImpl])
+    bind(classOf[NameRequiredAction]).to(classOf[NameRequiredActionImpl])
     bind(classOf[DateTimeService]).to(classOf[DateTimeServiceImpl]).asEagerSingleton()
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
   }

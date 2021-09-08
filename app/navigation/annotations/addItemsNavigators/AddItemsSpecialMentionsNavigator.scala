@@ -17,7 +17,6 @@
 package navigation.annotations.addItemsNavigators
 
 import controllers.addItems.specialMentions.routes
-import controllers.addItems.{routes => addItemRoutes}
 import derivable.{DeriveNumberOfDocuments, DeriveNumberOfSpecialMentions}
 import models.DeclarationType.Option4
 import models.reference.CircumstanceIndicator

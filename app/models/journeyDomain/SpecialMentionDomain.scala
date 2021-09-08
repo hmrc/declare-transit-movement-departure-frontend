@@ -18,7 +18,7 @@ package models.journeyDomain
 
 import cats.implicits._
 import models.Index
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.CustomsOffice
 import pages.OfficeOfDeparturePage
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
 

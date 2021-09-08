@@ -16,7 +16,6 @@
 
 package navigation
 
-import java.time.LocalDate
 import base.SpecBase
 import controllers.goodsSummary.{routes => goodsSummaryRoute}
 import generators.Generators
@@ -29,6 +28,8 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
 import queries.SealsQuery
+
+import java.time.LocalDate
 
 class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -46,6 +47,17 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
               .mustBe(goodsSummaryRoute.AuthorisedLocationCodeController.onPageLoad(updatedAnswers.lrn, NormalMode))
+        }
+      }
+
+      "must go from Loading Place page to session expired when no selection for ProcedureTypePage" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            lazy val updatedAnswers = answers.remove(ProcedureTypePage).toOption.value
+
+            navigator
+              .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
+              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
         }
       }
 
@@ -72,6 +84,19 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
               .mustBe(goodsSummaryRoute.AddAgreedLocationOfGoodsController.onPageLoad(updatedAnswers.lrn, NormalMode))
+        }
+      }
+
+      "must go from Loading Place page to session expired when on Normal journey and no selection for PreLodgeDeclaration" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(ProcedureTypePage, Normal).toOption.value
+              .remove(PreLodgeDeclarationPage).toOption.value
+
+            navigator
+              .nextPage(LoadingPlacePage, NormalMode, updatedAnswers)
+              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
         }
       }
 
@@ -181,8 +206,6 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-
-
       "must go from SealsInformationPage to GoodsSummaryCheckYourAnswersPage when answer is No" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -191,6 +214,17 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(SealsInformationPage, NormalMode, updatedAnswers)
               .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
+        }
+      }
+
+      "must go from SealsInformationPage to session expired when answer is undefined" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            lazy val updatedAnswers = answers.remove(SealsInformationPage).toOption.value
+
+            navigator
+              .nextPage(SealsInformationPage, NormalMode, updatedAnswers)
+              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
         }
       }
 
@@ -425,6 +459,17 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
             navigator
               .nextPage(SealsInformationPage, CheckMode, updatedAnswers)
               .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
+        }
+      }
+
+      "must go from SealsInformationPage to session expired when answer is undefined" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            lazy val updatedAnswers = answers.remove(SealsInformationPage).toOption.value
+
+            navigator
+              .nextPage(SealsInformationPage, CheckMode, updatedAnswers)
+              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
         }
       }
 

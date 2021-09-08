@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import models.journeyDomain.Packages.{BulkPackages, OtherPackages, UnpackedPackages}
 import models.reference.PackageType
 import org.scalacheck.Gen
-import pages.addItems.{DeclareMarkPage, TotalPiecesPage, _}
+import pages.addItems._
 import pages.{PackageTypePage, QuestionPage}
 
 class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
@@ -54,7 +54,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
         val result = UserAnswersReader[Packages](Packages.packagesReader(index, index)).run(unpackedPackageUa)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
 
       "when package type is bulk" in {
@@ -63,7 +63,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
         val result = UserAnswersReader[Packages](Packages.packagesReader(index, index)).run(bulkPackageUa)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
 
       "when package type is anything else" in {
@@ -71,7 +71,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
         val result = UserAnswersReader[Packages](Packages.packagesReader(index, index)).run(otherPackageUa)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
     }
 
@@ -85,7 +85,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
           val result = UserAnswersReader[OtherPackages](OtherPackages.otherPackageReader(index, index)).run(otherPackageUa)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
       }
@@ -122,7 +122,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
           val result = UserAnswersReader[BulkPackages](BulkPackages.bulkPackageReader(index, index)).run(bulkPackageUa)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
         "when all mandatory answers are defined and mark or number is defined" in {
@@ -135,7 +135,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
           val result = UserAnswersReader[BulkPackages](BulkPackages.bulkPackageReader(index, index)).run(userAnswers)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
       }
@@ -182,7 +182,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
           val result = UserAnswersReader[UnpackedPackages](UnpackedPackages.unpackedPackagesReader(index, index)).run(unpackedPackageUa)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
         "when mark or number is defined" in {
@@ -195,7 +195,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
           val result = UserAnswersReader[UnpackedPackages](UnpackedPackages.unpackedPackagesReader(index, index)).run(userAnswers)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
       }
 

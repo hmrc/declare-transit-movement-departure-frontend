@@ -16,13 +16,12 @@
 
 package models
 
-import java.time.{LocalDate, LocalDateTime, LocalTime}
-
-import com.lucidchart.open.xtract.{ParseError, ParseFailure, ParseResult, ParseSuccess, PartialParseSuccess, XmlReader}
 import com.lucidchart.open.xtract.XmlReader.{intReader, strictReadSeq}
+import com.lucidchart.open.xtract._
 import play.api.Logger
 import utils.Format.{dateFormatter, dateTimeFormatterIE015, timeFormatter}
 
+import java.time.{LocalDate, LocalDateTime, LocalTime}
 import scala.util.{Failure, Success, Try}
 import scala.xml.NodeSeq
 

@@ -16,13 +16,13 @@
 
 package viewModels
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import base.SpecBase
-import models.Index
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class GoodsSummaryCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks {
 
