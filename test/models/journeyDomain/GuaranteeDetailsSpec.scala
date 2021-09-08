@@ -74,7 +74,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result: EitherType[GuaranteeDetails] = UserAnswersReader[GuaranteeDetails](GuaranteeDetails.parseGuaranteeDetails(index)).run(guaranteeReferenceUa)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
 
       "when guarantee type is a valid other type of guarantee and all answers are defined" in {
@@ -83,7 +83,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result: EitherType[GuaranteeDetails] = UserAnswersReader[GuaranteeDetails](GuaranteeDetails.parseGuaranteeDetails(index)).run(otherGuaranteeUa)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
 
       "when there are multiple GuaranteeDetails all details for section have been answered" in {
@@ -95,7 +95,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result: EitherType[NonEmptyList[GuaranteeDetails]] = UserAnswersReader[NonEmptyList[GuaranteeDetails]].run(listOfGuaranteeDetails)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
 
       "when there are multiple GuaranteeDetails with a TIR Declaration Type" in {
@@ -112,7 +112,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
         val result: EitherType[NonEmptyList[GuaranteeDetails]] = UserAnswersReader[NonEmptyList[GuaranteeDetails]].run(listOfGuaranteeDetailsWithTIR)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
     }
 
@@ -154,7 +154,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val userAnswers = guaranteeReferenceUa.unsafeRemove(DefaultAmountPage(index))
 
-          val result = UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).run(userAnswers).value
 
           result mustBe expectedResult
         }
@@ -167,7 +167,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
             .unsafeSetVal(DefaultAmountPage(index))(true)
             .unsafeRemove(LiabilityAmountPage(index))
 
-          val result = UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).run(userAnswers).value
 
           result mustBe expectedResult
         }
@@ -179,7 +179,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
           val userAnswers = guaranteeReferenceUa
             .unsafeSetVal(DefaultAmountPage(index))(false)
 
-          val result = UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).run(userAnswers).right.value
+          val result = UserAnswersReader[GuaranteeReference](GuaranteeReference.parseGuaranteeReference(index)).run(userAnswers).value
 
           result mustBe expectedResult
         }
@@ -230,7 +230,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val expectedResult = GuaranteeOther(otherGuaranteeReferenceType, "otherRefNumber")
 
-          val result = UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).run(otherGuaranteeUa).right.value
+          val result = UserAnswersReader[GuaranteeOther](GuaranteeOther.parseGuaranteeOther(index)).run(otherGuaranteeUa).value
 
           result mustBe expectedResult
         }
@@ -264,7 +264,7 @@ class GuaranteeDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersS
 
           val expectedResult = GuaranteeTIR("tirRefNumber")
 
-          val result = UserAnswersReader[GuaranteeTIR](GuaranteeTIR.parseGuaranteeTIR(index)).run(tirGuaranteeReferenceUa).right.value
+          val result = UserAnswersReader[GuaranteeTIR](GuaranteeTIR.parseGuaranteeTIR(index)).run(tirGuaranteeReferenceUa).value
 
           result mustBe expectedResult
         }

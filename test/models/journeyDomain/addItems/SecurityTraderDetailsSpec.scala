@@ -35,7 +35,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
         val ua = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(false)
 
-        val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+        val result = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
         result mustBe None
       }
@@ -47,7 +47,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
 
-          val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+          val result = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
           result mustBe None
         }
@@ -64,7 +64,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
                 .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
               val expected = SecurityTraderEori(EoriNumber("testEori"))
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
               result.value mustEqual expected
             }
@@ -78,7 +78,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
                 .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
               val expected = SecurityTraderEori(EoriNumber("testEori"))
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
               result.value mustEqual expected
             }
@@ -92,7 +92,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
                 .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
               val expected = SecurityTraderEori(EoriNumber("testEori"))
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
               result.value mustEqual expected
             }
@@ -113,7 +113,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
 
               val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
               val expected = SecurityPersonalInformation("testName", address)
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
               result.value mustEqual expected
             }
@@ -134,7 +134,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
               val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
               val expected = SecurityPersonalInformation("testName", address)
 
-              val result = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
               result.value mustEqual expected
             }
@@ -150,7 +150,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
                 .unsafeSetVal(SecurityConsigneeEoriPage(index))("testEori")
 
               val expected = SecurityTraderEori(EoriNumber("testEori"))
-              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).right.value
+              val result   = SecurityTraderDetails.consigneeDetails(index).run(ua).value
 
               result.value mustEqual expected
             }
@@ -168,7 +168,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
         val ua = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(false)
 
-        val result = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
+        val result = SecurityTraderDetails.consignorDetails(index).run(ua).value
 
         result mustBe None
       }
@@ -180,7 +180,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
             .unsafeSetVal(AddSecurityDetailsPage)(true)
             .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
 
-          val result = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
+          val result = SecurityTraderDetails.consignorDetails(index).run(ua).value
 
           result mustBe None
         }
@@ -222,7 +222,7 @@ class SecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with UserAns
 
             val address  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
             val expected = SecurityPersonalInformation("testName", address)
-            val result   = SecurityTraderDetails.consignorDetails(index).run(ua).right.value
+            val result   = SecurityTraderDetails.consignorDetails(index).run(ua).value
 
             result.value mustEqual expected
           }

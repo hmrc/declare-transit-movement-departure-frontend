@@ -40,7 +40,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
             .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
             .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
 
-          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).value
 
           val expectedResult = PrincipalTraderEoriInfo(EoriNumber("GB123456"), None)
 
@@ -55,7 +55,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
             .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
             .unsafeSetVal(WhatIsPrincipalEoriPage)("XI123456")
 
-          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).value
 
           val expectedResult = PrincipalTraderEoriInfo(EoriNumber("XI123456"), None)
 
@@ -74,7 +74,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
             .unsafeSetVal(PrincipalNamePage)("principleName")
             .unsafeSetVal(PrincipalAddressPage)(address)
 
-          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).value
 
           val expectedResult = PrincipalTraderEoriPersonalInfo(eoriNumber, "principleName", address, None)
 
@@ -91,7 +91,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
             .unsafeSetVal(PrincipalNamePage)("principleName")
             .unsafeSetVal(PrincipalAddressPage)(address)
 
-          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).value
 
           val expectedResult = PrincipalTraderDetails("principleName", address, None)
 
@@ -108,7 +108,7 @@ class PrincipalTraderDetailsSpec extends SpecBase with GeneratorSpec with TryVal
             .unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
             .unsafeSetVal(WhatIsPrincipalEoriPage)("GB123456")
 
-          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).right.value
+          val result = UserAnswersReader[PrincipalTraderDetails].run(userAnswers).value
 
           val expectedResult = PrincipalTraderEoriInfo(EoriNumber("GB123456"), None)
 

@@ -47,7 +47,7 @@ class PreTaskListDetailsSpec extends SpecBase with GeneratorSpec with UserAnswer
 
         val result: EitherType[PreTaskListDetails] = UserAnswersReader[PreTaskListDetails].run(preTaskListUa)
 
-        result.right.value mustEqual expectedResult
+        result.value mustEqual expectedResult
       }
     }
 

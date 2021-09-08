@@ -45,7 +45,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
 
         val expectedResult = ItemsSecurityTraderDetails(None, None, None, None, None)
 
-        val result = ItemsSecurityTraderDetails.parser(index).run(itemSecurityTraderDetailsUa).right.value.value
+        val result = ItemsSecurityTraderDetails.parser(index).run(itemSecurityTraderDetailsUa).value.value
 
         result mustBe expectedResult
       }
@@ -70,7 +70,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
           .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
           .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
 
-        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value.value
+        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).value.value
 
         result mustBe expectedResult
       }
@@ -80,7 +80,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
         val consignorAddress  = CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), ""))
         val expectedConsignor = SecurityPersonalInformation("testName", consignorAddress)
         val expectedConsignee = SecurityTraderEori(EoriNumber("testEori"))
-        val gbCustomsOffice   = CustomsOffice("Id", "Name", CountryCode("GB"), None)
+        val gbCustomsOffice   = CustomsOffice("id", "name", CountryCode("code"), None)
 
         val userAnswers = itemSecurityTraderDetailsUa
           .unsafeSetVal(AddSafetyAndSecurityConsigneePage)(false)
@@ -91,12 +91,12 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
           .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(false)
           .unsafeSetVal(AddSecurityConsignorsEoriPage(index))(false)
           .unsafeSetVal(SecurityConsignorNamePage(index))("testName")
-          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("code"), None))
+          .unsafeSetVal(OfficeOfDeparturePage)(gbCustomsOffice)
           .unsafeSetVal(SecurityConsignorAddressPage(index))(CommonAddress("1", "2", "3", Country(CountryCode("ZZ"), "")))
 
         val expectedResult = ItemsSecurityTraderDetails(None, None, None, Some(expectedConsignor), Some(expectedConsignee))
 
-        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value.value
+        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).value.value
 
         result mustBe expectedResult
       }
@@ -104,7 +104,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       "when add security details is false" in {
         val userAnswers = emptyUserAnswers.unsafeSetVal(AddSecurityDetailsPage)(false)
 
-        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).right.value
+        val result = ItemsSecurityTraderDetails.parser(index).run(userAnswers).value
 
         result mustBe None
       }

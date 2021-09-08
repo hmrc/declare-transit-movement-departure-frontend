@@ -83,7 +83,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
     "must redirect to 'Departure declaration sent' page on valid submission" in {
       dataRetrievalWithData(emptyUserAnswers)
-      when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(ACCEPTED))))
+      when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(ACCEPTED, ""))))
 
       val request = FakeRequest(POST, routes.DeclarationSummaryController.onSubmit(lrn).url)
 
@@ -98,7 +98,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
       dataRetrievalWithData(emptyUserAnswers)
       val genServerError = Gen.chooseNum(500, 599).sample.value
 
-      when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(genServerError))))
+      when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(genServerError, ""))))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 

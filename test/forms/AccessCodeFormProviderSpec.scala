@@ -22,7 +22,6 @@ import play.api.data.FormError
 class AccessCodeFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey      = "accessCode.error.required"
-  private val lengthKey        = "accessCode.error.length"
   private val accessCodeLength = 4
   private val invalidKey       = "accessCode.error.invalidCharacters"
   private val form             = new AccessCodeFormProvider()()

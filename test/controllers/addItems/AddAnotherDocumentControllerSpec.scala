@@ -84,7 +84,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
         "heading"   -> msg"addAnotherDocument.heading.plural".withArgs(1),
         "radios"    -> Radios.yesNo(form("value"))
       )
-      templateCaptor.getValue mustEqual "addItems/addAnotherDocument.njk"
+      templateCaptor.getValue mustEqual template
       jsonCaptor.getValue must containJson(expectedJson)
 
     }
@@ -135,7 +135,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
         "radios"    -> Radios.yesNo(boundForm("value"))
       )
 
-      templateCaptor.getValue mustEqual "addItems/addAnotherDocument.njk"
+      templateCaptor.getValue mustEqual template
       jsonCaptor.getValue must containJson(expectedJson)
 
     }

@@ -46,7 +46,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
           None
         )
 
-        val result = UserAnswersReader[TraderDetails].run(traderDetailsUa).right.value
+        val result = UserAnswersReader[TraderDetails].run(traderDetailsUa).value
 
         result mustBe expectedResult
       }
@@ -65,7 +65,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
           .unsafeSetVal(ConsignorNamePage)("consignorName")
           .unsafeSetVal(ConsignorAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
 
-        val result = UserAnswersReader[TraderDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[TraderDetails].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -84,7 +84,7 @@ class TraderDetailsSpec extends SpecBase with GeneratorSpec with TryValues with 
           .unsafeSetVal(ConsigneeNamePage)("consigneeName")
           .unsafeSetVal(ConsigneeAddressPage)(CommonAddress("addressLine1", "addressLine2", "postalCode", Country(CountryCode("GB"), "123")))
 
-        val result = UserAnswersReader[TraderDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[TraderDetails].run(userAnswers).value
 
         result mustBe expectedResult
       }

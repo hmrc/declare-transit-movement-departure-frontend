@@ -54,7 +54,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
         .unsafeSetVal(DeclarationTypePage)(generatedOption)
         .unsafeSetVal(ArrivalTimesAtOfficePage(index))(dateNow)
 
-      val result = UserAnswersReader[RouteDetails].run(userAnswers).right.value
+      val result = UserAnswersReader[RouteDetails].run(userAnswers).value
 
       result mustBe expectedResult
     }
@@ -73,7 +73,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
         .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
         .unsafeSetVal(DeclarationTypePage)(DeclarationType.Option4)
 
-      val result = UserAnswersReader[RouteDetails].run(userAnswers).right.value
+      val result = UserAnswersReader[RouteDetails].run(userAnswers).value
 
       result mustBe expectedResult
     }
@@ -104,7 +104,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
           .unsafeSetVal(ArrivalTimesAtOfficePage(index))(dateNow)
 
-        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).right.value
+        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -126,7 +126,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
           .unsafeSetVal(AddOfficeOfTransitPage)(false)
 
-        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).right.value
+        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -149,7 +149,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
           .unsafeSetVal(AddOfficeOfTransitPage)(false)
 
-        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).right.value
+        val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -235,7 +235,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
 
-        val result = UserAnswersReader[RouteDetailsWithoutTransitInformation].run(userAnswers).right.value
+        val result = UserAnswersReader[RouteDetailsWithoutTransitInformation].run(userAnswers).value
 
         result mustBe expectedResult
       }

@@ -104,9 +104,9 @@ class DeclarationRequestServiceSpec
               result.isRight mustBe true
 
               if (userAnswerScenario.toModel.preTaskList.addSecurityDetails) {
-                result.right.value.header.secHEA358 mustBe Some(1)
+                result.value.header.secHEA358 mustBe Some(1)
               } else {
-                result.right.value.header.secHEA358 mustBe None
+                result.value.header.secHEA358 mustBe None
               }
           }
         }
@@ -126,7 +126,7 @@ class DeclarationRequestServiceSpec
 
           val result = service.convert(updatedUserAnswer).futureValue
 
-          result.right.value.header.totGroMasHEA307 mustBe "300.246"
+          result.value.header.totGroMasHEA307 mustBe "300.246"
         }
       }
 
@@ -150,10 +150,10 @@ class DeclarationRequestServiceSpec
 
                 val result = service.convert(userAnswers).futureValue
 
-                result.right.value.header.cusSubPlaHEA66.value mustBe "customsApprovedLocation"
-                result.right.value.header.autLocOfGooCodHEA41 mustBe None
-                result.right.value.header.agrLocOfGooHEA39 mustBe None
-                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+                result.value.header.cusSubPlaHEA66.value mustBe "customsApprovedLocation"
+                result.value.header.autLocOfGooCodHEA41 mustBe None
+                result.value.header.agrLocOfGooHEA39 mustBe None
+                result.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
 
@@ -174,10 +174,10 @@ class DeclarationRequestServiceSpec
 
                 val result = service.convert(userAnswers).futureValue
 
-                result.right.value.header.cusSubPlaHEA66 mustBe None
-                result.right.value.header.autLocOfGooCodHEA41 mustBe None
-                result.right.value.header.agrLocOfGooHEA39 mustBe None
-                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+                result.value.header.cusSubPlaHEA66 mustBe None
+                result.value.header.autLocOfGooCodHEA41 mustBe None
+                result.value.header.agrLocOfGooHEA39 mustBe None
+                result.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
         }
@@ -201,10 +201,10 @@ class DeclarationRequestServiceSpec
 
                 val result = service.convert(userAnswers).futureValue
 
-                result.right.value.header.cusSubPlaHEA66 mustBe None
-                result.right.value.header.autLocOfGooCodHEA41 mustBe None
-                result.right.value.header.agrLocOfGooHEA39 mustBe None
-                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+                result.value.header.cusSubPlaHEA66 mustBe None
+                result.value.header.autLocOfGooCodHEA41 mustBe None
+                result.value.header.agrLocOfGooHEA39 mustBe None
+                result.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
 
@@ -226,10 +226,10 @@ class DeclarationRequestServiceSpec
 
                 val result = service.convert(userAnswers).futureValue
 
-                result.right.value.header.cusSubPlaHEA66 mustBe None
-                result.right.value.header.autLocOfGooCodHEA41 mustBe None
-                result.right.value.header.agrLocOfGooHEA39.value mustBe "Agreed location of Goods"
-                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+                result.value.header.cusSubPlaHEA66 mustBe None
+                result.value.header.autLocOfGooCodHEA41 mustBe None
+                result.value.header.agrLocOfGooHEA39.value mustBe "Agreed location of Goods"
+                result.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
         }
@@ -251,7 +251,7 @@ class DeclarationRequestServiceSpec
 
                 val result = service.convert(userAnswers).futureValue
 
-                result.right.value.header.agrLocOfGooCodHEA38.value mustBe "Pre-lodge"
+                result.value.header.agrLocOfGooCodHEA38.value mustBe "Pre-lodge"
             }
           }
 
@@ -272,7 +272,7 @@ class DeclarationRequestServiceSpec
 
                 val result = service.convert(userAnswers).futureValue
 
-                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+                result.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
         }
@@ -288,9 +288,9 @@ class DeclarationRequestServiceSpec
 
                 val result = service.convert(userAnswerScenario.userAnswers).futureValue
 
-                result.right.value.header.cusSubPlaHEA66 mustBe None
-                result.right.value.header.agrLocOfGooHEA39 mustBe None
-                result.right.value.header.agrLocOfGooCodHEA38 mustBe None
+                result.value.header.cusSubPlaHEA66 mustBe None
+                result.value.header.agrLocOfGooHEA39 mustBe None
+                result.value.header.agrLocOfGooCodHEA38 mustBe None
             }
           }
         }
@@ -312,8 +312,8 @@ class DeclarationRequestServiceSpec
                 val expectedResult =
                   userAnswerScenario.toModel.goodsSummary.goodSummaryDetails.asInstanceOf[GoodSummarySimplifiedDetails].authorisedLocationCode
 
-                result.right.value.header.autLocOfGooCodHEA41.value mustBe expectedResult
-                result.right.value.header.cusSubPlaHEA66 mustBe None
+                result.value.header.autLocOfGooCodHEA41.value mustBe expectedResult
+                result.value.header.cusSubPlaHEA66 mustBe None
             }
           }
         }
@@ -329,7 +329,7 @@ class DeclarationRequestServiceSpec
 
                 val result = service.convert(userAnswerScenario.userAnswers).futureValue
 
-                result.right.value.header.autLocOfGooCodHEA41 mustBe None
+                result.value.header.autLocOfGooCodHEA41 mustBe None
             }
           }
         }
@@ -355,7 +355,7 @@ class DeclarationRequestServiceSpec
 
               val result = service.convert(userAnswers).futureValue
 
-              result.right.value.header.transportDetails.ideOfMeaOfTraCroHEA85.value mustBe "idCrossingBorder"
+              result.value.header.transportDetails.ideOfMeaOfTraCroHEA85.value mustBe "idCrossingBorder"
           }
         }
 
@@ -373,7 +373,7 @@ class DeclarationRequestServiceSpec
 
               val result = service.convert(userAnswers).futureValue
 
-              result.right.value.header.transportDetails.ideOfMeaOfTraCroHEA85 mustBe None
+              result.value.header.transportDetails.ideOfMeaOfTraCroHEA85 mustBe None
           }
         }
 
@@ -392,7 +392,7 @@ class DeclarationRequestServiceSpec
 
               val result = service.convert(userAnswers).futureValue
 
-              result.right.value.header.transportDetails.ideOfMeaOfTraCroHEA85 mustBe Some("idAtDeparture")
+              result.value.header.transportDetails.ideOfMeaOfTraCroHEA85 mustBe Some("idAtDeparture")
           }
         }
 
@@ -411,7 +411,7 @@ class DeclarationRequestServiceSpec
 
               val result = service.convert(userAnswers).futureValue
 
-              result.right.value.header.transportDetails.ideOfMeaOfTraCroHEA85 mustBe None
+              result.value.header.transportDetails.ideOfMeaOfTraCroHEA85 mustBe None
           }
         }
       }
@@ -436,7 +436,7 @@ class DeclarationRequestServiceSpec
 
               val result = service.convert(userAnswers).futureValue
 
-              result.right.value.header.transportDetails.natOfMeaOfTraCroHEA87.value mustBe "GB"
+              result.value.header.transportDetails.natOfMeaOfTraCroHEA87.value mustBe "GB"
           }
         }
 
@@ -455,7 +455,7 @@ class DeclarationRequestServiceSpec
 
               val result = service.convert(userAnswers).futureValue
 
-              result.right.value.header.transportDetails.natOfMeaOfTraCroHEA87 mustBe None
+              result.value.header.transportDetails.natOfMeaOfTraCroHEA87 mustBe None
           }
         }
 
@@ -475,7 +475,7 @@ class DeclarationRequestServiceSpec
 
               val result = service.convert(userAnswers).futureValue
 
-              result.right.value.header.transportDetails.natOfMeaOfTraCroHEA87.value mustBe "ND"
+              result.value.header.transportDetails.natOfMeaOfTraCroHEA87.value mustBe "ND"
           }
         }
 
@@ -494,7 +494,7 @@ class DeclarationRequestServiceSpec
 
               val result = service.convert(userAnswers).futureValue
 
-              result.right.value.header.transportDetails.natOfMeaOfTraCroHEA87 mustBe None
+              result.value.header.transportDetails.natOfMeaOfTraCroHEA87 mustBe None
           }
         }
       }
@@ -507,7 +507,7 @@ class DeclarationRequestServiceSpec
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
               when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-              val result = service.convert(userAnswerScenario.userAnswers).futureValue.right.value
+              val result = service.convert(userAnswerScenario.userAnswers).futureValue.value
 
               val expectedGoodsSummary = userAnswerScenario.toModel.goodsSummary.goodSummaryDetails.asInstanceOf[GoodSummarySimplifiedDetails]
 
@@ -526,7 +526,7 @@ class DeclarationRequestServiceSpec
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
               when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-              val result = service.convert(userAnswerScenario.userAnswers).futureValue.right.value
+              val result = service.convert(userAnswerScenario.userAnswers).futureValue.value
 
               result.controlResult mustBe None
               result.header.autLocOfGooCodHEA41 mustBe None
@@ -548,7 +548,7 @@ class DeclarationRequestServiceSpec
                 .unsafeSetVal(WhatIsPrincipalEoriPage)("ad123456789")
                 .unsafeSetVal(PrincipalAddressPage)(CommonAddress("Line 1", "city", "PostCode", Country(CountryCode("XI"), "SomeDescription")))
 
-              val result = service.convert(userAnswers).futureValue.right.value.traderPrincipal
+              val result = service.convert(userAnswers).futureValue.value.traderPrincipal
 
               result mustBe TraderPrincipalWithEori(
                 eori = "ad123456789",
@@ -569,7 +569,7 @@ class DeclarationRequestServiceSpec
           when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
           when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-          val result = service.convert(Scenario7.userAnswers).futureValue.right.value.customsOfficeTransit
+          val result = service.convert(Scenario7.userAnswers).futureValue.value.customsOfficeTransit
 
           result mustBe Seq.empty
         }
@@ -580,7 +580,7 @@ class DeclarationRequestServiceSpec
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
               when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
 
-              val result: Seq[CustomsOfficeTransit] = service.convert(scenario.userAnswers).futureValue.right.value.customsOfficeTransit
+              val result: Seq[CustomsOfficeTransit] = service.convert(scenario.userAnswers).futureValue.value.customsOfficeTransit
               val exepectedResult: Option[List[CustomsOfficeTransit]] =
                 scenario.toModel.routeDetails.asInstanceOf[RouteDetailsWithTransitInformation].transitInformation.map {
                   x =>

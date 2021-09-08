@@ -51,7 +51,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           .unsafeSetVal(RepresentativeNamePage)("repName")
           .unsafeSetVal(RepresentativeCapacityPage)(Direct)
 
-        val result = UserAnswersReader[MovementDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[MovementDetails].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -73,7 +73,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
           .unsafeSetVal(RepresentativeNamePage)("repName")
           .unsafeSetVal(RepresentativeCapacityPage)(Direct)
 
-        val result = UserAnswersReader[MovementDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[MovementDetails].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -112,7 +112,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
               .unsafeSetVal(RepresentativeNamePage)("repName")
               .unsafeSetVal(RepresentativeCapacityPage)(Direct)
 
-            val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).right.value
+            val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -136,7 +136,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
               .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
               .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
 
-            val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).right.value
+            val result = UserAnswersReader[NormalMovementDetails].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -227,7 +227,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
               .unsafeSetVal(RepresentativeNamePage)("repName")
               .unsafeSetVal(RepresentativeCapacityPage)(Direct)
 
-            val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).right.value
+            val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).value
 
             result mustBe expectedResult
           }
@@ -248,7 +248,7 @@ class MovementDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSp
               .unsafeSetVal(DeclarationPlacePage)("declarationPlace")
               .unsafeSetVal(DeclarationForSomeoneElsePage)(false)
 
-            val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).right.value
+            val result = UserAnswersReader[SimplifiedMovementDetails].run(userAnswers).value
 
             result mustBe expectedResult
           }

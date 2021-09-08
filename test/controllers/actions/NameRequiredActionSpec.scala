@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class NameRequiredActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators with UserAnswersSpecHelper {
 
-  def harness[T <: QuestionPage[String]](page: T, userAnswers: UserAnswers, f: NameRequest[AnyContent] => Unit): Future[Result] = {
+  def harness[T <: QuestionPage[String]](page: T, userAnswers: UserAnswers): Future[Result] = {
 
     lazy val actionProvider = app.injector.instanceOf[NameRequiredActionImpl]
 
@@ -40,8 +40,7 @@ class NameRequiredActionSpec extends SpecBase with GuiceOneAppPerSuite with Gene
       .invokeBlock(
         DataRequest(FakeRequest(GET, "/").asInstanceOf[Request[AnyContent]], EoriNumber(""), userAnswers),
         {
-          request: NameRequest[AnyContent] =>
-            f(request)
+          _: NameRequest[AnyContent] =>
             Future.successful(Results.Ok)
         }
       )
@@ -54,14 +53,14 @@ class NameRequiredActionSpec extends SpecBase with GuiceOneAppPerSuite with Gene
       val answers = emptyUserAnswers
         .unsafeSetVal(SecurityConsigneeNamePage(index))("Name")
 
-      val result: Future[Result] = harness(SecurityConsigneeNamePage(index), answers, request => request.userAnswers)
+      val result: Future[Result] = harness(SecurityConsigneeNamePage(index), answers)
       status(result) mustBe OK
       redirectLocation(result) mustBe None
     }
 
     "redirect to session expired if SecurityConsigneeNamePage undefined at index" in {
 
-      val result = harness(SecurityConsigneeNamePage(index), emptyUserAnswers, request => request.userAnswers)
+      val result = harness(SecurityConsigneeNamePage(index), emptyUserAnswers)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(controllers.routes.SessionExpiredController.onPageLoad().url)
     }

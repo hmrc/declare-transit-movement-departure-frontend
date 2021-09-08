@@ -36,7 +36,7 @@ class ItinerarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelp
 
         val result = UserAnswersReader[Itinerary](Itinerary.itineraryReader(index)).run(itineraryUa)
 
-        result.right.value mustEqual expectedResult
+        result.value mustEqual expectedResult
       }
 
       "when there are multiple countries of routing" in {
@@ -51,7 +51,7 @@ class ItinerarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelp
 
         val result = UserAnswersReader[NonEmptyList[Itinerary]](Itinerary.readItineraries).run(userAnswers)
 
-        result.right.value mustEqual expectedResult
+        result.value mustEqual expectedResult
       }
     }
 

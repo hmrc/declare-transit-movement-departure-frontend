@@ -43,7 +43,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
         val expectedResult = ConsigneeDetails("consigneeName", expectedAddress, Some(EoriNumber("eoriNumber")))
 
-        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).value
 
         result mustBe expectedResult
       }
@@ -60,7 +60,7 @@ class ConsigneeDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
         val expectedResult = ConsigneeDetails("consigneeName", expectedAddress, None)
 
-        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).right.value
+        val result = UserAnswersReader[ConsigneeDetails].run(userAnswers).value
 
         result mustBe expectedResult
 

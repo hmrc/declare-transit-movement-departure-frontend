@@ -53,7 +53,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
         val result = UserAnswersReader[GoodsSummary].run(userAnswers)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
 
       "when Normal" - {
@@ -76,7 +76,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
           val result = UserAnswersReader[GoodsSummary].run(userAnswers)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
         "when prelodge is false an user does not add custom approved location and adds Agreed Location of Goods" in {
@@ -99,7 +99,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
           val result = UserAnswersReader[GoodsSummary].run(userAnswers)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
         "when prelodge is false an user does not add custom approved location but does not add Agreed Location of Goods" in {
@@ -121,7 +121,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
           val result = UserAnswersReader[GoodsSummary].run(userAnswers)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
         "when prelodge is true and customer does add Agreed Location of Goods" in {
@@ -142,7 +142,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
           val result = UserAnswersReader[GoodsSummary].run(userAnswers)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
 
         "when prelodge is true and customer does not add Agreed Location of Goods and seals have been added" in {
@@ -164,7 +164,7 @@ class GoodsSummarySpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
           val result = UserAnswersReader[GoodsSummary].run(userAnswers)
 
-          result.right.value mustBe expectedResult
+          result.value mustBe expectedResult
         }
       }
     }

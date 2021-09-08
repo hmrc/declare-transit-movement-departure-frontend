@@ -36,7 +36,7 @@ import scala.concurrent.Future
 
 class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators with UserAnswersSpecHelper {
 
-  def harness(reader: DependentSection, userAnswers: UserAnswers, f: DataRequest[AnyContent] => Unit): Future[Result] = {
+  def harness(reader: DependentSection, userAnswers: UserAnswers): Future[Result] = {
 
     lazy val actionProvider = app.injector.instanceOf[CheckDependentSectionActionImpl]
 
@@ -44,8 +44,7 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
       .invokeBlock(
         DataRequest(FakeRequest(GET, "/").asInstanceOf[Request[AnyContent]], EoriNumber(""), userAnswers),
         {
-          request: DataRequest[AnyContent] =>
-            f(request)
+          _: DataRequest[AnyContent] =>
             Future.successful(Results.Ok)
         }
       )
@@ -71,14 +70,14 @@ class CheckDependentSectionActionSpec extends SpecBase with GuiceOneAppPerSuite 
         .unsafeSetVal(RepresentativeNamePage)("repName")
         .unsafeSetVal(RepresentativeCapacityPage)(Direct)
 
-      val result: Future[Result] = harness(DependentSection.TransportDetails, dependentSections, request => request.userAnswers)
+      val result: Future[Result] = harness(DependentSection.TransportDetails, dependentSections)
       status(result) mustBe OK
       redirectLocation(result) mustBe None
     }
 
     "return to task list page if dependent section is incomplete" in {
 
-      val result = harness(DependentSection.TransportDetails, emptyUserAnswers, request => request.userAnswers)
+      val result = harness(DependentSection.TransportDetails, emptyUserAnswers)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(controllers.routes.DeclarationSummaryController.onPageLoad(emptyUserAnswers.lrn).url)
     }

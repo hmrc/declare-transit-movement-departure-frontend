@@ -34,7 +34,7 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
 
         forAll(genUserAnswerScenario) {
           userAnswerScenario =>
-            val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers).right.value
+            val result = UserAnswersReader[JourneyDomain].run(userAnswerScenario.userAnswers).value
 
             result mustBe userAnswerScenario.toModel
         }
@@ -63,7 +63,7 @@ class JourneyDomainSpec extends SpecBase with GeneratorSpec with UserAnswersGene
             .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))(100.123)
             .unsafeSetVal(ItemTotalGrossMassPage(Index(1)))(200.123)
 
-          val itemSectionList = UserAnswersReader[NonEmptyList[ItemSection]].run(updatedUserAnswer).right.value
+          val itemSectionList = UserAnswersReader[NonEmptyList[ItemSection]].run(updatedUserAnswer).value
 
           val result = ItemSections(itemSectionList)
 

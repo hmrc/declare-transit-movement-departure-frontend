@@ -324,7 +324,7 @@ class UserAnswersToXmlConversionSpec
         </CARTRA100>
       </CC015B>
 
-      val generatedXml = service.convert(Scenario1.userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
+      val generatedXml = service.convert(Scenario1.userAnswers).futureValue.value.toXml.map(scala.xml.Utility.trim)
 
       validate(generatedXml.toString()) mustBe Success(())
 
@@ -424,7 +424,7 @@ class UserAnswersToXmlConversionSpec
         </GOOITEGDS>
       </CC015B>
 
-      val generatedXml = service.convert(Scenario2.userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
+      val generatedXml = service.convert(Scenario2.userAnswers).futureValue.value.toXml.map(scala.xml.Utility.trim)
 
       validate(generatedXml.toString()) mustBe Success(())
 
@@ -603,7 +603,7 @@ class UserAnswersToXmlConversionSpec
         </TRACONSEC029>
       </CC015B>
 
-      val generatedXml = service.convert(Scenario3.userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
+      val generatedXml = service.convert(Scenario3.userAnswers).futureValue.value.toXml.map(scala.xml.Utility.trim)
 
       validate(generatedXml.toString()) mustBe Success(())
 
@@ -784,7 +784,7 @@ class UserAnswersToXmlConversionSpec
         </TRACONSEC029>
       </CC015B>
 
-      val generatedXml = service.convert(Scenario4.userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
+      val generatedXml = service.convert(Scenario4.userAnswers).futureValue.value.toXml.map(scala.xml.Utility.trim)
 
       validate(generatedXml.toString()) mustBe Success(())
 
@@ -1037,7 +1037,7 @@ class UserAnswersToXmlConversionSpec
       </TRACONSEC029>
     </CC015B>
 
-    val generatedXml = service.convert(Scenario5.userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
+    val generatedXml = service.convert(Scenario5.userAnswers).futureValue.value.toXml.map(scala.xml.Utility.trim)
 
     validate(generatedXml.toString()) mustBe Success(())
 
@@ -1292,7 +1292,7 @@ class UserAnswersToXmlConversionSpec
       </CARTRA100>
     </CC015B>
 
-    val generatedXml = service.convert(Scenario6.userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
+    val generatedXml = service.convert(Scenario6.userAnswers).futureValue.value.toXml.map(scala.xml.Utility.trim)
 
     validate(generatedXml.toString()) mustBe Success(())
 
@@ -1530,7 +1530,7 @@ class UserAnswersToXmlConversionSpec
       </CARTRA100>
     </CC015B>
 
-    val generatedXml = service.convert(Scenario7.userAnswers).futureValue.right.value.toXml.map(scala.xml.Utility.trim)
+    val generatedXml = service.convert(Scenario7.userAnswers).futureValue.value.toXml.map(scala.xml.Utility.trim)
 
     validate(generatedXml.toString()) mustBe Success(())
 

@@ -92,7 +92,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
         val result = ItemSection.readerItemSection(index).run(itemSectionUa)
 
-        result.right.value mustBe expectedResult
+        result.value mustBe expectedResult
       }
 
       "when containers used is true and containers are defined" in {
@@ -104,7 +104,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
         val expectedResult = NonEmptyList(Container("123"), List(Container("123")))
 
-        val result = ItemSection.readerItemSection(index).run(userAnswers).right.value
+        val result = ItemSection.readerItemSection(index).run(userAnswers).value
 
         result.containers.value mustBe expectedResult
       }
@@ -119,7 +119,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
         val expectedResult = NonEmptyList(SpecialMentionDomain("specialMentionType", "additionalInfo", customsOffice), List.empty)
 
-        val result = ItemSection.readerItemSection(index).run(userAnswers).right.value
+        val result = ItemSection.readerItemSection(index).run(userAnswers).value
 
         result.specialMentions.value mustBe expectedResult
       }
@@ -254,7 +254,7 @@ class ItemSectionSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHe
 
         val result = ItemSection.readerItemSections.run(userAnswersWithSecondItem)
 
-        result.right.value mustEqual expectedResult
+        result.value mustEqual expectedResult
       }
     }
   }

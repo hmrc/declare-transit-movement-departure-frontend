@@ -34,7 +34,7 @@ class LocalReferenceNumberSpec extends AnyFreeSpec with Generators with Matchers
       val lrn                                          = new LocalReferenceNumber("12345ABC")
       val result: Either[String, LocalReferenceNumber] = pathBindable.bind("lrn", "12345ABC")
 
-      result.right.value mustEqual lrn
+      result.value mustEqual lrn
     }
 
     "must deserialise" in {

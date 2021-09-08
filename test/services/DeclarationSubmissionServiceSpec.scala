@@ -58,20 +58,20 @@ class DeclarationSubmissionServiceSpec extends SpecBase with MockServiceApp with
     "must create departure declaration for valid input" in {
       val request: DeclarationRequest = arbitrary[DeclarationRequest].sample.value
 
-      when(mockDepartureMovementConnector.submitDepartureMovement(any())(any())).thenReturn(Future.successful(HttpResponse(ACCEPTED)))
+      when(mockDepartureMovementConnector.submitDepartureMovement(any())(any())).thenReturn(Future.successful(HttpResponse(ACCEPTED, "")))
       when(mockDeclarationRequestService.convert(any())).thenReturn(Future.successful(Right(request)))
 
-      declarationService.submit(emptyUserAnswers).futureValue.right.value.status mustBe ACCEPTED
+      declarationService.submit(emptyUserAnswers).futureValue.value.status mustBe ACCEPTED
     }
 
     "must return failure status on failing to create departure declaration" in {
       val errorCode                   = Gen.chooseNum(400, 599).sample.value
       val request: DeclarationRequest = arbitrary[DeclarationRequest].sample.value
 
-      when(mockDepartureMovementConnector.submitDepartureMovement(any())(any())).thenReturn(Future.successful(HttpResponse(errorCode)))
+      when(mockDepartureMovementConnector.submitDepartureMovement(any())(any())).thenReturn(Future.successful(HttpResponse(errorCode, "")))
       when(mockDeclarationRequestService.convert(any())).thenReturn(Future.successful(Right(request)))
 
-      declarationService.submit(emptyUserAnswers).futureValue.right.value.status mustBe errorCode
+      declarationService.submit(emptyUserAnswers).futureValue.value.status mustBe errorCode
     }
 
     "must return None on failing to create departure declaration" in {
