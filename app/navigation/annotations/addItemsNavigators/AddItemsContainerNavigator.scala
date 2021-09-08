@@ -31,18 +31,17 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AddItemsContainerNavigator @Inject() () extends Navigator {
 
-  // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case ContainerNumberPage(itemIndex, _) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, NormalMode))
-    case AddAnotherContainerPage(itemIndex) => ua => Some(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(ua.lrn, itemIndex, NormalMode))
+    case ContainerNumberPage(itemIndex, _)    => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, NormalMode))
+    case AddAnotherContainerPage(itemIndex)   => ua => Some(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(ua.lrn, itemIndex, NormalMode))
     case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, NormalMode))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
-    case ContainerNumberPage(itemIndex, _) => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, CheckMode))
-    case AddAnotherContainerPage(itemIndex) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
+    case ContainerNumberPage(itemIndex, _)    => ua => Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, CheckMode))
+    case AddAnotherContainerPage(itemIndex)   => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
     case ConfirmRemoveContainerPage(index, _) => ua => Some(confirmRemoveContainerRoute(ua, index, CheckMode))
   }
 
@@ -51,5 +50,5 @@ class AddItemsContainerNavigator @Inject() () extends Navigator {
       case 0 => containerRoutes.ContainerNumberController.onPageLoad(ua.lrn, index, Index(0), mode)
       case _ => containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, index, mode)
     }
-  // format: on
+
 }

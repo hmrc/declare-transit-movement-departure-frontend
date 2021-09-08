@@ -26,7 +26,6 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PreTaskListNavigator @Inject() () extends Navigator {
 
-  // format: off
   override val normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case LocalReferenceNumberPage => ua => Some(routes.OfficeOfDepartureController.onPageLoad(ua.lrn, NormalMode))
     case OfficeOfDeparturePage    => ua => Some(routes.ProcedureTypeController.onPageLoad(ua.lrn, NormalMode))
@@ -38,5 +37,5 @@ class PreTaskListNavigator @Inject() () extends Navigator {
   override val checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case _ => _ => None
   }
-  // format: on
+
 }

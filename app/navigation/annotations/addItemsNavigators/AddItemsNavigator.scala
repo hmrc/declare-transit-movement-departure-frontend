@@ -29,34 +29,30 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AddItemsNavigator @Inject() () extends Navigator {
 
-  // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
     case ConfirmRemoveItemPage => ua => Some(removeItem(NormalMode)(ua))
-    case AddAnotherItemPage => ua => Some(addAnotherItemRoute(ua))
+    case AddAnotherItemPage    => ua => Some(addAnotherItemRoute(ua))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
     case ConfirmRemoveItemPage => ua => Some(removeItem(CheckMode)(ua))
-    case AddAnotherItemPage => ua => Some(addAnotherItemRoute(ua))
+    case AddAnotherItemPage    => ua => Some(addAnotherItemRoute(ua))
   }
 
   private def addAnotherItemRoute(userAnswers: UserAnswers): Call = {
     val count = userAnswers.get(DeriveNumberOfItems).getOrElse(0)
     userAnswers.get(AddAnotherItemPage) match {
-      case Some(true) =>  controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(count), NormalMode)
-      case _ => mainRoutes.DeclarationSummaryController.onPageLoad(userAnswers.lrn)
+      case Some(true) => controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(count), NormalMode)
+      case _          => mainRoutes.DeclarationSummaryController.onPageLoad(userAnswers.lrn)
     }
   }
 
   private def removeItem(mode: Mode)(ua: UserAnswers) =
     ua.get(DeriveNumberOfItems) match {
       case None | Some(0) => controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(ua.lrn, Index(0), mode)
-      case _ => controllers.addItems.routes.AddAnotherItemController.onPageLoad(ua.lrn)
+      case _              => controllers.addItems.routes.AddAnotherItemController.onPageLoad(ua.lrn)
     }
 
-
-
-  // format: on
 }

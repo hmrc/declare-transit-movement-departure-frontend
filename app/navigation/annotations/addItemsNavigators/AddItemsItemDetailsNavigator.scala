@@ -85,6 +85,7 @@ class AddItemsItemDetailsNavigator @Inject() () extends Navigator {
       case (Some(true), Some(false)) => Some(traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(ua.lrn, index, NormalMode))
       case (Some(true), Some(true)) =>
         Some(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(ua.lrn, index, Index(0), NormalMode))
+      case _ => None
     }
 
   private def isCommodityKnownRouteCheckMode(index: Index, ua: UserAnswers) =

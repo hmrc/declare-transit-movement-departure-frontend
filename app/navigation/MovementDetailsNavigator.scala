@@ -27,7 +27,6 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class MovementDetailsNavigator @Inject() () extends Navigator {
 
-  // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case PreLodgeDeclarationPage       => ua => Some(routes.ContainersUsedPageController.onPageLoad(ua.lrn, NormalMode))
     case ContainersUsedPage            => ua => Some(routes.DeclarationPlaceController.onPageLoad(ua.lrn, NormalMode))
@@ -48,5 +47,4 @@ class MovementDetailsNavigator @Inject() () extends Navigator {
       case (Some(true), _, NormalMode)   => routes.RepresentativeNameController.onPageLoad(ua.lrn, NormalMode)
       case _                             => routes.MovementDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
     }
-  // format: on
 }

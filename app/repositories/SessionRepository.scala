@@ -36,11 +36,7 @@ private[repositories] class DefaultSessionRepository @Inject() (
       "lrn"        -> id.value,
       "eoriNumber" -> eoriNumber.value
     )
-    //TODO to be removed 24hours after deployment
-    val legacySelector = Json.obj(
-      "_id"        -> id.value,
-      "eoriNumber" -> eoriNumber.value
-    )
+
     val modifier = Json.obj(
       "$set" -> Json.obj("lastUpdated" -> LocalDateTime.now)
     )

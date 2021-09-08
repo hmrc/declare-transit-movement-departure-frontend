@@ -32,7 +32,6 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class GuaranteeDetailsNavigator @Inject() () extends Navigator {
-// format: off
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case AddAnotherGuaranteePage                  => ua => addAnotherGuaranteeRoute(ua)
@@ -63,7 +62,7 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
 
   def otherReferenceLiablityAmountRoute(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(LiabilityAmountPage(index)), ua.get(AccessCodePage(index)), mode) match {
-      case (Some(x), _, _)            if (x.toDouble == 0.00 || x.toDouble.equals(0.0) || x.toDouble.toInt.equals(0)) =>
+      case (Some(x), _, _) if x.toDouble == 0.00 || x.toDouble.equals(0.0) || x.toDouble.toInt.equals(0) =>
         Some(routes.DefaultAmountController.onPageLoad(ua.lrn, index, mode))
       case (Some(_), _, NormalMode)      => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, NormalMode))
       case (Some(_), Some(_), CheckMode) => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
@@ -96,24 +95,25 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
 
   def defaultAmountRoute(ua: UserAnswers, index: Index, mode: Mode) =
     (ua.get(DefaultAmountPage(index)), ua.get(AccessCodePage(index)), mode) match {
-      case (Some(true), _, NormalMode)    => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, mode))
-      case (Some(true), None, CheckMode)  => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, mode))
-      case (Some(false), _, _)            => Some(routes.OtherReferenceLiabilityAmountController.onPageLoad(ua.lrn, index, mode))
-      case _                              => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
+      case (Some(true), _, NormalMode)   => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, mode))
+      case (Some(true), None, CheckMode) => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, mode))
+      case (Some(false), _, _)           => Some(routes.OtherReferenceLiabilityAmountController.onPageLoad(ua.lrn, index, mode))
+      case _                             => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     }
 
   def addAnotherGuaranteeRoute(ua: UserAnswers): Option[Call] = {
-    val count = ua.get(DeriveNumberOfGuarantees).getOrElse(1)
-    val declarationType = ua.get(DeclarationTypePage)
+    val count               = ua.get(DeriveNumberOfGuarantees).getOrElse(1)
+    val declarationType     = ua.get(DeclarationTypePage)
     val addAnotherGuarantee = ua.get(AddAnotherGuaranteePage)
 
     count match {
       case AddAnotherGuaranteePage.maxAllowedGuarantees => Some(controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn))
-      case _ => (declarationType, addAnotherGuarantee).tupled.map {
-        case (Option4, true)   => routes.TIRGuaranteeReferenceController.onPageLoad(ua.lrn, Index(count), NormalMode)
-        case (_,       true)   => routes.GuaranteeTypeController.onPageLoad(ua.lrn, Index(count), NormalMode)
-        case (_,       false)  => controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn)
-      }
+      case _ =>
+        (declarationType, addAnotherGuarantee).tupled.map {
+          case (Option4, true) => routes.TIRGuaranteeReferenceController.onPageLoad(ua.lrn, Index(count), NormalMode)
+          case (_, true)       => routes.GuaranteeTypeController.onPageLoad(ua.lrn, Index(count), NormalMode)
+          case (_, false)      => controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn)
+        }
     }
   }
 
@@ -148,5 +148,4 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
       case _ => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
     }
 
-  // format: on
 }

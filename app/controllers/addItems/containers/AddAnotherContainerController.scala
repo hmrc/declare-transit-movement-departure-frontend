@@ -75,15 +75,12 @@ class AddAnotherContainerController @Inject() (
           .fold(
             formWithErrors => renderPage(itemIndex, mode, formWithErrors).map(BadRequest(_)),
             value => {
-              val onwardRoute = value match {
-                case true =>
-                  val containerCount = request.userAnswers.get(DeriveNumberOfContainers(itemIndex)).getOrElse(0)
-                  val containerIndex = Index(containerCount)
-                  routes.ContainerNumberController.onPageLoad(request.userAnswers.lrn, itemIndex, containerIndex, mode)
-                case false =>
-                  navigator.nextPage(AddAnotherContainerPage(itemIndex), mode, request.userAnswers)
-                case _ =>
-                  controllers.routes.SessionExpiredController.onPageLoad()
+              val onwardRoute = if (value) {
+                val containerCount = request.userAnswers.get(DeriveNumberOfContainers(itemIndex)).getOrElse(0)
+                val containerIndex = Index(containerCount)
+                routes.ContainerNumberController.onPageLoad(request.userAnswers.lrn, itemIndex, containerIndex, mode)
+              } else {
+                navigator.nextPage(AddAnotherContainerPage(itemIndex), mode, request.userAnswers)
               }
 
               Future.successful(Redirect(onwardRoute))

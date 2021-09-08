@@ -40,7 +40,7 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
       ua => destinationOfficeRoute(ua, NormalMode)
     case OfficeOfTransitCountryPage(index) =>
       ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.lrn, index, NormalMode))
-    case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, NormalMode))
+    case AddOfficeOfTransitPage => ua => addOfficeOfTransitRoute(ua, NormalMode)
     case AddAnotherTransitOfficePage(index) =>
       ua => Some(redirectToAddTransitOfficeNextPage(ua, index, NormalMode))
     case AddTransitOfficePage =>
@@ -56,25 +56,25 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
       ua => Some(routes.AddAnotherTransitOfficeController.onPageLoad(ua.lrn, index, CheckMode))
     case page if isRouteDetailsSectionPage(page) =>
       ua => Some(routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn))
-    case AddOfficeOfTransitPage => ua => Some(addOfficeOfTransitRoute(ua, CheckMode))
+    case AddOfficeOfTransitPage => ua => addOfficeOfTransitRoute(ua, CheckMode)
     case _ =>
       _ => None
   }
 
-  def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =
-    ua.get(AddOfficeOfTransitPage) match {
-      case Some(true)  => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
-      case Some(false) => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
+  private def addOfficeOfTransitRoute(ua: UserAnswers, mode: Mode) =
+    ua.get(AddOfficeOfTransitPage) map {
+      case true  => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
+      case false => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
     }
 
-  def destinationOfficeRoute(ua: UserAnswers, mode: Mode) =
+  private def destinationOfficeRoute(ua: UserAnswers, mode: Mode) =
     (ua.get(OfficeOfDeparturePage), ua.get(DeclarationTypePage)).tupled.map {
       case (_, Option4)                                                                => routes.RouteDetailsCheckYourAnswersController.onPageLoad(ua.lrn)
       case (officeOfDeparture, _) if officeOfDeparture.countryId.code.startsWith("XI") => routes.AddOfficeOfTransitController.onPageLoad(ua.lrn, mode)
       case _                                                                           => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
     }
 
-  def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =
+  private def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =
     ua.get(AddSecurityDetailsPage) match {
       case Some(isSelected) if isSelected => routes.ArrivalTimesAtOfficeController.onPageLoad(ua.lrn, index, mode)
       case _                              => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)

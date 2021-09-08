@@ -34,34 +34,29 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
 
-  // format: off
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-
-
-    case PackageTypePage(itemIndex, packageIndex) => ua => packageTypeNormalMode(itemIndex, packageIndex, ua)
-    case HowManyPackagesPage(itemIndex, packageIndex) => ua => howManyPackagesNormalMode(itemIndex, packageIndex, ua)
+    case PackageTypePage(itemIndex, packageIndex)             => ua => packageTypeNormalMode(itemIndex, packageIndex, ua)
+    case HowManyPackagesPage(itemIndex, packageIndex)         => ua => howManyPackagesNormalMode(itemIndex, packageIndex, ua)
     case DeclareNumberOfPackagesPage(itemIndex, packageIndex) => ua => declareNumberOfPackagesNormalMode(itemIndex, packageIndex, ua)
-    case TotalPiecesPage(itemIndex, packageIndex) => ua => Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
+    case TotalPiecesPage(itemIndex, packageIndex) =>
+      ua => Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
     case AddMarkPage(itemIndex, packageIndex) => ua => addMarkNormalMode(itemIndex, packageIndex, ua)
-    case DeclareMarkPage(itemIndex, _) => ua => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
+    case DeclareMarkPage(itemIndex, _) =>
+      ua => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
     case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackageNormalMode(itemIndex, ua)
-    case DeclareMarkPage(itemIndex, _) => ua => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
-    case RemovePackagePage(itemIndex) => ua => Some(removePackage(itemIndex, NormalMode)(ua))
-
+    case RemovePackagePage(itemIndex)     => ua => Some(removePackage(itemIndex, NormalMode)(ua))
   }
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-
-    case PackageTypePage(itemIndex, packageIndex) => ua => packageTypeCheckMode(itemIndex, packageIndex, ua)
-    case HowManyPackagesPage(itemIndex, packageIndex) => ua => howManyPackagesCheckMode(itemIndex, packageIndex, ua)
+    case PackageTypePage(itemIndex, packageIndex)             => ua => packageTypeCheckMode(itemIndex, packageIndex, ua)
+    case HowManyPackagesPage(itemIndex, packageIndex)         => ua => howManyPackagesCheckMode(itemIndex, packageIndex, ua)
     case DeclareNumberOfPackagesPage(itemIndex, packageIndex) => ua => declareNumberOfPackagesCheckMode(itemIndex, packageIndex, ua)
-    case TotalPiecesPage(itemIndex, packageIndex) => ua => Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
+    case TotalPiecesPage(itemIndex, packageIndex) =>
+      ua => Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
     case AddMarkPage(itemIndex, packageIndex) => ua => addMarkCheckMode(itemIndex, packageIndex, ua)
-    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
-    case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackageCheckMode(itemIndex, ua)
-    case DeclareMarkPage(itemIndex, _) => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
-    case RemovePackagePage(itemIndex) => ua => Some(removePackage(itemIndex, CheckMode)(ua))
-
+    case DeclareMarkPage(itemIndex, _)        => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
+    case AddAnotherPackagePage(itemIndex)     => ua => addAnotherPackageCheckMode(itemIndex, ua)
+    case RemovePackagePage(itemIndex)         => ua => Some(removePackage(itemIndex, CheckMode)(ua))
   }
 
   def packageTypeNormalMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =
@@ -71,7 +66,7 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
       case Some(packageType) if unpackedCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
       case Some(_) => Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
-      case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
+      case _       => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
   def packageTypeCheckMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =
@@ -81,7 +76,7 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
       case Some(packageType) if unpackedCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case Some(_) => Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
-      case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
+      case _       => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
   def howManyPackagesNormalMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =
@@ -90,7 +85,8 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
         Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
       case (Some(_), Some(packageType)) if unpackedCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
-      case (Some(_), Some(_)) => Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
+      case (Some(_), Some(_)) =>
+        Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
       case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
@@ -100,13 +96,15 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
         Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case (Some(_), Some(packageType)) if unpackedCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
-      case (Some(_), Some(_)) => Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
+      case (Some(_), Some(_)) =>
+        Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
   def declareNumberOfPackagesNormalMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =
     (ua.get(DeclareNumberOfPackagesPage(itemIndex, packageIndex)), ua.get(PackageTypePage(itemIndex, packageIndex))) match {
-      case (Some(true), _) => Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
+      case (Some(true), _) =>
+        Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
       case (Some(false), Some(packageType)) if bulkCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
       case (Some(false), Some(packageType)) if unpackedCodes.contains(packageType.code) =>
@@ -117,7 +115,8 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
 
   def declareNumberOfPackagesCheckMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =
     (ua.get(DeclareNumberOfPackagesPage(itemIndex, packageIndex)), ua.get(PackageTypePage(itemIndex, packageIndex))) match {
-      case (Some(true), _) => Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
+      case (Some(true), _) =>
+        Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case (Some(false), Some(packageType)) if bulkCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case (Some(false), Some(packageType)) if unpackedCodes.contains(packageType.code) =>
@@ -128,16 +127,16 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
 
   def addMarkNormalMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =
     (ua.get(AddMarkPage(itemIndex, packageIndex))) match {
-      case Some(true) => Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
+      case Some(true)  => Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
       case Some(false) => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
-      case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
+      case _           => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
   def addMarkCheckMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =
     ua.get(AddMarkPage(itemIndex, packageIndex)) match {
-      case Some(true) => Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
+      case Some(true)  => Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case Some(false) => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
-      case _ => Some(mainRoutes.SessionExpiredController.onPageLoad())
+      case _           => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
   def addAnotherPackageNormalMode(itemIndex: Index, ua: UserAnswers): Option[Call] =
@@ -164,8 +163,6 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
         Some(containerRoutes.ContainerNumberController.onPageLoad(ua.lrn, itemIndex, Index(0), CheckMode))
       case (Some(false), _, _) =>
         Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
-      case (Some(false), _, _) =>
-        Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, CheckMode))
       case _ =>
         Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
@@ -173,9 +170,7 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
   private def removePackage(itemIndex: Index, mode: Mode)(ua: UserAnswers) =
     ua.get(DeriveNumberOfPackages(itemIndex)) match {
       case None | Some(0) => controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(ua.lrn, itemIndex, Index(0), mode)
-      case _ => controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, mode)
+      case _              => controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, mode)
     }
 
-
-  // format: on
 }
