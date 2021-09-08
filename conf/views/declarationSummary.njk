@@ -5,43 +5,45 @@
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 
 {% block pageTitle %}
-  {{ title(messages("declarationSummary.title")) }}
+    {{ title(messages("declarationSummary.title")) }}
 {% endblock %}
 
 {% block mainContent %}
 
-  <div class="govuk-main-wrapper">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-main-wrapper">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
 
-        <span class="govuk-caption-xl">{{ lrn }}</span>
-        <h1 class="govuk-heading-xl">
-          {{ messages("declarationSummary.heading") }}
-        </h1>
+                <span class="govuk-caption-xl">{{ lrn }}</span>
 
-         {{ summarySectionMacro(messages("declarationSummary.departureDetails"), sections) }}
+                <h1 class="govuk-heading-xl">
+                    {{ messages("declarationSummary.heading") }}
+                </h1>
 
-          {% if isDeclarationComplete %}
-            <form action="{{ onSubmitUrl }}" method="post">
-                {{ csrf() | safe }}
+                {{ summarySectionMacro(messages("declarationSummary.departureDetails"), sections) }}
 
-                <h2 class="govuk-heading-m">{{ messages("declarationSummary.submissionSubheader") }}</h2>
+                {% if isDeclarationComplete %}
+                    <form action="{{ onSubmitUrl }}" method="post">
+                        {{ csrf() | safe }}
 
-                <p class="govuk-body">
-                    {{ messages("declarationSummary.submissionHonestyPledge") }}
-                </p>
+                        <h2 class="govuk-heading-m">{{ messages("declarationSummary.submissionSubheader") }}</h2>
 
-                {{ govukButton({
-                  text: messages("declarationSummary.confirmAndSend"),
-                  preventDoubleClick: true,
-                  attributes: {id:"submit"}
-                }) }}
-            </form>
-         {% endif %}
+                        <p class="govuk-body">
+                            {{ messages("declarationSummary.submissionHonestyPledge") }}
+                        </p>
 
-         <p class="govuk-body"><a href={{backToTransitMovements}}>{{ messages("declarationSummary.backToTransitMovements")}}</a></p>
-      </div>
+                        {{ govukButton({
+                            text: messages("declarationSummary.confirmAndSend"),
+                            preventDoubleClick: true,
+                            attributes: {id: "submit"}
+                        }) }}
+                    </form>
+                {% endif %}
+
+                <p class="govuk-body"><a href={{backToTransitMovements}}>{{ messages("declarationSummary.backToTransitMovements")}}</a></p>
+
+            </div>
+        </div>
     </div>
-  </div>
 
 {% endblock %}
