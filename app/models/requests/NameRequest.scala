@@ -19,5 +19,4 @@ package models.requests
 import models.{EoriNumber, UserAnswers}
 import play.api.mvc.WrappedRequest
 
-case class ConsigneeNameRequest[A](request: DataRequest[A], eoriNumber: EoriNumber, userAnswers: UserAnswers, consigneeName: String)
-    extends WrappedRequest[A](request)
+case class NameRequest[A](request: DataRequest[A], eoriNumber: EoriNumber, userAnswers: UserAnswers, name: String) extends WrappedRequest[A](request)

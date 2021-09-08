@@ -16,23 +16,23 @@
 
 package controllers.actions
 
-import models.Index
-import models.requests.{ConsigneeNameRequest, DataRequest}
+import models.requests.{DataRequest, NameRequest}
+import pages.QuestionPage
 import play.api.mvc._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeConsigneeNameRequiredAction @Inject() extends ConsigneeNameRequiredAction {
+class FakeNameRequiredAction @Inject() extends NameRequiredAction {
   implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
-  override def apply(index: Index): ActionRefiner[DataRequest, ConsigneeNameRequest] =
-    new FakeConsigneeNameRequiredCompletionAction(index)
+  override def apply[T <: QuestionPage[String]](page: T): ActionRefiner[DataRequest, NameRequest] =
+    new FakeNameRequiredCompletionAction(page)
 }
 
-class FakeConsigneeNameRequiredCompletionAction(val index: Index)(implicit val executionContext: ExecutionContext)
-    extends ActionRefiner[DataRequest, ConsigneeNameRequest] {
+class FakeNameRequiredCompletionAction[T <: QuestionPage[String]](val page: T)(implicit val executionContext: ExecutionContext)
+    extends ActionRefiner[DataRequest, NameRequest] {
 
-  override protected def refine[A](request: DataRequest[A]): Future[Either[Result, ConsigneeNameRequest[A]]] =
-    Future.successful(Right(ConsigneeNameRequest(request, request.eoriNumber, request.userAnswers, "CONSIGNEE NAME")))
+  override protected def refine[A](request: DataRequest[A]): Future[Either[Result, NameRequest[A]]] =
+    Future.successful(Right(NameRequest(request, request.eoriNumber, request.userAnswers, "NAME")))
 }

@@ -51,7 +51,7 @@ class Module extends AbstractModule {
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl])
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction])
     bind(classOf[CheckDependentSectionAction]).to(classOf[CheckDependentSectionActionImpl])
-    bind(classOf[ConsigneeNameRequiredAction]).to(classOf[ConsigneeNameRequiredActionImpl])
+    bind(classOf[NameRequiredAction]).to(classOf[NameRequiredActionImpl])
     bind(classOf[DateTimeService]).to(classOf[DateTimeServiceImpl]).asEagerSingleton()
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
   }

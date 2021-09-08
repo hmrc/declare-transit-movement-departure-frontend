@@ -23,7 +23,7 @@ import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TradersSecurityDetails
-import pages.addItems.traderSecurityDetails.SecurityConsigneeAddressPage
+import pages.addItems.traderSecurityDetails.{SecurityConsigneeAddressPage, SecurityConsigneeNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -44,7 +44,7 @@ class SecurityConsigneeAddressController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  requireConsigneeName: ConsigneeNameRequiredAction,
+  requireName: NameRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -61,13 +61,13 @@ class SecurityConsigneeAddressController @Inject() (
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)
-      andThen requireConsigneeName(index)).async {
+      andThen requireName(SecurityConsigneeNamePage(index))).async {
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>
             val preparedForm = request.userAnswers.get(SecurityConsigneeAddressPage(index)) match {
-              case Some(value) => formProvider(countries, request.consigneeName).fill(value)
-              case None        => formProvider(countries, request.consigneeName)
+              case Some(value) => formProvider(countries, request.name).fill(value)
+              case None        => formProvider(countries, request.name)
             }
 
             val json = Json.obj(
@@ -75,7 +75,7 @@ class SecurityConsigneeAddressController @Inject() (
               "lrn"           -> lrn,
               "index"         -> index.display,
               "mode"          -> mode,
-              "consigneeName" -> request.consigneeName,
+              "consigneeName" -> request.name,
               "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
             )
 
@@ -88,11 +88,11 @@ class SecurityConsigneeAddressController @Inject() (
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)
-      andThen requireConsigneeName(index)).async {
+      andThen requireName(SecurityConsigneeNamePage(index))).async {
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>
-            formProvider(countries, request.consigneeName)
+            formProvider(countries, request.name)
               .bindFromRequest()
               .fold(
                 formWithErrors => {
@@ -107,7 +107,7 @@ class SecurityConsigneeAddressController @Inject() (
                     "lrn"           -> lrn,
                     "mode"          -> mode,
                     "index"         -> index.display,
-                    "consigneeName" -> request.consigneeName,
+                    "consigneeName" -> request.name,
                     "countries"     -> countryJsonList(countryValue, countries.fullList)
                   )
 

@@ -18,7 +18,6 @@ package controllers.addItems.traderSecurityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -45,6 +44,7 @@ class SecurityConsignorAddressController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  requireName: NameRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -60,30 +60,26 @@ class SecurityConsignorAddressController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen requireName(SecurityConsignorNamePage(index))).async {
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>
-            request.userAnswers.get(SecurityConsignorNamePage(index)) match {
-              case Some(consignorName) =>
-                val preparedForm = request.userAnswers.get(SecurityConsignorAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consignorName).fill(value)
-                  case None        => formProvider(countries, consignorName)
-                }
-
-                val json = Json.obj(
-                  "form"          -> preparedForm,
-                  "lrn"           -> lrn,
-                  "index"         -> index.display,
-                  "mode"          -> mode,
-                  "consignorName" -> consignorName,
-                  "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
-                )
-
-                renderer.render(template, json).map(Ok(_))
-              case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
-
+            val preparedForm = request.userAnswers.get(SecurityConsignorAddressPage(index)) match {
+              case Some(value) => formProvider(countries, request.name).fill(value)
+              case None        => formProvider(countries, request.name)
             }
+
+            val json = Json.obj(
+              "form"          -> preparedForm,
+              "lrn"           -> lrn,
+              "index"         -> index.display,
+              "mode"          -> mode,
+              "consignorName" -> request.name,
+              "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+            )
+
+            renderer.render(template, json).map(Ok(_))
         }
     }
 
@@ -91,38 +87,36 @@ class SecurityConsignorAddressController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen requireName(SecurityConsignorNamePage(index))).async {
       implicit request =>
-        request.userAnswers.get(SecurityConsignorNamePage(index)) match {
-          case Some(consignorName) =>
-            referenceDataConnector.getCountryList() flatMap {
-              countries =>
-                formProvider(countries, consignorName)
-                  .bindFromRequest()
-                  .fold(
-                    formWithErrors => {
-                      val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
-                        country =>
-                          countries.getCountry(CountryCode(country))
-                      }
-                      val json = Json.obj(
-                        "form"          -> formWithErrors,
-                        "lrn"           -> lrn,
-                        "mode"          -> mode,
-                        "index"         -> index.display,
-                        "consignorName" -> consignorName,
-                        "countries"     -> countryJsonList(countryValue, countries.fullList)
-                      )
-
-                      renderer.render(template, json).map(BadRequest(_))
-                    },
-                    value =>
-                      for {
-                        updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityConsignorAddressPage(index), value))
-                        _              <- sessionRepository.set(updatedAnswers)
-                      } yield Redirect(navigator.nextPage(SecurityConsignorAddressPage(index), mode, updatedAnswers))
+        referenceDataConnector.getCountryList() flatMap {
+          countries =>
+            formProvider(countries, request.name)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => {
+                  val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
+                    country =>
+                      countries.getCountry(CountryCode(country))
+                  }
+                  val json = Json.obj(
+                    "form"          -> formWithErrors,
+                    "lrn"           -> lrn,
+                    "mode"          -> mode,
+                    "index"         -> index.display,
+                    "consignorName" -> request.name,
+                    "countries"     -> countryJsonList(countryValue, countries.fullList)
                   )
-            }
+
+                  renderer.render(template, json).map(BadRequest(_))
+                },
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityConsignorAddressPage(index), value))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(SecurityConsignorAddressPage(index), mode, updatedAnswers))
+              )
         }
     }
 }

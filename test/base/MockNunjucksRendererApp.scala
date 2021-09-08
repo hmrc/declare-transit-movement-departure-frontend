@@ -100,7 +100,7 @@ trait MockNunjucksRendererApp extends GuiceOneAppPerSuite with BeforeAndAfterEac
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[CheckDependentSectionAction].to[FakeDependencyCheckActionFilter],
-        bind[ConsigneeNameRequiredAction].to[FakeConsigneeNameRequiredAction],
+        bind[NameRequiredAction].to[FakeNameRequiredAction],
         bind[IdentifierAction].to[FakeIdentifierAction],
         bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider),
         bind[NunjucksRenderer].toInstance(mockRenderer),
