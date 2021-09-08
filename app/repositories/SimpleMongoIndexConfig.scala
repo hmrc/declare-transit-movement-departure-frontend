@@ -16,10 +16,10 @@
 
 package repositories
 
+import reactivemongo.api.bson.BSONDocument
 import reactivemongo.api.bson.collection.BSONSerializationPack
 import reactivemongo.api.indexes.Index.Aux
 import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.BSONDocument
 
 private[repositories] object SimpleMongoIndexConfig {
 

@@ -18,8 +18,8 @@ package repositories
 
 import logging.Logging
 import play.api.Configuration
+import reactivemongo.api.bson.BSONDocument
 import reactivemongo.api.indexes.IndexType
-import reactivemongo.bson.BSONDocument
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
