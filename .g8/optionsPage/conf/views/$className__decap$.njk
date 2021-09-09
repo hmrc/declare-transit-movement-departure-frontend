@@ -32,6 +32,7 @@
           {{ csrf() | safe }}
 
           {{ govukRadios({
+            idPrefix: messages('$className;format="decap"$.heading'),
             name: 'value',
             fieldset: {
               legend: {
