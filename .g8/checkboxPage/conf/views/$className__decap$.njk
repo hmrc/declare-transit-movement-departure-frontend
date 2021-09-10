@@ -30,6 +30,8 @@
 
         <form action="{{ routes.controllers.$className$Controller.onSubmit(lrn, mode).url }}" method="post">
 
+        {{ csrf() | safe }}
+
         {% call govukFieldset({
           legend: {
             text: messages('$className;format="decap"$.heading'),
@@ -37,8 +39,6 @@
             isPageHeading: true
           }
         }) %}
-
-          {{ csrf() | safe }}
 
           {{ govukCheckboxes({
             name: 'value',
