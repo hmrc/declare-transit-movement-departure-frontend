@@ -17,24 +17,24 @@
 package viewModels
 
 import derivable._
-import models.{CountryList, DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
+import models.{DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
 import uk.gov.hmrc.viewmodels.{MessageInterpolators, SummaryList}
-import utils.{AddItemsCheckYourAnswersHelper, SpecialMentionsCheckYourAnswers}
+import utils.{AddItemsCheckYourAnswersHelper, SpecialMentionsCheckYourAnswersHelper}
 import viewModels.sections.Section
 
 object AddItemsCheckYourAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers,
-            index: Index,
-            documentTypeList: DocumentTypeList,
-            previousDocumentTypes: PreviousReferencesDocumentTypeList,
-            specialMentionList: SpecialMentionList,
-            countryList: CountryList
+  def apply(
+    userAnswers: UserAnswers,
+    index: Index,
+    documentTypeList: DocumentTypeList,
+    previousDocumentTypes: PreviousReferencesDocumentTypeList,
+    specialMentionList: SpecialMentionList
   ): AddItemsCheckYourAnswersViewModel = {
 
     val checkYourAnswersHelper = new AddItemsCheckYourAnswersHelper(userAnswers)
 
-    val specialMentionsCheckYourAnswers = new SpecialMentionsCheckYourAnswers(userAnswers)
+    val specialMentionsCheckYourAnswers = new SpecialMentionsCheckYourAnswersHelper(userAnswers)
 
     AddItemsCheckYourAnswersViewModel(
       Seq(
@@ -47,12 +47,12 @@ object AddItemsCheckYourAnswersViewModel {
         documentsSection(checkYourAnswersHelper, index, documentTypeList)(userAnswers),
         referencesSection(checkYourAnswersHelper, index, previousDocumentTypes)(userAnswers),
         securitySection(checkYourAnswersHelper, index),
-        traderSecuritySection(checkYourAnswersHelper, countryList, index)
+        traderSecuritySection(checkYourAnswersHelper, index)
       )
     )
   }
 
-  private def traderSecuritySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, countryList: CountryList, index: Index) = Section(
+  private def traderSecuritySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Section(
     msg"addItems.checkYourAnswersLabel.security",
     Seq(
       checkYourAnswersHelper.addSecurityConsignorsEori(index),
@@ -71,7 +71,7 @@ object AddItemsCheckYourAnswersViewModel {
     Seq(
       checkYourAnswersHelper.transportCharges(index),
       checkYourAnswersHelper.commercialReferenceNumber(index),
-      checkYourAnswersHelper.AddDangerousGoodsCode(index),
+      checkYourAnswersHelper.addDangerousGoodsCode(index),
       checkYourAnswersHelper.dangerousGoodsCode(index)
     ).flatten
   )
@@ -116,9 +116,9 @@ object AddItemsCheckYourAnswersViewModel {
       List.range(0, userAnswers.get(DeriveNumberOfPackages(index)).getOrElse(0)).flatMap {
         packagePosition =>
           Seq(
-            checkYourAnswersHelper.packageRow(index, Index(packagePosition), userAnswers),
-            checkYourAnswersHelper.totalPieces(index, Index(packagePosition), userAnswers),
-            checkYourAnswersHelper.numberOfPackages(index, Index(packagePosition), userAnswers)
+            checkYourAnswersHelper.packageRow(index, Index(packagePosition)),
+            checkYourAnswersHelper.totalPieces(index, Index(packagePosition)),
+            checkYourAnswersHelper.numberOfPackages(index, Index(packagePosition))
           ).flatten
       }
 
@@ -176,8 +176,8 @@ object AddItemsCheckYourAnswersViewModel {
     )
   }
 
-  private def specialMentionsSection(checkYourAnswersHelper: SpecialMentionsCheckYourAnswers, index: Index, specialMentionList: SpecialMentionList)(implicit
-    userAnswers: UserAnswers
+  private def specialMentionsSection(checkYourAnswersHelper: SpecialMentionsCheckYourAnswersHelper, index: Index, specialMentionList: SpecialMentionList)(
+    implicit userAnswers: UserAnswers
   ): Section = {
     val containerRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfSpecialMentions(index)).getOrElse(0)).flatMap {

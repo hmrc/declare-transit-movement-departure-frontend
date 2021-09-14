@@ -34,7 +34,7 @@ import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-import utils.SpecialMentionsCheckYourAnswers
+import utils.SpecialMentionsCheckYourAnswersHelper
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -90,7 +90,7 @@ class AddAnotherSpecialMentionController @Inject() (
     request: DataRequest[AnyContent]
   ): Future[Html] = {
 
-    val cya                   = new SpecialMentionsCheckYourAnswers(request.userAnswers)
+    val cya                   = new SpecialMentionsCheckYourAnswersHelper(request.userAnswers)
     val numberOfReferences    = request.userAnswers.get(DeriveNumberOfSpecialMentions(itemIndex)).getOrElse(0)
     val indexList: Seq[Index] = List.range(0, numberOfReferences).map(Index(_))
 

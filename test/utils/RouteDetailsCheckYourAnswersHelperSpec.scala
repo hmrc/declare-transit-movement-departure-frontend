@@ -423,7 +423,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
                 Action(
                   content = msg"site.edit",
                   href = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAnotherTransitOffice.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAnotherTransitOffice.checkYourAnswersLabel".withArgs(index.display))),
                   attributes = Map("id" -> "change-office-of-transit")
                 )
               )
@@ -467,7 +467,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
                 Action(
                   content = msg"site.edit",
                   href = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"arrivalTimesAtOffice.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"arrivalTimesAtOffice.checkYourAnswersLabel".withArgs(index.display))),
                   attributes = Map("id" -> "change-arrival-times-at-office-of-transit")
                 )
               )

@@ -17,9 +17,51 @@
 package utils
 
 import models.{LocalReferenceNumber, UserAnswers}
+import pages.QuestionPage
+import play.api.libs.json.Reads
+import play.api.mvc.Call
+import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
+import uk.gov.hmrc.viewmodels.{Content, MessageInterpolators}
 
-abstract class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def lrn: LocalReferenceNumber = userAnswers.lrn
+  lazy val lrn: LocalReferenceNumber = userAnswers.lrn
+
+  def getAnswerAndBuildRow[T](
+    page: QuestionPage[T],
+    format: T => Content,
+    prefix: String,
+    id: Option[String],
+    call: Call,
+    args: Any*
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildRow(prefix, format(answer), id, call, args: _*)
+    }
+
+  def buildRow(
+    prefix: String,
+    content: Content,
+    id: Option[String],
+    call: Call,
+    args: Any*
+  ): Row =
+    Row(
+      key = Key(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*), classes = Seq("govuk-!-width-one-half")),
+      value = Value(content),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = call.url,
+          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*))),
+          attributes = id
+            .map(
+              x => Map("id" -> x)
+            )
+            .getOrElse(Map.empty)
+        )
+      )
+    )
 
 }

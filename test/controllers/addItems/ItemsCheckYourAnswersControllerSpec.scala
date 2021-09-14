@@ -19,7 +19,7 @@ package controllers.addItems
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import matchers.JsonMatchers
-import models.{CountryList, DocumentTypeList, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList}
+import models.{DocumentTypeList, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -59,7 +59,6 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRend
       when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(DocumentTypeList(Nil)))
       when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
       when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(PreviousReferencesDocumentTypeList(Nil)))
-      when(mockRefDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(CountryList(Nil)))
       when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(MethodOfPaymentList(Nil)))
 
       dataRetrievalWithData(emptyUserAnswers)

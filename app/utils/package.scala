@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import models.CommonAddress
 import models.reference._
 import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.viewmodels.{Content, MessageInterpolators}
+import uk.gov.hmrc.viewmodels.{Content, Html, MessageInterpolators}
 
 package object utils {
   val defaultOption: JsObject = Json.obj("value" -> "", "text" -> "")
@@ -174,5 +175,9 @@ package object utils {
     } else {
       msg"site.rejected"
     }
+
+  def address(answer: CommonAddress): Html = Html(
+    Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description).mkString("<br>")
+  )
 
 }

@@ -17,13 +17,13 @@
 package utils
 
 import controllers.addItems.specialMentions.{routes => specialMentionRoutes}
-import models.{CheckMode, Index, LocalReferenceNumber, Mode, SpecialMentionList, UserAnswers}
+import models.{CheckMode, Index, Mode, SpecialMentionList, UserAnswers}
 import pages.addItems.specialMentions._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
-class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
+class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
   def specialMentionType(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList, mode: Mode): Option[Row] =
     userAnswers.get(SpecialMentionTypePage(itemIndex, referenceIndex)) flatMap {
@@ -39,13 +39,13 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
                   content = msg"site.change",
                   href = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$updatedAnswer")),
-                  attributes = Map("id" -> s"""change-special-mentions-${itemIndex.display}""")
+                  attributes = Map("id" -> s"change-special-mentions-${itemIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
-                  attributes = Map("id" -> s"""remove-special-mentions-${itemIndex.display}""")
+                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(updatedAnswer)),
+                  attributes = Map("id" -> s"remove-special-mentions-${itemIndex.display}")
                 )
               )
             )
@@ -66,27 +66,20 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
                   content = msg"site.change",
                   href = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$updatedAnswer")),
-                  attributes = Map("id" -> s"""change-special-mentions-${itemIndex.display}""")
+                  attributes = Map("id" -> s"change-special-mentions-${itemIndex.display}")
                 )
               )
             )
         }
     }
 
-  def addSpecialMention(itemIndex: Index): Option[Row] = userAnswers.get(AddSpecialMentionPage(itemIndex)) map {
-    answer =>
-      Row(
-        key = Key(msg"addSpecialMention.title".withArgs(msg"${itemIndex.display}"), classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
-            visuallyHiddenText = Some(msg"addSpecialMention.title".withArgs(msg"${itemIndex.display}"))
-          )
-        )
-      )
-  }
+  def addSpecialMention(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddSpecialMentionPage(itemIndex),
+    format = yesOrNo,
+    prefix = "addSpecialMention",
+    id = None,
+    call = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode)
+  )
 
   def addAnother(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
@@ -94,6 +87,4 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
 
     AddAnotherViewModel(addAnotherContainerHref, content)
   }
-
-  private def lrn: LocalReferenceNumber = userAnswers.lrn
 }

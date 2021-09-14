@@ -26,21 +26,18 @@ import play.api.mvc.Call
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 
-class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
+import java.time.LocalDateTime
 
-  private def lrn: LocalReferenceNumber = userAnswers.lrn
+class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  def arrivalTimesAtOffice(index: Index): Option[Row] = userAnswers.get(ArrivalTimesAtOfficePage(index)) map {
-    answer =>
-      val dateTime: String = s"${Format.dateTimeFormattedAMPM(answer).toLowerCase}"
-      row(
-        prefix = "arrivalTimesAtOffice",
-        value = dateTime,
-        id = "change-arrival-times-at-office-of-transit",
-        call = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode),
-        args = index.display
-      )
-  }
+  def arrivalTimesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDateTime](
+    page = ArrivalTimesAtOfficePage(index),
+    format = x => lit"${Format.dateTimeFormattedAMPM(x).toLowerCase}",
+    prefix = "arrivalTimesAtOffice",
+    id = Some("change-arrival-times-at-office-of-transit"),
+    call = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode),
+    args = index.display
+  )
 
   def destinationOffice(customsOfficeList: CustomsOfficeList): Option[Row] = officeRow[CustomsOffice](
     page = DestinationOfficePage,
@@ -131,10 +128,9 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     prefix: String,
     id: String,
     call: (LocalReferenceNumber, Mode) => Call
-  )(implicit rds: Reads[T]): Option[Row] = userAnswers.get(page) map {
-    answer =>
-      val countryName = countryList.getCountry(f(answer)).map(_.description).getOrElse(f(answer).code)
-      row(prefix, countryName, id, call(lrn, CheckMode))
+  )(implicit rds: Reads[T]): Option[Row] = {
+    val format: T => Content = x => lit"${countryList.getCountry(f(x)).map(_.description).getOrElse(f(x).code)}"
+    getAnswerAndBuildRow[T](page, format, prefix, Some(id), call(lrn, CheckMode))
   }
 
   private def officeRow[T](
@@ -149,22 +145,8 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     answer =>
       customsOfficeList.getCustomsOffice(f(answer)) map {
         customsOffice =>
-          row(prefix, s"${customsOffice.name} (${customsOffice.id})", id, call, args: _*)
+          buildRow(prefix, lit"${customsOffice.name} (${customsOffice.id})", Some(id), call, args: _*)
       }
   }
-
-  private def row(prefix: String, value: String, id: String, call: Call, args: Any*): Row =
-    Row(
-      key = Key(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*), classes = Seq("govuk-!-width-one-half")),
-      value = Value(lit"$value"),
-      actions = List(
-        Action(
-          content = msg"site.edit",
-          href = call.url,
-          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$prefix.checkYourAnswersLabel")),
-          attributes = Map("id" -> id)
-        )
-      )
-    )
 
 }

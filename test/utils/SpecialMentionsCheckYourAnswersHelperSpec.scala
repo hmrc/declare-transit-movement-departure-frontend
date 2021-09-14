@@ -25,7 +25,7 @@ import uk.gov.hmrc.viewmodels.Text.Message
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
-class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec with ReferenceDataGenerators {
+class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorSpec with ReferenceDataGenerators {
 
   "SpecialMentionsCheckYourAnswers" - {
 
@@ -46,7 +46,7 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
 
             val rowContent = s"(${specialMentionList.list.head.code}) ${specialMentionList.list.head.description}"
 
-            val cya = new SpecialMentionsCheckYourAnswers(updatedAnswers)
+            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers)
 
             val row = cya.specialMentionType(itemIndex, referenceIndex, specialMentionList, NormalMode)
 
@@ -65,7 +65,7 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
               .success
               .value
 
-            val cya = new SpecialMentionsCheckYourAnswers(updatedAnswers)
+            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers)
 
             val row = cya.specialMentionType(itemIndex, referenceIndex, SpecialMentionList(List(SpecialMention("code", "description"))), NormalMode)
 
@@ -91,7 +91,7 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
 
             val rowContent = s"(${specialMentionList.list.head.code}) ${specialMentionList.list.head.description}"
 
-            val cya = new SpecialMentionsCheckYourAnswers(updatedAnswers)
+            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers)
 
             val row = cya.specialMentionTypeNoRemoval(itemIndex, referenceIndex, specialMentionList)
 
@@ -110,7 +110,7 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
               .success
               .value
 
-            val cya = new SpecialMentionsCheckYourAnswers(updatedAnswers)
+            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers)
 
             val row = cya.specialMentionTypeNoRemoval(itemIndex, referenceIndex, SpecialMentionList(List(SpecialMention("code", "description"))))
 
@@ -123,7 +123,7 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
 
       "must link to correct page" - {
 
-        val cya = new SpecialMentionsCheckYourAnswers(emptyUserAnswers)
+        val cya = new SpecialMentionsCheckYourAnswersHelper(emptyUserAnswers)
 
         cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
