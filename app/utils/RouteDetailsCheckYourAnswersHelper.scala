@@ -25,22 +25,7 @@ import uk.gov.hmrc.viewmodels._
 
 class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def lrn: LocalReferenceNumber = userAnswers.lrn
-
-  def addOfficeOfTransit: Option[Row] = userAnswers.get(AddOfficeOfTransitPage) map {
-    answer =>
-      Row(
-        key = Key(msg"addOfficeOfTransit.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddOfficeOfTransitController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addOfficeOfTransit.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  private def lrn: LocalReferenceNumber = userAnswers.lrn
 
   def arrivalTimesAtOffice(index: Index): Option[Row] = userAnswers.get(ArrivalTimesAtOfficePage(index)) map {
     answer =>
@@ -76,21 +61,6 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
             )
           )
       }
-  }
-
-  def addTransitOffice(): Option[Row] = userAnswers.get(AddTransitOfficePage) map {
-    answer =>
-      Row(
-        key = Key(msg"addTransitOffice.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddTransitOfficeController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addTransitOffice.checkYourAnswersLabel"))
-          )
-        )
-      )
   }
 
   def addAnotherTransitOffice(index: Index, customsOfficeList: CustomsOfficeList): Option[Row] =
@@ -170,13 +140,13 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
               actions = List(
                 Action(
                   content = msg"site.change",
-                  href = routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, index, mode).url,
+                  href = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
                   attributes = Map("id" -> s"change-office-of-transit-${index.display}")
                 ),
                 Action(
                   content = msg"site.delete",
-                  href = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index, mode).url,
+                  href = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(key)),
                   attributes = Map("id" -> s"remove-office-of-transit-${index.display}")
                 )
@@ -197,21 +167,6 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
             href = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"movementDestinationCountry.checkYourAnswersLabel")),
             attributes = Map("id" -> "change-movement-destination-country")
-          )
-        )
-      )
-  }
-
-  def officeOfTransitCountry(index: Index): Option[Row] = userAnswers.get(OfficeOfTransitCountryPage(index)) map {
-    answer =>
-      Row(
-        key = Key(msg"officeOfTransitCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"officeOfTransitCountry.checkYourAnswersLabel"))
           )
         )
       )

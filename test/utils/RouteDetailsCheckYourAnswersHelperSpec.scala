@@ -20,10 +20,10 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.routeDetails.routes
 import generators.Generators
-import models.reference.{CountryCode, CustomsOffice}
-import models.{CustomsOfficeList, Mode, NormalMode}
+import models.reference.{Country, CountryCode, CountryOfDispatch, CustomsOffice}
+import models.{CheckMode, CountryList, CustomsOfficeList, Mode, NormalMode}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage}
+import pages.routeDetails._
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 
@@ -31,13 +31,15 @@ import java.time.LocalDateTime
 
 class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  private val mode: Mode = NormalMode
+  private val mode: Mode               = NormalMode
+  private val countryCode: CountryCode = CountryCode("COUNTRY CODE")
+  private val country: Country         = Country(countryCode, "COUNTRY DESCRIPTION")
 
   "RouteDetailsCheckYourAnswersHelper" - {
 
     "officeOfTransitRow" - {
 
-      val office = CustomsOffice("OFFICE ID", "OFFICE NAME", CountryCode("COUNTRY CODE"), None)
+      val office = CustomsOffice("OFFICE ID", "OFFICE NAME", countryCode, None)
 
       "return None" - {
 
@@ -131,6 +133,200 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               )
             )
           }
+        }
+      }
+    }
+
+    "movementDestinationCountry" - {
+
+      "return None" - {
+
+        "MovementDestinationCountryPage undefined" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.movementDestinationCountry(CountryList(Nil))
+          result mustBe None
+        }
+      }
+
+      "return Some(Row)" - {
+
+        "country name found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(MovementDestinationCountryPage)(countryCode)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.movementDestinationCountry(CountryList(Seq(country)))
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"movementDestinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"${country.description}"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"movementDestinationCountry.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-movement-destination-country")
+                )
+              )
+            )
+          )
+        }
+
+        "country name not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(MovementDestinationCountryPage)(countryCode)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.movementDestinationCountry(CountryList(Nil))
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"movementDestinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"${countryCode.code}"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"movementDestinationCountry.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-movement-destination-country")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "destinationCountry" - {
+
+      "return None" - {
+
+        "DestinationCountryPage undefined" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.destinationCountry(CountryList(Nil))
+          result mustBe None
+        }
+      }
+
+      "return Some(Row)" - {
+
+        "country name found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DestinationCountryPage)(countryCode)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.destinationCountry(CountryList(Seq(country)))
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"destinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"${country.description}"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.DestinationCountryController.onPageLoad(lrn, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"destinationCountry.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-destination-country")
+                )
+              )
+            )
+          )
+        }
+
+        "country name not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DestinationCountryPage)(countryCode)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.destinationCountry(CountryList(Nil))
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"destinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"${countryCode.code}"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.DestinationCountryController.onPageLoad(lrn, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"destinationCountry.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-destination-country")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "countryOfDispatch" - {
+
+      "return None" - {
+
+        "CountryOfDispatchPage undefined" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.countryOfDispatch(CountryList(Nil))
+          result mustBe None
+        }
+      }
+
+      "return Some(Row)" - {
+
+        val countryOfDispatch: CountryOfDispatch = CountryOfDispatch(countryCode, isNotEu = false)
+
+        "country name found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.countryOfDispatch(CountryList(Seq(country)))
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"countryOfDispatch.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"${country.description}"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"countryOfDispatch.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-country-of-dispatch")
+                )
+              )
+            )
+          )
+        }
+
+        "country name not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.countryOfDispatch(CountryList(Nil))
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"countryOfDispatch.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"${countryCode.code}"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"countryOfDispatch.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-country-of-dispatch")
+                )
+              )
+            )
+          )
         }
       }
     }
