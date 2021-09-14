@@ -432,6 +432,50 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
         }
       }
     }
+
+    "arrivalTimesAtOffice" - {
+
+      "return None" - {
+
+        "ArrivalTimesAtOfficePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.arrivalTimesAtOffice(index)
+          result mustBe None
+        }
+      }
+
+      "return Some(Row)" - {
+
+        "ArrivalTimesAtOfficePage defined at index" in {
+
+          val arrivalTime          = arbitrary[LocalDateTime].sample.value
+          val formattedArrivalTime = Format.dateTimeFormattedAMPM(arrivalTime).toLowerCase
+
+          val answers = emptyUserAnswers.unsafeSetVal(ArrivalTimesAtOfficePage(index))(arrivalTime)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.arrivalTimesAtOffice(index)
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"arrivalTimesAtOffice.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$formattedArrivalTime"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"arrivalTimesAtOffice.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-arrival-times-at-office-of-transit")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
   }
 
 }

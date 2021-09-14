@@ -17,7 +17,7 @@
 package utils
 
 import controllers.routeDetails.routes
-import models.reference.{CountryCode, CountryOfDispatch}
+import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
 import models.{CheckMode, CountryList, CustomsOfficeList, Index, LocalReferenceNumber, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.routeDetails._
@@ -48,61 +48,41 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def destinationOffice(customsOfficeList: CustomsOfficeList): Option[Row] = userAnswers.get(DestinationOfficePage) flatMap {
-    answer =>
-      customsOfficeList.getCustomsOffice(answer.id) map {
-        customsOffice =>
-          Row(
-            key = Key(msg"destinationOffice.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-            value = Value(lit"${customsOffice.name} (${customsOffice.id})"),
-            actions = List(
-              Action(
-                content = msg"site.edit",
-                href = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode).url,
-                visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"destinationOffice.checkYourAnswersLabel")),
-                attributes = Map("id" -> "change-destination-office")
-              )
-            )
-          )
-      }
-  }
+  def destinationOffice(customsOfficeList: CustomsOfficeList): Option[Row] = officeRow[CustomsOffice](
+    page = DestinationOfficePage,
+    f = x => x.id,
+    customsOfficeList = customsOfficeList,
+    prefix = "destinationOffice",
+    id = "change-destination-office",
+    call = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode)
+  )
 
-  def addAnotherTransitOffice(index: Index, customsOfficeList: CustomsOfficeList): Option[Row] =
-    userAnswers.get(AddAnotherTransitOfficePage(index)) flatMap {
-      answer =>
-        customsOfficeList.getCustomsOffice(answer) map {
-          officeOfTransit =>
-            Row(
-              key = Key(msg"addAnotherTransitOffice.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
-              value = Value(lit"${officeOfTransit.name} (${officeOfTransit.id})"),
-              actions = List(
-                Action(
-                  content = msg"site.edit",
-                  href = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAnotherTransitOffice.checkYourAnswersLabel")),
-                  attributes = Map("id" -> "change-office-of-transit")
-                )
-              )
-            )
-        }
-    }
+  def addAnotherTransitOffice(index: Index, customsOfficeList: CustomsOfficeList): Option[Row] = officeRow[String](
+    page = AddAnotherTransitOfficePage(index),
+    f = x => x,
+    customsOfficeList = customsOfficeList,
+    prefix = "addAnotherTransitOffice",
+    id = "change-office-of-transit",
+    call = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode),
+    args = index.display
+  )
 
   def countryOfDispatch(countryList: CountryList): Option[Row] = countryRow[CountryOfDispatch](
-    CountryOfDispatchPage,
-    x => x.country,
-    countryList,
-    "countryOfDispatch",
-    "change-country-of-dispatch",
-    routes.CountryOfDispatchController.onPageLoad
+    page = CountryOfDispatchPage,
+    f = x => x.country,
+    countryList = countryList,
+    prefix = "countryOfDispatch",
+    id = "change-country-of-dispatch",
+    call = routes.CountryOfDispatchController.onPageLoad
   )
 
   def destinationCountry(countryList: CountryList): Option[Row] = countryRow[CountryCode](
-    DestinationCountryPage,
-    x => x,
-    countryList,
-    "destinationCountry",
-    "change-destination-country",
-    routes.DestinationCountryController.onPageLoad
+    page = DestinationCountryPage,
+    f = x => x,
+    countryList = countryList,
+    prefix = "destinationCountry",
+    id = "change-destination-country",
+    call = routes.DestinationCountryController.onPageLoad
   )
 
   def officeOfTransitRow(index: Index, customsOfficeList: CustomsOfficeList, mode: Mode): Option[Row] =
@@ -142,12 +122,12 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
     }
 
   def movementDestinationCountry(countryList: CountryList): Option[Row] = countryRow[CountryCode](
-    MovementDestinationCountryPage,
-    x => x,
-    countryList,
-    "movementDestinationCountry",
-    "change-movement-destination-country",
-    routes.MovementDestinationCountryController.onPageLoad
+    page = MovementDestinationCountryPage,
+    f = x => x,
+    countryList = countryList,
+    prefix = "movementDestinationCountry",
+    id = "change-movement-destination-country",
+    call = routes.MovementDestinationCountryController.onPageLoad
   )
 
   private def countryRow[T](
@@ -160,17 +140,37 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   )(implicit rds: Reads[T]): Option[Row] = userAnswers.get(page) map {
     answer =>
       val countryName = countryList.getCountry(f(answer)).map(_.description).getOrElse(f(answer).code)
-      Row(
-        key = Key(msg"$prefix.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$countryName"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = call(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$prefix.checkYourAnswersLabel")),
-            attributes = Map("id" -> id)
-          )
+      row(prefix, countryName, id, call(lrn, CheckMode))
+  }
+
+  private def officeRow[T](
+    page: QuestionPage[T],
+    f: T => String,
+    customsOfficeList: CustomsOfficeList,
+    prefix: String,
+    id: String,
+    call: Call,
+    args: Any*
+  )(implicit rds: Reads[T]): Option[Row] = userAnswers.get(page) flatMap {
+    answer =>
+      customsOfficeList.getCustomsOffice(f(answer)) map {
+        customsOffice =>
+          row(prefix, s"${customsOffice.name} (${customsOffice.id})", id, call, args: _*)
+      }
+  }
+
+  private def row(prefix: String, value: String, id: String, call: Call, args: Any*): Row =
+    Row(
+      key = Key(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*), classes = Seq("govuk-!-width-one-half")),
+      value = Value(lit"$value"),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = call.url,
+          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$prefix.checkYourAnswersLabel")),
+          attributes = Map("id" -> id)
         )
       )
-  }
+    )
+
 }
