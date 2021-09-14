@@ -43,6 +43,21 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
   }
 
+  def loadingPlace: Option[Row] = userAnswers.get(LoadingPlacePage) map {
+    answer =>
+      Row(
+        key = Key(msg"loadingPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$answer"),
+        actions = List(
+          Action(
+            content = msg"site.edit",
+            href = controllers.routes.LoadingPlaceController.onPageLoad(lrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"loadingPlace.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
   def addAgreedLocationOfGoods: Option[Row] = userAnswers.get(AddAgreedLocationOfGoodsPage) map {
     answer =>
       Row(

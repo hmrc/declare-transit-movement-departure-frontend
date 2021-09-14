@@ -16,31 +16,10 @@
 
 package utils
 
-import controllers.routes
-import models.{CheckMode, LocalReferenceNumber, UserAnswers}
-import pages._
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
-import uk.gov.hmrc.viewmodels._
+import models.{LocalReferenceNumber, UserAnswers}
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
-
-  def loadingPlace: Option[Row] = userAnswers.get(LoadingPlacePage) map {
-    answer =>
-      Row(
-        key = Key(msg"loadingPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.LoadingPlaceController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"loadingPlace.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+abstract class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def lrn: LocalReferenceNumber = userAnswers.lrn
 
 }
-
-object CheckYourAnswersHelper

@@ -24,7 +24,6 @@ import pages.routeDetails._
 import play.api.libs.json.Reads
 import play.api.mvc.Call
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
-import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels._
 
 class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
@@ -34,17 +33,12 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def arrivalTimesAtOffice(index: Index): Option[Row] = userAnswers.get(ArrivalTimesAtOfficePage(index)) map {
     answer =>
       val dateTime: String = s"${Format.dateTimeFormattedAMPM(answer).toLowerCase}"
-      Row(
-        key = Key(msg"arrivalTimesAtOffice.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
-        value = Value(Literal(dateTime)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"arrivalTimesAtOffice.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-arrival-times-at-office-of-transit")
-          )
-        )
+      row(
+        prefix = "arrivalTimesAtOffice",
+        value = dateTime,
+        id = "change-arrival-times-at-office-of-transit",
+        call = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode),
+        args = index.display
       )
   }
 
