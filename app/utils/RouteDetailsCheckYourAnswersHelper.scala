@@ -162,21 +162,23 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
                 )
                 .getOrElse("")
 
+            val key = s"${office.name} (${office.id})"
+
             Row(
-              key = Key(lit"${office.name} (${office.id})"),
+              key = Key(lit"$key"),
               value = Value(lit"$arrivalTime"),
               actions = List(
                 Action(
                   content = msg"site.change",
                   href = routes.OfficeOfTransitCountryController.onPageLoad(userAnswers.lrn, index, mode).url,
-                  visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.change.hidden".withArgs(answer)),
-                  attributes = Map("id" -> s"""change-office-of-transit-${index.display}""")
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                  attributes = Map("id" -> s"change-office-of-transit-${index.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(userAnswers.lrn, index, mode).url,
-                  visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.delete.hidden".withArgs(answer)),
-                  attributes = Map("id" -> s"""remove-office-of-transit-${index.display}""")
+                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(key)),
+                  attributes = Map("id" -> s"remove-office-of-transit-${index.display}")
                 )
               )
             )
