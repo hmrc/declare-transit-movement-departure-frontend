@@ -35,11 +35,11 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
   private val countryCode: CountryCode = CountryCode("COUNTRY CODE")
   private val country: Country         = Country(countryCode, "COUNTRY DESCRIPTION")
 
+  private val customsOffice = CustomsOffice("OFFICE ID", "OFFICE NAME", countryCode, None)
+
   "RouteDetailsCheckYourAnswersHelper" - {
 
     "officeOfTransitRow" - {
-
-      val office = CustomsOffice("OFFICE ID", "OFFICE NAME", countryCode, None)
 
       "return None" - {
 
@@ -54,7 +54,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
         "customs office ID not found" in {
 
-          val answers = emptyUserAnswers.unsafeSetVal(AddAnotherTransitOfficePage(index))(office.id)
+          val answers = emptyUserAnswers.unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
 
           val helper = new RouteDetailsCheckYourAnswersHelper(answers)
           val result = helper.officeOfTransitRow(index, CustomsOfficeList(Nil), mode)
@@ -69,12 +69,12 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           "arrival time unknown" in {
 
             val answers = emptyUserAnswers
-              .unsafeSetVal(AddAnotherTransitOfficePage(index))(office.id)
+              .unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
 
             val helper = new RouteDetailsCheckYourAnswersHelper(answers)
-            val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(office)), mode)
+            val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(customsOffice)), mode)
 
-            val key = s"${office.name} (${office.id})"
+            val key = s"${customsOffice.name} (${customsOffice.id})"
 
             result mustBe Some(
               Row(
@@ -104,13 +104,13 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
             val formattedArrivalTime = Format.dateTimeFormattedAMPM(arrivalTime).toLowerCase
 
             val answers = emptyUserAnswers
-              .unsafeSetVal(AddAnotherTransitOfficePage(index))(office.id)
+              .unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
               .unsafeSetVal(ArrivalTimesAtOfficePage(index))(arrivalTime)
 
             val helper = new RouteDetailsCheckYourAnswersHelper(answers)
-            val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(office)), mode)
+            val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(customsOffice)), mode)
 
-            val key = s"${office.name} (${office.id})"
+            val key = s"${customsOffice.name} (${customsOffice.id})"
 
             result mustBe Some(
               Row(
@@ -323,6 +323,108 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
                   href = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"countryOfDispatch.checkYourAnswersLabel")),
                   attributes = Map("id" -> "change-country-of-dispatch")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "destinationOffice" - {
+
+      "return None" - {
+
+        "DestinationOfficePage undefined" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.destinationOffice(CustomsOfficeList(Nil))
+          result mustBe None
+        }
+
+        "customs office not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DestinationOfficePage)(customsOffice)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.destinationOffice(CustomsOfficeList(Nil))
+
+          result mustBe None
+        }
+      }
+
+      "return Some(Row)" - {
+
+        "customs office found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DestinationOfficePage)(customsOffice)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.destinationOffice(CustomsOfficeList(Seq(customsOffice)))
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"destinationOffice.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"${customsOffice.name} (${customsOffice.id})"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"destinationOffice.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-destination-office")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "addAnotherTransitOffice" - {
+
+      "return None" - {
+
+        "AddAnotherTransitOfficePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.addAnotherTransitOffice(index, CustomsOfficeList(Nil))
+          result mustBe None
+        }
+
+        "customs office not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.addAnotherTransitOffice(index, CustomsOfficeList(Nil))
+
+          result mustBe None
+        }
+      }
+
+      "return Some(Row)" - {
+
+        "customs office found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
+
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val result = helper.addAnotherTransitOffice(index, CustomsOfficeList(Seq(customsOffice)))
+
+          result mustBe Some(
+            Row(
+              key = Key(msg"addAnotherTransitOffice.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"${customsOffice.name} (${customsOffice.id})"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAnotherTransitOffice.checkYourAnswersLabel")),
+                  attributes = Map("id" -> "change-office-of-transit")
                 )
               )
             )

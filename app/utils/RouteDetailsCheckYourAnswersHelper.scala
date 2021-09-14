@@ -17,8 +17,12 @@
 package utils
 
 import controllers.routeDetails.routes
+import models.reference.{CountryCode, CountryOfDispatch}
 import models.{CheckMode, CountryList, CustomsOfficeList, Index, LocalReferenceNumber, Mode, UserAnswers}
+import pages.QuestionPage
 import pages.routeDetails._
+import play.api.libs.json.Reads
+import play.api.mvc.Call
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels._
@@ -83,41 +87,23 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         }
     }
 
-  def countryOfDispatch(codeList: CountryList): Option[Row] = userAnswers.get(CountryOfDispatchPage) map {
-    answer =>
-      val countryName = codeList.getCountry(answer.country).map(_.description).getOrElse(answer.country.code)
+  def countryOfDispatch(countryList: CountryList): Option[Row] = countryRow[CountryOfDispatch](
+    CountryOfDispatchPage,
+    x => x.country,
+    countryList,
+    "countryOfDispatch",
+    "change-country-of-dispatch",
+    routes.CountryOfDispatchController.onPageLoad
+  )
 
-      Row(
-        key = Key(msg"countryOfDispatch.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$countryName"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"countryOfDispatch.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-country-of-dispatch")
-          )
-        )
-      )
-  }
-
-  def destinationCountry(codeList: CountryList): Option[Row] = userAnswers.get(DestinationCountryPage) map {
-    answer =>
-      val countryName = codeList.getCountry(answer).map(_.description).getOrElse(answer.code)
-
-      Row(
-        key = Key(msg"destinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$countryName"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.DestinationCountryController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"destinationCountry.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-destination-country")
-          )
-        )
-      )
-  }
+  def destinationCountry(countryList: CountryList): Option[Row] = countryRow[CountryCode](
+    DestinationCountryPage,
+    x => x,
+    countryList,
+    "destinationCountry",
+    "change-destination-country",
+    routes.DestinationCountryController.onPageLoad
+  )
 
   def officeOfTransitRow(index: Index, customsOfficeList: CustomsOfficeList, mode: Mode): Option[Row] =
     userAnswers.get(AddAnotherTransitOfficePage(index)).flatMap {
@@ -155,18 +141,34 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
         }
     }
 
-  def movementDestinationCountry(countryList: CountryList): Option[Row] = userAnswers.get(MovementDestinationCountryPage) map {
+  def movementDestinationCountry(countryList: CountryList): Option[Row] = countryRow[CountryCode](
+    MovementDestinationCountryPage,
+    x => x,
+    countryList,
+    "movementDestinationCountry",
+    "change-movement-destination-country",
+    routes.MovementDestinationCountryController.onPageLoad
+  )
+
+  private def countryRow[T](
+    page: QuestionPage[T],
+    f: T => CountryCode,
+    countryList: CountryList,
+    prefix: String,
+    id: String,
+    call: (LocalReferenceNumber, Mode) => Call
+  )(implicit rds: Reads[T]): Option[Row] = userAnswers.get(page) map {
     answer =>
-      val countryName = countryList.getCountry(answer).map(_.description).getOrElse(answer.code)
+      val countryName = countryList.getCountry(f(answer)).map(_.description).getOrElse(f(answer).code)
       Row(
-        key = Key(msg"movementDestinationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"$prefix.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$countryName"),
         actions = List(
           Action(
             content = msg"site.edit",
-            href = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"movementDestinationCountry.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-movement-destination-country")
+            href = call(lrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$prefix.checkYourAnswersLabel")),
+            attributes = Map("id" -> id)
           )
         )
       )
