@@ -16,7 +16,8 @@
 
 package utils
 
-import models.{LocalReferenceNumber, UserAnswers}
+import models.reference.CountryCode
+import models.{CheckMode, CountryList, LocalReferenceNumber, Mode, UserAnswers}
 import pages.QuestionPage
 import play.api.libs.json.Reads
 import play.api.mvc.Call
@@ -135,5 +136,17 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
         )
       )
     )
+
+  def getAnswerAndBuildCountryRow[T](
+    page: QuestionPage[T],
+    f: T => CountryCode,
+    countryList: CountryList,
+    prefix: String,
+    id: String,
+    call: (LocalReferenceNumber, Mode) => Call
+  )(implicit rds: Reads[T]): Option[Row] = {
+    val format: T => Content = x => lit"${countryList.getCountry(f(x)).map(_.description).getOrElse(f(x).code)}"
+    getAnswerAndBuildRow[T](page, format, prefix, Some(id), call(lrn, CheckMode))
+  }
 
 }

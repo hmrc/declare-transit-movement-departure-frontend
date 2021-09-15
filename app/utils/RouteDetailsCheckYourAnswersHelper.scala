@@ -18,7 +18,7 @@ package utils
 
 import controllers.routeDetails.routes
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
-import models.{CheckMode, CountryList, CustomsOfficeList, Index, LocalReferenceNumber, Mode, UserAnswers}
+import models.{CheckMode, CountryList, CustomsOfficeList, Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.routeDetails._
 import play.api.libs.json.Reads
@@ -39,7 +39,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     args = index.display
   )
 
-  def destinationOffice(customsOfficeList: CustomsOfficeList): Option[Row] = officeRow[CustomsOffice](
+  def destinationOffice(customsOfficeList: CustomsOfficeList): Option[Row] = getAnswerAndBuildOfficeRow[CustomsOffice](
     page = DestinationOfficePage,
     f = x => x.id,
     customsOfficeList = customsOfficeList,
@@ -48,7 +48,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     call = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode)
   )
 
-  def addAnotherTransitOffice(index: Index, customsOfficeList: CustomsOfficeList): Option[Row] = officeRow[String](
+  def addAnotherTransitOffice(index: Index, customsOfficeList: CustomsOfficeList): Option[Row] = getAnswerAndBuildOfficeRow[String](
     page = AddAnotherTransitOfficePage(index),
     f = x => x,
     customsOfficeList = customsOfficeList,
@@ -58,7 +58,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     args = index.display
   )
 
-  def countryOfDispatch(countryList: CountryList): Option[Row] = countryRow[CountryOfDispatch](
+  def countryOfDispatch(countryList: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryOfDispatch](
     page = CountryOfDispatchPage,
     f = x => x.country,
     countryList = countryList,
@@ -67,7 +67,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     call = routes.CountryOfDispatchController.onPageLoad
   )
 
-  def destinationCountry(countryList: CountryList): Option[Row] = countryRow[CountryCode](
+  def destinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
     page = DestinationCountryPage,
     f = x => x,
     countryList = countryList,
@@ -101,7 +101,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
         }
     }
 
-  def movementDestinationCountry(countryList: CountryList): Option[Row] = countryRow[CountryCode](
+  def movementDestinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
     page = MovementDestinationCountryPage,
     f = x => x,
     countryList = countryList,
@@ -110,19 +110,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     call = routes.MovementDestinationCountryController.onPageLoad
   )
 
-  private def countryRow[T](
-    page: QuestionPage[T],
-    f: T => CountryCode,
-    countryList: CountryList,
-    prefix: String,
-    id: String,
-    call: (LocalReferenceNumber, Mode) => Call
-  )(implicit rds: Reads[T]): Option[Row] = {
-    val format: T => Content = x => lit"${countryList.getCountry(f(x)).map(_.description).getOrElse(f(x).code)}"
-    getAnswerAndBuildRow[T](page, format, prefix, Some(id), call(lrn, CheckMode))
-  }
-
-  private def officeRow[T](
+  private def getAnswerAndBuildOfficeRow[T](
     page: QuestionPage[T],
     f: T => String,
     customsOfficeList: CustomsOfficeList,
