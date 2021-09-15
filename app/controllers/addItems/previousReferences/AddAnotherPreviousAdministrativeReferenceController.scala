@@ -95,7 +95,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
       previousDocuments =>
         val referenceRows = indexList.map {
           referenceIndex =>
-            cyaHelper.previousAdministrativeReferenceRows(index, referenceIndex, previousDocuments, NormalMode)
+            cyaHelper.previousAdministrativeReferenceType(index, referenceIndex, previousDocuments, NormalMode)
         }
 
         val singularOrPlural = if (numberOfReferences == 1) "singular" else "plural"

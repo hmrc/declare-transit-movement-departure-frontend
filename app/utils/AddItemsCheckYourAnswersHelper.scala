@@ -24,14 +24,14 @@ import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
 import controllers.addItems.traderSecurityDetails.{routes => tradersSecurityDetailsRoutes}
 import models.DeclarationType.Option4
 import models._
-import models.reference.{DocumentType, MethodOfPayment}
+import models.reference.{MethodOfPayment, PackageType}
 import pages._
 import pages.addItems._
 import pages.addItems.containers._
 import pages.addItems.securityDetails._
 import pages.addItems.traderDetails._
 import pages.addItems.traderSecurityDetails._
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
+import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
@@ -46,22 +46,12 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     call = securityDetailsRoutes.TransportChargesController.onPageLoad(lrn, itemIndex, CheckMode)
   )
 
-  def containerRow(itemIndex: Index, containerIndex: Index, userAnswers: UserAnswers): Option[Row] =
-    userAnswers.get(ContainerNumberPage(itemIndex, containerIndex)).map {
-      answer =>
-        Row(
-          key = Key(lit"$answer"),
-          value = Value(lit""),
-          actions = List(
-            Action(
-              content = msg"site.change",
-              href = containerRoutes.ContainerNumberController.onPageLoad(userAnswers.lrn, itemIndex, containerIndex, CheckMode).url,
-              visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
-              attributes = Map("id" -> s"change-container-${containerIndex.display}")
-            )
-          )
-        )
-    }
+  def containerNumber(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildValuelessRow[String](
+    page = ContainerNumberPage(itemIndex, containerIndex),
+    format = x => lit"$x",
+    id = Some(s"change-container-${containerIndex.display}"),
+    call = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode)
+  )
 
   def addAnotherContainer(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
@@ -70,70 +60,47 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     AddAnotherViewModel(addAnotherContainerHref, content)
   }
 
-  def documentRows(index: Index, documentIndex: Index, documentType: DocumentTypeList): Option[Row] = {
-
-    def actions(documentType: String): List[Action] = userAnswers.get(DeclarationTypePage) match {
-      case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
-        List(
-          Action(
-            content = msg"site.change",
-            href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
-            visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(documentType)),
-            attributes = Map("id" -> s"change-document-${index.display}")
-          )
-        )
-      case _ =>
-        List(
-          Action(
-            content = msg"site.change",
-            href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
-            visuallyHiddenText = Some(msg"addAnotherDocument.documentList.change.hidden".withArgs(documentType)),
-            attributes = Map("id" -> s"change-document-${index.display}")
-          ),
-          Action(
-            content = msg"site.delete",
-            href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(userAnswers.lrn, index, documentIndex, CheckMode).url,
-            visuallyHiddenText = Some(msg"addAnotherDocument.documentList.delete.hidden".withArgs(documentType)),
-            attributes = Map("id" -> s"remove-document-${index.display}")
-          )
-        )
-    }
-
+  def documentRow(index: Index, documentIndex: Index, documentType: DocumentTypeList, removable: Boolean): Option[Row] =
     userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
       answer =>
-        documentType.getDocumentType(answer) map {
-          case DocumentType(code, description, _) =>
-            Row(
-              key = Key(lit"($code) $description"),
-              value = Value(lit""),
-              actions = actions(answer)
-            )
+        documentType.getDocumentType(answer).map {
+          documentType =>
+            val updatedAnswer = s"(${documentType.code}) ${documentType.description}"
+
+            userAnswers.get(DeclarationTypePage) match {
+              case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
+                buildValuelessRow(
+                  key = lit"$updatedAnswer",
+                  id = Some(s"change-document-${index.display}"),
+                  call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode),
+                  args = answer
+                )
+              case _ if removable =>
+                buildRemovableRow(
+                  key = lit"$updatedAnswer",
+                  id = s"document-${index.display}",
+                  changeCall = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode),
+                  removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode),
+                  args = answer
+                )
+              case _ =>
+                buildValuelessRow(
+                  key = lit"$updatedAnswer",
+                  id = Some(s"change-document-${documentIndex.display}"),
+                  call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode),
+                  args = answer
+                )
+            }
         }
     }
-  }
 
-  def itemRows(index: Index): Option[Row] =
-    userAnswers.get(ItemDescriptionPage(index)).map {
-      answer =>
-        Row(
-          key = Key(lit"$answer"),
-          value = Value(lit""),
-          actions = List(
-            Action(
-              content = msg"site.change",
-              href = routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
-              visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.change.hidden".withArgs(answer)),
-              attributes = Map("id" -> s"change-item-${index.display}")
-            ),
-            Action(
-              content = msg"site.delete",
-              href = routes.ConfirmRemoveItemController.onPageLoad(userAnswers.lrn, index).url,
-              visuallyHiddenText = Some(msg"addTransitOffice.officeOfTransit.delete.hidden".withArgs(answer)),
-              attributes = Map("id" -> s"remove-item-${index.display}")
-            )
-          )
-        )
-    }
+  def itemRow(index: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
+    page = ItemDescriptionPage(index),
+    format = x => lit"$x",
+    id = s"item-${index.display}",
+    changeCall = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index),
+    removeCall = routes.ConfirmRemoveItemController.onPageLoad(lrn, index)
+  )
 
   def addDocuments(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddDocumentsPage(itemIndex),
@@ -270,27 +237,21 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     args = index.display
   )
 
-  def previousReferenceRows(index: Index, referenceIndex: Index, previousDocumentType: PreviousReferencesDocumentTypeList): Option[Row] =
+  def previousReferenceType(index: Index, referenceIndex: Index, previousDocumentType: PreviousReferencesDocumentTypeList): Option[Row] =
     userAnswers.get(ReferenceTypePage(index, referenceIndex)) flatMap {
       answer =>
         previousDocumentType.getPreviousReferencesDocumentType(answer) map {
           referenceType =>
-            Row(
-              key = Key(lit"(${referenceType.code}) ${referenceType.description.getOrElse("")}"),
-              value = Value(lit""),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = previousReferencesRoutes.ReferenceTypeController.onPageLoad(userAnswers.lrn, index, referenceIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
-                  attributes = Map("id" -> s"change-item-${index.display}")
-                )
-              )
+            buildValuelessRow(
+              key = lit"(${referenceType.code}) ${referenceType.description.getOrElse("")}",
+              id = Some(s"change-item-${index.display}"),
+              call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode),
+              args = answer
             )
         }
     }
 
-  def previousAdministrativeReferenceRows(
+  def previousAdministrativeReferenceType(
     index: Index,
     referenceIndex: Index,
     previousDocumentType: PreviousReferencesDocumentTypeList,
@@ -300,25 +261,12 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
       answer =>
         previousDocumentType.getPreviousReferencesDocumentType(answer) map {
           referenceType =>
-            Row(
-              key = Key(lit"(${referenceType.code}) ${referenceType.description.getOrElse("")}"),
-              value = Value(lit""),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = previousReferencesRoutes.ReferenceTypeController.onPageLoad(userAnswers.lrn, index, referenceIndex, mode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
-                  attributes = Map("id" -> s"change-reference-document-type-${index.display}")
-                ),
-                Action(
-                  content = msg"site.delete",
-                  href = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController
-                    .onPageLoad(userAnswers.lrn, index, referenceIndex, mode)
-                    .url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(answer)),
-                  attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
-                )
-              )
+            buildRemovableRow(
+              key = lit"(${referenceType.code}) ${referenceType.description.getOrElse("")}",
+              id = s"reference-document-type-${index.display}",
+              changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode),
+              removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode),
+              args = answer
             )
         }
     }
@@ -338,29 +286,20 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     AddAnotherViewModel(addAnotherPackageHref, content)
   }
 
-  def packageRow(itemIndex: Index, packageIndex: Index): Option[Row] =
-    userAnswers.get(PackageTypePage(itemIndex, packageIndex)).map {
-      answer =>
-        Row(
-          key = Key(msg"packageType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-          value = Value(lit"$answer"),
-          actions = List(
-            Action(
-              content = msg"site.edit",
-              href = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
-              visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer.toString)),
-              attributes = Map("id" -> s"change-package-${packageIndex.display}")
-            )
-          )
-        )
-    }
+  def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](
+    page = PackageTypePage(itemIndex, packageIndex),
+    format = x => lit"$x",
+    prefix = "packageType",
+    id = Some(s"change-package-${packageIndex.display}"),
+    call = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
+  )
 
   def numberOfPackages(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[Int](
     page = HowManyPackagesPage(itemIndex, packageIndex),
     format = x => lit"$x",
     prefix = "declareNumberOfPackages",
     id = None,
-    call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode)
+    call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
   )
 
   def totalPieces(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[Int](
@@ -368,7 +307,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     format = x => lit"$x",
     prefix = "totalPieces",
     id = None,
-    call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode)
+    call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
   )
 
   def addAnotherPackage(itemIndex: Index, content: Text): AddAnotherViewModel = {
@@ -383,43 +322,6 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     val addAnotherDocumentHref = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, itemIndex, CheckMode).url
 
     AddAnotherViewModel(addAnotherDocumentHref, content)
-  }
-
-  def documentRow(itemIndex: Index, documentIndex: Index, userAnswers: UserAnswers, documentTypeList: DocumentTypeList): Option[Row] = {
-
-    def actions(updatedAnswer: String): List[Action] = userAnswers.get(DeclarationTypePage) match {
-      case Some(Option4) if itemIndex.position == 0 & documentIndex.position == 0 =>
-        List(
-          Action(
-            content = msg"site.change",
-            href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
-            attributes = Map("id" -> s"change-document-${documentIndex.display}")
-          )
-        )
-      case _ =>
-        List(
-          Action(
-            content = msg"site.change",
-            href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, documentIndex, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(updatedAnswer)),
-            attributes = Map("id" -> s"change-document-${documentIndex.display}")
-          )
-        )
-    }
-
-    userAnswers.get(DocumentTypePage(itemIndex, documentIndex)).flatMap {
-      answer =>
-        documentTypeList.getDocumentType(answer).map {
-          documentType =>
-            val updatedAnswer = s"(${documentType.code}) ${documentType.description}"
-            Row(
-              key = Key(lit"$updatedAnswer"),
-              value = Value(lit""),
-              actions = actions(answer)
-            )
-        }
-    }
   }
 
   def commercialReferenceNumber(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[String](

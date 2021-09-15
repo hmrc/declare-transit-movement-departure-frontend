@@ -40,6 +40,29 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
         buildRow(prefix, format(answer), id, call, args: _*)
     }
 
+  def getAnswerAndBuildValuelessRow[T](
+    page: QuestionPage[T],
+    format: T => Content,
+    id: Option[String],
+    call: Call
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildValuelessRow(format(answer), id, call, answer)
+    }
+
+  def getAnswerAndBuildRemovableRow[T](
+    page: QuestionPage[T],
+    format: T => Content,
+    id: String,
+    changeCall: Call,
+    removeCall: Call
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildRemovableRow(format(answer), id, changeCall, removeCall, answer)
+    }
+
   def buildRow(
     prefix: String,
     content: Content,
@@ -60,6 +83,55 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
               x => Map("id" -> x)
             )
             .getOrElse(Map.empty)
+        )
+      )
+    )
+
+  def buildValuelessRow(
+    key: Content,
+    id: Option[String],
+    call: Call,
+    args: Any*
+  ): Row =
+    Row(
+      key = Key(key),
+      value = Value(lit""),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = call.url,
+          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(args: _*)),
+          attributes = id
+            .map(
+              x => Map("id" -> x)
+            )
+            .getOrElse(Map.empty)
+        )
+      )
+    )
+
+  def buildRemovableRow(
+    key: Content,
+    id: String,
+    changeCall: Call,
+    removeCall: Call,
+    args: Any*
+  ): Row =
+    Row(
+      key = Key(key),
+      value = Value(lit""),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = changeCall.url,
+          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(args: _*)),
+          attributes = Map("id" -> s"change-$id")
+        ),
+        Action(
+          content = msg"site.delete",
+          href = removeCall.url,
+          visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(args: _*)),
+          attributes = Map("id" -> s"remove-$id")
         )
       )
     )

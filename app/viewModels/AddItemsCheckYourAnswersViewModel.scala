@@ -116,7 +116,7 @@ object AddItemsCheckYourAnswersViewModel {
       List.range(0, userAnswers.get(DeriveNumberOfPackages(index)).getOrElse(0)).flatMap {
         packagePosition =>
           Seq(
-            checkYourAnswersHelper.packageRow(index, Index(packagePosition)),
+            checkYourAnswersHelper.packageType(index, Index(packagePosition)),
             checkYourAnswersHelper.totalPieces(index, Index(packagePosition)),
             checkYourAnswersHelper.numberOfPackages(index, Index(packagePosition))
           ).flatten
@@ -136,7 +136,7 @@ object AddItemsCheckYourAnswersViewModel {
     val referencesRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)).flatMap {
         position =>
-          checkYourAnswersHelper.previousReferenceRows(index, Index(position), previousDocumentTypes)
+          checkYourAnswersHelper.previousReferenceType(index, Index(position), previousDocumentTypes)
       }
 
     Section(
@@ -152,7 +152,7 @@ object AddItemsCheckYourAnswersViewModel {
     val documentRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfDocuments(index)).getOrElse(0)).flatMap {
         documentPosition =>
-          checkYourAnswersHelper.documentRow(index, Index(documentPosition), userAnswers, documentTypeList)
+          checkYourAnswersHelper.documentRow(index, Index(documentPosition), documentTypeList, removable = false)
       }
 
     Section(
@@ -166,7 +166,7 @@ object AddItemsCheckYourAnswersViewModel {
     val containerRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfContainers(index)).getOrElse(0)).flatMap {
         containerPosition =>
-          checkYourAnswersHelper.containerRow(index, Index(containerPosition), userAnswers)
+          checkYourAnswersHelper.containerNumber(index, Index(containerPosition))
       }
 
     Section(

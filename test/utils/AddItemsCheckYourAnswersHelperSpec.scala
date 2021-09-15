@@ -18,17 +18,21 @@ package utils
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
+import controllers.addItems.containers.routes._
 import controllers.addItems.documents.routes._
 import controllers.addItems.itemDetails.routes._
 import controllers.addItems.packagesInformation.routes._
 import controllers.addItems.previousReferences.routes._
+import controllers.addItems.routes
 import controllers.addItems.securityDetails.routes._
 import controllers.addItems.traderDetails.routes._
 import controllers.addItems.traderSecurityDetails.routes._
-import models.reference.{Country, CountryCode, MethodOfPayment, PackageType}
-import models.{CheckMode, CommonAddress}
+import models.DeclarationType.{Option3, Option4}
+import models.reference._
+import models.{CheckMode, CommonAddress, DocumentTypeList, Mode, NormalMode, PreviousReferencesDocumentTypeList}
 import pages._
 import pages.addItems._
+import pages.addItems.containers.ContainerNumberPage
 import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialReferenceNumberPage, DangerousGoodsCodePage, TransportChargesPage}
 import pages.addItems.traderDetails._
 import pages.addItems.traderSecurityDetails._
@@ -71,6 +75,210 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = TransportChargesController.onPageLoad(lrn, itemIndex, CheckMode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"transportCharges.checkYourAnswersLabel"))
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "containerNumber" - {
+
+      val containerNumber: String = "CONTAINER NUMBER"
+
+      "return None" - {
+        "ContainerNumberPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.containerNumber(itemIndex, containerIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "ContainerNumberPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ContainerNumberPage(itemIndex, containerIndex))(containerNumber)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.containerNumber(itemIndex, containerIndex)
+
+          result mustBe Some(
+            Row(
+              key = Key(lit"$containerNumber"),
+              value = Value(lit""),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(containerNumber)),
+                  attributes = Map("id" -> s"change-container-${containerIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "documentRow" - {
+
+      val documentCode: String   = "DOCUMENT CODE"
+      val document: DocumentType = DocumentType(documentCode, "DESCRIPTION", transportDocument = true)
+
+      "return None" - {
+
+        "DocumentTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.documentRow(itemIndex, documentIndex, DocumentTypeList(Nil), removable = true)
+          result mustBe None
+        }
+
+        "document type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Nil), removable = true)
+
+          result mustBe None
+
+        }
+      }
+
+      "return Some(row)" - {
+
+        "Option4 declaration type and first index" in {
+
+          val answers = emptyUserAnswers
+            .unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+            .unsafeSetVal(DeclarationTypePage)(Option4)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = true)
+
+          result mustBe Some(
+            Row(
+              key = Key(lit"(${document.code}) ${document.description}"),
+              value = Value(lit""),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(documentCode)),
+                  attributes = Map("id" -> s"change-document-${index.display}")
+                )
+              )
+            )
+          )
+        }
+
+        "non-Option4 declaration type" - {
+
+          "removable" in {
+
+            val answers = emptyUserAnswers
+              .unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+              .unsafeSetVal(DeclarationTypePage)(Option3)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers)
+            val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = true)
+
+            result mustBe Some(
+              Row(
+                key = Key(lit"(${document.code}) ${document.description}"),
+                value = Value(lit""),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(documentCode)),
+                    attributes = Map("id" -> s"change-document-${index.display}")
+                  ),
+                  Action(
+                    content = msg"site.delete",
+                    href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(documentCode)),
+                    attributes = Map("id" -> s"remove-document-${index.display}")
+                  )
+                )
+              )
+            )
+          }
+
+          "not removable" in {
+
+            val answers = emptyUserAnswers
+              .unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+              .unsafeSetVal(DeclarationTypePage)(Option3)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers)
+            val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = false)
+
+            result mustBe Some(
+              Row(
+                key = Key(lit"(${document.code}) ${document.description}"),
+                value = Value(lit""),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(documentCode)),
+                    attributes = Map("id" -> s"change-document-${documentIndex.display}")
+                  )
+                )
+              )
+            )
+          }
+        }
+      }
+    }
+
+    "itemRow" - {
+
+      val itemDescription: String = "ITEM DESCRIPTION"
+
+      "return None" - {
+        "ItemDescriptionPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.itemRow(index)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "ItemDescriptionPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ItemDescriptionPage(index))(itemDescription)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.itemRow(index)
+
+          result mustBe Some(
+            Row(
+              key = Key(lit"$itemDescription"),
+              value = Value(lit""),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index).url,
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(itemDescription)),
+                  attributes = Map("id" -> s"change-item-${index.display}")
+                ),
+                Action(
+                  content = msg"site.delete",
+                  href = routes.ConfirmRemoveItemController.onPageLoad(lrn, index).url,
+                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(itemDescription)),
+                  attributes = Map("id" -> s"remove-item-${index.display}")
                 )
               )
             )
@@ -737,6 +945,195 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       }
     }
 
+    "previousReferenceType" - {
+
+      val referenceCode: String        = "REFERENCE CODE"
+      val referenceDescription: String = "REFERENCE DESCRIPTION"
+
+      "return None" - {
+        "ReferenceTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.previousReferenceType(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+          result mustBe None
+        }
+
+        "previous reference type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.previousReferenceType(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+
+          result mustBe None
+
+        }
+      }
+
+      "return Some(row)" - {
+        "ReferenceTypePage defined at index and previous reference type found" - {
+
+          "previous reference has no description" in {
+
+            val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers)
+            val result = helper.previousReferenceType(
+              index,
+              referenceIndex,
+              PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None)))
+            )
+
+            result mustBe Some(
+              Row(
+                key = Key(lit"($referenceCode) "),
+                value = Value(lit""),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(referenceCode)),
+                    attributes = Map("id" -> s"change-item-${index.display}")
+                  )
+                )
+              )
+            )
+          }
+
+          "previous reference has description" in {
+
+            val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers)
+            val result = helper.previousReferenceType(
+              index,
+              referenceIndex,
+              PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription))))
+            )
+
+            result mustBe Some(
+              Row(
+                key = Key(lit"($referenceCode) $referenceDescription"),
+                value = Value(lit""),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(referenceCode)),
+                    attributes = Map("id" -> s"change-item-${index.display}")
+                  )
+                )
+              )
+            )
+          }
+        }
+      }
+    }
+
+    "previousAdministrativeReferenceType" - {
+
+      val referenceCode: String        = "REFERENCE CODE"
+      val referenceDescription: String = "REFERENCE DESCRIPTION"
+      val mode: Mode                   = NormalMode
+
+      "return None" - {
+        "ReferenceTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.previousAdministrativeReferenceType(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil), mode)
+          result mustBe None
+        }
+
+        "previous reference type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.previousAdministrativeReferenceType(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil), mode)
+
+          result mustBe None
+
+        }
+      }
+
+      "return Some(row)" - {
+        "ReferenceTypePage defined at index and previous reference type found" - {
+
+          "previous reference has no description" in {
+
+            val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers)
+            val result = helper.previousAdministrativeReferenceType(
+              index,
+              referenceIndex,
+              PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None))),
+              mode
+            )
+
+            result mustBe Some(
+              Row(
+                key = Key(lit"($referenceCode) "),
+                value = Value(lit""),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(referenceCode)),
+                    attributes = Map("id" -> s"change-reference-document-type-${index.display}")
+                  ),
+                  Action(
+                    content = msg"site.delete",
+                    href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(referenceCode)),
+                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
+                  )
+                )
+              )
+            )
+          }
+
+          "previous reference has description" in {
+
+            val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers)
+            val result = helper.previousAdministrativeReferenceType(
+              index,
+              referenceIndex,
+              PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription)))),
+              mode
+            )
+
+            result mustBe Some(
+              Row(
+                key = Key(lit"($referenceCode) $referenceDescription"),
+                value = Value(lit""),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(referenceCode)),
+                    attributes = Map("id" -> s"change-reference-document-type-${index.display}")
+                  ),
+                  Action(
+                    content = msg"site.delete",
+                    href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(referenceCode)),
+                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
+                  )
+                )
+              )
+            )
+          }
+        }
+      }
+    }
+
     "addAdministrativeReference" - {
 
       "return None" - {
@@ -775,7 +1172,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       }
     }
 
-    "packageRow" - {
+    "packageType" - {
 
       val packageType: PackageType = PackageType("CODE", "DESCRIPTION")
 
@@ -785,7 +1182,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.packageRow(itemIndex, packageIndex)
+          val result = helper.packageType(itemIndex, packageIndex)
           result mustBe None
         }
       }
@@ -796,7 +1193,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers.unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(packageType)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.packageRow(itemIndex, packageIndex)
+          val result = helper.packageType(itemIndex, packageIndex)
 
           result mustBe Some(
             Row(
@@ -806,7 +1203,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 Action(
                   content = msg"site.edit",
                   href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(packageType.toString)),
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"packageType.checkYourAnswersLabel")),
                   attributes = Map("id" -> s"change-package-${packageIndex.display}")
                 )
               )
