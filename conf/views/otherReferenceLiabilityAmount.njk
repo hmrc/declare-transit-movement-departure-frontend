@@ -34,21 +34,27 @@
 
           {{ csrf() | safe }}
 
-
-          <h1 class="govuk-heading-xl"> {{messages('liabilityAmount.heading')}}<h1>
-          <p class="govuk-body"> {{messages('liabilityAmount.paragraph')}}<p>
-
-               {{ hmrcInputCurrency({
-                      name: "value",
-                      id: "value",
-                      value: form.value.value,
-                      classes: "govuk-input--width-10",
-                      autocomplete: "off",
-                      type: "tel",
-                      errorMessage: form.value.error
-                    })
-                  }}
-
+          {{ govukInput({
+            label: {
+              text: messages('liabilityAmount.heading'),
+              isPageHeading: true,
+              classes: "govuk-label--xl"
+            },
+            hint: {
+              text: messages('liabilityAmount.paragraph')
+            },
+            name: "value",
+            id: "value",
+            value: form.value.value,
+            classes: "govuk-input--width-10",
+            errorMessage: form.value.error,
+            prefix: {
+              text: "£"
+            },
+            inputMode: "text",
+            autocomplete: "off",
+            spellcheck: false
+          }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
