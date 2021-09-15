@@ -1,7 +1,5 @@
 {% extends "includes/layout.njk" %}
 
-{% from "macros/hmrc-input--currency/macro.njk" import hmrcInputCurrency with context %}
-
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
 {% from "govuk/components/input/macro.njk"         import govukInput %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
@@ -31,7 +29,6 @@
 
          <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn, mode).url }}" method="post">
          <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
-
           {{ csrf() | safe }}
 
           {{ govukInput({
