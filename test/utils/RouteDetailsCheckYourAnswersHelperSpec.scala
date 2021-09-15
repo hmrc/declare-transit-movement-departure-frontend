@@ -82,7 +82,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
                 value = Value(lit""),
                 actions = List(
                   Action(
-                    content = msg"site.change",
+                    content = msg"site.edit",
                     href = routes.OfficeOfTransitCountryController.onPageLoad(answers.lrn, index, mode).url,
                     visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
                     attributes = Map("id" -> s"change-office-of-transit-${index.display}")
@@ -118,7 +118,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
                 value = Value(lit"$formattedArrivalTime"),
                 actions = List(
                   Action(
-                    content = msg"site.change",
+                    content = msg"site.edit",
                     href = routes.OfficeOfTransitCountryController.onPageLoad(answers.lrn, index, mode).url,
                     visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
                     attributes = Map("id" -> s"change-office-of-transit-${index.display}")

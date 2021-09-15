@@ -53,14 +53,14 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def getAnswerAndBuildRemovableRow[T](
     page: QuestionPage[T],
-    format: T => Content,
+    format: T => String,
     id: String,
     changeCall: Call,
     removeCall: Call
   )(implicit rds: Reads[T]): Option[Row] =
     userAnswers.get(page) map {
       answer =>
-        buildRemovableRow(format(answer), id, changeCall, removeCall, answer)
+        buildRemovableRow(key = format(answer), id = id, changeCall = changeCall, removeCall = removeCall)
     }
 
   def buildRow(
@@ -111,26 +111,26 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     )
 
   def buildRemovableRow(
-    key: Content,
+    key: String,
+    value: String = "",
     id: String,
     changeCall: Call,
-    removeCall: Call,
-    args: Any*
+    removeCall: Call
   ): Row =
     Row(
-      key = Key(key),
-      value = Value(lit""),
+      key = Key(lit"$key"),
+      value = Value(lit"$value"),
       actions = List(
         Action(
           content = msg"site.edit",
           href = changeCall.url,
-          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(args: _*)),
+          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
           attributes = Map("id" -> s"change-$id")
         ),
         Action(
           content = msg"site.delete",
           href = removeCall.url,
-          visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(args: _*)),
+          visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(key)),
           attributes = Map("id" -> s"remove-$id")
         )
       )

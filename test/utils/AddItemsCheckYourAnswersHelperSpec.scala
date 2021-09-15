@@ -29,7 +29,7 @@ import controllers.addItems.traderDetails.routes._
 import controllers.addItems.traderSecurityDetails.routes._
 import models.DeclarationType.{Option3, Option4}
 import models.reference._
-import models.{CheckMode, CommonAddress, DocumentTypeList, Mode, NormalMode, PreviousReferencesDocumentTypeList}
+import models.{CheckMode, CommonAddress, DocumentTypeList, PreviousReferencesDocumentTypeList}
 import pages._
 import pages.addItems._
 import pages.addItems.containers.ContainerNumberPage
@@ -198,13 +198,13 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   Action(
                     content = msg"site.edit",
                     href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(documentCode)),
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(s"(${document.code}) ${document.description}")),
                     attributes = Map("id" -> s"change-document-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(documentCode)),
+                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(s"(${document.code}) ${document.description}")),
                     attributes = Map("id" -> s"remove-document-${index.display}")
                   )
                 )
@@ -1036,7 +1036,6 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
       val referenceCode: String        = "REFERENCE CODE"
       val referenceDescription: String = "REFERENCE DESCRIPTION"
-      val mode: Mode                   = NormalMode
 
       "return None" - {
         "ReferenceTypePage undefined at index" in {
@@ -1044,7 +1043,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.previousAdministrativeReferenceType(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil), mode)
+          val result = helper.previousAdministrativeReferenceRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
           result mustBe None
         }
 
@@ -1053,7 +1052,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.previousAdministrativeReferenceType(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil), mode)
+          val result = helper.previousAdministrativeReferenceRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
 
           result mustBe None
 
@@ -1068,11 +1067,10 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
             val helper = new AddItemsCheckYourAnswersHelper(answers)
-            val result = helper.previousAdministrativeReferenceType(
+            val result = helper.previousAdministrativeReferenceRow(
               index,
               referenceIndex,
-              PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None))),
-              mode
+              PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None)))
             )
 
             result mustBe Some(
@@ -1082,14 +1080,14 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(referenceCode)),
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(s"($referenceCode) ")),
                     attributes = Map("id" -> s"change-reference-document-type-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
-                    href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(referenceCode)),
+                    href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(s"($referenceCode) ")),
                     attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
                   )
                 )
@@ -1102,11 +1100,10 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
             val helper = new AddItemsCheckYourAnswersHelper(answers)
-            val result = helper.previousAdministrativeReferenceType(
+            val result = helper.previousAdministrativeReferenceRow(
               index,
               referenceIndex,
-              PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription)))),
-              mode
+              PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription))))
             )
 
             result mustBe Some(
@@ -1116,14 +1113,14 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(referenceCode)),
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(s"($referenceCode) $referenceDescription")),
                     attributes = Map("id" -> s"change-reference-document-type-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
-                    href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(referenceCode)),
+                    href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
+                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(s"($referenceCode) $referenceDescription")),
                     attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
                   )
                 )

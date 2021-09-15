@@ -19,32 +19,16 @@ package utils
 import controllers.addItems.containers.{routes => containerRoutes}
 import models.{CheckMode, Index, UserAnswers}
 import pages.addItems.containers.ContainerNumberPage
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
-import uk.gov.hmrc.viewmodels._
+import uk.gov.hmrc.viewmodels.SummaryList.Row
 
-class ContainersCheckYourAnswersHelper(userAnswers: UserAnswers) {
+class ContainersCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  //todo: this isn't the correct pattern as should be two columns
-  def containerNumber(itemIndex: Index, containerIndex: Index): Option[Row] = userAnswers.get(ContainerNumberPage(itemIndex, containerIndex)) map {
-    answer =>
-      Row(
-        key = Key(msg"containerNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = containerRoutes.ContainerNumberController.onPageLoad(userAnswers.lrn, itemIndex, containerIndex, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"containerNumber.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""edit-container-number-${itemIndex.display}""")
-          ),
-          Action(
-            content = msg"site.delete",
-            href = containerRoutes.ConfirmRemoveContainerController.onPageLoad(userAnswers.lrn, itemIndex, containerIndex, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer)),
-            attributes = Map("id" -> s"""remove-container-number-${itemIndex.display}""")
-          )
-        )
-      )
-  }
+  def containerRow(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
+    page = ContainerNumberPage(itemIndex, containerIndex),
+    format = x => x,
+    id = s"container-number-${itemIndex.display}",
+    changeCall = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode),
+    removeCall = containerRoutes.ConfirmRemoveContainerController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode)
+  )
 
 }

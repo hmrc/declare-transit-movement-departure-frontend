@@ -77,11 +77,10 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
                 )
               case _ if removable =>
                 buildRemovableRow(
-                  key = lit"$updatedAnswer",
+                  key = updatedAnswer,
                   id = s"document-${index.display}",
                   changeCall = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode),
-                  removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode),
-                  args = answer
+                  removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
               case _ =>
                 buildValuelessRow(
@@ -96,7 +95,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def itemRow(index: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
     page = ItemDescriptionPage(index),
-    format = x => lit"$x",
+    format = x => x,
     id = s"item-${index.display}",
     changeCall = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index),
     removeCall = routes.ConfirmRemoveItemController.onPageLoad(lrn, index)
@@ -251,22 +250,20 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
         }
     }
 
-  def previousAdministrativeReferenceType(
+  def previousAdministrativeReferenceRow(
     index: Index,
     referenceIndex: Index,
-    previousDocumentType: PreviousReferencesDocumentTypeList,
-    mode: Mode
+    previousDocumentType: PreviousReferencesDocumentTypeList
   ): Option[Row] =
     userAnswers.get(ReferenceTypePage(index, referenceIndex)) flatMap {
       answer =>
         previousDocumentType.getPreviousReferencesDocumentType(answer) map {
           referenceType =>
             buildRemovableRow(
-              key = lit"(${referenceType.code}) ${referenceType.description.getOrElse("")}",
+              key = s"(${referenceType.code}) ${referenceType.description.getOrElse("")}",
               id = s"reference-document-type-${index.display}",
-              changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode),
-              removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode),
-              args = answer
+              changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode),
+              removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode)
             )
         }
     }

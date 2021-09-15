@@ -19,7 +19,7 @@ package utils
 import controllers.addItems.specialMentions.{routes => specialMentionRoutes}
 import models.{CheckMode, Index, Mode, SpecialMentionList, UserAnswers}
 import pages.addItems.specialMentions._
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
+import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
@@ -31,23 +31,12 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
         specialMentions.getSpecialMention(answer) map {
           specialMention =>
             val updatedAnswer = s"(${specialMention.code}) ${specialMention.description}"
-            Row(
-              key = Key(msg"$updatedAnswer"),
-              value = Value(lit""),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$updatedAnswer")),
-                  attributes = Map("id" -> s"change-special-mentions-${itemIndex.display}")
-                ),
-                Action(
-                  content = msg"site.delete",
-                  href = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode).url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(updatedAnswer)),
-                  attributes = Map("id" -> s"remove-special-mentions-${itemIndex.display}")
-                )
-              )
+
+            buildRemovableRow(
+              key = updatedAnswer,
+              id = s"special-mentions-${itemIndex.display}",
+              changeCall = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
+              removeCall = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode)
             )
         }
     }
@@ -58,17 +47,12 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
         specialMentions.getSpecialMention(answer) map {
           specialMention =>
             val updatedAnswer = s"(${specialMention.code}) ${specialMention.description}"
-            Row(
-              key = Key(msg"$updatedAnswer"),
-              value = Value(lit""),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$updatedAnswer")),
-                  attributes = Map("id" -> s"change-special-mentions-${itemIndex.display}")
-                )
-              )
+
+            buildValuelessRow(
+              key = lit"$updatedAnswer",
+              id = Some(s"change-special-mentions-${itemIndex.display}"),
+              call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode),
+              args = updatedAnswer
             )
         }
     }

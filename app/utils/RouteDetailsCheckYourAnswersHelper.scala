@@ -23,7 +23,7 @@ import pages.QuestionPage
 import pages.routeDetails._
 import play.api.libs.json.Reads
 import play.api.mvc.Call
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
+import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
 import java.time.LocalDateTime
@@ -91,23 +91,12 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
             val key = s"${office.name} (${office.id})"
 
-            Row(
-              key = Key(lit"$key"),
-              value = Value(lit"$arrivalTime"),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
-                  attributes = Map("id" -> s"change-office-of-transit-${index.display}")
-                ),
-                Action(
-                  content = msg"site.delete",
-                  href = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index, mode).url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(key)),
-                  attributes = Map("id" -> s"remove-office-of-transit-${index.display}")
-                )
-              )
+            buildRemovableRow(
+              key = key,
+              value = arrivalTime,
+              id = s"office-of-transit-${index.display}",
+              changeCall = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode),
+              removeCall = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index, mode)
             )
         }
     }

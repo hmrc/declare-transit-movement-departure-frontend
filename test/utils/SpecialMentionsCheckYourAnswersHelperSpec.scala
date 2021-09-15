@@ -21,7 +21,7 @@ import generators.ReferenceDataGenerators
 import models.reference.SpecialMention
 import models.{CheckMode, NormalMode, SpecialMentionList, UserAnswers}
 import pages.addItems.specialMentions.SpecialMentionTypePage
-import uk.gov.hmrc.viewmodels.Text.Message
+import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
@@ -50,7 +50,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
             val row = cya.specialMentionType(itemIndex, referenceIndex, specialMentionList, NormalMode)
 
-            row.value.key.content mustBe Message(rowContent)
+            row.value.key.content mustBe Literal(rowContent)
 
             row.value.actions.length mustBe 2
         }
@@ -95,7 +95,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
             val row = cya.specialMentionTypeNoRemoval(itemIndex, referenceIndex, specialMentionList)
 
-            row.value.key.content mustBe Message(rowContent)
+            row.value.key.content mustBe Literal(rowContent)
 
             row.value.actions.length mustBe 1
         }
