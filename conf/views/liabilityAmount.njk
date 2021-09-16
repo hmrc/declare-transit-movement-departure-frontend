@@ -1,7 +1,5 @@
 {% extends "includes/layout.njk" %}
 
-{% from "macros/hmrc-input--currency/macro.njk" import hmrcInputCurrency with context %}
-
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -33,22 +31,30 @@
         <form action="{{ routes.controllers.guaranteeDetails.LiabilityAmountController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
-
           {{ csrf() | safe }}
 
-          <h1 class="govuk-heading-xl"> {{messages('liabilityAmount.heading')}}<h1>
-
-          <p class="govuk-body"> {{messages('liabilityAmount.paragraph')}}<p>
-
-               {{ hmrcInputCurrency({
-                      name: "value",
-                      id: "value",
-                      value: form.value.value,
-                      classes: "govuk-input--width-10",
-                      autocomplete: "off",
-                      errorMessage: form.value.error
-                    })
-                  }}
+          {{ govukInput({
+            label: {
+              text: messages('liabilityAmount.heading'),
+              isPageHeading: true,
+              classes: "govuk-label--xl"
+            },
+            hint: {
+              text: messages('liabilityAmount.paragraph'),
+              classes: "govuk-label govuk-!-padding-bottom-2"
+            },
+            name: "value",
+            id: "value",
+            value: form.value.value,
+            classes: "govuk-input--width-10",
+            errorMessage: form.value.error,
+            prefix: {
+              text: "£"
+            },
+            inputMode: "text",
+            autocomplete: "off",
+            spellcheck: false
+          }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
