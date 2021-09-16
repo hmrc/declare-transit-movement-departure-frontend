@@ -426,6 +426,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers: UserAnswers = answers
+              .remove(OtherReferencePage(index)).success.value
               .remove(GuaranteeReferencePage(index)).success.value
               .set(AccessCodePage(index), "1111").success.value
               .set(GuaranteeTypePage(index), GuaranteeWaiver).success.value
@@ -440,6 +441,7 @@ class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers: UserAnswers = answers
+              .remove(OtherReferencePage(index)).success.value
               .set(GuaranteeTypePage(index), FlatRateVoucher).success.value
               .remove(GuaranteeReferencePage(index)).success.value
 
