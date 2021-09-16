@@ -58,7 +58,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     args = index.display
   )
 
-  def countryOfDispatch(countryList: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryOfDispatch](
+  def countryOfDispatch(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryOfDispatch](
     page = CountryOfDispatchPage,
     f = x => x.country,
     countryList = countryList,
@@ -67,7 +67,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     call = routes.CountryOfDispatchController.onPageLoad
   )
 
-  def destinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
+  def destinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
     page = DestinationCountryPage,
     f = x => x,
     countryList = countryList,
@@ -101,7 +101,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
         }
     }
 
-  def movementDestinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
+  def movementDestinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
     page = MovementDestinationCountryPage,
     f = x => x,
     countryList = countryList,

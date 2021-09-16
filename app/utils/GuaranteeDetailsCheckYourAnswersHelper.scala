@@ -129,7 +129,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
       if (index.position == 0) {
         getAnswerAndBuildValuelessRow[String](
           page = TIRGuaranteeReferencePage(index),
-          format = x => lit"$x",
+          format = x => x,
           id = Some(s"change-tir-carnet-${index.display}"),
           call = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index)
         )

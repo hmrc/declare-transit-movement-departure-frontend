@@ -163,15 +163,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = true)
 
+          val key = s"(${document.code}) ${document.description}"
+
           result mustBe Some(
             Row(
-              key = Key(lit"(${document.code}) ${document.description}"),
+              key = Key(lit"$key"),
               value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(documentCode)),
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
                   attributes = Map("id" -> s"change-document-${index.display}")
                 )
               )
@@ -221,15 +223,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val helper = new AddItemsCheckYourAnswersHelper(answers)
             val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = false)
 
+            val key = s"(${document.code}) ${document.description}"
+
             result mustBe Some(
               Row(
-                key = Key(lit"(${document.code}) ${document.description}"),
+                key = Key(lit"$key"),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(documentCode)),
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
                     attributes = Map("id" -> s"change-document-${documentIndex.display}")
                   )
                 )
@@ -986,15 +990,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None)))
             )
 
+            val key = s"($referenceCode) "
+
             result mustBe Some(
               Row(
-                key = Key(lit"($referenceCode) "),
+                key = Key(lit"$key"),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(referenceCode)),
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
                     attributes = Map("id" -> s"change-item-${index.display}")
                   )
                 )
@@ -1013,15 +1019,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription))))
             )
 
+            val key = s"($referenceCode) $referenceDescription"
+
             result mustBe Some(
               Row(
-                key = Key(lit"($referenceCode) $referenceDescription"),
+                key = Key(lit"$key"),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(referenceCode)),
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
                     attributes = Map("id" -> s"change-item-${index.display}")
                   )
                 )

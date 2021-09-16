@@ -63,7 +63,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     if (inlandModeCode.isMode5Or7Code || inlandModeCode.isRailCode) {
       None
     } else {
-      getAnswerAndBuildCountryRow[CountryCode](
+      getAnswerAndBuildSimpleCountryRow[CountryCode](
         page = NationalityAtDeparturePage,
         f = x => x,
         countryList = countryList,
@@ -73,7 +73,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
       )
     }
 
-  def nationalityCrossingBorder(countryList: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
+  def nationalityCrossingBorder(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
     page = NationalityCrossingBorderPage,
     f = x => x,
     countryList = countryList,

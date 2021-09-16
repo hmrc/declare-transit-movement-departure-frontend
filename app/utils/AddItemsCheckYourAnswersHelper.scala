@@ -48,7 +48,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def containerNumber(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildValuelessRow[String](
     page = ContainerNumberPage(itemIndex, containerIndex),
-    format = x => lit"$x",
+    format = x => x,
     id = Some(s"change-container-${containerIndex.display}"),
     call = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode)
   )
@@ -70,10 +70,9 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
             userAnswers.get(DeclarationTypePage) match {
               case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
                 buildValuelessRow(
-                  key = lit"$updatedAnswer",
+                  key = updatedAnswer,
                   id = Some(s"change-document-${index.display}"),
-                  call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode),
-                  args = answer
+                  call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
               case _ if removable =>
                 buildRemovableRow(
@@ -84,10 +83,9 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
                 )
               case _ =>
                 buildValuelessRow(
-                  key = lit"$updatedAnswer",
+                  key = updatedAnswer,
                   id = Some(s"change-document-${documentIndex.display}"),
-                  call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode),
-                  args = answer
+                  call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
             }
         }
@@ -242,10 +240,9 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
         previousDocumentType.getPreviousReferencesDocumentType(answer) map {
           referenceType =>
             buildValuelessRow(
-              key = lit"(${referenceType.code}) ${referenceType.description.getOrElse("")}",
+              key = s"(${referenceType.code}) ${referenceType.description.getOrElse("")}",
               id = Some(s"change-item-${index.display}"),
-              call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode),
-              args = answer
+              call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode)
             )
         }
     }

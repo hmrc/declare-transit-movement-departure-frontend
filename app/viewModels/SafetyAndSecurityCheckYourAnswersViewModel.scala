@@ -19,13 +19,13 @@ package viewModels
 import derivable.DeriveNumberOfCountryOfRouting
 import models.{CircumstanceIndicatorList, CountryList, Index, UserAnswers}
 import uk.gov.hmrc.viewmodels.{MessageInterpolators, SummaryList}
-import utils.SafetyAndSecurityCheckYourAnswerHelper
+import utils.SafetyAndSecurityCheckYourAnswersHelper
 import viewModels.sections.Section
 
 object SafetyAndSecurityCheckYourAnswersViewModel {
 
   def apply(userAnswers: UserAnswers, countries: CountryList, circumstanceIndicators: CircumstanceIndicatorList): Seq[Section] = {
-    val cyah = new SafetyAndSecurityCheckYourAnswerHelper(userAnswers)
+    val cyah = new SafetyAndSecurityCheckYourAnswersHelper(userAnswers)
 
     val countriesOfRoutingRows: Seq[SummaryList.Row] = List.range(0, userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)).flatMap {
       countryOfRoutingPosition =>

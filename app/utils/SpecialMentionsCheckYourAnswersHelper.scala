@@ -45,10 +45,9 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
       specialMentions = specialMentions,
       buildRow = x =>
         buildValuelessRow(
-          key = lit"$x",
+          key = x,
           id = Some(s"change-special-mentions-${itemIndex.display}"),
-          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode),
-          args = x
+          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode)
         )
     )
 

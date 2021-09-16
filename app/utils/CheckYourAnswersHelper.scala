@@ -43,13 +43,13 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def getAnswerAndBuildValuelessRow[T](
     page: QuestionPage[T],
-    format: T => Content,
+    format: T => String,
     id: Option[String],
     call: Call
   )(implicit rds: Reads[T]): Option[Row] =
     userAnswers.get(page) map {
       answer =>
-        buildValuelessRow(format(answer), id, call, answer)
+        buildValuelessRow(format(answer), id, call)
     }
 
   def getAnswerAndBuildRemovableRow[T](
@@ -89,19 +89,18 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     )
 
   def buildValuelessRow(
-    key: Content,
+    key: String,
     id: Option[String],
-    call: Call,
-    args: Any*
+    call: Call
   ): Row =
     Row(
-      key = Key(key),
+      key = Key(lit"$key"),
       value = Value(lit""),
       actions = List(
         Action(
           content = msg"site.edit",
           href = call.url,
-          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(args: _*)),
+          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
           attributes = id
             .map(
               x => Map("id" -> x)
@@ -137,19 +136,37 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       )
     )
 
-  def getAnswerAndBuildCountryRow[T](
+  def getAnswerAndBuildSimpleCountryRow[T](
     page: QuestionPage[T],
     f: T => CountryCode,
     countryList: CountryList,
     prefix: String,
     id: String,
     call: (LocalReferenceNumber, Mode) => Call
-  )(implicit rds: Reads[T]): Option[Row] = {
-    val format: T => Content = x => {
+  )(implicit rds: Reads[T]): Option[Row] =
+    getAnswerAndBuildCountryRow[T](
+      f = f,
+      countryList = countryList,
+      getAnswerAndBuildRow = f =>
+        getAnswerAndBuildRow[T](
+          page = page,
+          format = x => lit"${f(x)}",
+          prefix = prefix,
+          id = Some(id),
+          call = call(lrn, CheckMode)
+        )
+    )
+
+  def getAnswerAndBuildCountryRow[T](
+    f: T => CountryCode,
+    countryList: CountryList,
+    getAnswerAndBuildRow: (T => String) => Option[Row]
+  ): Option[Row] = {
+    val format: T => String = x => {
       val countryCode: CountryCode = f(x)
-      lit"${countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)}"
+      countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)
     }
-    getAnswerAndBuildRow[T](page, format, prefix, Some(id), call(lrn, CheckMode))
+    getAnswerAndBuildRow(format)
   }
 
 }
