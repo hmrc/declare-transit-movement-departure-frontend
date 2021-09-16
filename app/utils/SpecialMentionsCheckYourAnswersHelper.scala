@@ -18,6 +18,7 @@ package utils
 
 import controllers.addItems.specialMentions.{routes => specialMentionRoutes}
 import models.{CheckMode, Index, Mode, SpecialMentionList, UserAnswers}
+import pages.QuestionPage
 import pages.addItems.specialMentions._
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
@@ -26,36 +27,30 @@ import viewModels.AddAnotherViewModel
 class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
   def specialMentionType(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList, mode: Mode): Option[Row] =
-    userAnswers.get(SpecialMentionTypePage(itemIndex, referenceIndex)) flatMap {
-      answer =>
-        specialMentions.getSpecialMention(answer) map {
-          specialMention =>
-            val updatedAnswer = s"(${specialMention.code}) ${specialMention.description}"
-
-            buildRemovableRow(
-              key = updatedAnswer,
-              id = s"special-mentions-${itemIndex.display}",
-              changeCall = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
-              removeCall = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode)
-            )
-        }
-    }
+    getAnswerAndBuildSpecialMentionRow(
+      page = SpecialMentionTypePage(itemIndex, referenceIndex),
+      specialMentions = specialMentions,
+      buildRow = x =>
+        buildRemovableRow(
+          key = x,
+          id = s"special-mentions-${itemIndex.display}",
+          changeCall = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
+          removeCall = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode)
+        )
+    )
 
   def specialMentionTypeNoRemoval(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList): Option[Row] =
-    userAnswers.get(SpecialMentionTypePage(itemIndex, referenceIndex)) flatMap {
-      answer =>
-        specialMentions.getSpecialMention(answer) map {
-          specialMention =>
-            val updatedAnswer = s"(${specialMention.code}) ${specialMention.description}"
-
-            buildValuelessRow(
-              key = lit"$updatedAnswer",
-              id = Some(s"change-special-mentions-${itemIndex.display}"),
-              call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode),
-              args = updatedAnswer
-            )
-        }
-    }
+    getAnswerAndBuildSpecialMentionRow(
+      page = SpecialMentionTypePage(itemIndex, referenceIndex),
+      specialMentions = specialMentions,
+      buildRow = x =>
+        buildValuelessRow(
+          key = lit"$x",
+          id = Some(s"change-special-mentions-${itemIndex.display}"),
+          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode),
+          args = x
+        )
+    )
 
   def addSpecialMention(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSpecialMentionPage(itemIndex),
@@ -70,5 +65,17 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     val addAnotherContainerHref = specialMentionRoutes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url
 
     AddAnotherViewModel(addAnotherContainerHref, content)
+  }
+
+  private def getAnswerAndBuildSpecialMentionRow(
+    page: QuestionPage[String],
+    specialMentions: SpecialMentionList,
+    buildRow: String => Row
+  ): Option[Row] = userAnswers.get(page) flatMap {
+    answer =>
+      specialMentions.getSpecialMention(answer) map {
+        specialMention =>
+          buildRow(s"(${specialMention.code}) ${specialMention.description}")
+      }
   }
 }

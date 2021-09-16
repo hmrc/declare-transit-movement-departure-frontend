@@ -27,7 +27,7 @@ import pages.routeDetails.DestinationOfficePage
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 
-class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
+class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
   def defaultAmount(index: Index): Option[Row] =
     userAnswers.get(DefaultAmountPage(index)) map {
@@ -190,23 +190,23 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
       userAnswers.get(TIRGuaranteeReferencePage(index)).map {
         answer =>
           Row(
-            key = Key(msg"$answer"),
+            key = Key(lit"$answer"),
             value = Value(lit""),
             actions = List(
               Action(
-                content = msg"site.change",
-                href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
-                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"$answer")),
-                attributes = Map("id" -> s"""change-tir-carnet-${index.display}""")
+                content = msg"site.edit",
+                href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index).url,
+                visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(lit"$answer")),
+                attributes = Map("id" -> s"change-tir-carnet-${index.display}")
               )
             ) ++ {
               if (index.position != 0) {
                 List(
                   Action(
                     content = msg"site.delete",
-                    href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.lrn, index).url,
-                    visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"$answer")),
-                    attributes = Map("id" -> s"""remove-tir-carnet-${index.display}""")
+                    href = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index).url,
+                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(lit"$answer")),
+                    attributes = Map("id" -> s"remove-tir-carnet-${index.display}")
                   )
                 )
               } else {
@@ -223,21 +223,19 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
             value = Value(lit""),
             actions = List(
               Action(
-                content = msg"site.change",
-                href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index).url,
-                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.change.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-                attributes = Map("id" -> s"""change-guarantee-${index.display}""")
+                content = msg"site.edit",
+                href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index).url,
+                visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}")),
+                attributes = Map("id" -> s"change-guarantee-${index.display}")
               ),
               Action(
                 content = msg"site.delete",
-                href = routes.ConfirmRemoveGuaranteeController.onPageLoad(userAnswers.lrn, index).url,
-                visuallyHiddenText = Some(msg"addAnotherGuarantee.guarantee.delete.hidden".withArgs(msg"${GuaranteeType.getId(answer.toString)}")),
-                attributes = Map("id" -> s"""remove-guarantee-${index.display}""")
+                href = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index).url,
+                visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(msg"guaranteeType.${GuaranteeType.getId(answer.toString)}")),
+                attributes = Map("id" -> s"remove-guarantee-${index.display}")
               )
             )
           )
       }
     }
-
-  def lrn: LocalReferenceNumber = userAnswers.lrn
 }
