@@ -7,3 +7,8 @@ $hmrc-assets-path: "/manage-transit-movements-departures/assets/lib/hmrc-fronten
 @import "partials/shame";
 @import "partials/input-currency";
 @import "partials/timeout-dialog";
+
+.ctc-hint-as-label {
+    @extend .govuk-label;
+    padding-bottom: 10px;
+}
