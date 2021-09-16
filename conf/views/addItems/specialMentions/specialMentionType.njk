@@ -35,15 +35,16 @@
 
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("specialMentionType.heading", index) }}
-        </h1>
-
         <form action="{{ routes.controllers.addItems.specialMentions.SpecialMentionTypeController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
               {{ govukSelect({
+                label: {
+                  text: messages("specialMentionType.heading", index),
+                  isPageHeading: true,
+                  classes: "govuk-label--xl"
+                },
                 classes: "govuk-input--width-20 autocomplete",
                 id: "value",
                 name: "value",
