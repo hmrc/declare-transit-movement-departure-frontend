@@ -30,15 +30,18 @@
         <form action="{{ routes.controllers.LoadingPlaceController.onSubmit(lrn, mode).url }}" method="post">
 
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
-        <h1 class="govuk-heading-xl"> {{ messages("loadingPlace.heading", index) }}  </h1>
-        <p class="govuk-body"> {{ messages("loadingPlace.paragraph", index) }}  </p>
 
           {{ csrf() | safe }}
 
           {{ govukInput({
             label: {
-              isPageHeading: false,
-              classes: "govuk-label--medium"
+              text: messages("loadingPlace.heading", index),
+              isPageHeading: true,
+              classes: "govuk-label--xl"
+            },
+            hint: {
+              text: messages("loadingPlace.paragraph", index),
+              classes: "ctc-hint-as-label"
             },
             id: "value",
             name: "value",

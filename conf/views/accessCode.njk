@@ -31,8 +31,9 @@
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
         {{ csrf() | safe }}
-        <h1 class="govuk-heading-xl">{{ messages('accessCode.heading') }}</h1>
-
+        <h1 class="govuk-heading-xl">
+          <label for="value">{{ messages('accessCode.heading') }}</label>
+        </h1>
 
         {{ govukInput({
           label: {

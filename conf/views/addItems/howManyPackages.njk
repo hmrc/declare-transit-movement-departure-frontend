@@ -29,15 +29,16 @@
 
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("howManyPackages.heading", displayIndex) }}
-        </h1>
-
         <form action="{{ routes.controllers.addItems.packagesInformation.HowManyPackagesController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
           {{ govukInput({
+            label: {
+              text: messages("howManyPackages.heading", displayIndex) ,
+              isPageHeading: true,
+              classes: "govuk-label--xl"
+            },
             id: "value",
             name: "value",
             type: "tel",
