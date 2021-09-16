@@ -35,18 +35,20 @@
         {% endif %}
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("destinationCountry.heading") }}
-        </h1>
-
-
         <form action="{{ onSubmitUrl }}" method="post">
-
-        <p class="govuk-body">{{messages('destinationCountry.label')}}</p>
 
           {{ csrf() | safe }}
 
             {{ govukSelect({
+              label: {
+                text: messages('destinationCountry.heading'),
+                isPageHeading: true,
+                classes: "govuk-label--xl"
+              },
+              hint: {
+                text: messages('destinationCountry.label'),
+                classes: "govuk-label govuk-!-padding-bottom-2"
+              },
               classes: "govuk-input--width-20 autocomplete",
               id: "value",
               name: "value",

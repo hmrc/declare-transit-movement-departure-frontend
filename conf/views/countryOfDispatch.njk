@@ -36,17 +36,20 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("countryOfDispatch.heading") }}
-        </h1>
-
         <form action="{{ routes.controllers.routeDetails.CountryOfDispatchController.onSubmit(lrn, mode).url }}" method="post">
-
-          <p class="govuk-body">{{messages('countryOfDispatch.label')}}</p>
 
           {{ csrf() | safe }}
 
             {{ govukSelect({
+              label: {
+                text: messages('countryOfDispatch.heading'),
+                isPageHeading: true,
+                classes: "govuk-label--xl"
+              },
+              hint: {
+                text: messages('countryOfDispatch.label'),
+                classes: "govuk-label govuk-!-padding-bottom-2"
+              },
               classes: "govuk-input--width-20
               autocomplete",
               id: "value",

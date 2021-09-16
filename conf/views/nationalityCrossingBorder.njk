@@ -39,17 +39,18 @@
 
           {{ csrf() | safe }}
 
-            <h1 class="govuk-heading-xl">
-                            {{ messages("nationalityCrossingBorder.heading") }}
-                          </h1>
-
-                  {{ govukSelect({
-                                      classes: "govuk-input--width-20 autocomplete",
-                                      id: "value",
-                                      name: "value",
-                                      errorMessage: form.value.error,
-                                      items: countries
-                                    }) }}
+          {{ govukSelect({
+              label: {
+                text: messages('nationalityCrossingBorder.heading'),
+                isPageHeading: true,
+                classes: "govuk-label--xl"
+              },
+              classes: "govuk-input--width-20 autocomplete",
+              id: "value",
+              name: "value",
+              errorMessage: form.value.error,
+              items: countries
+            }) }}
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
