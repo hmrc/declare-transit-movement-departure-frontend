@@ -124,7 +124,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     call = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, CheckMode)
   )
 
-  def guaranteeRows(index: Index, isTir: Boolean)(implicit messages: Messages): Option[Row] =
+  def guaranteeRow(index: Index, isTir: Boolean)(implicit messages: Messages): Option[Row] =
     if (isTir) {
       if (index.position == 0) {
         getAnswerAndBuildValuelessRow[String](

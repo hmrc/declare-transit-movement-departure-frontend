@@ -17,15 +17,14 @@
 package utils
 
 import controllers.safetyAndSecurity.routes
-import models.{CheckMode, CircumstanceIndicatorList, CountryList, Index, LocalReferenceNumber, Mode, UserAnswers}
+import models.{CheckMode, CircumstanceIndicatorList, CountryList, Index, UserAnswers}
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
-class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
-
-  private def lrn: LocalReferenceNumber = userAnswers.lrn
+// scalastyle:off number.of.methods
+class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
   def addCarrierEori: Option[Row] = userAnswers.get(AddCarrierEoriPage) map {
     answer =>
@@ -435,7 +434,7 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
       )
   }
 
-  def countryRows(index: Index, countries: CountryList, mode: Mode): Option[Row] =
+  def countryRow(index: Index, countries: CountryList): Option[Row] =
     userAnswers.get(CountryOfRoutingPage(index)).map {
       answer =>
         val countryName = countries.getCountry(answer).map(_.description).getOrElse(answer.code)
@@ -444,22 +443,22 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
           value = Value(lit""),
           actions = List(
             Action(
-              content = msg"site.change",
-              href = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode).url,
-              visuallyHiddenText = Some(msg"addAnotherCountryOfRouting.checkYourAnswersLabel.change.visuallyHidden".withArgs(answer)),
-              attributes = Map("id" -> s"""change-country-${index.display}""")
+              content = msg"site.edit",
+              href = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode).url,
+              visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(countryName)),
+              attributes = Map("id" -> s"change-country-${index.display}")
             ),
             Action(
               content = msg"site.delete",
-              href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, mode).url,
-              visuallyHiddenText = Some(msg"addAnotherCountryOfRouting.checkYourAnswersLabel.remove.visuallyHidden".withArgs(answer)),
-              attributes = Map("id" -> s"""remove-country-${index.display}""")
+              href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode).url,
+              visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(countryName)),
+              attributes = Map("id" -> s"remove-country-${index.display}")
             )
           )
         )
     }
 
-  def countryOfRoutingRows(index: Index, countries: CountryList): Option[Row] =
+  def countryOfRoutingRow(index: Index, countries: CountryList): Option[Row] =
     userAnswers.get(CountryOfRoutingPage(index)).map {
       answer =>
         val countryName = countries.getCountry(answer).map(_.description).getOrElse(answer.code)
@@ -468,10 +467,10 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
           value = Value(lit""),
           actions = List(
             Action(
-              content = msg"site.change",
+              content = msg"site.edit",
               href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
-              visuallyHiddenText = Some(msg"addAnotherCountryOfRouting.checkYourAnswersLabel.change.visuallyHidden".withArgs(answer)),
-              attributes = Map("id" -> s"""change-country-${index.display}""")
+              visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(countryName)),
+              attributes = Map("id" -> s"change-country-${index.display}")
             )
           )
         )
@@ -484,19 +483,5 @@ class SafetyAndSecurityCheckYourAnswerHelper(userAnswers: UserAnswers) {
     AddAnotherViewModel(addAnotherCountryOfRoutingHref, content)
   }
 
-  def confirmRemoveCountry(index: Index): Option[Row] = userAnswers.get(ConfirmRemoveCountryPage) map {
-    answer =>
-      Row(
-        key = Key(msg"confirmRemoveCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"confirmRemoveCountry.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
-
 }
+// scalastyle:on number.of.methods

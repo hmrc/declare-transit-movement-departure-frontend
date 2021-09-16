@@ -19,7 +19,7 @@ package utils
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.guaranteeDetails.routes
-import generators.ModelGenerators._
+import generators.Generators
 import models.DeclarationType.Option4
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CheckMode, DeclarationType, GuaranteeType, Index}
@@ -31,7 +31,7 @@ import pages.routeDetails.DestinationOfficePage
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 
-class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with ScalaCheckPropertyChecks {
+class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with ScalaCheckPropertyChecks with Generators {
 
   "GuaranteeDetailsCheckYourAnswersHelper" - {
 
@@ -585,7 +585,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val answers = emptyUserAnswers
 
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
-          val result = helper.guaranteeRows(index, isTir = true)
+          val result = helper.guaranteeRow(index, isTir = true)
           result mustBe None
         }
 
@@ -594,7 +594,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val answers = emptyUserAnswers
 
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
-          val result = helper.guaranteeRows(index, isTir = false)
+          val result = helper.guaranteeRow(index, isTir = false)
           result mustBe None
         }
       }
@@ -612,7 +612,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val answers = emptyUserAnswers.unsafeSetVal(TIRGuaranteeReferencePage(index))(guaranteeReference)
 
             val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
-            val result = helper.guaranteeRows(index, isTir = true)
+            val result = helper.guaranteeRow(index, isTir = true)
 
             result mustBe Some(
               Row(
@@ -641,7 +641,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               .unsafeSetVal(TIRGuaranteeReferencePage(index))(guaranteeReference)
 
             val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
-            val result = helper.guaranteeRows(index, isTir = true)
+            val result = helper.guaranteeRow(index, isTir = true)
 
             result mustBe Some(
               Row(
@@ -673,7 +673,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val answers = emptyUserAnswers.unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
 
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
-          val result = helper.guaranteeRows(index, isTir = false)
+          val result = helper.guaranteeRow(index, isTir = false)
 
           val key = s"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}"
 

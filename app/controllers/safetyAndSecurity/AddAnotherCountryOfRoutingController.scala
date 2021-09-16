@@ -65,7 +65,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        renderPage(lrn, form, mode).map(Ok(_))
+        renderPage(lrn, form).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
@@ -77,7 +77,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => renderPage(lrn, formWithErrors, mode).map(BadRequest(_)),
+            formWithErrors => renderPage(lrn, formWithErrors).map(BadRequest(_)),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAnotherCountryOfRoutingPage, value))
@@ -86,7 +86,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
           )
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, form: Form[Boolean], mode: Mode)(implicit request: DataRequest[AnyContent]): Future[Html] = {
+  private def renderPage(lrn: LocalReferenceNumber, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
     val cyaHelper                = new SafetyAndSecurityCheckYourAnswerHelper(request.userAnswers)
     val numberOfRoutingCountries = request.userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)
@@ -95,7 +95,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
       countries =>
         val countryRows = indexList.map {
           index =>
-            cyaHelper.countryRows(index, countries, mode)
+            cyaHelper.countryRow(index, countries)
         }
 
         val singularOrPlural = if (numberOfRoutingCountries > 1) "plural" else "singular"
