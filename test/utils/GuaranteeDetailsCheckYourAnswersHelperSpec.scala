@@ -622,7 +622,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   Action(
                     content = msg"site.edit",
                     href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(lit"$guaranteeReference")),
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(guaranteeReference)),
                     attributes = Map("id" -> s"change-tir-carnet-${index.display}")
                   )
                 )
@@ -651,13 +651,13 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   Action(
                     content = msg"site.edit",
                     href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(lit"$guaranteeReference")),
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(guaranteeReference)),
                     attributes = Map("id" -> s"change-tir-carnet-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(lit"$guaranteeReference")),
+                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(guaranteeReference)),
                     attributes = Map("id" -> s"remove-tir-carnet-${index.display}")
                   )
                 )
@@ -679,19 +679,19 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           result mustBe Some(
             Row(
-              key = Key(msg"$key"),
+              key = Key(lit"${msg"$key".resolve}"),
               value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$key")),
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$key".resolve)),
                   attributes = Map("id" -> s"change-guarantee-${index.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index).url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(msg"$key")),
+                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(msg"$key".resolve)),
                   attributes = Map("id" -> s"remove-guarantee-${index.display}")
                 )
               )
