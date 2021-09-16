@@ -29,18 +29,24 @@
 
         <form action="{{ routes.controllers.addItems.itemDetails.TotalNetMassController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
-        <h1 class="govuk-heading-xl"> {{ messages("totalNetMass.heading", index) }}  </h1>
-        <span class="govuk-hint"> {{messages('totalNetMass.hintText')}} </span>
 
           {{ csrf() | safe }}
 
           {{ govukInput({
-                      id: "value",
-                      name: "value",
-                      value: form.value.value,
-                      errorMessage: form.value.error,
-                      classes: "govuk-input--width-10"
-                    }) }}
+              label: {
+                text: messages("totalNetMass.heading", index),
+                isPageHeading: true,
+                classes: "govuk-label--xl"
+              },
+              hint: {
+                text: messages('totalNetMass.hintText')
+              },
+              id: "value",
+              name: "value",
+              value: form.value.value,
+              errorMessage: form.value.error,
+              classes: "govuk-input--width-10"
+            }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
