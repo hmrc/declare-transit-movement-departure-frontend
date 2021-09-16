@@ -145,7 +145,10 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     id: String,
     call: (LocalReferenceNumber, Mode) => Call
   )(implicit rds: Reads[T]): Option[Row] = {
-    val format: T => Content = x => lit"${countryList.getCountry(f(x)).map(_.description).getOrElse(f(x).code)}"
+    val format: T => Content = x => {
+      val countryCode: CountryCode = f(x)
+      lit"${countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)}"
+    }
     getAnswerAndBuildRow[T](page, format, prefix, Some(id), call(lrn, CheckMode))
   }
 

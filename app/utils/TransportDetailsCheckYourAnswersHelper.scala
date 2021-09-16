@@ -136,13 +136,13 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     id: String,
     call: (LocalReferenceNumber, Mode) => Call
   ): Option[Row] = {
-    val format: String => Content = x =>
+    val format: String => Content = modeCode =>
       lit"${transportModeList
-        .getTransportMode(x)
+        .getTransportMode(modeCode)
         .map(
           mode => s"(${mode.code}) ${mode.description}"
         )
-        .getOrElse(x)}"
+        .getOrElse(modeCode)}"
     getAnswerAndBuildRow[String](page, format, prefix, Some(id), call(lrn, CheckMode))
   }
 
