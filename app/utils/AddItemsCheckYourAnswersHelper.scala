@@ -560,7 +560,8 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.edit",
-              href = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
+              href =
+                controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declareNumberOfPackages.checkYourAnswersLabel"))
             )
           )
