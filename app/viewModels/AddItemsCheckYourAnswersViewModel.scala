@@ -136,7 +136,7 @@ object AddItemsCheckYourAnswersViewModel {
     val referencesRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)).flatMap {
         position =>
-          checkYourAnswersHelper.previousReferenceType(index, Index(position), previousDocumentTypes)
+          checkYourAnswersHelper.previousReferenceRow(index, Index(position), previousDocumentTypes)
       }
 
     Section(
@@ -166,7 +166,7 @@ object AddItemsCheckYourAnswersViewModel {
     val containerRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfContainers(index)).getOrElse(0)).flatMap {
         containerPosition =>
-          checkYourAnswersHelper.containerNumber(index, Index(containerPosition))
+          checkYourAnswersHelper.containerRow(index, Index(containerPosition))
       }
 
     Section(

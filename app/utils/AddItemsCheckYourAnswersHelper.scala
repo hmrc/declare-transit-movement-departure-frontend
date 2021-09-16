@@ -46,7 +46,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     call = securityDetailsRoutes.TransportChargesController.onPageLoad(lrn, itemIndex, CheckMode)
   )
 
-  def containerNumber(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildValuelessRow[String](
+  def containerRow(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildValuelessRow[String](
     page = ContainerNumberPage(itemIndex, containerIndex),
     formatAnswer = formatAsSelf,
     id = Some(s"change-container-${containerIndex.display}"),
@@ -234,7 +234,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     args = index.display
   )
 
-  def previousReferenceType(index: Index, referenceIndex: Index, previousDocumentType: PreviousReferencesDocumentTypeList): Option[Row] =
+  def previousReferenceRow(index: Index, referenceIndex: Index, previousDocumentType: PreviousReferencesDocumentTypeList): Option[Row] =
     userAnswers.get(ReferenceTypePage(index, referenceIndex)) flatMap {
       answer =>
         previousDocumentType.getPreviousReferencesDocumentType(answer) map {

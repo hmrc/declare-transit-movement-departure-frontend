@@ -30,9 +30,9 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     getAnswerAndBuildSpecialMentionRow(
       page = SpecialMentionTypePage(itemIndex, referenceIndex),
       specialMentions = specialMentions,
-      buildRow = x =>
+      buildRow = key =>
         buildRemovableRow(
-          key = x,
+          key = key,
           id = s"special-mentions-${itemIndex.display}",
           changeCall = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
           removeCall = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode)
@@ -43,9 +43,9 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     getAnswerAndBuildSpecialMentionRow(
       page = SpecialMentionTypePage(itemIndex, referenceIndex),
       specialMentions = specialMentions,
-      buildRow = x =>
+      buildRow = key =>
         buildValuelessRow(
-          key = x,
+          key = key,
           id = Some(s"change-special-mentions-${itemIndex.display}"),
           call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode)
         )

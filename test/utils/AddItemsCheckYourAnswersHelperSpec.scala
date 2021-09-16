@@ -93,7 +93,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.containerNumber(itemIndex, containerIndex)
+          val result = helper.containerRow(itemIndex, containerIndex)
           result mustBe None
         }
       }
@@ -104,7 +104,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers.unsafeSetVal(ContainerNumberPage(itemIndex, containerIndex))(containerNumber)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.containerNumber(itemIndex, containerIndex)
+          val result = helper.containerRow(itemIndex, containerIndex)
 
           result mustBe Some(
             Row(
@@ -960,7 +960,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.previousReferenceType(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+          val result = helper.previousReferenceRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
           result mustBe None
         }
 
@@ -969,7 +969,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.previousReferenceType(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+          val result = helper.previousReferenceRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
 
           result mustBe None
 
@@ -984,7 +984,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
             val helper = new AddItemsCheckYourAnswersHelper(answers)
-            val result = helper.previousReferenceType(
+            val result = helper.previousReferenceRow(
               index,
               referenceIndex,
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None)))
@@ -1013,7 +1013,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
             val helper = new AddItemsCheckYourAnswersHelper(answers)
-            val result = helper.previousReferenceType(
+            val result = helper.previousReferenceRow(
               index,
               referenceIndex,
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription))))

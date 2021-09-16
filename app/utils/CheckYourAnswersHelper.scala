@@ -38,7 +38,13 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   )(implicit rds: Reads[T]): Option[Row] =
     userAnswers.get(page) map {
       answer =>
-        buildRow(prefix, formatAnswer(answer), id, call, args: _*)
+        buildRow(
+          prefix = prefix,
+          content = formatAnswer(answer),
+          id = id,
+          call = call,
+          args = args: _*
+        )
     }
 
   def getAnswerAndBuildValuelessRow[T](
@@ -49,7 +55,11 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   )(implicit rds: Reads[T]): Option[Row] =
     userAnswers.get(page) map {
       answer =>
-        buildValuelessRow(formatAnswer(answer), id, call)
+        buildValuelessRow(
+          key = formatAnswer(answer),
+          id = id,
+          call = call
+        )
     }
 
   def getAnswerAndBuildRemovableRow[T](
@@ -61,7 +71,12 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   )(implicit rds: Reads[T]): Option[Row] =
     userAnswers.get(page) map {
       answer =>
-        buildRemovableRow(key = formatAnswer(answer), id = id, changeCall = changeCall, removeCall = removeCall)
+        buildRemovableRow(
+          key = formatAnswer(answer),
+          id = id,
+          changeCall = changeCall,
+          removeCall = removeCall
+        )
     }
 
   def buildRow(
@@ -79,11 +94,9 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
           content = msg"site.edit",
           href = call.url,
           visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*))),
-          attributes = id
-            .map(
-              x => Map("id" -> x)
-            )
-            .getOrElse(Map.empty)
+          attributes = id.fold[Map[String, String]](Map.empty)(
+            id => Map("id" -> id)
+          )
         )
       )
     )
@@ -101,11 +114,9 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
           content = msg"site.edit",
           href = call.url,
           visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
-          attributes = id
-            .map(
-              x => Map("id" -> x)
-            )
-            .getOrElse(Map.empty)
+          attributes = id.fold[Map[String, String]](Map.empty)(
+            id => Map("id" -> id)
+          )
         )
       )
     )
