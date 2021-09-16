@@ -28,7 +28,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def agreedLocationOfGoods: Option[Row] = getAnswerAndBuildRow[String](
     page = AgreedLocationOfGoodsPage,
-    format = x => lit"$x",
+    formatAnswer = x => lit"$x",
     prefix = "agreedLocationOfGoods",
     id = None,
     call = routes.AgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode)
@@ -36,7 +36,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def loadingPlace: Option[Row] = getAnswerAndBuildRow[String](
     page = LoadingPlacePage,
-    format = x => lit"$x",
+    formatAnswer = x => lit"$x",
     prefix = "loadingPlace",
     id = None,
     call = controllers.routes.LoadingPlaceController.onPageLoad(lrn, CheckMode)
@@ -44,7 +44,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def addAgreedLocationOfGoods: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddAgreedLocationOfGoodsPage,
-    format = yesOrNo,
+    formatAnswer = yesOrNo,
     prefix = "addAgreedLocationOfGoods",
     id = None,
     call = routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode)
@@ -52,7 +52,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def sealsInformation: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = SealsInformationPage,
-    format = yesOrNo,
+    formatAnswer = yesOrNo,
     prefix = "sealsInformation",
     id = None,
     call = routes.SealsInformationController.onPageLoad(lrn, CheckMode)
@@ -60,7 +60,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def controlResultDateLimit: Option[Row] = getAnswerAndBuildRow[LocalDate](
     page = ControlResultDateLimitPage,
-    format = x => lit"${Format.dateFormattedWithMonthName(x)}",
+    formatAnswer = x => lit"${Format.dateFormattedWithMonthName(x)}",
     prefix = "controlResultDateLimit",
     id = Some("change-control-result-date-limit"),
     call = routes.ControlResultDateLimitController.onPageLoad(lrn, CheckMode)
@@ -68,7 +68,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def addSeals: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSealsPage,
-    format = yesOrNo,
+    formatAnswer = yesOrNo,
     prefix = "addSeals",
     id = Some("change-add-seals"),
     call = routes.AddSealsController.onPageLoad(lrn, CheckMode)
@@ -76,7 +76,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def customsApprovedLocation: Option[Row] = getAnswerAndBuildRow[String](
     page = CustomsApprovedLocationPage,
-    format = x => lit"$x",
+    formatAnswer = x => lit"$x",
     prefix = "customsApprovedLocation",
     id = Some("change-customs-approved-location"),
     call = routes.CustomsApprovedLocationController.onPageLoad(lrn, CheckMode)
@@ -84,7 +84,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def addCustomsApprovedLocation: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddCustomsApprovedLocationPage,
-    format = yesOrNo,
+    formatAnswer = yesOrNo,
     prefix = "addCustomsApprovedLocation",
     id = Some("change-add-customs-approved-location"),
     call = routes.AddCustomsApprovedLocationController.onPageLoad(lrn, CheckMode)
@@ -92,7 +92,7 @@ class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def authorisedLocationCode: Option[Row] = getAnswerAndBuildRow[String](
     page = AuthorisedLocationCodePage,
-    format = x => lit"$x",
+    formatAnswer = x => lit"$x",
     prefix = "authorisedLocationCode",
     id = Some("change-authorised-location-code"),
     call = routes.AuthorisedLocationCodeController.onPageLoad(lrn, CheckMode)

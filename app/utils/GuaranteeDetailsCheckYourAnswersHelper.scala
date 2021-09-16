@@ -31,7 +31,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
 
   def defaultAmount(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = DefaultAmountPage(index),
-    format = yesOrNo,
+    formatAnswer = yesOrNo,
     prefix = "defaultAmount",
     id = Some("change-default-amount"),
     call = routes.DefaultAmountController.onPageLoad(lrn, index, CheckMode)
@@ -44,7 +44,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
       case _ =>
         getAnswerAndBuildRow[GuaranteeType](
           page = GuaranteeTypePage(index),
-          format = x => msg"guaranteeType.${GuaranteeType.getId(x.toString)}",
+          formatAnswer = x => msg"guaranteeType.${GuaranteeType.getId(x.toString)}",
           prefix = "guaranteeType",
           id = Some("change-guarantee-type"),
           call = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode)
@@ -53,7 +53,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
 
   def accessCode(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = AccessCodePage(index),
-    format = _ => lit"••••",
+    formatAnswer = _ => lit"••••",
     prefix = "accessCode",
     id = Some("change-access-code"),
     call = routes.AccessCodeController.onPageLoad(lrn, index, CheckMode)
@@ -61,7 +61,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
 
   def otherReference(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = OtherReferencePage(index),
-    format = x => lit"$x",
+    formatAnswer = x => lit"$x",
     prefix = "otherReference",
     id = Some("change-other-reference"),
     call = routes.OtherReferenceController.onPageLoad(lrn, index, CheckMode)
@@ -72,7 +72,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
       case (Some(Option4), Index(0)) =>
         getAnswerAndBuildRow[String](
           page = LiabilityAmountPage(index),
-          format = x => lit"$x",
+          formatAnswer = x => lit"$x",
           prefix = "liabilityAmount",
           id = Some("change-liability-amount"),
           call = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode)
@@ -110,7 +110,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
 
   def guaranteeReference(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = GuaranteeReferencePage(index),
-    format = x => lit"$x",
+    formatAnswer = x => lit"$x",
     prefix = "guaranteeReference",
     id = Some("change-guarantee-reference"),
     call = routes.GuaranteeReferenceController.onPageLoad(lrn, index, CheckMode)
@@ -118,7 +118,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
 
   def tirGuaranteeReference(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = TIRGuaranteeReferencePage(index),
-    format = x => lit"$x",
+    formatAnswer = x => lit"$x",
     prefix = "tirGuaranteeReference",
     id = Some("change-tir-guarantee-reference"),
     call = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, CheckMode)
@@ -129,14 +129,14 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
       if (index.position == 0) {
         getAnswerAndBuildValuelessRow[String](
           page = TIRGuaranteeReferencePage(index),
-          format = x => x,
+          formatAnswer = x => x,
           id = Some(s"change-tir-carnet-${index.display}"),
           call = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index)
         )
       } else {
         getAnswerAndBuildRemovableRow[String](
           page = TIRGuaranteeReferencePage(index),
-          format = x => x,
+          formatAnswer = x => x,
           id = s"tir-carnet-${index.display}",
           changeCall = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index),
           removeCall = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index)
@@ -145,7 +145,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     } else {
       getAnswerAndBuildRemovableRow[GuaranteeType](
         page = GuaranteeTypePage(index),
-        format = x => msg"guaranteeType.${GuaranteeType.getId(x.toString)}".resolve,
+        formatAnswer = x => msg"guaranteeType.${GuaranteeType.getId(x.toString)}".resolve,
         id = s"guarantee-${index.display}",
         changeCall = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index),
         removeCall = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index)

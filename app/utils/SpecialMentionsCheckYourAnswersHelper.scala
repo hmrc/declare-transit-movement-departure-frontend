@@ -53,7 +53,7 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
 
   def addSpecialMention(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSpecialMentionPage(itemIndex),
-    format = yesOrNo,
+    formatAnswer = yesOrNo,
     prefix = "addSpecialMention",
     id = None,
     call = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode)

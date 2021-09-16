@@ -32,7 +32,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def arrivalTimesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDateTime](
     page = ArrivalTimesAtOfficePage(index),
-    format = x => lit"${Format.dateTimeFormattedAMPM(x).toLowerCase}",
+    formatAnswer = x => lit"${Format.dateTimeFormattedAMPM(x).toLowerCase}",
     prefix = "arrivalTimesAtOffice",
     id = Some("change-arrival-times-at-office-of-transit"),
     call = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode),
@@ -41,7 +41,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def destinationOffice(customsOfficeList: CustomsOfficeList): Option[Row] = getAnswerAndBuildOfficeRow[CustomsOffice](
     page = DestinationOfficePage,
-    f = x => x.id,
+    formatAnswer = x => x.id,
     customsOfficeList = customsOfficeList,
     prefix = "destinationOffice",
     id = "change-destination-office",
@@ -50,7 +50,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def addAnotherTransitOffice(index: Index, customsOfficeList: CustomsOfficeList): Option[Row] = getAnswerAndBuildOfficeRow[String](
     page = AddAnotherTransitOfficePage(index),
-    f = x => x,
+    formatAnswer = x => x,
     customsOfficeList = customsOfficeList,
     prefix = "addAnotherTransitOffice",
     id = "change-office-of-transit",
@@ -60,7 +60,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def countryOfDispatch(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryOfDispatch](
     page = CountryOfDispatchPage,
-    f = x => x.country,
+    getCountryCode = x => x.country,
     countryList = countryList,
     prefix = "countryOfDispatch",
     id = "change-country-of-dispatch",
@@ -69,7 +69,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def destinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
     page = DestinationCountryPage,
-    f = x => x,
+    getCountryCode = x => x,
     countryList = countryList,
     prefix = "destinationCountry",
     id = "change-destination-country",
@@ -103,7 +103,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def movementDestinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
     page = MovementDestinationCountryPage,
-    f = x => x,
+    getCountryCode = x => x,
     countryList = countryList,
     prefix = "movementDestinationCountry",
     id = "change-movement-destination-country",
@@ -112,7 +112,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   private def getAnswerAndBuildOfficeRow[T](
     page: QuestionPage[T],
-    f: T => String,
+    formatAnswer: T => String,
     customsOfficeList: CustomsOfficeList,
     prefix: String,
     id: String,
@@ -120,7 +120,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     args: Any*
   )(implicit rds: Reads[T]): Option[Row] = userAnswers.get(page) flatMap {
     answer =>
-      customsOfficeList.getCustomsOffice(f(answer)) map {
+      customsOfficeList.getCustomsOffice(formatAnswer(answer)) map {
         customsOffice =>
           buildRow(prefix, lit"${customsOffice.name} (${customsOffice.id})", Some(id), call, args: _*)
       }

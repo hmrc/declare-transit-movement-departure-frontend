@@ -53,7 +53,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
 
   def idCrossingBorder: Option[Row] = getAnswerAndBuildRow[String](
     page = IdCrossingBorderPage,
-    format = x => lit"$x",
+    formatAnswer = x => lit"$x",
     prefix = "idCrossingBorder",
     id = Some("change-id-crossing-border"),
     call = routes.IdCrossingBorderController.onPageLoad(lrn, CheckMode)
@@ -65,7 +65,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     } else {
       getAnswerAndBuildSimpleCountryRow[CountryCode](
         page = NationalityAtDeparturePage,
-        f = x => x,
+        getCountryCode = x => x,
         countryList = countryList,
         prefix = "nationalityAtDeparture",
         id = "change-nationality-at-departure",
@@ -75,7 +75,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
 
   def nationalityCrossingBorder(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
     page = NationalityCrossingBorderPage,
-    f = x => x,
+    getCountryCode = x => x,
     countryList = countryList,
     prefix = "nationalityCrossingBorder",
     id = "change-nationality-crossing-border",
@@ -88,7 +88,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     } else {
       getAnswerAndBuildRow[String](
         page = IdAtDeparturePage,
-        format = x => lit"$x",
+        formatAnswer = x => lit"$x",
         prefix = "idAtDeparture",
         id = None,
         call = routes.IdAtDepartureController.onPageLoad(lrn, CheckMode)
@@ -97,7 +97,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
 
   def changeAtBorder: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = ChangeAtBorderPage,
-    format = yesOrNo,
+    formatAnswer = yesOrNo,
     prefix = "changeAtBorder",
     id = Some("change-change-at-border"),
     call = routes.ChangeAtBorderController.onPageLoad(lrn, CheckMode)
@@ -109,7 +109,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     } else {
       getAnswerAndBuildRow[Boolean](
         page = AddIdAtDeparturePage,
-        format = yesOrNo,
+        formatAnswer = yesOrNo,
         prefix = "addIdAtDeparture",
         id = Some("change-add-id-at-departure"),
         call = routes.AddIdAtDepartureController.onPageLoad(lrn, CheckMode)
@@ -122,7 +122,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     } else {
       getAnswerAndBuildRow[Boolean](
         page = AddNationalityAtDeparturePage,
-        format = yesOrNo,
+        formatAnswer = yesOrNo,
         prefix = "addNationalityAtDeparture",
         id = Some("change-add-nationality-at-departure"),
         call = routes.AddNationalityAtDepartureController.onPageLoad(lrn, CheckMode)
