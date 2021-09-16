@@ -155,29 +155,35 @@ package object utils {
     defaultOption +: paymentObjects
   }
 
-  def yesOrNo(answer: Boolean): Content =
+  def formatAsYesOrNo(answer: Boolean): Content =
     if (answer) {
       msg"site.yes"
     } else {
       msg"site.no"
     }
 
-  def yesOrNo(answer: Int): Content =
+  def formatAsYesOrNo(answer: Int): Content =
     if (answer == 1) {
       msg"site.yes"
     } else {
       msg"site.no"
     }
 
-  def acceptedOrRejected(answer: Int): Content =
+  def formatAsAcceptedOrRejected(answer: Int): Content =
     if (answer == 1) {
       msg"site.accepted"
     } else {
       msg"site.rejected"
     }
 
-  def address(answer: CommonAddress): Html = Html(
+  def formatAsAddress(answer: CommonAddress): Html = Html(
     Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description).mkString("<br>")
   )
+
+  def formatAsLiteral[T](answer: T): Content = lit"$answer"
+
+  def formatAsSelf(answer: String): String = answer
+
+  def formatAsMasked[T]: T => Content = _ => lit"••••"
 
 }

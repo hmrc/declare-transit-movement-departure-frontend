@@ -29,7 +29,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addCarrierEori: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddCarrierEoriPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addCarrierEori",
     id = None,
     call = routes.AddCarrierEoriController.onPageLoad(lrn, CheckMode)
@@ -37,7 +37,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addCarrier: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddCarrierPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addCarrier",
     id = None,
     call = routes.AddCarrierController.onPageLoad(lrn, CheckMode)
@@ -45,7 +45,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addCircumstanceIndicator: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddCircumstanceIndicatorPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addCircumstanceIndicator",
     id = None,
     call = routes.AddCircumstanceIndicatorController.onPageLoad(lrn, CheckMode)
@@ -53,7 +53,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addCommercialReferenceNumberAllItems: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddCommercialReferenceNumberAllItemsPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addCommercialReferenceNumberAllItems",
     id = None,
     call = routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(lrn, CheckMode)
@@ -61,7 +61,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addCommercialReferenceNumber: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddCommercialReferenceNumberPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addCommercialReferenceNumber",
     id = None,
     call = routes.AddCommercialReferenceNumberController.onPageLoad(lrn, CheckMode)
@@ -69,7 +69,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addConveyanceReferenceNumber: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddConveyanceReferenceNumberPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addConveyancerReferenceNumber",
     id = None,
     call = routes.AddConveyanceReferenceNumberController.onPageLoad(lrn, CheckMode)
@@ -77,7 +77,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addPlaceOfUnloadingCode: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddPlaceOfUnloadingCodePage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addPlaceOfUnloadingCode",
     id = None,
     call = routes.AddPlaceOfUnloadingCodeController.onPageLoad(lrn, CheckMode)
@@ -85,7 +85,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addSafetyAndSecurityConsigneeEori: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSafetyAndSecurityConsigneeEoriPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addSafetyAndSecurityConsigneeEori",
     id = None,
     call = routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, CheckMode)
@@ -93,7 +93,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addSafetyAndSecurityConsignee: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSafetyAndSecurityConsigneePage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addSafetyAndSecurityConsignee",
     id = None,
     call = routes.AddSafetyAndSecurityConsigneeController.onPageLoad(lrn, CheckMode)
@@ -101,7 +101,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addSafetyAndSecurityConsignorEori: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSafetyAndSecurityConsignorEoriPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addSafetyAndSecurityConsignorEori",
     id = None,
     call = routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(lrn, CheckMode)
@@ -109,7 +109,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addSafetyAndSecurityConsignor: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSafetyAndSecurityConsignorPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addSafetyAndSecurityConsignor",
     id = None,
     call = routes.AddSafetyAndSecurityConsignorController.onPageLoad(lrn, CheckMode)
@@ -117,7 +117,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def addTransportChargesPaymentMethod: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddTransportChargesPaymentMethodPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addTransportChargesPaymentMethod",
     id = None,
     call = routes.AddTransportChargesPaymentMethodController.onPageLoad(lrn, CheckMode)
@@ -125,7 +125,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def carrierAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
     page = CarrierAddressPage,
-    formatAnswer = address,
+    formatAnswer = formatAsAddress,
     prefix = "carrierAddress",
     id = None,
     call = routes.CarrierAddressController.onPageLoad(lrn, CheckMode)
@@ -133,7 +133,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def carrierEori: Option[Row] = getAnswerAndBuildRow[String](
     page = CarrierEoriPage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "carrierEori",
     id = None,
     call = routes.CarrierEoriController.onPageLoad(lrn, CheckMode)
@@ -141,7 +141,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def carrierName: Option[Row] = getAnswerAndBuildRow[String](
     page = CarrierNamePage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "carrierName",
     id = None,
     call = routes.CarrierNameController.onPageLoad(lrn, CheckMode)
@@ -163,7 +163,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def commercialReferenceNumberAllItems: Option[Row] = getAnswerAndBuildRow[String](
     page = CommercialReferenceNumberAllItemsPage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "commercialReferenceNumberAllItems",
     id = None,
     call = routes.CommercialReferenceNumberAllItemsController.onPageLoad(lrn, CheckMode)
@@ -171,7 +171,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def conveyanceReferenceNumber: Option[Row] = getAnswerAndBuildRow[String](
     page = ConveyanceReferenceNumberPage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "conveyanceReferenceNumber",
     id = None,
     call = routes.ConveyanceReferenceNumberController.onPageLoad(lrn, CheckMode)
@@ -179,7 +179,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def placeOfUnloadingCode: Option[Row] = getAnswerAndBuildRow[String](
     page = PlaceOfUnloadingCodePage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "placeOfUnloadingCode",
     id = None,
     call = routes.PlaceOfUnloadingCodeController.onPageLoad(lrn, CheckMode)
@@ -187,7 +187,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def safetyAndSecurityConsigneeAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
     page = SafetyAndSecurityConsigneeAddressPage,
-    formatAnswer = address,
+    formatAnswer = formatAsAddress,
     prefix = "safetyAndSecurityConsigneeAddress",
     id = None,
     call = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, CheckMode)
@@ -195,7 +195,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def safetyAndSecurityConsigneeEori: Option[Row] = getAnswerAndBuildRow[String](
     page = SafetyAndSecurityConsigneeEoriPage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "safetyAndSecurityConsigneeEori",
     id = None,
     call = routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, CheckMode)
@@ -203,7 +203,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def safetyAndSecurityConsigneeName: Option[Row] = getAnswerAndBuildRow[String](
     page = SafetyAndSecurityConsigneeNamePage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "safetyAndSecurityConsigneeName",
     id = None,
     call = routes.SafetyAndSecurityConsigneeNameController.onPageLoad(lrn, CheckMode)
@@ -211,7 +211,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def safetyAndSecurityConsignorAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
     page = SafetyAndSecurityConsignorAddressPage,
-    formatAnswer = address,
+    formatAnswer = formatAsAddress,
     prefix = "safetyAndSecurityConsignorAddress",
     id = None,
     call = routes.SafetyAndSecurityConsignorAddressController.onPageLoad(lrn, CheckMode)
@@ -219,7 +219,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def safetyAndSecurityConsignorEori: Option[Row] = getAnswerAndBuildRow[String](
     page = SafetyAndSecurityConsignorEoriPage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "safetyAndSecurityConsignorEori",
     id = None,
     call = routes.SafetyAndSecurityConsignorEoriController.onPageLoad(lrn, CheckMode)
@@ -227,7 +227,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def safetyAndSecurityConsignorName: Option[Row] = getAnswerAndBuildRow[String](
     page = SafetyAndSecurityConsignorNamePage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "safetyAndSecurityConsignorName",
     id = None,
     call = routes.SafetyAndSecurityConsignorNameController.onPageLoad(lrn, CheckMode)
@@ -235,19 +235,19 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
 
   def transportChargesPaymentMethod(): Option[Row] = getAnswerAndBuildRow[MethodOfPayment](
     page = TransportChargesPaymentMethodPage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "transportChargesPaymentMethod",
     id = None,
     call = routes.TransportChargesPaymentMethodController.onPageLoad(lrn, CheckMode)
   )
 
   def countryRow(index: Index, countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
-    getCountryCode = x => x,
+    getCountryCode = countryCode => countryCode,
     countryList = countries,
-    getAnswerAndBuildRow = f =>
+    getAnswerAndBuildRow = formatAnswer =>
       getAnswerAndBuildRemovableRow(
         page = CountryOfRoutingPage(index),
-        formatAnswer = f,
+        formatAnswer = formatAnswer,
         id = s"country-${index.display}",
         changeCall = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode),
         removeCall = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode)
@@ -255,12 +255,12 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
   )
 
   def countryOfRoutingRow(index: Index, countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
-    getCountryCode = x => x,
+    getCountryCode = countryCode => countryCode,
     countryList = countries,
-    getAnswerAndBuildRow = f =>
+    getAnswerAndBuildRow = formatAnswer =>
       getAnswerAndBuildValuelessRow(
         page = CountryOfRoutingPage(index),
-        formatAnswer = f,
+        formatAnswer = formatAnswer,
         id = Some(s"change-country-${index.display}"),
         call = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode)
       )

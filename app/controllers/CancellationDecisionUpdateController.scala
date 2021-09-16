@@ -28,7 +28,7 @@ import services.DepartureMessageService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Key, Row, Value}
-import utils.{acceptedOrRejected, yesOrNo}
+import utils.{formatAsAcceptedOrRejected, formatAsYesOrNo}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -66,12 +66,12 @@ class CancellationDecisionUpdateController @Inject() (
 
     val rows = Seq(
       Row(Key(msg"cancellationDecisionUpdate.mrn"), Value(lit"${message.mrn}"), Seq.empty),
-      Row(Key(msg"cancellationDecisionUpdate.initiatedByCustoms"), Value(yesOrNo(message.cancellationInitiatedBy)), Seq.empty)
+      Row(Key(msg"cancellationDecisionUpdate.initiatedByCustoms"), Value(formatAsYesOrNo(message.cancellationInitiatedBy)), Seq.empty)
     )
 
     val rowsWithCancellationDecision: Seq[Row] = {
       if (message.cancellationDecision.nonEmpty) {
-        rows :+ Row(Key(msg"cancellationDecisionUpdate.cancellationDecision"), Value(acceptedOrRejected(message.cancellationDecision.get)), Seq.empty)
+        rows :+ Row(Key(msg"cancellationDecisionUpdate.cancellationDecision"), Value(formatAsAcceptedOrRejected(message.cancellationDecision.get)), Seq.empty)
       } else {
         rows
       }

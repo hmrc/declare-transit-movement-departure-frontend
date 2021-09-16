@@ -26,7 +26,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
 
   def preLodgeDeclarationPage: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = PreLodgeDeclarationPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "preLodgeDeclaration",
     id = Some("change-pre-lodge-declaration"),
     call = routes.PreLodgeDeclarationController.onPageLoad(lrn, CheckMode)
@@ -34,7 +34,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
 
   def representativeCapacity: Option[Row] = getAnswerAndBuildRow[RepresentativeCapacity](
     page = RepresentativeCapacityPage,
-    formatAnswer = x => msg"representativeCapacity.$x",
+    formatAnswer = representativeCapacity => msg"representativeCapacity.$representativeCapacity",
     prefix = "representativeCapacity",
     id = Some("change-representative-capacity"),
     call = routes.RepresentativeCapacityController.onPageLoad(lrn, CheckMode)
@@ -42,7 +42,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
 
   def representativeName: Option[Row] = getAnswerAndBuildRow[String](
     page = RepresentativeNamePage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "representativeName",
     id = Some("change-representative-name"),
     call = routes.RepresentativeNameController.onPageLoad(lrn, CheckMode)
@@ -50,7 +50,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
 
   def containersUsedPage: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = ContainersUsedPage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "containersUsed",
     id = Some("change-containers-used"),
     call = routes.ContainersUsedPageController.onPageLoad(lrn, CheckMode)
@@ -58,7 +58,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
 
   def declarationForSomeoneElse: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = DeclarationForSomeoneElsePage,
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "declarationForSomeoneElse",
     id = Some("change-declaration-for-someone-else"),
     call = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, CheckMode)
@@ -66,7 +66,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
 
   def declarationPlace: Option[Row] = getAnswerAndBuildRow[String](
     page = DeclarationPlacePage,
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "declarationPlace",
     id = Some("change-declaration-place"),
     call = routes.DeclarationPlaceController.onPageLoad(lrn, CheckMode)

@@ -40,7 +40,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def transportCharges(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[MethodOfPayment](
     page = TransportChargesPage(itemIndex),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "transportCharges",
     id = None,
     call = securityDetailsRoutes.TransportChargesController.onPageLoad(lrn, itemIndex, CheckMode)
@@ -48,7 +48,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def containerNumber(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildValuelessRow[String](
     page = ContainerNumberPage(itemIndex, containerIndex),
-    formatAnswer = x => x,
+    formatAnswer = formatAsSelf,
     id = Some(s"change-container-${containerIndex.display}"),
     call = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode)
   )
@@ -93,7 +93,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def itemRow(index: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
     page = ItemDescriptionPage(index),
-    formatAnswer = x => x,
+    formatAnswer = formatAsSelf,
     id = s"item-${index.display}",
     changeCall = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index),
     removeCall = routes.ConfirmRemoveItemController.onPageLoad(lrn, index)
@@ -101,7 +101,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def addDocuments(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddDocumentsPage(itemIndex),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addDocuments",
     id = None,
     call = controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(lrn, itemIndex, CheckMode),
@@ -110,7 +110,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def traderDetailsConsignorName(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = TraderDetailsConsignorNamePage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "traderDetailsConsignorName",
     id = None,
     call = traderDetailsRoutes.TraderDetailsConsignorNameController.onPageLoad(lrn, index, CheckMode),
@@ -119,7 +119,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def traderDetailsConsignorEoriNumber(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = TraderDetailsConsignorEoriNumberPage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "traderDetailsConsignorEoriNumber",
     id = None,
     call = traderDetailsRoutes.TraderDetailsConsignorEoriNumberController.onPageLoad(lrn, index, CheckMode),
@@ -128,7 +128,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def traderDetailsConsignorEoriKnown(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = TraderDetailsConsignorEoriKnownPage(index),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "traderDetailsConsignorEoriKnown",
     id = None,
     call = traderDetailsRoutes.TraderDetailsConsignorEoriKnownController.onPageLoad(lrn, index, CheckMode),
@@ -137,7 +137,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def traderDetailsConsignorAddress(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[CommonAddress](
     page = TraderDetailsConsignorAddressPage(itemIndex),
-    formatAnswer = address,
+    formatAnswer = formatAsAddress,
     prefix = "traderDetailsConsignorAddress",
     id = None,
     call = traderDetailsRoutes.TraderDetailsConsignorAddressController.onPageLoad(lrn, itemIndex, CheckMode),
@@ -146,7 +146,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def traderDetailsConsigneeName(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = TraderDetailsConsigneeNamePage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "traderDetailsConsigneeName",
     id = None,
     call = traderDetailsRoutes.TraderDetailsConsigneeNameController.onPageLoad(lrn, index, CheckMode),
@@ -155,7 +155,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def traderDetailsConsigneeEoriNumber(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = TraderDetailsConsigneeEoriNumberPage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "traderDetailsConsigneeEoriNumber",
     id = None,
     call = traderDetailsRoutes.TraderDetailsConsigneeEoriNumberController.onPageLoad(lrn, index, CheckMode),
@@ -164,7 +164,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def traderDetailsConsigneeEoriKnown(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = TraderDetailsConsigneeEoriKnownPage(index),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "traderDetailsConsigneeEoriKnown",
     id = None,
     call = traderDetailsRoutes.TraderDetailsConsigneeEoriKnownController.onPageLoad(lrn, index, CheckMode),
@@ -173,7 +173,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def traderDetailsConsigneeAddress(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[CommonAddress](
     page = TraderDetailsConsigneeAddressPage(itemIndex),
-    formatAnswer = address,
+    formatAnswer = formatAsAddress,
     prefix = "traderDetailsConsigneeAddress",
     id = None,
     call = traderDetailsRoutes.TraderDetailsConsigneeAddressController.onPageLoad(lrn, itemIndex, CheckMode),
@@ -182,7 +182,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def commodityCode(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = CommodityCodePage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "commodityCode",
     id = Some("change-commodity-code"),
     call = controllers.addItems.itemDetails.routes.CommodityCodeController.onPageLoad(lrn, index, CheckMode),
@@ -191,7 +191,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def totalNetMass(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = TotalNetMassPage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "totalNetMass",
     id = Some("change-total-net-mass"),
     call = controllers.addItems.itemDetails.routes.TotalNetMassController.onPageLoad(lrn, index, CheckMode),
@@ -200,7 +200,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def isCommodityCodeKnown(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = IsCommodityCodeKnownPage(index),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "isCommodityCodeKnown",
     id = Some("change-is-commodity-known"),
     call = controllers.addItems.itemDetails.routes.IsCommodityCodeKnownController.onPageLoad(lrn, index, CheckMode),
@@ -209,7 +209,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def addTotalNetMass(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddTotalNetMassPage(index),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addTotalNetMass",
     id = Some("change-add-total-net-mass"),
     call = controllers.addItems.itemDetails.routes.AddTotalNetMassController.onPageLoad(lrn, index, CheckMode),
@@ -218,7 +218,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def itemTotalGrossMass(index: Index): Option[Row] = getAnswerAndBuildRow[Double](
     page = ItemTotalGrossMassPage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "itemTotalGrossMass",
     id = Some("change-item-total-gross-mass"),
     call = controllers.addItems.itemDetails.routes.ItemTotalGrossMassController.onPageLoad(lrn, index, CheckMode),
@@ -227,7 +227,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def itemDescription(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = ItemDescriptionPage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "itemDescription",
     id = Some("change-item-description"),
     call = controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(lrn, index, CheckMode),
@@ -267,7 +267,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def addAdministrativeReference(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddAdministrativeReferencePage(index),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addAdministrativeReference",
     id = None,
     call = previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(lrn, index, CheckMode)
@@ -282,7 +282,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](
     page = PackageTypePage(itemIndex, packageIndex),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "packageType",
     id = Some(s"change-package-${packageIndex.display}"),
     call = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
@@ -290,7 +290,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def numberOfPackages(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[Int](
     page = HowManyPackagesPage(itemIndex, packageIndex),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "declareNumberOfPackages",
     id = None,
     call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
@@ -298,7 +298,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def totalPieces(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[Int](
     page = TotalPiecesPage(itemIndex, packageIndex),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "totalPieces",
     id = None,
     call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
@@ -320,7 +320,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def commercialReferenceNumber(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = CommercialReferenceNumberPage(itemIndex),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "commercialReferenceNumber",
     id = None,
     call = securityDetailsRoutes.CommercialReferenceNumberController.onPageLoad(lrn, itemIndex, CheckMode)
@@ -328,7 +328,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def addDangerousGoodsCode(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddDangerousGoodsCodePage(itemIndex),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addDangerousGoodsCode",
     id = None,
     call = securityDetailsRoutes.AddDangerousGoodsCodeController.onPageLoad(lrn, itemIndex, CheckMode)
@@ -336,7 +336,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def dangerousGoodsCode(itemIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = DangerousGoodsCodePage(itemIndex),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "dangerousGoodsCode",
     id = None,
     call = securityDetailsRoutes.DangerousGoodsCodeController.onPageLoad(lrn, itemIndex, CheckMode)
@@ -344,7 +344,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def addSecurityConsignorsEori(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSecurityConsignorsEoriPage(index),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addSecurityConsignorsEori",
     id = None,
     call = tradersSecurityDetailsRoutes.AddSecurityConsignorsEoriController.onPageLoad(lrn, index, CheckMode)
@@ -352,7 +352,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def addSecurityConsigneesEori(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddSecurityConsigneesEoriPage(index),
-    formatAnswer = yesOrNo,
+    formatAnswer = formatAsYesOrNo,
     prefix = "addSecurityConsigneesEori",
     id = None,
     call = tradersSecurityDetailsRoutes.AddSecurityConsigneesEoriController.onPageLoad(lrn, index, CheckMode)
@@ -360,7 +360,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def securityConsigneeName(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = SecurityConsigneeNamePage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "securityConsigneeName",
     id = None,
     call = tradersSecurityDetailsRoutes.SecurityConsigneeNameController.onPageLoad(lrn, index, CheckMode)
@@ -368,7 +368,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def securityConsignorName(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = SecurityConsignorNamePage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "securityConsignorName",
     id = None,
     call = tradersSecurityDetailsRoutes.SecurityConsignorNameController.onPageLoad(lrn, index, CheckMode)
@@ -376,7 +376,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def securityConsigneeAddress(index: Index): Option[Row] = getAnswerAndBuildRow[CommonAddress](
     page = SecurityConsigneeAddressPage(index),
-    formatAnswer = address,
+    formatAnswer = formatAsAddress,
     prefix = "securityConsigneeAddress",
     id = None,
     call = tradersSecurityDetailsRoutes.SecurityConsigneeAddressController.onPageLoad(lrn, index, CheckMode)
@@ -384,7 +384,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def securityConsignorAddress(index: Index): Option[Row] = getAnswerAndBuildRow[CommonAddress](
     page = SecurityConsignorAddressPage(index),
-    formatAnswer = address,
+    formatAnswer = formatAsAddress,
     prefix = "securityConsignorAddress",
     id = None,
     call = tradersSecurityDetailsRoutes.SecurityConsignorAddressController.onPageLoad(lrn, index, CheckMode)
@@ -392,7 +392,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def securityConsigneeEori(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = SecurityConsigneeEoriPage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "securityConsigneeEori",
     id = None,
     call = tradersSecurityDetailsRoutes.SecurityConsigneeEoriController.onPageLoad(lrn, index, CheckMode)
@@ -400,7 +400,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def securityConsignorEori(index: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = SecurityConsignorEoriPage(index),
-    formatAnswer = x => lit"$x",
+    formatAnswer = formatAsLiteral,
     prefix = "securityConsignorEori",
     id = None,
     call = tradersSecurityDetailsRoutes.SecurityConsignorEoriController.onPageLoad(lrn, index, CheckMode)
