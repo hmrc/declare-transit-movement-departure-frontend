@@ -68,8 +68,8 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
         getCountryCode = countryCode => countryCode,
         countryList = countryList,
         prefix = "nationalityAtDeparture",
-        id = "change-nationality-at-departure",
-        call = routes.NationalityAtDepartureController.onPageLoad
+        id = Some("change-nationality-at-departure"),
+        call = routes.NationalityAtDepartureController.onPageLoad(lrn, CheckMode)
       )
     }
 
@@ -78,8 +78,8 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     getCountryCode = countryCode => countryCode,
     countryList = countryList,
     prefix = "nationalityCrossingBorder",
-    id = "change-nationality-crossing-border",
-    call = routes.NationalityCrossingBorderController.onPageLoad
+    id = Some("change-nationality-crossing-border"),
+    call = routes.NationalityCrossingBorderController.onPageLoad(lrn, CheckMode)
   )
 
   def idAtDeparture(inlandModeCode: String): Option[Row] =

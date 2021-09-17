@@ -19,7 +19,7 @@ package viewModels
 import derivable.DeriveNumberOfSeals
 import models.UserAnswers
 import uk.gov.hmrc.viewmodels.SummaryList
-import utils.{AddSealHelper, GoodsSummaryCheckYourAnswersHelper}
+import utils.{AddSealCheckYourAnswersHelper, GoodsSummaryCheckYourAnswersHelper}
 import viewModels.sections.Section
 
 case class GoodsSummaryCheckYourAnswersViewModel(sections: Seq[Section])
@@ -29,7 +29,7 @@ object GoodsSummaryCheckYourAnswersViewModel {
   def apply(userAnswers: UserAnswers): GoodsSummaryCheckYourAnswersViewModel = {
 
     val goodsSummaryCheckYourAnswersHelper = new GoodsSummaryCheckYourAnswersHelper(userAnswers)
-    val addSealHelper                      = new AddSealHelper(userAnswers)
+    val addSealHelper                      = new AddSealCheckYourAnswersHelper(userAnswers)
 
     val authorisedLocationCode: Option[SummaryList.Row]     = goodsSummaryCheckYourAnswersHelper.authorisedLocationCode
     val controlResultDateLimit: Option[SummaryList.Row]     = goodsSummaryCheckYourAnswersHelper.controlResultDateLimit
@@ -40,7 +40,7 @@ object GoodsSummaryCheckYourAnswersViewModel {
     val loadingPlace: Option[SummaryList.Row]               = goodsSummaryCheckYourAnswersHelper.loadingPlace
     val addSeals: Option[SummaryList.Row]                   = goodsSummaryCheckYourAnswersHelper.addSeals
     val numberOfSeals                                       = userAnswers.get(DeriveNumberOfSeals).getOrElse(0)
-    val seals                                               = if (numberOfSeals == 0) None else addSealHelper.sealsRow(userAnswers.lrn)
+    val seals                                               = if (numberOfSeals == 0) None else addSealHelper.sealsRow()
     val sealsInformation: Option[SummaryList.Row]           = goodsSummaryCheckYourAnswersHelper.sealsInformation
 
     val checkYourAnswersData = Seq(

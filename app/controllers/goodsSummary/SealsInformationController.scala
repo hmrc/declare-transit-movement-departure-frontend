@@ -32,7 +32,7 @@ import play.twirl.api.Html
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-import utils.AddSealHelper
+import utils.AddSealCheckYourAnswersHelper
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -80,7 +80,7 @@ class SealsInformationController @Inject() (
     val listOfSealsIndex = List.range(0, numberOfSeals).map(Index(_))
     val sealsRows = listOfSealsIndex.flatMap {
       index =>
-        AddSealHelper.apply(request.userAnswers).sealRow(lrn, index, mode)
+        new AddSealCheckYourAnswersHelper(request.userAnswers).sealRow(index)
 
     }
 

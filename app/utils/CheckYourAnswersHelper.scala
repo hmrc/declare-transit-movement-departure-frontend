@@ -17,7 +17,7 @@
 package utils
 
 import models.reference.CountryCode
-import models.{CheckMode, CountryList, LocalReferenceNumber, Mode, UserAnswers}
+import models.{CountryList, LocalReferenceNumber, UserAnswers}
 import pages.QuestionPage
 import play.api.libs.json.Reads
 import play.api.mvc.Call
@@ -152,8 +152,8 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     getCountryCode: T => CountryCode,
     countryList: CountryList,
     prefix: String,
-    id: String,
-    call: (LocalReferenceNumber, Mode) => Call
+    id: Option[String],
+    call: Call
   )(implicit rds: Reads[T]): Option[Row] =
     getAnswerAndBuildCountryRow[T](
       getCountryCode = getCountryCode,
@@ -163,8 +163,8 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
           page = page,
           formatAnswer = answer => lit"${formatAnswer(answer)}",
           prefix = prefix,
-          id = Some(id),
-          call = call(lrn, CheckMode)
+          id = id,
+          call = call
         )
     )
 

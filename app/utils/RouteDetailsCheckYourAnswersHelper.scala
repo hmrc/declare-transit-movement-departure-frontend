@@ -60,7 +60,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
         prefix = "addAnotherTransitOffice",
         answer = lit"$answer",
         id = Some("change-office-of-transit"),
-        call = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode),
+        call = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, CheckMode),
         args = index.display
       )
   )
@@ -70,8 +70,8 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     getCountryCode = countryCode => countryCode.country,
     countryList = countryList,
     prefix = "countryOfDispatch",
-    id = "change-country-of-dispatch",
-    call = routes.CountryOfDispatchController.onPageLoad
+    id = Some("change-country-of-dispatch"),
+    call = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode)
   )
 
   def destinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
@@ -79,8 +79,8 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     getCountryCode = countryCode => countryCode,
     countryList = countryList,
     prefix = "destinationCountry",
-    id = "change-destination-country",
-    call = routes.DestinationCountryController.onPageLoad
+    id = Some("change-destination-country"),
+    call = routes.DestinationCountryController.onPageLoad(lrn, CheckMode)
   )
 
   def officeOfTransitRow(index: Index, customsOfficeList: CustomsOfficeList, mode: Mode): Option[Row] =
@@ -107,8 +107,8 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     getCountryCode = countryCode => countryCode,
     countryList = countryList,
     prefix = "movementDestinationCountry",
-    id = "change-movement-destination-country",
-    call = routes.MovementDestinationCountryController.onPageLoad
+    id = Some("change-movement-destination-country"),
+    call = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode)
   )
 
   private def getAnswerAndBuildOfficeRow[T](
