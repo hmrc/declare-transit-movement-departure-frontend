@@ -22,7 +22,6 @@ import models.{CheckMode, CountryList, CustomsOfficeList, Index, Mode, UserAnswe
 import pages.QuestionPage
 import pages.routeDetails._
 import play.api.libs.json.Reads
-import play.api.mvc.Call
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
@@ -43,19 +42,27 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     page = DestinationOfficePage,
     formatAnswer = customsOffice => customsOffice.id,
     customsOfficeList = customsOfficeList,
-    prefix = "destinationOffice",
-    id = "change-destination-office",
-    call = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode)
+    buildRow = answer =>
+      buildRow(
+        prefix = "destinationOffice",
+        answer = lit"$answer",
+        id = Some("change-destination-office"),
+        call = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode)
+      )
   )
 
   def addAnotherTransitOffice(index: Index, customsOfficeList: CustomsOfficeList): Option[Row] = getAnswerAndBuildOfficeRow[String](
     page = AddAnotherTransitOfficePage(index),
     formatAnswer = formatAsSelf,
     customsOfficeList = customsOfficeList,
-    prefix = "addAnotherTransitOffice",
-    id = "change-office-of-transit",
-    call = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode),
-    args = index.display
+    buildRow = answer =>
+      buildRow(
+        prefix = "addAnotherTransitOffice",
+        answer = lit"$answer",
+        id = Some("change-office-of-transit"),
+        call = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode),
+        args = index.display
+      )
   )
 
   def countryOfDispatch(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryOfDispatch](
@@ -77,29 +84,23 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
   )
 
   def officeOfTransitRow(index: Index, customsOfficeList: CustomsOfficeList, mode: Mode): Option[Row] =
-    userAnswers.get(AddAnotherTransitOfficePage(index)).flatMap {
-      answer =>
-        customsOfficeList.getCustomsOffice(answer).map {
-          office =>
-            val arrivalTime =
-              userAnswers
-                .get(ArrivalTimesAtOfficePage(index))
-                .map(
-                  time => s"${Format.dateTimeFormattedAMPM(time).toLowerCase}"
-                )
-                .getOrElse("")
-
-            val key = s"${office.name} (${office.id})"
-
-            buildRemovableRow(
-              key = key,
-              value = arrivalTime,
-              id = s"office-of-transit-${index.display}",
-              changeCall = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode),
-              removeCall = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index, mode)
-            )
-        }
-    }
+    getAnswerAndBuildOfficeRow[String](
+      page = AddAnotherTransitOfficePage(index),
+      formatAnswer = formatAsSelf,
+      customsOfficeList = customsOfficeList,
+      buildRow = key =>
+        buildRemovableRow(
+          key = key,
+          value = userAnswers
+            .get(ArrivalTimesAtOfficePage(index))
+            .fold("")(
+              dateTime => s"${Format.dateTimeFormattedAMPM(dateTime).toLowerCase}"
+            ),
+          id = s"office-of-transit-${index.display}",
+          changeCall = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode),
+          removeCall = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index, mode)
+        )
+    )
 
   def movementDestinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
     page = MovementDestinationCountryPage,
@@ -114,15 +115,12 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     page: QuestionPage[T],
     formatAnswer: T => String,
     customsOfficeList: CustomsOfficeList,
-    prefix: String,
-    id: String,
-    call: Call,
-    args: Any*
+    buildRow: String => Row
   )(implicit rds: Reads[T]): Option[Row] = userAnswers.get(page) flatMap {
     answer =>
       customsOfficeList.getCustomsOffice(formatAnswer(answer)) map {
         customsOffice =>
-          buildRow(prefix, lit"${customsOffice.name} (${customsOffice.id})", Some(id), call, args: _*)
+          buildRow(s"${customsOffice.name} (${customsOffice.id})")
       }
   }
 

@@ -98,7 +98,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
         Some(
           buildRow(
             prefix = "liabilityAmount",
-            content = displayAmount,
+            answer = displayAmount,
             id = Some("change-liability-amount"),
             call = call
           )

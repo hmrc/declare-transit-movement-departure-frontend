@@ -139,10 +139,10 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     val format: String => Content = modeCode =>
       lit"${transportModeList
         .getTransportMode(modeCode)
-        .map(
+        .fold(modeCode)(
           mode => s"(${mode.code}) ${mode.description}"
-        )
-        .getOrElse(modeCode)}"
+        )}"
+
     getAnswerAndBuildRow[String](page, format, prefix, Some(id), call(lrn, CheckMode))
   }
 

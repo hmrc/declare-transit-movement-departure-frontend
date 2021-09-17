@@ -65,25 +65,25 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
       answer =>
         documentType.getDocumentType(answer).map {
           documentType =>
-            val updatedAnswer = s"(${documentType.code}) ${documentType.description}"
+            val key = s"(${documentType.code}) ${documentType.description}"
 
             userAnswers.get(DeclarationTypePage) match {
               case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
                 buildValuelessRow(
-                  key = updatedAnswer,
+                  key = key,
                   id = Some(s"change-document-${index.display}"),
                   call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
               case _ if removable =>
                 buildRemovableRow(
-                  key = updatedAnswer,
+                  key = key,
                   id = s"document-${index.display}",
                   changeCall = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode),
                   removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
               case _ =>
                 buildValuelessRow(
-                  key = updatedAnswer,
+                  key = key,
                   id = Some(s"change-document-${documentIndex.display}"),
                   call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
@@ -234,36 +234,30 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     args = index.display
   )
 
-  def previousReferenceRow(index: Index, referenceIndex: Index, previousDocumentType: PreviousReferencesDocumentTypeList): Option[Row] =
-    userAnswers.get(ReferenceTypePage(index, referenceIndex)) flatMap {
-      answer =>
-        previousDocumentType.getPreviousReferencesDocumentType(answer) map {
-          referenceType =>
-            buildValuelessRow(
-              key = s"(${referenceType.code}) ${referenceType.description.getOrElse("")}",
-              id = Some(s"change-item-${index.display}"),
-              call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode)
-            )
-        }
-    }
+  def previousReferenceRow(index: Index, referenceIndex: Index, documents: PreviousReferencesDocumentTypeList): Option[Row] =
+    getAnswerAndBuildPreviousReferenceRow(
+      page = ReferenceTypePage(index, referenceIndex),
+      documents = documents,
+      buildRow = key =>
+        buildValuelessRow(
+          key = key,
+          id = Some(s"change-item-${index.display}"),
+          call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode)
+        )
+    )
 
-  def previousAdministrativeReferenceRow(
-    index: Index,
-    referenceIndex: Index,
-    previousDocumentType: PreviousReferencesDocumentTypeList
-  ): Option[Row] =
-    userAnswers.get(ReferenceTypePage(index, referenceIndex)) flatMap {
-      answer =>
-        previousDocumentType.getPreviousReferencesDocumentType(answer) map {
-          referenceType =>
-            buildRemovableRow(
-              key = s"(${referenceType.code}) ${referenceType.description.getOrElse("")}",
-              id = s"reference-document-type-${index.display}",
-              changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode),
-              removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode)
-            )
-        }
-    }
+  def previousAdministrativeReferenceRow(index: Index, referenceIndex: Index, documents: PreviousReferencesDocumentTypeList): Option[Row] =
+    getAnswerAndBuildPreviousReferenceRow(
+      page = ReferenceTypePage(index, referenceIndex),
+      documents = documents,
+      buildRow = key =>
+        buildRemovableRow(
+          key = key,
+          id = s"reference-document-type-${index.display}",
+          changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode),
+          removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode)
+        )
+    )
 
   def addAdministrativeReference(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddAdministrativeReferencePage(index),
@@ -405,6 +399,18 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     id = None,
     call = tradersSecurityDetailsRoutes.SecurityConsignorEoriController.onPageLoad(lrn, index, CheckMode)
   )
+
+  private def getAnswerAndBuildPreviousReferenceRow(
+    page: QuestionPage[String],
+    documents: PreviousReferencesDocumentTypeList,
+    buildRow: String => Row
+  ): Option[Row] = userAnswers.get(page) flatMap {
+    answer =>
+      documents.getPreviousReferencesDocumentType(answer) map {
+        doc =>
+          buildRow(s"(${doc.code}) ${doc.description.getOrElse("")}")
+      }
+  }
 
 }
 // scalastyle:on number.of.methods

@@ -40,7 +40,7 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       answer =>
         buildRow(
           prefix = prefix,
-          content = formatAnswer(answer),
+          answer = formatAnswer(answer),
           id = id,
           call = call,
           args = args: _*
@@ -81,14 +81,14 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def buildRow(
     prefix: String,
-    content: Content,
+    answer: Content,
     id: Option[String],
     call: Call,
     args: Any*
   ): Row =
     Row(
       key = Key(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*), classes = Seq("govuk-!-width-one-half")),
-      value = Value(content),
+      value = Value(answer),
       actions = List(
         Action(
           content = msg"site.edit",

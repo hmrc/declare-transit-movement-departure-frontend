@@ -152,10 +152,9 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = code =>
       lit"${circumstanceIndicators
         .getCircumstanceIndicator(code)
-        .map(
-          x => s"(${x.code}) ${x.description}"
-        )
-        .getOrElse(code)}",
+        .fold(code)(
+          indicator => s"(${indicator.code}) ${indicator.description}"
+        )}",
     prefix = "circumstanceIndicator",
     id = None,
     call = routes.CircumstanceIndicatorController.onPageLoad(lrn, CheckMode)
