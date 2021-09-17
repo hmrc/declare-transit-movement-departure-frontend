@@ -35,20 +35,18 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
+        <h1 class="govuk-heading-xl">
+          <label for="value">{{ messages("addAnotherTransitOffice.heading", countryName) }}</label>
+        </h1>
 
         <form action="{{ routes.controllers.routeDetails.AddAnotherTransitOfficeController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
           {{ govukSelect({
-            label: {
-              text: messages("addAnotherTransitOffice.heading", countryName),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
             hint: {
               text: messages('addAnotherTransitOffice.paragraph'),
-              classes: "ctc-hint-as-label"
+              classes: "govuk-label govuk-!-padding-bottom-2"
             },
             classes: "govuk-input--width-20 autocomplete",
             id: "value",

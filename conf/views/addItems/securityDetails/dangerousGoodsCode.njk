@@ -33,17 +33,16 @@
           }) }}
         {% endif %}
 
+        <h1 class="govuk-heading-xl">
+            <label for="value">{{ messages("dangerousGoodsCode.heading") }}</label>
+        </h1>
+
         <form action="{{ routes.controllers.addItems.securityDetails.DangerousGoodsCodeController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
           {{ csrf() | safe }}
 
           {{ govukSelect({
-              label: {
-                text: messages("dangerousGoodsCode.heading"),
-                isPageHeading: true,
-                classes: "govuk-label--xl"
-              },
               classes: "govuk-input--width-20 autocomplete",
               id: "value",
               name: "value",

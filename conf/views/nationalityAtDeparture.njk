@@ -38,12 +38,11 @@
 
           {{ csrf() | safe }}
 
+          <h1 class="govuk-heading-xl">
+            <label for="value">{{ messages("nationalityAtDeparture.heading") }}</label>
+          </h1>
+
           {{ govukSelect({
-              label: {
-                text: messages("nationalityAtDeparture.heading"),
-                isPageHeading: true,
-                classes: "govuk-label--xl"
-              },
               classes: "govuk-input--width-20 autocomplete",
               id: "value",
               name: "value",

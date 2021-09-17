@@ -35,13 +35,13 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
+        <h1 class="govuk-heading-xl">
+          <label for="value">{{ messages("officeOfDeparture.heading") }}</label>
+        </h1>
+
         <form action="{{ routes.controllers.OfficeOfDepartureController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
-
-          <h1 class="govuk-heading-xl">
-            <label for="value">{{ messages("officeOfDeparture.heading") }}</label>
-          </h1>
 
           {{ govukSelect({
             classes: "govuk-input--width-20 autocomplete",
@@ -49,10 +49,6 @@
               text: messages('officeOfDeparture.label'),
               isPageHeading: false,
               classes: "govuk-body"
-            },
-            hint: {
-              text: messages('officeOfDeparture.label'),
-              classes: "ctc-hint-as-label"
             },
             id: "value",
             name: "value",

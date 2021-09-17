@@ -30,14 +30,12 @@
         <form action="{{ routes.controllers.addItems.itemDetails.CommodityCodeController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
+        <h1 class="govuk-heading-xl">
+          <label for="value">{{ messages('commodityCode.heading', index) }}</label>
+        </h1>
         {{ csrf() | safe }}
 
           {{ govukInput({
-            label: {
-              text: messages('commodityCode.heading', index),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
             hint: {
               text: messages('commodityCode.hintText')
             },

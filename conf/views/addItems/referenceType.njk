@@ -35,16 +35,15 @@
 
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
+        <h1 class="govuk-heading-xl">
+            <label for="value">{{ messages("referenceType.heading") }}</label>
+        </h1>
+
         <form action="{{ routes.controllers.addItems.previousReferences.ReferenceTypeController.onSubmit(lrn, index, referenceIndex, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
             {{ govukSelect({
-              label: {
-                text: messages("referenceType.heading"),
-                isPageHeading: true,
-                classes: "govuk-label--xl"
-              },
               classes: "govuk-input--width-20 autocomplete",
               id: "value",
               name: "value",

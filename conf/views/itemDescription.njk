@@ -31,6 +31,10 @@
         <form action="{{ routes.controllers.addItems.itemDetails.ItemDescriptionController.onSubmit(lrn, mode).url }}" method="post">
           <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
+          <h1 class="govuk-heading-xl">
+            <label for="value">{{ messages("itemDescription.heading", index) }}</label>
+          </h1>
+
          {{ csrf() | safe }}
 
          {{ govukCharacterCount({
@@ -38,14 +42,9 @@
                id: "value",
                maxlength: 280,
                value: form.value.value,
-               label: {
-                 text: messages("itemDescription.heading", index),
-                 isPageHeading: true,
-                 classes: "govuk-label--xl"
-               },
                hint: {
                  text: messages('itemDescription.paragraph'),
-                 classes: "ctc-hint-as-label"
+                 classes: "govuk-label govuk-!-padding-bottom-2"
                }
          }) }}
 

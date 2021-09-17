@@ -31,17 +31,16 @@
 
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
+          <h1 class="govuk-heading-xl">
+            <label for="value">{{ messages("loadingPlace.heading", index) }}</label>
+          </h1>
+
           {{ csrf() | safe }}
 
           {{ govukInput({
-            label: {
-              text: messages("loadingPlace.heading", index),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
             hint: {
               text: messages("loadingPlace.paragraph", index),
-              classes: "ctc-hint-as-label"
+              classes: "govuk-label govuk-!-padding-bottom-2"
             },
             id: "value",
             name: "value",

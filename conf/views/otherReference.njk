@@ -32,16 +32,15 @@
 
           {{ csrf() | safe }}
 
+          <h1 class="govuk-heading-xl">
+            <label for="value">{{ messages('otherReference.heading') }}</label>
+          </h1>
+
           {{ govukInput({
             classes: "govuk-input govuk-input--width-20",
-            label: {
-              text: messages('otherReference.heading'),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
             hint: {
               text: messages('otherReference.paragraph'),
-              classes: "ctc-hint-as-label"
+              classes: "govuk-label govuk-!-padding-bottom-2"
             },
             id: "value",
             name: "value",

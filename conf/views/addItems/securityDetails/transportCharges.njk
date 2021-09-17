@@ -37,14 +37,13 @@
         <form action="{{ routes.controllers.addItems.securityDetails.TransportChargesController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
+           <h1 class="govuk-heading-xl">
+             <label for="value">{{ messages("transportCharges.heading") }}</label>
+           </h1>
+
           {{ csrf() | safe }}
 
             {{ govukSelect({
-                label: {
-                  text: messages("transportCharges.heading"),
-                  isPageHeading: true,
-                  classes: "govuk-label--xl"
-                },
                 classes: "govuk-input--width-20 autocomplete",
                 id: "value",
                 name: "value",

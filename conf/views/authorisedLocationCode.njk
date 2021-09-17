@@ -30,17 +30,16 @@
         <form action="{{ routes.controllers.goodsSummary.AuthorisedLocationCodeController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
+          <h1 class="govuk-heading-xl">
+            <label for="value">{{ messages('authorisedLocationCode.heading') }}</label>
+          </h1>
+
           {{ csrf() | safe }}
 
           {{ govukInput({
-            label: {
-              text: messages('authorisedLocationCode.heading'),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
             hint: {
               text: messages('authorisedLocationCode.paragraph'),
-              classes: "ctc-hint-as-label"
+              classes: "govuk-label govuk-!-padding-bottom-2"
             },
             id: "value",
             name: "value",

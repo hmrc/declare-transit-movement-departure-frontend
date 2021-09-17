@@ -31,15 +31,14 @@
          <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
           {{ csrf() | safe }}
 
+          <h1 class="govuk-heading-xl">
+            <label for="value">{{ messages('liabilityAmount.heading') }}</label>
+          </h1>
+
           {{ govukInput({
-            label: {
-              text: messages('liabilityAmount.heading'),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
             hint: {
               text: messages('liabilityAmount.paragraph'),
-              classes: "ctc-hint-as-label"
+              classes: "govuk-label govuk-!-padding-bottom-2"
             },
             name: "value",
             id: "value",
