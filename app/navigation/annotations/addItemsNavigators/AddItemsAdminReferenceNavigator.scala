@@ -127,7 +127,7 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
 
   private def removePreviousAdministrativeReference(itemIndex: Index, mode: Mode)(ua: UserAnswers) =
     ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)) match {
-      case None | Some(0) => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(0), mode)
+      case None | Some(0) => previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, mode)
       case _              => previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, mode)
     }
 
