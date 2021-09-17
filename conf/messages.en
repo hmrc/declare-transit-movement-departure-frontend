@@ -1144,11 +1144,16 @@ declarationRejection.heading = There is a problem with this departure declaratio
 declarationRejection.date = Rejection date
 declarationRejection.localReferenceNumber = Local reference number
 declarationRejection.rejectionReason = Rejection reason
-declarationRejection.errorType =  Error type
+declarationRejection.code =  Error code
 declarationRejection.pointer =  Error pointer
 declarationRejection.reason =  Reason
 declarationRejection.declarationDetails = Departure details
 declarationRejection.rejectionDetails = Rejection details
+
+declarationRejection.review = You must review the error and
+declarationRejection.newDeparture = send a new departure declaration with the right information
+declarationRejection.youCan = You can
+declarationRejection.contact = contact the New Computerised Transit System helpdesk if you need help understanding the error (opens in a new tab)
 
 addCircumstanceIndicator.title =  Do you need to add a specific circumstance indicator?
 addCircumstanceIndicator.heading = Do you need to add a specific circumstance indicator?

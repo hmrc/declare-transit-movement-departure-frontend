@@ -22,22 +22,17 @@
           {{ messages("declarationRejection.heading") }}
         </h1>
 
-        {% for section in detailsSection %}
-            {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother) }}
-        {% endfor %}
-
-        <h2 class="govuk-heading-m">
-            {{ messages("declarationRejection.rejectionDetails") }}
-        </h2>
-
         {% for section in errorsSection %}
             {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother) }}
         {% endfor %}
 
         <p class="govuk-body">
-            You must <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries" target="_blank">contact the New Computerised Transit System helpdesk to get this fixed (opens in a new tab)</a>.
+     DepartureMovementConnectorSpec       {{ messages("declarationRejection.review") }} <a href={{ departureUrl }}>{{ messages("declarationRejection.newDeparture") }}</a>.
         </p>
 
+        <p class="govuk-body">
+            {{ messages("declarationRejection.youCan") }} <a href={{ contactUrl }} target="_blank">{{ messages("declarationRejection.contact") }}</a>.
+        </p>
       </div>
     </div>
   </div>

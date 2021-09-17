@@ -210,7 +210,6 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
               <FUNERRER1>
                 <ErrTypER11>15</ErrTypER11>
                 <ErrPoiER12>GUA(2).REF(1).Other guarantee reference</ErrPoiER12>
-                <ErrReaER13>C130</ErrReaER13>
               </FUNERRER1>
             </CC016A>
 
@@ -230,7 +229,7 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
               LocalDate.parse("2019-09-13"),
               Some("The IE015 message received was invalid"),
               Seq(
-                RejectionError("15", "GUA(2).REF(1).Other guarantee reference", Some("C130"))
+                RejectionError("15", "GUA(2).REF(1).Other guarantee reference")
               )
             )
           )
@@ -244,7 +243,6 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
           <FUNERRER1>
             <ErrTypER11>15</ErrTypER11>
             <ErrPoiER12>not valid</ErrPoiER12>
-            <ErrReaER13>malformed</ErrReaER13>
           </FUNERRER1>
         </CC016A>
 
@@ -314,7 +312,6 @@ class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler
           <FUNERRER1>
             <ErrTypER11>15</ErrTypER11>
             <ErrPoiER12>not valid</ErrPoiER12>
-            <ErrReaER13>malformed</ErrReaER13>
           </FUNERRER1>
         </CC009A>
 
