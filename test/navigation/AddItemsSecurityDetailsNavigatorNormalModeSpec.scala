@@ -32,43 +32,52 @@ class AddItemsSecurityDetailsNavigatorNormalModeSpec extends SpecBase with Scala
 
   "In Normal mode" - {
 
-    "Must go from TransportChargesPage to CommercialReferencePage when AddCommercialReferenceNumberAllItemsPage answer is No" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddCommercialReferenceNumberAllItemsPage, false)
-            .success
-            .value
-          navigator
-            .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+    "Must go from TransportChargesPage" - {
+      "to Commercial Reference Number page when there is a Commercial reference number but not the same one for all items" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddCommercialReferenceNumberPage, true)
+              .success
+              .value
+              .set(AddCommercialReferenceNumberAllItemsPage, false)
+              .success
+              .value
+            navigator
+              .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+        }
       }
-    }
 
-    "Must go from TransportChargesPage to CommercialReferencePage when AddCommercialReferenceNumberAllItemsPage is not completed" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .remove(AddCommercialReferenceNumberAllItemsPage)
-            .success
-            .value
-          navigator
-            .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.CommercialReferenceNumberController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+      "to  Adds Dangerous Goods Code page when the is a Commercial Reference number and it is the same for all items " in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddCommercialReferenceNumberAllItemsPage, true)
+              .success
+              .value
+              .set(AddCommercialReferenceNumberPage, true)
+              .success
+              .value
+            navigator
+              .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+        }
       }
-    }
 
-    "Must go from TransportChargesPage to AddsDangerousGoodsCodePage when AddCommercialReferenceNumberAllItemsPage answer is Yes" in {
-      forAll(arbitrary[UserAnswers]) {
-        answers =>
-          val updatedAnswers = answers
-            .set(AddCommercialReferenceNumberAllItemsPage, true)
-            .success
-            .value
-          navigator
-            .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
-            .mustBe(routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+      "to Adds Dangerous Goods Code page when there is no commercial reference number" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers
+              .set(AddCommercialReferenceNumberPage, false)
+              .success
+              .value
+            navigator
+              .nextPage(TransportChargesPage(index), NormalMode, updatedAnswers)
+              .mustBe(routes.AddDangerousGoodsCodeController.onPageLoad(updatedAnswers.lrn, index, NormalMode))
+        }
       }
+
     }
 
     "Must go from CommercialReferenceNumberPage to AddDangerousGoodsCodePage" in {
