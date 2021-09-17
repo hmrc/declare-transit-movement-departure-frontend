@@ -52,11 +52,15 @@ object ItemsSecurityTraderDetails {
     }
 
   private def commercialReferenceNumberPage(index: Index): UserAnswersReader[Option[String]] =
-    AddCommercialReferenceNumberAllItemsPage.optionalReader
-      .flatMap {
-        case Some(true) => none[String].pure[UserAnswersReader]
-        case _          => CommercialReferenceNumberPage(index).reader.map(Some(_))
-      }
+    AddCommercialReferenceNumberPage.optionalReader.flatMap {
+      case Some(true) =>
+        AddCommercialReferenceNumberAllItemsPage.optionalReader
+          .flatMap {
+            case Some(true) => none[String].pure[UserAnswersReader]
+            case _          => CommercialReferenceNumberPage(index).reader.map(Some(_))
+          }
+      case _ => none[String].pure[UserAnswersReader]
+    }
 
   private def dangerousGoodsCodePage(index: Index): UserAnswersReader[Option[String]] =
     AddDangerousGoodsCodePage(index).filterOptionalDependent(identity) {
