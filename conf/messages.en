@@ -528,8 +528,8 @@ addCustomsApprovedLocation.error.required = Select yes if you need to add a Cust
 
 sealIdDetails.title = What is the new official customs seal number?
 sealIdDetails.heading = What is the new official customs seal number?
-sealIdDetails.checkYourAnswersLabel.singular = Official customs seal number
-sealIdDetails.checkYourAnswersLabel.plural = Official customs seal numbers
+sealIdDetails.singular.checkYourAnswersLabel = Official customs seal number
+sealIdDetails.plural.checkYourAnswersLabel = Official customs seal numbers
 sealIdDetails.error.required = Enter the new official customs seal number
 sealIdDetails.error.length = The new official customs seal number must be 20 characters or less
 sealIdDetails.error.invalidCharacters = The new official customs seal number must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces

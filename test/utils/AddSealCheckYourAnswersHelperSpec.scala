@@ -23,8 +23,8 @@ import models.CheckMode
 import models.domain.SealDomain
 import pages.SealIdDetailsPage
 import queries.SealsQuery
-import uk.gov.hmrc.viewmodels.{Html, MessageInterpolators}
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
+import uk.gov.hmrc.viewmodels.{Html, MessageInterpolators}
 
 class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper {
 
@@ -55,19 +55,19 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
 
           result mustBe Some(
             Row(
-              key = Key(msg"sealsInformation.sealList.label".withArgs(sealIndex.display)),
-              value = Value(lit"${sealDomain.numberOrMark}"),
+              key = Key(lit"${sealDomain.numberOrMark}"),
+              value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = SealIdDetailsController.onPageLoad(lrn, sealIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealsInformation.sealList.label".withArgs(sealIndex.display))),
+                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(sealDomain.numberOrMark)),
                   attributes = Map("id" -> s"change-seal-${sealIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(msg"sealsInformation.sealList.label".withArgs(sealIndex.display))),
+                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(sealDomain.numberOrMark)),
                   attributes = Map("id" -> s"remove-seal-${sealIndex.display}")
                 )
               )
@@ -104,13 +104,13 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
 
             result mustBe Some(
               Row(
-                key = Key(msg"sealIdDetails.checkYourAnswersLabel.singular"),
+                key = Key(msg"sealIdDetails.singular.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
                 value = Value(Html(sealDomain.numberOrMark)),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = SealsInformationController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"sealIdDetails.checkYourAnswersLabel.singular"),
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealIdDetails.singular.checkYourAnswersLabel")),
                     attributes = Map("id" -> "change-seal")
                   )
                 )
@@ -130,13 +130,13 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
 
             result mustBe Some(
               Row(
-                key = Key(msg"sealIdDetails.checkYourAnswersLabel.plural"),
+                key = Key(msg"sealIdDetails.plural.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
                 value = Value(Html(s"${sealDomain1.numberOrMark}<br>${sealDomain2.numberOrMark}")),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = SealsInformationController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"sealIdDetails.checkYourAnswersLabel.plural"),
+                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealIdDetails.plural.checkYourAnswersLabel")),
                     attributes = Map("id" -> "change-seals")
                   )
                 )

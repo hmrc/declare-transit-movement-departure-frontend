@@ -47,6 +47,25 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
         )
     }
 
+  def getAnswerAndBuildDynamicRow[T](
+    page: QuestionPage[T],
+    formatAnswer: T => Content,
+    dynamicPrefix: T => String,
+    dynamicId: T => Option[String],
+    call: Call,
+    args: Any*
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildRow(
+          prefix = dynamicPrefix(answer),
+          answer = formatAnswer(answer),
+          id = dynamicId(answer),
+          call = call,
+          args = args: _*
+        )
+    }
+
   def getAnswerAndBuildValuelessRow[T](
     page: QuestionPage[T],
     formatAnswer: T => String,
