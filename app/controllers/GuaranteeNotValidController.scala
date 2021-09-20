@@ -46,7 +46,12 @@ class GuaranteeNotValidController @Inject() (
     implicit request =>
       guaranteeNotValidMessageService.guaranteeNotValidMessage(departureId).flatMap {
         case Some(message) =>
-          val json = Json.obj("guaranteeNotValidMessage" -> Json.toJson(message), "contactUrl" -> appConfig.nctsEnquiriesUrl)
+          val json = Json.obj(
+            "guaranteeNotValidMessage" -> Json.toJson(message),
+            "contactUrl"               -> appConfig.nctsEnquiriesUrl,
+            "departureUrl"             -> routes.LocalReferenceNumberController.onPageLoad().url
+          )
+
           renderer.render("guaranteeNotValid.njk", json).map(Ok(_))
         case _ =>
           renderTechnicalDifficultiesPage
