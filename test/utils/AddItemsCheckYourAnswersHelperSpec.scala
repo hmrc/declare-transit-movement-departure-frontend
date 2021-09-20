@@ -1224,6 +1224,55 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       }
     }
 
+    "packageRow" - {
+
+      val packageType: PackageType = PackageType("CODE", "DESCRIPTION")
+
+      "return None" - {
+        "PackageTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.packageRow(itemIndex, packageIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "PackageTypePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(packageType)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.packageRow(itemIndex, packageIndex)
+
+          val label = lit"$packageType"
+
+          result mustBe Some(
+            Row(
+              key = Key(label),
+              value = Value(lit""),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-package-${packageIndex.display}")
+                ),
+                Action(
+                  content = msg"site.delete",
+                  href = RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"remove-package-${packageIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
     "packageType" - {
 
       val packageType: PackageType = PackageType("CODE", "DESCRIPTION")

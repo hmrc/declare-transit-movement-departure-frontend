@@ -274,6 +274,14 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     AddAnotherViewModel(addAnotherPackageHref, content)
   }
 
+  def packageRow(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRemovableRow[PackageType](
+    page = PackageTypePage(itemIndex, packageIndex),
+    formatAnswer = formatAsLiteral,
+    id = s"package-${packageIndex.display}",
+    changeCall = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode),
+    removeCall = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
+  )
+
   def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](
     page = PackageTypePage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
