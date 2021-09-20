@@ -66,15 +66,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.transportCharges(index)
 
+          val label = msg"transportCharges.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"transportCharges.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$methodOfPayment"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TransportChargesController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"transportCharges.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -106,15 +108,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.containerRow(itemIndex, containerIndex)
 
+          val label = lit"$containerNumber"
+
           result mustBe Some(
             Row(
-              key = Key(lit"$containerNumber"),
+              key = Key(label),
               value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(containerNumber)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-container-${containerIndex.display}")
                 )
               )
@@ -163,17 +167,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = true)
 
-          val key = s"(${document.code}) ${document.description}"
+          val label = lit"(${document.code}) ${document.description}"
 
           result mustBe Some(
             Row(
-              key = Key(lit"$key"),
+              key = Key(label),
               value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-document-${index.display}")
                 )
               )
@@ -192,21 +196,23 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val helper = new AddItemsCheckYourAnswersHelper(answers)
             val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = true)
 
+            val label = lit"(${document.code}) ${document.description}"
+
             result mustBe Some(
               Row(
-                key = Key(lit"(${document.code}) ${document.description}"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(s"(${document.code}) ${document.description}")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-document-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(s"(${document.code}) ${document.description}")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"remove-document-${index.display}")
                   )
                 )
@@ -223,17 +229,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val helper = new AddItemsCheckYourAnswersHelper(answers)
             val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = false)
 
-            val key = s"(${document.code}) ${document.description}"
+            val label = lit"(${document.code}) ${document.description}"
 
             result mustBe Some(
               Row(
-                key = Key(lit"$key"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-document-${documentIndex.display}")
                   )
                 )
@@ -267,21 +273,23 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.itemRow(index)
 
+          val label = lit"$itemDescription"
+
           result mustBe Some(
             Row(
-              key = Key(lit"$itemDescription"),
+              key = Key(label),
               value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(itemDescription)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-item-${index.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = routes.ConfirmRemoveItemController.onPageLoad(lrn, index).url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(itemDescription)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"remove-item-${index.display}")
                 )
               )
@@ -312,15 +320,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.addDocuments(index)
 
+          val label = msg"addDocuments.checkYourAnswersLabel".withArgs(itemIndex.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"addDocuments.checkYourAnswersLabel".withArgs(itemIndex.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = AddDocumentsController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addDocuments.checkYourAnswersLabel".withArgs(index.display)))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -352,15 +362,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.traderDetailsConsignorName(index)
 
+          val label = msg"traderDetailsConsignorName.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"traderDetailsConsignorName.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$consignorName"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TraderDetailsConsignorNameController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsignorName.checkYourAnswersLabel".withArgs(index.display)))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -392,15 +404,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.traderDetailsConsignorEoriNumber(index)
 
+          val label = msg"traderDetailsConsignorEoriNumber.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"traderDetailsConsignorEoriNumber.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$eoriNumber"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TraderDetailsConsignorEoriNumberController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsignorEoriNumber.checkYourAnswersLabel".withArgs(index.display)))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -430,15 +444,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.traderDetailsConsignorEoriKnown(index)
 
+          val label = msg"traderDetailsConsignorEoriKnown.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"traderDetailsConsignorEoriKnown.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.no"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TraderDetailsConsignorEoriKnownController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsignorEoriKnown.checkYourAnswersLabel".withArgs(index.display)))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -468,6 +484,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           "TraderDetailsConsignorNamePage undefined at index" in {
 
             val consigneeName = msg"traderDetailsConsignorAddress.checkYourAnswersLabel.fallback"
+            val label         = msg"traderDetailsConsignorAddress.checkYourAnswersLabel".withArgs(consigneeName)
 
             val answers = emptyUserAnswers.unsafeSetVal(TraderDetailsConsignorAddressPage(index))(address)
 
@@ -476,13 +493,13 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
             result mustBe Some(
               Row(
-                key = Key(msg"traderDetailsConsignorAddress.checkYourAnswersLabel".withArgs(consigneeName), classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = TraderDetailsConsignorAddressController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsignorAddress.checkYourAnswersLabel".withArgs(consigneeName)))
+                    visuallyHiddenText = Some(label)
                   )
                 )
               )
@@ -500,15 +517,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val helper = new AddItemsCheckYourAnswersHelper(answers)
             val result = helper.traderDetailsConsignorAddress(index)
 
+            val label = msg"traderDetailsConsignorAddress.checkYourAnswersLabel".withArgs(consigneeName)
+
             result mustBe Some(
               Row(
-                key = Key(msg"traderDetailsConsignorAddress.checkYourAnswersLabel".withArgs(consigneeName), classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = TraderDetailsConsignorAddressController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsignorAddress.checkYourAnswersLabel".withArgs(consigneeName)))
+                    visuallyHiddenText = Some(label)
                   )
                 )
               )
@@ -541,15 +560,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.traderDetailsConsigneeName(index)
 
+          val label = msg"traderDetailsConsigneeName.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"traderDetailsConsigneeName.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$consigneeName"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TraderDetailsConsigneeNameController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsigneeName.checkYourAnswersLabel".withArgs(index.display)))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -581,15 +602,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.traderDetailsConsigneeEoriNumber(index)
 
+          val label = msg"traderDetailsConsigneeEoriNumber.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"traderDetailsConsigneeEoriNumber.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$eoriNumber"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TraderDetailsConsigneeEoriNumberController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsigneeEoriNumber.checkYourAnswersLabel".withArgs(index.display)))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -619,15 +642,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.traderDetailsConsigneeEoriKnown(index)
 
+          val label = msg"traderDetailsConsigneeEoriKnown.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"traderDetailsConsigneeEoriKnown.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TraderDetailsConsigneeEoriKnownController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsigneeEoriKnown.checkYourAnswersLabel".withArgs(index.display)))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -663,15 +688,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val helper = new AddItemsCheckYourAnswersHelper(answers)
             val result = helper.traderDetailsConsigneeAddress(index)
 
+            val label = msg"traderDetailsConsigneeAddress.checkYourAnswersLabel".withArgs(consigneeName)
+
             result mustBe Some(
               Row(
-                key = Key(msg"traderDetailsConsigneeAddress.checkYourAnswersLabel".withArgs(consigneeName), classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = TraderDetailsConsigneeAddressController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsigneeAddress.checkYourAnswersLabel".withArgs(consigneeName)))
+                    visuallyHiddenText = Some(label)
                   )
                 )
               )
@@ -689,15 +716,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val helper = new AddItemsCheckYourAnswersHelper(answers)
             val result = helper.traderDetailsConsigneeAddress(index)
 
+            val label = msg"traderDetailsConsigneeAddress.checkYourAnswersLabel".withArgs(consigneeName)
+
             result mustBe Some(
               Row(
-                key = Key(msg"traderDetailsConsigneeAddress.checkYourAnswersLabel".withArgs(consigneeName), classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = TraderDetailsConsigneeAddressController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"traderDetailsConsigneeAddress.checkYourAnswersLabel".withArgs(consigneeName)))
+                    visuallyHiddenText = Some(label)
                   )
                 )
               )
@@ -730,15 +759,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.commodityCode(index)
 
+          val label = msg"commodityCode.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"commodityCode.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$commodityCode"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = CommodityCodeController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"commodityCode.checkYourAnswersLabel".withArgs(index.display))),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-commodity-code")
                 )
               )
@@ -771,15 +802,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.totalNetMass(index)
 
+          val label = msg"totalNetMass.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"totalNetMass.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$mass"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TotalNetMassController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalNetMass.checkYourAnswersLabel".withArgs(index.display))),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-total-net-mass")
                 )
               )
@@ -810,15 +843,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.isCommodityCodeKnown(index)
 
+          val label = msg"isCommodityCodeKnown.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"isCommodityCodeKnown.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = controllers.addItems.itemDetails.routes.IsCommodityCodeKnownController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isCommodityCodeKnown.checkYourAnswersLabel".withArgs(index.display))),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-is-commodity-known")
                 )
               )
@@ -849,15 +884,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.addTotalNetMass(index)
 
+          val label = msg"addTotalNetMass.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"addTotalNetMass.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = controllers.addItems.itemDetails.routes.AddTotalNetMassController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addTotalNetMass.checkYourAnswersLabel".withArgs(index.display))),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-add-total-net-mass")
                 )
               )
@@ -890,15 +927,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.itemTotalGrossMass(index)
 
+          val label = msg"itemTotalGrossMass.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"itemTotalGrossMass.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$mass"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = controllers.addItems.itemDetails.routes.ItemTotalGrossMassController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"itemTotalGrossMass.checkYourAnswersLabel".withArgs(index.display))),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-item-total-gross-mass")
                 )
               )
@@ -931,15 +970,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.itemDescription(index)
 
+          val label = msg"itemDescription.checkYourAnswersLabel".withArgs(index.display)
+
           result mustBe Some(
             Row(
-              key = Key(msg"itemDescription.checkYourAnswersLabel".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$description"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"itemDescription.checkYourAnswersLabel".withArgs(index.display))),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-item-description")
                 )
               )
@@ -990,17 +1031,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None)))
             )
 
-            val key = s"($referenceCode) "
+            val label = lit"($referenceCode) "
 
             result mustBe Some(
               Row(
-                key = Key(lit"$key"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-item-${index.display}")
                   )
                 )
@@ -1019,17 +1060,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription))))
             )
 
-            val key = s"($referenceCode) $referenceDescription"
+            val label = lit"($referenceCode) $referenceDescription"
 
             result mustBe Some(
               Row(
-                key = Key(lit"$key"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-item-${index.display}")
                   )
                 )
@@ -1081,21 +1122,23 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None)))
             )
 
+            val label = lit"($referenceCode) "
+
             result mustBe Some(
               Row(
-                key = Key(lit"($referenceCode) "),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(s"($referenceCode) ")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-reference-document-type-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(s"($referenceCode) ")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
                   )
                 )
@@ -1114,21 +1157,23 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription))))
             )
 
+            val label = lit"($referenceCode) $referenceDescription"
+
             result mustBe Some(
               Row(
-                key = Key(lit"($referenceCode) $referenceDescription"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(s"($referenceCode) $referenceDescription")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-reference-document-type-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(s"($referenceCode) $referenceDescription")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
                   )
                 )
@@ -1160,15 +1205,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.addAdministrativeReference(index)
 
+          val label = msg"addAdministrativeReference.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addAdministrativeReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = AddAdministrativeReferenceController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAdministrativeReference.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1200,15 +1247,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.packageType(itemIndex, packageIndex)
 
+          val label = msg"packageType.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"packageType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$packageType"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"packageType.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-package-${packageIndex.display}")
                 )
               )
@@ -1241,15 +1290,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.numberOfPackages(itemIndex, packageIndex)
 
+          val label = msg"declareNumberOfPackages.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"declareNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$numberOfPackages"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = HowManyPackagesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declareNumberOfPackages.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1281,15 +1332,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.totalPieces(itemIndex, packageIndex)
 
+          val label = msg"totalPieces.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"totalPieces.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$totalPieces"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalPieces.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1321,15 +1374,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.commercialReferenceNumber(index)
 
+          val label = msg"commercialReferenceNumber.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"commercialReferenceNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$referenceNumber"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = CommercialReferenceNumberController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"commercialReferenceNumber.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1359,15 +1414,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.addDangerousGoodsCode(index)
 
+          val label = msg"addDangerousGoodsCode.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addDangerousGoodsCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = AddDangerousGoodsCodeController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addDangerousGoodsCode.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1399,15 +1456,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.dangerousGoodsCode(index)
 
+          val label = msg"dangerousGoodsCode.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"dangerousGoodsCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$code"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = DangerousGoodsCodeController.onPageLoad(lrn, itemIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"dangerousGoodsCode.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1437,15 +1496,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.addSecurityConsignorsEori(index)
 
+          val label = msg"addSecurityConsignorsEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addSecurityConsignorsEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = AddSecurityConsignorsEoriController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSecurityConsignorsEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1475,15 +1536,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.addSecurityConsigneesEori(index)
 
+          val label = msg"addSecurityConsigneesEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addSecurityConsigneesEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = AddSecurityConsigneesEoriController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSecurityConsigneesEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1515,15 +1578,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.securityConsigneeName(index)
 
+          val label = msg"securityConsigneeName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"securityConsigneeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$consigneeName"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = SecurityConsigneeNameController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"securityConsigneeName.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1555,15 +1620,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.securityConsignorName(index)
 
+          val label = msg"securityConsignorName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"securityConsignorName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$consignorName"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = SecurityConsignorNameController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"securityConsignorName.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1595,15 +1662,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.securityConsigneeAddress(index)
 
+          val label = msg"securityConsigneeAddress.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"securityConsigneeAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = SecurityConsigneeAddressController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"securityConsigneeAddress.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1635,15 +1704,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.securityConsignorAddress(index)
 
+          val label = msg"securityConsignorAddress.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"securityConsignorAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = SecurityConsignorAddressController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"securityConsignorAddress.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1675,15 +1746,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.securityConsigneeEori(index)
 
+          val label = msg"securityConsigneeEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"securityConsigneeEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$eoriNumber"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = SecurityConsigneeEoriController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"securityConsigneeEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1715,15 +1788,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.securityConsignorEori(index)
 
+          val label = msg"securityConsignorEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"securityConsignorEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$eoriNumber"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = SecurityConsignorEoriController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"securityConsignorEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )

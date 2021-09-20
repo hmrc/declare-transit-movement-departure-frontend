@@ -28,7 +28,7 @@ class AddSealCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourA
 
   def sealRow(sealIndex: Index): Option[Row] = getAnswerAndBuildRemovableRow[SealDomain](
     page = SealIdDetailsPage(sealIndex),
-    formatAnswer = _.numberOrMark,
+    formatAnswer = sealDomain => lit"${sealDomain.numberOrMark}",
     id = s"seal-${sealIndex.display}",
     changeCall = routes.SealIdDetailsController.onPageLoad(lrn, sealIndex, CheckMode),
     removeCall = routes.ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, CheckMode)

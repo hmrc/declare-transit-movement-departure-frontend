@@ -52,15 +52,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.principalTirHolderIdPage
 
+          val label = msg"principalTirHolderId.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"principalTirHolderId.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$id"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.PrincipalTirHolderIdController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalTirHolderId.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -92,15 +94,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.consigneeAddress
 
+          val label = msg"consigneeAddress.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"consigneeAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ConsigneeAddressController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consigneeAddress.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -132,15 +136,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.principalAddress
 
+          val label = msg"principalAddress.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"principalAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.PrincipalAddressController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalAddress.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -172,15 +178,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.consigneeName
 
+          val label = msg"consigneeName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"consigneeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$consigneeName"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ConsigneeNameController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consigneeName.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -212,15 +220,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.whatIsConsigneeEori
 
+          val label = msg"whatIsConsigneeEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"whatIsConsigneeEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$consigneeEori"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.WhatIsConsigneeEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"whatIsConsigneeEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -250,15 +260,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.isConsigneeEoriKnown
 
+          val label = msg"isConsigneeEoriKnown.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"isConsigneeEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.IsConsigneeEoriKnownController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isConsigneeEoriKnown.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -290,15 +302,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.consignorName
 
+          val label = msg"consignorName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"consignorName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$consignorName"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ConsignorNameController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorName.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -328,15 +342,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.addConsignee
 
+          val label = msg"addConsignee.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addConsignee.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddConsigneeController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addConsignee.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-consignee-same-for-all-items")
                 )
               )
@@ -369,15 +385,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.consignorAddress
 
+          val label = msg"consignorAddress.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"consignorAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ConsignorAddressController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorAddress.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -409,15 +427,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.consignorEori
 
+          val label = msg"consignorEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"consignorEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$consignorEori"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ConsignorEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -447,15 +467,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.addConsignor
 
+          val label = msg"addConsignor.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addConsignor.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddConsignorController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addConsignor.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-consignor-same-for-all-items")
                 )
               )
@@ -486,15 +508,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.isConsignorEoriKnown
 
+          val label = msg"isConsignorEoriKnown.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"isConsignorEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.IsConsignorEoriKnownController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isConsignorEoriKnown.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -526,15 +550,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.principalName
 
+          val label = msg"principalName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"principalName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$principalName"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.PrincipalNameController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalName.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -564,15 +590,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.isPrincipalEoriKnown
 
+          val label = msg"isPrincipalEoriKnown.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"isPrincipalEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.IsPrincipalEoriKnownController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isPrincipalEoriKnown.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-is-principal-eori-known")
                 )
               )
@@ -605,15 +633,17 @@ class TraderDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersS
           val helper = new TraderDetailsCheckYourAnswersHelper(answers)
           val result = helper.whatIsPrincipalEori
 
+          val label = msg"whatIsPrincipalEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"whatIsPrincipalEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$principalEori"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.WhatIsPrincipalEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"whatIsPrincipalEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )

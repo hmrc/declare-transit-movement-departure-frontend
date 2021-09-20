@@ -56,15 +56,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
           val result = helper.defaultAmount(index)
 
+          val label = msg"defaultAmount.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"defaultAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.DefaultAmountController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"defaultAmount.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-default-amount")
                 )
               )
@@ -116,15 +118,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
                 val result = helper.guaranteeType(index)
 
+                val label = msg"guaranteeType.checkYourAnswersLabel"
+
                 result mustBe Some(
                   Row(
-                    key = Key(msg"guaranteeType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                    key = Key(label, classes = Seq("govuk-!-width-one-half")),
                     value = Value(msg"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}"),
                     actions = List(
                       Action(
                         content = msg"site.edit",
                         href = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode).url,
-                        visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeType.checkYourAnswersLabel")),
+                        visuallyHiddenText = Some(label),
                         attributes = Map("id" -> "change-guarantee-type")
                       )
                     )
@@ -145,15 +149,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
             val result = helper.guaranteeType(index)
 
+            val label = msg"guaranteeType.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"guaranteeType.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(msg"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeType.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-guarantee-type")
                   )
                 )
@@ -187,15 +193,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
           val result = helper.accessCode(index)
 
+          val label = msg"accessCode.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"accessCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"••••"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AccessCodeController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"accessCode.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-access-code")
                 )
               )
@@ -228,15 +236,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
           val result = helper.otherReference(index)
 
+          val label = msg"otherReference.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"otherReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$otherReference"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.OtherReferenceController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"otherReference.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-other-reference")
                 )
               )
@@ -298,15 +308,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
           val result = helper.tirLiabilityAmount(index)
 
+          val label = msg"liabilityAmount.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$amount"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"liabilityAmount.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-liability-amount")
                 )
               )
@@ -376,15 +388,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
                   val result = helper.liabilityAmount(index)
 
+                  val label = msg"liabilityAmount.checkYourAnswersLabel"
+
                   result mustBe Some(
                     Row(
-                      key = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                      key = Key(label, classes = Seq("govuk-!-width-one-half")),
                       value = Value(lit"$amount"),
                       actions = List(
                         Action(
                           content = msg"site.edit",
                           href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
-                          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"liabilityAmount.checkYourAnswersLabel")),
+                          visuallyHiddenText = Some(label),
                           attributes = Map("id" -> "change-liability-amount")
                         )
                       )
@@ -408,15 +422,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
                   val result = helper.liabilityAmount(index)
 
+                  val label = msg"liabilityAmount.checkYourAnswersLabel"
+
                   result mustBe Some(
                     Row(
-                      key = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                      key = Key(label, classes = Seq("govuk-!-width-one-half")),
                       value = Value(msg"guaranteeDetailsCheckYourAnswers.defaultLiabilityAmount"),
                       actions = List(
                         Action(
                           content = msg"site.edit",
                           href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
-                          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"liabilityAmount.checkYourAnswersLabel")),
+                          visuallyHiddenText = Some(label),
                           attributes = Map("id" -> "change-liability-amount")
                         )
                       )
@@ -442,15 +458,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
                   val result = helper.liabilityAmount(index)
 
+                  val label = msg"liabilityAmount.checkYourAnswersLabel"
+
                   result mustBe Some(
                     Row(
-                      key = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                      key = Key(label, classes = Seq("govuk-!-width-one-half")),
                       value = Value(msg"guaranteeDetailsCheckYourAnswers.defaultLiabilityAmount"),
                       actions = List(
                         Action(
                           content = msg"site.edit",
                           href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
-                          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"liabilityAmount.checkYourAnswersLabel")),
+                          visuallyHiddenText = Some(label),
                           attributes = Map("id" -> "change-liability-amount")
                         )
                       )
@@ -474,15 +492,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
                   val result = helper.liabilityAmount(index)
 
+                  val label = msg"liabilityAmount.checkYourAnswersLabel"
+
                   result mustBe Some(
                     Row(
-                      key = Key(msg"liabilityAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                      key = Key(label, classes = Seq("govuk-!-width-one-half")),
                       value = Value(msg"guaranteeDetailsCheckYourAnswers.defaultLiabilityAmount"),
                       actions = List(
                         Action(
                           content = msg"site.edit",
                           href = routes.LiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
-                          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"liabilityAmount.checkYourAnswersLabel")),
+                          visuallyHiddenText = Some(label),
                           attributes = Map("id" -> "change-liability-amount")
                         )
                       )
@@ -517,15 +537,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
           val result = helper.guaranteeReference(index)
 
+          val label = msg"guaranteeReference.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"guaranteeReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$guaranteeReference"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.GuaranteeReferenceController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"guaranteeReference.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-guarantee-reference")
                 )
               )
@@ -558,15 +580,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
           val result = helper.tirGuaranteeReference(index)
 
+          val label = msg"tirGuaranteeReference.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"tirGuaranteeReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$guaranteeReference"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"tirGuaranteeReference.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-tir-guarantee-reference")
                 )
               )
@@ -614,15 +638,17 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
             val result = helper.guaranteeRow(index, isTir = true)
 
+            val label = lit"$guaranteeReference"
+
             result mustBe Some(
               Row(
-                key = Key(lit"$guaranteeReference"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(guaranteeReference)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-tir-carnet-${index.display}")
                   )
                 )
@@ -643,21 +669,23 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
             val result = helper.guaranteeRow(index, isTir = true)
 
+            val label = lit"$guaranteeReference"
+
             result mustBe Some(
               Row(
-                key = Key(lit"$guaranteeReference"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(guaranteeReference)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-tir-carnet-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(guaranteeReference)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"remove-tir-carnet-${index.display}")
                   )
                 )
@@ -675,23 +703,23 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
           val result = helper.guaranteeRow(index, isTir = false)
 
-          val key = s"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}"
+          val label = msg"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}"
 
           result mustBe Some(
             Row(
-              key = Key(lit"${msg"$key".resolve}"),
+              key = Key(label),
               value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$key".resolve)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-guarantee-${index.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index).url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(msg"$key".resolve)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"remove-guarantee-${index.display}")
                 )
               )

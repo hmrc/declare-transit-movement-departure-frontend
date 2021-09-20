@@ -50,15 +50,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addCarrierEori
 
+          val label = msg"addCarrierEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addCarrierEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddCarrierEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addCarrierEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -88,15 +90,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addCarrier
 
+          val label = msg"addCarrier.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addCarrier.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddCarrierController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addCarrier.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -126,15 +130,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addCircumstanceIndicator
 
+          val label = msg"addCircumstanceIndicator.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addCircumstanceIndicator.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddCircumstanceIndicatorController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addCircumstanceIndicator.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -164,15 +170,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addCommercialReferenceNumberAllItems
 
+          val label = msg"addCommercialReferenceNumberAllItems.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addCommercialReferenceNumberAllItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addCommercialReferenceNumberAllItems.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -202,15 +210,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addCommercialReferenceNumber
 
+          val label = msg"addCommercialReferenceNumber.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addCommercialReferenceNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddCommercialReferenceNumberController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addCommercialReferenceNumber.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -240,15 +250,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addConveyanceReferenceNumber
 
+          val label = msg"addConveyancerReferenceNumber.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addConveyancerReferenceNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddConveyanceReferenceNumberController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addConveyancerReferenceNumber.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -278,15 +290,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addPlaceOfUnloadingCode
 
+          val label = msg"addPlaceOfUnloadingCode.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addPlaceOfUnloadingCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddPlaceOfUnloadingCodeController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addPlaceOfUnloadingCode.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -316,15 +330,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addSafetyAndSecurityConsigneeEori
 
+          val label = msg"addSafetyAndSecurityConsigneeEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addSafetyAndSecurityConsigneeEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSafetyAndSecurityConsigneeEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -354,15 +370,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addSafetyAndSecurityConsignee
 
+          val label = msg"addSafetyAndSecurityConsignee.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addSafetyAndSecurityConsignee.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddSafetyAndSecurityConsigneeController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSafetyAndSecurityConsignee.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -392,15 +410,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addSafetyAndSecurityConsignorEori
 
+          val label = msg"addSafetyAndSecurityConsignorEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addSafetyAndSecurityConsignorEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSafetyAndSecurityConsignorEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -430,15 +450,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addSafetyAndSecurityConsignor
 
+          val label = msg"addSafetyAndSecurityConsignor.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addSafetyAndSecurityConsignor.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddSafetyAndSecurityConsignorController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSafetyAndSecurityConsignor.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -468,15 +490,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.addTransportChargesPaymentMethod
 
+          val label = msg"addTransportChargesPaymentMethod.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addTransportChargesPaymentMethod.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddTransportChargesPaymentMethodController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addTransportChargesPaymentMethod.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -508,15 +532,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.carrierAddress
 
+          val label = msg"carrierAddress.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"carrierAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.CarrierAddressController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"carrierAddress.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -548,15 +574,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.carrierEori
 
+          val label = msg"carrierEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"carrierEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$eori"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.CarrierEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"carrierEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -588,15 +616,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.carrierName
 
+          val label = msg"carrierName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"carrierName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$name"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.CarrierNameController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"carrierName.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -631,15 +661,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
             val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
             val result = helper.circumstanceIndicator(CircumstanceIndicatorList(Nil))
 
+            val label = msg"circumstanceIndicator.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"circumstanceIndicator.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"$indicatorCode"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.CircumstanceIndicatorController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"circumstanceIndicator.checkYourAnswersLabel"))
+                    visuallyHiddenText = Some(label)
                   )
                 )
               )
@@ -653,15 +685,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
             val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
             val result = helper.circumstanceIndicator(CircumstanceIndicatorList(Seq(indicator)))
 
+            val label = msg"circumstanceIndicator.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"circumstanceIndicator.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"(${indicator.code}) ${indicator.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.CircumstanceIndicatorController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"circumstanceIndicator.checkYourAnswersLabel"))
+                    visuallyHiddenText = Some(label)
                   )
                 )
               )
@@ -694,15 +728,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.commercialReferenceNumberAllItems
 
+          val label = msg"commercialReferenceNumberAllItems.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"commercialReferenceNumberAllItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$referenceNumber"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.CommercialReferenceNumberAllItemsController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"commercialReferenceNumberAllItems.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -734,15 +770,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.conveyanceReferenceNumber
 
+          val label = msg"conveyanceReferenceNumber.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"conveyanceReferenceNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$referenceNumber"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ConveyanceReferenceNumberController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"conveyanceReferenceNumber.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -774,15 +812,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.placeOfUnloadingCode
 
+          val label = msg"placeOfUnloadingCode.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"placeOfUnloadingCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$locationCode"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.PlaceOfUnloadingCodeController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"placeOfUnloadingCode.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -814,15 +854,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.safetyAndSecurityConsigneeAddress
 
+          val label = msg"safetyAndSecurityConsigneeAddress.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"safetyAndSecurityConsigneeAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"safetyAndSecurityConsigneeAddress.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -854,15 +896,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.safetyAndSecurityConsigneeEori
 
+          val label = msg"safetyAndSecurityConsigneeEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"safetyAndSecurityConsigneeEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$eori"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"safetyAndSecurityConsigneeEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -894,15 +938,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.safetyAndSecurityConsigneeName
 
+          val label = msg"safetyAndSecurityConsigneeName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"safetyAndSecurityConsigneeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$name"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.SafetyAndSecurityConsigneeNameController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"safetyAndSecurityConsigneeName.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -934,15 +980,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.safetyAndSecurityConsignorAddress
 
+          val label = msg"safetyAndSecurityConsignorAddress.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"safetyAndSecurityConsignorAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(Html(Seq(address.AddressLine1, address.AddressLine2, address.postalCode, address.country.description).mkString("<br>"))),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.SafetyAndSecurityConsignorAddressController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"safetyAndSecurityConsignorAddress.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -974,15 +1022,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.safetyAndSecurityConsignorEori
 
+          val label = msg"safetyAndSecurityConsignorEori.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"safetyAndSecurityConsignorEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$name"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.SafetyAndSecurityConsignorEoriController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"safetyAndSecurityConsignorEori.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1014,15 +1064,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.safetyAndSecurityConsignorName
 
+          val label = msg"safetyAndSecurityConsignorName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"safetyAndSecurityConsignorName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$name"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.SafetyAndSecurityConsignorNameController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"safetyAndSecurityConsignorName.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1054,15 +1106,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
           val result = helper.transportChargesPaymentMethod()
 
+          val label = msg"transportChargesPaymentMethod.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"transportChargesPaymentMethod.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$paymentMethod"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.TransportChargesPaymentMethodController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"transportChargesPaymentMethod.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -1097,23 +1151,23 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
             val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
             val result = helper.countryRow(index, CountryList(Nil))
 
-            val key = countryCode.code
+            val label = lit"${countryCode.code}"
 
             result mustBe Some(
               Row(
-                key = Key(lit"$key"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"remove-country-${index.display}")
                   )
                 )
@@ -1128,23 +1182,23 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
             val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
             val result = helper.countryRow(index, CountryList(Seq(country)))
 
-            val key = country.description
+            val label = lit"${country.description}"
 
             result mustBe Some(
               Row(
-                key = Key(lit"$key"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"remove-country-${index.display}")
                   )
                 )
@@ -1181,17 +1235,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
             val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
             val result = helper.countryOfRoutingRow(index, CountryList(Nil))
 
-            val key = countryCode.code
+            val label = lit"${countryCode.code}"
 
             result mustBe Some(
               Row(
-                key = Key(lit"$key"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   )
                 )
@@ -1206,17 +1260,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
             val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
             val result = helper.countryOfRoutingRow(index, CountryList(Seq(country)))
 
-            val key = country.description
+            val label = lit"${country.description}"
 
             result mustBe Some(
               Row(
-                key = Key(lit"$key"),
+                key = Key(label),
                 value = Value(lit""),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   )
                 )

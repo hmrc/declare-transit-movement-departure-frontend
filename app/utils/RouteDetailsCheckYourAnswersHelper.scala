@@ -45,7 +45,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     buildRow = answer =>
       buildRow(
         prefix = "destinationOffice",
-        answer = lit"$answer",
+        answer = answer,
         id = Some("change-destination-office"),
         call = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode)
       )
@@ -58,7 +58,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     buildRow = answer =>
       buildRow(
         prefix = "addAnotherTransitOffice",
-        answer = lit"$answer",
+        answer = answer,
         id = Some("change-office-of-transit"),
         call = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, CheckMode),
         args = index.display
@@ -88,9 +88,9 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
       page = AddAnotherTransitOfficePage(index),
       formatAnswer = formatAsSelf,
       customsOfficeList = customsOfficeList,
-      buildRow = key =>
+      buildRow = label =>
         buildRemovableRow(
-          key = key,
+          label = label,
           value = userAnswers
             .get(ArrivalTimesAtOfficePage(index))
             .fold("")(
@@ -115,12 +115,12 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     page: QuestionPage[T],
     formatAnswer: T => String,
     customsOfficeList: CustomsOfficeList,
-    buildRow: String => Row
+    buildRow: Text => Row
   )(implicit rds: Reads[T]): Option[Row] = userAnswers.get(page) flatMap {
     answer =>
       customsOfficeList.getCustomsOffice(formatAnswer(answer)) map {
         customsOffice =>
-          buildRow(s"${customsOffice.name} (${customsOffice.id})")
+          buildRow(lit"${customsOffice.name} (${customsOffice.id})")
       }
   }
 

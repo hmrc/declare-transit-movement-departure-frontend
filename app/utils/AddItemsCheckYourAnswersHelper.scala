@@ -48,7 +48,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def containerRow(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildValuelessRow[String](
     page = ContainerNumberPage(itemIndex, containerIndex),
-    formatAnswer = formatAsSelf,
+    formatAnswer = formatAsLiteral,
     id = Some(s"change-container-${containerIndex.display}"),
     call = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode)
   )
@@ -65,25 +65,25 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
       answer =>
         documentType.getDocumentType(answer).map {
           documentType =>
-            val key = s"(${documentType.code}) ${documentType.description}"
+            val label = lit"(${documentType.code}) ${documentType.description}"
 
             userAnswers.get(DeclarationTypePage) match {
               case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
                 buildValuelessRow(
-                  key = key,
+                  label = label,
                   id = Some(s"change-document-${index.display}"),
                   call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
               case _ if removable =>
                 buildRemovableRow(
-                  key = key,
+                  label = label,
                   id = s"document-${index.display}",
                   changeCall = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode),
                   removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
               case _ =>
                 buildValuelessRow(
-                  key = key,
+                  label = label,
                   id = Some(s"change-document-${documentIndex.display}"),
                   call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
@@ -93,7 +93,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
 
   def itemRow(index: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
     page = ItemDescriptionPage(index),
-    formatAnswer = formatAsSelf,
+    formatAnswer = formatAsLiteral,
     id = s"item-${index.display}",
     changeCall = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index),
     removeCall = routes.ConfirmRemoveItemController.onPageLoad(lrn, index)
@@ -238,9 +238,9 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     getAnswerAndBuildPreviousReferenceRow(
       page = ReferenceTypePage(index, referenceIndex),
       documents = documents,
-      buildRow = key =>
+      buildRow = label =>
         buildValuelessRow(
-          key = key,
+          label = label,
           id = Some(s"change-item-${index.display}"),
           call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode)
         )
@@ -250,9 +250,9 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     getAnswerAndBuildPreviousReferenceRow(
       page = ReferenceTypePage(index, referenceIndex),
       documents = documents,
-      buildRow = key =>
+      buildRow = label =>
         buildRemovableRow(
-          key = key,
+          label = label,
           id = s"reference-document-type-${index.display}",
           changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode),
           removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode)
@@ -403,12 +403,12 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
   private def getAnswerAndBuildPreviousReferenceRow(
     page: QuestionPage[String],
     documents: PreviousReferencesDocumentTypeList,
-    buildRow: String => Row
+    buildRow: Text => Row
   ): Option[Row] = userAnswers.get(page) flatMap {
     answer =>
       documents.getPreviousReferencesDocumentType(answer) map {
         doc =>
-          buildRow(s"(${doc.code}) ${doc.description.getOrElse("")}")
+          buildRow(lit"(${doc.code}) ${doc.description.getOrElse("")}")
       }
   }
 

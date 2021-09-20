@@ -53,15 +53,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.agreedLocationOfGoods
 
+          val label = msg"agreedLocationOfGoods.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"agreedLocationOfGoods.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$location"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"agreedLocationOfGoods.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -91,15 +93,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.loadingPlace
 
+          val label = msg"loadingPlace.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"loadingPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$location"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = controllers.routes.LoadingPlaceController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"loadingPlace.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -129,15 +133,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.addAgreedLocationOfGoods
 
+          val label = msg"addAgreedLocationOfGoods.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addAgreedLocationOfGoods.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAgreedLocationOfGoods.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -167,15 +173,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.sealsInformation
 
+          val label = msg"sealsInformation.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"sealsInformation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.SealsInformationController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealsInformation.checkYourAnswersLabel"))
+                  visuallyHiddenText = Some(label)
                 )
               )
             )
@@ -208,15 +216,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.controlResultDateLimit
 
+          val label = msg"controlResultDateLimit.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"controlResultDateLimit.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$formattedDate"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ControlResultDateLimitController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"controlResultDateLimit.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-control-result-date-limit")
                 )
               )
@@ -247,15 +257,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.addSeals
 
+          val label = msg"addSeals.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addSeals.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddSealsController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSeals.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-add-seals")
                 )
               )
@@ -286,15 +298,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.customsApprovedLocation
 
+          val label = msg"customsApprovedLocation.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"customsApprovedLocation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$location"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.CustomsApprovedLocationController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"customsApprovedLocation.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-customs-approved-location")
                 )
               )
@@ -325,15 +339,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.addCustomsApprovedLocation
 
+          val label = msg"addCustomsApprovedLocation.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"addCustomsApprovedLocation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AddCustomsApprovedLocationController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addCustomsApprovedLocation.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-add-customs-approved-location")
                 )
               )
@@ -364,15 +380,17 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
           val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
           val result = helper.authorisedLocationCode
 
+          val label = msg"authorisedLocationCode.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"authorisedLocationCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$location"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.AuthorisedLocationCodeController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"authorisedLocationCode.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-authorised-location-code")
                 )
               )

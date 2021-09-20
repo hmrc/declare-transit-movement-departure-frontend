@@ -51,21 +51,23 @@ class ContainersCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpec
           val helper = new ContainersCheckYourAnswersHelper(answers)
           val result = helper.containerRow(itemIndex, containerIndex)
 
+          val label = lit"$containerNumber"
+
           result mustBe Some(
             Row(
-              key = Key(lit"$containerNumber"),
+              key = Key(label),
               value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(containerNumber)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-container-number-${itemIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = ConfirmRemoveContainerController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(containerNumber)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"remove-container-number-${itemIndex.display}")
                 )
               )

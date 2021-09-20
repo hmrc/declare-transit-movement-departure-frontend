@@ -22,9 +22,9 @@ import pages.QuestionPage
 import play.api.libs.json.Reads
 import play.api.mvc.Call
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
-import uk.gov.hmrc.viewmodels.{Content, MessageInterpolators}
+import uk.gov.hmrc.viewmodels.{Content, MessageInterpolators, Text}
 
-abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   lazy val lrn: LocalReferenceNumber = userAnswers.lrn
 
@@ -68,14 +68,14 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def getAnswerAndBuildValuelessRow[T](
     page: QuestionPage[T],
-    formatAnswer: T => String,
+    formatAnswer: T => Text,
     id: Option[String],
     call: Call
   )(implicit rds: Reads[T]): Option[Row] =
     userAnswers.get(page) map {
       answer =>
         buildValuelessRow(
-          key = formatAnswer(answer),
+          label = formatAnswer(answer),
           id = id,
           call = call
         )
@@ -83,7 +83,7 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def getAnswerAndBuildRemovableRow[T](
     page: QuestionPage[T],
-    formatAnswer: T => String,
+    formatAnswer: T => Text,
     id: String,
     changeCall: Call,
     removeCall: Call
@@ -91,7 +91,7 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     userAnswers.get(page) map {
       answer =>
         buildRemovableRow(
-          key = formatAnswer(answer),
+          label = formatAnswer(answer),
           id = id,
           changeCall = changeCall,
           removeCall = removeCall
@@ -112,7 +112,7 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
         Action(
           content = msg"site.edit",
           href = call.url,
-          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*))),
+          visuallyHiddenText = Some(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*)),
           attributes = id.fold[Map[String, String]](Map.empty)(
             id => Map("id" -> id)
           )
@@ -121,18 +121,18 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     )
 
   def buildValuelessRow(
-    key: String,
+    label: Text,
     id: Option[String],
     call: Call
   ): Row =
     Row(
-      key = Key(lit"$key"),
+      key = Key(label),
       value = Value(lit""),
       actions = List(
         Action(
           content = msg"site.edit",
           href = call.url,
-          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+          visuallyHiddenText = Some(label),
           attributes = id.fold[Map[String, String]](Map.empty)(
             id => Map("id" -> id)
           )
@@ -141,26 +141,26 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     )
 
   def buildRemovableRow(
-    key: String,
+    label: Text,
     value: String = "",
     id: String,
     changeCall: Call,
     removeCall: Call
   ): Row =
     Row(
-      key = Key(lit"$key"),
+      key = Key(label),
       value = Value(lit"$value"),
       actions = List(
         Action(
           content = msg"site.edit",
           href = changeCall.url,
-          visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(key)),
+          visuallyHiddenText = Some(label),
           attributes = Map("id" -> s"change-$id")
         ),
         Action(
           content = msg"site.delete",
           href = removeCall.url,
-          visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(key)),
+          visuallyHiddenText = Some(label),
           attributes = Map("id" -> s"remove-$id")
         )
       )
@@ -180,7 +180,7 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       getAnswerAndBuildRow = formatAnswer =>
         getAnswerAndBuildRow[T](
           page = page,
-          formatAnswer = answer => lit"${formatAnswer(answer)}",
+          formatAnswer = formatAnswer,
           prefix = prefix,
           id = id,
           call = call
@@ -190,11 +190,11 @@ abstract private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def getAnswerAndBuildCountryRow[T](
     getCountryCode: T => CountryCode,
     countryList: CountryList,
-    getAnswerAndBuildRow: (T => String) => Option[Row]
+    getAnswerAndBuildRow: (T => Text) => Option[Row]
   ): Option[Row] = {
-    val formatAnswer: T => String = x => {
+    val formatAnswer: T => Text = x => {
       val countryCode: CountryCode = getCountryCode(x)
-      countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)
+      lit"${countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)}"
     }
     getAnswerAndBuildRow(formatAnswer)
   }

@@ -53,21 +53,23 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
           val helper = new AddSealCheckYourAnswersHelper(answers)
           val result = helper.sealRow(sealIndex)
 
+          val label = lit"${sealDomain.numberOrMark}"
+
           result mustBe Some(
             Row(
-              key = Key(lit"${sealDomain.numberOrMark}"),
+              key = Key(label),
               value = Value(lit""),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = SealIdDetailsController.onPageLoad(lrn, sealIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(sealDomain.numberOrMark)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-seal-${sealIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.delete.hidden".withArgs(sealDomain.numberOrMark)),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"remove-seal-${sealIndex.display}")
                 )
               )
@@ -102,15 +104,17 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
             val helper = new AddSealCheckYourAnswersHelper(answers)
             val result = helper.sealsRow()
 
+            val label = msg"sealIdDetails.singular.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"sealIdDetails.singular.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(Html(sealDomain.numberOrMark)),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = SealsInformationController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealIdDetails.singular.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-seal")
                   )
                 )
@@ -128,15 +132,17 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
             val helper = new AddSealCheckYourAnswersHelper(answers)
             val result = helper.sealsRow()
 
+            val label = msg"sealIdDetails.plural.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"sealIdDetails.plural.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(Html(s"${sealDomain1.numberOrMark}<br>${sealDomain2.numberOrMark}")),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = SealsInformationController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealIdDetails.plural.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-seals")
                   )
                 )

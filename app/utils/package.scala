@@ -17,7 +17,7 @@
 import models.CommonAddress
 import models.reference._
 import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.viewmodels.{Content, Html, MessageInterpolators}
+import uk.gov.hmrc.viewmodels.{Content, Html, MessageInterpolators, Text}
 
 package object utils {
   val defaultOption: JsObject = Json.obj("value" -> "", "text" -> "")
@@ -180,9 +180,9 @@ package object utils {
     Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description).mkString("<br>")
   )
 
-  def formatAsLiteral[T](answer: T): Content = lit"$answer"
+  def formatAsLiteral[A](answer: A): Text = lit"$answer"
 
-  def formatAsSelf(answer: String): String = answer
+  def formatAsSelf[T](answer: T): T = answer
 
   def formatAsMasked[T]: T => Content = _ => lit"••••"
 

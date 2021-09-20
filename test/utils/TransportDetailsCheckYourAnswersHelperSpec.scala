@@ -58,15 +58,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new TransportDetailsCheckYourAnswersHelper(answers)
             val result = helper.modeAtBorder(TransportModeList(Nil))
 
+            val label = msg"modeAtBorder.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"modeAtBorder.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"$modeCode"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.ModeAtBorderController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"modeAtBorder.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-mode-at-border")
                   )
                 )
@@ -81,15 +83,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new TransportDetailsCheckYourAnswersHelper(answers)
             val result = helper.modeAtBorder(TransportModeList(Seq(mode)))
 
+            val label = msg"modeAtBorder.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"modeAtBorder.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"(${mode.code}) ${mode.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.ModeAtBorderController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"modeAtBorder.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-mode-at-border")
                   )
                 )
@@ -126,15 +130,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new TransportDetailsCheckYourAnswersHelper(answers)
             val result = helper.modeCrossingBorder(TransportModeList(Nil))
 
+            val label = msg"modeCrossingBorder.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"modeCrossingBorder.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"$modeCode"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.ModeCrossingBorderController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"modeCrossingBorder.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-mode-crossing-border")
                   )
                 )
@@ -149,15 +155,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new TransportDetailsCheckYourAnswersHelper(answers)
             val result = helper.modeCrossingBorder(TransportModeList(Seq(mode)))
 
+            val label = msg"modeCrossingBorder.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"modeCrossingBorder.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"(${mode.code}) ${mode.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.ModeCrossingBorderController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"modeCrossingBorder.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-mode-crossing-border")
                   )
                 )
@@ -194,15 +202,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new TransportDetailsCheckYourAnswersHelper(answers)
             val result = helper.inlandMode(TransportModeList(Nil))
 
+            val label = msg"inlandMode.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"inlandMode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"$modeCode"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.InlandModeController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"inlandMode.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-inland-mode")
                   )
                 )
@@ -217,15 +227,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new TransportDetailsCheckYourAnswersHelper(answers)
             val result = helper.inlandMode(TransportModeList(Seq(mode)))
 
+            val label = msg"inlandMode.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"inlandMode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"(${mode.code}) ${mode.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.InlandModeController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"inlandMode.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-inland-mode")
                   )
                 )
@@ -259,15 +271,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new TransportDetailsCheckYourAnswersHelper(answers)
           val result = helper.idCrossingBorder
 
+          val label = msg"idCrossingBorder.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"idCrossingBorder.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$id"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.IdCrossingBorderController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"idCrossingBorder.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-id-crossing-border")
                 )
               )
@@ -322,15 +336,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 val helper = new TransportDetailsCheckYourAnswersHelper(answers)
                 val result = helper.nationalityAtDeparture(CountryList(Nil), modeCode.toString)
 
+                val label = msg"nationalityAtDeparture.checkYourAnswersLabel"
+
                 result mustBe Some(
                   Row(
-                    key = Key(msg"nationalityAtDeparture.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                    key = Key(label, classes = Seq("govuk-!-width-one-half")),
                     value = Value(lit"${countryCode.code}"),
                     actions = List(
                       Action(
                         content = msg"site.edit",
                         href = routes.NationalityAtDepartureController.onPageLoad(lrn, CheckMode).url,
-                        visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"nationalityAtDeparture.checkYourAnswersLabel")),
+                        visuallyHiddenText = Some(label),
                         attributes = Map("id" -> "change-nationality-at-departure")
                       )
                     )
@@ -348,15 +364,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 val helper = new TransportDetailsCheckYourAnswersHelper(answers)
                 val result = helper.nationalityAtDeparture(CountryList(Seq(country)), modeCode.toString)
 
+                val label = msg"nationalityAtDeparture.checkYourAnswersLabel"
+
                 result mustBe Some(
                   Row(
-                    key = Key(msg"nationalityAtDeparture.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                    key = Key(label, classes = Seq("govuk-!-width-one-half")),
                     value = Value(lit"${country.description}"),
                     actions = List(
                       Action(
                         content = msg"site.edit",
                         href = routes.NationalityAtDepartureController.onPageLoad(lrn, CheckMode).url,
-                        visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"nationalityAtDeparture.checkYourAnswersLabel")),
+                        visuallyHiddenText = Some(label),
                         attributes = Map("id" -> "change-nationality-at-departure")
                       )
                     )
@@ -395,15 +413,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new TransportDetailsCheckYourAnswersHelper(answers)
             val result = helper.nationalityCrossingBorder(CountryList(Nil))
 
+            val label = msg"nationalityCrossingBorder.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"nationalityCrossingBorder.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"${countryCode.code}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.NationalityCrossingBorderController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"nationalityCrossingBorder.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-nationality-crossing-border")
                   )
                 )
@@ -418,15 +438,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             val helper = new TransportDetailsCheckYourAnswersHelper(answers)
             val result = helper.nationalityCrossingBorder(CountryList(Seq(country)))
 
+            val label = msg"nationalityCrossingBorder.checkYourAnswersLabel"
+
             result mustBe Some(
               Row(
-                key = Key(msg"nationalityCrossingBorder.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"${country.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
                     href = routes.NationalityCrossingBorderController.onPageLoad(lrn, CheckMode).url,
-                    visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"nationalityCrossingBorder.checkYourAnswersLabel")),
+                    visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-nationality-crossing-border")
                   )
                 )
@@ -478,15 +500,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               val helper = new TransportDetailsCheckYourAnswersHelper(answers)
               val result = helper.idAtDeparture(modeCode.toString)
 
+              val label = msg"idAtDeparture.checkYourAnswersLabel"
+
               result mustBe Some(
                 Row(
-                  key = Key(msg"idAtDeparture.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                  key = Key(label, classes = Seq("govuk-!-width-one-half")),
                   value = Value(lit"$id"),
                   actions = List(
                     Action(
                       content = msg"site.edit",
                       href = routes.IdAtDepartureController.onPageLoad(lrn, CheckMode).url,
-                      visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"idAtDeparture.checkYourAnswersLabel"))
+                      visuallyHiddenText = Some(label)
                     )
                   )
                 )
@@ -517,15 +541,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
           val helper = new TransportDetailsCheckYourAnswersHelper(answers)
           val result = helper.changeAtBorder
 
+          val label = msg"changeAtBorder.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"changeAtBorder.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ChangeAtBorderController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"changeAtBorder.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-change-at-border")
                 )
               )
@@ -575,15 +601,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               val helper = new TransportDetailsCheckYourAnswersHelper(answers)
               val result = helper.addIdAtDeparture(modeCode.toString)
 
+              val label = msg"addIdAtDeparture.checkYourAnswersLabel"
+
               result mustBe Some(
                 Row(
-                  key = Key(msg"addIdAtDeparture.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                  key = Key(label, classes = Seq("govuk-!-width-one-half")),
                   value = Value(msg"site.yes"),
                   actions = List(
                     Action(
                       content = msg"site.edit",
                       href = routes.AddIdAtDepartureController.onPageLoad(lrn, CheckMode).url,
-                      visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addIdAtDeparture.checkYourAnswersLabel")),
+                      visuallyHiddenText = Some(label),
                       attributes = Map("id" -> "change-add-id-at-departure")
                     )
                   )
@@ -634,15 +662,17 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               val helper = new TransportDetailsCheckYourAnswersHelper(answers)
               val result = helper.addNationalityAtDeparture(modeCode.toString)
 
+              val label = msg"addNationalityAtDeparture.checkYourAnswersLabel"
+
               result mustBe Some(
                 Row(
-                  key = Key(msg"addNationalityAtDeparture.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                  key = Key(label, classes = Seq("govuk-!-width-one-half")),
                   value = Value(msg"site.yes"),
                   actions = List(
                     Action(
                       content = msg"site.edit",
                       href = routes.AddNationalityAtDepartureController.onPageLoad(lrn, CheckMode).url,
-                      visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addNationalityAtDeparture.checkYourAnswersLabel")),
+                      visuallyHiddenText = Some(label),
                       attributes = Map("id" -> "change-add-nationality-at-departure")
                     )
                   )

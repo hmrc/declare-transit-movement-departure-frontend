@@ -30,9 +30,9 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     getAnswerAndBuildSpecialMentionRow(
       page = SpecialMentionTypePage(itemIndex, referenceIndex),
       specialMentions = specialMentions,
-      buildRow = key =>
+      buildRow = label =>
         buildRemovableRow(
-          key = key,
+          label = label,
           id = s"special-mentions-${itemIndex.display}",
           changeCall = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
           removeCall = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode)
@@ -43,9 +43,9 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     getAnswerAndBuildSpecialMentionRow(
       page = SpecialMentionTypePage(itemIndex, referenceIndex),
       specialMentions = specialMentions,
-      buildRow = key =>
+      buildRow = label =>
         buildValuelessRow(
-          key = key,
+          label = label,
           id = Some(s"change-special-mentions-${itemIndex.display}"),
           call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode)
         )
@@ -69,12 +69,12 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
   private def getAnswerAndBuildSpecialMentionRow(
     page: QuestionPage[String],
     specialMentions: SpecialMentionList,
-    buildRow: String => Row
+    buildRow: Text => Row
   ): Option[Row] = userAnswers.get(page) flatMap {
     answer =>
       specialMentions.getSpecialMention(answer) map {
         specialMention =>
-          buildRow(s"(${specialMention.code}) ${specialMention.description}")
+          buildRow(lit"(${specialMention.code}) ${specialMention.description}")
       }
   }
 }

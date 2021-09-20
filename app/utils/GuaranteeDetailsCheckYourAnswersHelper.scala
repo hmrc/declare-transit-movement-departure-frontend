@@ -23,7 +23,6 @@ import models._
 import pages._
 import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage, TIRGuaranteeReferencePage}
 import pages.routeDetails.DestinationOfficePage
-import play.api.i18n.Messages
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
@@ -124,19 +123,19 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     call = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, CheckMode)
   )
 
-  def guaranteeRow(index: Index, isTir: Boolean)(implicit messages: Messages): Option[Row] =
+  def guaranteeRow(index: Index, isTir: Boolean): Option[Row] =
     if (isTir) {
       if (index.position == 0) {
         getAnswerAndBuildValuelessRow[String](
           page = TIRGuaranteeReferencePage(index),
-          formatAnswer = formatAsSelf,
+          formatAnswer = formatAsLiteral,
           id = Some(s"change-tir-carnet-${index.display}"),
           call = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index)
         )
       } else {
         getAnswerAndBuildRemovableRow[String](
           page = TIRGuaranteeReferencePage(index),
-          formatAnswer = formatAsSelf,
+          formatAnswer = formatAsLiteral,
           id = s"tir-carnet-${index.display}",
           changeCall = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index),
           removeCall = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index)
@@ -145,7 +144,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     } else {
       getAnswerAndBuildRemovableRow[GuaranteeType](
         page = GuaranteeTypePage(index),
-        formatAnswer = guaranteeType => msg"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}".resolve,
+        formatAnswer = guaranteeType => msg"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}",
         id = s"guarantee-${index.display}",
         changeCall = routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(lrn, index),
         removeCall = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index)

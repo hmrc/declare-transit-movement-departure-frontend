@@ -49,15 +49,17 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
           val helper = new MovementDetailsCheckYourAnswersHelper(answers)
           val result = helper.preLodgeDeclarationPage
 
+          val label = msg"preLodgeDeclaration.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"preLodgeDeclaration.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.PreLodgeDeclarationController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"preLodgeDeclaration.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-pre-lodge-declaration")
                 )
               )
@@ -90,15 +92,17 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
           val helper = new MovementDetailsCheckYourAnswersHelper(answers)
           val result = helper.representativeCapacity
 
+          val label = msg"representativeCapacity.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"representativeCapacity.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"representativeCapacity.$representativeCapacity"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.RepresentativeCapacityController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"representativeCapacity.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-representative-capacity")
                 )
               )
@@ -131,15 +135,17 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
           val helper = new MovementDetailsCheckYourAnswersHelper(answers)
           val result = helper.representativeName
 
+          val label = msg"representativeName.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"representativeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$representativeName"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.RepresentativeNameController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"representativeName.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-representative-name")
                 )
               )
@@ -170,15 +176,17 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
           val helper = new MovementDetailsCheckYourAnswersHelper(answers)
           val result = helper.containersUsedPage
 
+          val label = msg"containersUsed.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"containersUsed.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.ContainersUsedPageController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"containersUsed.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-containers-used")
                 )
               )
@@ -209,15 +217,17 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
           val helper = new MovementDetailsCheckYourAnswersHelper(answers)
           val result = helper.declarationForSomeoneElse
 
+          val label = msg"declarationForSomeoneElse.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"declarationForSomeoneElse.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declarationForSomeoneElse.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-declaration-for-someone-else")
                 )
               )
@@ -250,15 +260,17 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
           val helper = new MovementDetailsCheckYourAnswersHelper(answers)
           val result = helper.declarationPlace
 
+          val label = msg"declarationPlace.checkYourAnswersLabel"
+
           result mustBe Some(
             Row(
-              key = Key(msg"declarationPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$declarationPlace"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = routes.DeclarationPlaceController.onPageLoad(lrn, CheckMode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declarationPlace.checkYourAnswersLabel")),
+                  visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-declaration-place")
                 )
               )
