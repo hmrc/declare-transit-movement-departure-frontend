@@ -1248,7 +1248,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
+                  href = HowManyPackagesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
                   visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declareNumberOfPackages.checkYourAnswersLabel"))
                 )
               )

@@ -287,7 +287,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     formatAnswer = formatAsLiteral,
     prefix = "declareNumberOfPackages",
     id = None,
-    call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
+    call = controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
   )
 
   def totalPieces(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[Int](
