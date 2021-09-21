@@ -1,0 +1,11 @@
+{% macro headerForId(params) %}
+    {% if params.header %}
+        <h1 class="govuk-heading-xl">
+            {% if params.id %}
+                <label for="{{ params.id }}">{{ params.header }}</label>
+            {% else %}
+                {{ params.header }}
+            {% endif %}
+        </h1>
+    {% endif %}
+{% endmacro %}

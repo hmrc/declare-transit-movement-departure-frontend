@@ -1,6 +1,7 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
+{% from "macros/headerForId.njk"                   import headerForId as headerForIdMacro %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
@@ -31,9 +32,11 @@
         <form action="{{ routes.controllers.addItems.itemDetails.ItemDescriptionController.onSubmit(lrn, mode).url }}" method="post">
           <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
-          <h1 class="govuk-heading-xl">
-            <label for="value">{{ messages("itemDescription.heading", index) }}</label>
-          </h1>
+         {{ headerForIdMacro({
+             header: messages("itemDescription.heading", index),
+             id: "value"
+            })
+         }}
 
          {{ csrf() | safe }}
 

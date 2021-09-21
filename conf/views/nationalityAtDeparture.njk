@@ -1,6 +1,7 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
+{% from "macros/headerForId.njk"                   import headerForId as headerForIdMacro %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
@@ -38,9 +39,11 @@
 
           {{ csrf() | safe }}
 
-          <h1 class="govuk-heading-xl">
-            <label for="value">{{ messages("nationalityAtDeparture.heading") }}</label>
-          </h1>
+          {{ headerForIdMacro({
+                header: messages("nationalityAtDeparture.heading"),
+                id: "value"
+             })
+          }}
 
           {{ govukSelect({
               classes: "govuk-input--width-20 autocomplete",

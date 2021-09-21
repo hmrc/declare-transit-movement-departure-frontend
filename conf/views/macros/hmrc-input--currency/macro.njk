@@ -1,0 +1,23 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% macro hmrcInputCurrency(params) %}
+
+     {{ govukInput({
+        hint: {
+          text: params.label,
+          classes: "govuk-label govuk-!-padding-bottom-2"
+        },
+        name: params.name,
+        id: params.id,
+        value: params.value,
+        classes: params.classes,
+        errorMessage: params.error,
+        prefix: {
+          text: "£"
+        },
+        inputMode: "text",
+        autocomplete: params.autocomplete,
+        spellcheck: false
+     }) }}
+
+{% endmacro %}
