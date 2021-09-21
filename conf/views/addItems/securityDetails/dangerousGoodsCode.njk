@@ -34,14 +34,14 @@
           }) }}
         {% endif %}
 
-        {{ headerForIdMacro({
-              header: messages("dangerousGoodsCode.heading"),
-              id: "value"
-           })
-        }}
-
         <form action="{{ routes.controllers.addItems.securityDetails.DangerousGoodsCodeController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
+
+          {{ headerForIdMacro({
+                header: messages("dangerousGoodsCode.heading"),
+                id: "value"
+             })
+          }}
 
           {{ csrf() | safe }}
 
