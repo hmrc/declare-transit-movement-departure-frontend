@@ -1,7 +1,7 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/headerForId.njk"                   import headerForId as headerForIdMacro %}
+{% from "macros/headerForId.njk"                   import headerForId %}
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -36,7 +36,7 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
-        {{ headerForIdMacro({
+        {{ headerForId({
               header: messages('movementDestinationCountry.heading'),
               id: "value"
            })

@@ -1,8 +1,8 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/headerForId.njk"                   import headerForId as headerForIdMacro %}
-{% from "macros/hmrc-input--currency/macro.njk"    import hmrcInputCurrency as hmrcInputCurrencyMacro %}
+{% from "macros/headerForId.njk"                   import headerForId %}
+{% from "macros/hmrc-input--currency/macro.njk"    import hmrcInputCurrency %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
@@ -32,13 +32,13 @@
          <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
           {{ csrf() | safe }}
 
-         {{ headerForIdMacro({
+         {{ headerForId({
               header: messages('liabilityAmount.heading'),
               id: "value"
             })
          }}
 
-         {{ hmrcInputCurrencyMacro({
+         {{ hmrcInputCurrency({
               label: messages('liabilityAmount.paragraph'),
               name: "value",
               id: "value",
