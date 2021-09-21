@@ -529,7 +529,10 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def addAnotherPreviousReferences(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
-    val addAnotherPackageHref = previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, CheckMode).url
+    val addAnotherPackageHref = userAnswers.get(AddAdministrativeReferencePage(itemIndex)) match {
+      case Some(true) => previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, CheckMode).url
+      case _          => previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(lrn, itemIndex, CheckMode).url
+    }
 
     AddAnotherViewModel(addAnotherPackageHref, content)
   }
@@ -624,8 +627,10 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def addAnotherDocument(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
-    val addAnotherDocumentHref = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, itemIndex, CheckMode).url
-
+    val addAnotherDocumentHref = userAnswers.get(AddDocumentsPage(itemIndex)) match {
+      case Some(true) => controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, itemIndex, CheckMode).url
+      case _          => controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(lrn, itemIndex, CheckMode).url
+    }
     AddAnotherViewModel(addAnotherDocumentHref, content)
   }
 

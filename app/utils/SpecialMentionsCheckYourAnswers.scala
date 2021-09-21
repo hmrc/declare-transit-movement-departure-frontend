@@ -90,7 +90,10 @@ class SpecialMentionsCheckYourAnswers(userAnswers: UserAnswers) {
 
   def addAnother(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
-    val addAnotherContainerHref = specialMentionRoutes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url
+    val addAnotherContainerHref = userAnswers.get(AddSpecialMentionPage(itemIndex)) match {
+      case Some(true) => specialMentionRoutes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url
+      case _          => specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url
+    }
 
     AddAnotherViewModel(addAnotherContainerHref, content)
   }

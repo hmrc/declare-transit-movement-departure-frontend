@@ -20,7 +20,7 @@ import base.{GeneratorSpec, SpecBase}
 import generators.ReferenceDataGenerators
 import models.reference.SpecialMention
 import models.{CheckMode, NormalMode, SpecialMentionList, UserAnswers}
-import pages.addItems.specialMentions.SpecialMentionTypePage
+import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionTypePage}
 import uk.gov.hmrc.viewmodels.Text.Message
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
@@ -121,13 +121,41 @@ class SpecialMentionsCheckYourAnswersSpec extends SpecBase with GeneratorSpec wi
 
     "addAnother" - {
 
-      "must link to correct page" - {
+      "must link to AddAnotherSpecialMention provided they have answered 'Yes' to AddSpecialMention" - {
+
+        val updatedUserAnswers = emptyUserAnswers.set(AddSpecialMentionPage(itemIndex), true).success.value
+
+        val cya = new SpecialMentionsCheckYourAnswers(updatedUserAnswers)
+
+        cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
+          AddAnotherViewModel(
+            controllers.addItems.specialMentions.routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            msg"addItems.checkYourAnswersLabel.specialMentions"
+          )
+
+      }
+
+      "must link to AddSpecialMention provided they have answered 'No' to AddSpecialMention" - {
+
+        val updatedUserAnswers = emptyUserAnswers.set(AddSpecialMentionPage(itemIndex), false).success.value
+
+        val cya = new SpecialMentionsCheckYourAnswers(updatedUserAnswers)
+
+        cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
+          AddAnotherViewModel(
+            controllers.addItems.specialMentions.routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            msg"addItems.checkYourAnswersLabel.specialMentions"
+          )
+
+      }
+
+      "must link to AddSpecialMention if they have not answered AddSpecialMention" - {
 
         val cya = new SpecialMentionsCheckYourAnswers(emptyUserAnswers)
 
         cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
-            controllers.addItems.specialMentions.routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            controllers.addItems.specialMentions.routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
             msg"addItems.checkYourAnswersLabel.specialMentions"
           )
 
