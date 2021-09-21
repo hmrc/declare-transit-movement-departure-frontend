@@ -5,6 +5,7 @@
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
+{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
 {% block pageTitle %}
   {{ title(messages("$className;format="decap"$.title"), form.errors) }}
@@ -29,20 +30,23 @@
 
         <form action="{{ routes.controllers.$className$Controller.onSubmit(lrn, mode).url }}" method="post">
 
-          {{ csrf() | safe }}
+        {{ csrf() | safe }}
+
+        {% call govukFieldset({
+          legend: {
+            text: messages('$className;format="decap"$.heading'),
+            classes: "govuk-fieldset__legend--xl",
+            isPageHeading: true
+          }
+        }) %}
 
           {{ govukCheckboxes({
             name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('$className;format="decap"$.heading'),
-                isPageHeading: true,
-                classes: "govuk-fieldset__legend--xl"
-              }
-            },
             items: checkboxes,
             errorMessage: form.value.error
           }) }}
+
+        {% endcall %}
 
           {{ govukButton({
             text: messages("site.continue"),
