@@ -30,6 +30,8 @@ import controllers.addItems.traderSecurityDetails.routes._
 import models.DeclarationType.{Option3, Option4}
 import models.reference._
 import models.{CheckMode, CommonAddress, DocumentTypeList, PreviousReferencesDocumentTypeList}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.addItems._
 import pages.addItems.containers.ContainerNumberPage
@@ -37,9 +39,11 @@ import pages.addItems.securityDetails.{AddDangerousGoodsCodePage, CommercialRefe
 import pages.addItems.traderDetails._
 import pages.addItems.traderSecurityDetails._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
+import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels.{Html, MessageInterpolators}
+import viewModels.AddAnotherViewModel
 
-class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper {
+class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with ScalaCheckPropertyChecks {
 
   "AddItemsCheckYourAnswersHelper" - {
 
@@ -1224,6 +1228,44 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       }
     }
 
+    "addAnotherPreviousReferences" - {
+      "create view model" - {
+
+        val content = Literal("foo")
+
+        "with href pointing to AddAnotherPreviousAdministrativeReferenceController" - {
+          "when AddAdministrativeReferencePage is true" in {
+
+            val answers = emptyUserAnswers.unsafeSetVal(AddAdministrativeReferencePage(itemIndex))(true)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers)
+            val result = helper.addAnotherPreviousReferences(itemIndex, content)
+            result mustBe AddAnotherViewModel(
+              href = AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, CheckMode).url,
+              content = content
+            )
+          }
+        }
+
+        "with href pointing to AddAdministrativeReferenceController" - {
+          "when AddAdministrativeReferencePage is false or undefined" in {
+
+            forAll(arbitrary[Option[Boolean]].suchThat(!_.contains(true))) {
+              maybeBool =>
+                val answers = emptyUserAnswers.unsafeSetOpt(AddAdministrativeReferencePage(itemIndex))(maybeBool)
+
+                val helper = new AddItemsCheckYourAnswersHelper(answers)
+                val result = helper.addAnotherPreviousReferences(itemIndex, content)
+                result mustBe AddAnotherViewModel(
+                  href = AddAdministrativeReferenceController.onPageLoad(lrn, itemIndex, CheckMode).url,
+                  content = content
+                )
+            }
+          }
+        }
+      }
+    }
+
     "packageRow" - {
 
       val packageType: PackageType = PackageType("CODE", "DESCRIPTION")
@@ -1396,6 +1438,63 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               )
             )
           )
+        }
+      }
+    }
+
+    "addAnotherPackage" - {
+      "create view model" - {
+
+        val content = Literal("foo")
+
+        "with href pointing to AddAnotherPackageController" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddDocumentsPage(itemIndex))(true)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.addAnotherPackage(itemIndex, content)
+          result mustBe AddAnotherViewModel(
+            href = AddAnotherPackageController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            content = content
+          )
+        }
+      }
+    }
+
+    "addAnotherDocument" - {
+      "create view model" - {
+
+        val content = Literal("foo")
+
+        "with href pointing to AddAnotherDocumentController" - {
+          "when AddDocumentsPage is true" in {
+
+            val answers = emptyUserAnswers.unsafeSetVal(AddDocumentsPage(itemIndex))(true)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers)
+            val result = helper.addAnotherDocument(itemIndex, content)
+            result mustBe AddAnotherViewModel(
+              href = AddAnotherDocumentController.onPageLoad(lrn, itemIndex, CheckMode).url,
+              content = content
+            )
+          }
+        }
+
+        "with href pointing to AddDocumentsController" - {
+          "when AddDocumentsPage is false or undefined" in {
+
+            forAll(arbitrary[Option[Boolean]].suchThat(!_.contains(true))) {
+              maybeBool =>
+                val answers = emptyUserAnswers.unsafeSetOpt(AddDocumentsPage(itemIndex))(maybeBool)
+
+                val helper = new AddItemsCheckYourAnswersHelper(answers)
+                val result = helper.addAnotherDocument(itemIndex, content)
+                result mustBe AddAnotherViewModel(
+                  href = AddDocumentsController.onPageLoad(lrn, itemIndex, CheckMode).url,
+                  content = content
+                )
+            }
+          }
         }
       }
     }
