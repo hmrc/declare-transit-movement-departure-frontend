@@ -25,12 +25,12 @@ import controllers.addItems.traderSecurityDetails.{routes => tradersSecurityDeta
 import models.DeclarationType.Option4
 import models._
 import models.reference.DocumentType
+import pages._
 import pages.addItems._
 import pages.addItems.containers._
 import pages.addItems.securityDetails._
 import pages.addItems.traderDetails._
 import pages.addItems.traderSecurityDetails._
-import pages._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
@@ -560,7 +560,8 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) {
           actions = List(
             Action(
               content = msg"site.edit",
-              href = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
+              href =
+                controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, CheckMode).url,
               visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declareNumberOfPackages.checkYourAnswersLabel"))
             )
           )
