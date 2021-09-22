@@ -16,38 +16,19 @@
 
 package viewModels
 
-import models.{Index, Mode, UserAnswers}
-import pages.PackageTypePage
-import uk.gov.hmrc.viewmodels.MessageInterpolators
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
+import models.{Index, UserAnswers}
+import uk.gov.hmrc.viewmodels.SummaryList.Row
+import utils.AddItemsCheckYourAnswersHelper
 
 object PackageViewModel {
 
-  def packageRows(itemIndex: Index, packageRange: Int, userAnswers: UserAnswers, mode: Mode): Seq[Option[Row]] =
+  def packageRows(itemIndex: Index, packageRange: Int, userAnswers: UserAnswers): Seq[Option[Row]] = {
+    val cyaHelper = new AddItemsCheckYourAnswersHelper(userAnswers)
     List.range(0, packageRange).map {
       packagePosition =>
         val packageIndex = Index(packagePosition)
 
-        userAnswers.get(PackageTypePage(itemIndex, packageIndex)).map {
-          answer =>
-            Row(
-              key = Key(lit"$answer"),
-              value = Value(lit""),
-              actions = List(
-                Action(
-                  content = msg"site.change",
-                  href = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, mode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer.toString)),
-                  attributes = Map("id" -> s"""change-package-${packageIndex.display}""")
-                ),
-                Action(
-                  content = msg"site.delete",
-                  href = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(userAnswers.lrn, itemIndex, packageIndex, mode).url,
-                  visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(answer.toString)),
-                  attributes = Map("id" -> s"""remove-package-${packageIndex.display}""")
-                )
-              )
-            )
-        }
+        cyaHelper.packageRow(itemIndex, packageIndex)
     }
+  }
 }

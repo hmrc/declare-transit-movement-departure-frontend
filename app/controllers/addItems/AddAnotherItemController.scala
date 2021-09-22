@@ -91,7 +91,7 @@ class AddAnotherItemController @Inject() (
 
     val itemRows = indexList.map {
       index =>
-        cyaHelper.itemRows(index)
+        cyaHelper.itemRow(index)
     }
 
     val singularOrPlural = if (numberOfItems == 1) "singular" else "plural"

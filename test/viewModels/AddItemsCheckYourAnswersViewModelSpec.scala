@@ -18,7 +18,7 @@ package viewModels
 
 import base.SpecBase
 import models.reference._
-import models.{CountryList, DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
+import models.{DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
@@ -33,7 +33,6 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
   private val documentTypeList = DocumentTypeList(Seq(DocumentType("code", "name", true)))
   private val previousReferencesDocumentTypeList = PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType("code", Some("name"))))
   private val specialMentionList = SpecialMentionList(Seq(SpecialMention("code", "name")))
-  private val countryList = new CountryList(Seq(Country(CountryCode("FR"), "France")))
 
   private val updatedAnswers = emptyUserAnswers
     .set(ItemDescriptionPage(index), "test").success.value
@@ -47,7 +46,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     .set(PackageTypePage(index, itemIndex), PackageType("AB", "Description") ).success.value
     .set(HowManyPackagesPage(index, itemIndex), 123).success.value
 
-  private val data = AddItemsCheckYourAnswersViewModel(updatedAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList, countryList)
+  private val data = AddItemsCheckYourAnswersViewModel(updatedAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList)
 
   private val updatedAnswersWithUnpackedPackages = emptyUserAnswers
     .set(ItemDescriptionPage(index), "test").success.value
@@ -61,7 +60,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     .set(PackageTypePage(index, itemIndex), PackageType("NE", "Description") ).success.value
     .set(TotalPiecesPage(index, itemIndex), 123).success.value
 
-  private val dataWithUnpackedPackes = AddItemsCheckYourAnswersViewModel(updatedAnswersWithUnpackedPackages, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList, countryList)
+  private val dataWithUnpackedPackes = AddItemsCheckYourAnswersViewModel(updatedAnswersWithUnpackedPackages, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList)
 
 
   "AddItemsCheckYourAnswersViewModel" - {

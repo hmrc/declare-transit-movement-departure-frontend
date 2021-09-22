@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import models.CommonAddress
 import models.reference._
 import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.viewmodels.{Content, MessageInterpolators}
+import uk.gov.hmrc.viewmodels.{Content, Html, MessageInterpolators, Text}
 
 package object utils {
   val defaultOption: JsObject = Json.obj("value" -> "", "text" -> "")
@@ -154,25 +155,35 @@ package object utils {
     defaultOption +: paymentObjects
   }
 
-  def yesOrNo(answer: Boolean): Content =
+  def formatAsYesOrNo(answer: Boolean): Content =
     if (answer) {
       msg"site.yes"
     } else {
       msg"site.no"
     }
 
-  def yesOrNo(answer: Int): Content =
+  def formatAsYesOrNo(answer: Int): Content =
     if (answer == 1) {
       msg"site.yes"
     } else {
       msg"site.no"
     }
 
-  def acceptedOrRejected(answer: Int): Content =
+  def formatAsAcceptedOrRejected(answer: Int): Content =
     if (answer == 1) {
       msg"site.accepted"
     } else {
       msg"site.rejected"
     }
+
+  def formatAsAddress(answer: CommonAddress): Html = Html(
+    Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description).mkString("<br>")
+  )
+
+  def formatAsLiteral[A](answer: A): Text = lit"$answer"
+
+  def formatAsSelf[T](answer: T): T = answer
+
+  def formatAsMasked[T]: T => Content = _ => lit"••••"
 
 }

@@ -100,7 +100,7 @@ class AddAnotherGuaranteeController @Inject() (
 
     val guaranteeRows = indexList.map {
       index =>
-        cyaHelper.guaranteeRows(index, isTir)
+        cyaHelper.guaranteeRow(index, isTir)
     }
 
     val singularOrPlural = if (numberOfItems == 1) "singular" else "plural"
