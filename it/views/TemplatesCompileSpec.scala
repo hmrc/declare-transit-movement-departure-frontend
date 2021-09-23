@@ -79,7 +79,7 @@ class TemplatesCompileSpec extends ItSpecBase with GuiceOneAppPerSuite {
           form =>
             val action = form.attr("action")
             action mustNot be("")
-            action mustNot contain("undefined")
+            action mustNot include("undefined")
         }
     }
   }
