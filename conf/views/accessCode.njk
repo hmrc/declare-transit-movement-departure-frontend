@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.guaranteeDetails.AccessCodeController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.guaranteeDetails.AccessCodeController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
         {{ csrf() | safe }}

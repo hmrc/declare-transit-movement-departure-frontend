@@ -81,6 +81,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
       val expectedJson = Json.obj(
         "form"          -> form,
         "lrn"           -> lrn,
+        "itemIndex"     -> itemIndex.display,
         "radios"        -> Radios.yesNo(form("value")),
         "pageTitle"     -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
         "heading"       -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
@@ -115,6 +116,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
       val expectedJson = Json.obj(
         "form"          -> form,
         "lrn"           -> lrn,
+        "itemIndex"     -> itemIndex.display,
         "pageTitle"     -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
         "heading"       -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
         "referenceRows" -> Nil
@@ -165,6 +167,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
       val expectedJson = Json.obj(
         "form"      -> boundForm,
         "lrn"       -> lrn,
+        "itemIndex" -> itemIndex.display,
         "pageTitle" -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
         "heading"   -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1)
       )

@@ -39,7 +39,7 @@
           {{ messages("officeOfTransitCountry.heading") }}
         </h1>
 
-        <form action="{{ routes.controllers.routeDetails.OfficeOfTransitCountryController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.routeDetails.OfficeOfTransitCountryController.onSubmit(lrn, index, mode).url }}" method="post">
 
         <p class="govuk-body">{{ messages('officeOfTransitCountry.paragraph') }}</p>
 

@@ -38,7 +38,7 @@
                     rows: containerRows
                 }) }}
 
-        <form action="{{ routes.controllers.addItems.containers.AddAnotherContainerController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.containers.AddAnotherContainerController.onSubmit(lrn, index, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

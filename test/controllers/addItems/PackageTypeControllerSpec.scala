@@ -54,7 +54,8 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val packageTypeRoute: String = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val packageTypeRoute: String =
+    controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -96,6 +97,8 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "form"         -> form,
         "mode"         -> NormalMode,
         "lrn"          -> lrn,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display,
         "packageTypes" -> packageTypesJson
       )
 
@@ -136,6 +139,8 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         "form"         -> filledForm,
         "mode"         -> NormalMode,
         "lrn"          -> lrn,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display,
         "packageTypes" -> packageTypesJson
       )
 
@@ -199,9 +204,11 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"         -> boundForm,
+        "lrn"          -> lrn,
+        "mode"         -> NormalMode,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/packageType.njk"

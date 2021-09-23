@@ -123,6 +123,7 @@ class ArrivalTimesAtOfficeControllerSpec
 
       val expectedJson = Json.obj(
         "form"     -> form,
+        "index"    -> index.display,
         "mode"     -> NormalMode,
         "lrn"      -> lrn,
         "dateTime" -> viewModel
@@ -173,6 +174,7 @@ class ArrivalTimesAtOfficeControllerSpec
 
       val expectedJson = Json.obj(
         "form"     -> filledForm,
+        "index"    -> index.display,
         "mode"     -> NormalMode,
         "lrn"      -> lrn,
         "dateTime" -> viewModel
@@ -217,6 +219,7 @@ class ArrivalTimesAtOfficeControllerSpec
 
       val expectedJson = Json.obj(
         "form"     -> boundForm,
+        "index"    -> index.display,
         "mode"     -> NormalMode,
         "lrn"      -> lrn,
         "dateTime" -> viewModel

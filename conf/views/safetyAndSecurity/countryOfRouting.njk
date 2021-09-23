@@ -36,7 +36,7 @@
           {{ messages("countryOfRouting.heading") }}
         </h1>
 
-        <form action="{{ routes.controllers.safetyAndSecurity.CountryOfRoutingController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.safetyAndSecurity.CountryOfRoutingController.onSubmit(lrn, index, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

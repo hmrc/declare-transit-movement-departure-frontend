@@ -73,9 +73,12 @@ class TotalPiecesControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"         -> form,
+        "lrn"          -> lrn,
+        "mode"         -> NormalMode,
+        "displayIndex" -> itemIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/totalPieces.njk"
@@ -102,9 +105,12 @@ class TotalPiecesControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       val filledForm = form.bind(Map("value" -> validAnswer.toString))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"         -> filledForm,
+        "lrn"          -> lrn,
+        "mode"         -> NormalMode,
+        "displayIndex" -> itemIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/totalPieces.njk"
@@ -144,9 +150,12 @@ class TotalPiecesControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"         -> boundForm,
+        "lrn"          -> lrn,
+        "mode"         -> NormalMode,
+        "displayIndex" -> itemIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/totalPieces.njk"

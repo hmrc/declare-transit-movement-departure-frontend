@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.addItems.itemDetails.TotalNetMassController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.itemDetails.TotalNetMassController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
         <h1 class="govuk-heading-xl"> {{ messages("totalNetMass.heading", index) }}  </h1>
         <span class="govuk-hint"> {{messages('totalNetMass.hintText')}} </span>

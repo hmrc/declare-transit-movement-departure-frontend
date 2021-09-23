@@ -100,6 +100,7 @@ class AddAnotherDocumentController @Inject() (
         val json = Json.obj(
           "form"         -> form,
           "lrn"          -> lrn,
+          "index"        -> index.display,
           "pageTitle"    -> msg"addAnotherDocument.title.$singularOrPlural".withArgs(numberOfDocuments),
           "heading"      -> msg"addAnotherDocument.heading.$singularOrPlural".withArgs(numberOfDocuments),
           "documentRows" -> documentRows,

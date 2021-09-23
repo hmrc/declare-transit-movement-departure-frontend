@@ -45,10 +45,10 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new GuaranteeReferenceFormProvider()
-  val form         = formProvider(GuaranteeReferenceWithGrn.Constants.guaranteeReferenceNumberLength)
+  private val formProvider = new GuaranteeReferenceFormProvider()
+  private val form         = formProvider(GuaranteeReferenceWithGrn.Constants.guaranteeReferenceNumberLength)
 
-  lazy val guaranteeReferenceRoute = routes.GuaranteeReferenceController.onPageLoad(lrn, index, NormalMode).url
+  private lazy val guaranteeReferenceRoute = routes.GuaranteeReferenceController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -62,9 +62,9 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, guaranteeReferenceRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, guaranteeReferenceRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -73,9 +73,10 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"  -> form,
+        "mode"  -> NormalMode,
+        "index" -> index.display,
+        "lrn"   -> lrn
       )
 
       templateCaptor.getValue mustEqual "guaranteeDetails/guaranteeReference.njk"
@@ -89,9 +90,9 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, guaranteeReferenceRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, guaranteeReferenceRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -102,9 +103,10 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
       val filledForm = form.bind(Map("value" -> "123456789012345678901234"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> filledForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual "guaranteeDetails/guaranteeReference.njk"
@@ -148,10 +150,10 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, guaranteeReferenceRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, guaranteeReferenceRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -160,9 +162,10 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> boundForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual "guaranteeDetails/guaranteeReference.njk"

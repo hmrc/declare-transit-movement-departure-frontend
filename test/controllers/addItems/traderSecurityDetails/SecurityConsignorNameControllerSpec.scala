@@ -157,9 +157,10 @@ class SecurityConsignorNameControllerSpec extends SpecBase with MockNunjucksRend
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> boundForm,
+        "lrn"   -> lrn,
+        "index" -> index.display,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual template
@@ -194,7 +195,6 @@ class SecurityConsignorNameControllerSpec extends SpecBase with MockNunjucksRend
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
-
     }
   }
 }

@@ -86,6 +86,7 @@ class SealIdDetailsController @Inject() (
       "form"        -> preparedForm,
       "lrn"         -> lrn,
       "mode"        -> mode,
+      "sealIndex"   -> sealIndex.display,
       "onSubmitUrl" -> routes.SealIdDetailsController.onSubmit(lrn, sealIndex, mode).url
     )
 

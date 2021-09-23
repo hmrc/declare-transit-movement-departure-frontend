@@ -79,6 +79,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
 
       val expectedJson = Json.obj(
         "form"            -> form,
+        "index"           -> index.display,
         "mode"            -> NormalMode,
         "officeOfTransit" -> s"${customsOffice.name} (${customsOffice.id})",
         "lrn"             -> lrn,
@@ -208,6 +209,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
 
       val expectedJson = Json.obj(
         "form"            -> boundForm,
+        "index"           -> index.display,
         "mode"            -> NormalMode,
         "officeOfTransit" -> s"${customsOffice.name} (${customsOffice.id})",
         "lrn"             -> lrn,

@@ -71,9 +71,10 @@ class AccessCodeControllerSpec extends SpecBase with MockNunjucksRendererApp wit
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"  -> form,
+        "mode"  -> NormalMode,
+        "lrn"   -> lrn,
+        "index" -> index.display
       )
 
       templateCaptor.getValue mustEqual "accessCode.njk"
@@ -99,9 +100,10 @@ class AccessCodeControllerSpec extends SpecBase with MockNunjucksRendererApp wit
       val filledForm = form.bind(Map("value" -> "1234"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> filledForm,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode,
+        "index" -> index.display
       )
 
       templateCaptor.getValue mustEqual "accessCode.njk"
@@ -139,9 +141,10 @@ class AccessCodeControllerSpec extends SpecBase with MockNunjucksRendererApp wit
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> boundForm,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode,
+        "index" -> index.display
       )
 
       templateCaptor.getValue mustEqual "accessCode.njk"

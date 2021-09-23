@@ -68,7 +68,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
             case None        => form
             case Some(value) => form.fill(value)
           }
-          renderPage(lrn, officeOfTransitId, mode, preparedForm).map(Ok(_))
+          renderPage(lrn, index, officeOfTransitId, mode, preparedForm).map(Ok(_))
         case _ => renderErrorPage(mode)
       }
   }
@@ -80,7 +80,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
           form
             .bindFromRequest()
             .fold(
-              formWithErrors => renderPage(lrn, officeOfTransitId, mode, formWithErrors).map(BadRequest(_)),
+              formWithErrors => renderPage(lrn, index, officeOfTransitId, mode, formWithErrors).map(BadRequest(_)),
               value =>
                 if (value) {
                   for {
@@ -95,13 +95,14 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
       }
   }
 
-  private def renderPage(lrn: LocalReferenceNumber, officeOfTransitId: String, mode: Mode, form: Form[Boolean])(implicit
+  private def renderPage(lrn: LocalReferenceNumber, index: Index, officeOfTransitId: String, mode: Mode, form: Form[Boolean])(implicit
     request: DataRequest[AnyContent]
   ): Future[Html] =
     referenceDataConnector.getCustomsOffice(officeOfTransitId) flatMap {
       officeOfTransit =>
         val json = Json.obj(
           "form"            -> form,
+          "index"           -> index.display,
           "mode"            -> mode,
           "officeOfTransit" -> s"${officeOfTransit.name} (${officeOfTransit.id})",
           "lrn"             -> lrn,

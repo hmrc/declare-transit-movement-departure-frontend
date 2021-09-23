@@ -101,6 +101,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
         val singularOrPlural = if (numberOfReferences == 1) "singular" else "plural"
         val json = Json.obj(
           "form"          -> form,
+          "index"         -> index.display,
           "lrn"           -> lrn,
           "pageTitle"     -> msg"addAnotherPreviousAdministrativeReference.title.$singularOrPlural".withArgs(numberOfReferences),
           "heading"       -> msg"addAnotherPreviousAdministrativeReference.heading.$singularOrPlural".withArgs(numberOfReferences),

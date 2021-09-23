@@ -79,6 +79,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
 
       val expectedJson = Json.obj(
         "form"      -> form,
+        "index"     -> index.display,
         "lrn"       -> lrn,
         "pageTitle" -> msg"addAnotherDocument.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherDocument.heading.plural".withArgs(1),

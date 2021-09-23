@@ -64,6 +64,7 @@ class DefaultAmountController @Inject() (
 
         val json = Json.obj(
           "form"   -> preparedForm,
+          "index"  -> index.display,
           "mode"   -> mode,
           "lrn"    -> lrn,
           "radios" -> Radios.yesNo(preparedForm("value"))
@@ -85,6 +86,7 @@ class DefaultAmountController @Inject() (
 
               val json = Json.obj(
                 "form"   -> formWithErrors,
+                "index"  -> index.display,
                 "mode"   -> mode,
                 "lrn"    -> lrn,
                 "radios" -> Radios.yesNo(formWithErrors("value"))

@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.addItems.traderDetails.TraderDetailsConsigneeEoriNumberController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.traderDetails.TraderDetailsConsigneeEoriNumberController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
         <h1 class="govuk-heading-xl"> {{messages('traderDetailsConsigneeEoriNumber.heading', index)}}<h1>
 

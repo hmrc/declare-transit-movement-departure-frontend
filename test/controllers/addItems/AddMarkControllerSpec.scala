@@ -72,10 +72,13 @@ class AddMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with M
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"   -> form,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(form("value"))
+        "form"         -> form,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "radios"       -> Radios.yesNo(form("value")),
+        "displayIndex" -> packageIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/addMark.njk"
@@ -102,10 +105,13 @@ class AddMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with M
       val filledForm = form.bind(Map("value" -> "true"))
 
       val expectedJson = Json.obj(
-        "form"   -> filledForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(filledForm("value"))
+        "form"         -> filledForm,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "radios"       -> Radios.yesNo(filledForm("value")),
+        "displayIndex" -> packageIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/addMark.njk"
@@ -168,10 +174,13 @@ class AddMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with M
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"   -> boundForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(boundForm("value"))
+        "form"         -> boundForm,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "radios"       -> Radios.yesNo(boundForm("value")),
+        "displayIndex" -> packageIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/addMark.njk"
