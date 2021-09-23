@@ -103,6 +103,7 @@ class OfficeOfTransitCountryControllerSpec
 
       val expectedJson = Json.obj(
         "form"        -> form,
+        "index"       -> index.display,
         "mode"        -> NormalMode,
         "lrn"         -> lrn,
         "countries"   -> jsonCountryList(preSelected = false),
@@ -142,6 +143,7 @@ class OfficeOfTransitCountryControllerSpec
 
       val expectedJson = Json.obj(
         "form"        -> form,
+        "index"       -> index.display,
         "mode"        -> NormalMode,
         "lrn"         -> lrn,
         "countries"   -> jsonCountryList(preSelected = false),
@@ -200,6 +202,7 @@ class OfficeOfTransitCountryControllerSpec
 
       val expectedJson = Json.obj(
         "form"        -> filledForm,
+        "index"       -> index.display,
         "lrn"         -> lrn,
         "mode"        -> NormalMode,
         "countries"   -> jsonCountryList(true),
@@ -277,9 +280,10 @@ class OfficeOfTransitCountryControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> boundForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual template
