@@ -16,31 +16,187 @@
 
 package utils
 
-import controllers.routes
-import models.{CheckMode, LocalReferenceNumber, UserAnswers}
-import pages._
+import models.reference.CountryCode
+import models.{CountryList, LocalReferenceNumber, UserAnswers}
+import pages.QuestionPage
+import play.api.libs.json.Reads
+import play.api.mvc.Call
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
-import uk.gov.hmrc.viewmodels._
+import uk.gov.hmrc.viewmodels.{Content, MessageInterpolators, Text}
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def loadingPlace: Option[Row] = userAnswers.get(LoadingPlacePage) map {
-    answer =>
-      Row(
-        key = Key(msg"loadingPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.LoadingPlaceController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"loadingPlace.checkYourAnswersLabel"))
+  lazy val lrn: LocalReferenceNumber = userAnswers.lrn
+
+  def getAnswerAndBuildRow[T](
+    page: QuestionPage[T],
+    formatAnswer: T => Content,
+    prefix: String,
+    id: Option[String],
+    call: Call,
+    args: Any*
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildRow(
+          prefix = prefix,
+          answer = formatAnswer(answer),
+          id = id,
+          call = call,
+          args = args: _*
+        )
+    }
+
+  def getAnswerAndBuildDynamicRow[T](
+    page: QuestionPage[T],
+    formatAnswer: T => Content,
+    dynamicPrefix: T => String,
+    dynamicId: T => Option[String],
+    call: Call,
+    args: Any*
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildRow(
+          prefix = dynamicPrefix(answer),
+          answer = formatAnswer(answer),
+          id = dynamicId(answer),
+          call = call,
+          args = args: _*
+        )
+    }
+
+  def getAnswerAndBuildValuelessRow[T](
+    page: QuestionPage[T],
+    formatAnswer: T => Text,
+    id: Option[String],
+    call: Call
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildValuelessRow(
+          label = formatAnswer(answer),
+          id = id,
+          call = call
+        )
+    }
+
+  def getAnswerAndBuildRemovableRow[T](
+    page: QuestionPage[T],
+    formatAnswer: T => Text,
+    id: String,
+    changeCall: Call,
+    removeCall: Call
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildRemovableRow(
+          label = formatAnswer(answer),
+          id = id,
+          changeCall = changeCall,
+          removeCall = removeCall
+        )
+    }
+
+  def buildRow(
+    prefix: String,
+    answer: Content,
+    id: Option[String],
+    call: Call,
+    args: Any*
+  ): Row =
+    Row(
+      key = Key(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*), classes = Seq("govuk-!-width-one-half")),
+      value = Value(answer),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = call.url,
+          visuallyHiddenText = Some(msg"$prefix.checkYourAnswersLabel".withArgs(args: _*)),
+          attributes = id.fold[Map[String, String]](Map.empty)(
+            id => Map("id" -> id)
           )
         )
       )
+    )
+
+  def buildValuelessRow(
+    label: Text,
+    id: Option[String],
+    call: Call
+  ): Row =
+    Row(
+      key = Key(label),
+      value = Value(lit""),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = call.url,
+          visuallyHiddenText = Some(label),
+          attributes = id.fold[Map[String, String]](Map.empty)(
+            id => Map("id" -> id)
+          )
+        )
+      )
+    )
+
+  def buildRemovableRow(
+    label: Text,
+    value: String = "",
+    id: String,
+    changeCall: Call,
+    removeCall: Call
+  ): Row =
+    Row(
+      key = Key(label),
+      value = Value(lit"$value"),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = changeCall.url,
+          visuallyHiddenText = Some(label),
+          attributes = Map("id" -> s"change-$id")
+        ),
+        Action(
+          content = msg"site.delete",
+          href = removeCall.url,
+          visuallyHiddenText = Some(label),
+          attributes = Map("id" -> s"remove-$id")
+        )
+      )
+    )
+
+  def getAnswerAndBuildSimpleCountryRow[T](
+    page: QuestionPage[T],
+    getCountryCode: T => CountryCode,
+    countryList: CountryList,
+    prefix: String,
+    id: Option[String],
+    call: Call
+  )(implicit rds: Reads[T]): Option[Row] =
+    getAnswerAndBuildCountryRow[T](
+      getCountryCode = getCountryCode,
+      countryList = countryList,
+      getAnswerAndBuildRow = formatAnswer =>
+        getAnswerAndBuildRow[T](
+          page = page,
+          formatAnswer = formatAnswer,
+          prefix = prefix,
+          id = id,
+          call = call
+        )
+    )
+
+  def getAnswerAndBuildCountryRow[T](
+    getCountryCode: T => CountryCode,
+    countryList: CountryList,
+    getAnswerAndBuildRow: (T => Text) => Option[Row]
+  ): Option[Row] = {
+    val formatAnswer: T => Text = x => {
+      val countryCode: CountryCode = getCountryCode(x)
+      lit"${countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)}"
+    }
+    getAnswerAndBuildRow(formatAnswer)
   }
 
-  def lrn: LocalReferenceNumber = userAnswers.lrn
-
 }
-
-object CheckYourAnswersHelper

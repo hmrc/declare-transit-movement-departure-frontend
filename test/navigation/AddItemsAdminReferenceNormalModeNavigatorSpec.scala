@@ -133,7 +133,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         }
       }
 
-      "must go to reference type page when there are no previous references" in {
+      "must go to add administrative reference page when there are no previous references" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswer = answers
@@ -142,7 +142,7 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
 
             navigator
               .nextPage(ConfirmRemovePreviousAdministrativeReferencePage(index, referenceIndex), NormalMode, updatedAnswer)
-              .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.lrn, index, index, NormalMode))
+              .mustBe(previousReferenceRoutes.AddAdministrativeReferenceController.onPageLoad(answers.lrn, index, NormalMode))
         }
       }
 

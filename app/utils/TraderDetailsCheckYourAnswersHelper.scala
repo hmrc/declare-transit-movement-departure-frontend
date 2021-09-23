@@ -17,253 +17,129 @@
 package utils
 
 import controllers.traderDetails.routes
-import models.{CheckMode, LocalReferenceNumber, UserAnswers}
+import models.{CheckMode, CommonAddress, UserAnswers}
 import pages.traderDetails._
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
-import uk.gov.hmrc.viewmodels._
+import uk.gov.hmrc.viewmodels.SummaryList.Row
 
-class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
+class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  def principalTirHolderIdPage: Option[Row] = userAnswers.get(PrincipalTirHolderIdPage) map {
-    answer =>
-      Row(
-        key = Key(msg"principalTirHolderId.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.PrincipalTirHolderIdController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalTirHolderIdPage.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def principalTirHolderIdPage: Option[Row] = getAnswerAndBuildRow[String](
+    page = PrincipalTirHolderIdPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "principalTirHolderId",
+    id = None,
+    call = routes.PrincipalTirHolderIdController.onPageLoad(lrn, CheckMode)
+  )
 
-  def consigneeAddress: Option[Row] = userAnswers.get(ConsigneeAddressPage) map {
-    answer =>
-      val address = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
-          .mkString("<br>")
-      )
-      Row(
-        key = Key(msg"consigneeAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(address),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ConsigneeAddressController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consigneeAddress.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def consigneeAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
+    page = ConsigneeAddressPage,
+    formatAnswer = formatAsAddress,
+    prefix = "consigneeAddress",
+    id = None,
+    call = routes.ConsigneeAddressController.onPageLoad(lrn, CheckMode)
+  )
 
-  def principalAddress: Option[Row] = userAnswers.get(PrincipalAddressPage) map {
-    answer =>
-      val address = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
-          .mkString("<br>")
-      )
-      Row(
-        key = Key(msg"principalAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(address),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.PrincipalAddressController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalAddress.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def principalAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
+    page = PrincipalAddressPage,
+    formatAnswer = formatAsAddress,
+    prefix = "principalAddress",
+    id = None,
+    call = routes.PrincipalAddressController.onPageLoad(lrn, CheckMode)
+  )
 
-  def consigneeName: Option[Row] = userAnswers.get(ConsigneeNamePage) map {
-    answer =>
-      Row(
-        key = Key(msg"consigneeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ConsigneeNameController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consigneeName.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def consigneeName: Option[Row] = getAnswerAndBuildRow[String](
+    page = ConsigneeNamePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "consigneeName",
+    id = None,
+    call = routes.ConsigneeNameController.onPageLoad(lrn, CheckMode)
+  )
 
-  def whatIsConsigneeEori: Option[Row] = userAnswers.get(WhatIsConsigneeEoriPage) map {
-    answer =>
-      Row(
-        key = Key(msg"whatIsConsigneeEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.WhatIsConsigneeEoriController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"whatIsConsigneeEori.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def whatIsConsigneeEori: Option[Row] = getAnswerAndBuildRow[String](
+    page = WhatIsConsigneeEoriPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "whatIsConsigneeEori",
+    id = None,
+    call = routes.WhatIsConsigneeEoriController.onPageLoad(lrn, CheckMode)
+  )
 
-  def isConsigneeEoriKnown: Option[Row] = userAnswers.get(IsConsigneeEoriKnownPage) map {
-    answer =>
-      Row(
-        key = Key(msg"isConsigneeEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.IsConsigneeEoriKnownController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isConsigneeEoriKnown.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def isConsigneeEoriKnown: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = IsConsigneeEoriKnownPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "isConsigneeEoriKnown",
+    id = None,
+    call = routes.IsConsigneeEoriKnownController.onPageLoad(lrn, CheckMode)
+  )
 
-  def consignorName: Option[Row] = userAnswers.get(ConsignorNamePage) map {
-    answer =>
-      Row(
-        key = Key(msg"consignorName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ConsignorNameController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorName.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def consignorName: Option[Row] = getAnswerAndBuildRow[String](
+    page = ConsignorNamePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "consignorName",
+    id = None,
+    call = routes.ConsignorNameController.onPageLoad(lrn, CheckMode)
+  )
 
-  def addConsignee: Option[Row] = userAnswers.get(AddConsigneePage) map {
-    answer =>
-      Row(
-        key = Key(msg"addConsignee.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddConsigneeController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addConsignee.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-consignee-same-for-all-items")
-          )
-        )
-      )
-  }
+  def addConsignee: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddConsigneePage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addConsignee",
+    id = Some("change-consignee-same-for-all-items"),
+    call = routes.AddConsigneeController.onPageLoad(lrn, CheckMode)
+  )
 
-  def consignorAddress: Option[Row] = userAnswers.get(ConsignorAddressPage) map {
-    answer =>
-      val address = Html(
-        Seq(answer.AddressLine1, answer.AddressLine2, answer.postalCode, answer.country.description)
-          .mkString("<br>")
-      )
+  def consignorAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
+    page = ConsignorAddressPage,
+    formatAnswer = formatAsAddress,
+    prefix = "consignorAddress",
+    id = None,
+    call = routes.ConsignorAddressController.onPageLoad(lrn, CheckMode)
+  )
 
-      Row(
-        key = Key(msg"consignorAddress.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(address),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ConsignorAddressController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorAddress.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def consignorEori: Option[Row] = getAnswerAndBuildRow[String](
+    page = ConsignorEoriPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "consignorEori",
+    id = None,
+    call = routes.ConsignorEoriController.onPageLoad(lrn, CheckMode)
+  )
 
-  def consignorEori: Option[Row] = userAnswers.get(ConsignorEoriPage) map {
-    answer =>
-      Row(
-        key = Key(msg"consignorEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ConsignorEoriController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"consignorEori.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def addConsignor: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddConsignorPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addConsignor",
+    id = Some("change-consignor-same-for-all-items"),
+    call = routes.AddConsignorController.onPageLoad(lrn, CheckMode)
+  )
 
-  def addConsignor: Option[Row] = userAnswers.get(AddConsignorPage) map {
-    answer =>
-      Row(
-        key = Key(msg"addConsignor.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddConsignorController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addConsignor.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-consignor-same-for-all-items")
-          )
-        )
-      )
-  }
+  def isConsignorEoriKnown: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = IsConsignorEoriKnownPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "isConsignorEoriKnown",
+    id = None,
+    call = routes.IsConsignorEoriKnownController.onPageLoad(lrn, CheckMode)
+  )
 
-  def isConsignorEoriKnown: Option[Row] = userAnswers.get(IsConsignorEoriKnownPage) map {
-    answer =>
-      Row(
-        key = Key(msg"isConsignorEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.IsConsignorEoriKnownController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isConsignorEoriKnown.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def principalName: Option[Row] = getAnswerAndBuildRow[String](
+    page = PrincipalNamePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "principalName",
+    id = None,
+    call = routes.PrincipalNameController.onPageLoad(lrn, CheckMode)
+  )
 
-  def principalName: Option[Row] = userAnswers.get(PrincipalNamePage) map {
-    answer =>
-      Row(
-        key = Key(msg"principalName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.PrincipalNameController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"principalName.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def isPrincipalEoriKnown: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = IsPrincipalEoriKnownPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "isPrincipalEoriKnown",
+    id = Some("change-is-principal-eori-known"),
+    call = routes.IsPrincipalEoriKnownController.onPageLoad(lrn, CheckMode)
+  )
 
-  def isPrincipalEoriKnown: Option[Row] = userAnswers.get(IsPrincipalEoriKnownPage) map {
-    answer =>
-      Row(
-        key = Key(msg"isPrincipalEoriKnown.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.IsPrincipalEoriKnownController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"isPrincipalEoriKnown.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-is-principal-eori-known""")
-          )
-        )
-      )
-  }
-
-  def whatIsPrincipalEori: Option[Row] = userAnswers.get(WhatIsPrincipalEoriPage) map {
-    answer =>
-      Row(
-        key = Key(msg"whatIsPrincipalEori.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.WhatIsPrincipalEoriController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"whatIsPrincipalEori.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
-
-  def lrn: LocalReferenceNumber = userAnswers.lrn
+  def whatIsPrincipalEori: Option[Row] = getAnswerAndBuildRow[String](
+    page = WhatIsPrincipalEoriPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "whatIsPrincipalEori",
+    id = None,
+    call = routes.WhatIsPrincipalEoriController.onPageLoad(lrn, CheckMode)
+  )
 }

@@ -17,108 +17,58 @@
 package utils
 
 import controllers.movementDetails.routes
-import models.{CheckMode, LocalReferenceNumber, UserAnswers}
+import models.{CheckMode, RepresentativeCapacity, UserAnswers}
 import pages.generalInformation._
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
+import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) {
+class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  def preLodgeDeclarationPage: Option[Row] = userAnswers.get(PreLodgeDeclarationPage) map {
-    answer =>
-      Row(
-        key = Key(msg"preLodgeDeclaration.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.PreLodgeDeclarationController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"preLodgeDeclaration.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-pre-lodge-declaration""")
-          )
-        )
-      )
-  }
+  def preLodgeDeclarationPage: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = PreLodgeDeclarationPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "preLodgeDeclaration",
+    id = Some("change-pre-lodge-declaration"),
+    call = routes.PreLodgeDeclarationController.onPageLoad(lrn, CheckMode)
+  )
 
-  def representativeCapacity: Option[Row] = userAnswers.get(RepresentativeCapacityPage) map {
-    answer =>
-      Row(
-        key = Key(msg"representativeCapacity.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(msg"representativeCapacity.$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.RepresentativeCapacityController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"representativeCapacity.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-representative-capacity""")
-          )
-        )
-      )
-  }
+  def representativeCapacity: Option[Row] = getAnswerAndBuildRow[RepresentativeCapacity](
+    page = RepresentativeCapacityPage,
+    formatAnswer = representativeCapacity => msg"representativeCapacity.$representativeCapacity",
+    prefix = "representativeCapacity",
+    id = Some("change-representative-capacity"),
+    call = routes.RepresentativeCapacityController.onPageLoad(lrn, CheckMode)
+  )
 
-  def representativeName: Option[Row] = userAnswers.get(RepresentativeNamePage) map {
-    answer =>
-      Row(
-        key = Key(msg"representativeName.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.RepresentativeNameController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"representativeName.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-representative-name""")
-          )
-        )
-      )
-  }
+  def representativeName: Option[Row] = getAnswerAndBuildRow[String](
+    page = RepresentativeNamePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "representativeName",
+    id = Some("change-representative-name"),
+    call = routes.RepresentativeNameController.onPageLoad(lrn, CheckMode)
+  )
 
-  def containersUsedPage: Option[Row] = userAnswers.get(ContainersUsedPage) map {
-    answer =>
-      Row(
-        key = Key(msg"containersUsed.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ContainersUsedPageController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"containersUsed.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-containers-used""")
-          )
-        )
-      )
-  }
+  def containersUsedPage: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = ContainersUsedPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "containersUsed",
+    id = Some("change-containers-used"),
+    call = routes.ContainersUsedPageController.onPageLoad(lrn, CheckMode)
+  )
 
-  def declarationForSomeoneElse: Option[Row] = userAnswers.get(DeclarationForSomeoneElsePage) map {
-    answer =>
-      Row(
-        key = Key(msg"declarationForSomeoneElse.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declarationForSomeoneElse.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-declaration-for-someone-else""")
-          )
-        )
-      )
-  }
+  def declarationForSomeoneElse: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = DeclarationForSomeoneElsePage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "declarationForSomeoneElse",
+    id = Some("change-declaration-for-someone-else"),
+    call = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, CheckMode)
+  )
 
-  def declarationPlace: Option[Row] = userAnswers.get(DeclarationPlacePage) map {
-    answer =>
-      Row(
-        key = Key(msg"declarationPlace.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.DeclarationPlaceController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"declarationPlace.checkYourAnswersLabel")),
-            attributes = Map("id" -> s"""change-declaration-place""")
-          )
-        )
-      )
-  }
-
-  def lrn: LocalReferenceNumber = userAnswers.lrn
+  def declarationPlace: Option[Row] = getAnswerAndBuildRow[String](
+    page = DeclarationPlacePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "declarationPlace",
+    id = Some("change-declaration-place"),
+    call = routes.DeclarationPlaceController.onPageLoad(lrn, CheckMode)
+  )
 }
