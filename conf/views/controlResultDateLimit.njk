@@ -28,22 +28,22 @@
           }) }}
         {% endif %}
 
-        <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
+        <span class="govuk-caption-xl">{{ messages('goodsSummary.preHeading') }}</span>
 
         <form action="{{ routes.controllers.goodsSummary.ControlResultDateLimitController.onSubmit(lrn, mode).url }}" method="post">
 
-        {% call govukFieldset({
-          legend: {
-            text: messages("controlResultDateLimit.heading"),
-            classes: "govuk-fieldset__legend--xl",
-            isPageHeading: true
-          }
-        }) %}
+          {% call govukFieldset({
+            legend: {
+              text: messages("controlResultDateLimit.heading"),
+              classes: "govuk-fieldset__legend--xl",
+              isPageHeading: true
+            }
+          }) %}
 
-        <p class = "govuk-body"> {{messages('controlResultDateLimit.paragraph1')}}</p>
-        <p class = "govuk-body"> {{messages('controlResultDateLimit.paragraph2')}}
-           <a  href= "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/tax-credits-enquiries" target="_blank"> {{ messages("technicalDifficulties.contact.link") }}</a>.
-        </p>
+          <p class = "govuk-body">{{ messages('controlResultDateLimit.paragraph1') }}</p>
+          <p class = "govuk-body">{{ messages('controlResultDateLimit.paragraph2') }}
+            <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/tax-credits-enquiries" target="_blank" rel="noopener noreferrer"> {{ messages("technicalDifficulties.contact.link") }}</a>.
+          </p>
 
           {{ csrf() | safe }}
 
@@ -60,7 +60,7 @@
             attributes: {id:"submit"}
           }) }}
 
-        {% endcall %}
+          {% endcall %}
         </form>
 
       </div>

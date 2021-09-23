@@ -4,7 +4,7 @@
 {% from "macros/title.njk"                         import title %}
 
 {% block pageTitle %}
-    {{ messages("technicalDifficulties.title") }}
+  {{ messages("technicalDifficulties.title") }}
 {% endblock %}
 
 {% block mainContent %}
@@ -22,8 +22,9 @@
         <p class="govuk-body">{{ messages("technicalDifficulties.tryAgain") }}</p>
 
         <p class="govuk-body">{{ messages("technicalDifficulties.contact") }}
-            <a class="govuk-link" href={{contactUrl}} target="_blank">{{ messages("technicalDifficulties.contact.link") }}</a>.
+          <a class="govuk-link" href={{ contactUrl }} target="_blank" rel="noopener noreferrer">{{ messages("technicalDifficulties.contact.link") }}</a>.
         </p>
+
       </div>
     </div>
   </div>
