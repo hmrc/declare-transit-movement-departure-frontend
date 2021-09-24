@@ -82,9 +82,11 @@ class TIRCarnetReferenceControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"          -> form,
+        "mode"          -> NormalMode,
+        "lrn"           -> lrn,
+        "itemIndex"     -> itemIndex.display,
+        "documentIndex" -> documentIndex.display
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -115,9 +117,11 @@ class TIRCarnetReferenceControllerSpec
       val filledForm = form.bind(Map("value" -> "1234567890"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"          -> filledForm,
+        "lrn"           -> lrn,
+        "mode"          -> NormalMode,
+        "itemIndex"     -> itemIndex.display,
+        "documentIndex" -> documentIndex.display
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -204,9 +208,11 @@ class TIRCarnetReferenceControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"          -> boundForm,
+        "lrn"           -> lrn,
+        "mode"          -> NormalMode,
+        "itemIndex"     -> itemIndex.display,
+        "documentIndex" -> documentIndex.display
       )
 
       templateCaptor.getValue mustEqual template

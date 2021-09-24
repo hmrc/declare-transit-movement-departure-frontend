@@ -65,9 +65,10 @@ class GuaranteeReferenceController @Inject() (
         }
 
         val json = Json.obj(
-          "form" -> preparedForm,
-          "lrn"  -> lrn,
-          "mode" -> mode
+          "form"  -> preparedForm,
+          "lrn"   -> lrn,
+          "index" -> index.display,
+          "mode"  -> mode
         )
 
         renderer.render("guaranteeDetails/guaranteeReference.njk", json).map(Ok(_))
@@ -86,9 +87,10 @@ class GuaranteeReferenceController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form" -> formWithErrors,
-                "lrn"  -> lrn,
-                "mode" -> mode
+                "form"  -> formWithErrors,
+                "lrn"   -> lrn,
+                "index" -> index.display,
+                "mode"  -> mode
               )
 
               renderer.render("guaranteeDetails/guaranteeReference.njk", json).map(BadRequest(_))

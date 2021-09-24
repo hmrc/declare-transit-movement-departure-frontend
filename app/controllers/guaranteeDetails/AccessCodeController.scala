@@ -63,9 +63,10 @@ class AccessCodeController @Inject() (
         }
 
         val json = Json.obj(
-          "form" -> preparedForm,
-          "lrn"  -> lrn,
-          "mode" -> mode
+          "form"  -> preparedForm,
+          "lrn"   -> lrn,
+          "mode"  -> mode,
+          "index" -> index.display
         )
 
         renderer.render("accessCode.njk", json).map(Ok(_))
@@ -83,9 +84,10 @@ class AccessCodeController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form" -> formWithErrors,
-                "lrn"  -> lrn,
-                "mode" -> mode
+                "form"  -> formWithErrors,
+                "lrn"   -> lrn,
+                "mode"  -> mode,
+                "index" -> index.display
               )
 
               renderer.render("accessCode.njk", json).map(BadRequest(_))

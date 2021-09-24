@@ -106,6 +106,7 @@ class AddAnotherSpecialMentionController @Inject() (
         val json = Json.obj(
           "form"          -> form,
           "lrn"           -> lrn,
+          "itemIndex"     -> itemIndex.display,
           "pageTitle"     -> msg"addAnotherSpecialMention.title.$singularOrPlural".withArgs(numberOfReferences, itemIndex.display),
           "heading"       -> msg"addAnotherSpecialMention.heading.$singularOrPlural".withArgs(numberOfReferences, itemIndex.display),
           "referenceRows" -> referenceRows,

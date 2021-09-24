@@ -74,9 +74,11 @@ class DocumentReferenceControllerSpec extends SpecBase with MockNunjucksRenderer
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"          -> form,
+        "itemIndex"     -> itemIndex.display,
+        "documentIndex" -> documentIndex.display,
+        "mode"          -> NormalMode,
+        "lrn"           -> lrn
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -107,9 +109,11 @@ class DocumentReferenceControllerSpec extends SpecBase with MockNunjucksRenderer
       val filledForm = form.bind(Map("value" -> "answer"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"          -> filledForm,
+        "itemIndex"     -> itemIndex.display,
+        "documentIndex" -> documentIndex.display,
+        "lrn"           -> lrn,
+        "mode"          -> NormalMode
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -155,9 +159,11 @@ class DocumentReferenceControllerSpec extends SpecBase with MockNunjucksRenderer
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"          -> boundForm,
+        "itemIndex"     -> itemIndex.display,
+        "documentIndex" -> documentIndex.display,
+        "lrn"           -> lrn,
+        "mode"          -> NormalMode
       )
 
       templateCaptor.getValue mustEqual template

@@ -39,7 +39,7 @@
           {{ messages("specialMentionType.heading", index) }}
         </h1>
 
-        <form action="{{ routes.controllers.addItems.specialMentions.SpecialMentionTypeController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.specialMentions.SpecialMentionTypeController.onSubmit(lrn, index, referenceIndex, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

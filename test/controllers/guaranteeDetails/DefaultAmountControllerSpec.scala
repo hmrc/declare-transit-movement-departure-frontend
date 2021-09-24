@@ -72,6 +72,7 @@ class DefaultAmountControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
       val expectedJson = Json.obj(
         "form"   -> form,
+        "index"  -> index.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> Radios.yesNo(form("value"))
@@ -101,6 +102,7 @@ class DefaultAmountControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
       val expectedJson = Json.obj(
         "form"   -> filledForm,
+        "index"  -> index.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> Radios.yesNo(filledForm("value"))
@@ -144,6 +146,7 @@ class DefaultAmountControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
       val expectedJson = Json.obj(
         "form"   -> boundForm,
+        "index"  -> index.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> Radios.yesNo(boundForm("value"))

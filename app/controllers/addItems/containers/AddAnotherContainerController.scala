@@ -102,6 +102,7 @@ class AddAnotherContainerController @Inject() (
 
     val json = Json.obj(
       "form"           -> form,
+      "index"          -> itemIndex.display,
       "mode"           -> mode,
       "lrn"            -> request.userAnswers.lrn,
       "pageTitle"      -> title,

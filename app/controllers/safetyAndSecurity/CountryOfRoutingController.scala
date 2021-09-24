@@ -73,7 +73,7 @@ class CountryOfRoutingController @Inject() (
               .map(form.fill)
               .getOrElse(form)
 
-            renderPage(lrn, mode, preparedForm, countries.fullList) map (Ok(_))
+            renderPage(lrn, index, mode, preparedForm, countries.fullList) map (Ok(_))
         }
     }
 
@@ -88,7 +88,7 @@ class CountryOfRoutingController @Inject() (
             formProvider(countries)
               .bindFromRequest()
               .fold(
-                formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList) map (BadRequest(_)),
+                formWithErrors => renderPage(lrn, index, mode, formWithErrors, countries.fullList) map (BadRequest(_)),
                 value =>
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfRoutingPage(index), value.code))
@@ -98,12 +98,13 @@ class CountryOfRoutingController @Inject() (
         }
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country])(implicit
+  private def renderPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[Country], countries: Seq[Country])(implicit
     request: Request[AnyContent]
   ): Future[Html] = {
     val json = Json.obj(
       "form"      -> form,
       "lrn"       -> lrn,
+      "index"     -> index.display,
       "mode"      -> mode,
       "countries" -> countryJsonList(form.value, countries)
     )

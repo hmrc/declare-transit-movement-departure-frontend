@@ -63,9 +63,11 @@ class DocumentReferenceController @Inject() (
         }
 
         val json = Json.obj(
-          "form" -> preparedForm,
-          "lrn"  -> lrn,
-          "mode" -> mode
+          "form"          -> preparedForm,
+          "itemIndex"     -> itemIndex.display,
+          "documentIndex" -> documentIndex.display,
+          "lrn"           -> lrn,
+          "mode"          -> mode
         )
 
         renderer.render(template, json).map(Ok(_))
@@ -83,9 +85,11 @@ class DocumentReferenceController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form" -> formWithErrors,
-                "lrn"  -> lrn,
-                "mode" -> mode
+                "form"          -> formWithErrors,
+                "itemIndex"     -> itemIndex.display,
+                "documentIndex" -> documentIndex.display,
+                "lrn"           -> lrn,
+                "mode"          -> mode
               )
 
               renderer.render(template, json).map(BadRequest(_))

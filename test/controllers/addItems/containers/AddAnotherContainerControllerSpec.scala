@@ -47,6 +47,7 @@ class AddAnotherContainerControllerSpec extends SpecBase with MockNunjucksRender
 
   private def expectedJson(form: Form[_]) = Json.obj(
     "form"           -> form,
+    "index"          -> itemIndex.display,
     "mode"           -> NormalMode,
     "lrn"            -> lrn,
     "pageTitle"      -> "addAnotherContainer.title.plural",

@@ -75,6 +75,7 @@ class AddSecurityConsignorsEoriControllerSpec extends SpecBase with MockNunjucks
 
       val expectedJson = Json.obj(
         "form"   -> form,
+        "index"  -> itemIndex.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> Radios.yesNo(form("value"))
@@ -109,6 +110,7 @@ class AddSecurityConsignorsEoriControllerSpec extends SpecBase with MockNunjucks
 
       val expectedJson = Json.obj(
         "form"   -> filledForm,
+        "index"  -> itemIndex.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> Radios.yesNo(filledForm("value"))
@@ -159,6 +161,7 @@ class AddSecurityConsignorsEoriControllerSpec extends SpecBase with MockNunjucks
 
       val expectedJson = Json.obj(
         "form"   -> boundForm,
+        "index"  -> itemIndex.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> Radios.yesNo(boundForm("value"))
