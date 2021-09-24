@@ -76,6 +76,8 @@ class PackageTypeController @Inject() (
               "form"         -> preparedForm,
               "lrn"          -> lrn,
               "mode"         -> mode,
+              "itemIndex"    -> itemIndex.display,
+              "packageIndex" -> packageIndex.display,
               "packageTypes" -> packageTypeList(preparedForm.value, packageTypes.packageTypeList)
             )
 
@@ -101,6 +103,8 @@ class PackageTypeController @Inject() (
                     "form"         -> formWithErrors,
                     "lrn"          -> lrn,
                     "mode"         -> mode,
+                    "itemIndex"    -> itemIndex.display,
+                    "packageIndex" -> packageIndex.display,
                     "packageTypes" -> packageTypeList(form.value, packageTypes.packageTypeList)
                   )
 

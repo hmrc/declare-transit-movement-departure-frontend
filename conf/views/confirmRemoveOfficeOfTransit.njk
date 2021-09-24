@@ -44,7 +44,7 @@
           </dl>
 
 
-        <form action="{{ routes.controllers.routeDetails.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.routeDetails.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn, index, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

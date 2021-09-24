@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.addItems.itemDetails.IsCommodityCodeKnownController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.itemDetails.IsCommodityCodeKnownController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
           {{ csrf() | safe }}

@@ -1135,6 +1135,8 @@ declarationRejection.pointer =  Error pointer
 declarationRejection.reason =  Reason
 declarationRejection.declarationDetails = Departure details
 declarationRejection.rejectionDetails = Rejection details
+declarationRejection.contact.p = You must
+declarationRejection.contact.link = contact the New Computerised Transit System helpdesk to get this fixed (opens in a new tab)
 
 addCircumstanceIndicator.title =  Do you need to add a specific circumstance indicator?
 addCircumstanceIndicator.heading = Do you need to add a specific circumstance indicator?
@@ -1321,6 +1323,8 @@ cancellationDecisionUpdate.initiatedByCustoms = Initiated by customs?
 cancellationDecisionUpdate.cancellationDecision = Status
 cancellationDecisionUpdate.cancellationDecisionDate = Date of decision
 cancellationDecisionUpdate.cancellationJustification = Reason
+cancellationDecisionUpdate.contact.p = You must
+cancellationDecisionUpdate.contact.link = contact the New Computerised Transit System helpdesk to get this fixed (opens in a new tab)
 
 safetyAndSecurityCheckYourAnswers.title = Check your answers
 safetyAndSecurityCheckYourAnswers.heading = Check your answers

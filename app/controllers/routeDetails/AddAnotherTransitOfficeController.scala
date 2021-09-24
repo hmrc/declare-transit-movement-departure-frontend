@@ -79,6 +79,7 @@ class AddAnotherTransitOfficeController @Inject() (
                   "lrn"            -> lrn,
                   "customsOffices" -> getCustomsOfficesAsJson(preparedForm.value, customsOffices.filterNot(selectedCustomsOfficeIds)),
                   "countryName"    -> countryName,
+                  "index"          -> index.display,
                   "mode"           -> mode
                 )
                 renderer.render("addAnotherTransitOffice.njk", json).map(Ok(_))
@@ -107,6 +108,7 @@ class AddAnotherTransitOfficeController @Inject() (
                       "lrn"            -> lrn,
                       "customsOffices" -> getCustomsOfficesAsJson(formWithErrors.value, customsOffices.filterNot(selectedCustomsOfficeIds)),
                       "countryName"    -> countryName,
+                      "index"          -> index.display,
                       "mode"           -> mode
                     )
                     renderer.render("addAnotherTransitOffice.njk", json).map(BadRequest(_))

@@ -91,6 +91,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
 
       val expectedJson = Json.obj(
         "form"           -> form,
+        "index"          -> index.display,
         "mode"           -> NormalMode,
         "lrn"            -> lrn,
         "countryName"    -> "United Kingdom",
@@ -148,6 +149,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
 
       val expectedJson = Json.obj(
         "form"           -> filledForm,
+        "index"          -> index.display,
         "lrn"            -> lrn,
         "mode"           -> NormalMode,
         "customsOffices" -> expectedCustomsOfficeJson
@@ -196,9 +198,10 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> boundForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual "addAnotherTransitOffice.njk"

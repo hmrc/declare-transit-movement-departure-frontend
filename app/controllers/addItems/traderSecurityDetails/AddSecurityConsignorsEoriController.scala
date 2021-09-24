@@ -66,6 +66,7 @@ class AddSecurityConsignorsEoriController @Inject() (
         val json = Json.obj(
           "form"   -> preparedForm,
           "mode"   -> mode,
+          "index"  -> itemIndex.display,
           "lrn"    -> lrn,
           "radios" -> Radios.yesNo(preparedForm("value"))
         )
@@ -87,6 +88,7 @@ class AddSecurityConsignorsEoriController @Inject() (
               val json = Json.obj(
                 "form"   -> formWithErrors,
                 "mode"   -> mode,
+                "index"  -> itemIndex.display,
                 "lrn"    -> lrn,
                 "radios" -> Radios.yesNo(formWithErrors("value"))
               )

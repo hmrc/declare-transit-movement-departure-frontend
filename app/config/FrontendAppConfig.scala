@@ -28,6 +28,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val analyticsHost: String    = configuration.get[String](s"google-analytics.host")
   val betaFeedbackUrl          = s"$contactHost/contact/beta-feedback"
   val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
+  val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
 
   val trackingConsentUrl: String = configuration.get[String]("microservice.services.tracking-consent-frontend.url")
   val gtmContainer: String       = configuration.get[String]("microservice.services.tracking-consent-frontend.gtm.container")

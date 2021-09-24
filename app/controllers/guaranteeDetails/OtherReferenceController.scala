@@ -63,9 +63,10 @@ class OtherReferenceController @Inject() (
         }
 
         val json = Json.obj(
-          "form" -> preparedForm,
-          "lrn"  -> lrn,
-          "mode" -> mode
+          "form"  -> preparedForm,
+          "index" -> index.display,
+          "lrn"   -> lrn,
+          "mode"  -> mode
         )
 
         renderer.render("otherReference.njk", json).map(Ok(_))
@@ -83,9 +84,10 @@ class OtherReferenceController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form" -> formWithErrors,
-                "lrn"  -> lrn,
-                "mode" -> mode
+                "form"  -> formWithErrors,
+                "index" -> index.display,
+                "lrn"   -> lrn,
+                "mode"  -> mode
               )
 
               renderer.render("otherReference.njk", json).map(BadRequest(_))

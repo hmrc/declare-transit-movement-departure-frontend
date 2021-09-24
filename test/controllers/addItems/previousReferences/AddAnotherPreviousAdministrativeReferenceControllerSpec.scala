@@ -97,6 +97,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
       val expectedJson = Json.obj(
         "form"      -> form,
+        "index"     -> index.display,
         "lrn"       -> lrn,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
@@ -129,6 +130,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
       val expectedJson = Json.obj(
         "form"      -> form,
+        "index"     -> index.display,
         "lrn"       -> lrn,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
@@ -177,6 +179,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
       val expectedJson = Json.obj(
         "form"      -> boundForm,
+        "index"     -> index.display,
         "lrn"       -> lrn,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)

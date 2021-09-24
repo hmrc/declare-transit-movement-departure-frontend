@@ -36,7 +36,7 @@
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
 
-        <form action="{{ routes.controllers.routeDetails.AddAnotherTransitOfficeController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.routeDetails.AddAnotherTransitOfficeController.onSubmit(lrn, index, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

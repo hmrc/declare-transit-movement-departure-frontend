@@ -64,6 +64,7 @@ class GuaranteeTypeController @Inject() (
 
         val json = Json.obj(
           "form"   -> preparedForm,
+          "index"  -> index.display,
           "mode"   -> mode,
           "lrn"    -> lrn,
           "radios" -> GuaranteeType.radios(preparedForm)
@@ -85,6 +86,7 @@ class GuaranteeTypeController @Inject() (
 
               val json = Json.obj(
                 "form"   -> formWithErrors,
+                "index"  -> index.display,
                 "mode"   -> mode,
                 "lrn"    -> lrn,
                 "radios" -> GuaranteeType.radios(formWithErrors)

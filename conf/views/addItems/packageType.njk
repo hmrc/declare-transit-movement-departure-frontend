@@ -36,7 +36,7 @@
 
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
-        <form action="{{ routes.controllers.addItems.packagesInformation.PackageTypeController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.packagesInformation.PackageTypeController.onSubmit(lrn, itemIndex, packageIndex, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

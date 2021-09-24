@@ -31,7 +31,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.guaranteeDetails.LiabilityAmountController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.guaranteeDetails.LiabilityAmountController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}

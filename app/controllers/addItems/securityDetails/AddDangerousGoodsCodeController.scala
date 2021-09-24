@@ -63,10 +63,11 @@ class AddDangerousGoodsCodeController @Inject() (
         }
 
         val json = Json.obj(
-          "form"   -> preparedForm,
-          "mode"   -> mode,
-          "lrn"    -> lrn,
-          "radios" -> Radios.yesNo(preparedForm("value"))
+          "form"      -> preparedForm,
+          "mode"      -> mode,
+          "lrn"       -> lrn,
+          "itemIndex" -> itemIndex.display,
+          "radios"    -> Radios.yesNo(preparedForm("value"))
         )
 
         renderer.render(template, json).map(Ok(_))
@@ -84,10 +85,11 @@ class AddDangerousGoodsCodeController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form"   -> formWithErrors,
-                "mode"   -> mode,
-                "lrn"    -> lrn,
-                "radios" -> Radios.yesNo(formWithErrors("value"))
+                "form"      -> formWithErrors,
+                "mode"      -> mode,
+                "lrn"       -> lrn,
+                "itemIndex" -> itemIndex.display,
+                "radios"    -> Radios.yesNo(formWithErrors("value"))
               )
 
               renderer.render(template, json).map(BadRequest(_))

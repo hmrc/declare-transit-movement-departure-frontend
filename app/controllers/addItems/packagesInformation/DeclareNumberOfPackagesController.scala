@@ -63,11 +63,12 @@ class DeclareNumberOfPackagesController @Inject() (
         }
 
         val json = Json.obj(
-          "form"      -> preparedForm,
-          "mode"      -> mode,
-          "lrn"       -> lrn,
-          "radios"    -> Radios.yesNo(preparedForm("value")),
-          "itemIndex" -> itemIndex.display
+          "form"         -> preparedForm,
+          "mode"         -> mode,
+          "lrn"          -> lrn,
+          "radios"       -> Radios.yesNo(preparedForm("value")),
+          "itemIndex"    -> itemIndex.display,
+          "packageIndex" -> packageIndex.display
         )
 
         renderer.render("addItems/declareNumberOfPackages.njk", json).map(Ok(_))
@@ -87,11 +88,12 @@ class DeclareNumberOfPackagesController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form"      -> formWithErrors,
-                "mode"      -> mode,
-                "lrn"       -> lrn,
-                "radios"    -> Radios.yesNo(formWithErrors("value")),
-                "itemIndex" -> itemIndex.display
+                "form"         -> formWithErrors,
+                "mode"         -> mode,
+                "lrn"          -> lrn,
+                "radios"       -> Radios.yesNo(formWithErrors("value")),
+                "itemIndex"    -> itemIndex.display,
+                "packageIndex" -> packageIndex.display
               )
 
               renderer.render("addItems/declareNumberOfPackages.njk", json).map(BadRequest(_))

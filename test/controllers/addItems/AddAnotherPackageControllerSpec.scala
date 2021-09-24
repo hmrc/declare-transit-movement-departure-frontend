@@ -71,10 +71,11 @@ class AddAnotherPackageControllerSpec extends SpecBase with MockNunjucksRenderer
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"   -> form,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(form("value"))
+        "form"      -> form,
+        "mode"      -> NormalMode,
+        "lrn"       -> lrn,
+        "itemIndex" -> itemIndex.display,
+        "radios"    -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherPackage.njk"
@@ -102,10 +103,11 @@ class AddAnotherPackageControllerSpec extends SpecBase with MockNunjucksRenderer
       val filledForm = form.bind(Map("value" -> "true"))
 
       val expectedJson = Json.obj(
-        "form"   -> filledForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(filledForm("value"))
+        "form"      -> filledForm,
+        "mode"      -> NormalMode,
+        "lrn"       -> lrn,
+        "itemIndex" -> itemIndex.display,
+        "radios"    -> Radios.yesNo(filledForm("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherPackage.njk"
@@ -146,10 +148,11 @@ class AddAnotherPackageControllerSpec extends SpecBase with MockNunjucksRenderer
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"   -> boundForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(boundForm("value"))
+        "form"      -> boundForm,
+        "mode"      -> NormalMode,
+        "lrn"       -> lrn,
+        "itemIndex" -> itemIndex.display,
+        "radios"    -> Radios.yesNo(boundForm("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherPackage.njk"
