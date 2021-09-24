@@ -1,7 +1,6 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/headerForId.njk"                   import headerForId %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk"         import govukInput %}
@@ -32,13 +31,13 @@
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
         {{ csrf() | safe }}
-        {{ headerForId({
-              header: messages('accessCode.heading'),
-              id: "value"
-           })
-        }}
 
         {{ govukInput({
+          label: {
+            text: messages('accessCode.heading'),
+            isPageHeading: true,
+            classes: "govuk-label--xl govuk-!-padding-bottom-5"
+          },
           type: "password",
           id: "value",
           classes: "govuk-input--width-5",

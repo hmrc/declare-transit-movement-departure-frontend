@@ -1,7 +1,6 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/headerForId.njk"                   import headerForId %}
 {% from "govuk/components/input/macro.njk"         import govukInput %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -31,15 +30,14 @@
         <form action="{{ routes.controllers.goodsSummary.AuthorisedLocationCodeController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
-          {{ headerForId({
-                header: messages('authorisedLocationCode.heading'),
-                id: "value"
-             })
-          }}
-
           {{ csrf() | safe }}
 
           {{ govukInput({
+            label: {
+              text: messages('authorisedLocationCode.heading'),
+              isPageHeading: true,
+              classes: "govuk-label--xl govuk-!-padding-bottom-5"
+            },
             hint: {
               text: messages('authorisedLocationCode.paragraph'),
               classes: "hint-as-label"

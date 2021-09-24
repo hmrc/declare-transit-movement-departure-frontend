@@ -43,12 +43,14 @@
 
           {{ csrf() | safe }}
 
+          <p class="govuk-body"> {{ messages("officeOfDeparture.label") }}</p>
+
           {{ govukSelect({
             classes: "govuk-input--width-20 autocomplete",
             label: {
-              text: messages('officeOfDeparture.label'),
+              text: messages('officeOfDeparture.heading'),
               isPageHeading: false,
-              classes: "govuk-body"
+              classes: "govuk-visually-hidden"
             },
             id: "value",
             name: "value",

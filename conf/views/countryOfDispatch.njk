@@ -1,7 +1,6 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/headerForId.njk"                   import headerForId %}
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -36,17 +35,16 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
-        {{ headerForId({
-            header: messages("countryOfDispatch.heading"),
-            id: "value"
-           })
-        }}
-
         <form action="{{ routes.controllers.routeDetails.CountryOfDispatchController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
             {{ govukSelect({
+              label: {
+                text: messages("countryOfDispatch.heading"),
+                isPageHeading: true,
+                classes: "govuk-label--xl govuk-!-padding-bottom-5"
+              },
               hint: {
                 text: messages('countryOfDispatch.label'),
                 classes: "hint-as-label"

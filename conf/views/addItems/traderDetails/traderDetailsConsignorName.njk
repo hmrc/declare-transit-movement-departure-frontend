@@ -1,7 +1,6 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/headerForId.njk"                   import headerForId %}
 {% from "govuk/components/input/macro.njk"         import govukInput %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -31,15 +30,14 @@
         <form action="{{ routes.controllers.addItems.traderDetails.TraderDetailsConsignorNameController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
-          {{ headerForId({
-                header: messages('traderDetailsConsignorName.heading', index),
-                id: "value"
-             })
-          }}
-
           {{ csrf() | safe }}
 
           {{ govukInput({
+            label: {
+              text: messages('traderDetailsConsignorName.heading', index),
+              isPageHeading: true,
+              classes: "govuk-label--xl govuk-!-padding-bottom-5"
+            },
             id: "value",
             name: "value",
             value: form.value.value,

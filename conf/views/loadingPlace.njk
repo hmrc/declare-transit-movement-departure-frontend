@@ -1,7 +1,6 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/headerForId.njk"                   import headerForId %}
 {% from "govuk/components/input/macro.njk"         import govukInput %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -32,15 +31,14 @@
 
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
-          {{ headerForId({
-                header: messages("loadingPlace.heading", index),
-                id: "value"
-             })
-          }}
-
           {{ csrf() | safe }}
 
           {{ govukInput({
+            label: {
+              text: messages("loadingPlace.heading", index),
+              isPageHeading: true,
+              classes: "govuk-label--xl govuk-!-padding-bottom-5"
+            },
             hint: {
               text: messages("loadingPlace.paragraph", index),
               classes: "hint-as-label"
