@@ -60,7 +60,7 @@ class DestinationOfficeControllerSpec
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   private val form                              = new DestinationOfficeFormProvider()(customsOffices, "United Kingdom")
   private val mockReferenceDataConnector        = mock[ReferenceDataConnector]
-  lazy val destinationOfficeRoute               = routes.DestinationOfficeController.onPageLoad(lrn, NormalMode).url
+  private lazy val destinationOfficeRoute       = routes.DestinationOfficeController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -86,9 +86,9 @@ class DestinationOfficeControllerSpec
 
       when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(GET, destinationOfficeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, destinationOfficeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -99,7 +99,7 @@ class DestinationOfficeControllerSpec
         .getTransitCountryList(eqTo(alwaysExcludedTransitCountries))(any(), any())
 
       val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text"         -> ""),
+        Json.obj("value" -> "", "text"         -> "Select"),
         Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> false),
         Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
       )
@@ -132,9 +132,9 @@ class DestinationOfficeControllerSpec
 
       when(mockReferenceDataConnector.getTransitCountryList(any())(any(), any())).thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(GET, destinationOfficeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, destinationOfficeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -145,7 +145,7 @@ class DestinationOfficeControllerSpec
         .getTransitCountryList(eqTo(alwaysExcludedTransitCountries))(any(), any())
 
       val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text"         -> ""),
+        Json.obj("value" -> "", "text"         -> "Select"),
         Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> false),
         Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
       )
@@ -218,9 +218,9 @@ class DestinationOfficeControllerSpec
 
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(GET, destinationOfficeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, destinationOfficeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -231,7 +231,7 @@ class DestinationOfficeControllerSpec
       val filledForm = form.bind(Map("value" -> "officeId"))
 
       val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text"         -> ""),
+        Json.obj("value" -> "", "text"         -> "Select"),
         Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> true),
         Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
       )
@@ -289,10 +289,10 @@ class DestinationOfficeControllerSpec
 
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(POST, destinationOfficeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, destinationOfficeRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

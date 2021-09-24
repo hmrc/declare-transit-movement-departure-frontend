@@ -73,9 +73,9 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
         .thenReturn(Future.successful(customsOffices))
       when(mockRefDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(GET, addAnotherTransitOfficeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherTransitOfficeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -84,7 +84,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text"         -> ""),
+        Json.obj("value" -> "", "text"         -> "Select"),
         Json.obj("value" -> "officeId", "text" -> "someName (officeId)", "selected" -> false),
         Json.obj("value" -> "id", "text"       -> "name (id)", "selected"           -> false)
       )
@@ -130,9 +130,9 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any())).thenReturn(Future.successful(customsOffices))
 
-      val request        = FakeRequest(GET, addAnotherTransitOfficeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherTransitOfficeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -143,7 +143,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
       val filledForm = form.bind(Map("value" -> "officeId"))
 
       val expectedCustomsOfficeJson = Seq(
-        Json.obj("value" -> "", "text"   -> ""),
+        Json.obj("value" -> "", "text"   -> "Select"),
         Json.obj("value" -> "id", "text" -> "name (id)", "selected" -> false)
       )
 
@@ -186,10 +186,10 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
         .thenReturn(Future.successful(customsOffices))
       when(mockRefDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(POST, addAnotherTransitOfficeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addAnotherTransitOfficeRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

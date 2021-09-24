@@ -63,7 +63,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach(): Unit = {
+  override def beforeEach: Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }
@@ -77,9 +77,9 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
       when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
 
-      val request        = FakeRequest(GET, packageTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, packageTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -88,7 +88,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val packageTypesJson = Seq(
-        Json.obj("value" -> "", "text"   -> ""),
+        Json.obj("value" -> "", "text"   -> "Select"),
         Json.obj("value" -> "AB", "text" -> "Description 1 (AB)", "selected" -> false),
         Json.obj("value" -> "CD", "text" -> "Description 2 (CD)", "selected" -> false)
       )
@@ -117,9 +117,9 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       val userAnswers = emptyUserAnswers.set(PackageTypePage(index, index), packageType1).success.value
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, packageTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, packageTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -130,7 +130,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       val filledForm = form.bind(Map("value" -> "AB"))
 
       val packageTypesJson = Seq(
-        Json.obj("value" -> "", "text"   -> ""),
+        Json.obj("value" -> "", "text"   -> "Select"),
         Json.obj("value" -> "AB", "text" -> "Description 1 (AB)", "selected" -> true),
         Json.obj("value" -> "CD", "text" -> "Description 2 (CD)", "selected" -> false)
       )
@@ -192,10 +192,10 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
 
-      val request        = FakeRequest(POST, packageTypeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, packageTypeRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

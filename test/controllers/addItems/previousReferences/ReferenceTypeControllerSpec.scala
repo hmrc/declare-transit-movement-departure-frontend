@@ -60,7 +60,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val referenceTypeRoute = routes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, NormalMode).url
+  private lazy val referenceTypeRoute = routes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -68,7 +68,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsAdminReference]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach(): Unit = {
+  override def beforeEach: Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }
@@ -82,9 +82,9 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
       when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
 
-      val request        = FakeRequest(GET, referenceTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, referenceTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -93,7 +93,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedPreviousDocumentTypeJson = Seq(
-        Json.obj("value" -> "", "text"    -> ""),
+        Json.obj("value" -> "", "text"    -> "Select"),
         Json.obj("value" -> "T1", "text"  -> "(T1) Description T1", "selected" -> false),
         Json.obj("value" -> "T2F", "text" -> "T2F", "selected"                 -> false),
         Json.obj("value" -> "CO", "text"  -> "CO", "selected"                  -> false)
@@ -124,9 +124,9 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
       val userAnswers = emptyUserAnswers.set(ReferenceTypePage(index, referenceIndex), "T1").success.value
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, referenceTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, referenceTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -137,7 +137,7 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
       val filledForm = form.bind(Map("value" -> "T1"))
 
       val expectedPreviousDocumentTypeJson = Seq(
-        Json.obj("value" -> "", "text"    -> ""),
+        Json.obj("value" -> "", "text"    -> "Select"),
         Json.obj("value" -> "T1", "text"  -> "(T1) Description T1", "selected" -> true),
         Json.obj("value" -> "T2F", "text" -> "T2F", "selected"                 -> false),
         Json.obj("value" -> "CO", "text"  -> "CO", "selected"                  -> false)
@@ -181,10 +181,10 @@ class ReferenceTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
       when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
 
-      val request        = FakeRequest(POST, referenceTypeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, referenceTypeRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

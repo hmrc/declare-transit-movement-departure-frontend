@@ -54,10 +54,10 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
   private val form         = formProvider(countries)
   private val template     = "movementDestinationCountry.njk"
 
-  lazy val movementDestinationCountryRoute = routes.MovementDestinationCountryController.onPageLoad(lrn, NormalMode).url
+  private lazy val movementDestinationCountryRoute = routes.MovementDestinationCountryController.onPageLoad(lrn, NormalMode).url
 
   def jsonCountryList(preSelected: Boolean): Seq[JsObject] = Seq(
-    Json.obj("text" -> "", "value"               -> ""),
+    Json.obj("text" -> "Select", "value"         -> ""),
     Json.obj("text" -> "United Kingdom", "value" -> "GB", "selected" -> preSelected)
   )
 
@@ -81,9 +81,9 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, movementDestinationCountryRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, movementDestinationCountryRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -120,9 +120,9 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, movementDestinationCountryRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, movementDestinationCountryRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -160,9 +160,9 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, movementDestinationCountryRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, movementDestinationCountryRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -221,10 +221,10 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(POST, movementDestinationCountryRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, movementDestinationCountryRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

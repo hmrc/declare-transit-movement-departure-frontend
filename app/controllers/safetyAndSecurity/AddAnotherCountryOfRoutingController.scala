@@ -65,7 +65,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        renderPage(lrn, form).map(Ok(_))
+        renderPage(lrn, mode, form).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
@@ -77,7 +77,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => renderPage(lrn, formWithErrors).map(BadRequest(_)),
+            formWithErrors => renderPage(lrn, mode, formWithErrors).map(BadRequest(_)),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAnotherCountryOfRoutingPage, value))
@@ -86,7 +86,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
           )
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
+  private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
     val cyaHelper                = new SafetyAndSecurityCheckYourAnswersHelper(request.userAnswers)
     val numberOfRoutingCountries = request.userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)
@@ -105,6 +105,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
           "heading"     -> msg"addAnotherCountryOfRouting.heading.$singularOrPlural".withArgs(numberOfRoutingCountries),
           "countryRows" -> countryRows,
           "lrn"         -> lrn,
+          "mode"        -> mode,
           "radios"      -> Radios.yesNo(form("value"))
         )
 

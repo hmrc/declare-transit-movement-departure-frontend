@@ -29,7 +29,8 @@ if (typeof accessibleAutocomplete != 'undefined' && document.querySelector('.aut
     // load autocomplete
     accessibleAutocomplete.enhanceSelectElement({
         selectElement: document.querySelector('.autocomplete'),
-        showAllValues: true
+        showAllValues: true,
+        defaultValue: ''
     });
 
     // =====================================================
