@@ -610,8 +610,8 @@ guaranteeReference.error.required = Enter the guarantee reference number
 guaranteeReference.error.invalid = The guarantee reference number must only include letters a to z without accents and numbers 0 to 9
 guaranteeReference.error.length = Guarantee reference number must be {0} characters or less
 
-liabilityAmount.title = How much is the liability amount?
-liabilityAmount.heading = How much is the liability amount?
+liabilityAmount.title = How much is the liability amount, in pounds?
+liabilityAmount.heading = How much is the liability amount, in pounds?
 liabilityAmount.checkYourAnswersLabel = Liability amount
 liabilityAmount.error.required = Enter the liability amount
 liabilityAmount.error.length = Liability amount must be 100 characters or less
