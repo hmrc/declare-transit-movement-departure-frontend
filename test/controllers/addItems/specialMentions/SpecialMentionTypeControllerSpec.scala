@@ -57,7 +57,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val specialMentionTypeRoute = routes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
+  private lazy val specialMentionTypeRoute = routes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -76,9 +76,9 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
 
       when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
 
-      val request        = FakeRequest(GET, specialMentionTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, specialMentionTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -87,7 +87,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedSpecialMentionJson = Seq(
-        Json.obj("value" -> "", "text"      -> ""),
+        Json.obj("value" -> "", "text"      -> "Select"),
         Json.obj("value" -> "10600", "text" -> "(10600) Negotiable Bill of lading 'to order blank endorsed'", "selected" -> false),
         Json.obj("value" -> "30400", "text" -> "(30400) RET-EXP – Copy 3 to be returned", "selected"                     -> false)
       )
@@ -117,9 +117,9 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
 
       when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
 
-      val request        = FakeRequest(GET, specialMentionTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, specialMentionTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -130,7 +130,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
       val filledForm = form.bind(Map("value" -> "10600"))
 
       val expectedSpecialMentionJson = Seq(
-        Json.obj("value" -> "", "text"      -> ""),
+        Json.obj("value" -> "", "text"      -> "Select"),
         Json.obj("value" -> "10600", "text" -> "(10600) Negotiable Bill of lading 'to order blank endorsed'", "selected" -> true),
         Json.obj("value" -> "30400", "text" -> "(30400) RET-EXP – Copy 3 to be returned", "selected"                     -> false)
       )
@@ -175,10 +175,10 @@ class SpecialMentionTypeControllerSpec extends SpecBase with MockNunjucksRendere
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(POST, specialMentionTypeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, specialMentionTypeRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

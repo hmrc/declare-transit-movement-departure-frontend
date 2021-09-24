@@ -63,10 +63,10 @@ class OfficeOfTransitCountryControllerSpec
   private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("JE"), None)
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
 
-  lazy val officeOfTransitCountryRoute = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, NormalMode).url
+  private lazy val officeOfTransitCountryRoute = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, NormalMode).url
 
   def jsonCountryList(preSelected: Boolean): Seq[JsObject] = Seq(
-    Json.obj("text" -> "", "value"               -> ""),
+    Json.obj("text" -> "Select", "value"         -> ""),
     Json.obj("text" -> "United Kingdom", "value" -> "GB", "selected" -> preSelected)
   )
 
@@ -89,9 +89,9 @@ class OfficeOfTransitCountryControllerSpec
 
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, officeOfTransitCountryRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, officeOfTransitCountryRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -129,9 +129,9 @@ class OfficeOfTransitCountryControllerSpec
 
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, officeOfTransitCountryRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, officeOfTransitCountryRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -188,9 +188,9 @@ class OfficeOfTransitCountryControllerSpec
 
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, officeOfTransitCountryRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, officeOfTransitCountryRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -268,10 +268,10 @@ class OfficeOfTransitCountryControllerSpec
 
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(POST, officeOfTransitCountryRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, officeOfTransitCountryRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

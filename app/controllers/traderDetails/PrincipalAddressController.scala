@@ -119,6 +119,6 @@ class PrincipalAddressController @Inject() (
         Json.obj("text" -> country.description, "value" -> country.code, "selected" -> value.contains(country))
     }
 
-    Json.obj("value" -> "", "text" -> "") +: countryJsonList
+    Json.obj("value" -> "", "text" -> "Select a country") +: countryJsonList
   }
 }

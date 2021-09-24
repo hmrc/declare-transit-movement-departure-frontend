@@ -49,8 +49,8 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
   private val documentTypeList = DocumentTypeList(
     Seq(
-      DocumentType("955", "ATA carnet", true),
-      DocumentType("740", "Air waybill", true)
+      DocumentType("955", "ATA carnet", transportDocument = true),
+      DocumentType("740", "Air waybill", transportDocument = true)
     )
   )
   private val form     = formProvider(documentTypeList)
@@ -58,7 +58,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val documentTypeRoute = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  private lazy val documentTypeRoute = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -66,7 +66,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach(): Unit = {
+  override def beforeEach: Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }
@@ -81,9 +81,9 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
       when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
 
-      val request        = FakeRequest(GET, documentTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, documentTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -92,7 +92,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedDocumentTypeJson = Seq(
-        Json.obj("value" -> "", "text"    -> ""),
+        Json.obj("value" -> "", "text"    -> "Select"),
         Json.obj("value" -> "955", "text" -> "(955) ATA carnet", "selected"  -> false),
         Json.obj("value" -> "740", "text" -> "(740) Air waybill", "selected" -> false)
       )
@@ -121,9 +121,9 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
       val userAnswers = emptyUserAnswers.set(addItems.DocumentTypePage(itemIndex, documentIndex), "955").success.value
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, documentTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, documentTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -134,7 +134,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
       val filledForm = form.bind(Map("value" -> "955"))
 
       val expectedDocumentTypeJson = Seq(
-        Json.obj("value" -> "", "text"    -> ""),
+        Json.obj("value" -> "", "text"    -> "Select"),
         Json.obj("value" -> "955", "text" -> "(955) ATA carnet", "selected"  -> true),
         Json.obj("value" -> "740", "text" -> "(740) Air waybill", "selected" -> false)
       )
@@ -179,10 +179,10 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
       when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
 
-      val request        = FakeRequest(POST, documentTypeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, documentTypeRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

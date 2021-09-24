@@ -20,7 +20,7 @@ import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.viewmodels.{Content, Html, MessageInterpolators, Text}
 
 package object utils {
-  val defaultOption: JsObject = Json.obj("value" -> "", "text" -> "")
+  val defaultOption: JsObject = Json.obj("value" -> "", "text" -> "Select")
 
   def packageTypeList(value: Option[PackageType], packageTypes: Seq[PackageType]): Seq[JsObject] = {
     val packageTypeJson = packageTypes.map {
