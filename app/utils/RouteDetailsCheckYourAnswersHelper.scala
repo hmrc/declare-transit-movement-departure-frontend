@@ -33,7 +33,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     page = ArrivalTimesAtOfficePage(index),
     formatAnswer = dateTime => lit"${Format.dateTimeFormattedAMPM(dateTime).toLowerCase}",
     prefix = "arrivalTimesAtOffice",
-    id = Some("change-arrival-times-at-office-of-transit"),
+    id = Some(s"change-arrival-times-at-office-of-transit-${index.display}"),
     call = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode),
     args = index.display
   )
@@ -59,7 +59,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
       buildRow(
         prefix = "addAnotherTransitOffice",
         answer = answer,
-        id = Some("change-office-of-transit"),
+        id = Some(s"change-office-of-transit-${index.display}"),
         call = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, CheckMode),
         args = index.display
       )
