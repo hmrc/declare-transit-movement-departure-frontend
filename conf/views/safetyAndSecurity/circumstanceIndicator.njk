@@ -36,13 +36,14 @@
         <form action="{{ routes.controllers.safetyAndSecurity.CircumstanceIndicatorController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('safetyAndSecurity.preHeading')}}</span>
 
-            <h1 class="govuk-heading-xl">
-              {{ messages("circumstanceIndicator.heading") }}
-            </h1>
-
           {{ csrf() | safe }}
 
           {{ govukSelect({
+            label: {
+              text: messages('circumstanceIndicator.heading'),
+              isPageHeading: true,
+              classes: "govuk-label--xl govuk-!-padding-bottom-5"
+            },
             classes: "govuk-input--width-20 autocomplete",
             id: "value",
             name: "value",

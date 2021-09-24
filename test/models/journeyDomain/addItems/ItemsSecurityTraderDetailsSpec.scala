@@ -31,7 +31,6 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
 
   private val itemSecurityTraderDetailsUa = emptyUserAnswers
     .unsafeSetVal(AddSecurityDetailsPage)(true)
-    .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
     .unsafeSetVal(AddDangerousGoodsCodePage(index))(false)
     .unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
     .unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
@@ -54,7 +53,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
 
         val expectedResult = ItemsSecurityTraderDetails(
           Some(MethodOfPayment("code", "description")),
-          Some("commercialReferenceNumber"),
+          None,
           Some("dangerousGoodsCode"),
           None,
           None
@@ -136,6 +135,7 @@ class ItemsSecurityTraderDetailsSpec extends SpecBase with GeneratorSpec with Tr
       "when AddCommercialReferenceNumberAllItemsPage is not true and CommercialReferenceNumberPage is not defined" in {
 
         val userAnswers = itemSecurityTraderDetailsUa
+          .unsafeSetVal(AddCommercialReferenceNumberPage)(true)
           .unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(false)
           .unsafeRemove(CommercialReferenceNumberPage(index))
 

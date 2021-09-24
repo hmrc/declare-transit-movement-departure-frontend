@@ -23,6 +23,7 @@ import navigation.Navigator
 import pages.addItems.securityDetails._
 import pages.safetyAndSecurity.{
   AddCommercialReferenceNumberAllItemsPage,
+  AddCommercialReferenceNumberPage,
   AddSafetyAndSecurityConsigneePage,
   AddSafetyAndSecurityConsignorPage,
   CircumstanceIndicatorPage
@@ -64,9 +65,9 @@ class AddItemsSecurityDetailsNavigator @Inject() () extends Navigator {
     }
 
   private def transportChargesRoute(ua: UserAnswers, index: Index) =
-    ua.get(AddCommercialReferenceNumberAllItemsPage) match {
-      case Some(true) => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
-      case _          => Some(routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, index, NormalMode))
+    (ua.get(AddCommercialReferenceNumberPage), ua.get(AddCommercialReferenceNumberAllItemsPage)) match {
+      case (Some(true), Some(false)) => Some(routes.CommercialReferenceNumberController.onPageLoad(ua.lrn, index, NormalMode))
+      case _                         => Some(routes.AddDangerousGoodsCodeController.onPageLoad(ua.lrn, index, NormalMode))
     }
 
   private def dangerousGoodsCodeRoute(ua: UserAnswers, index: Index, mode: Mode) =

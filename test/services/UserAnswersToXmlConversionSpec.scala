@@ -462,7 +462,6 @@ class UserAnswersToXmlConversionSpec
           <DecDatHEA383>20201212</DecDatHEA383>
           <DecPlaHEA394>XX1 1XX</DecPlaHEA394>
           <TraChaMetOfPayHEA1>M</TraChaMetOfPayHEA1>
-          <ComRefNumHEA>GD1CRN</ComRefNumHEA>
           <SecHEA358>1</SecHEA358>
           <CodPlUnHEA357>PlaceOfUnloadingPage</CodPlUnHEA357>
         </HEAHEA>
