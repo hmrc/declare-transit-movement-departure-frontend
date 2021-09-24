@@ -48,6 +48,8 @@ class Renderer @Inject() (frontendAppConfig: FrontendAppConfig, appConfig: Rende
     "countdown"                      -> appConfig.countdownSeconds,
     "trackingConsentUrl"             -> frontendAppConfig.trackingConsentUrl,
     "gtmContainer"                   -> frontendAppConfig.gtmContainer,
-    "serviceUrl"                     -> frontendAppConfig.serviceUrl
+    "serviceUrl"                     -> frontendAppConfig.serviceUrl,
+    "contactUrl"                     -> frontendAppConfig.nctsEnquiriesUrl,
+    "guidanceUrl"                    -> frontendAppConfig.nctsGuidanceUrl
   )
 }
