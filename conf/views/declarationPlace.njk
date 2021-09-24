@@ -1,7 +1,6 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/headerForId.njk"                   import headerForId %}
 {% from "govuk/components/input/macro.njk"         import govukInput %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -33,17 +32,18 @@
 
           {{ csrf() | safe }}
 
-          {{ headerForId({
-                header: messages("declarationPlace.heading"),
-                id: "value"
-              })
-          }}
+          <h1 class="govuk-heading-xl">
+            {{ messages("declarationPlace.heading") }}
+          </h1>
 
           <p class = "govuk-body"> {{ messages('declarationPlace.paragraph') }} </p>
           <p class = "govuk-label" > {{ messages('postcode') }} </p>
 
           {{ govukInput({
-
+             label: {
+               text: messages('transportChargesPaymentMethod.heading'),
+               classes: "govuk-visually-hidden"
+             },
             id: "value",
             name: "value",
             value: form.value.value,

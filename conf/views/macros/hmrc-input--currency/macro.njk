@@ -3,8 +3,13 @@
 {% macro hmrcInputCurrency(params) %}
 
      {{ govukInput({
-        hint: {
+        label: {
           text: params.label,
+          isPageHeading: true,
+          classes: "govuk-label--xl govuk-!-padding-bottom-5"
+        },
+        hint: {
+          text: params.hint,
           classes: "hint-as-label"
         },
         name: params.name,
