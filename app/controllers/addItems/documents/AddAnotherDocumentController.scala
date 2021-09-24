@@ -62,7 +62,7 @@ class AddAnotherDocumentController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        renderPage(lrn, index, formProvider(index)).map(Ok(_))
+        renderPage(lrn, index, mode, formProvider(index)).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
@@ -74,7 +74,7 @@ class AddAnotherDocumentController @Inject() (
         formProvider(index)
           .bindFromRequest()
           .fold(
-            formWithErrors => renderPage(lrn, index, formWithErrors).map(BadRequest(_)),
+            formWithErrors => renderPage(lrn, index, mode, formWithErrors).map(BadRequest(_)),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAnotherDocumentPage(index), value))
@@ -83,7 +83,7 @@ class AddAnotherDocumentController @Inject() (
           )
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, index: Index, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
+  private def renderPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
     val cyaHelper             = new AddItemsCheckYourAnswersHelper(request.userAnswers)
     val numberOfDocuments     = request.userAnswers.get(DeriveNumberOfDocuments(index)).getOrElse(0)
@@ -101,6 +101,7 @@ class AddAnotherDocumentController @Inject() (
           "form"         -> form,
           "lrn"          -> lrn,
           "index"        -> index.display,
+          "mode"         -> mode,
           "pageTitle"    -> msg"addAnotherDocument.title.$singularOrPlural".withArgs(numberOfDocuments),
           "heading"      -> msg"addAnotherDocument.heading.$singularOrPlural".withArgs(numberOfDocuments),
           "documentRows" -> documentRows,
