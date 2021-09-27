@@ -10,7 +10,7 @@
 
 {% block mainContent %}
 
-  {{ govukBackLink({
+{{ govukBackLink({
     text: messages("site.back")
   }) }}
 
@@ -34,10 +34,13 @@
           {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother) }}
         {% endfor %}
 
-        <p class="govuk-body">{{ messages("declarationRejection.contact.p") }}
-          <a href={{ contactUrl }} target="_blank" rel="noopener noreferrer">{{ messages("declarationRejection.contact.link") }}</a>.
+        <p class="govuk-body">
+            {{ messages("declarationRejection.review") }} <a href={{ departureUrl }}>{{ messages("declarationRejection.newDeparture") }}</a>.
         </p>
 
+        <p class="govuk-body">
+            {{ messages("declarationRejection.youCan") }} <a href={{ contactUrl }} target="_blank" rel="noopener noreferrer">{{ messages("declarationRejection.contact.link") }}</a>.
+        </p>
       </div>
     </div>
   </div>

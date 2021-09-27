@@ -50,35 +50,11 @@ class DeclarationRejectionController @Inject() (
   private def errorSections(message: DeclarationRejectionMessage): Seq[Section] = message.errors map {
     error =>
       val rows = Seq(
-        Row(Key(msg"declarationRejection.errorType"), Value(lit"${error.errorType}"), Seq.empty),
-        Row(Key(msg"declarationRejection.pointer"), Value(lit"${error.pointer}"), Seq.empty)
+        Row(Key(msg"declarationRejection.code"), Value(lit"${error.errorCode}")),
+        Row(Key(msg"declarationRejection.pointer"), Value(lit"${error.pointer}"))
       )
 
-      val completed = if (error.reason.nonEmpty) {
-        rows :+ Row(Key(msg"declarationRejection.reason"), Value(lit"${error.reason.get}"), Seq.empty)
-      } else {
-        rows
-      }
-
-      Section(completed)
-  }
-
-  private def detailsSection(message: DeclarationRejectionMessage): Seq[Section] = {
-    val rejectionDate = LocalDate.parse(message.rejectionDate.toString)
-    val displayDate   = dateFormatterMonthName.format(rejectionDate)
-
-    val rows = Seq(
-      Row(Key(msg"declarationRejection.localReferenceNumber"), Value(lit"${message.reference}"), Seq.empty),
-      Row(Key(msg"declarationRejection.date"), Value(lit"$displayDate"), Seq.empty)
-    )
-
-    val completedRows = if (message.reason.nonEmpty) {
-      rows :+ Row(Key(msg"declarationRejection.rejectionReason"), Value(lit"${message.reason.get}"))
-    } else {
-      rows
-    }
-
-    Seq(Section(msg"declarationRejection.declarationDetails", completedRows))
+      Section(rows)
   }
 
   def onPageLoad(departureId: DepartureId): Action[AnyContent] = identify.async {
@@ -86,9 +62,9 @@ class DeclarationRejectionController @Inject() (
       departureMessageService.declarationRejectionMessage(departureId).flatMap {
         case Some(message) =>
           val json = Json.obj(
-            "detailsSection" -> detailsSection(message),
-            "errorsSection"  -> errorSections(message),
-            "contactUrl"     -> appConfig.nctsEnquiriesUrl
+            "errorsSection" -> errorSections(message),
+            "contactUrl"    -> appConfig.nctsEnquiriesUrl,
+            "departureUrl"  -> routes.LocalReferenceNumberController.onPageLoad().url
           )
           renderer.render("declarationRejection.njk", json).map(Ok(_))
         case _ =>

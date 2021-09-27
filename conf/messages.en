@@ -1057,14 +1057,17 @@ dangerousGoodsCode.checkYourAnswersLabel = United Nations number for dangerous g
 dangerousGoodsCode.error.required = Enter the United Nations number for dangerous goods
 dangerousGoodsCode.error.length = United Nations number for dangerous goods must be 4 characters or less
 
-guaranteeNotValid.title = There is a problem with this departure declaration
-guaranteeNotValid.heading = There is a problem with this departure declaration
-guaranteeNotValid.reasonCode = Invalid guarantee reason code
-guaranteeNotValid.reason = Invalid guarantee reason
-guaranteeNotValid.contact = contact the New Computerised Transit System helpdesk to get this fixed (opens in a new window)
-guaranteeNotValid.you.must = You must
+guaranteeNotValid.title = There is a problem with the guarantee for this departure declaration
+guaranteeNotValid.heading = There is a problem with the guarantee for this departure declaration
+guaranteeNotValid.errorCode = Error code
+guaranteeNotValid.reason = Reason
+guaranteeNotValid.review = You must review the error and
+guaranteeNotValid.sendDeparture = send a new departure declaration with the right guarantee information
+guaranteeNotValid.youCan = You can
+guaranteeNotValid.contact = contact the New Computerised Transit System helpdesk if you need help understanding the error (opens in a new tab)
 guaranteeNotValid.mrn = Movement reference number
 guaranteeNotValid.guaranteeRefNumber = Guarantee Reference number
+guaranteeNotValid.you.must = You must
 
 usingSameMethodOfPayment.title = Are you using the same payment method for all items?
 usingSameMethodOfPayment.heading = Are you using the same payment method for all items?
@@ -1130,13 +1133,18 @@ declarationRejection.heading = There is a problem with this departure declaratio
 declarationRejection.date = Rejection date
 declarationRejection.localReferenceNumber = Local reference number
 declarationRejection.rejectionReason = Rejection reason
-declarationRejection.errorType =  Error type
+declarationRejection.code =  Error code
 declarationRejection.pointer =  Error pointer
 declarationRejection.reason =  Reason
 declarationRejection.declarationDetails = Departure details
 declarationRejection.rejectionDetails = Rejection details
 declarationRejection.contact.p = You must
 declarationRejection.contact.link = contact the New Computerised Transit System helpdesk to get this fixed (opens in a new tab)
+
+declarationRejection.review = You must review the error and
+declarationRejection.newDeparture = send a new departure declaration with the right information
+declarationRejection.youCan = You can
+declarationRejection.contact = contact the New Computerised Transit System helpdesk if you need help understanding the error (opens in a new tab)
 
 addCircumstanceIndicator.title =  Do you need to add a specific circumstance indicator?
 addCircumstanceIndicator.heading = Do you need to add a specific circumstance indicator?

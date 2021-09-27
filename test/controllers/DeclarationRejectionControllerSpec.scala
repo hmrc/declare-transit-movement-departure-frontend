@@ -51,80 +51,45 @@ class DeclarationRejectionControllerSpec extends SpecBase with MockNunjucksRende
 
   "DeclarationRejection Controller" - {
 
-    "return OK and the correct view for a GET" - {
-      "when rejection reason is available" in {
-        val rejectionErrors = Seq(RejectionError("type1", "pointer", Some("reason")), RejectionError("type1", "pointer", None))
+    "return OK and the correct view for a GET" in {
 
-        val message = DeclarationRejectionMessage(
-          reference = "123456",
-          rejectionDate = LocalDate.parse("2010-10-10"),
-          reason = Some("rejected"),
-          errors = rejectionErrors
+      val rejectionErrors = Seq(RejectionError("type1", "pointer"), RejectionError("type1", "pointer"))
+
+      val message = DeclarationRejectionMessage(
+        reference = "123456",
+        rejectionDate = LocalDate.parse("2010-10-10"),
+        reason = None,
+        errors = rejectionErrors
+      )
+
+      when(mockDepartureMessageService.declarationRejectionMessage(any())(any(), any()))
+        .thenReturn(Future.successful(Some(message)))
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      dataRetrievalWithData(emptyUserAnswers)
+
+      val request        = FakeRequest(GET, routes.DeclarationRejectionController.onPageLoad(departureId).url)
+      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+
+      val expectedJson =
+        Json.obj(
+          "contactUrl"   -> "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries",
+          "departureUrl" -> routes.LocalReferenceNumberController.onPageLoad().url
         )
 
-        when(mockDepartureMessageService.declarationRejectionMessage(any())(any(), any()))
-          .thenReturn(Future.successful(Some(message)))
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey - "detailsSection" - "errorsSection"
 
-        when(mockRenderer.render(any(), any())(any()))
-          .thenReturn(Future.successful(Html("")))
-
-        dataRetrievalWithData(emptyUserAnswers)
-
-        val request        = FakeRequest(GET, routes.DeclarationRejectionController.onPageLoad(departureId).url)
-        val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-        val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
-
-        val result = route(app, request).value
-
-        status(result) mustEqual OK
-
-        verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-        val expectedJson =
-          Json.obj("contactUrl" -> "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries")
-
-        val jsonWithoutConfig = jsonCaptor.getValue - configKey - "detailsSection" - "errorsSection"
-
-        templateCaptor.getValue mustEqual template
-        jsonWithoutConfig mustBe expectedJson
-      }
-
-      "when rejection reason is unavailable" in {
-        val rejectionErrors = Seq(RejectionError("type1", "pointer", Some("reason")), RejectionError("type1", "pointer", None))
-
-        val message = DeclarationRejectionMessage(
-          reference = "123456",
-          rejectionDate = LocalDate.parse("2010-10-10"),
-          reason = None,
-          errors = rejectionErrors
-        )
-
-        when(mockDepartureMessageService.declarationRejectionMessage(any())(any(), any()))
-          .thenReturn(Future.successful(Some(message)))
-
-        when(mockRenderer.render(any(), any())(any()))
-          .thenReturn(Future.successful(Html("")))
-
-        dataRetrievalWithData(emptyUserAnswers)
-
-        val request        = FakeRequest(GET, routes.DeclarationRejectionController.onPageLoad(departureId).url)
-        val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-        val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
-
-        val result = route(app, request).value
-
-        status(result) mustEqual OK
-
-        verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-        val expectedJson =
-          Json.obj("contactUrl" -> "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/new-computerised-transit-system-enquiries")
-
-        val jsonWithoutConfig = jsonCaptor.getValue - configKey - "detailsSection" - "errorsSection"
-
-        templateCaptor.getValue mustEqual template
-        jsonWithoutConfig mustBe expectedJson
-      }
+      templateCaptor.getValue mustEqual template
+      jsonWithoutConfig mustBe expectedJson
     }
   }
 

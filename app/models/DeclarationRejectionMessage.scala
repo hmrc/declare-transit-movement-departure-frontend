@@ -38,7 +38,7 @@ object DeclarationRejectionMessage {
   ).mapN(apply)
 }
 
-case class RejectionError(errorType: String, pointer: String, reason: Option[String])
+case class RejectionError(errorCode: String, pointer: String)
 
 object RejectionError {
 
@@ -46,7 +46,6 @@ object RejectionError {
 
   implicit val xmlReader: XmlReader[RejectionError] = (
     (__ \ "ErrTypER11").read[String],
-    (__ \ "ErrPoiER12").read[String],
-    (__ \ "ErrReaER13").read[Option[String]]
+    (__ \ "ErrPoiER12").read[String]
   ).mapN(apply)
 }
