@@ -1065,6 +1065,9 @@ guaranteeNotValid.review = You must review the error and
 guaranteeNotValid.sendDeparture = send a new departure declaration with the right guarantee information
 guaranteeNotValid.youCan = You can
 guaranteeNotValid.contact = contact the New Computerised Transit System helpdesk if you need help understanding the error (opens in a new tab)
+guaranteeNotValid.mrn = Movement reference number
+guaranteeNotValid.guaranteeRefNumber = Guarantee Reference number
+guaranteeNotValid.you.must = You must
 
 usingSameMethodOfPayment.title = Are you using the same payment method for all items?
 usingSameMethodOfPayment.heading = Are you using the same payment method for all items?
