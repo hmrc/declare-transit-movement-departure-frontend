@@ -62,13 +62,13 @@ class ContainersCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpec
                   content = msg"site.edit",
                   href = ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-container-number-${itemIndex.display}")
+                  attributes = Map("id" -> s"change-container-number-${itemIndex.display}-${containerIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = ConfirmRemoveContainerController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"remove-container-number-${itemIndex.display}")
+                  attributes = Map("id" -> s"remove-container-number-${itemIndex.display}-${containerIndex.display}")
                 )
               )
             )

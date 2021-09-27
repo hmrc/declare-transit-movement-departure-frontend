@@ -71,20 +71,20 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
               case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
                 buildValuelessRow(
                   label = label,
-                  id = Some(s"change-document-${index.display}"),
+                  id = Some(s"change-document-${index.display}-${documentIndex.display}"),
                   call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
               case _ if removable =>
                 buildRemovableRow(
                   label = label,
-                  id = s"document-${index.display}",
+                  id = s"document-${index.display}-${documentIndex.display}",
                   changeCall = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode),
                   removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
               case _ =>
                 buildValuelessRow(
                   label = label,
-                  id = Some(s"change-document-${documentIndex.display}"),
+                  id = Some(s"change-document-${index.display}-${documentIndex.display}"),
                   call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
             }
@@ -241,7 +241,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
       buildRow = label =>
         buildValuelessRow(
           label = label,
-          id = Some(s"change-item-${index.display}"),
+          id = Some(s"change-item-${index.display}-${referenceIndex.display}"),
           call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode)
         )
     )
@@ -253,7 +253,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
       buildRow = label =>
         buildRemovableRow(
           label = label,
-          id = s"reference-document-type-${index.display}",
+          id = s"reference-document-type-${index.display}-${referenceIndex.display}",
           changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode),
           removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode)
         )
