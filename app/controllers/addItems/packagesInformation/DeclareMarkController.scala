@@ -67,7 +67,9 @@ class DeclareMarkController @Inject() (
           "form"         -> preparedForm,
           "lrn"          -> lrn,
           "mode"         -> mode,
-          "displayIndex" -> packageIndex.display
+          "displayIndex" -> packageIndex.display,
+          "itemIndex"    -> itemIndex.display,
+          "packageIndex" -> packageIndex.display
         )
 
         renderer.render("addItems/declareMark.njk", json).map(Ok(_))
@@ -91,7 +93,9 @@ class DeclareMarkController @Inject() (
                 "form"         -> formWithErrors,
                 "lrn"          -> lrn,
                 "mode"         -> mode,
-                "displayIndex" -> packageIndex.display
+                "displayIndex" -> packageIndex.display,
+                "itemIndex"    -> itemIndex.display,
+                "packageIndex" -> packageIndex.display
               )
 
               renderer.render("addItems/declareMark.njk", json).map(BadRequest(_))

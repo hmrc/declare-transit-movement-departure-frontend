@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.addItems.specialMentions.SpecialMentionAdditionalInfoController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.specialMentions.SpecialMentionAdditionalInfoController.onSubmit(lrn, index, referenceIndex, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 

@@ -63,9 +63,10 @@ class CommercialReferenceNumberController @Inject() (
         }
 
         val json = Json.obj(
-          "form" -> preparedForm,
-          "lrn"  -> lrn,
-          "mode" -> mode
+          "form"  -> preparedForm,
+          "lrn"   -> lrn,
+          "index" -> index.display,
+          "mode"  -> mode
         )
 
         renderer.render(template, json).map(Ok(_))
@@ -83,9 +84,10 @@ class CommercialReferenceNumberController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form" -> formWithErrors,
-                "lrn"  -> lrn,
-                "mode" -> mode
+                "form"  -> formWithErrors,
+                "lrn"   -> lrn,
+                "index" -> index.display,
+                "mode"  -> mode
               )
 
               renderer.render(template, json).map(BadRequest(_))

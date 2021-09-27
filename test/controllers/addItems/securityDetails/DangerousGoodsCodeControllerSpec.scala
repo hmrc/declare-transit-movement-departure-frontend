@@ -54,7 +54,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val dangerousGoodsCodeRoute = routes.DangerousGoodsCodeController.onPageLoad(lrn, index, NormalMode).url
+  private lazy val dangerousGoodsCodeRoute = routes.DangerousGoodsCodeController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -72,9 +72,9 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(GET, dangerousGoodsCodeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, dangerousGoodsCodeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -83,7 +83,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedDangerousGoodsCodeJson = Seq(
-        Json.obj("value" -> "", "text"     -> ""),
+        Json.obj("value" -> "", "text"     -> "Select"),
         Json.obj("value" -> "0004", "text" -> "(0004) AMMONIUM PICRATE dry or wetted with less than 10% water, by mass", "selected" -> false),
         Json.obj("value" -> "0005", "text" -> "(0005) CARTRIDGES FOR WEAPONS with bursting charge", "selected"                      -> false)
       )
@@ -112,9 +112,9 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
       val userAnswers = emptyUserAnswers.set(DangerousGoodsCodePage(index), dangerousGoodsCode1.code).success.value
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, dangerousGoodsCodeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, dangerousGoodsCodeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -125,7 +125,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
       val filledForm = form.bind(Map("value" -> "0004"))
 
       val expectedDangerousGoodsCodeJson = Seq(
-        Json.obj("value" -> "", "text"     -> ""),
+        Json.obj("value" -> "", "text"     -> "Select"),
         Json.obj("value" -> "0004", "text" -> "(0004) AMMONIUM PICRATE dry or wetted with less than 10% water, by mass", "selected" -> true),
         Json.obj("value" -> "0005", "text" -> "(0005) CARTRIDGES FOR WEAPONS with bursting charge", "selected"                      -> false)
       )
@@ -168,10 +168,10 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRefDataConnector.getDangerousGoodsCodeList()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(POST, dangerousGoodsCodeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, dangerousGoodsCodeRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

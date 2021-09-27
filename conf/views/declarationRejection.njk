@@ -1,6 +1,6 @@
 {% extends "includes/layout.njk" %}
 
-{% from "govuk/components/back-link/macro.njk"        import govukBackLink %}
+{% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
 {% from "macros/title.njk"                         import title %}
 {% from "macros/section.njk"                       import section as sectionMacro %}
 
@@ -22,8 +22,16 @@
           {{ messages("declarationRejection.heading") }}
         </h1>
 
+        {% for section in detailsSection %}
+          {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother) }}
+        {% endfor %}
+
+        <h2 class="govuk-heading-m">
+          {{ messages("declarationRejection.rejectionDetails") }}
+        </h2>
+
         {% for section in errorsSection %}
-            {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother) }}
+          {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother) }}
         {% endfor %}
 
         <p class="govuk-body">
@@ -31,7 +39,7 @@
         </p>
 
         <p class="govuk-body">
-            {{ messages("declarationRejection.youCan") }} <a href={{ contactUrl }} target="_blank">{{ messages("declarationRejection.contact") }}</a>.
+            {{ messages("declarationRejection.youCan") }} <a href={{ contactUrl }} target="_blank">{{ messages("declarationRejection.contact.link")) }}</a>.
         </p>
       </div>
     </div>

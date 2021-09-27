@@ -47,15 +47,15 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider    = new NationalityAtDepartureFormProvider()
-  private val country = Country(CountryCode("GB"), "United Kingdom")
-  val countries       = CountryList(Seq(country))
-  val form            = formProvider(countries)
+  private val formProvider = new NationalityAtDepartureFormProvider()
+  private val country      = Country(CountryCode("GB"), "United Kingdom")
+  private val countries    = CountryList(Seq(country))
+  private val form         = formProvider(countries)
 
-  lazy val nationalityAtDepartureRoute = routes.NationalityAtDepartureController.onPageLoad(lrn, NormalMode).url
+  private lazy val nationalityAtDepartureRoute = routes.NationalityAtDepartureController.onPageLoad(lrn, NormalMode).url
 
   def jsonCountryList(preSelected: Boolean): Seq[JsObject] = Seq(
-    Json.obj("text" -> "", "value"               -> ""),
+    Json.obj("text" -> "Select", "value"         -> ""),
     Json.obj("text" -> "United Kingdom", "value" -> "GB", "selected" -> preSelected)
   )
 
@@ -82,9 +82,9 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(GET, nationalityAtDepartureRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, nationalityAtDepartureRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -116,9 +116,9 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(GET, nationalityAtDepartureRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, nationalityAtDepartureRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -173,10 +173,10 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(POST, nationalityAtDepartureRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, nationalityAtDepartureRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

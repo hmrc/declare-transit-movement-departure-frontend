@@ -59,7 +59,6 @@ class ItemsCheckYourAnswersController @Inject() (
             previousReferencesDocumentTypes <- referenceDataConnector.getPreviousReferencesDocumentTypes()
             documentTypes                   <- referenceDataConnector.getDocumentTypes()
             specialMentions                 <- referenceDataConnector.getSpecialMention()
-            countries                       <- referenceDataConnector.getCountryList()
           } yield {
 
             val sections: Seq[Section] =
@@ -68,8 +67,7 @@ class ItemsCheckYourAnswersController @Inject() (
                 index,
                 documentTypes,
                 previousReferencesDocumentTypes,
-                specialMentions,
-                countries
+                specialMentions
               ).sections
 
             Json.obj(

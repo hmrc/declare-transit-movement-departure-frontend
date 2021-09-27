@@ -27,15 +27,20 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.addItems.itemDetails.CommodityCodeController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.itemDetails.CommodityCodeController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
-        <h1 class="govuk-heading-xl"> {{messages('commodityCode.heading', index)}}<h1>
 
         {{ csrf() | safe }}
 
-        <span class="govuk-hint">{{messages('commodityCode.hintText')}}</span>
-
           {{ govukInput({
+            label: {
+              text: messages('commodityCode.heading', index),
+              isPageHeading: true,
+              classes: "govuk-label--xl govuk-!-padding-bottom-5"
+            },
+            hint: {
+              text: messages('commodityCode.hintText')
+            },
             id: "value",
             name: "value",
             value: form.value.value,

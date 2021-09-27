@@ -48,10 +48,10 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
   private val form                                         = formProvider(index)
   private val template                                     = "addItems/addAnotherDocument.njk"
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  val documentType1: DocumentType                          = DocumentType("1", "11", true)
-  val documentType2: DocumentType                          = DocumentType("2", "22", true)
+  val documentType1: DocumentType                          = DocumentType("1", "11", transportDocument = true)
+  val documentType2: DocumentType                          = DocumentType("2", "22", transportDocument = true)
   val documentTypeList: DocumentTypeList                   = DocumentTypeList(Seq(documentType1, documentType2))
-  lazy val addAnotherDocumentRoute                         = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, index, NormalMode).url
+  private lazy val addAnotherDocumentRoute                 = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -68,10 +68,10 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, addAnotherDocumentRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
-      val result         = route(app, request).value
+      val request                                = FakeRequest(GET, addAnotherDocumentRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val result                                 = route(app, request).value
 
       status(result) mustEqual OK
 
@@ -79,7 +79,9 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
 
       val expectedJson = Json.obj(
         "form"      -> form,
+        "index"     -> index.display,
         "lrn"       -> lrn,
+        "mode"      -> NormalMode,
         "pageTitle" -> msg"addAnotherDocument.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherDocument.heading.plural".withArgs(1),
         "radios"    -> Radios.yesNo(form("value"))
@@ -116,10 +118,10 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, addAnotherDocumentRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addAnotherDocumentRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -132,6 +134,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
         "pageTitle" -> msg"addAnotherDocument.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherDocument.heading.plural".withArgs(1),
         "lrn"       -> lrn,
+        "mode"      -> NormalMode,
         "radios"    -> Radios.yesNo(boundForm("value"))
       )
 

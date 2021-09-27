@@ -47,7 +47,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
   private val form         = formProvider()
   private val template     = "addItems/specialMentions/addAnotherSpecialMention.njk"
 
-  lazy val addAnotherSpecialMentionRoute = routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, NormalMode).url
+  private lazy val addAnotherSpecialMentionRoute = routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, NormalMode).url
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
@@ -68,9 +68,9 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(GET, addAnotherSpecialMentionRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherSpecialMentionRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -81,6 +81,8 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
       val expectedJson = Json.obj(
         "form"          -> form,
         "lrn"           -> lrn,
+        "mode"          -> NormalMode,
+        "itemIndex"     -> itemIndex.display,
         "radios"        -> Radios.yesNo(form("value")),
         "pageTitle"     -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
         "heading"       -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
@@ -102,9 +104,9 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
       val userAnswers = UserAnswers(lrn, eoriNumber).set(AddAnotherSpecialMentionPage(itemIndex), true).success.value
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, addAnotherSpecialMentionRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherSpecialMentionRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -115,6 +117,8 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
       val expectedJson = Json.obj(
         "form"          -> form,
         "lrn"           -> lrn,
+        "mode"          -> NormalMode,
+        "itemIndex"     -> itemIndex.display,
         "pageTitle"     -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
         "heading"       -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
         "referenceRows" -> Nil
@@ -151,10 +155,10 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(POST, addAnotherSpecialMentionRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addAnotherSpecialMentionRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -165,6 +169,8 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
       val expectedJson = Json.obj(
         "form"      -> boundForm,
         "lrn"       -> lrn,
+        "mode"      -> NormalMode,
+        "itemIndex" -> itemIndex.display,
         "pageTitle" -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
         "heading"   -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1)
       )

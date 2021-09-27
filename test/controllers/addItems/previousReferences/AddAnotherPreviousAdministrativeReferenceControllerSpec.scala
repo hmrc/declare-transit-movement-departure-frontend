@@ -62,7 +62,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
     )
   )
 
-  lazy val addAnotherPreviousAdministrativeReferenceRoute =
+  private lazy val addAnotherPreviousAdministrativeReferenceRoute =
     routes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -71,7 +71,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsAdminReference]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach(): Unit = {
+  override def beforeEach: Unit = {
     reset(mockRefDataConnector)
     super.beforeEach()
   }
@@ -85,9 +85,9 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
       when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
 
-      val request        = FakeRequest(GET, addAnotherPreviousAdministrativeReferenceRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherPreviousAdministrativeReferenceRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -97,7 +97,9 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
       val expectedJson = Json.obj(
         "form"      -> form,
+        "index"     -> index.display,
         "lrn"       -> lrn,
+        "mode"      -> NormalMode,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
       )
@@ -117,9 +119,9 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
       val userAnswers = UserAnswers(lrn, eoriNumber).set(AddAnotherPreviousAdministrativeReferencePage(index), true).success.value
       dataRetrievalWithData(userAnswers)
-      val request        = FakeRequest(GET, addAnotherPreviousAdministrativeReferenceRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherPreviousAdministrativeReferenceRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -129,7 +131,9 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
       val expectedJson = Json.obj(
         "form"      -> form,
+        "index"     -> index.display,
         "lrn"       -> lrn,
+        "mode"      -> NormalMode,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
       )
@@ -164,10 +168,10 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, addAnotherPreviousAdministrativeReferenceRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addAnotherPreviousAdministrativeReferenceRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -177,7 +181,9 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
       val expectedJson = Json.obj(
         "form"      -> boundForm,
+        "index"     -> index.display,
         "lrn"       -> lrn,
+        "mode"      -> NormalMode,
         "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
         "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
       )

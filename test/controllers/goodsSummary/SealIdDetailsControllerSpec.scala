@@ -73,9 +73,10 @@ class SealIdDetailsControllerSpec extends SpecBase with MockNunjucksRendererApp 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"      -> form,
+        "mode"      -> NormalMode,
+        "sealIndex" -> sealIndex.display,
+        "lrn"       -> lrn
       )
 
       templateCaptor.getValue mustEqual "sealIdDetails.njk"
@@ -106,6 +107,7 @@ class SealIdDetailsControllerSpec extends SpecBase with MockNunjucksRendererApp 
         "form"        -> filledForm,
         "lrn"         -> lrn,
         "mode"        -> NormalMode,
+        "sealIndex"   -> sealIndex.display,
         "onSubmitUrl" -> routes.SealIdDetailsController.onSubmit(lrn, sealIndex, NormalMode).url
       )
 
@@ -148,9 +150,10 @@ class SealIdDetailsControllerSpec extends SpecBase with MockNunjucksRendererApp 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"      -> boundForm,
+        "lrn"       -> lrn,
+        "mode"      -> NormalMode,
+        "sealIndex" -> sealIndex.display
       )
 
       templateCaptor.getValue mustEqual "sealIdDetails.njk"

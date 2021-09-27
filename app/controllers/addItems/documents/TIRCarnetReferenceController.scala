@@ -64,9 +64,11 @@ class TIRCarnetReferenceController @Inject() (
         }
 
         val json = Json.obj(
-          "form" -> preparedForm,
-          "lrn"  -> lrn,
-          "mode" -> mode
+          "form"          -> preparedForm,
+          "lrn"           -> lrn,
+          "mode"          -> mode,
+          "itemIndex"     -> itemIndex.display,
+          "documentIndex" -> documentIndex.display
         )
 
         renderer.render(template, json).map(Ok(_))
@@ -82,9 +84,11 @@ class TIRCarnetReferenceController @Inject() (
               .fold(
                 formWithErrors => {
                   val json = Json.obj(
-                    "form" -> formWithErrors,
-                    "lrn"  -> lrn,
-                    "mode" -> mode
+                    "form"          -> formWithErrors,
+                    "lrn"           -> lrn,
+                    "mode"          -> mode,
+                    "itemIndex"     -> itemIndex.display,
+                    "documentIndex" -> documentIndex.display
                   )
 
                   renderer.render(template, json).map(BadRequest(_))

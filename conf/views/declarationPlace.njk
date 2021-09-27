@@ -27,25 +27,29 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.movementDetails.DeclarationPlaceController.onSubmit(mode).url }}" method="post">
+        <form action="{{ routes.controllers.movementDetails.DeclarationPlaceController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('movementDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("declarationPlace.heading") }}
-        </h1>
+          <h1 class="govuk-heading-xl">
+            {{ messages("declarationPlace.heading") }}
+          </h1>
 
-            <p class = "govuk-body"> {{ messages('declarationPlace.paragraph') }} </p>
-            <p class = "govuk-label" > {{ messages('postcode') }} </p>
-
-            <span class="govuk-hint">{{messages('postcodeExample')}}</span>
+          <p class = "govuk-body"> {{ messages('declarationPlace.paragraph') }} </p>
+          <p class = "govuk-label" > {{ messages('postcode') }} </p>
 
           {{ govukInput({
-
+             label: {
+               text: messages('transportChargesPaymentMethod.heading'),
+               classes: "govuk-visually-hidden"
+             },
             id: "value",
             name: "value",
             value: form.value.value,
+            hint: {
+               text: messages('postcodeExample')
+            },
             errorMessage: form.value.error
           }) }}
 

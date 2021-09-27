@@ -27,14 +27,20 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.addItems.itemDetails.ItemTotalGrossMassController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.itemDetails.ItemTotalGrossMassController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
-        <h1 class="govuk-heading-xl"> {{ messages("itemTotalGrossMass.heading", index) }}  </h1>
-        <span class="govuk-hint"> {{messages('itemTotalGrossMass.hintText')}} </span>
 
           {{ csrf() | safe }}
 
           {{ govukInput({
+            label: {
+              text: messages("itemTotalGrossMass.heading", index),
+              isPageHeading: true,
+              classes: "govuk-label--xl govuk-!-padding-bottom-5"
+            },
+            hint: {
+              text: messages('itemTotalGrossMass.hintText')
+            },
             id: "value",
             name: "value",
             value: form.value.value,

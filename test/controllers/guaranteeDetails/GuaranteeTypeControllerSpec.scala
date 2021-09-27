@@ -71,6 +71,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
       val expectedJson = Json.obj(
         "form"   -> form,
+        "index"  -> index.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> GuaranteeType.radios(form)
@@ -100,6 +101,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
       val expectedJson = Json.obj(
         "form"   -> filledForm,
+        "index"  -> index.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> GuaranteeType.radios(filledForm)
@@ -142,6 +144,7 @@ class GuaranteeTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
       val expectedJson = Json.obj(
         "form"   -> boundForm,
+        "index"  -> index.display,
         "mode"   -> NormalMode,
         "lrn"    -> lrn,
         "radios" -> GuaranteeType.radios(boundForm)

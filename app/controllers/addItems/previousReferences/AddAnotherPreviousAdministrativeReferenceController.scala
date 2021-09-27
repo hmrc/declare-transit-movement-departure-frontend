@@ -21,7 +21,7 @@ import controllers.actions._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
 import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
 import models.requests.DataRequest
-import models.{DependentSection, Index, LocalReferenceNumber, Mode, NormalMode}
+import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsAdminReference
 import pages.addItems.AddAnotherPreviousAdministrativeReferencePage
@@ -64,7 +64,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        renderPage(lrn, index, form).map(Ok(_))
+        renderPage(lrn, index, mode, form).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
@@ -76,7 +76,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => renderPage(lrn, index, formWithErrors).map(BadRequest(_)),
+            formWithErrors => renderPage(lrn, index, mode, formWithErrors).map(BadRequest(_)),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAnotherPreviousAdministrativeReferencePage(index), value))
@@ -85,7 +85,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
           )
     }
 
-  private def renderPage(lrn: LocalReferenceNumber, index: Index, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
+  private def renderPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
     val cyaHelper             = new AddItemsCheckYourAnswersHelper(request.userAnswers)
     val numberOfReferences    = request.userAnswers.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)
@@ -95,13 +95,15 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
       previousDocuments =>
         val referenceRows = indexList.map {
           referenceIndex =>
-            cyaHelper.previousAdministrativeReferenceRows(index, referenceIndex, previousDocuments, NormalMode)
+            cyaHelper.previousAdministrativeReferenceRow(index, referenceIndex, previousDocuments)
         }
 
         val singularOrPlural = if (numberOfReferences == 1) "singular" else "plural"
         val json = Json.obj(
           "form"          -> form,
+          "index"         -> index.display,
           "lrn"           -> lrn,
+          "mode"          -> mode,
           "pageTitle"     -> msg"addAnotherPreviousAdministrativeReference.title.$singularOrPlural".withArgs(numberOfReferences),
           "heading"       -> msg"addAnotherPreviousAdministrativeReference.heading.$singularOrPlural".withArgs(numberOfReferences),
           "referenceRows" -> referenceRows,

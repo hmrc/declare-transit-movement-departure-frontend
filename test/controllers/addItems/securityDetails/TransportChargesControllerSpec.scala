@@ -58,7 +58,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
-  lazy val transportChargesRoute = routes.TransportChargesController.onPageLoad(lrn, index, NormalMode).url
+  private lazy val transportChargesRoute = routes.TransportChargesController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -66,7 +66,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SecurityDetails]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach(): Unit = {
+  override def beforeEach: Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }
@@ -81,9 +81,9 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
       when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
-      val request        = FakeRequest(GET, transportChargesRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, transportChargesRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -92,7 +92,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedMethodOfPaymentJson = Seq(
-        Json.obj("value" -> "", "text"  -> ""),
+        Json.obj("value" -> "", "text"  -> "Select"),
         Json.obj("value" -> "A", "text" -> "(A) Payment in cash", "selected"        -> false),
         Json.obj("value" -> "B", "text" -> "(B) Payment by credit card", "selected" -> false)
       )
@@ -121,9 +121,9 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
       val userAnswers = emptyUserAnswers.set(TransportChargesPage(index), MethodOfPayment("A", "Payment in cash")).success.value
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, transportChargesRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, transportChargesRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -134,7 +134,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
       val filledForm = form.bind(Map("value" -> "A"))
 
       val expectedMethodOfPaymentJson = Seq(
-        Json.obj("value" -> "", "text"  -> ""),
+        Json.obj("value" -> "", "text"  -> "Select"),
         Json.obj("value" -> "A", "text" -> "(A) Payment in cash", "selected"        -> true),
         Json.obj("value" -> "B", "text" -> "(B) Payment by credit card", "selected" -> false)
       )
@@ -181,10 +181,10 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(POST, transportChargesRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, transportChargesRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

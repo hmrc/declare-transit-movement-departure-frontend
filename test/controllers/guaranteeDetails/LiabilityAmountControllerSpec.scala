@@ -71,9 +71,10 @@ class LiabilityAmountControllerSpec extends SpecBase with MockNunjucksRendererAp
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"  -> form,
+        "index" -> index.display,
+        "mode"  -> NormalMode,
+        "lrn"   -> lrn
       )
 
       templateCaptor.getValue mustEqual "liabilityAmount.njk"
@@ -99,9 +100,10 @@ class LiabilityAmountControllerSpec extends SpecBase with MockNunjucksRendererAp
       val filledForm = form.bind(Map("value" -> "1.00"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> filledForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual "liabilityAmount.njk"
@@ -140,9 +142,10 @@ class LiabilityAmountControllerSpec extends SpecBase with MockNunjucksRendererAp
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> boundForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual "liabilityAmount.njk"

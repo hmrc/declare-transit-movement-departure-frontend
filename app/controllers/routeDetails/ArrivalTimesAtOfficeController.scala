@@ -74,19 +74,20 @@ class ArrivalTimesAtOfficeController @Inject() (
                   if (dateTime.getHour > 12) "pm" else "am"
               }
 
-              loadPage(lrn, mode, amOrPm, preparedForm).map(Ok(_))
+              loadPage(lrn, index, mode, amOrPm, preparedForm).map(Ok(_))
           }
         case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
       }
   }
 
-  private def loadPage(lrn: LocalReferenceNumber, mode: Mode, selectAMPMValue: Option[String], form: Form[LocalDateTime])(implicit
+  private def loadPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, selectAMPMValue: Option[String], form: Form[LocalDateTime])(implicit
     request: Request[AnyContent]
   ): Future[Html] = {
     val viewModel = DateTimeInput.localDateTime(form("value"))
 
     val json = Json.obj(
       "form"     -> form,
+      "index"    -> index.display,
       "mode"     -> mode,
       "lrn"      -> lrn,
       "amPmList" -> amPmAsJson(selectAMPMValue),
@@ -107,7 +108,7 @@ class ArrivalTimesAtOfficeController @Inject() (
               form
                 .bindFromRequest()
                 .fold(
-                  formWithErrors => loadPage(lrn, mode, formWithErrors.data.get("value.amOrPm"), formWithErrors).map(BadRequest(_)),
+                  formWithErrors => loadPage(lrn, index, mode, formWithErrors.data.get("value.amOrPm"), formWithErrors).map(BadRequest(_)),
                   value =>
                     for {
                       updatedAnswers <- Future.fromTry(request.userAnswers.set(ArrivalTimesAtOfficePage(index), value))

@@ -133,6 +133,7 @@ class OfficeOfTransitCountryController @Inject() (
   ): Future[Result] = {
     val json = Json.obj(
       "form"        -> form,
+      "index"       -> index.display,
       "lrn"         -> lrn,
       "mode"        -> mode,
       "countries"   -> countryJsonList(form.value, countries),

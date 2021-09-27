@@ -67,7 +67,9 @@ class AddMarkController @Inject() (
           "mode"         -> mode,
           "lrn"          -> lrn,
           "radios"       -> Radios.yesNo(preparedForm("value")),
-          "displayIndex" -> packageIndex.display
+          "displayIndex" -> packageIndex.display,
+          "itemIndex"    -> itemIndex.display,
+          "packageIndex" -> packageIndex.display
         )
 
         renderer.render("addItems/addMark.njk", json).map(Ok(_))
@@ -91,7 +93,9 @@ class AddMarkController @Inject() (
                 "mode"         -> mode,
                 "lrn"          -> lrn,
                 "radios"       -> Radios.yesNo(formWithErrors("value")),
-                "displayIndex" -> packageIndex.display
+                "displayIndex" -> packageIndex.display,
+                "itemIndex"    -> itemIndex.display,
+                "packageIndex" -> packageIndex.display
               )
 
               renderer.render("addItems/addMark.njk", json).map(BadRequest(_))

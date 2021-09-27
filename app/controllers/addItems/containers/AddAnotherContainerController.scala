@@ -94,7 +94,7 @@ class AddAnotherContainerController @Inject() (
     val indexList          = List.range(0, numberOfContainers).map(Index(_))
     val containerRows = indexList.map {
       containerIndex =>
-        cyaHelper.containerNumber(itemIndex, containerIndex)
+        cyaHelper.containerRow(itemIndex, containerIndex)
     }
 
     val singularOrPlural = if (numberOfContainers == 1) "singular" else "plural"
@@ -102,6 +102,7 @@ class AddAnotherContainerController @Inject() (
 
     val json = Json.obj(
       "form"           -> form,
+      "index"          -> itemIndex.display,
       "mode"           -> mode,
       "lrn"            -> request.userAnswers.lrn,
       "pageTitle"      -> title,

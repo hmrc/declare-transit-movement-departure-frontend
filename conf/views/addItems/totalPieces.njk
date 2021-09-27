@@ -28,15 +28,17 @@
         {% endif %}
 
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
-        <h1 class="govuk-heading-xl">
-            {{ messages('totalPieces.heading', displayIndex) }}
-        </h1>
 
-        <form action="{{ routes.controllers.addItems.packagesInformation.TotalPiecesController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.packagesInformation.TotalPiecesController.onSubmit(lrn, itemIndex, packageIndex, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
           {{ govukInput({
+            label: {
+              text: messages('totalPieces.heading', displayIndex),
+              isPageHeading: true,
+              classes: "govuk-label--xl govuk-!-padding-bottom-5"
+            },
             id: "value",
             name: "value",
             type: "tel",

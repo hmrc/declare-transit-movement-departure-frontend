@@ -73,9 +73,10 @@ class TIRGuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRend
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"  -> form,
+        "index" -> index.display,
+        "mode"  -> NormalMode,
+        "lrn"   -> lrn
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -106,9 +107,10 @@ class TIRGuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRend
       val filledForm = form.bind(Map("value" -> "answer"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> filledForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -154,9 +156,10 @@ class TIRGuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRend
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> boundForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual template

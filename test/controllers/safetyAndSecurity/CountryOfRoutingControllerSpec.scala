@@ -84,6 +84,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val expectedJson = Json.obj(
         "form"      -> form,
+        "index"     -> index.display,
         "mode"      -> NormalMode,
         "lrn"       -> lrn,
         "countries" -> countryJsonList(form.value, countries.countries)
@@ -120,6 +121,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val expectedJson = Json.obj(
         "form"      -> filledForm,
+        "index"     -> index.display,
         "lrn"       -> lrn,
         "mode"      -> NormalMode,
         "countries" -> countryJsonList(filledForm.value, countries.countries)
@@ -170,9 +172,10 @@ class CountryOfRoutingControllerSpec extends SpecBase with MockNunjucksRendererA
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"  -> boundForm,
+        "index" -> index.display,
+        "lrn"   -> lrn,
+        "mode"  -> NormalMode
       )
 
       templateCaptor.getValue mustEqual template

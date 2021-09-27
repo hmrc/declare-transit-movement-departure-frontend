@@ -17,161 +17,84 @@
 package utils
 
 import controllers.goodsSummary.routes
-import models.{CheckMode, LocalReferenceNumber, UserAnswers}
+import models.{CheckMode, UserAnswers}
 import pages._
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
-import uk.gov.hmrc.viewmodels.Text.Literal
+import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
-import utils.GoodsSummaryCheckYourAnswersHelper.dateFormatter
 
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
-class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) {
+class GoodsSummaryCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  def agreedLocationOfGoods: Option[Row] = userAnswers.get(AgreedLocationOfGoodsPage) map {
-    answer =>
-      Row(
-        key = Key(msg"agreedLocationOfGoods.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"agreedLocationOfGoods.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def agreedLocationOfGoods: Option[Row] = getAnswerAndBuildRow[String](
+    page = AgreedLocationOfGoodsPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "agreedLocationOfGoods",
+    id = None,
+    call = routes.AgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode)
+  )
 
-  def addAgreedLocationOfGoods: Option[Row] = userAnswers.get(AddAgreedLocationOfGoodsPage) map {
-    answer =>
-      Row(
-        key = Key(msg"addAgreedLocationOfGoods.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addAgreedLocationOfGoods.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def loadingPlace: Option[Row] = getAnswerAndBuildRow[String](
+    page = LoadingPlacePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "loadingPlace",
+    id = None,
+    call = controllers.routes.LoadingPlaceController.onPageLoad(lrn, CheckMode)
+  )
 
-  def confirmRemoveSeals: Option[Row] = userAnswers.get(ConfirmRemoveSealsPage) map {
-    answer =>
-      Row(
-        key = Key(msg"confirmRemoveSeals.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ConfirmRemoveSealsController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"confirmRemoveSeals.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def addAgreedLocationOfGoods: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddAgreedLocationOfGoodsPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addAgreedLocationOfGoods",
+    id = None,
+    call = routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode)
+  )
 
-  def sealsInformation: Option[Row] = userAnswers.get(SealsInformationPage) map {
-    answer =>
-      Row(
-        key = Key(msg"sealsInformation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.SealsInformationController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealsInformation.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
+  def sealsInformation: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = SealsInformationPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "sealsInformation",
+    id = None,
+    call = routes.SealsInformationController.onPageLoad(lrn, CheckMode)
+  )
 
-  def controlResultDateLimit: Option[Row] = userAnswers.get(ControlResultDateLimitPage) map {
-    answer =>
-      Row(
-        key = Key(msg"controlResultDateLimit.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(Literal(answer.format(dateFormatter))),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ControlResultDateLimitController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"controlResultDateLimit.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-control-result-date-limit")
-          )
-        )
-      )
-  }
+  def controlResultDateLimit: Option[Row] = getAnswerAndBuildRow[LocalDate](
+    page = ControlResultDateLimitPage,
+    formatAnswer = date => lit"${Format.dateFormattedWithMonthName(date)}",
+    prefix = "controlResultDateLimit",
+    id = Some("change-control-result-date-limit"),
+    call = routes.ControlResultDateLimitController.onPageLoad(lrn, CheckMode)
+  )
 
-  def addSeals: Option[Row] = userAnswers.get(AddSealsPage) map {
-    answer =>
-      Row(
-        key = Key(msg"addSeals.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddSealsController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addSeals.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-add-seals")
-          )
-        )
-      )
-  }
+  def addSeals: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddSealsPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addSeals",
+    id = Some("change-add-seals"),
+    call = routes.AddSealsController.onPageLoad(lrn, CheckMode)
+  )
 
-  def customsApprovedLocation: Option[Row] = userAnswers.get(CustomsApprovedLocationPage) map {
-    answer =>
-      Row(
-        key = Key(msg"customsApprovedLocation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.CustomsApprovedLocationController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"customsApprovedLocation.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-customs-approved-location")
-          )
-        )
-      )
-  }
+  def customsApprovedLocation: Option[Row] = getAnswerAndBuildRow[String](
+    page = CustomsApprovedLocationPage,
+    formatAnswer = formatAsLiteral,
+    prefix = "customsApprovedLocation",
+    id = Some("change-customs-approved-location"),
+    call = routes.CustomsApprovedLocationController.onPageLoad(lrn, CheckMode)
+  )
 
-  def addCustomsApprovedLocation: Option[Row] = userAnswers.get(AddCustomsApprovedLocationPage) map {
-    answer =>
-      Row(
-        key = Key(msg"addCustomsApprovedLocation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AddCustomsApprovedLocationController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"addCustomsApprovedLocation.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-add-customs-approved-location")
-          )
-        )
-      )
-  }
+  def addCustomsApprovedLocation: Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddCustomsApprovedLocationPage,
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addCustomsApprovedLocation",
+    id = Some("change-add-customs-approved-location"),
+    call = routes.AddCustomsApprovedLocationController.onPageLoad(lrn, CheckMode)
+  )
 
-  def authorisedLocationCode: Option[Row] = userAnswers.get(AuthorisedLocationCodePage) map {
-    answer =>
-      Row(
-        key = Key(msg"authorisedLocationCode.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AuthorisedLocationCodeController.onPageLoad(lrn, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"authorisedLocationCode.checkYourAnswersLabel")),
-            attributes = Map("id" -> "change-authorised-location-code")
-          )
-        )
-      )
-  }
-
-  def lrn: LocalReferenceNumber = userAnswers.lrn
-}
-
-object GoodsSummaryCheckYourAnswersHelper {
-
-  private val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+  def authorisedLocationCode: Option[Row] = getAnswerAndBuildRow[String](
+    page = AuthorisedLocationCodePage,
+    formatAnswer = formatAsLiteral,
+    prefix = "authorisedLocationCode",
+    id = Some("change-authorised-location-code"),
+    call = routes.AuthorisedLocationCodeController.onPageLoad(lrn, CheckMode)
+  )
 }

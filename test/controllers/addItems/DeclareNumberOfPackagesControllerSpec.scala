@@ -72,10 +72,12 @@ class DeclareNumberOfPackagesControllerSpec extends SpecBase with MockNunjucksRe
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"   -> form,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(form("value"))
+        "form"         -> form,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "radios"       -> Radios.yesNo(form("value")),
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/declareNumberOfPackages.njk"
@@ -102,10 +104,12 @@ class DeclareNumberOfPackagesControllerSpec extends SpecBase with MockNunjucksRe
       val filledForm = form.bind(Map("value" -> "true"))
 
       val expectedJson = Json.obj(
-        "form"   -> filledForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(filledForm("value"))
+        "form"         -> filledForm,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "radios"       -> Radios.yesNo(filledForm("value")),
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/declareNumberOfPackages.njk"
@@ -167,10 +171,12 @@ class DeclareNumberOfPackagesControllerSpec extends SpecBase with MockNunjucksRe
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"   -> boundForm,
-        "mode"   -> NormalMode,
-        "lrn"    -> lrn,
-        "radios" -> Radios.yesNo(boundForm("value"))
+        "form"         -> boundForm,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "radios"       -> Radios.yesNo(boundForm("value")),
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/declareNumberOfPackages.njk"

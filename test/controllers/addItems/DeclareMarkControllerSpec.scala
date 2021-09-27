@@ -71,9 +71,12 @@ class DeclareMarkControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> form,
-        "mode" -> NormalMode,
-        "lrn"  -> lrn
+        "form"         -> form,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "displayIndex" -> packageIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/declareMark.njk"
@@ -100,9 +103,12 @@ class DeclareMarkControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       val filledForm = form.bind(Map("value" -> "answer"))
 
       val expectedJson = Json.obj(
-        "form" -> filledForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"         -> filledForm,
+        "lrn"          -> lrn,
+        "mode"         -> NormalMode,
+        "displayIndex" -> packageIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/declareMark.njk"
@@ -141,9 +147,12 @@ class DeclareMarkControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form" -> boundForm,
-        "lrn"  -> lrn,
-        "mode" -> NormalMode
+        "form"         -> boundForm,
+        "lrn"          -> lrn,
+        "mode"         -> NormalMode,
+        "displayIndex" -> packageIndex.display,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display
       )
 
       templateCaptor.getValue mustEqual "addItems/declareMark.njk"

@@ -27,16 +27,16 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.guaranteeDetails.AccessCodeController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.guaranteeDetails.AccessCodeController.onSubmit(lrn, index, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
 
         {{ csrf() | safe }}
-        <h1 class="govuk-heading-xl">{{ messages('accessCode.heading') }}</h1>
-
 
         {{ govukInput({
           label: {
-            text: ""
+            text: messages('accessCode.heading'),
+            isPageHeading: true,
+            classes: "govuk-label--xl govuk-!-padding-bottom-5"
           },
           type: "password",
           id: "value",

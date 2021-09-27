@@ -51,7 +51,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with MockNunjuck
   private val form                       = formProvider()
   private val template                   = "safetyAndSecurity/addAnotherCountryOfRouting.njk"
 
-  lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url
+  private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -70,9 +70,9 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with MockNunjuck
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(GET, addAnotherCountryOfRoutingRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherCountryOfRoutingRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -85,6 +85,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with MockNunjuck
         "pageTitle" -> msg"addAnotherCountryOfRouting.title.singular".withArgs(1),
         "heading"   -> msg"addAnotherCountryOfRouting.heading.singular".withArgs(1),
         "lrn"       -> lrn,
+        "mode"      -> NormalMode,
         "radios"    -> Radios.yesNo(form("value"))
       )
 
@@ -120,10 +121,10 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with MockNunjuck
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(POST, addAnotherCountryOfRoutingRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addAnotherCountryOfRoutingRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -136,6 +137,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with MockNunjuck
         "pageTitle" -> msg"addAnotherCountryOfRouting.title.singular".withArgs(1),
         "heading"   -> msg"addAnotherCountryOfRouting.heading.singular".withArgs(1),
         "lrn"       -> lrn,
+        "mode"      -> NormalMode,
         "radios"    -> Radios.yesNo(form("value"))
       )
 
