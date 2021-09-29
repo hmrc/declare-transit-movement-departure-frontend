@@ -65,13 +65,11 @@ class RouteDetailsCheckYourAnswersController @Inject() (
               }
 
               val json = Json.obj(
-                "lrn"      -> lrn,
-                "sections" -> Json.toJson(sections),
-                "addOfficesOfTransitUrl" -> routes.OfficeOfTransitCountryController
-                  .onPageLoad(lrn, Index(request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)), NormalMode)
-                  .url,
-                "nextPageUrl"          -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
-                "showOfficesOfTransit" -> decType
+                "lrn"                    -> lrn,
+                "sections"               -> Json.toJson(sections),
+                "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url,
+                "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
+                "showOfficesOfTransit"   -> decType
               )
 
               ValidateReaderLogger[RouteDetails](request.userAnswers)
