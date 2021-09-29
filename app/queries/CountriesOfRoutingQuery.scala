@@ -16,13 +16,13 @@
 
 package queries
 
-import models.Index
+import models.reference.CountryCode
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import queries.Constants.countriesOfRouting
 
-final case class CountriesOfRoutingQuery(index: Index) extends QuestionPage[Seq[String]] {
+final case class CountriesOfRoutingQuery() extends QuestionPage[Seq[CountryCode]] {
 
-  override def path: JsPath = JsPath \ countriesOfRouting \ index.position
+  override def path: JsPath = JsPath \ countriesOfRouting
 
 }

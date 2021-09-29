@@ -218,7 +218,7 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       getAnswerAndBuildRow = formatAnswer =>
         getAnswerAndBuildRow[T](
           page = page,
-          formatAnswer = formatAnswer,
+          formatAnswer = reformatAsLiteral(formatAnswer),
           prefix = prefix,
           id = id,
           call = call
@@ -228,11 +228,11 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def getAnswerAndBuildCountryRow[T](
     getCountryCode: T => CountryCode,
     countryList: CountryList,
-    getAnswerAndBuildRow: (T => Text) => Option[Row]
+    getAnswerAndBuildRow: (T => String) => Option[Row]
   ): Option[Row] = {
-    val formatAnswer: T => Text = x => {
+    val formatAnswer: T => String = x => {
       val countryCode: CountryCode = getCountryCode(x)
-      lit"${countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)}"
+      formatAsCountry(countryCode)(countryList)
     }
     getAnswerAndBuildRow(formatAnswer)
   }

@@ -1228,6 +1228,8 @@ addAnotherCountryOfRouting.heading.singular = You have added {0} country of rout
 addAnotherCountryOfRouting.heading.plural = You have added {0} countries of routing
 addAnotherCountryOfRouting.h2 = Do you need to add another country of routing?
 addAnotherCountryOfRouting.error.required = Select yes if you need to add another country of routing
+addAnotherCountryOfRouting.singular.checkYourAnswersLabel = Country of routing
+addAnotherCountryOfRouting.plural.checkYourAnswersLabel = Countries of routing
 
 addSafetyAndSecurityConsignor.title = Is there a security consignor for all items?
 addSafetyAndSecurityConsignor.heading = Is there a security consignor for all items?

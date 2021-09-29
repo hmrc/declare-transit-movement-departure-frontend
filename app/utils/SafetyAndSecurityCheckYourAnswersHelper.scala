@@ -20,6 +20,7 @@ import controllers.safetyAndSecurity.routes
 import models.reference.{CountryCode, MethodOfPayment}
 import models.{CheckMode, CircumstanceIndicatorList, CommonAddress, CountryList, Index, UserAnswers}
 import pages.safetyAndSecurity._
+import queries.CountriesOfRoutingQuery
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
@@ -244,23 +245,24 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     getCountryCode = countryCode => countryCode,
     countryList = countries,
     getAnswerAndBuildRow = formatAnswer =>
-      getAnswerAndBuildRemovableRow(
+      getAnswerAndBuildRemovableRow[CountryCode](
         page = CountryOfRoutingPage(index),
-        formatAnswer = formatAnswer,
+        formatAnswer = reformatAsLiteral(formatAnswer),
         id = s"country-${index.display}",
         changeCall = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode),
         removeCall = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode)
       )
   )
 
-  def countryOfRoutingRow(index: Index, countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
+  def countriesOfRoutingRow(countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
     getCountryCode = countryCode => countryCode,
     countryList = countries,
     getAnswerAndBuildRow = formatAnswer =>
-      getAnswerAndBuildValuelessRow(
-        page = CountryOfRoutingPage(index),
-        formatAnswer = formatAnswer,
-        id = Some(s"change-country-${index.display}"),
+      getAnswerAndBuildDynamicRow[Seq[CountryCode]](
+        page = CountriesOfRoutingQuery(),
+        formatAnswer = countries => Html(countries.map(formatAnswer).mkString("<br>")),
+        dynamicPrefix = countries => s"addAnotherCountryOfRouting.${if (countries.size == 1) "singular" else "plural"}",
+        dynamicId = countries => Some(s"change-${if (countries.size == 1) "country" else "countries"}"),
         call = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode)
       )
   )
