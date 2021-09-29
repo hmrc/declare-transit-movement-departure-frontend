@@ -60,7 +60,7 @@ class DeclareMarkFormProviderSpec extends StringFieldBehaviours {
 
     "must not bind invalid input" in {
 
-      val invalidCharacters      = "^[$&+,:;=?@#|'<>.^*()%!-]{1,42}$"
+      val invalidCharacters      = "^[$+,:;=#|<>^*()%!]{1,42}$"
       val invalidStringGenerator = RegexpGen.from(invalidCharacters)
 
       forAll(invalidStringGenerator) {
