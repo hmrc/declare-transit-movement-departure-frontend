@@ -46,9 +46,10 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     call = securityDetailsRoutes.TransportChargesController.onPageLoad(lrn, itemIndex, CheckMode)
   )
 
-  def containerRow(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildValuelessRow[String](
+  def containerSectionRow(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildSectionRow[String](
     page = ContainerNumberPage(itemIndex, containerIndex),
     formatAnswer = formatAsLiteral,
+    label = msg"addAnotherContainer.containerList.label".withArgs(containerIndex.display),
     id = Some(s"change-container-${containerIndex.display}"),
     call = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode)
   )
@@ -60,7 +61,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     AddAnotherViewModel(addAnotherContainerHref, content)
   }
 
-  def documentRow(index: Index, documentIndex: Index, documentType: DocumentTypeList, removable: Boolean): Option[Row] =
+  def documentRow(index: Index, documentIndex: Index, documentType: DocumentTypeList): Option[Row] =
     userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
       answer =>
         documentType.getDocumentType(answer).map {
@@ -71,20 +72,39 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
               case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
                 buildValuelessRow(
                   label = label,
-                  id = Some(s"change-document-${index.display}"),
+                  id = Some(s"change-document-${index.display}-${documentIndex.display}"),
                   call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
-              case _ if removable =>
+              case _ =>
                 buildRemovableRow(
                   label = label,
-                  id = s"document-${index.display}",
+                  id = s"document-${index.display}-${documentIndex.display}",
                   changeCall = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode),
                   removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
-              case _ =>
+            }
+        }
+    }
+
+  def documentSectionRow(index: Index, documentIndex: Index, documentType: DocumentTypeList): Option[Row] =
+    userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
+      answer =>
+        documentType.getDocumentType(answer).map {
+          documentType =>
+            val label = lit"(${documentType.code}) ${documentType.description}"
+
+            userAnswers.get(DeclarationTypePage) match {
+              case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
                 buildValuelessRow(
                   label = label,
-                  id = Some(s"change-document-${documentIndex.display}"),
+                  id = Some(s"change-document-${index.display}-${documentIndex.display}"),
+                  call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode)
+                )
+              case _ =>
+                buildSectionRow(
+                  label = msg"addDocuments.documentList.label".withArgs(documentIndex.display),
+                  answer = label,
+                  id = Some(s"change-document-${index.display}-${documentIndex.display}"),
                   call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode)
                 )
             }
@@ -234,13 +254,14 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     args = index.display
   )
 
-  def previousReferenceRow(index: Index, referenceIndex: Index, documents: PreviousReferencesDocumentTypeList): Option[Row] =
+  def previousReferenceSectionRow(index: Index, referenceIndex: Index, documents: PreviousReferencesDocumentTypeList): Option[Row] =
     getAnswerAndBuildPreviousReferenceRow(
       page = ReferenceTypePage(index, referenceIndex),
       documents = documents,
-      buildRow = label =>
-        buildValuelessRow(
-          label = label,
+      buildRow = answer =>
+        buildSectionRow(
+          label = msg"addAdministrativeReference.administrativeReferenceList.label".withArgs(referenceIndex.display),
+          answer = answer,
           id = Some(s"change-item-${index.display}"),
           call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode)
         )
@@ -283,6 +304,14 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
     id = s"package-${packageIndex.display}",
     changeCall = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode),
     removeCall = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
+  )
+
+  def packageSectionRow(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildSectionRow[PackageType](
+    page = PackageTypePage(itemIndex, packageIndex),
+    formatAnswer = formatAsLiteral,
+    label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display),
+    id = Some(s"change-package-${packageIndex.display}"),
+    call = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
   )
 
   def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](

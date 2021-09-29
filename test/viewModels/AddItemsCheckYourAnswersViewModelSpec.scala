@@ -87,12 +87,12 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
 
     "packages section have title and contain all rows when package type is not unpacked" in {
       data.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
-      data.sections(3).rows.length mustEqual 2
+      data.sections(3).rows.length mustEqual 1
     }
 
     "packages section have title and contain all rows when package type is unpacked" in {
       dataWithUnpackedPackes.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
-      dataWithUnpackedPackes.sections(3).rows.length mustEqual 2
+      dataWithUnpackedPackes.sections(3).rows.length mustEqual 1
     }
   }
   // format: on

@@ -98,6 +98,23 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
         )
     }
 
+  def getAnswerAndBuildSectionRow[T](
+    page: QuestionPage[T],
+    formatAnswer: T => Text,
+    label: Text,
+    id: Option[String],
+    call: Call
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildSectionRow(
+          label = label,
+          answer = formatAnswer(answer),
+          id = id,
+          call = call
+        )
+    }
+
   def buildRow(
     prefix: String,
     answer: Content,
@@ -128,6 +145,27 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     Row(
       key = Key(label),
       value = Value(lit""),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = call.url,
+          visuallyHiddenText = Some(label),
+          attributes = id.fold[Map[String, String]](Map.empty)(
+            id => Map("id" -> id)
+          )
+        )
+      )
+    )
+
+  def buildSectionRow(
+    label: Text,
+    answer: Content,
+    id: Option[String],
+    call: Call
+  ): Row =
+    Row(
+      key = Key(label),
+      value = Value(answer),
       actions = List(
         Action(
           content = msg"site.edit",

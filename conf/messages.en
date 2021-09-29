@@ -737,6 +737,7 @@ addAnotherPackage.heading.singular = You have added {0} package
 addAnotherPackage.yesNo = Do you need to add another package?
 addAnotherPackage.error.required = Select yes if you need to add another package
 addAnotherPackage.change.hidden = Change {0}
+addAnotherPackage.packageList.label = Package {0}
 
 commodityCode.title = What is the commodity code for item {0}?
 commodityCode.heading = What is the commodity code for item {0}?
@@ -890,6 +891,7 @@ addAdministrativeReference.title = Do you have a document to prove the customs s
 addAdministrativeReference.heading = Do you have a document to prove the customs status of item {0}?
 addAdministrativeReference.checkYourAnswersLabel = Add previous administrative reference?
 addAdministrativeReference.error.required = Select yes if you have a proof of customs status document for any goods in this movement
+addAdministrativeReference.administrativeReferenceList.label = Proof of customs status document {0}
 
 referenceType.title = What type of reference do you want to add?
 referenceType.heading = What type of reference do you want to add?
@@ -950,6 +952,7 @@ addAnotherSpecialMention.title.plural = You have added {0} special mentions for 
 addAnotherSpecialMention.heading.singular = You have added 1 special mention for item {0}
 addAnotherSpecialMention.heading.plural = You have added {0} special mentions for item {1}
 addAnotherSpecialMention.addAnother = Do you need to add another special mention?
+addAnotherSpecialMention.specialMentionList.label = Special mention {0}
 
 addAnotherSpecialMention.checkYourAnswersLabel = addAnotherSpecialMention
 addAnotherSpecialMention.error.required = Select yes if you need to add another special mention
@@ -972,6 +975,7 @@ addAnotherContainer.heading = Do you need to add another shipping container?
 addAnotherContainer.checkYourAnswersLabel.singular = Container
 addAnotherContainer.checkYourAnswersLabel.plural = Containers
 addAnotherContainer.error.required = Select yes if you need to add another shipping container
+addAnotherContainer.containerList.label = Shipping container {0}
 
 addExtraDocumentInformation.title = Do you need to add any extra information for document {0}?
 addExtraDocumentInformation.heading = Do you need to add any extra information for document {0}?
@@ -982,6 +986,7 @@ addDocuments.heading = Do you need to add any produced documents or work certifi
 addDocuments.paragraph = These include certificates of origin, authorised economic operator (AEO) certificates, or transit GB (TGB) documents for domestic goods moving between GB and NI.
 addDocuments.checkYourAnswersLabel = Do you need to add any produced documents or work certificates for item {0}?
 addDocuments.error.required = Select yes if you need to add any produced documents or work certificates for item {0}
+addDocuments.documentList.label = Document {0}
 
 documentReference.title = What is the document reference?
 documentReference.heading = What is the document reference?

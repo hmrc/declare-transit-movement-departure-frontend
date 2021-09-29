@@ -116,9 +116,7 @@ object AddItemsCheckYourAnswersViewModel {
       List.range(0, userAnswers.get(DeriveNumberOfPackages(index)).getOrElse(0)).flatMap {
         packagePosition =>
           Seq(
-            checkYourAnswersHelper.packageType(index, Index(packagePosition)),
-            checkYourAnswersHelper.totalPieces(index, Index(packagePosition)),
-            checkYourAnswersHelper.numberOfPackages(index, Index(packagePosition))
+            checkYourAnswersHelper.packageSectionRow(index, Index(packagePosition))
           ).flatten
       }
 
@@ -136,7 +134,7 @@ object AddItemsCheckYourAnswersViewModel {
     val referencesRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)).flatMap {
         position =>
-          checkYourAnswersHelper.previousReferenceRow(index, Index(position), previousDocumentTypes)
+          checkYourAnswersHelper.previousReferenceSectionRow(index, Index(position), previousDocumentTypes)
       }
 
     Section(
@@ -152,7 +150,7 @@ object AddItemsCheckYourAnswersViewModel {
     val documentRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfDocuments(index)).getOrElse(0)).flatMap {
         documentPosition =>
-          checkYourAnswersHelper.documentRow(index, Index(documentPosition), documentTypeList, removable = false)
+          checkYourAnswersHelper.documentSectionRow(index, Index(documentPosition), documentTypeList)
       }
 
     Section(
@@ -166,7 +164,7 @@ object AddItemsCheckYourAnswersViewModel {
     val containerRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfContainers(index)).getOrElse(0)).flatMap {
         containerPosition =>
-          checkYourAnswersHelper.containerRow(index, Index(containerPosition))
+          checkYourAnswersHelper.containerSectionRow(index, Index(containerPosition))
       }
 
     Section(
@@ -182,7 +180,7 @@ object AddItemsCheckYourAnswersViewModel {
     val containerRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfSpecialMentions(index)).getOrElse(0)).flatMap {
         containerPosition =>
-          checkYourAnswersHelper.specialMentionTypeNoRemoval(index, Index(containerPosition), specialMentionList)
+          checkYourAnswersHelper.specialMentionSectionRow(index, Index(containerPosition), specialMentionList)
       }
 
     Section(

@@ -89,7 +89,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       }
     }
 
-    "containerNumber" - {
+    "containerSectionRow" - {
 
       val containerNumber: String = "CONTAINER NUMBER"
 
@@ -99,7 +99,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.containerRow(itemIndex, containerIndex)
+          val result = helper.containerSectionRow(itemIndex, containerIndex)
           result mustBe None
         }
       }
@@ -110,14 +110,14 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers.unsafeSetVal(ContainerNumberPage(itemIndex, containerIndex))(containerNumber)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.containerRow(itemIndex, containerIndex)
+          val result = helper.containerSectionRow(itemIndex, containerIndex)
 
-          val label = lit"$containerNumber"
+          val label = msg"addAnotherContainer.containerList.label".withArgs(containerIndex.display)
 
           result mustBe Some(
             Row(
               key = Key(label),
-              value = Value(lit""),
+              value = Value(lit"$containerNumber"),
               actions = List(
                 Action(
                   content = msg"site.edit",
@@ -144,7 +144,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.documentRow(itemIndex, documentIndex, DocumentTypeList(Nil), removable = true)
+          val result = helper.documentRow(itemIndex, documentIndex, DocumentTypeList(Nil))
           result mustBe None
         }
 
@@ -153,7 +153,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Nil), removable = true)
+          val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Nil))
 
           result mustBe None
 
@@ -169,7 +169,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             .unsafeSetVal(DeclarationTypePage)(Option4)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = true)
+          val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)))
 
           val label = lit"(${document.code}) ${document.description}"
 
@@ -182,74 +182,130 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}")
+                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
                 )
               )
             )
           )
         }
 
-        "non-Option4 declaration type" - {
+        "non-Option4 declaration type" in {
 
-          "removable" in {
+          val answers = emptyUserAnswers
+            .unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+            .unsafeSetVal(DeclarationTypePage)(Option3)
 
-            val answers = emptyUserAnswers
-              .unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
-              .unsafeSetVal(DeclarationTypePage)(Option3)
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)))
 
-            val helper = new AddItemsCheckYourAnswersHelper(answers)
-            val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = true)
+          val label = lit"(${document.code}) ${document.description}"
 
-            val label = lit"(${document.code}) ${document.description}"
-
-            result mustBe Some(
-              Row(
-                key = Key(label),
-                value = Value(lit""),
-                actions = List(
-                  Action(
-                    content = msg"site.edit",
-                    href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-document-${index.display}")
-                  ),
-                  Action(
-                    content = msg"site.delete",
-                    href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"remove-document-${index.display}")
-                  )
+          result mustBe Some(
+            Row(
+              key = Key(label),
+              value = Value(lit""),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                ),
+                Action(
+                  content = msg"site.delete",
+                  href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"remove-document-${index.display}-${documentIndex.display}")
                 )
               )
             )
-          }
+          )
+        }
+      }
+    }
 
-          "not removable" in {
+    "documentSectionRow" - {
 
-            val answers = emptyUserAnswers
-              .unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
-              .unsafeSetVal(DeclarationTypePage)(Option3)
+      val documentCode: String   = "DOCUMENT CODE"
+      val document: DocumentType = DocumentType(documentCode, "DESCRIPTION", transportDocument = true)
 
-            val helper = new AddItemsCheckYourAnswersHelper(answers)
-            val result = helper.documentRow(index, referenceIndex, DocumentTypeList(Seq(document)), removable = false)
+      "return None" - {
 
-            val label = lit"(${document.code}) ${document.description}"
+        "DocumentTypePage undefined at index" in {
 
-            result mustBe Some(
-              Row(
-                key = Key(label),
-                value = Value(lit""),
-                actions = List(
-                  Action(
-                    content = msg"site.edit",
-                    href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
-                    visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-document-${documentIndex.display}")
-                  )
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.documentSectionRow(itemIndex, documentIndex, DocumentTypeList(Nil))
+          result mustBe None
+        }
+
+        "document type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.documentSectionRow(index, referenceIndex, DocumentTypeList(Nil))
+
+          result mustBe None
+
+        }
+      }
+
+      "return Some(row)" - {
+
+        "Option4 declaration type and first index" in {
+
+          val answers = emptyUserAnswers
+            .unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+            .unsafeSetVal(DeclarationTypePage)(Option4)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.documentSectionRow(index, referenceIndex, DocumentTypeList(Seq(document)))
+
+          val label = lit"(${document.code}) ${document.description}"
+
+          result mustBe Some(
+            Row(
+              key = Key(label),
+              value = Value(lit""),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
                 )
               )
             )
-          }
+          )
+        }
+
+        "non-Option4 declaration type" in {
+
+          val answers = emptyUserAnswers
+            .unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+            .unsafeSetVal(DeclarationTypePage)(Option3)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.documentSectionRow(index, referenceIndex, DocumentTypeList(Seq(document)))
+
+          val label = msg"addDocuments.documentList.label".withArgs(documentIndex.display)
+
+          result mustBe Some(
+            Row(
+              key = Key(label),
+              value = Value(lit"(${document.code}) ${document.description}"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                )
+              )
+            )
+          )
         }
       }
     }
@@ -994,7 +1050,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       }
     }
 
-    "previousReferenceType" - {
+    "previousReferenceSectionRow" - {
 
       val referenceCode: String        = "REFERENCE CODE"
       val referenceDescription: String = "REFERENCE DESCRIPTION"
@@ -1005,7 +1061,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.previousReferenceRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+          val result = helper.previousReferenceSectionRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
           result mustBe None
         }
 
@@ -1014,7 +1070,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers)
-          val result = helper.previousReferenceRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+          val result = helper.previousReferenceSectionRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
 
           result mustBe None
 
@@ -1029,18 +1085,18 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
             val helper = new AddItemsCheckYourAnswersHelper(answers)
-            val result = helper.previousReferenceRow(
+            val result = helper.previousReferenceSectionRow(
               index,
               referenceIndex,
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None)))
             )
 
-            val label = lit"($referenceCode) "
+            val label = msg"addAdministrativeReference.administrativeReferenceList.label".withArgs(referenceIndex.display)
 
             result mustBe Some(
               Row(
                 key = Key(label),
-                value = Value(lit""),
+                value = Value(lit"($referenceCode) "),
                 actions = List(
                   Action(
                     content = msg"site.edit",
@@ -1058,18 +1114,18 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(referenceCode)
 
             val helper = new AddItemsCheckYourAnswersHelper(answers)
-            val result = helper.previousReferenceRow(
+            val result = helper.previousReferenceSectionRow(
               index,
               referenceIndex,
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, Some(referenceDescription))))
             )
 
-            val label = lit"($referenceCode) $referenceDescription"
+            val label = msg"addAdministrativeReference.administrativeReferenceList.label".withArgs(referenceIndex.display)
 
             result mustBe Some(
               Row(
                 key = Key(label),
-                value = Value(lit""),
+                value = Value(lit"($referenceCode) $referenceDescription"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
@@ -1307,6 +1363,49 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   href = RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"remove-package-${packageIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "packageSectionRow" - {
+
+      val packageType: PackageType = PackageType("CODE", "DESCRIPTION")
+
+      "return None" - {
+        "PackageTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.packageSectionRow(itemIndex, packageIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "PackageTypePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(packageType)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers)
+          val result = helper.packageSectionRow(itemIndex, packageIndex)
+
+          val label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display)
+
+          result mustBe Some(
+            Row(
+              key = Key(label),
+              value = Value(lit"$packageType"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-package-${packageIndex.display}")
                 )
               )
             )
