@@ -1089,10 +1089,10 @@ addSecurityConsigneesEori.heading = Do you know the security consignee’s EORI 
 addSecurityConsigneesEori.checkYourAnswersLabel = Know the security consignee’s EORI number?
 addSecurityConsigneesEori.error.required = Select yes if you know the security consignee’s EORI number
 
-securityConsigneeAllItems.title = Is this the security consignee for all the items?
-securityConsigneeAllItems.heading = Is this the security consignee for all the items?
+securityConsigneeAllItems.title = Is there a security consignee for all the items?
+securityConsigneeAllItems.heading = Is there a security consignee for all the items?
 securityConsigneeAllItems.checkYourAnswersLabel = Security consignee for all items
-securityConsigneeAllItems.error.required = Select yes if this the security consignee for all the items
+securityConsigneeAllItems.error.required = Select yes if there is a security consignee for all the items
 
 securityConsignorEori.title = What is the security consignor’s EORI number?
 securityConsignorEori.heading = What is the security consignor’s EORI number?
