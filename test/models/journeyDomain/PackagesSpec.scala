@@ -28,7 +28,7 @@ class PackagesSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelpe
 
   private val unpackedPackageCode = Gen.oneOf(PackageType.unpackedCodes).sample.value
   private val bulkPackageCode     = Gen.oneOf(PackageType.bulkCodes).sample.value
-  private val otherPackageCode    = arb[String].suchThat(!PackageType.bulkAndUnpackedCodes.contains(_)).sample.value
+  private val otherPackageCode    = arb[String].retryUntil(!PackageType.bulkAndUnpackedCodes.contains(_)).sample.value
 
   private val unpackedPackageUa = emptyUserAnswers
     .unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(PackageType(unpackedPackageCode, "description"))

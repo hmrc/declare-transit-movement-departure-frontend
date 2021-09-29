@@ -1250,7 +1250,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
         "with href pointing to AddAdministrativeReferenceController" - {
           "when AddAdministrativeReferencePage is false or undefined" in {
 
-            forAll(arbitrary[Option[Boolean]].suchThat(!_.contains(true))) {
+            forAll(arbitrary[Option[Boolean]].retryUntil(!_.contains(true))) {
               maybeBool =>
                 val answers = emptyUserAnswers.unsafeSetOpt(AddAdministrativeReferencePage(itemIndex))(maybeBool)
 
@@ -1483,7 +1483,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
         "with href pointing to AddDocumentsController" - {
           "when AddDocumentsPage is false or undefined" in {
 
-            forAll(arbitrary[Option[Boolean]].suchThat(!_.contains(true))) {
+            forAll(arbitrary[Option[Boolean]].retryUntil(!_.contains(true))) {
               maybeBool =>
                 val answers = emptyUserAnswers.unsafeSetOpt(AddDocumentsPage(itemIndex))(maybeBool)
 

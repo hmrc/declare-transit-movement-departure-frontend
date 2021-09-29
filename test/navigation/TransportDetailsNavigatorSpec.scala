@@ -212,7 +212,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       }
 
       "must go from ModeCrossingBorder to NationalityCrossingBorder Page when answer does not start with 2, 5 or 7" in {
-        val inlandModesGen = Gen.numStr.suchThat(
+        val inlandModesGen = Gen.numStr.retryUntil(
           num => !ModeCrossingBorder.isExemptFromNationality(num)
         )
         forAll(arbitrary[UserAnswers], inlandModesGen) {
@@ -423,7 +423,7 @@ class TransportDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       }
 
       "must go from ModeCrossingBorder to IdCrossingBorderPage when answer does not start with 2, 5, 7" in {
-        val inlandModesGen = Gen.numStr.suchThat(
+        val inlandModesGen = Gen.numStr.retryUntil(
           num => !ModeCrossingBorder.isExemptFromNationality(num)
         )
         forAll(arbitrary[UserAnswers], inlandModesGen) {

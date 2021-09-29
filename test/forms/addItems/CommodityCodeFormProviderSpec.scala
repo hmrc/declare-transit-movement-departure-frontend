@@ -60,7 +60,7 @@ class CommodityCodeFormProviderSpec extends StringFieldBehaviours with SpecBase 
         List(FormError(fieldName, commodityCodeInvalidCharacterKey, Seq(index.display)))
 
       val genInvalidString: Gen[String] = {
-        stringsWithMaxLength(maxLength) suchThat (!_.matches(commodityCodeCharactersRegex))
+        stringsWithMaxLength(maxLength) retryUntil (!_.matches(commodityCodeCharactersRegex))
       }
 
       forAll(genInvalidString) {
