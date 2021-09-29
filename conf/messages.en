@@ -1219,7 +1219,6 @@ countryOfRouting.title =  What is the country of routing?
 countryOfRouting.heading =  What is the country of routing?
 countryOfRouting.checkYourAnswersLabel = Country of routing
 countryOfRouting.error.required = Enter the country of routing
-addOrRemoveCountryOfRouting.checkYourAnswersLabel = Add or remove countries of routing
 
 
 addAnotherCountryOfRouting.title.singular = You have added {0} country of routing

@@ -46,8 +46,7 @@ object SafetyAndSecurityCheckYourAnswersViewModel {
       ),
       Section(
         msg"safetyAndSecurity.checkYourAnswersLabel.countriesOfRouting",
-        countriesOfRoutingRows,
-        cyah.addAnotherCountryOfRouting(msg"addOrRemoveCountryOfRouting.checkYourAnswersLabel")
+        countriesOfRoutingRows
       ),
       Section(
         msg"safetyAndSecurity.checkYourAnswersLabel.securityTraderDetails",

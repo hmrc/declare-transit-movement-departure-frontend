@@ -23,7 +23,6 @@ import pages.safetyAndSecurity._
 import queries.CountriesOfRoutingQuery
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
-import viewModels.AddAnotherViewModel
 
 // scalastyle:off number.of.methods
 class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
@@ -266,13 +265,6 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
         call = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode)
       )
   )
-
-  def addAnotherCountryOfRouting(content: Text): AddAnotherViewModel = {
-
-    val addAnotherCountryOfRoutingHref = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url
-
-    AddAnotherViewModel(addAnotherCountryOfRoutingHref, content)
-  }
 
 }
 // scalastyle:on number.of.methods
