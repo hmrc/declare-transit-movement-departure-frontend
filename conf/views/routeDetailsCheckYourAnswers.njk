@@ -17,22 +17,26 @@
         <h1 class="govuk-heading-xl">
           {{ messages("routeDetailsCheckYourAnswers.heading") }}
         </h1>
+
         {% for section in sections %}
-             {{ sectionMacro(section.sectionTitle, section.rows) }}
+          {{ sectionMacro(section.sectionTitle, section.rows) }}
         {% endfor %}
 
         {% if showOfficesOfTransit %}
-        <p class="govuk-body"><a id="add-or-remove-office-of-transit" href="{{ addOfficesOfTransitUrl }}">{{ messages("\addOrRemoveOfficesOfTransit.checkYourAnswersLabel") }}</a><p>
+          <p class="govuk-body">
+            <a id="add-or-remove-office-of-transit" href="{{ addOfficesOfTransitUrl }}">{{ messages("addOrRemoveOfficesOfTransit.checkYourAnswersLabel") }}</a>
+          <p>
         {% endif %}
 
-           {{ csrf() | safe }}
+        {{ csrf() | safe }}
 
-         {{ govukButton({
-              text: messages("site.continue"),
-              preventDoubleClick: true,
-              href: nextPageUrl,
-              attributes: {id:"submit"}
-            }) }}
+        {{ govukButton({
+          text: messages("site.continue"),
+          preventDoubleClick: true,
+          href: nextPageUrl,
+          attributes: {id:"submit"}
+        }) }}
+
       </div>
     </div>
   </div>
