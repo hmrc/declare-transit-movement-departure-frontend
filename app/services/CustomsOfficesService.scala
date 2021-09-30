@@ -35,7 +35,7 @@ class CustomsOfficesService @Inject() (
   )
 
   private def getNICustomsOffices(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
-    Future.successful(CustomsOfficeList(Nil))
+    referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("XI"), departureOfficeRoles)
 
   def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     for {
