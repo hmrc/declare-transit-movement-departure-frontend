@@ -23,8 +23,7 @@ import models.messages.DeclarationRequest
 import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage, DepartureId, GuaranteeNotValidMessage, MessagesSummary, ResponseMessage}
 import play.api.http.HeaderNames
 import uk.gov.hmrc.http.HttpReads.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import xml.XMLWrites._
 
 import javax.inject.Inject

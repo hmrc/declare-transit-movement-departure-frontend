@@ -35,7 +35,7 @@ import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
 import services.ExcludedCountriesService.routeDetailsExcludedCountries
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
 
