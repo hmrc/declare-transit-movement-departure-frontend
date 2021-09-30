@@ -16,8 +16,7 @@
 
 package repositories
 
-import logging.Logging
-import play.api.Configuration
+import play.api.{Configuration, Logging}
 import reactivemongo.api.bson.BSONDocument
 import reactivemongo.api.indexes.IndexType
 

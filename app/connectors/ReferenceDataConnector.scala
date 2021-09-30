@@ -17,9 +17,9 @@
 package connectors
 
 import config.FrontendAppConfig
-import logging.Logging
 import models._
 import models.reference._
+import play.api.Logging
 import play.api.http.Status.{NOT_FOUND, OK}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}

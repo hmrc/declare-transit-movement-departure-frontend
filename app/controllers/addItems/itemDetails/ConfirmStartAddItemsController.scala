@@ -18,12 +18,12 @@ package controllers.addItems.itemDetails
 
 import controllers.actions._
 import forms.ConfirmStartAddItemsFormProvider
-import logging.Logging
 import models.{DependentSection, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsItemDetails
 import pages.AddSecurityDetailsPage
 import pages.addItems.ConfirmStartAddItemsPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

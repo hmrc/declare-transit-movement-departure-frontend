@@ -26,7 +26,6 @@ import models.requests.DataRequest
 import models.{DeclarationType, Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
 import pages.DeclarationTypePage
 import pages.routeDetails.MovementDestinationCountryPage
-import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -79,7 +78,7 @@ class RouteDetailsCheckYourAnswersController @Inject() (
               renderer.render("routeDetailsCheckYourAnswers.njk", json).map(Ok(_))
           }
         case _ =>
-          Logger.info("DestinationCountryPage has no data")
+          logger.info("DestinationCountryPage has no data")
           Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
       }
   }

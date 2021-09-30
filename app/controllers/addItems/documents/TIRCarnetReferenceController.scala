@@ -18,13 +18,13 @@ package controllers.addItems.documents
 
 import controllers.actions._
 import forms.addItems.TIRCarnetReferenceFormProvider
-import logging.Logging
 import models.DeclarationType.Option4
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
 import pages.DeclarationTypePage
 import pages.addItems.{DocumentTypePage, TIRCarnetReferencePage}
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

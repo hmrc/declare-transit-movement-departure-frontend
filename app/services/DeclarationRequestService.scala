@@ -18,7 +18,6 @@ package services
 
 import cats.data.NonEmptyList
 import cats.implicits._
-import logging.Logging
 import models.GuaranteeType.TIR
 import models.domain.SealDomain
 import models.journeyDomain.GoodsSummary.{
@@ -43,6 +42,7 @@ import models.messages.header.{Header, Transport}
 import models.messages.safetyAndSecurity._
 import models.messages.trader._
 import models.{CommonAddress, EoriNumber, UserAnswers}
+import play.api.Logging
 import repositories.InterchangeControlReferenceIdRepository
 
 import java.time.LocalDateTime

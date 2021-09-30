@@ -21,12 +21,12 @@ import cats.implicits._
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.DestinationOfficeFormProvider
-import logging.Logging
 import models.reference.CustomsOffice
 import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import pages.routeDetails.{DestinationOfficePage, MovementDestinationCountryPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
