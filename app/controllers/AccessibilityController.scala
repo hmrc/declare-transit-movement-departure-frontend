@@ -31,7 +31,7 @@ class AccessibilityController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action.async {
+  def onPageLoad(): Action[AnyContent] = Action.async {
     implicit request =>
       renderer.render("accessibility.njk").map(Ok(_))
   }

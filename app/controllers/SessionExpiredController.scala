@@ -34,7 +34,7 @@ class SessionExpiredController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action.async {
+  def onPageLoad(): Action[AnyContent] = Action.async {
     implicit request =>
       val json = Json.obj(
         "nextPageUrl" -> s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do"

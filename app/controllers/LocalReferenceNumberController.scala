@@ -48,14 +48,14 @@ class LocalReferenceNumberController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad: Action[AnyContent] = identify.async {
+  def onPageLoad(): Action[AnyContent] = identify.async {
     implicit request =>
       val json = Json.obj("form" -> form)
 
       renderer.render("localReferenceNumber.njk", json).map(Ok(_))
   }
 
-  def onSubmit: Action[AnyContent] = identify.async {
+  def onSubmit(): Action[AnyContent] = identify.async {
     implicit request =>
       form
         .bindFromRequest()
