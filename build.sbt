@@ -2,7 +2,6 @@ import play.sbt.routes.RoutesKeys
 import sbt.Def
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "declare-transit-movement-departure-frontend"
@@ -19,7 +18,7 @@ lazy val root = (project in file("."))
   )
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .configs(IntegrationTest)
-  .settings(integrationTestSettings(): _*)
+  .settings(inConfig(IntegrationTest)(itSettings): _*)
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
@@ -94,17 +93,17 @@ lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   )
 )
 
-//lazy val itSettings = Defaults.itSettings ++ Seq(
-//  unmanagedSourceDirectories := Seq(
-//    baseDirectory.value / "it"
-//  ),
-//  unmanagedResourceDirectories := Seq(
-//    baseDirectory.value / "it" / "resources"
-//  ),
-//  parallelExecution := false,
-//  fork              := true,
-//  javaOptions ++= Seq(
-//    "-Dconfig.resource=it.application.conf",
-//    "-Dlogger.resource=it.logback.xml"
-//  )
-//)
+lazy val itSettings = Defaults.itSettings ++ Seq(
+  unmanagedSourceDirectories := Seq(
+    baseDirectory.value / "it"
+  ),
+  unmanagedResourceDirectories := Seq(
+    baseDirectory.value / "it" / "resources"
+  ),
+  parallelExecution := false,
+  fork              := true,
+  javaOptions ++= Seq(
+    "-Dconfig.resource=it.application.conf",
+    "-Dlogger.resource=it.logback.xml"
+  )
+)
