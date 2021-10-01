@@ -521,7 +521,7 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
 
   protected val countrySpecificCodes      = Seq("DG0", "DG1")
   protected val countrySpecificCodeGen    = Gen.oneOf(countrySpecificCodes)
-  protected val nonCountrySpecificCodeGen = stringsWithMaxLength(5, alphaNumChar).suchThat(!countrySpecificCodes.contains(_))
+  protected val nonCountrySpecificCodeGen = stringsWithMaxLength(5, alphaNumChar).retryUntil(!countrySpecificCodes.contains(_))
 
   protected val liabilityAmount    = Seq("5000", "10000")
   protected val liabilityAmountGen = Gen.oneOf(liabilityAmount)
@@ -585,7 +585,7 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
   implicit lazy val arbitraryRegularPackage: Arbitrary[RegularPackage] =
     Arbitrary {
       for {
-        kindOfPackage <- stringsWithMaxLength(3, alphaNumChar).suchThat(
+        kindOfPackage <- stringsWithMaxLength(3, alphaNumChar).retryUntil(
           x => !BulkPackage.validCodes.contains(x) && !UnpackedPackage.validCodes.contains(x)
         )
         numberOfPackages <- Gen.choose(0, 99999)
