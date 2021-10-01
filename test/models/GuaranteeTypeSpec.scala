@@ -42,7 +42,7 @@ class GuaranteeTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropert
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!GuaranteeType.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] retryUntil (!GuaranteeType.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>

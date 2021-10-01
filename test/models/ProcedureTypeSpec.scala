@@ -40,7 +40,7 @@ class ProcedureTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropert
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!ProcedureType.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] retryUntil (!ProcedureType.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>

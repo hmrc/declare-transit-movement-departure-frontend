@@ -147,7 +147,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
         "must not be defined when modeAtBorder is not 4 or 40 and AddConveyanceReferenceNumber is false" in {
 
           val modeAtBorder = arb[String]
-            .suchThat(
+            .retryUntil(
               mode => mode != "4" && mode != "40"
             )
             .sample
@@ -180,7 +180,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
 
         "must be defined when addCircumstanceIndicator is not 'E' " in {
 
-          val circumstanceIndicator = arb[String].suchThat(_ != "E").sample.value
+          val circumstanceIndicator = arb[String].retryUntil(_ != "E").sample.value
 
           val userAnswers = fullSafetyAndSecurityUa
             .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
@@ -420,7 +420,7 @@ class SafetyAndSecuritySpec extends SpecBase with GeneratorSpec with TryValues w
         "when ModeAtBorderPage is not '4' or '40' and AddConveyanceReferenceNumberPage is true and ConveyanceReferenceNumberPage is empty" in {
 
           val modeAtBorder = arb[String]
-            .suchThat(
+            .retryUntil(
               mode => mode != "4" && mode != "40"
             )
             .sample

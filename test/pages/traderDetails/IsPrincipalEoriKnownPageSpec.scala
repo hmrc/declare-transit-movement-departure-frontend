@@ -16,7 +16,7 @@
 
 package pages.traderDetails
 
-import models.ProcedureType.Normal
+import models.ProcedureType.{Normal, Simplified}
 import models.{CommonAddress, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.ProcedureTypePage
@@ -37,7 +37,36 @@ class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
 
   "cleanup" - {
 
-    "must remove PrincipalAddressPage and PrincipalNamePage when there is a change of the answer to 'Yes'" in {
+    "must remove PrincipalAddressPage and PrincipalNamePage when there is a change of the answer to 'Yes' and Simplified ProcedureType" in {
+
+      val principalAddress = arbitrary[CommonAddress].sample.value
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val result = userAnswers
+            .set(IsPrincipalEoriKnownPage, false)
+            .success
+            .value
+            .set(ProcedureTypePage, Simplified)
+            .success
+            .value
+            .set(WhatIsPrincipalEoriPage, "GB223445")
+            .success
+            .value
+            .set(PrincipalNamePage, "answer")
+            .success
+            .value
+            .set(PrincipalAddressPage, principalAddress)
+            .success
+            .value
+            .set(IsPrincipalEoriKnownPage, true)
+            .success
+            .value
+
+          result.get(PrincipalNamePage) must not be defined
+          result.get(PrincipalAddressPage) must not be defined
+      }
+    }
+    "must not remove PrincipalAddressPage and PrincipalNamePage when there is a change of the answer to 'Yes' and Normal ProcedureType" in {
 
       val principalAddress = arbitrary[CommonAddress].sample.value
       forAll(arbitrary[UserAnswers]) {
@@ -62,8 +91,8 @@ class IsPrincipalEoriKnownPageSpec extends PageBehaviours {
             .success
             .value
 
-          result.get(PrincipalNamePage) must not be defined
-          result.get(PrincipalAddressPage) must not be defined
+          result.get(PrincipalNamePage) mustBe defined
+          result.get(PrincipalAddressPage) mustBe defined
       }
     }
 

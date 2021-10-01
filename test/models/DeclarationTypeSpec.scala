@@ -51,7 +51,7 @@ class DeclarationTypeSpec
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!DeclarationType.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] retryUntil (!DeclarationType.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>

@@ -16,8 +16,9 @@
 
 package pages.traderDetails
 
+import models.ProcedureType.{Normal, Simplified}
 import models.UserAnswers
-import pages.{ClearAllAddItems, QuestionPage}
+import pages.{ClearAllAddItems, ProcedureTypePage, QuestionPage}
 import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}
@@ -32,8 +33,8 @@ case object IsPrincipalEoriKnownPage extends QuestionPage[Boolean] with ClearAll
     val cleanedUpUserAnswers = value match {
       case Some(false) => userAnswers.remove(WhatIsPrincipalEoriPage)
       case Some(true) =>
-        userAnswers.get(WhatIsPrincipalEoriPage) match {
-          case Some(x) if x.startsWith("GB") =>
+        userAnswers.get(ProcedureTypePage) match {
+          case Some(Simplified) =>
             userAnswers
               .remove(PrincipalNamePage)
               .flatMap(_.remove(PrincipalAddressPage))
