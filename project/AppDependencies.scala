@@ -14,7 +14,7 @@ object AppDependencies {
     "uk.gov.hmrc"                %% "play-ui"                         % "9.7.0-play-28",
     "uk.gov.hmrc"                %% "bootstrap-frontend-play-28"      % "5.14.0",
     "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.0.0-play-28",
-    "uk.gov.hmrc"                %% "play-nunjucks"                   % "0.32.0-play-28",
+    "uk.gov.hmrc"                %% "play-nunjucks"                   % "0.31.0-play-28", // NB: version 0.32.0 causing performance issues evidenced by failing unit and integration view specs
     "uk.gov.hmrc"                %% "play-nunjucks-viewmodel"         % "0.15.0-play-28",
     "org.webjars.npm"             % "govuk-frontend"                  % "3.13.0",
     "org.webjars.npm"             % "hmrc-frontend"                   % "1.35.2",
