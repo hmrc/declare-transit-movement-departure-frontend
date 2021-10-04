@@ -30,7 +30,7 @@ trait ModelGenerators {
   implicit lazy val arbitraryPackageType: Arbitrary[PackageType] =
     Arbitrary {
       for {
-        code        <- arbitrary[String].suchThat(!PackageType.bulkAndUnpackedCodes.contains(_))
+        code        <- arbitrary[String].retryUntil(!PackageType.bulkAndUnpackedCodes.contains(_))
         description <- arbitrary[String]
       } yield PackageType(code, description)
     }

@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 class DeclareMarkFormProvider @Inject() extends Mappings {
 
-  val regex: String = "^[a-zA-Z0-9]*$"
+  val regex: String = "^[a-zA-Z0-9&'@\\/.\\-? ]*$"
   val maxLength     = 42
 
   def apply(totalPackages: Option[Int], packageIndex: Int): Form[String] =

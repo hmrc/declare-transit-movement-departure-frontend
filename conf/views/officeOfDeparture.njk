@@ -43,22 +43,17 @@
 
           {{ csrf() | safe }}
 
-          <p class="govuk-body"> {{ messages("officeOfDeparture.label") }}</p>
+          <div class="govuk-body" id="hint1">{{ messages("officeOfDeparture.label") }}</div>
+
+          <div class="govuk-hint" id="hint2">{{ messages('officeOfDeparture.hintText') }} </div>
 
           {{ govukSelect({
             classes: "govuk-input--width-20 autocomplete",
-            label: {
-              text: messages('officeOfDeparture.heading'),
-              isPageHeading: false,
-              classes: "govuk-visually-hidden"
-            },
             id: "value",
             name: "value",
-            hint: {
-              text: messages('officeOfDeparture.hintText')
-            },
             errorMessage: form.value.error,
-            items: customsOffices
+            items: customsOffices,
+            describedBy: "hint1 hint2"
           }) }}
 
           {{ govukButton({

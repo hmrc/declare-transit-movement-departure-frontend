@@ -728,7 +728,7 @@ declareMark.heading = What is the mark or number for package {0}?
 declareMark.error.required = Enter the mark or number for package {0}
 declareMark.error.length = The mark or number for package {0} must be {1} characters or less
 declareMark.error.emptyNumberOfPackages = Mark or number for package {0} must be 1 or more
-declareMark.error.format = The mark or number for package {0} must only include letters a to z without accents, numbers 0 to 9
+declareMark.error.format = The mark or number for package {0} must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
 addAnotherPackage.title.plural = You have added {0} packages
 addAnotherPackage.title.singular = You have added {0} package
@@ -1089,10 +1089,10 @@ addSecurityConsigneesEori.heading = Do you know the security consignee’s EORI 
 addSecurityConsigneesEori.checkYourAnswersLabel = Know the security consignee’s EORI number?
 addSecurityConsigneesEori.error.required = Select yes if you know the security consignee’s EORI number
 
-securityConsigneeAllItems.title = Is this the security consignee for all the items?
-securityConsigneeAllItems.heading = Is this the security consignee for all the items?
+securityConsigneeAllItems.title = Is there a security consignee for all the items?
+securityConsigneeAllItems.heading = Is there a security consignee for all the items?
 securityConsigneeAllItems.checkYourAnswersLabel = Security consignee for all items
-securityConsigneeAllItems.error.required = Select yes if this the security consignee for all the items
+securityConsigneeAllItems.error.required = Select yes if there is a security consignee for all the items
 
 securityConsignorEori.title = What is the security consignor’s EORI number?
 securityConsignorEori.heading = What is the security consignor’s EORI number?
@@ -1138,8 +1138,6 @@ declarationRejection.pointer =  Error pointer
 declarationRejection.reason =  Reason
 declarationRejection.declarationDetails = Departure details
 declarationRejection.rejectionDetails = Rejection details
-declarationRejection.contact.p = You must
-declarationRejection.contact.link = contact the New Computerised Transit System helpdesk to get this fixed (opens in a new tab)
 
 declarationRejection.review = You must review the error and
 declarationRejection.newDeparture = send a new departure declaration with the right information
@@ -1257,10 +1255,10 @@ safetyAndSecurityConsignorName.error.required = Enter the security consignor’s
 safetyAndSecurityConsignorName.error.length = The security consignor’s name must be 35 characters or less
 safetyAndSecurityConsignorName.error.invalid = The security consignor’s name must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 
-addSafetyAndSecurityConsignee.title =  Is this the security consignee for all items?
-addSafetyAndSecurityConsignee.heading = Is this the security consignee for all items?
+addSafetyAndSecurityConsignee.title =  Is there a security consignee for all items?
+addSafetyAndSecurityConsignee.heading = Is there a security consignee for all items?
 addSafetyAndSecurityConsignee.checkYourAnswersLabel = Security consignee for all items?
-addSafetyAndSecurityConsignee.error.required = Select yes if this is the security consignee for all items
+addSafetyAndSecurityConsignee.error.required = Select yes if there is a the security consignee for all items
 
 addSafetyAndSecurityConsigneeEori.title =  Do you know the security consignee’s EORI number?
 addSafetyAndSecurityConsigneeEori.heading =  Do you know the security consignee’s EORI number?

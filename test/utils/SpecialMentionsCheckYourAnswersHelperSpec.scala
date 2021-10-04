@@ -34,7 +34,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
       "display row if answer exists in reference data" in {
 
         forAll(arb[UserAnswers],
-               arb[SpecialMentionList].suchThat(
+               arb[SpecialMentionList].retryUntil(
                  x => x.list.nonEmpty
                )
         ) {
@@ -79,7 +79,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
       "display row if answer exists in reference data" in {
 
         forAll(arb[UserAnswers],
-               arb[SpecialMentionList].suchThat(
+               arb[SpecialMentionList].retryUntil(
                  x => x.list.nonEmpty
                )
         ) {

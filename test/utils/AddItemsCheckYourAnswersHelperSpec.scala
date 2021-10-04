@@ -182,7 +182,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}")
+                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
                 )
               )
             )
@@ -211,13 +211,13 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                     content = msg"site.edit",
                     href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-document-${index.display}")
+                    attributes = Map("id" -> s"change-document-${index.display}-${referenceIndex.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"remove-document-${index.display}")
+                    attributes = Map("id" -> s"remove-document-${index.display}-${referenceIndex.display}")
                   )
                 )
               )
@@ -244,7 +244,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                     content = msg"site.edit",
                     href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-document-${documentIndex.display}")
+                    attributes = Map("id" -> s"change-document-${documentIndex.display}-${documentIndex.display}")
                   )
                 )
               )
@@ -1046,7 +1046,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-item-${index.display}")
+                    attributes = Map("id" -> s"change-item-${index.display}-${referenceIndex.display}")
                   )
                 )
               )
@@ -1075,7 +1075,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-item-${index.display}")
+                    attributes = Map("id" -> s"change-item-${index.display}-${referenceIndex.display}")
                   )
                 )
               )
@@ -1137,13 +1137,13 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-reference-document-type-${index.display}")
+                    attributes = Map("id" -> s"change-reference-document-type-${index.display}-${referenceIndex.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
+                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}-${referenceIndex.display}")
                   )
                 )
               )
@@ -1172,13 +1172,13 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                     content = msg"site.edit",
                     href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-reference-document-type-${index.display}")
+                    attributes = Map("id" -> s"change-reference-document-type-${index.display}-${referenceIndex.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}")
+                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}-${referenceIndex.display}")
                   )
                 )
               )
@@ -1250,7 +1250,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
         "with href pointing to AddAdministrativeReferenceController" - {
           "when AddAdministrativeReferencePage is false or undefined" in {
 
-            forAll(arbitrary[Option[Boolean]].suchThat(!_.contains(true))) {
+            forAll(arbitrary[Option[Boolean]].retryUntil(!_.contains(true))) {
               maybeBool =>
                 val answers = emptyUserAnswers.unsafeSetOpt(AddAdministrativeReferencePage(itemIndex))(maybeBool)
 
@@ -1483,7 +1483,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
         "with href pointing to AddDocumentsController" - {
           "when AddDocumentsPage is false or undefined" in {
 
-            forAll(arbitrary[Option[Boolean]].suchThat(!_.contains(true))) {
+            forAll(arbitrary[Option[Boolean]].retryUntil(!_.contains(true))) {
               maybeBool =>
                 val answers = emptyUserAnswers.unsafeSetOpt(AddDocumentsPage(itemIndex))(maybeBool)
 
