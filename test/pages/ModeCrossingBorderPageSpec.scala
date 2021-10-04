@@ -59,7 +59,7 @@ class ModeCrossingBorderPageSpec extends PageBehaviours with TryValues with Opti
     "must not clear IdCrossingBorder and Nationality Crossing Border Page if any other mode is selected" in {
 
       forAll(
-        Gen.numStr.suchThat(
+        Gen.numStr.retryUntil(
           num => !ModeCrossingBorder.isExemptFromNationality(num)
         )
       ) {

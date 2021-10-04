@@ -28,7 +28,7 @@ awk '/trait UserAnswersEntryGenerators/ {\
     print "    Arbitrary {";\
     print "      for {";\
     print "        page  <- arbitrary[LocalReferenceNumberPage.type]";\
-    print "        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))";\
+    print "        value <- arbitrary[String].retryUntil(_.nonEmpty).map(Json.toJson(_))";\
     print "      } yield (page, value)";\
     print "    }";\
     next }1' ../test/generators/UserAnswersEntryGenerators.scala > tmp && mv tmp ../test/generators/UserAnswersEntryGenerators.scala

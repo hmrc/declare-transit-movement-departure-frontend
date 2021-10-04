@@ -32,20 +32,21 @@
 
           {{ csrf() | safe }}
 
-        <h1 class="govuk-heading-xl">{{ messages('confirmRemoveSeals.heading') }}</h1>
+        <fieldset class="govuk-fieldset" aria-describedby="remove-seals-hint">
+
+        <legend>
+            <h1 class="govuk-heading-xl">{{ messages('confirmRemoveSeals.heading') }}</h1>
+        </legend>
+        
+        <span class="govuk-fieldset__legend govuk-body" id="remove-seals-hint">{{ messages('confirmRemoveSeals.paragraph') }}</span>
 
           {{ govukRadios({
             name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('confirmRemoveSeals.paragraph'),
-                isPageHeading: false,
-                classes: "govuk-body"
-              }
-            },
             items: radios,
             errorMessage: form.value.error
           }) }}
+
+          </fieldset>
 
           {{ govukButton({
             text: messages("site.continue"),

@@ -109,7 +109,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           "non-Option4 declaration type" in {
 
-            forAll(arbitrary[Option[DeclarationType]].suchThat(!_.contains(Option4))) {
+            forAll(arbitrary[Option[DeclarationType]].retryUntil(!_.contains(Option4))) {
               declarationType =>
                 val answers = emptyUserAnswers
                   .unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
@@ -271,7 +271,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
         "non-Option4 declaration type" in {
 
-          forAll(arbitrary[Option[DeclarationType]].suchThat(!_.contains(Option4))) {
+          forAll(arbitrary[Option[DeclarationType]].retryUntil(!_.contains(Option4))) {
             declarationType =>
               val answers = emptyUserAnswers.unsafeSetOpt(DeclarationTypePage)(declarationType)
 
@@ -339,7 +339,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val gen = arbitrary[(Option[CustomsOffice], Option[CustomsOffice], Option[GuaranteeType])]
 
-            forAll(gen.suchThat {
+            forAll(gen.retryUntil {
               case (departureOffice, destinationOffice, guaranteeType) =>
                 val conditionForSomeRow = departureOffice.isDefined &&
                   destinationOffice.isDefined &&
@@ -409,7 +409,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             "LiabilityAmountPage undefined at index" in {
 
-              forAll(arbitrary[GuaranteeType].suchThat {
+              forAll(arbitrary[GuaranteeType].retryUntil {
                 guaranteeType =>
                   GuaranteeType.guaranteeReferenceRoute.contains(guaranteeType)
               }) {
@@ -443,7 +443,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             "LiabilityAmountPage defined at index with blank value" in {
 
-              forAll(arbitrary[(GuaranteeType, Int)].suchThat {
+              forAll(arbitrary[(GuaranteeType, Int)].retryUntil {
                 case (guaranteeType, characterCount) =>
                   GuaranteeType.guaranteeReferenceRoute.contains(guaranteeType) &&
                     characterCount < 100
@@ -479,7 +479,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             "GB departure and destination offices" in {
 
-              forAll(arbitrary[GuaranteeType].suchThat {
+              forAll(arbitrary[GuaranteeType].retryUntil {
                 guaranteeType =>
                   GuaranteeType.guaranteeReferenceRoute.contains(guaranteeType)
               }) {

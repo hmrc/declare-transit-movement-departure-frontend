@@ -30,7 +30,12 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
-       <h1 class="govuk-heading-xl"> {{ messages("confirmRemoveOfficeOfTransit.heading") }} </h1>
+
+       <fieldset class="govuk-fieldset">
+
+       <legend>
+        <h1 class="govuk-heading-xl"> {{ messages("confirmRemoveOfficeOfTransit.heading") }} </h1>
+       </legend>
 
           <dl class="govuk-summary-list">
                  <div class="govuk-summary-list__row">
@@ -43,22 +48,17 @@
                  </div>
           </dl>
 
-
         <form action="{{ routes.controllers.routeDetails.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn, index, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
           {{ govukRadios({
             name: 'value',
-            fieldset: {
-              legend: {
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--xl"
-              }
-            },
             items: radios,
             errorMessage: form.value.error
           }) }}
+
+          </fieldset>
 
           {{ govukButton({
             text: messages("site.continue"),

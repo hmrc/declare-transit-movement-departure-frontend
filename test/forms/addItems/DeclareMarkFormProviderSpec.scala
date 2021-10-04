@@ -58,9 +58,18 @@ class DeclareMarkFormProviderSpec extends StringFieldBehaviours {
       result.errors must contain only FormError(fieldName, "declareMark.error.emptyNumberOfPackages", Seq(1))
     }
 
+    "must not return errors when binding special characters" in {
+
+      val specialCharacterString = "&'@/.-? "
+
+      val result = form().bind(Map(fieldName -> specialCharacterString)).apply(fieldName)
+
+      result.errors mustBe List.empty
+    }
+
     "must not bind invalid input" in {
 
-      val invalidCharacters      = "^[$&+,:;=?@#|'<>.^*()%!-]{1,42}$"
+      val invalidCharacters      = "^[$+,:;=#|<>^*()%!]{1,42}$"
       val invalidStringGenerator = RegexpGen.from(invalidCharacters)
 
       forAll(invalidStringGenerator) {

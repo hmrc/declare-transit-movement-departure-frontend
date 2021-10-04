@@ -73,7 +73,7 @@ class TransportDetailsSpec extends SpecBase with GeneratorSpec with TryValues wi
 
       "when InlandModePage is any other code" in {
 
-        val otherCode = arb[Int].suchThat(
+        val otherCode = arb[Int].retryUntil(
           value => !Mode5or7.Constants.codes.contains(value) && !Rail.Constants.codes.contains(value)
         )
 
