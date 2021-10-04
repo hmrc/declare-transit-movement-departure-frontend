@@ -17,10 +17,10 @@
 package controllers.actions
 
 import controllers.routes
-import logging.Logging
 import models.DependentSection
 import models.journeyDomain.UserAnswersReader
 import models.requests.DataRequest
+import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionFilter, Result}
 
