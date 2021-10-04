@@ -18,14 +18,14 @@ package models
 
 import com.lucidchart.open.xtract.XmlReader.{intReader, strictReadSeq}
 import com.lucidchart.open.xtract._
-import play.api.Logger
+import play.api.Logging
 import utils.Format.{dateFormatter, dateTimeFormatterIE015, timeFormatter}
 
 import java.time.{LocalDate, LocalDateTime, LocalTime}
 import scala.util.{Failure, Success, Try}
 import scala.xml.NodeSeq
 
-object XMLReads {
+object XMLReads extends Logging {
 
   case class LocalDateParseFailure(message: String) extends ParseError
   case class LocalTimeParseFailure(message: String) extends ParseError
@@ -77,10 +77,10 @@ object XMLReads {
     XmlReader.of[T].read(message) match {
       case ParseSuccess(model) => Some(model)
       case PartialParseSuccess(_, errors) =>
-        Logger.error(s"PartialParseSuccess: Failed with errors: $errors")
+        logger.error(s"PartialParseSuccess: Failed with errors: $errors")
         None
       case ParseFailure(errors) =>
-        Logger.error(s"ParseFailure: Failed with errors: $errors")
+        logger.error(s"ParseFailure: Failed with errors: $errors")
         None
     }
 }

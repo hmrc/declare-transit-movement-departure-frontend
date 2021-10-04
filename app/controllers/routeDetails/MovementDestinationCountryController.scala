@@ -20,12 +20,12 @@ import cats.data.OptionT
 import cats.implicits._
 import controllers.actions._
 import forms.MovementDestinationCountryFormProvider
-import logging.Logging
 import models.reference.Country
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import pages.routeDetails.MovementDestinationCountryPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -34,7 +34,7 @@ import renderer.Renderer
 import repositories.SessionRepository
 import services.CountriesService
 import services.ExcludedCountriesService.routeDetailsExcludedCountries
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
 

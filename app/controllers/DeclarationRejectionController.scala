@@ -25,13 +25,11 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import services.DepartureMessageService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Key, Row, Value}
-import utils.Format.dateFormatterMonthName
 import viewModels.sections.Section
 
-import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
