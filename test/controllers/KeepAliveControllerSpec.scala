@@ -17,7 +17,6 @@
 package controllers
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import controllers.Assets.NO_CONTENT
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, times, verify, when}
 import play.api.test.FakeRequest

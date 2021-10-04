@@ -16,8 +16,6 @@
 
 package views
 
-import java.io.File
-
 import itSpecBase.ItSpecBase
 import models.{Mode, NormalMode}
 import org.jsoup.Jsoup
@@ -30,6 +28,7 @@ import play.api.test.FakeRequest
 import play.twirl.api.Html
 import renderer.Renderer
 
+import java.io.File
 import scala.collection.JavaConverters._
 
 class TemplatesCompileSpec extends ItSpecBase with GuiceOneAppPerSuite {
