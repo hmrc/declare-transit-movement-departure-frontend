@@ -25,6 +25,9 @@ object Format {
   def dateFormatted(date: LocalDate): String         = date.format(dateFormatter)
   def dateFormatted(dateTime: LocalDateTime): String = dateTime.format(dateFormatter)
 
+  val dateFormatterDDMMYYYY: DateTimeFormatter           = DateTimeFormatter.ofPattern("dd MM yyyy")
+  def dateFormatterDDMMYYYY(dateTime: LocalDate): String = dateTime.format(dateFormatterDDMMYYYY)
+
   val dateFormatterMonthName: DateTimeFormatter                   = DateTimeFormatter.ofPattern("d MMMM yyyy")
   def dateFormattedWithMonthName(date: LocalDate): String         = date.format(dateFormatterMonthName)
   def dateFormattedWithMonthName(dateTime: LocalDateTime): String = dateTime.format(dateFormatterMonthName)

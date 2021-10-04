@@ -18,25 +18,28 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
+import utils.Format
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 import javax.inject.Inject
 
 class ArrivalTimesAtOfficeFormProvider @Inject() extends Mappings {
 
-  def apply(officeOfTransit: String): Form[LocalDateTime] =
+  private val localDate                        = LocalDate.now()
+  private val pastDate                         = localDate.minusDays(1)
+  private val futureDate                       = localDate.plusWeeks(2)
+
+  def apply(officeOfTransit: String): Form[LocalDate] =
     Form(
-      "value" -> localDateTime(
-        invalidDateKey = "arrivalTimesAtOffice.error.invalid.date",
-        invalidTimeKey = "arrivalTimesAtOffice.error.invalid.time",
-        invalidHourKey = "arrivalTimesAtOffice.error.invalid.hour",
-        allRequiredKey = "arrivalTimesAtOffice.error.required.all",
-        timeRequiredKey = "arrivalTimesAtOffice.error.required.time",
-        dateRequiredKey = "arrivalTimesAtOffice.error.required.date",
-        amOrPmRequired = "arrivalTimesAtOffice.amOrPm.error.required",
-        pastDateErrorKey = "arrivalTimesAtOffice.error.past.date",
-        futureDateErrorKey = "arrivalTimesAtOffice.error.future.date",
+      "value" -> localDate(
+        invalidKey = "arrivalTimesAtOffice.error.invalid.date",
+        allRequiredKey = "arrivalTimesAtOffice.error.required.date",
+        twoRequiredKey = "arrivalTimesAtOffice.error.required.two",
+        requiredKey = "arrivalTimesAtOffice.error.required.date",
         args = Seq(officeOfTransit)
+      ).verifying(
+        maxDate(futureDate, "arrivalTimesAtOffice.error.future.date", officeOfTransit, Format.dateFormatterDDMMYYYY.format(futureDate)),
+        minDate(pastDate, "arrivalTimesAtOffice.error.past.date", officeOfTransit, Format.dateFormatterDDMMYYYY.format(pastDate))
       )
     )
 }

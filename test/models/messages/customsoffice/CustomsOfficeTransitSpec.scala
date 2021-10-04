@@ -27,6 +27,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import utils.Format
 import xml.XMLWrites._
 
+import java.time.{LocalDateTime, LocalTime}
 import scala.xml.NodeSeq
 
 class CustomsOfficeTransitSpec
@@ -46,7 +47,7 @@ class CustomsOfficeTransitSpec
           customsOffice =>
             val arrivalTime = customsOffice.arrivalTime.map {
               arrivalTime =>
-                <ArrTimTRACUS085>{Format.dateTimeFormattedIE015(arrivalTime)}</ArrTimTRACUS085>
+                <ArrTimTRACUS085>{Format.dateTimeFormattedIE015(LocalDateTime.of(arrivalTime, LocalTime.of(12, 0)))}</ArrTimTRACUS085>
             }
 
             val expectedResult =

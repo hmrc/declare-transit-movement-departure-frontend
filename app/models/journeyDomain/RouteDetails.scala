@@ -25,7 +25,7 @@ import models.{DeclarationType, Index, UserAnswers}
 import pages._
 import pages.routeDetails._
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime}
 
 trait RouteDetails {
 
@@ -60,7 +60,7 @@ object RouteDetailsWithTransitInformation {
 
   case class TransitInformation(
     transitOffice: String,
-    arrivalTime: Option[LocalDateTime]
+    arrivalTime: Option[LocalDate]
   )
 
   private def addOfficeOfTransit = AddSecurityDetailsPage.reader

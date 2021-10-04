@@ -25,13 +25,13 @@ import play.api.libs.json.Reads
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  def arrivalTimesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDateTime](
+  def arrivalTimesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDate](
     page = ArrivalTimesAtOfficePage(index),
-    formatAnswer = dateTime => lit"${Format.dateTimeFormattedAMPM(dateTime).toLowerCase}",
+    formatAnswer = dateTime => lit"${Format.dateFormatterDDMMYYYY(dateTime).toLowerCase}",
     prefix = "arrivalTimesAtOffice",
     id = Some("change-arrival-times-at-office-of-transit"),
     call = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode),
@@ -94,7 +94,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
           value = userAnswers
             .get(ArrivalTimesAtOfficePage(index))
             .fold("")(
-              dateTime => s"${Format.dateTimeFormattedAMPM(dateTime).toLowerCase}"
+              dateTime => s"${Format.dateFormatterDDMMYYYY(dateTime).toLowerCase}"
             ),
           id = s"office-of-transit-${index.display}",
           changeCall = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode),

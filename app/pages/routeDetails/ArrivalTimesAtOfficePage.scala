@@ -21,9 +21,9 @@ import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
 import queries.Constants.routeDetailsOfficesOfTransit
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
-case class ArrivalTimesAtOfficePage(index: Index) extends QuestionPage[LocalDateTime] with ClearAllAddItems[LocalDateTime] {
+case class ArrivalTimesAtOfficePage(index: Index) extends QuestionPage[LocalDate] with ClearAllAddItems[LocalDate] {
 
   override def path: JsPath = JsPath \ routeDetailsOfficesOfTransit \ index.position \ toString
 

@@ -134,7 +134,7 @@ trait MessagesModelGenerators extends ModelGenerators with Generators {
     Arbitrary {
       for {
         customsOffice   <- Gen.pick(CustomsOffice.Constants.length, 'A' to 'Z')
-        arrivalDateTime <- Gen.option(arbitrary(arbitraryLocalDateTime))
+        arrivalDateTime <- Gen.option(arbitrary(arbitraryLocalDate))
       } yield CustomsOfficeTransit(customsOffice.mkString, arrivalDateTime)
     }
 

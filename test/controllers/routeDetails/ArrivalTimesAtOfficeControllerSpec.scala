@@ -40,7 +40,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import viewModels.DateTimeInput
 
-import java.time.{LocalDateTime, ZoneOffset}
+import java.time.{LocalDate, LocalDateTime, ZoneOffset}
 import scala.concurrent.Future
 
 class ArrivalTimesAtOfficeControllerSpec
@@ -58,7 +58,7 @@ class ArrivalTimesAtOfficeControllerSpec
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
   lazy val arrivalTimesAtOfficeRoute = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, NormalMode).url
 
@@ -74,14 +74,9 @@ class ArrivalTimesAtOfficeControllerSpec
   def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, arrivalTimesAtOfficeRoute)
       .withFormUrlEncodedBody(
-        "value.day"    -> validAnswer.getDayOfMonth.toString,
-        "value.month"  -> validAnswer.getMonthValue.toString,
-        "value.year"   -> validAnswer.getYear.toString,
-        "value.hour"   -> convertTo12HourClock(validAnswer.getHour).toString,
-        "value.minute" -> validAnswer.getMinute.toString,
-        "value.amOrPm" -> {
-          if (validAnswer.getHour > 12) "pm" else "am"
-        }
+        "value.day"   -> validAnswer.getDayOfMonth.toString,
+        "value.month" -> validAnswer.getMonthValue.toString,
+        "value.year"  -> validAnswer.getYear.toString
       )
 
   private def convertTo12HourClock(hour: Int) =
@@ -159,14 +154,9 @@ class ArrivalTimesAtOfficeControllerSpec
 
       val filledForm = form.bind(
         Map(
-          "value.day"    -> validAnswer.getDayOfMonth.toString,
-          "value.month"  -> validAnswer.getMonthValue.toString,
-          "value.year"   -> validAnswer.getYear.toString,
-          "value.hour"   -> convertTo12HourClock(validAnswer.getHour).toString,
-          "value.minute" -> validAnswer.getMinute.toString,
-          "value.amOrPm" -> {
-            if (validAnswer.getHour > 12) "pm" else "am"
-          }
+          "value.day"   -> validAnswer.getDayOfMonth.toString,
+          "value.month" -> validAnswer.getMonthValue.toString,
+          "value.year"  -> validAnswer.getYear.toString
         )
       )
 

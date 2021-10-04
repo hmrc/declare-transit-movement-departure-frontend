@@ -33,10 +33,9 @@ import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import utils._
 import viewModels.DateTimeInput
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -62,25 +61,20 @@ class ArrivalTimesAtOfficeController @Inject() (
         case Some(officeOfTransitId) =>
           referenceDataConnector.getCustomsOffice(officeOfTransitId) flatMap {
             office =>
-              val form: Form[LocalDateTime] = formProvider(office.name)
+              val form: Form[LocalDate] = formProvider(office.name)
 
               val preparedForm = request.userAnswers.get(ArrivalTimesAtOfficePage(index)) match {
-                case Some(value) => form.fill(value)
+                case Some(value) => form.fill(LocalDate.of(value.getYear, value.getMonth, value.getDayOfMonth))
                 case None        => form
               }
 
-              val amOrPm: Option[String] = preparedForm.value.map {
-                dateTime =>
-                  if (dateTime.getHour > 12) "pm" else "am"
-              }
-
-              loadPage(lrn, index, mode, amOrPm, preparedForm).map(Ok(_))
+              loadPage(lrn, index, mode, preparedForm).map(Ok(_))
           }
         case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
       }
   }
 
-  private def loadPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, selectAMPMValue: Option[String], form: Form[LocalDateTime])(implicit
+  private def loadPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[LocalDate])(implicit
     request: Request[AnyContent]
   ): Future[Html] = {
     val viewModel = DateTimeInput.localDateTime(form("value"))
@@ -90,7 +84,6 @@ class ArrivalTimesAtOfficeController @Inject() (
       "index"    -> index.display,
       "mode"     -> mode,
       "lrn"      -> lrn,
-      "amPmList" -> amPmAsJson(selectAMPMValue),
       "dateTime" -> viewModel
     )
 
@@ -103,16 +96,17 @@ class ArrivalTimesAtOfficeController @Inject() (
         case Some(officeOfTransitId) =>
           referenceDataConnector.getCustomsOffice(officeOfTransitId) flatMap {
             office =>
-              val form: Form[LocalDateTime] = formProvider(office.name)
+              val form: Form[LocalDate] = formProvider(office.name)
 
               form
                 .bindFromRequest()
                 .fold(
-                  formWithErrors => loadPage(lrn, index, mode, formWithErrors.data.get("value.amOrPm"), formWithErrors).map(BadRequest(_)),
+                  formWithErrors => loadPage(lrn, index, mode, formWithErrors).map(BadRequest(_)),
                   value =>
                     for {
-                      updatedAnswers <- Future.fromTry(request.userAnswers.set(ArrivalTimesAtOfficePage(index), value))
-                      _              <- sessionRepository.set(updatedAnswers)
+                      updatedAnswers <- Future
+                        .fromTry(request.userAnswers.set(ArrivalTimesAtOfficePage(index), LocalDate.of(value.getYear, value.getMonth, value.getDayOfMonth)))
+                      _ <- sessionRepository.set(updatedAnswers)
                     } yield Redirect(navigator.nextPage(ArrivalTimesAtOfficePage(index), mode, updatedAnswers))
                 )
           }

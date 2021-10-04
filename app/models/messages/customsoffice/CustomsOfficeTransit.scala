@@ -22,23 +22,32 @@ import models.XMLReads._
 import utils.Format
 import xml.XMLWrites
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime, LocalTime}
 import scala.xml.NodeSeq
 
-case class CustomsOfficeTransit(referenceNumber: String, arrivalTime: Option[LocalDateTime])
+case class CustomsOfficeTransit(referenceNumber: String, arrivalTime: Option[LocalDate])
 
 object CustomsOfficeTransit {
 
   implicit val xmlReader: XmlReader[CustomsOfficeTransit] = (
     (__ \ "RefNumRNS1").read[String],
-    (__ \ "ArrTimTRACUS085").read[LocalDateTime].optional
+    (__ \ "ArrTimTRACUS085")
+      .read[LocalDateTime]
+      .map(
+        x => LocalDate.of(x.getYear, x.getMonth, x.getDayOfMonth)
+      )
+      .optional
   ).mapN(apply)
 
   implicit def writes: XMLWrites[CustomsOfficeTransit] = XMLWrites[CustomsOfficeTransit] {
     customsOffice =>
       val arrivalTime = customsOffice.arrivalTime.map {
         arrivalTime =>
-          <ArrTimTRACUS085>{Format.dateTimeFormattedIE015(arrivalTime)}</ArrTimTRACUS085>
+          <ArrTimTRACUS085>{
+            Format.dateTimeFormattedIE015(
+              LocalDateTime.of(LocalDate.of(arrivalTime.getYear, arrivalTime.getMonth, arrivalTime.getDayOfMonth), LocalTime.of(12, 0))
+            )
+          }</ArrTimTRACUS085>
       }
 
       <CUSOFFTRARNS>

@@ -16,41 +16,33 @@
 
 package forms
 
-import forms.behaviours.DateTimeWithAMPMBehaviours
+import forms.behaviours.DateBehaviours
 import play.api.data.FormError
 import utils.Format
 
-class ArrivalTimesAtOfficeFormProviderSpec extends DateTimeWithAMPMBehaviours {
+import java.time.LocalDate
 
-  private val officeOfTransit                 = "office"
-  private val form                            = new ArrivalTimesAtOfficeFormProvider()(officeOfTransit)
-  private val localDateTime                   = dateTime.withHour(1)
-  private val pastDateTime                    = localDateTime.minusDays(1)
-  private val futureDateTime                  = localDateTime.plusWeeks(2)
-  private val formattedPastDateTime: String   = s"${Format.dateFormattedWithMonthName(pastDateTime)}"
-  private val formattedFutureDateTime: String = s"${Format.dateFormattedWithMonthName(futureDateTime)}"
-  private val formPastError                   = FormError("value", "arrivalTimesAtOffice.error.past.date", Seq(officeOfTransit, formattedPastDateTime))
-  private val formFutureError                 = FormError("value", "arrivalTimesAtOffice.error.future.date", Seq(officeOfTransit, formattedFutureDateTime))
+class ArrivalTimesAtOfficeFormProviderSpec extends DateBehaviours {
+
+  private val officeOfTransit             = "office"
+  private val form                        = new ArrivalTimesAtOfficeFormProvider()(officeOfTransit)
+  private val localDate                   = LocalDate.now()
+  private val pastDate                    = localDate.minusDays(1)
+  private val futureDate                  = localDate.plusWeeks(2)
+  private val formattedPastDate: String   = s"${Format.dateFormatterDDMMYYYY(pastDate)}"
+  private val formattedFutureDate: String = s"${Format.dateFormatterDDMMYYYY(futureDate)}"
+  private val formPastError               = FormError("value", "arrivalTimesAtOffice.error.past.date", Seq(officeOfTransit, formattedPastDate))
+  private val formFutureError             = FormError("value", "arrivalTimesAtOffice.error.future.date", Seq(officeOfTransit, formattedFutureDate))
 
   ".value" - {
 
-    behave like dateTimeField(form, "value", localDateTime)
+    behave like dateField(form, "value", localDate)
 
-    behave like dateTimeFieldWithMin(form, "value", localDateTime, formPastError)
+    behave like dateFieldWithMin(form, "value", localDate, formPastError)
 
-    behave like dateFieldWithMax(form, "value", futureDateTime, formFutureError)
-
-    behave like invalidDateField(form, "value", "arrivalTimesAtOffice.error.invalid.date", Seq(officeOfTransit))
-
-    behave like invalidHourField(form, "value", "arrivalTimesAtOffice.error.invalid.hour", Seq(officeOfTransit))
-
-    behave like invalidTimeField(form, "value", "arrivalTimesAtOffice.error.invalid.time", Seq(officeOfTransit))
+    behave like dateFieldWithMax(form, "value", localDate, formFutureError)
 
     behave like mandatoryDateField(form, "value", "arrivalTimesAtOffice.error.required.date", Seq(officeOfTransit))
-
-    behave like mandatoryTimeField(form, "value", "arrivalTimesAtOffice.error.required.time", Seq(officeOfTransit))
-
-    behave like mandatoryAMPMField(form, "value", "arrivalTimesAtOffice.amOrPm.error.required", Seq(officeOfTransit))
 
   }
 }

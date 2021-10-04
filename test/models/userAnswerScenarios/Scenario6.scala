@@ -70,7 +70,7 @@ import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime}
 
 case object Scenario6 extends UserAnswerScenario {
 
@@ -103,11 +103,11 @@ case object Scenario6 extends UserAnswerScenario {
     .unsafeSetVal(pages.routeDetails.AddOfficeOfTransitPage)(true)
     .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
     .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(0)))(LocalDate.of(2020, 5, 5))
     .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(true)
     .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
     .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(1)))("TOP12342")
-    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(1)))(LocalDate.of(2020, 5, 7))
     .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(false)
     /*
      * Transport Details
@@ -314,9 +314,7 @@ case object Scenario6 extends UserAnswerScenario {
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
     Some(
-      NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
-                   List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
-      )
+      NonEmptyList(TransitInformation("TOP12341", Some(LocalDate.of(2020, 5, 5))), List(TransitInformation("TOP12342", Some(LocalDate.of(2020, 5, 7)))))
     )
   )
 

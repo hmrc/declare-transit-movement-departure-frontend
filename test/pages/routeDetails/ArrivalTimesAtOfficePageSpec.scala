@@ -19,7 +19,7 @@ package pages.routeDetails
 import models.Index
 import pages.behaviours.PageBehaviours
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 class ArrivalTimesAtOfficePageSpec extends PageBehaviours {
 
@@ -27,12 +27,12 @@ class ArrivalTimesAtOfficePageSpec extends PageBehaviours {
 
     val index = Index(0)
 
-    beRetrievable[LocalDateTime](ArrivalTimesAtOfficePage(index))
+    beRetrievable[LocalDate](ArrivalTimesAtOfficePage(index))
 
-    beSettable[LocalDateTime](ArrivalTimesAtOfficePage(index))
+    beSettable[LocalDate](ArrivalTimesAtOfficePage(index))
 
-    beRemovable[LocalDateTime](ArrivalTimesAtOfficePage(index))
+    beRemovable[LocalDate](ArrivalTimesAtOfficePage(index))
 
-    clearDownItems[LocalDateTime](ArrivalTimesAtOfficePage(index))
+    clearDownItems[LocalDate](ArrivalTimesAtOfficePage(index))
   }
 }

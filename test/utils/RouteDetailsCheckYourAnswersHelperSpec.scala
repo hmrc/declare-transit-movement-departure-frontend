@@ -27,7 +27,7 @@ import pages.routeDetails._
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime}
 
 class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
@@ -100,8 +100,8 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           "arrival time known" in {
 
-            val arrivalTime          = arbitrary[LocalDateTime].sample.value
-            val formattedArrivalTime = Format.dateTimeFormattedAMPM(arrivalTime).toLowerCase
+            val arrivalTime          = arbitrary[LocalDate].sample.value
+            val formattedArrivalTime = Format.dateFormatterDDMMYYYY(arrivalTime).toLowerCase
 
             val answers = emptyUserAnswers
               .unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
@@ -467,8 +467,8 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
         "ArrivalTimesAtOfficePage defined at index" in {
 
-          val arrivalTime          = arbitrary[LocalDateTime].sample.value
-          val formattedArrivalTime = Format.dateTimeFormattedAMPM(arrivalTime).toLowerCase
+          val arrivalTime          = arbitrary[LocalDate].sample.value
+          val formattedArrivalTime = Format.dateFormatterDDMMYYYY(arrivalTime).toLowerCase
 
           val answers = emptyUserAnswers.unsafeSetVal(ArrivalTimesAtOfficePage(index))(arrivalTime)
 
