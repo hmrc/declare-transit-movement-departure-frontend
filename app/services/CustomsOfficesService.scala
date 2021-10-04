@@ -34,11 +34,8 @@ class CustomsOfficesService @Inject() (
     "DEP"
   )
 
-  private def getNICustomsOffices(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = if (frontendAppConfig.isNIJourneyEnabled) {
+  private def getNICustomsOffices(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("XI"), departureOfficeRoles)
-  } else {
-    Future.successful(CustomsOfficeList(Nil))
-  }
 
   def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     for {

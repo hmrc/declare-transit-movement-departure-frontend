@@ -52,13 +52,13 @@ class AuthorisedLocationCodeFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    "must bind special characters" in {
+    "must not return errors when binding special characters" in {
 
       val specialCharacterString = "&'@/.-?% "
 
-      val result = form.bind(Map(fieldName -> "&'@/.-?% ")).apply(fieldName)
+      val result = form.bind(Map(fieldName -> specialCharacterString)).apply(fieldName)
 
-      result.value.value mustBe specialCharacterString
+      result.errors mustBe List.empty
     }
 
     "must not bind strings with invalid characters" in {

@@ -249,7 +249,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
         "AddDocumentPage is true" in {
 
           val invalidCircumstanceIndicator = arb[String]
-            .suchThat(
+            .retryUntil(
               string => !CircumstanceIndicator.conditionalIndicators.forall(_.contains(string))
             )
             .sample
@@ -281,7 +281,7 @@ class ProducedDocumentSpec extends SpecBase with GeneratorSpec with UserAnswersS
         "AddDocumentPage is false" in {
 
           val invalidCircumstanceIndicator = arb[String]
-            .suchThat(
+            .retryUntil(
               string => !CircumstanceIndicator.conditionalIndicators.forall(_.contains(string))
             )
             .sample

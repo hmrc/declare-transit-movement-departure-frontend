@@ -33,7 +33,7 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
       buildRow = label =>
         buildRemovableRow(
           label = label,
-          id = s"special-mentions-${itemIndex.display}",
+          id = s"special-mentions-${itemIndex.display}-${referenceIndex.display}",
           changeCall = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
           removeCall = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode)
         )
@@ -47,7 +47,7 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
         buildSectionRow(
           label = msg"addAnotherSpecialMention.specialMentionList.label".withArgs(referenceIndex.display),
           answer = answer,
-          id = Some(s"change-special-mentions-${itemIndex.display}"),
+          id = Some(s"change-special-mentions-${itemIndex.display}-${referenceIndex.display}"),
           call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode)
         )
     )

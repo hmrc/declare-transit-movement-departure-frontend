@@ -262,7 +262,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
         buildSectionRow(
           label = msg"addAdministrativeReference.administrativeReferenceList.label".withArgs(referenceIndex.display),
           answer = answer,
-          id = Some(s"change-item-${index.display}"),
+          id = Some(s"change-item-${index.display}-${referenceIndex.display}"),
           call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode)
         )
     )
@@ -274,7 +274,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
       buildRow = label =>
         buildRemovableRow(
           label = label,
-          id = s"reference-document-type-${index.display}",
+          id = s"reference-document-type-${index.display}-${referenceIndex.display}",
           changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, CheckMode),
           removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, CheckMode)
         )

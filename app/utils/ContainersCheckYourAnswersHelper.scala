@@ -26,7 +26,7 @@ class ContainersCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYo
   def containerRow(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
     page = ContainerNumberPage(itemIndex, containerIndex),
     formatAnswer = formatAsLiteral,
-    id = s"container-number-${itemIndex.display}",
+    id = s"container-number-${itemIndex.display}-${containerIndex.display}",
     changeCall = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode),
     removeCall = containerRoutes.ConfirmRemoveContainerController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode)
   )

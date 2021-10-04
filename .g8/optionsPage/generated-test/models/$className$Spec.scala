@@ -25,7 +25,7 @@ class $className$Spec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!$className$.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] retryUntil (!$className$.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>
