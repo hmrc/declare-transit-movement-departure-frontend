@@ -728,7 +728,7 @@ declareMark.heading = What is the mark or number for package {0}?
 declareMark.error.required = Enter the mark or number for package {0}
 declareMark.error.length = The mark or number for package {0} must be {1} characters or less
 declareMark.error.emptyNumberOfPackages = Mark or number for package {0} must be 1 or more
-declareMark.error.format = The mark or number for package {0} must only include letters a to z without accents, numbers 0 to 9
+declareMark.error.format = The mark or number for package {0} must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
 
 addAnotherPackage.title.plural = You have added {0} packages
 addAnotherPackage.title.singular = You have added {0} package
