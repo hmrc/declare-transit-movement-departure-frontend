@@ -44,6 +44,7 @@ class Renderer @Inject() (frontendAppConfig: FrontendAppConfig, appConfig: Rende
     "serviceIdentifier"              -> appConfig.contactFormServiceIdentifier,
     "contactHost"                    -> appConfig.contactHost,
     "signOutUrl"                     -> appConfig.signOutUrl,
+    "signInUrl"                      -> appConfig.signInUrl,
     "timeout"                        -> appConfig.timeoutSeconds,
     "countdown"                      -> appConfig.countdownSeconds,
     "trackingConsentUrl"             -> frontendAppConfig.trackingConsentUrl,

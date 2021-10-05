@@ -37,7 +37,8 @@ class SessionExpiredController @Inject() (
   def onPageLoad(): Action[AnyContent] = Action.async {
     implicit request =>
       val json = Json.obj(
-        "nextPageUrl" -> s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do"
+        "nextPageUrl" -> s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do",
+        "isLoggedIn"  -> false
       )
       renderer.render("session-expired.njk", json).map(Ok(_))
   }
