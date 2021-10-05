@@ -37,10 +37,9 @@ import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import uk.gov.hmrc.viewmodels.NunjucksSupport
-import viewModels.DateTimeInput
+import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 
-import java.time.{LocalDate, LocalDateTime, ZoneOffset}
+import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
 class ArrivalTimesAtOfficeControllerSpec
@@ -79,23 +78,6 @@ class ArrivalTimesAtOfficeControllerSpec
         "value.year"  -> validAnswer.getYear.toString
       )
 
-  private def convertTo12HourClock(hour: Int) =
-    hour match {
-      case 13     => 1
-      case 14     => 2
-      case 15     => 3
-      case 16     => 4
-      case 17     => 5
-      case 18     => 6
-      case 19     => 7
-      case 20     => 8
-      case 21     => 9
-      case 22     => 10
-      case 23     => 11
-      case 24 | 0 => 12
-      case _      => hour
-    }
-
   "ArrivalTimesAtOffice Controller" - {
 
     "must return OK and the correct view for a GET" in {
@@ -114,14 +96,14 @@ class ArrivalTimesAtOfficeControllerSpec
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val viewModel = DateTimeInput.localDateTime(form("value"))
+      val viewModel = DateInput.localDate(form("value"))
 
       val expectedJson = Json.obj(
-        "form"     -> form,
-        "index"    -> index.display,
-        "mode"     -> NormalMode,
-        "lrn"      -> lrn,
-        "dateTime" -> viewModel
+        "form"  -> form,
+        "index" -> index.display,
+        "mode"  -> NormalMode,
+        "lrn"   -> lrn,
+        "date"  -> viewModel
       )
 
       templateCaptor.getValue mustEqual "arrivalTimesAtOffice.njk"
@@ -160,14 +142,14 @@ class ArrivalTimesAtOfficeControllerSpec
         )
       )
 
-      val viewModel = DateTimeInput.localDateTime(filledForm("value"))
+      val viewModel = DateInput.localDate(filledForm("value"))
 
       val expectedJson = Json.obj(
-        "form"     -> filledForm,
-        "index"    -> index.display,
-        "mode"     -> NormalMode,
-        "lrn"      -> lrn,
-        "dateTime" -> viewModel
+        "form"  -> filledForm,
+        "index" -> index.display,
+        "mode"  -> NormalMode,
+        "lrn"   -> lrn,
+        "date"  -> viewModel
       )
 
       templateCaptor.getValue mustEqual "arrivalTimesAtOffice.njk"
@@ -205,14 +187,14 @@ class ArrivalTimesAtOfficeControllerSpec
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val viewModel = DateTimeInput.localDateTime(boundForm("value"))
+      val viewModel = DateInput.localDate(boundForm("value"))
 
       val expectedJson = Json.obj(
-        "form"     -> boundForm,
-        "index"    -> index.display,
-        "mode"     -> NormalMode,
-        "lrn"      -> lrn,
-        "dateTime" -> viewModel
+        "form"  -> boundForm,
+        "index" -> index.display,
+        "mode"  -> NormalMode,
+        "lrn"   -> lrn,
+        "date"  -> viewModel
       )
 
       templateCaptor.getValue mustEqual "arrivalTimesAtOffice.njk"

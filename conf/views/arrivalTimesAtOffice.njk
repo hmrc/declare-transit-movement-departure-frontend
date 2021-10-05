@@ -5,7 +5,6 @@
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "macros/dateTime.njk"                      import dateTime as dateTimeMacro %}
 {% from "macros/title.njk"                         import title %}
 {% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
@@ -44,12 +43,13 @@
 
           {{ csrf() | safe }}
 
-         {{ dateTimeMacro({
-          hint: messages('arrivalTimesAtOffice.hint'),
-          items: dateTime.items,
-          errorMessage: dateTime.error,
-          amPmList: amPmList
-          }) }}
+        {{ govukDateInput({
+          hint: {
+            text: messages('arrivalTimesAtOffice.hint')
+          },
+          errorMessage: date.error,
+          items: date.items
+        }) }}
 
         {% endcall %}
 

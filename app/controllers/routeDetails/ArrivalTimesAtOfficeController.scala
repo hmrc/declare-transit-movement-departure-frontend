@@ -32,8 +32,7 @@ import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
-import viewModels.DateTimeInput
+import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 
 import java.time.LocalDate
 import javax.inject.Inject
@@ -77,14 +76,14 @@ class ArrivalTimesAtOfficeController @Inject() (
   private def loadPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[LocalDate])(implicit
     request: Request[AnyContent]
   ): Future[Html] = {
-    val viewModel = DateTimeInput.localDateTime(form("value"))
+    val viewModel = DateInput.localDate(form("value"))
 
     val json = Json.obj(
-      "form"     -> form,
-      "index"    -> index.display,
-      "mode"     -> mode,
-      "lrn"      -> lrn,
-      "dateTime" -> viewModel
+      "form"  -> form,
+      "index" -> index.display,
+      "mode"  -> mode,
+      "lrn"   -> lrn,
+      "date"  -> viewModel
     )
 
     renderer.render("arrivalTimesAtOffice.njk", json)

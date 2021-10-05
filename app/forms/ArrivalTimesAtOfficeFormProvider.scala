@@ -25,9 +25,9 @@ import javax.inject.Inject
 
 class ArrivalTimesAtOfficeFormProvider @Inject() extends Mappings {
 
-  private val localDate                        = LocalDate.now()
-  private val pastDate                         = localDate.minusDays(1)
-  private val futureDate                       = localDate.plusWeeks(2)
+  private val localDate  = LocalDate.now()
+  private val pastDate   = localDate.minusDays(1)
+  private val futureDate = localDate.plusWeeks(2)
 
   def apply(officeOfTransit: String): Form[LocalDate] =
     Form(
