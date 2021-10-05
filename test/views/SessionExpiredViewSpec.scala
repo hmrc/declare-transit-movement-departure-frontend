@@ -28,7 +28,12 @@ class SessionExpiredViewSpec extends SingleViewSpec("session-expired.njk") {
         Json.obj("isLoggedIn" -> false)
       ).futureValue
 
-      assertPageHasLink(doc, "nav-sign-in", "Sign in", "urls.login?continue=urls.loginContinue")
+      assertPageHasLink(
+        doc,
+        "nav-sign-in",
+        "Sign in",
+        "http://localhost:9949/auth-login-stub/gg-sign-in?continue=http://localhost:9489/manage-transit-movements-departures/local-reference-number"
+      )
       assertPageHasNoLink(doc, "nav-sign-out")
     }
 
@@ -37,14 +42,24 @@ class SessionExpiredViewSpec extends SingleViewSpec("session-expired.njk") {
         Json.obj("isLoggedIn" -> true)
       ).futureValue
 
-      assertPageHasLink(doc, "nav-sign-out", "Sign out", "urls.logoutContinueurls.feedback")
+      assertPageHasLink(
+        doc,
+        "nav-sign-out",
+        "Sign out",
+        "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9514/feedback/manage-transit-departures"
+      )
       assertPageHasNoLink(doc, "nav-sign-in")
     }
 
     "must have the sign out link if the Document isLoggedIn is not populated" in {
       val doc: Document = renderDocument().futureValue
 
-      assertPageHasLink(doc, "nav-sign-out", "Sign out", "urls.logoutContinueurls.feedback")
+      assertPageHasLink(
+        doc,
+        "nav-sign-out",
+        "Sign out",
+        "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9514/feedback/manage-transit-departures"
+      )
       assertPageHasNoLink(doc, "nav-sign-in")
     }
   }

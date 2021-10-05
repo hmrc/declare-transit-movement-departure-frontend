@@ -33,7 +33,7 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
 
   override val signOutUrl: String = configuration.get[String]("urls.logoutContinue") + configuration.get[String]("urls.feedback")
 
-  override val signInUrl: String = configuration.get[String]("urls.login") + "?continue=" + configuration.get[String]("urls.loginContinur")
+  override val signInUrl: String = configuration.get[String]("urls.login") + "?continue=" + configuration.get[String]("urls.loginContinue")
 
   override def timeoutSeconds: String = configuration.get[String]("session.timeoutSeconds")
 
