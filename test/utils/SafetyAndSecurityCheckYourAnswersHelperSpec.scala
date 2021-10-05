@@ -1240,7 +1240,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
             result mustBe Some(
               Row(
-                key = Key(label),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"${countryCode.code}"),
                 actions = List(
                   Action(
@@ -1265,7 +1265,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
             result mustBe Some(
               Row(
-                key = Key(label),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"${country.description}"),
                 actions = List(
                   Action(

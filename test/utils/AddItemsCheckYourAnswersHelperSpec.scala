@@ -116,7 +116,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
           result mustBe Some(
             Row(
-              key = Key(label),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$containerNumber"),
               actions = List(
                 Action(
@@ -294,7 +294,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
           result mustBe Some(
             Row(
-              key = Key(label),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"(${document.code}) ${document.description}"),
               actions = List(
                 Action(
@@ -1095,7 +1095,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
             result mustBe Some(
               Row(
-                key = Key(label),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"($referenceCode) "),
                 actions = List(
                   Action(
@@ -1124,7 +1124,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
             result mustBe Some(
               Row(
-                key = Key(label),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
                 value = Value(lit"($referenceCode) $referenceDescription"),
                 actions = List(
                   Action(
@@ -1398,7 +1398,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
           result mustBe Some(
             Row(
-              key = Key(label),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
               value = Value(lit"$packageType"),
               actions = List(
                 Action(

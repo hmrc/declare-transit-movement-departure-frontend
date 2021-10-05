@@ -50,7 +50,8 @@ object SafetyAndSecurityCheckYourAnswersViewModel {
       ),
       Section(
         msg"safetyAndSecurity.checkYourAnswersLabel.countriesOfRouting",
-        countriesOfRoutingRows
+        countriesOfRoutingRows,
+        cyah.addAnotherCountryOfRouting(msg"addOrRemoveCountryOfRouting.checkYourAnswersLabel")
       ),
       Section(
         msg"safetyAndSecurity.checkYourAnswersLabel.securityTraderDetails",

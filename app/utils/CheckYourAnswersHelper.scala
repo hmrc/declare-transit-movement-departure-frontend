@@ -164,7 +164,7 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     call: Call
   ): Row =
     Row(
-      key = Key(label),
+      key = Key(label, classes = Seq("govuk-!-width-one-half")),
       value = Value(answer),
       actions = List(
         Action(
