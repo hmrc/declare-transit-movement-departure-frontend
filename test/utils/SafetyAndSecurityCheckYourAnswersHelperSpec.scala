@@ -1212,13 +1212,16 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
     "countriesOfRoutingRow" - {
 
+      val countryCode: CountryCode = CountryCode("CODE")
+      val country: Country         = Country(countryCode, "DESCRIPTION")
+
       "return None" - {
         "CountriesOfRoutingQuery undefined at index" in {
 
           val answers = emptyUserAnswers
 
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
-          val result = helper.countriesOfRoutingRow(CountryList(Nil))
+          val result = helper.countryOfRoutingSectionRow(index, CountryList(Nil))
           result mustBe None
         }
       }
@@ -1226,118 +1229,54 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
       "return Some(row)" - {
         "CountriesOfRoutingQuery defined at index" - {
 
-          "1 country" - {
+          "country code not found" in {
 
-            val countryCode: CountryCode = CountryCode("CODE")
-            val country: Country         = Country(countryCode, "DESCRIPTION")
+            val answers = emptyUserAnswers.unsafeSetVal(CountriesOfRoutingQuery())(Seq(countryCode))
 
-            "country code not found" in {
+            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+            val result = helper.countryOfRoutingSectionRow(index, CountryList(Nil))
 
-              val answers = emptyUserAnswers.unsafeSetVal(CountriesOfRoutingQuery())(Seq(countryCode))
+            val label = msg"addAnotherCountryOfRouting.countryOfRoutingList.label".withArgs(index.display)
 
-              val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
-              val result = helper.countriesOfRoutingRow(CountryList(Nil))
-
-              val label = msg"addAnotherCountryOfRouting.singular.checkYourAnswersLabel"
-
-              result mustBe Some(
-                Row(
-                  key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                  value = Value(Html(countryCode.code)),
-                  actions = List(
-                    Action(
-                      content = msg"site.edit",
-                      href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
-                      visuallyHiddenText = Some(label),
-                      attributes = Map("id" -> "change-country")
-                    )
+            result mustBe Some(
+              Row(
+                key = Key(label),
+                value = Value(lit"${countryCode.code}"),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode).url,
+                    visuallyHiddenText = Some(label),
+                    attributes = Map("id" -> s"change-country-${index.display}")
                   )
                 )
               )
-            }
-
-            "country code found" in {
-
-              val answers = emptyUserAnswers.unsafeSetVal(CountriesOfRoutingQuery())(Seq(countryCode))
-
-              val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
-              val result = helper.countriesOfRoutingRow(CountryList(Seq(country)))
-
-              val label = msg"addAnotherCountryOfRouting.singular.checkYourAnswersLabel"
-
-              result mustBe Some(
-                Row(
-                  key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                  value = Value(Html(country.description)),
-                  actions = List(
-                    Action(
-                      content = msg"site.edit",
-                      href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
-                      visuallyHiddenText = Some(label),
-                      attributes = Map("id" -> "change-country")
-                    )
-                  )
-                )
-              )
-            }
+            )
           }
 
-          "multiple countries" - {
+          "country code found" in {
 
-            val countryCode1: CountryCode = CountryCode("CODE 1")
-            val country1: Country         = Country(countryCode1, "DESCRIPTION 1")
-            val countryCode2: CountryCode = CountryCode("CODE 2")
-            val country2: Country         = Country(countryCode2, "DESCRIPTION 2")
+            val answers = emptyUserAnswers.unsafeSetVal(CountriesOfRoutingQuery())(Seq(countryCode))
 
-            "country code not found" in {
+            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+            val result = helper.countryOfRoutingSectionRow(index, CountryList(Seq(country)))
 
-              val answers = emptyUserAnswers.unsafeSetVal(CountriesOfRoutingQuery())(Seq(countryCode1, countryCode2))
+            val label = msg"addAnotherCountryOfRouting.countryOfRoutingList.label".withArgs(index.display)
 
-              val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
-              val result = helper.countriesOfRoutingRow(CountryList(Nil))
-
-              val label = msg"addAnotherCountryOfRouting.plural.checkYourAnswersLabel"
-
-              result mustBe Some(
-                Row(
-                  key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                  value = Value(Html(s"${countryCode1.code}<br>${countryCode2.code}")),
-                  actions = List(
-                    Action(
-                      content = msg"site.edit",
-                      href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
-                      visuallyHiddenText = Some(label),
-                      attributes = Map("id" -> "change-countries")
-                    )
+            result mustBe Some(
+              Row(
+                key = Key(label),
+                value = Value(lit"${country.description}"),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode).url,
+                    visuallyHiddenText = Some(label),
+                    attributes = Map("id" -> s"change-country-${index.display}")
                   )
                 )
               )
-            }
-
-            "country code found" in {
-
-              val answers = emptyUserAnswers.unsafeSetVal(CountriesOfRoutingQuery())(Seq(countryCode1, countryCode2))
-
-              val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
-              val result = helper.countriesOfRoutingRow(CountryList(Seq(country1, country2)))
-
-              val label = msg"addAnotherCountryOfRouting.plural.checkYourAnswersLabel"
-
-              result mustBe Some(
-                Row(
-                  key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                  value = Value(Html(s"${country1.description}<br>${country2.description}")),
-                  actions = List(
-                    Action(
-                      content = msg"site.edit",
-                      href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
-                      visuallyHiddenText = Some(label),
-                      attributes = Map("id" -> "change-countries")
-                    )
-                  )
-                )
-              )
-            }
+            )
           }
         }
       }

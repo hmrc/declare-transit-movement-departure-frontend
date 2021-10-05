@@ -20,7 +20,6 @@ import controllers.safetyAndSecurity.routes
 import models.reference.{CountryCode, MethodOfPayment}
 import models.{CheckMode, CircumstanceIndicatorList, CommonAddress, CountryList, Index, UserAnswers}
 import pages.safetyAndSecurity._
-import queries.CountriesOfRoutingQuery
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
@@ -253,16 +252,16 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
       )
   )
 
-  def countriesOfRoutingRow(countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
+  def countryOfRoutingSectionRow(index: Index, countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
     getCountryCode = countryCode => countryCode,
     countryList = countries,
     getAnswerAndBuildRow = formatAnswer =>
-      getAnswerAndBuildDynamicRow[Seq[CountryCode]](
-        page = CountriesOfRoutingQuery(),
-        formatAnswer = countries => Html(countries.map(formatAnswer).mkString("<br>")),
-        dynamicPrefix = countries => s"addAnotherCountryOfRouting.${if (countries.size == 1) "singular" else "plural"}",
-        dynamicId = countries => Some(s"change-${if (countries.size == 1) "country" else "countries"}"),
-        call = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode)
+      getAnswerAndBuildSectionRow[CountryCode](
+        page = CountryOfRoutingPage(index),
+        formatAnswer = reformatAsLiteral(formatAnswer),
+        label = msg"addAnotherCountryOfRouting.countryOfRoutingList.label".withArgs(index.display),
+        id = Some(s"change-country-${index.display}"),
+        call = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode)
       )
   )
 
