@@ -233,7 +233,20 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
                   .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, CheckMode))
             }
           }
-          "must go to CheckYourAnswers if'No' and there are containers and containers not used" in {
+
+          "must go to CheckYourAnswers if 'No' and containers not used" in {
+            forAll(arbitrary[UserAnswers], arbitrary[String]) {
+              (answers, container) =>
+                val updatedAnswers = answers
+                  .set(ContainersUsedPage, false).success.value
+                  .set(AddAnotherPackagePage(itemIndex), false).success.value
+                navigator
+                  .nextPage(AddAnotherPackagePage(itemIndex), CheckMode, updatedAnswers)
+                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex))
+            }
+          }
+
+          "must go to CheckYourAnswers if 'No' and containers used and there are containers" in {
             forAll(arbitrary[UserAnswers], arbitrary[String]) {
               (answers, container) =>
                 val updatedAnswers = answers
@@ -246,20 +259,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
             }
           }
 
-          "must go to CheckYourAnswers if'No' and there are containers" in {
-            forAll(arbitrary[UserAnswers], arbitrary[String]) {
-              (answers, container) =>
-                val updatedAnswers = answers
-                  .set(AddAnotherPackagePage(itemIndex), false).success.value
-                  .set(ContainerNumberPage(itemIndex, containerIndex), container).success.value
-                navigator
-                  .nextPage(AddAnotherPackagePage(itemIndex), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex))
-            }
-          }
-
-
-          "must go to ContainerNumber(0, 0) if'No' and there are NO containers" in {
+          "must go to ContainerNumber(0, 0) if 'No' and there are NO containers" in {
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
