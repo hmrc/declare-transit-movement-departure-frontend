@@ -50,8 +50,7 @@ class SessionExpiredControllerSpec extends SpecBase with MockNunjucksRendererApp
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "nextPageUrl" -> "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do",
-        "isLoggedIn"  -> false
+        "signInUrl" -> "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"
       )
       templateCaptor.getValue mustEqual "session-expired.njk"
       val jsonCaptorWithoutConfig: JsObject = jsonCaptor.getValue - configKey
