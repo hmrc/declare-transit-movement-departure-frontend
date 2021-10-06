@@ -42,7 +42,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*repositories.*;" +
       ".*BuildInfo.*;.*javascript.*;.*Routes.*;.*GuiceInjector;" +
       ".*ControllerConfiguration",
-    ScoverageKeys.coverageMinimum       := 80,
+    ScoverageKeys.coverageMinimumStmtTotal := 80,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting  := true,
     useSuperShell in ThisBuild          := false,
@@ -54,7 +54,6 @@ lazy val root = (project in file("."))
       "-Ypartial-unification"
     ),
     libraryDependencies ++= AppDependencies(),
-    dependencyOverrides += "commons-codec" % "commons-codec" % "1.12", //added for reactive mongo issues
     retrieveManaged                        := true,
     evictionWarningOptions in update :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
@@ -108,5 +107,3 @@ lazy val itSettings = Defaults.itSettings ++ Seq(
     "-Dlogger.resource=it.logback.xml"
   )
 )
-
-dependencyOverrides ++= AppDependencies.overrides

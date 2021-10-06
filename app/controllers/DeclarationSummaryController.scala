@@ -26,7 +26,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import services.DeclarationSubmissionService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.DeclarationSummaryViewModel
 
 import javax.inject.Inject

@@ -17,12 +17,18 @@
 package views
 
 import base.SpecBase
+import config.{FrontendAppConfig, RenderConfig}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.libs.json.JsObject
+import play.api.i18n.Messages
+import play.api.libs.json.{JsObject, Json}
+import play.api.mvc.RequestHeader
+import play.api.test.Helpers
+import play.api.{Configuration, Environment}
+import play.twirl.api.Html
 import renderer.Renderer
+import uk.gov.hmrc.nunjucks.{DevelopmentNunjucksRoutesHelper, NunjucksConfigurationProvider, NunjucksRenderer, NunjucksSetup}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,19 +38,38 @@ abstract class SingleViewSpec(protected val viewUnderTest: String) extends SpecB
 
   require(viewUnderTest.endsWith(".njk"), "Expected view with file extension of `.njk`")
 
-  implicit override val messages: Messages = app.injector.instanceOf[MessagesApi].preferred(fakeRequest)
+  override val messages: Messages = Helpers.stubMessages()
 
-  def renderDocument(json: JsObject): Future[Document] = {
+  private def asDocument(html: Html): Document = Jsoup.parse(html.toString())
+
+  private val renderer = {
+    val env                   = Environment.simple()
+    val nunjucksSetup         = new NunjucksSetup(env)
+    val nunjucksConfiguration = new NunjucksConfigurationProvider(Configuration.load(env), nunjucksSetup).get()
+    val nunjucksRoutesHelper  = new DevelopmentNunjucksRoutesHelper(env)
+
+    val nunjucksRenderer = new NunjucksRenderer(
+      nunjucksSetup,
+      nunjucksConfiguration,
+      env,
+      nunjucksRoutesHelper,
+      Helpers.stubMessagesApi()
+    )
+
+    val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+    val renderConfig      = app.injector.instanceOf[RenderConfig]
+
+    new Renderer(frontendAppConfig, renderConfig, nunjucksRenderer)
+  }
+
+  def renderDocument(json: JsObject = Json.obj()): Future[Document] = {
     import play.api.test.CSRFTokenHelper._
 
-    implicit val fr = fakeRequest.withCSRFToken
+    implicit val fr: RequestHeader = fakeRequest.withCSRFToken
 
-    app.injector
-      .instanceOf[Renderer]
+    renderer
       .render(viewUnderTest, json)
-      .map(
-        html => Jsoup.parse(html.toString())
-      )
+      .map(asDocument)
   }
 
 }
