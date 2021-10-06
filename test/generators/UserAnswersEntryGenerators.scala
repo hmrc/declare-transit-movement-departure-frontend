@@ -902,7 +902,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryDestinationCountryUserAnswersEntry: Arbitrary[(DestinationCountryPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- stringsWithMaxLength(2).suchThat(_.nonEmpty).map(Json.toJson(_))
+        value <- stringsWithMaxLength(2).retryUntil(_.nonEmpty).map(Json.toJson(_))
       } yield (DestinationCountryPage, value)
     }
 
@@ -958,7 +958,7 @@ trait UserAnswersEntryGenerators {
   implicit lazy val arbitraryCountryOfDispatchUserAnswersEntry: Arbitrary[(CountryOfDispatchPage.type, JsValue)] =
     Arbitrary {
       for {
-        value <- stringsWithMaxLength(2).suchThat(_.nonEmpty).map(Json.toJson(_))
+        value <- stringsWithMaxLength(2).retryUntil(_.nonEmpty).map(Json.toJson(_))
       } yield (CountryOfDispatchPage, value)
     }
 

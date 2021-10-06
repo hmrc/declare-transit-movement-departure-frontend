@@ -40,7 +40,7 @@ class RepresentativeCapacitySpec extends AnyFreeSpec with Matchers with ScalaChe
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!RepresentativeCapacity.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] retryUntil (!RepresentativeCapacity.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>

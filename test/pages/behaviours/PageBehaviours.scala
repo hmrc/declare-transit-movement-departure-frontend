@@ -132,7 +132,7 @@ trait PageBehaviours
         val gen = for {
           page        <- genP
           userAnswers <- genUserAnswerScenario
-          newValue <- arbitrary[A].suchThat(
+          newValue <- arbitrary[A].retryUntil(
             a => !userAnswers.userAnswers.get(page).contains(a)
           )
         } yield (page, userAnswers.userAnswers, newValue)

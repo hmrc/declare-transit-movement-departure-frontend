@@ -17,11 +17,11 @@
 package navigation
 
 import controllers.safetyAndSecurity.routes
-import logging.Logging
 import models._
 import models.reference.{CountryCode, CustomsOffice}
 import pages.safetyAndSecurity._
 import pages.{OfficeOfDeparturePage, Page}
+import play.api.Logging
 import play.api.mvc.Call
 
 import javax.inject.Singleton

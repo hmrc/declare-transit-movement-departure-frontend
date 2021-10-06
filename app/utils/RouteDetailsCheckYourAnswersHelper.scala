@@ -31,9 +31,9 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
 
   def arrivalDatesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDate](
     page = ArrivalDatesAtOfficePage(index),
-    formatAnswer = dateTime => lit"${Format.dateFormattedDDMMYYYY(dateTime).toLowerCase}",
+    formatAnswer = date => lit"${Format.dateFormattedDDMMYYYY(date).toLowerCase}",
     prefix = "arrivalDatesAtOffice",
-    id = Some("change-arrival-dates-at-office-of-transit"),
+    id = Some(s"change-arrival-dates-at-office-of-transit-${index.display}"),
     call = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, CheckMode),
     args = index.display
   )
@@ -59,7 +59,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
       buildRow(
         prefix = "addAnotherTransitOffice",
         answer = answer,
-        id = Some("change-office-of-transit"),
+        id = Some(s"change-office-of-transit-${index.display}"),
         call = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, CheckMode),
         args = index.display
       )

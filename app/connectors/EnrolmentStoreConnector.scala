@@ -17,11 +17,10 @@
 package connectors
 
 import config.FrontendAppConfig
-import logging.Logging
 import models.QueryGroupsEnrolmentsResponseModel
+import play.api.Logging
 import play.api.http.Status._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

@@ -59,7 +59,7 @@ class SecurityConsigneeNameFormProviderSpec extends SpecBase with StringFieldBeh
         List(FormError(fieldName, invalidKey, Seq(consignorNameRegex)))
 
       val genInvalidString: Gen[String] = {
-        stringsWithMaxLength(consigneeNameMaxLength) suchThat (!_.matches(consignorNameRegex))
+        stringsWithMaxLength(consigneeNameMaxLength) retryUntil (!_.matches(consignorNameRegex))
       }
 
       forAll(genInvalidString) {

@@ -55,50 +55,50 @@ trait Generators extends UserAnswersGenerator with ModelGenerators {
   }
 
   def intsLargerThanMaxValue: Gen[BigInt] =
-    arbitrary[BigInt] suchThat (
+    arbitrary[BigInt] retryUntil (
       x => x > Int.MaxValue
     )
 
   def intsSmallerThanMinValue: Gen[BigInt] =
-    arbitrary[BigInt] suchThat (
+    arbitrary[BigInt] retryUntil (
       x => x < Int.MinValue
     )
 
   def nonNumerics: Gen[String] =
-    alphaStr suchThat (_.size > 0)
+    alphaStr suchThat (_.nonEmpty)
 
   def decimals: Gen[String] =
     arbitrary[BigDecimal]
-      .suchThat(_.abs < Int.MaxValue)
-      .suchThat(!_.isValidInt)
+      .retryUntil(_.abs < Int.MaxValue)
+      .retryUntil(!_.isValidInt)
       .map(_.formatted("%f"))
 
   def decimalsPositive: Gen[String] =
     arbitrary[BigDecimal]
-      .suchThat(
+      .retryUntil(
         x => x.signum >= 0
       )
-      .suchThat(
+      .retryUntil(
         x => x.abs <= Int.MaxValue
       )
-      .suchThat(!_.isValidInt)
+      .retryUntil(!_.isValidInt)
       .map(_.formatted("%f"))
 
   def intsBelowValue(value: Int): Gen[Int] =
-    arbitrary[Int] suchThat (_ < value)
+    arbitrary[Int] retryUntil (_ < value)
 
   def intsAboveValue(value: Int): Gen[Int] =
-    arbitrary[Int] suchThat (_ > value)
+    arbitrary[Int] retryUntil (_ > value)
 
   def intsOutsideRange(min: Int, max: Int): Gen[Int] =
-    arbitrary[Int] suchThat (
+    arbitrary[Int] retryUntil (
       x => x < min || x > max
     )
 
   def nonBooleans: Gen[String] =
     nonEmptyString
-      .suchThat(_ != "true")
-      .suchThat(_ != "false")
+      .retryUntil(_ != "true")
+      .retryUntil(_ != "false")
 
   def nonEmptyString: Gen[String] =
     for {
@@ -159,7 +159,7 @@ trait Generators extends UserAnswersGenerator with ModelGenerators {
     } yield chars.mkString
 
   def stringsExceptSpecificValues(excluded: Seq[String]): Gen[String] =
-    nonEmptyString suchThat (!excluded.contains(_))
+    nonEmptyString retryUntil (!excluded.contains(_))
 
   def oneOf[T](xs: Seq[Gen[T]]): Gen[T] =
     if (xs.isEmpty) {
