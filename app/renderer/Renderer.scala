@@ -50,6 +50,9 @@ class Renderer @Inject() (frontendAppConfig: FrontendAppConfig, appConfig: Rende
     "gtmContainer"                   -> frontendAppConfig.gtmContainer,
     "serviceUrl"                     -> frontendAppConfig.serviceUrl,
     "contactUrl"                     -> frontendAppConfig.nctsEnquiriesUrl,
-    "guidanceUrl"                    -> frontendAppConfig.nctsGuidanceUrl
+    "guidanceUrl"                    -> frontendAppConfig.nctsGuidanceUrl,
+    "userResearchUrl"                -> frontendAppConfig.userResearchUrl,
+    "showPhaseBanner"                -> frontendAppConfig.showPhaseBanner,
+    "showUserResearchBanner"         -> frontendAppConfig.showUserResearchBanner
   )
 }

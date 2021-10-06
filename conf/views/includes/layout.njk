@@ -22,17 +22,18 @@
   {% endmacro %}
 
   {{ hmrcHeader({
-    homepageUrl: "https://www.gov.uk",
     serviceName: messages("site.service_name"),
     serviceUrl: config.serviceUrl,
-    containerClasses: "govuk-width-container",
-    assetsPath: "/assets",
     phaseBanner: {
-      show: true,
+      show: config.showPhaseBanner,
       text: 'beta',
       html: phaseBanner()
     },
-    signOutHref: config.signOutUrl
+    signOutHref: config.signOutUrl,
+    userResearchBanner: {
+      show: config.showUserResearchBanner,
+      url: config.userResearchUrl
+    }
   }) }}
 
 {% endblock %}
