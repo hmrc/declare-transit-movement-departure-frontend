@@ -19,7 +19,7 @@ package controllers.routeDetails
 import base.{GeneratorSpec, MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.ArrivalTimesAtOfficeFormProvider
+import forms.ArrivalDatesAtOfficeFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import models.reference.{CountryCode, CustomsOffice}
@@ -29,7 +29,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage}
+import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalDatesAtOfficePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -42,7 +42,7 @@ import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class ArrivalTimesAtOfficeControllerSpec
+class ArrivalDatesAtOfficeControllerSpec
     extends SpecBase
     with MockNunjucksRendererApp
     with MockitoSugar
@@ -50,7 +50,7 @@ class ArrivalTimesAtOfficeControllerSpec
     with JsonMatchers
     with GeneratorSpec {
 
-  val formProvider                 = new ArrivalTimesAtOfficeFormProvider()
+  val formProvider                 = new ArrivalDatesAtOfficeFormProvider()
   private val customsOffice        = CustomsOffice("1", "name", CountryCode("GB"), None)
   private def form                 = formProvider(customsOffice.name)
   private val mockRefDataConnector = mock[ReferenceDataConnector]
@@ -59,7 +59,7 @@ class ArrivalTimesAtOfficeControllerSpec
 
   val validAnswer: LocalDate = LocalDate.now()
 
-  lazy val arrivalTimesAtOfficeRoute = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, NormalMode).url
+  lazy val arrivalDatesAtOfficeRoute = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -68,17 +68,17 @@ class ArrivalTimesAtOfficeControllerSpec
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest(GET, arrivalTimesAtOfficeRoute)
+    FakeRequest(GET, arrivalDatesAtOfficeRoute)
 
   def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
-    FakeRequest(POST, arrivalTimesAtOfficeRoute)
+    FakeRequest(POST, arrivalDatesAtOfficeRoute)
       .withFormUrlEncodedBody(
         "value.day"   -> validAnswer.getDayOfMonth.toString,
         "value.month" -> validAnswer.getMonthValue.toString,
         "value.year"  -> validAnswer.getYear.toString
       )
 
-  "ArrivalTimesAtOffice Controller" - {
+  "ArrivalDatesAtOffice Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val userAnswers = emptyUserAnswers.set(AddAnotherTransitOfficePage(index), customsOffice.id).toOption.value
@@ -106,7 +106,7 @@ class ArrivalTimesAtOfficeControllerSpec
         "date"  -> viewModel
       )
 
-      templateCaptor.getValue mustEqual "arrivalTimesAtOffice.njk"
+      templateCaptor.getValue mustEqual "arrivalDatesAtOffice.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -116,7 +116,7 @@ class ArrivalTimesAtOfficeControllerSpec
         .set(AddAnotherTransitOfficePage(index), customsOffice.id)
         .toOption
         .value
-        .set(ArrivalTimesAtOfficePage(index), validAnswer)
+        .set(ArrivalDatesAtOfficePage(index), validAnswer)
         .success
         .value
 
@@ -152,7 +152,7 @@ class ArrivalTimesAtOfficeControllerSpec
         "date"  -> viewModel
       )
 
-      templateCaptor.getValue mustEqual "arrivalTimesAtOffice.njk"
+      templateCaptor.getValue mustEqual "arrivalDatesAtOffice.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -176,7 +176,7 @@ class ArrivalTimesAtOfficeControllerSpec
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getCustomsOffice(any())(any(), any())).thenReturn(Future.successful(customsOffice))
 
-      val request        = FakeRequest(POST, arrivalTimesAtOfficeRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val request        = FakeRequest(POST, arrivalDatesAtOfficeRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm      = form.bind(Map("value" -> "invalid value"))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
@@ -197,7 +197,7 @@ class ArrivalTimesAtOfficeControllerSpec
         "date"  -> viewModel
       )
 
-      templateCaptor.getValue mustEqual "arrivalTimesAtOffice.njk"
+      templateCaptor.getValue mustEqual "arrivalDatesAtOffice.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 

@@ -25,7 +25,7 @@ import xml.XMLWrites
 import java.time.{LocalDate, LocalDateTime, LocalTime}
 import scala.xml.NodeSeq
 
-case class CustomsOfficeTransit(referenceNumber: String, arrivalTime: Option[LocalDate])
+case class CustomsOfficeTransit(referenceNumber: String, arrivalDate: Option[LocalDate])
 
 object CustomsOfficeTransit {
 
@@ -41,18 +41,18 @@ object CustomsOfficeTransit {
 
   implicit def writes: XMLWrites[CustomsOfficeTransit] = XMLWrites[CustomsOfficeTransit] {
     customsOffice =>
-      val arrivalTime = customsOffice.arrivalTime.map {
-        arrivalTime =>
+      val arrivalDate = customsOffice.arrivalDate.map {
+        arrivalDate =>
           <ArrTimTRACUS085>{
             Format.dateTimeFormattedIE015(
-              LocalDateTime.of(arrivalTime, LocalTime.of(12, 0))
+              LocalDateTime.of(arrivalDate, LocalTime.of(12, 0))
             )
           }</ArrTimTRACUS085>
       }
 
       <CUSOFFTRARNS>
         <RefNumRNS1>{customsOffice.referenceNumber}</RefNumRNS1>
-        {arrivalTime.getOrElse(NodeSeq.Empty)}
+        {arrivalDate.getOrElse(NodeSeq.Empty)}
       </CUSOFFTRARNS>
   }
 }

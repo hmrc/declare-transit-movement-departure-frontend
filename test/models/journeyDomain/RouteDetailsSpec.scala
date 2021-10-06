@@ -52,7 +52,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
         .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
         .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
         .unsafeSetVal(DeclarationTypePage)(generatedOption)
-        .unsafeSetVal(ArrivalTimesAtOfficePage(index))(dateNow)
+        .unsafeSetVal(ArrivalDatesAtOfficePage(index))(dateNow)
 
       val result = UserAnswersReader[RouteDetails].run(userAnswers).value
 
@@ -102,7 +102,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
           .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
           .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
-          .unsafeSetVal(ArrivalTimesAtOfficePage(index))(dateNow)
+          .unsafeSetVal(ArrivalDatesAtOfficePage(index))(dateNow)
 
         val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).value
 
@@ -165,7 +165,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
           DestinationCountryPage,
           DestinationOfficePage,
           AddAnotherTransitOfficePage(index),
-          ArrivalTimesAtOfficePage(index)
+          ArrivalDatesAtOfficePage(index)
         )
 
         forAll(mandatoryPages) {
@@ -179,7 +179,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
               .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
               .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
               .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
-              .unsafeSetVal(ArrivalTimesAtOfficePage(index))(dateNow)
+              .unsafeSetVal(ArrivalDatesAtOfficePage(index))(dateNow)
               .unsafeRemove(mandatoryPage)
 
             val result = UserAnswersReader[RouteDetailsWithTransitInformation].run(userAnswers).left.value

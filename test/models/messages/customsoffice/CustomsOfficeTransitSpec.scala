@@ -45,15 +45,15 @@ class CustomsOfficeTransitSpec
       "CustomsOfficeTransit to xml" in {
         forAll(arbitrary[CustomsOfficeTransit]) {
           customsOffice =>
-            val arrivalTime = customsOffice.arrivalTime.map {
-              arrivalTime =>
-                <ArrTimTRACUS085>{Format.dateTimeFormattedIE015(LocalDateTime.of(arrivalTime, LocalTime.of(12, 0)))}</ArrTimTRACUS085>
+            val arrivalDate = customsOffice.arrivalDate.map {
+              arrivalDate =>
+                <ArrTimTRACUS085>{Format.dateTimeFormattedIE015(LocalDateTime.of(arrivalDate, LocalTime.of(12, 0)))}</ArrTimTRACUS085>
             }
 
             val expectedResult =
               <CUSOFFTRARNS>
                 <RefNumRNS1>{customsOffice.referenceNumber}</RefNumRNS1>
-                {arrivalTime.getOrElse(NodeSeq.Empty)}
+                {arrivalDate.getOrElse(NodeSeq.Empty)}
               </CUSOFFTRARNS>
 
             customsOffice.toXml mustEqual expectedResult

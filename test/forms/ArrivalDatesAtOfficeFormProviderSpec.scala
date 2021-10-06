@@ -22,17 +22,17 @@ import utils.Format
 
 import java.time.LocalDate
 
-class ArrivalTimesAtOfficeFormProviderSpec extends DateBehaviours {
+class ArrivalDatesAtOfficeFormProviderSpec extends DateBehaviours {
 
   private val officeOfTransit             = "office"
-  private val form                        = new ArrivalTimesAtOfficeFormProvider()(officeOfTransit)
+  private val form                        = new ArrivalDatesAtOfficeFormProvider()(officeOfTransit)
   private val localDate                   = LocalDate.now()
   private val pastDate                    = localDate.minusDays(1)
   private val futureDate                  = localDate.plusWeeks(2)
   private val formattedPastDate: String   = s"${Format.dateFormattedDDMMYYYY(pastDate)}"
   private val formattedFutureDate: String = s"${Format.dateFormattedDDMMYYYY(futureDate)}"
-  private val formPastError               = FormError("value", "arrivalTimesAtOffice.error.past.date", Seq(officeOfTransit, formattedPastDate))
-  private val formFutureError             = FormError("value", "arrivalTimesAtOffice.error.future.date", Seq(officeOfTransit, formattedFutureDate))
+  private val formPastError               = FormError("value", "arrivalDatesAtOffice.error.past.date", Seq(officeOfTransit, formattedPastDate))
+  private val formFutureError             = FormError("value", "arrivalDatesAtOffice.error.future.date", Seq(officeOfTransit, formattedFutureDate))
 
   ".value" - {
 
@@ -42,7 +42,7 @@ class ArrivalTimesAtOfficeFormProviderSpec extends DateBehaviours {
 
     behave like dateFieldWithMax(form, "value", localDate, formFutureError)
 
-    behave like mandatoryDateField(form, "value", "arrivalTimesAtOffice.error.required.date", Seq(officeOfTransit))
+    behave like mandatoryDateField(form, "value", "arrivalDatesAtOffice.error.required.date", Seq(officeOfTransit))
 
   }
 }

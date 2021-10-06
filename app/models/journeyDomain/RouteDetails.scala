@@ -60,7 +60,7 @@ object RouteDetailsWithTransitInformation {
 
   case class TransitInformation(
     transitOffice: String,
-    arrivalTime: Option[LocalDate]
+    arrivalDate: Option[LocalDate]
   )
 
   private def addOfficeOfTransit = AddSecurityDetailsPage.reader
@@ -72,7 +72,7 @@ object RouteDetailsWithTransitInformation {
               case (_, index) =>
                 (
                   AddAnotherTransitOfficePage(Index(index)).reader,
-                  ArrivalTimesAtOfficePage(Index(index)).reader
+                  ArrivalDatesAtOfficePage(Index(index)).reader
                 ).tupled.map {
                   case (office, time) => TransitInformation(office, Some(time))
                 }

@@ -117,7 +117,7 @@ class RouteDetailsCheckYourAnswersController @Inject() (
           index =>
             Seq(
               routesCYAHelper.addAnotherTransitOffice(index, customsOfficeList),
-              routesCYAHelper.arrivalTimesAtOffice(index)
+              routesCYAHelper.arrivalDatesAtOffice(index)
             ).flatten
         }
         Section(msg"officesOfTransit.checkYourAnswersLabel", rows)

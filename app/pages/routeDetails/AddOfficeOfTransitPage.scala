@@ -34,7 +34,7 @@ case object AddOfficeOfTransitPage extends QuestionPage[Boolean] with ClearAllAd
         userAnswers
           .remove(OfficeOfTransitCountryPage(Index(0)))
           .flatMap(_.remove(OfficeOfTransitCountryPage(Index(0))))
-          .flatMap(_.remove(ArrivalTimesAtOfficePage(Index(0))))
+          .flatMap(_.remove(ArrivalDatesAtOfficePage(Index(0))))
       case _ => Success(userAnswers)
     }
 

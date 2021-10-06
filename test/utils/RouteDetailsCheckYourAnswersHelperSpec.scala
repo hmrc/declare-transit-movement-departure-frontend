@@ -100,12 +100,12 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           "arrival time known" in {
 
-            val arrivalTime          = arbitrary[LocalDate].sample.value
-            val formattedArrivalTime = Format.dateFormattedDDMMYYYY(arrivalTime).toLowerCase
+            val arrivalDate          = arbitrary[LocalDate].sample.value
+            val formattedArrivalDate = Format.dateFormattedDDMMYYYY(arrivalDate).toLowerCase
 
             val answers = emptyUserAnswers
               .unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
-              .unsafeSetVal(ArrivalTimesAtOfficePage(index))(arrivalTime)
+              .unsafeSetVal(ArrivalDatesAtOfficePage(index))(arrivalDate)
 
             val helper = new RouteDetailsCheckYourAnswersHelper(answers)
             val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(customsOffice)), mode)
@@ -115,7 +115,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
             result mustBe Some(
               Row(
                 key = Key(label),
-                value = Value(lit"$formattedArrivalTime"),
+                value = Value(lit"$formattedArrivalDate"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
@@ -449,44 +449,44 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
       }
     }
 
-    "arrivalTimesAtOffice" - {
+    "arrivalDatesAtOffice" - {
 
       "return None" - {
 
-        "ArrivalTimesAtOfficePage undefined at index" in {
+        "ArrivalDatesAtOfficePage undefined at index" in {
 
           val answers = emptyUserAnswers
 
           val helper = new RouteDetailsCheckYourAnswersHelper(answers)
-          val result = helper.arrivalTimesAtOffice(index)
+          val result = helper.arrivalDatesAtOffice(index)
           result mustBe None
         }
       }
 
       "return Some(Row)" - {
 
-        "ArrivalTimesAtOfficePage defined at index" in {
+        "ArrivalDatesAtOfficePage defined at index" in {
 
-          val arrivalTime          = arbitrary[LocalDate].sample.value
-          val formattedArrivalTime = Format.dateFormattedDDMMYYYY(arrivalTime).toLowerCase
+          val arrivalDate          = arbitrary[LocalDate].sample.value
+          val formattedArrivalDate = Format.dateFormattedDDMMYYYY(arrivalDate).toLowerCase
 
-          val answers = emptyUserAnswers.unsafeSetVal(ArrivalTimesAtOfficePage(index))(arrivalTime)
+          val answers = emptyUserAnswers.unsafeSetVal(ArrivalDatesAtOfficePage(index))(arrivalDate)
 
           val helper = new RouteDetailsCheckYourAnswersHelper(answers)
-          val result = helper.arrivalTimesAtOffice(index)
+          val result = helper.arrivalDatesAtOffice(index)
 
-          val label = msg"arrivalTimesAtOffice.checkYourAnswersLabel".withArgs(index.display)
+          val label = msg"arrivalDatesAtOffice.checkYourAnswersLabel".withArgs(index.display)
 
           result mustBe Some(
             Row(
               key = Key(label, classes = Seq("govuk-!-width-one-half")),
-              value = Value(lit"$formattedArrivalTime"),
+              value = Value(lit"$formattedArrivalDate"),
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode).url,
+                  href = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, CheckMode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> "change-arrival-times-at-office-of-transit")
+                  attributes = Map("id" -> "change-arrival-dates-at-office-of-transit")
                 )
               )
             )

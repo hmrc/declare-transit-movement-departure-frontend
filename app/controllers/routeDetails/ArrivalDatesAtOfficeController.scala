@@ -19,11 +19,11 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.ArrivalTimesAtOfficeFormProvider
+import forms.ArrivalDatesAtOfficeFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage}
+import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalDatesAtOfficePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -38,14 +38,14 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ArrivalTimesAtOfficeController @Inject() (
+class ArrivalDatesAtOfficeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @RouteDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: ArrivalTimesAtOfficeFormProvider,
+  formProvider: ArrivalDatesAtOfficeFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -62,7 +62,7 @@ class ArrivalTimesAtOfficeController @Inject() (
             office =>
               val form: Form[LocalDate] = formProvider(office.name)
 
-              val preparedForm = request.userAnswers.get(ArrivalTimesAtOfficePage(index)) match {
+              val preparedForm = request.userAnswers.get(ArrivalDatesAtOfficePage(index)) match {
                 case Some(value) => form.fill(value)
                 case None        => form
               }
@@ -86,7 +86,7 @@ class ArrivalTimesAtOfficeController @Inject() (
       "date"  -> viewModel
     )
 
-    renderer.render("arrivalTimesAtOffice.njk", json)
+    renderer.render("arrivalDatesAtOffice.njk", json)
   }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -104,9 +104,9 @@ class ArrivalTimesAtOfficeController @Inject() (
                   value =>
                     for {
                       updatedAnswers <- Future
-                        .fromTry(request.userAnswers.set(ArrivalTimesAtOfficePage(index), value))
+                        .fromTry(request.userAnswers.set(ArrivalDatesAtOfficePage(index), value))
                       _ <- sessionRepository.set(updatedAnswers)
-                    } yield Redirect(navigator.nextPage(ArrivalTimesAtOfficePage(index), mode, updatedAnswers))
+                    } yield Redirect(navigator.nextPage(ArrivalDatesAtOfficePage(index), mode, updatedAnswers))
                 )
           }
         case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))

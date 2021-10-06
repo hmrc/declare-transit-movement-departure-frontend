@@ -29,12 +29,12 @@ import java.time.LocalDate
 
 class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  def arrivalTimesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDate](
-    page = ArrivalTimesAtOfficePage(index),
+  def arrivalDatesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDate](
+    page = ArrivalDatesAtOfficePage(index),
     formatAnswer = dateTime => lit"${Format.dateFormattedDDMMYYYY(dateTime).toLowerCase}",
-    prefix = "arrivalTimesAtOffice",
-    id = Some("change-arrival-times-at-office-of-transit"),
-    call = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode),
+    prefix = "arrivalDatesAtOffice",
+    id = Some("change-arrival-dates-at-office-of-transit"),
+    call = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, CheckMode),
     args = index.display
   )
 
@@ -92,7 +92,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
         buildRemovableRow(
           label = label,
           value = userAnswers
-            .get(ArrivalTimesAtOfficePage(index))
+            .get(ArrivalDatesAtOfficePage(index))
             .fold("")(
               dateTime => s"${Format.dateFormattedDDMMYYYY(dateTime).toLowerCase}"
             ),

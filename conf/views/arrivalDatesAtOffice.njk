@@ -9,7 +9,7 @@
 {% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
 {% block pageTitle %}
-  {{ title(messages("arrivalTimesAtOffice.title"), form.errors) }}
+  {{ title(messages("arrivalDatesAtOffice.title"), form.errors) }}
 {% endblock %}
 
 {% block mainContent %}
@@ -31,11 +31,11 @@
 
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
-        <form action="{{ routes.controllers.routeDetails.ArrivalTimesAtOfficeController.onSubmit(lrn, index, mode).url }}" method="post">
+        <form action="{{ routes.controllers.routeDetails.ArrivalDatesAtOfficeController.onSubmit(lrn, index, mode).url }}" method="post">
 
         {% call govukFieldset({
           legend: {
-            text: messages("arrivalTimesAtOffice.heading"),
+            text: messages("arrivalDatesAtOffice.heading"),
             classes: "govuk-fieldset__legend--xl",
             isPageHeading: true
           }
@@ -45,7 +45,7 @@
 
         {{ govukDateInput({
           hint: {
-            text: messages('arrivalTimesAtOffice.hint')
+            text: messages('arrivalDatesAtOffice.hint')
           },
           errorMessage: date.error,
           items: date.items

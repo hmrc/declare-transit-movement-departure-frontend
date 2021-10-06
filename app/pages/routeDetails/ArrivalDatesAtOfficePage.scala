@@ -17,22 +17,19 @@
 package pages.routeDetails
 
 import models.Index
-import pages.behaviours.PageBehaviours
+import pages.{ClearAllAddItems, QuestionPage}
+import play.api.libs.json.JsPath
+import queries.Constants.routeDetailsOfficesOfTransit
 
 import java.time.LocalDate
 
-class ArrivalTimesAtOfficePageSpec extends PageBehaviours {
+case class ArrivalDatesAtOfficePage(index: Index) extends QuestionPage[LocalDate] with ClearAllAddItems[LocalDate] {
 
-  "ArrivalTimesAtOfficePage" - {
+  override def path: JsPath = JsPath \ routeDetailsOfficesOfTransit \ index.position \ toString
 
-    val index = Index(0)
+  override def toString: String = ArrivalDatesAtOfficePage.key
+}
 
-    beRetrievable[LocalDate](ArrivalTimesAtOfficePage(index))
-
-    beSettable[LocalDate](ArrivalTimesAtOfficePage(index))
-
-    beRemovable[LocalDate](ArrivalTimesAtOfficePage(index))
-
-    clearDownItems[LocalDate](ArrivalTimesAtOfficePage(index))
-  }
+object ArrivalDatesAtOfficePage {
+  val key: String = "arrivalDatesAtOffice"
 }

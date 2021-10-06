@@ -165,7 +165,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryConfirmRemoveOfficeOfTransitUserAnswersEntry.arbitrary ::
       arbitrarySealsInformationUserAnswersEntry.arbitrary ::
       arbitraryAddAnotherTransitOfficeUserAnswersEntry.arbitrary ::
-      arbitraryArrivalTimesAtOfficeUserAnswersEntry.arbitrary ::
+      arbitraryArrivalDatesAtOfficeUserAnswersEntry.arbitrary ::
       arbitraryControlResultDateLimitUserAnswersEntry.arbitrary ::
       arbitrarySealIdDetailsUserAnswersEntry.arbitrary ::
       arbitraryAddSealsUserAnswersEntry.arbitrary ::
@@ -215,7 +215,7 @@ trait UserAnswersGenerator extends UserAnswersEntryGenerators with TryValues {
       arbitraryConfirmRemoveOfficeOfTransitUserAnswersEntry.arbitrary ::
       arbitrarySealsInformationUserAnswersEntry.arbitrary ::
       arbitraryAddAnotherTransitOfficeUserAnswersEntry.arbitrary ::
-      arbitraryArrivalTimesAtOfficeUserAnswersEntry.arbitrary ::
+      arbitraryArrivalDatesAtOfficeUserAnswersEntry.arbitrary ::
       arbitraryControlResultDateLimitUserAnswersEntry.arbitrary ::
       arbitrarySealIdDetailsUserAnswersEntry.arbitrary ::
       arbitraryAddSealsUserAnswersEntry.arbitrary ::

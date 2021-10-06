@@ -542,15 +542,15 @@ addSeals.error.required = Select yes if you need to add official customs seals n
 addSealsLater.title = Official customs seals may be added later
 addSealsLater.heading = Official customs seals may be added later
 
-arrivalTimesAtOffice.title = When do you expect the transit to arrive at the office of transit?
-arrivalTimesAtOffice.heading = When do you expect the transit to arrive at the office of transit?
-arrivalTimesAtOffice.hint = Like, 14 1 2020.
-arrivalTimesAtOffice.checkYourAnswersLabel = Arrival date at office of transit {0}
-arrivalTimesAtOffice.error.past.date = The date you expect the transit to arrive at {0} must be after {1}
-arrivalTimesAtOffice.error.future.date = The date you expect the transit to arrive at {0} must be before {1}
-arrivalTimesAtOffice.error.required.date = Enter the date you expect the transit to arrive at {0}
-arrivalTimesAtOffice.error.required.two = The date you expect the transit to arrive at {0} must include {1} and {2}
-arrivalTimesAtOffice.error.invalid.date = Enter a real Date
+arrivalDatesAtOffice.title = When do you expect the transit to arrive at the office of transit?
+arrivalDatesAtOffice.heading = When do you expect the transit to arrive at the office of transit?
+arrivalDatesAtOffice.hint = Like, 14 1 2020.
+arrivalDatesAtOffice.checkYourAnswersLabel = Arrival date at office of transit {0}
+arrivalDatesAtOffice.error.past.date = The date you expect the transit to arrive at {0} must be after {1}
+arrivalDatesAtOffice.error.future.date = The date you expect the transit to arrive at {0} must be before {1}
+arrivalDatesAtOffice.error.required.date = Enter the date you expect the transit to arrive at {0}
+arrivalDatesAtOffice.error.required.two = The date you expect the transit to arrive at {0} must include {1} and {2}
+arrivalDatesAtOffice.error.invalid.date = Enter a real Date
 
 controlResultDateLimit.title = What is the control result date limit?
 controlResultDateLimit.heading = What is the control result date limit?
