@@ -32,18 +32,16 @@
 
           {{ csrf() | safe }}
 
-          <h1 class="govuk-heading-xl">
-            {{ messages("declarationPlace.heading") }}
+          <h1 class="govuk-label-wrapper">
+              <label class="govuk-label govuk-label--xl" for="postcode">
+                    {{ messages("declarationPlace.heading") }}
+              </label>
           </h1>
 
           <p class = "govuk-body"> {{ messages('declarationPlace.paragraph') }} </p>
           <p class = "govuk-label" > {{ messages('postcode') }} </p>
 
           {{ govukInput({
-             label: {
-               text: messages('declarationPlace.heading'),
-               classes: "govuk-visually-hidden"
-             },
             id: "value",
             name: "value",
             value: form.value.value,
