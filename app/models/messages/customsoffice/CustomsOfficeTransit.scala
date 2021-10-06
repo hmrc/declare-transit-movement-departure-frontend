@@ -45,7 +45,7 @@ object CustomsOfficeTransit {
         arrivalTime =>
           <ArrTimTRACUS085>{
             Format.dateTimeFormattedIE015(
-              LocalDateTime.of(LocalDate.of(arrivalTime.getYear, arrivalTime.getMonth, arrivalTime.getDayOfMonth), LocalTime.of(12, 0))
+              LocalDateTime.of(arrivalTime, LocalTime.of(12, 0))
             )
           }</ArrTimTRACUS085>
       }

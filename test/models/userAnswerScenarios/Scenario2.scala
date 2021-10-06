@@ -33,7 +33,7 @@ import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, UserAnswers}
 import play.api.libs.json.Json
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDate
 
 case object Scenario2 extends UserAnswerScenario {
 

@@ -25,7 +25,7 @@ import models.{DeclarationType, Index, UserAnswers}
 import pages._
 import pages.routeDetails._
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDate
 
 trait RouteDetails {
 

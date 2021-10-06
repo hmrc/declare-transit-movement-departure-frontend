@@ -29,8 +29,8 @@ class ArrivalTimesAtOfficeFormProviderSpec extends DateBehaviours {
   private val localDate                   = LocalDate.now()
   private val pastDate                    = localDate.minusDays(1)
   private val futureDate                  = localDate.plusWeeks(2)
-  private val formattedPastDate: String   = s"${Format.dateFormatterDDMMYYYY(pastDate)}"
-  private val formattedFutureDate: String = s"${Format.dateFormatterDDMMYYYY(futureDate)}"
+  private val formattedPastDate: String   = s"${Format.dateFormattedDDMMYYYY(pastDate)}"
+  private val formattedFutureDate: String = s"${Format.dateFormattedDDMMYYYY(futureDate)}"
   private val formPastError               = FormError("value", "arrivalTimesAtOffice.error.past.date", Seq(officeOfTransit, formattedPastDate))
   private val formFutureError             = FormError("value", "arrivalTimesAtOffice.error.future.date", Seq(officeOfTransit, formattedFutureDate))
 

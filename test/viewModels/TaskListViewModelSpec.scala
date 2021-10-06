@@ -34,7 +34,7 @@ import pages.safetyAndSecurity._
 import pages.traderDetails.{AddConsigneePage, AddConsignorPage, IsPrincipalEoriKnownPage, WhatIsPrincipalEoriPage}
 import play.api.libs.json.{JsObject, Json}
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDate
 
 class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper with UserAnswersGenerator with ModelGenerators {
 

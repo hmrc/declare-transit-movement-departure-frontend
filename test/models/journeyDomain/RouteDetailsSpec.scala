@@ -26,7 +26,7 @@ import org.scalacheck.Gen
 import pages._
 import pages.routeDetails._
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDate
 
 class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 

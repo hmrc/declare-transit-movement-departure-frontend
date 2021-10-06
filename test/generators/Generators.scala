@@ -224,15 +224,6 @@ trait Generators extends UserAnswersGenerator with ModelGenerators {
     ).map(_.toLocalTime)
   }
 
-  implicit lazy val arbitraryLocalDateTime: Arbitrary[LocalDateTime] = Arbitrary {
-    dateTimesBetween(
-      LocalDateTime.of(1900, 1, 1, 0, 0, 0),
-      LocalDateTime.of(2100, 1, 1, 0, 0, 0)
-    ).map(
-      x => x.withNano(0).withSecond(0)
-    )
-  }
-
   lazy val genExemptNationalityCode: Gen[Int] =
     for {
       range1    <- Gen.chooseNum(20, 29)

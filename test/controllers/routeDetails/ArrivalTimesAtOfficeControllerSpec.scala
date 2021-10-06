@@ -39,7 +39,7 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 
-import java.time.{LocalDate, ZoneOffset}
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class ArrivalTimesAtOfficeControllerSpec
@@ -57,7 +57,7 @@ class ArrivalTimesAtOfficeControllerSpec
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now()
 
   lazy val arrivalTimesAtOfficeRoute = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, NormalMode).url
 

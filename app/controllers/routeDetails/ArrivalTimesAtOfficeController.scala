@@ -63,7 +63,7 @@ class ArrivalTimesAtOfficeController @Inject() (
               val form: Form[LocalDate] = formProvider(office.name)
 
               val preparedForm = request.userAnswers.get(ArrivalTimesAtOfficePage(index)) match {
-                case Some(value) => form.fill(LocalDate.of(value.getYear, value.getMonth, value.getDayOfMonth))
+                case Some(value) => form.fill(value)
                 case None        => form
               }
 
@@ -104,7 +104,7 @@ class ArrivalTimesAtOfficeController @Inject() (
                   value =>
                     for {
                       updatedAnswers <- Future
-                        .fromTry(request.userAnswers.set(ArrivalTimesAtOfficePage(index), LocalDate.of(value.getYear, value.getMonth, value.getDayOfMonth)))
+                        .fromTry(request.userAnswers.set(ArrivalTimesAtOfficePage(index), value))
                       _ <- sessionRepository.set(updatedAnswers)
                     } yield Redirect(navigator.nextPage(ArrivalTimesAtOfficePage(index), mode, updatedAnswers))
                 )
