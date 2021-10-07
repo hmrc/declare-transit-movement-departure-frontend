@@ -21,7 +21,7 @@ import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -34,11 +34,11 @@ class SessionExpiredController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action.async {
+  def onPageLoad(): Action[AnyContent] = Action.async {
     implicit request =>
       val json = Json.obj(
-        "nextPageUrl" -> s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do"
+        "signInUrl" -> s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do"
       )
-      renderer.render("session-expired.njk", json).map(Ok(_))
+      renderer.render("session-expired.njk", json).map(Ok(_).withNewSession)
   }
 }

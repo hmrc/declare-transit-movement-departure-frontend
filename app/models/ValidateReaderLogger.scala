@@ -16,8 +16,8 @@
 
 package models
 
-import logging.Logging
 import models.journeyDomain.UserAnswersReader
+import play.api.Logging
 
 trait ValidateReaderLogger extends Logging {
 

@@ -24,10 +24,10 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc.{AnyContent, RequestHeader, Result, Results}
-import play.api.{Logger, PlayException}
+import play.api.{Logging, PlayException}
 import renderer.Renderer
 import uk.gov.hmrc.nunjucks.NunjucksSupport
-import uk.gov.hmrc.play.bootstrap.http.ApplicationException
+import uk.gov.hmrc.play.bootstrap.frontend.http.ApplicationException
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 
 import javax.inject.{Inject, Singleton}
@@ -41,7 +41,8 @@ class ErrorHandler @Inject() (
 )(implicit ec: ExecutionContext)
     extends HttpErrorHandler
     with I18nSupport
-    with NunjucksSupport {
+    with NunjucksSupport
+    with Logging {
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] = {
 
@@ -87,16 +88,17 @@ class ErrorHandler @Inject() (
   }
 
   private def logError(request: RequestHeader, ex: Throwable): Unit =
-    Logger.error(
+    logger.error(
       """
         |
         |! %sInternal server error, for (%s) [%s] ->
-        | """.stripMargin.format(ex match {
-                                   case p: PlayException => "@" + p.id + " - "
-                                   case _                => ""
-                                 },
-                                 request.method,
-                                 request.uri
+        | """.stripMargin.format(
+        ex match {
+          case p: PlayException => "@" + p.id + " - "
+          case _                => ""
+        },
+        request.method,
+        request.uri
       ),
       ex
     )

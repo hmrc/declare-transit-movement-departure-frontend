@@ -27,7 +27,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import javax.inject.Inject
@@ -48,14 +48,14 @@ class LocalReferenceNumberController @Inject() (
 
   private val form = formProvider()
 
-  def onPageLoad: Action[AnyContent] = identify.async {
+  def onPageLoad(): Action[AnyContent] = identify.async {
     implicit request =>
       val json = Json.obj("form" -> form)
 
       renderer.render("localReferenceNumber.njk", json).map(Ok(_))
   }
 
-  def onSubmit: Action[AnyContent] = identify.async {
+  def onSubmit(): Action[AnyContent] = identify.async {
     implicit request =>
       form
         .bindFromRequest()

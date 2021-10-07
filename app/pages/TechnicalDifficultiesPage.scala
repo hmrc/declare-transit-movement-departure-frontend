@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import play.api.libs.json.Json
 import play.api.mvc.{Request, Result}
 import renderer.Renderer
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 

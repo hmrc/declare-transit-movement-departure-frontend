@@ -16,8 +16,8 @@
 
 package models
 
-import logging.Logging
 import models.journeyDomain.ReaderError
+import play.api.Logging
 
 trait ValidateTaskListViewLogger extends Logging {
 

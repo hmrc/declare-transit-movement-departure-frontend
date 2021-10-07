@@ -99,4 +99,12 @@ trait ViewSpecAssertions extends Matchers {
     }
   }
 
+  def assertPageHasLink(doc: Document, id: String, expectedText: String, expectedHref: String) = {
+    val link = doc.selectFirst(s"a[id=$id]")
+    link.text() mustBe expectedText
+    link.attr("href") mustBe expectedHref
+  }
+
+  def assertPageHasNoLink(doc: Document, id: String) =
+    doc.select(s"a[id=$id]").isEmpty mustBe true
 }

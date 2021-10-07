@@ -17,8 +17,8 @@
 package services
 
 import connectors.DepartureMovementConnector
-import logging.Logging
 import models.{CancellationDecisionUpdateMessage, DeclarationRejectionMessage, DepartureId, GuaranteeNotValidMessage}
+import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
