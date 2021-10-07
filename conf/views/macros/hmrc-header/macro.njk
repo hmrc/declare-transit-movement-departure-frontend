@@ -13,7 +13,7 @@
         serviceUrl: params.serviceUrl,
         phaseBanner: phaseBanner,
         userResearchBanner: userResearchBanner,
-        signOutHref: params.signOutHref
+        signOutHref: params.signOutHref if not params.isSignedIn
     }) }}
 
 {% endmacro %}

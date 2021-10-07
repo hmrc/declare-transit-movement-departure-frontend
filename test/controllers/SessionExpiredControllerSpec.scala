@@ -20,6 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -43,11 +44,17 @@ class SessionExpiredControllerSpec extends SpecBase with MockNunjucksRendererApp
 
       status(result) mustEqual OK
 
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), any())(any())
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
+      val expectedJson = Json.obj(
+        "signInUrl" -> "http://localhost:9485/manage-transit-movements/what-do-you-want-to-do"
+      )
       templateCaptor.getValue mustEqual "session-expired.njk"
+      val jsonCaptorWithoutConfig: JsObject = jsonCaptor.getValue - configKey
+      jsonCaptorWithoutConfig mustBe expectedJson
     }
   }
 }
