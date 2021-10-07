@@ -54,7 +54,7 @@ import models.reference._
 import models.{CommonAddress, DeclarationType, EoriNumber, GuaranteeType, Index, LocalReferenceNumber, ProcedureType, RepresentativeCapacity, UserAnswers}
 import play.api.libs.json.Json
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 case object Scenario5 extends UserAnswerScenario {
 
@@ -87,11 +87,11 @@ case object Scenario5 extends UserAnswerScenario {
     .unsafeSetVal(pages.routeDetails.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
     .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
     .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.routeDetails.ArrivalDatesAtOfficePage(Index(0)))(LocalDate.of(2020, 5, 5))
+    .unsafeSetVal(pages.routeDetails.ArrivalDatesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 12, 0))
     .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(true)
     .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
     .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.routeDetails.ArrivalDatesAtOfficePage(Index(0)))(LocalDate.of(2020, 5, 7))
+    .unsafeSetVal(pages.routeDetails.ArrivalDatesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 12, 0))
     .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(false)
     /*
      * Transport Details
@@ -327,7 +327,7 @@ case object Scenario5 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    Some(NonEmptyList(TransitInformation("TOP12341", Some(LocalDate.of(2020, 5, 7))), List.empty))
+    Some(NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 12, 0))), List.empty))
   )
 
   private val movementDetails = NormalMovementDetails(false, true, "XX1 1XX", DeclarationForSomeoneElse("John Doe", Direct))

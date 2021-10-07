@@ -26,13 +26,13 @@ import org.scalacheck.Gen
 import pages._
 import pages.routeDetails._
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecHelper {
 
   "RouteDetailsReader" - {
     "Can parse a route detail long journey" in {
-      val dateNow = LocalDate.now()
+      val dateNow = LocalDateTime.now()
 
       val generatedOption = Gen.oneOf(DeclarationType.Option1, DeclarationType.Option2, DeclarationType.Option3).sample.value
 
@@ -85,7 +85,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
       "when safetyAndSecurityFlag is true and arrival time is added when office of transit is added" in {
 
-        val dateNow = LocalDate.now()
+        val dateNow = LocalDateTime.now()
 
         val expectedResult = RouteDetailsWithTransitInformation(
           CountryOfDispatch(CountryCode("GB"), true),
@@ -170,7 +170,7 @@ class RouteDetailsSpec extends SpecBase with GeneratorSpec with UserAnswersSpecH
 
         forAll(mandatoryPages) {
           mandatoryPage =>
-            val dateNow = LocalDate.now()
+            val dateNow = LocalDateTime.now()
 
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))

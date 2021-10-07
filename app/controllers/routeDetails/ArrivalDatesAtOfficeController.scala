@@ -33,9 +33,8 @@ import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
-import utils._
 
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime, LocalTime}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -64,7 +63,7 @@ class ArrivalDatesAtOfficeController @Inject() (
               val form: Form[LocalDate] = formProvider(office.name)
 
               val preparedForm = request.userAnswers.get(ArrivalDatesAtOfficePage(index)) match {
-                case Some(value) => form.fill(value)
+                case Some(value) => form.fill(LocalDate.of(value.getYear, value.getMonth, value.getDayOfMonth))
                 case None        => form
               }
 
@@ -105,7 +104,7 @@ class ArrivalDatesAtOfficeController @Inject() (
                   value =>
                     for {
                       updatedAnswers <- Future
-                        .fromTry(request.userAnswers.set(ArrivalDatesAtOfficePage(index), value))
+                        .fromTry(request.userAnswers.set(ArrivalDatesAtOfficePage(index), LocalDateTime.of(value, LocalTime.of(12, 0))))
                       _ <- sessionRepository.set(updatedAnswers)
                     } yield Redirect(navigator.nextPage(ArrivalDatesAtOfficePage(index), mode, updatedAnswers))
                 )

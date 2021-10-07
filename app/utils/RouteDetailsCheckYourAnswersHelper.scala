@@ -25,13 +25,13 @@ import play.api.libs.json.Reads
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime}
 
 class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  def arrivalDatesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDate](
+  def arrivalDatesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDateTime](
     page = ArrivalDatesAtOfficePage(index),
-    formatAnswer = date => lit"${Format.dateFormattedDDMMYYYY(date).toLowerCase}",
+    formatAnswer = date => lit"${Format.dateFormattedDDMMYYYY(LocalDate.of(date.getYear, date.getMonth, date.getDayOfMonth)).toLowerCase}",
     prefix = "arrivalDatesAtOffice",
     id = Some(s"change-arrival-dates-at-office-of-transit-${index.display}"),
     call = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, CheckMode),
@@ -94,7 +94,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
           value = userAnswers
             .get(ArrivalDatesAtOfficePage(index))
             .fold("")(
-              dateTime => s"${Format.dateFormattedDDMMYYYY(dateTime).toLowerCase}"
+              dateTime => s"${Format.dateFormattedDDMMYYYY(LocalDate.of(dateTime.getYear, dateTime.getMonth, dateTime.getDayOfMonth)).toLowerCase}"
             ),
           id = s"office-of-transit-${index.display}",
           changeCall = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode),
