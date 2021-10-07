@@ -7,12 +7,12 @@
 
 {% block head %}
   {% block pageHead %}{% endblock %}
-     {{ hmrcTimeoutDialog({
-       timeout: config.timeout,
-       countdown: config.countdown,
-       keepAliveUrl: routes.controllers.KeepAliveController.keepAlive(lrn).url,
-       signOutUrl: config.signOutUrl
-     }) }}
+  {{ hmrcTimeoutDialog({
+    timeout: config.timeout,
+    countdown: config.countdown,
+    keepAliveUrl: routes.controllers.KeepAliveController.keepAlive(lrn).url,
+    signOutUrl: config.signOutUrl
+  }) }}
   {% include "includes/head.njk" %}
 {% endblock %}
 
