@@ -65,7 +65,7 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
         Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
       case Some(packageType) if unpackedCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
-      case Some(_) => Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
+      case Some(_) => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
       case _       => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
@@ -75,7 +75,7 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
         Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case Some(packageType) if unpackedCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
-      case Some(_) => Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
+      case Some(_) => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, CheckMode))
       case _       => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 

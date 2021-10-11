@@ -53,7 +53,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(PackageTypePage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(answers.lrn, index, index, CheckMode))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, CheckMode))
             }
           }
 
