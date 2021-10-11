@@ -87,7 +87,7 @@ class SessionRepositorySpec extends ItSpecBase
         result mustBe None
       }
 
-      "must return None when UserAnswers match EoriNumber" in {
+      "must return None when no UserAnswers match EoriNumber" in {
 
         val result = service.get(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("InvalidEori")).futureValue
 
