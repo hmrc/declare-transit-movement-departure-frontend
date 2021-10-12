@@ -31,6 +31,7 @@ import renderer.Renderer
 import uk.gov.hmrc.nunjucks.{DevelopmentNunjucksRoutesHelper, NunjucksConfigurationProvider, NunjucksRenderer, NunjucksSetup}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
+import scala.collection.convert.ImplicitConversions._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -94,6 +95,12 @@ abstract class SingleViewSpec(protected val viewUnderTest: String, hasSignOutLin
 
       assertPageHasNoSignOutLink(doc)
     }
+  }
+
+  "must render accessibility statement link in footer" in {
+    val doc: Document = renderDocument().futureValue
+    val link          = doc.getElementsByClass("govuk-footer__link").toList.find(_.text() == "footer.links.accessibility").get
+    link.attr("href") mustBe "/accessibility-statement/manage-transit-movements"
   }
 
 }
