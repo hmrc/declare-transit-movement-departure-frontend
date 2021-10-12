@@ -706,11 +706,6 @@ packageType.heading = What package type has been used?
 packageType.error.required = Enter the package type that has been used
 packageType.checkYourAnswersLabel = Package type
 
-declareNumberOfPackages.title = Do you need to state how many of this package or item {0} has been used?
-declareNumberOfPackages.heading = Do you need to state how many of this package for item {0} has been used?
-declareNumberOfPackages.error.required = Select yes if you want to state how many of this package for item {0} has been used
-declareNumberOfPackages.checkYourAnswersLabel = Number of packages
-
 totalPieces.title = How many pieces have been used for item {0}?
 totalPieces.heading = How many pieces have been used for item {0}?
 totalPieces.error.nonNumeric = How many pieces have been used for item {0} must only include numbers 0 to 9

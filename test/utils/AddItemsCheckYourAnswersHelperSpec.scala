@@ -1381,7 +1381,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers)
           val result = helper.numberOfPackages(itemIndex, packageIndex)
 
-          val label = msg"declareNumberOfPackages.checkYourAnswersLabel"
+          val label = msg"howManyPackages.checkYourAnswersLabel"
 
           result mustBe Some(
             Row(

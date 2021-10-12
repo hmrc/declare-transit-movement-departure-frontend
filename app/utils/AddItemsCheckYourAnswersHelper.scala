@@ -296,7 +296,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYour
   def numberOfPackages(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[Int](
     page = HowManyPackagesPage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
-    prefix = "declareNumberOfPackages",
+    prefix = "howManyPackages",
     id = None,
     call = controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(lrn, itemIndex, packageIndex, CheckMode)
   )
