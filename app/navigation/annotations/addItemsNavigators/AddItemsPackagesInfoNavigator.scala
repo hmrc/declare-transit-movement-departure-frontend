@@ -75,7 +75,7 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
         Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case Some(packageType) if unpackedCodes.contains(packageType.code) =>
         Some(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
-      case Some(_) => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, CheckMode))
+      case Some(_) => Some(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
       case _       => Some(mainRoutes.SessionExpiredController.onPageLoad())
     }
 
