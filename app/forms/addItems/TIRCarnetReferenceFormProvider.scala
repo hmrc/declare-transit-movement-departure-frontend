@@ -20,8 +20,6 @@ import forms.Constants.{tirCarnetReferenceMaxLength, tirCarnetReferenceMinLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericWithSpaceRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
@@ -30,7 +28,7 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("tirCarnetReference.error.required")
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             minLength(tirCarnetReferenceMinLength, "tirCarnetReference.error.minLength", tirCarnetReferenceMinLength),
             maxLength(tirCarnetReferenceMaxLength, "tirCarnetReference.error.maxLength", tirCarnetReferenceMaxLength),
             regexp(alphaNumericWithSpaceRegex, "tirCarnetReference.error.invalidCharacters")

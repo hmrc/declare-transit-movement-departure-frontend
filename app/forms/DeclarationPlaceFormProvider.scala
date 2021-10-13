@@ -18,8 +18,6 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class DeclarationPlaceFormProvider @Inject() extends Mappings {

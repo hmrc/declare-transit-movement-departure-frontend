@@ -16,23 +16,20 @@
 
 package forms
 
-import forms.mappings.Mappings
-import models.domain.StringFieldRegex.alphaNumericWithSpaceRegex
-import play.api.data.Form
-import javax.inject.Inject
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
-class RepresentativeNameFormProvider @Inject() extends Mappings {
+object StopOnFirstFail {
 
-  val maxLengthRepresentativeName = 35
+  def apply[T](constraints: Constraint[T]*) = Constraint {
+    field: T =>
+      constraints.toList dropWhile (_(field) == Valid) match {
+        case Nil             => Valid
+        case constraint :: _ => constraint(field)
+      }
+  }
 
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("representativeName.error.required")
-        .verifying(
-          StopOnFirstFail[String](
-            maxLength(maxLengthRepresentativeName, "representativeName.error.length"),
-            regexp(alphaNumericWithSpaceRegex, "representativeName.error.invalid")
-          )
-        )
+  def constraint[T](message: String, validator: (T) => Boolean) =
+    Constraint(
+      (data: T) => if (validator(data)) Valid else Invalid(Seq(ValidationError(message)))
     )
 }
