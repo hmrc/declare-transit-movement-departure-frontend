@@ -19,8 +19,6 @@ package forms.safetyAndSecurity
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class CarrierNameFormProvider @Inject() extends Mappings {
@@ -31,7 +29,7 @@ class CarrierNameFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("carrierName.error.required")
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(maxLengthCarrierlName, "carrierName.error.length"),
             regexp(stringFieldRegex, "carrierName.error.invalidCharacters")
           )
