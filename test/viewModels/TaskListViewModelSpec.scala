@@ -679,7 +679,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       .unsafeSetVal(DestinationCountryPage)(CountryCode("IT"))
       .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
       .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
-      .unsafeSetVal(ArrivalTimesAtOfficePage(index))(LocalDateTime.now())
+      .unsafeSetVal(ArrivalDatesAtOfficePage(index))(LocalDateTime.now())
       // SafetyAndSecurity
       .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
       .unsafeSetVal(AddTransportChargesPaymentMethodPage)(false)
@@ -1127,7 +1127,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
       .unsafeSetVal(DestinationOfficePage)(CustomsOffice("id", "name", CountryCode("IT"), None))
       .unsafeSetVal(DeclarationTypePage)(Option1)
       .unsafeSetVal(AddAnotherTransitOfficePage(index))("transitOffice")
-      .unsafeSetVal(ArrivalTimesAtOfficePage(index))(LocalDateTime.now)
+      .unsafeSetVal(ArrivalDatesAtOfficePage(index))(LocalDateTime.now)
 
     "section task is always included" in {
       val viewModel = TaskListViewModel(emptyUserAnswers)

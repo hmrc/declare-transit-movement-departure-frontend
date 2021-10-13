@@ -170,7 +170,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
 
               navigator
                 .nextPage(AddAnotherTransitOfficePage(index), NormalMode, updatedUserAnswers)
-                .mustBe(routes.ArrivalTimesAtOfficeController.onPageLoad(answers.lrn, index, NormalMode))
+                .mustBe(routes.ArrivalDatesAtOfficeController.onPageLoad(answers.lrn, index, NormalMode))
           }
         }
 
@@ -191,7 +191,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           forAll(arbitrary[UserAnswers]) {
             answers =>
               navigator
-                .nextPage(ArrivalTimesAtOfficePage(index), NormalMode, answers)
+                .nextPage(ArrivalDatesAtOfficePage(index), NormalMode, answers)
                 .mustBe(routes.AddTransitOfficeController.onPageLoad(answers.lrn, NormalMode))
           }
         }

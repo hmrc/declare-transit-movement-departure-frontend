@@ -794,11 +794,11 @@ trait UserAnswersEntryGenerators {
       } yield (ControlResultDateLimitPage, value)
     }
 
-  implicit lazy val arbitraryArrivalTimesAtOfficeUserAnswersEntry: Arbitrary[(ArrivalTimesAtOfficePage, JsValue)] =
+  implicit lazy val arbitraryArrivalDatesAtOfficeUserAnswersEntry: Arbitrary[(ArrivalDatesAtOfficePage, JsValue)] =
     Arbitrary {
       for {
         value <- arbitrary[Int].map(Json.toJson(_))
-      } yield (ArrivalTimesAtOfficePage(Index(0)), value)
+      } yield (ArrivalDatesAtOfficePage(Index(0)), value)
     }
 
   implicit lazy val arbitrarySealIdDetailsUserAnswersEntry: Arbitrary[(SealIdDetailsPage, JsValue)] =

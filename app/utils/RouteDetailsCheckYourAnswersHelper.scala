@@ -25,16 +25,16 @@ import play.api.libs.json.Reads
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime}
 
 class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
 
-  def arrivalTimesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDateTime](
-    page = ArrivalTimesAtOfficePage(index),
-    formatAnswer = dateTime => lit"${Format.dateTimeFormattedAMPM(dateTime).toLowerCase}",
-    prefix = "arrivalTimesAtOffice",
-    id = Some(s"change-arrival-times-at-office-of-transit-${index.display}"),
-    call = routes.ArrivalTimesAtOfficeController.onPageLoad(lrn, index, CheckMode),
+  def arrivalDatesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDateTime](
+    page = ArrivalDatesAtOfficePage(index),
+    formatAnswer = date => lit"${Format.dateFormattedDDMMYYYY(LocalDate.of(date.getYear, date.getMonth, date.getDayOfMonth)).toLowerCase}",
+    prefix = "arrivalDatesAtOffice",
+    id = Some(s"change-arrival-dates-at-office-of-transit-${index.display}"),
+    call = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, CheckMode),
     args = index.display
   )
 
@@ -92,9 +92,9 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
         buildRemovableRow(
           label = label,
           value = userAnswers
-            .get(ArrivalTimesAtOfficePage(index))
+            .get(ArrivalDatesAtOfficePage(index))
             .fold("")(
-              dateTime => s"${Format.dateTimeFormattedAMPM(dateTime).toLowerCase}"
+              dateTime => s"${Format.dateFormattedDDMMYYYY(LocalDate.of(dateTime.getYear, dateTime.getMonth, dateTime.getDayOfMonth)).toLowerCase}"
             ),
           id = s"office-of-transit-${index.display}",
           changeCall = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode),

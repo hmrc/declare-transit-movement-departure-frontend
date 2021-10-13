@@ -212,7 +212,7 @@ class DeclarationRequestService @Inject() (
 
     def customsOfficeTransit(transitInformation: NonEmptyList[TransitInformation]): Seq[CustomsOfficeTransit] =
       transitInformation.map {
-        case TransitInformation(office, arrivalTime) => CustomsOfficeTransit(office, arrivalTime)
+        case TransitInformation(office, arrivalDate) => CustomsOfficeTransit(office, arrivalDate)
       }.toList
 
     def headerSeals(domainSeals: Seq[SealDomain]): Option[Seals] =
