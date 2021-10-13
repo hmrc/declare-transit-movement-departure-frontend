@@ -749,7 +749,7 @@ isCommodityCodeKnown.error.required = Select yes if you know the commodity code 
 
 howManyPackages.title = How many packages have been used for item {0}?
 howManyPackages.heading = How many packages have been used for item {0}?
-howManyPackages.checkYourAnswersLabel = How many packages have been used for item {0}?
+howManyPackages.checkYourAnswersLabel = Number of packages
 howManyPackages.error.nonNumeric = How many packages have been used for item {0} must only include numbers 0 to 9
 howManyPackages.error.required = Enter how many packages have been used for item {0}
 howManyPackages.error.wholeNumber = Enter how many packages have been used for item {0} using whole numbers
