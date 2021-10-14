@@ -38,7 +38,7 @@ class ArrivalDatesAtOfficeFormProvider @Inject() extends Mappings {
         requiredKey = "arrivalDatesAtOffice.error.required.date",
         args = Seq(officeOfTransit)
       ).verifying(
-        maxDate(futureDate, "arrivalDatesAtOffice.error.future.date", officeOfTransit, Format.dateFormatterDDMMYYYY.format(futureDate)),
+        maxDate(futureDate, "arrivalDatesAtOffice.error.future.date", officeOfTransit, Format.dateFormatterDDMMYYYY.format(futureDate.plusDays(1))),
         minDate(pastDate, "arrivalDatesAtOffice.error.past.date", officeOfTransit, Format.dateFormatterDDMMYYYY.format(pastDate))
       )
     )
