@@ -69,7 +69,6 @@ class TraderDetailsOfficesOfTransitFilter(index: Index)(implicit protected val e
     } else {
       (lastloopComplete, index.position) match {
         case (_, 0)                                 => Future.successful(None)
-        case (true, x) if x <= numberOfOffices      => Future.successful(None)
         case (true, x) if x > numberOfOffices       => redirectToAddTransitOfficeController
         case (_, _) if numberOfOffices == 0         => redirectToOfficeOfTransitCountryController(Index(0))
         case (false, x) if x != numberOfOffices - 1 => redirectToOfficeOfTransitCountryController(Index(numberOfOffices - 1))
