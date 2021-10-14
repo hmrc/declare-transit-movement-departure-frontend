@@ -605,13 +605,6 @@ trait UserAnswersEntryGenerators {
       } yield (TotalPiecesPage(Index(0), Index(0)), value)
     }
 
-  implicit lazy val arbitraryDeclareNumberOfPackagesUserAnswersEntry: Arbitrary[(DeclareNumberOfPackagesPage, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (DeclareNumberOfPackagesPage(Index(0), Index(0)), value)
-    }
-
   implicit lazy val arbitraryCommodityCodeUserAnswersEntry: Arbitrary[(CommodityCodePage, JsValue)] =
     Arbitrary {
       for {
