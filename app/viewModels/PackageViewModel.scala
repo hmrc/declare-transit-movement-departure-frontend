@@ -16,14 +16,14 @@
 
 package viewModels
 
-import models.{Index, NormalMode, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import utils.AddItemsCheckYourAnswersHelper
 
 object PackageViewModel {
 
-  def packageRows(itemIndex: Index, packageRange: Int, userAnswers: UserAnswers): Seq[Option[Row]] = {
-    val cyaHelper = new AddItemsCheckYourAnswersHelper(userAnswers, NormalMode)
+  def packageRows(itemIndex: Index, packageRange: Int, userAnswers: UserAnswers, mode: Mode): Seq[Option[Row]] = {
+    val cyaHelper = new AddItemsCheckYourAnswersHelper(userAnswers, mode)
     List.range(0, packageRange).map {
       packagePosition =>
         val packageIndex = Index(packagePosition)

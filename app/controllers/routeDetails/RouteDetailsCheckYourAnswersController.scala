@@ -23,7 +23,7 @@ import derivable.DeriveNumberOfOfficeOfTransits
 import models.journeyDomain.RouteDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
-import models.{DeclarationType, Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
+import models.{CheckMode, DeclarationType, Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
 import pages.DeclarationTypePage
 import pages.routeDetails.MovementDestinationCountryPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -82,7 +82,7 @@ class RouteDetailsCheckYourAnswersController @Inject() (
   }
 
   private def createSections(countryCode: CountryCode)(implicit hc: HeaderCarrier, request: DataRequest[AnyContent]): Future[Seq[Section]] = {
-    val checkYourAnswersHelper = new RouteDetailsCheckYourAnswersHelper(request.userAnswers, NormalMode)
+    val checkYourAnswersHelper = new RouteDetailsCheckYourAnswersHelper(request.userAnswers, CheckMode)
 
     for {
       countryList            <- referenceDataConnector.getCountryList()

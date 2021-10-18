@@ -1246,7 +1246,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode).url,
+                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   )
@@ -1271,7 +1271,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode).url,
+                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   )

@@ -261,7 +261,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mo
         page = CountryOfRoutingPage(index),
         formatAnswer = formatAnswer,
         id = Some(s"change-country-${index.display}"),
-        call = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode)
+        call = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode)
       )
   )
 
