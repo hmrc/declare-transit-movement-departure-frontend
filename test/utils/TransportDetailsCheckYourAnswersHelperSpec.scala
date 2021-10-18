@@ -20,7 +20,7 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.transportDetails.routes
 import models.reference.{Country, CountryCode, TransportMode}
-import models.{CheckMode, CountryList, TransportModeList}
+import models.{CheckMode, CountryList, Mode, TransportModeList}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -30,19 +30,21 @@ import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 
 class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with ScalaCheckPropertyChecks {
 
+  val mode: Mode = CheckMode
+
   "TransportDetailsCheckYourAnswersHelper" - {
 
     "modeAtBorder" - {
 
-      val modeCode: String    = "MODE CODE"
-      val mode: TransportMode = TransportMode(modeCode, "DESCRIPTION")
+      val modeCode: String             = "MODE CODE"
+      val transportMode: TransportMode = TransportMode(modeCode, "DESCRIPTION")
 
       "return None" - {
         "ModeAtBorderPage undefined at index" in {
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.modeAtBorder(TransportModeList(Nil))
           result mustBe None
         }
@@ -55,7 +57,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(ModeAtBorderPage)(modeCode)
 
-            val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+            val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
             val result = helper.modeAtBorder(TransportModeList(Nil))
 
             val label = msg"modeAtBorder.checkYourAnswersLabel"
@@ -67,7 +69,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.ModeAtBorderController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.ModeAtBorderController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-mode-at-border")
                   )
@@ -80,19 +82,19 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(ModeAtBorderPage)(modeCode)
 
-            val helper = new TransportDetailsCheckYourAnswersHelper(answers)
-            val result = helper.modeAtBorder(TransportModeList(Seq(mode)))
+            val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
+            val result = helper.modeAtBorder(TransportModeList(Seq(transportMode)))
 
             val label = msg"modeAtBorder.checkYourAnswersLabel"
 
             result mustBe Some(
               Row(
                 key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                value = Value(lit"(${mode.code}) ${mode.description}"),
+                value = Value(lit"(${transportMode.code}) ${transportMode.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.ModeAtBorderController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.ModeAtBorderController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-mode-at-border")
                   )
@@ -106,15 +108,15 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
     "modeCrossingBorder" - {
 
-      val modeCode: String    = "MODE CODE"
-      val mode: TransportMode = TransportMode(modeCode, "DESCRIPTION")
+      val modeCode: String             = "MODE CODE"
+      val transportMode: TransportMode = TransportMode(modeCode, "DESCRIPTION")
 
       "return None" - {
         "ModeCrossingBorderPage undefined at index" in {
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.modeCrossingBorder(TransportModeList(Nil))
           result mustBe None
         }
@@ -127,7 +129,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(ModeCrossingBorderPage)(modeCode)
 
-            val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+            val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
             val result = helper.modeCrossingBorder(TransportModeList(Nil))
 
             val label = msg"modeCrossingBorder.checkYourAnswersLabel"
@@ -139,7 +141,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.ModeCrossingBorderController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.ModeCrossingBorderController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-mode-crossing-border")
                   )
@@ -152,19 +154,19 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(ModeCrossingBorderPage)(modeCode)
 
-            val helper = new TransportDetailsCheckYourAnswersHelper(answers)
-            val result = helper.modeCrossingBorder(TransportModeList(Seq(mode)))
+            val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
+            val result = helper.modeCrossingBorder(TransportModeList(Seq(transportMode)))
 
             val label = msg"modeCrossingBorder.checkYourAnswersLabel"
 
             result mustBe Some(
               Row(
                 key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                value = Value(lit"(${mode.code}) ${mode.description}"),
+                value = Value(lit"(${transportMode.code}) ${transportMode.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.ModeCrossingBorderController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.ModeCrossingBorderController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-mode-crossing-border")
                   )
@@ -178,15 +180,15 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
     "inlandMode" - {
 
-      val modeCode: String    = "MODE CODE"
-      val mode: TransportMode = TransportMode(modeCode, "DESCRIPTION")
+      val modeCode: String             = "MODE CODE"
+      val transportMode: TransportMode = TransportMode(modeCode, "DESCRIPTION")
 
       "return None" - {
         "InlandModePage undefined at index" in {
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.inlandMode(TransportModeList(Nil))
           result mustBe None
         }
@@ -199,7 +201,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(InlandModePage)(modeCode)
 
-            val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+            val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
             val result = helper.inlandMode(TransportModeList(Nil))
 
             val label = msg"inlandMode.checkYourAnswersLabel"
@@ -211,7 +213,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.InlandModeController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.InlandModeController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-inland-mode")
                   )
@@ -224,19 +226,19 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(InlandModePage)(modeCode)
 
-            val helper = new TransportDetailsCheckYourAnswersHelper(answers)
-            val result = helper.inlandMode(TransportModeList(Seq(mode)))
+            val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
+            val result = helper.inlandMode(TransportModeList(Seq(transportMode)))
 
             val label = msg"inlandMode.checkYourAnswersLabel"
 
             result mustBe Some(
               Row(
                 key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                value = Value(lit"(${mode.code}) ${mode.description}"),
+                value = Value(lit"(${transportMode.code}) ${transportMode.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.InlandModeController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.InlandModeController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-inland-mode")
                   )
@@ -257,7 +259,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.idCrossingBorder
           result mustBe None
         }
@@ -268,7 +270,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers.unsafeSetVal(IdCrossingBorderPage)(id)
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.idCrossingBorder
 
           val label = msg"idCrossingBorder.checkYourAnswersLabel"
@@ -280,7 +282,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.IdCrossingBorderController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.IdCrossingBorderController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-id-crossing-border")
                 )
@@ -304,7 +306,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.nationalityAtDeparture(CountryList(Nil), arbitrary[Int].sample.value.toString)
           result mustBe None
         }
@@ -317,7 +319,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             modeCode =>
               val answers = emptyUserAnswers.unsafeSetVal(NationalityAtDeparturePage)(countryCode)
 
-              val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+              val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
               val result = helper.nationalityAtDeparture(CountryList(Nil), modeCode.toString)
               result mustBe None
           }
@@ -333,7 +335,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               modeCode =>
                 val answers = emptyUserAnswers.unsafeSetVal(NationalityAtDeparturePage)(countryCode)
 
-                val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+                val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
                 val result = helper.nationalityAtDeparture(CountryList(Nil), modeCode.toString)
 
                 val label = msg"nationalityAtDeparture.checkYourAnswersLabel"
@@ -345,7 +347,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                     actions = List(
                       Action(
                         content = msg"site.edit",
-                        href = routes.NationalityAtDepartureController.onPageLoad(lrn, CheckMode).url,
+                        href = routes.NationalityAtDepartureController.onPageLoad(lrn, mode).url,
                         visuallyHiddenText = Some(label),
                         attributes = Map("id" -> "change-nationality-at-departure")
                       )
@@ -361,7 +363,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               modeCode =>
                 val answers = emptyUserAnswers.unsafeSetVal(NationalityAtDeparturePage)(countryCode)
 
-                val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+                val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
                 val result = helper.nationalityAtDeparture(CountryList(Seq(country)), modeCode.toString)
 
                 val label = msg"nationalityAtDeparture.checkYourAnswersLabel"
@@ -373,7 +375,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                     actions = List(
                       Action(
                         content = msg"site.edit",
-                        href = routes.NationalityAtDepartureController.onPageLoad(lrn, CheckMode).url,
+                        href = routes.NationalityAtDepartureController.onPageLoad(lrn, mode).url,
                         visuallyHiddenText = Some(label),
                         attributes = Map("id" -> "change-nationality-at-departure")
                       )
@@ -397,7 +399,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.nationalityCrossingBorder(CountryList(Nil))
           result mustBe None
         }
@@ -410,7 +412,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(NationalityCrossingBorderPage)(countryCode)
 
-            val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+            val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
             val result = helper.nationalityCrossingBorder(CountryList(Nil))
 
             val label = msg"nationalityCrossingBorder.checkYourAnswersLabel"
@@ -422,7 +424,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.NationalityCrossingBorderController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.NationalityCrossingBorderController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-nationality-crossing-border")
                   )
@@ -435,7 +437,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(NationalityCrossingBorderPage)(countryCode)
 
-            val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+            val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
             val result = helper.nationalityCrossingBorder(CountryList(Seq(country)))
 
             val label = msg"nationalityCrossingBorder.checkYourAnswersLabel"
@@ -447,7 +449,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.NationalityCrossingBorderController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.NationalityCrossingBorderController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-nationality-crossing-border")
                   )
@@ -470,7 +472,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.idAtDeparture(arbitrary[Int].sample.value.toString)
           result mustBe None
         }
@@ -483,7 +485,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             modeCode =>
               val answers = emptyUserAnswers.unsafeSetVal(IdAtDeparturePage)(id)
 
-              val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+              val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
               val result = helper.idAtDeparture(modeCode.toString)
               result mustBe None
           }
@@ -497,7 +499,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             modeCode =>
               val answers = emptyUserAnswers.unsafeSetVal(IdAtDeparturePage)(id)
 
-              val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+              val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
               val result = helper.idAtDeparture(modeCode.toString)
 
               val label = msg"idAtDeparture.checkYourAnswersLabel"
@@ -509,7 +511,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   actions = List(
                     Action(
                       content = msg"site.edit",
-                      href = routes.IdAtDepartureController.onPageLoad(lrn, CheckMode).url,
+                      href = routes.IdAtDepartureController.onPageLoad(lrn, mode).url,
                       visuallyHiddenText = Some(label)
                     )
                   )
@@ -527,7 +529,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.changeAtBorder
           result mustBe None
         }
@@ -538,7 +540,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers.unsafeSetVal(ChangeAtBorderPage)(true)
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.changeAtBorder
 
           val label = msg"changeAtBorder.checkYourAnswersLabel"
@@ -550,7 +552,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.ChangeAtBorderController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.ChangeAtBorderController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-change-at-border")
                 )
@@ -571,7 +573,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.addIdAtDeparture(arbitrary[Int].sample.value.toString)
           result mustBe None
         }
@@ -584,7 +586,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             modeCode =>
               val answers = emptyUserAnswers.unsafeSetVal(AddIdAtDeparturePage)(true)
 
-              val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+              val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
               val result = helper.addIdAtDeparture(modeCode.toString)
               result mustBe None
           }
@@ -598,7 +600,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             modeCode =>
               val answers = emptyUserAnswers.unsafeSetVal(AddIdAtDeparturePage)(true)
 
-              val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+              val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
               val result = helper.addIdAtDeparture(modeCode.toString)
 
               val label = msg"addIdAtDeparture.checkYourAnswersLabel"
@@ -610,7 +612,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   actions = List(
                     Action(
                       content = msg"site.edit",
-                      href = routes.AddIdAtDepartureController.onPageLoad(lrn, CheckMode).url,
+                      href = routes.AddIdAtDepartureController.onPageLoad(lrn, mode).url,
                       visuallyHiddenText = Some(label),
                       attributes = Map("id" -> "change-add-id-at-departure")
                     )
@@ -632,7 +634,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+          val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.addNationalityAtDeparture(arbitrary[Int].sample.value.toString)
           result mustBe None
         }
@@ -645,7 +647,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             modeCode =>
               val answers = emptyUserAnswers.unsafeSetVal(AddNationalityAtDeparturePage)(true)
 
-              val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+              val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
               val result = helper.addNationalityAtDeparture(modeCode.toString)
               result mustBe None
           }
@@ -659,7 +661,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             modeCode =>
               val answers = emptyUserAnswers.unsafeSetVal(AddNationalityAtDeparturePage)(true)
 
-              val helper = new TransportDetailsCheckYourAnswersHelper(answers)
+              val helper = new TransportDetailsCheckYourAnswersHelper(answers, mode)
               val result = helper.addNationalityAtDeparture(modeCode.toString)
 
               val label = msg"addNationalityAtDeparture.checkYourAnswersLabel"
@@ -671,7 +673,7 @@ class TransportDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   actions = List(
                     Action(
                       content = msg"site.edit",
-                      href = routes.AddNationalityAtDepartureController.onPageLoad(lrn, CheckMode).url,
+                      href = routes.AddNationalityAtDepartureController.onPageLoad(lrn, mode).url,
                       visuallyHiddenText = Some(label),
                       attributes = Map("id" -> "change-add-nationality-at-departure")
                     )

@@ -80,7 +80,7 @@ class SealsInformationController @Inject() (
     val listOfSealsIndex = List.range(0, numberOfSeals).map(Index(_))
     val sealsRows = listOfSealsIndex.flatMap {
       index =>
-        new AddSealCheckYourAnswersHelper(request.userAnswers).sealRow(index)
+        new AddSealCheckYourAnswersHelper(request.userAnswers, mode).sealRow(index)
 
     }
 

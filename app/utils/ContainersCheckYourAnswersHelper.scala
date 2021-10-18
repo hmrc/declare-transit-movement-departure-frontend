@@ -17,18 +17,18 @@
 package utils
 
 import controllers.addItems.containers.{routes => containerRoutes}
-import models.{CheckMode, Index, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.addItems.containers.ContainerNumberPage
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 
-class ContainersCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class ContainersCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
   def containerRow(itemIndex: Index, containerIndex: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
     page = ContainerNumberPage(itemIndex, containerIndex),
     formatAnswer = formatAsLiteral,
     id = s"container-number-${itemIndex.display}-${containerIndex.display}",
-    changeCall = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode),
-    removeCall = containerRoutes.ConfirmRemoveContainerController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode)
+    changeCall = containerRoutes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, mode),
+    removeCall = containerRoutes.ConfirmRemoveContainerController.onPageLoad(lrn, itemIndex, containerIndex, mode)
   )
 
 }

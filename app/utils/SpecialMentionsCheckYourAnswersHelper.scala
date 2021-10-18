@@ -17,16 +17,16 @@
 package utils
 
 import controllers.addItems.specialMentions.{routes => specialMentionRoutes}
-import models.{CheckMode, Index, Mode, SpecialMentionList, UserAnswers}
+import models.{Index, Mode, SpecialMentionList, UserAnswers}
 import pages.QuestionPage
 import pages.addItems.specialMentions._
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
-class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
-  def specialMentionType(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList, mode: Mode): Option[Row] =
+  def specialMentionType(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList): Option[Row] =
     getAnswerAndBuildSpecialMentionRow(
       page = SpecialMentionTypePage(itemIndex, referenceIndex),
       specialMentions = specialMentions,
@@ -47,7 +47,7 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
         buildValuelessRow(
           label = label,
           id = Some(s"change-special-mentions-${itemIndex.display}-${referenceIndex.display}"),
-          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, CheckMode)
+          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
         )
     )
 
@@ -56,14 +56,14 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     formatAnswer = formatAsYesOrNo,
     prefix = "addSpecialMention",
     id = None,
-    call = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode)
+    call = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode)
   )
 
   def addAnother(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
     val addAnotherContainerHref = userAnswers.get(AddSpecialMentionPage(itemIndex)) match {
-      case Some(true) => specialMentionRoutes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url
-      case _          => specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url
+      case Some(true) => specialMentionRoutes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url
+      case _          => specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url
     }
 
     AddAnotherViewModel(addAnotherContainerHref, content)

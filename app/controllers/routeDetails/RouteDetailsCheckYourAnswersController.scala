@@ -82,7 +82,7 @@ class RouteDetailsCheckYourAnswersController @Inject() (
   }
 
   private def createSections(countryCode: CountryCode)(implicit hc: HeaderCarrier, request: DataRequest[AnyContent]): Future[Seq[Section]] = {
-    val checkYourAnswersHelper = new RouteDetailsCheckYourAnswersHelper(request.userAnswers)
+    val checkYourAnswersHelper = new RouteDetailsCheckYourAnswersHelper(request.userAnswers, NormalMode)
 
     for {
       countryList            <- referenceDataConnector.getCountryList()

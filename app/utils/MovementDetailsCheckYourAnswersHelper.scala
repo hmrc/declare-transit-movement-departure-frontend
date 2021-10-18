@@ -17,19 +17,19 @@
 package utils
 
 import controllers.movementDetails.routes
-import models.{CheckMode, RepresentativeCapacity, UserAnswers}
+import models.{Mode, RepresentativeCapacity, UserAnswers}
 import pages.generalInformation._
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
   def preLodgeDeclarationPage: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = PreLodgeDeclarationPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "preLodgeDeclaration",
     id = Some("change-pre-lodge-declaration"),
-    call = routes.PreLodgeDeclarationController.onPageLoad(lrn, CheckMode)
+    call = routes.PreLodgeDeclarationController.onPageLoad(lrn, mode)
   )
 
   def representativeCapacity: Option[Row] = getAnswerAndBuildRow[RepresentativeCapacity](
@@ -37,7 +37,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     formatAnswer = representativeCapacity => msg"representativeCapacity.$representativeCapacity",
     prefix = "representativeCapacity",
     id = Some("change-representative-capacity"),
-    call = routes.RepresentativeCapacityController.onPageLoad(lrn, CheckMode)
+    call = routes.RepresentativeCapacityController.onPageLoad(lrn, mode)
   )
 
   def representativeName: Option[Row] = getAnswerAndBuildRow[String](
@@ -45,7 +45,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     formatAnswer = formatAsLiteral,
     prefix = "representativeName",
     id = Some("change-representative-name"),
-    call = routes.RepresentativeNameController.onPageLoad(lrn, CheckMode)
+    call = routes.RepresentativeNameController.onPageLoad(lrn, mode)
   )
 
   def containersUsedPage: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -53,7 +53,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     formatAnswer = formatAsYesOrNo,
     prefix = "containersUsed",
     id = Some("change-containers-used"),
-    call = routes.ContainersUsedPageController.onPageLoad(lrn, CheckMode)
+    call = routes.ContainersUsedPageController.onPageLoad(lrn, mode)
   )
 
   def declarationForSomeoneElse: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -61,7 +61,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     formatAnswer = formatAsYesOrNo,
     prefix = "declarationForSomeoneElse",
     id = Some("change-declaration-for-someone-else"),
-    call = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, CheckMode)
+    call = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, mode)
   )
 
   def declarationPlace: Option[Row] = getAnswerAndBuildRow[String](
@@ -69,6 +69,6 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Ch
     formatAnswer = formatAsLiteral,
     prefix = "declarationPlace",
     id = Some("change-declaration-place"),
-    call = routes.DeclarationPlaceController.onPageLoad(lrn, CheckMode)
+    call = routes.DeclarationPlaceController.onPageLoad(lrn, mode)
   )
 }

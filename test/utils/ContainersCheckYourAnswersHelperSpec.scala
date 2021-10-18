@@ -19,12 +19,14 @@ package utils
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.containers.routes._
-import models.CheckMode
+import models.{CheckMode, Mode}
 import pages.addItems.containers.ContainerNumberPage
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 
 class ContainersCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper {
+
+  val mode: Mode = CheckMode
 
   "ContainersCheckYourAnswersHelper" - {
 
@@ -37,7 +39,7 @@ class ContainersCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpec
 
           val answers = emptyUserAnswers
 
-          val helper = new ContainersCheckYourAnswersHelper(answers)
+          val helper = new ContainersCheckYourAnswersHelper(answers, mode)
           val result = helper.containerRow(itemIndex, containerIndex)
           result mustBe None
         }
@@ -48,7 +50,7 @@ class ContainersCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpec
 
           val answers = emptyUserAnswers.unsafeSetVal(ContainerNumberPage(itemIndex, containerIndex))(containerNumber)
 
-          val helper = new ContainersCheckYourAnswersHelper(answers)
+          val helper = new ContainersCheckYourAnswersHelper(answers, mode)
           val result = helper.containerRow(itemIndex, containerIndex)
 
           val label = lit"$containerNumber"
@@ -60,13 +62,13 @@ class ContainersCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpec
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode).url,
+                  href = ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-container-number-${itemIndex.display}-${containerIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
-                  href = ConfirmRemoveContainerController.onPageLoad(lrn, itemIndex, containerIndex, CheckMode).url,
+                  href = ConfirmRemoveContainerController.onPageLoad(lrn, itemIndex, containerIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"remove-container-number-${itemIndex.display}-${containerIndex.display}")
                 )
