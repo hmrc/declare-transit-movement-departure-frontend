@@ -126,11 +126,11 @@ class UserAnswersToXmlConversionSpec
         </CUSOFFDEPEPT>
         <CUSOFFTRARNS>
           <RefNumRNS1>TOP12341</RefNumRNS1>
-          <ArrTimTRACUS085>202005050512</ArrTimTRACUS085>
+          <ArrTimTRACUS085>202005051200</ArrTimTRACUS085>
         </CUSOFFTRARNS>
         <CUSOFFTRARNS>
           <RefNumRNS1>TOP12342</RefNumRNS1>
-          <ArrTimTRACUS085>202005072112</ArrTimTRACUS085>
+          <ArrTimTRACUS085>202005071200</ArrTimTRACUS085>
         </CUSOFFTRARNS>
         <CUSOFFDESEST>
           <RefNumEST1>DOP1234A</RefNumEST1>
@@ -493,7 +493,7 @@ class UserAnswersToXmlConversionSpec
         </CUSOFFDEPEPT>
         <CUSOFFTRARNS>
           <RefNumRNS1>TOP12341</RefNumRNS1>
-          <ArrTimTRACUS085>202005072112</ArrTimTRACUS085>
+          <ArrTimTRACUS085>202005071200</ArrTimTRACUS085>
         </CUSOFFTRARNS>
         <CUSOFFDESEST>
           <RefNumEST1>DOP1234A</RefNumEST1>
@@ -672,7 +672,7 @@ class UserAnswersToXmlConversionSpec
         </CUSOFFDEPEPT>
         <CUSOFFTRARNS>
           <RefNumRNS1>TOP12341</RefNumRNS1>
-          <ArrTimTRACUS085>202005072112</ArrTimTRACUS085>
+          <ArrTimTRACUS085>202005071200</ArrTimTRACUS085>
         </CUSOFFTRARNS>
         <CUSOFFDESEST>
           <RefNumEST1>DOP1234A</RefNumEST1>
@@ -838,7 +838,7 @@ class UserAnswersToXmlConversionSpec
       </CUSOFFDEPEPT>
       <CUSOFFTRARNS>
         <RefNumRNS1>TOP12341</RefNumRNS1>
-        <ArrTimTRACUS085>202005072112</ArrTimTRACUS085>
+        <ArrTimTRACUS085>202005071200</ArrTimTRACUS085>
       </CUSOFFTRARNS>
       <CUSOFFDESEST>
         <RefNumEST1>DOP1234A</RefNumEST1>
@@ -1093,11 +1093,11 @@ class UserAnswersToXmlConversionSpec
       </CUSOFFDEPEPT>
       <CUSOFFTRARNS>
         <RefNumRNS1>TOP12341</RefNumRNS1>
-        <ArrTimTRACUS085>202005050512</ArrTimTRACUS085>
+        <ArrTimTRACUS085>202005051200</ArrTimTRACUS085>
       </CUSOFFTRARNS>
       <CUSOFFTRARNS>
         <RefNumRNS1>TOP12342</RefNumRNS1>
-        <ArrTimTRACUS085>202005072112</ArrTimTRACUS085>
+        <ArrTimTRACUS085>202005071200</ArrTimTRACUS085>
       </CUSOFFTRARNS>
       <CUSOFFDESEST>
         <RefNumEST1>DOP1234A</RefNumEST1>

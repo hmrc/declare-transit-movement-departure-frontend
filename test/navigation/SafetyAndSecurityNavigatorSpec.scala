@@ -715,8 +715,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
         navigator
           .nextPage(CountryOfRoutingPage(index), CheckMode, emptyUserAnswers)
-          .mustBe(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn)) //TODO: Possibly change to do below instead
-        //          .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(emptyUserAnswers.id, CheckMode))
+          .mustBe(routes.AddAnotherCountryOfRoutingController.onPageLoad(emptyUserAnswers.lrn, CheckMode))
       }
 
       "must go from AddAnotherCountryOfRouting page to" - {

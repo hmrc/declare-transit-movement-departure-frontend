@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package forms.addItems
+package pages.routeDetails
 
-import forms.mappings.Mappings
-import play.api.data.Form
+import models.Index
+import pages.{ClearAllAddItems, QuestionPage}
+import play.api.libs.json.JsPath
+import queries.Constants.routeDetailsOfficesOfTransit
 
-import javax.inject.Inject
+import java.time.LocalDateTime
 
-class DeclareNumberOfPackagesFormProvider @Inject() extends Mappings {
+case class ArrivalDatesAtOfficePage(index: Index) extends QuestionPage[LocalDateTime] with ClearAllAddItems[LocalDateTime] {
 
-  def apply(itemIndex: Int): Form[Boolean] =
-    Form(
-      "value" -> boolean("declareNumberOfPackages.error.required", args = Seq(itemIndex))
-    )
+  override def path: JsPath = JsPath \ routeDetailsOfficesOfTransit \ index.position \ toString
+
+  override def toString: String = ArrivalDatesAtOfficePage.key
+}
+
+object ArrivalDatesAtOfficePage {
+  val key: String = "arrivalTimesAtOffice"
 }

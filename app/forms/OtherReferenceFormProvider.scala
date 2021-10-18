@@ -20,8 +20,6 @@ import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
 import models.messages.guarantee.GuaranteeReferenceWithOther.Constants.otherReferenceNumberLength
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class OtherReferenceFormProvider @Inject() () extends Mappings {

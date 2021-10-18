@@ -22,7 +22,7 @@ import controllers.guaranteeDetails.routes
 import generators.Generators
 import models.DeclarationType.Option4
 import models.reference.{CountryCode, CustomsOffice}
-import models.{CheckMode, DeclarationType, GuaranteeType, Index}
+import models.{CheckMode, DeclarationType, GuaranteeType, Index, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
@@ -33,6 +33,8 @@ import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 
 class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with ScalaCheckPropertyChecks with Generators {
 
+  val mode: Mode = CheckMode
+
   "GuaranteeDetailsCheckYourAnswersHelper" - {
 
     "defaultAmount" - {
@@ -42,7 +44,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.defaultAmount(index)
           result mustBe None
         }
@@ -53,7 +55,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers.unsafeSetVal(DefaultAmountPage(index))(true)
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.defaultAmount(index)
 
           val label = msg"defaultAmount.checkYourAnswersLabel"
@@ -65,7 +67,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.DefaultAmountController.onPageLoad(lrn, index, CheckMode).url,
+                  href = routes.DefaultAmountController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-default-amount")
                 )
@@ -86,7 +88,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.guaranteeType(index)
           result mustBe None
         }
@@ -97,7 +99,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             .unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
             .unsafeSetVal(DeclarationTypePage)(Option4)
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.guaranteeType(index)
           result mustBe None
         }
@@ -115,7 +117,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   .unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
                   .unsafeSetOpt(DeclarationTypePage)(declarationType)
 
-                val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+                val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
                 val result = helper.guaranteeType(index)
 
                 val label = msg"guaranteeType.checkYourAnswersLabel"
@@ -127,7 +129,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                     actions = List(
                       Action(
                         content = msg"site.edit",
-                        href = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode).url,
+                        href = routes.GuaranteeTypeController.onPageLoad(lrn, index, mode).url,
                         visuallyHiddenText = Some(label),
                         attributes = Map("id" -> "change-guarantee-type")
                       )
@@ -146,7 +148,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               .unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
               .unsafeSetVal(DeclarationTypePage)(Option4)
 
-            val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+            val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
             val result = helper.guaranteeType(index)
 
             val label = msg"guaranteeType.checkYourAnswersLabel"
@@ -158,7 +160,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode).url,
+                    href = routes.GuaranteeTypeController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-guarantee-type")
                   )
@@ -179,7 +181,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.accessCode(index)
           result mustBe None
         }
@@ -190,7 +192,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers.unsafeSetVal(AccessCodePage(index))(accessCode)
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.accessCode(index)
 
           val label = msg"accessCode.checkYourAnswersLabel"
@@ -202,7 +204,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AccessCodeController.onPageLoad(lrn, index, CheckMode).url,
+                  href = routes.AccessCodeController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-access-code")
                 )
@@ -222,7 +224,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.otherReference(index)
           result mustBe None
         }
@@ -233,7 +235,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers.unsafeSetVal(OtherReferencePage(index))(otherReference)
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.otherReference(index)
 
           val label = msg"otherReference.checkYourAnswersLabel"
@@ -245,7 +247,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.OtherReferenceController.onPageLoad(lrn, index, CheckMode).url,
+                  href = routes.OtherReferenceController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-other-reference")
                 )
@@ -264,7 +266,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.tirLiabilityAmount(index)
           result mustBe None
         }
@@ -275,7 +277,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             declarationType =>
               val answers = emptyUserAnswers.unsafeSetOpt(DeclarationTypePage)(declarationType)
 
-              val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+              val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
               val result = helper.tirLiabilityAmount(index)
               result mustBe None
           }
@@ -289,7 +291,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             .unsafeSetVal(LiabilityAmountPage(Index(0)))("AMOUNT 1")
             .unsafeSetVal(LiabilityAmountPage(index))("AMOUNT 2")
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.tirLiabilityAmount(index)
           result mustBe None
         }
@@ -305,7 +307,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
             .unsafeSetVal(LiabilityAmountPage(index))(amount)
             .unsafeSetVal(DeclarationTypePage)(Option4)
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.tirLiabilityAmount(index)
 
           val label = msg"liabilityAmount.checkYourAnswersLabel"
@@ -317,7 +319,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
+                  href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-liability-amount")
                 )
@@ -354,7 +356,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                   .unsafeSetOpt(DestinationOfficePage)(destinationOffice)
                   .unsafeSetOpt(GuaranteeTypePage(index))(guaranteeType)
 
-                val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+                val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
                 val result = helper.liabilityAmount(index)
                 result mustBe None
             }
@@ -385,7 +387,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                     .unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
                     .unsafeSetVal(LiabilityAmountPage(index))(amount)
 
-                  val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+                  val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
                   val result = helper.liabilityAmount(index)
 
                   val label = msg"liabilityAmount.checkYourAnswersLabel"
@@ -397,7 +399,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                       actions = List(
                         Action(
                           content = msg"site.edit",
-                          href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
+                          href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, mode).url,
                           visuallyHiddenText = Some(label),
                           attributes = Map("id" -> "change-liability-amount")
                         )
@@ -419,7 +421,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                     .unsafeSetVal(DestinationOfficePage)(gbOffice)
                     .unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
 
-                  val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+                  val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
                   val result = helper.liabilityAmount(index)
 
                   val label = msg"liabilityAmount.checkYourAnswersLabel"
@@ -431,7 +433,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                       actions = List(
                         Action(
                           content = msg"site.edit",
-                          href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
+                          href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, mode).url,
                           visuallyHiddenText = Some(label),
                           attributes = Map("id" -> "change-liability-amount")
                         )
@@ -455,7 +457,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                     .unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
                     .unsafeSetVal(LiabilityAmountPage(index))(" " * characterCount)
 
-                  val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+                  val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
                   val result = helper.liabilityAmount(index)
 
                   val label = msg"liabilityAmount.checkYourAnswersLabel"
@@ -467,7 +469,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                       actions = List(
                         Action(
                           content = msg"site.edit",
-                          href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
+                          href = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, mode).url,
                           visuallyHiddenText = Some(label),
                           attributes = Map("id" -> "change-liability-amount")
                         )
@@ -489,7 +491,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                     .unsafeSetVal(DestinationOfficePage)(gbOffice)
                     .unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
 
-                  val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+                  val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
                   val result = helper.liabilityAmount(index)
 
                   val label = msg"liabilityAmount.checkYourAnswersLabel"
@@ -501,7 +503,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
                       actions = List(
                         Action(
                           content = msg"site.edit",
-                          href = routes.LiabilityAmountController.onPageLoad(lrn, index, CheckMode).url,
+                          href = routes.LiabilityAmountController.onPageLoad(lrn, index, mode).url,
                           visuallyHiddenText = Some(label),
                           attributes = Map("id" -> "change-liability-amount")
                         )
@@ -523,7 +525,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.guaranteeReference(index)
           result mustBe None
         }
@@ -534,7 +536,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers.unsafeSetVal(GuaranteeReferencePage(index))(guaranteeReference)
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.guaranteeReference(index)
 
           val label = msg"guaranteeReference.checkYourAnswersLabel"
@@ -546,7 +548,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.GuaranteeReferenceController.onPageLoad(lrn, index, CheckMode).url,
+                  href = routes.GuaranteeReferenceController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-guarantee-reference")
                 )
@@ -566,7 +568,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.tirGuaranteeReference(index)
           result mustBe None
         }
@@ -577,7 +579,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers.unsafeSetVal(TIRGuaranteeReferencePage(index))(guaranteeReference)
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.tirGuaranteeReference(index)
 
           val label = msg"tirGuaranteeReference.checkYourAnswersLabel"
@@ -589,7 +591,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, CheckMode).url,
+                  href = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-tir-guarantee-reference")
                 )
@@ -608,7 +610,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.guaranteeRow(index, isTir = true)
           result mustBe None
         }
@@ -617,7 +619,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.guaranteeRow(index, isTir = false)
           result mustBe None
         }
@@ -635,7 +637,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
             val answers = emptyUserAnswers.unsafeSetVal(TIRGuaranteeReferencePage(index))(guaranteeReference)
 
-            val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+            val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
             val result = helper.guaranteeRow(index, isTir = true)
 
             val label = lit"$guaranteeReference"
@@ -666,7 +668,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
               .unsafeSetVal(TIRGuaranteeReferencePage(Index(0)))("GUARANTEE REFERENCE 1")
               .unsafeSetVal(TIRGuaranteeReferencePage(index))(guaranteeReference)
 
-            val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+            val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
             val result = helper.guaranteeRow(index, isTir = true)
 
             val label = lit"$guaranteeReference"
@@ -700,7 +702,7 @@ class GuaranteeDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswe
 
           val answers = emptyUserAnswers.unsafeSetVal(GuaranteeTypePage(index))(guaranteeType)
 
-          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers)
+          val helper = new GuaranteeDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.guaranteeRow(index, isTir = false)
 
           val label = msg"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}"

@@ -87,7 +87,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
 
   private def renderPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
-    val cyaHelper             = new AddItemsCheckYourAnswersHelper(request.userAnswers)
+    val cyaHelper             = new AddItemsCheckYourAnswersHelper(request.userAnswers, mode)
     val numberOfReferences    = request.userAnswers.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)
     val indexList: Seq[Index] = List.range(0, numberOfReferences).map(Index(_))
 

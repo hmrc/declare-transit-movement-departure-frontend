@@ -94,7 +94,7 @@ class AddAnotherGuaranteeController @Inject() (
 
   private def renderPage(lrn: LocalReferenceNumber, form: Form[Boolean], isTir: Boolean)(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
-    val cyaHelper             = new GuaranteeDetailsCheckYourAnswersHelper(request.userAnswers)
+    val cyaHelper             = new GuaranteeDetailsCheckYourAnswersHelper(request.userAnswers, NormalMode)
     val numberOfItems         = request.userAnswers.get(DeriveNumberOfGuarantees).getOrElse(0)
     val indexList: Seq[Index] = List.range(0, numberOfItems).map(Index(_))
 

@@ -17,7 +17,7 @@
 package viewModels
 
 import derivable._
-import models.{DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
+import models.{CheckMode, DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
 import uk.gov.hmrc.viewmodels.{MessageInterpolators, SummaryList}
 import utils.{AddItemsCheckYourAnswersHelper, SpecialMentionsCheckYourAnswersHelper}
 import viewModels.sections.Section
@@ -32,9 +32,9 @@ object AddItemsCheckYourAnswersViewModel {
     specialMentionList: SpecialMentionList
   ): AddItemsCheckYourAnswersViewModel = {
 
-    val checkYourAnswersHelper = new AddItemsCheckYourAnswersHelper(userAnswers)
+    val checkYourAnswersHelper = new AddItemsCheckYourAnswersHelper(userAnswers, CheckMode)
 
-    val specialMentionsCheckYourAnswers = new SpecialMentionsCheckYourAnswersHelper(userAnswers)
+    val specialMentionsCheckYourAnswers = new SpecialMentionsCheckYourAnswersHelper(userAnswers, CheckMode)
 
     AddItemsCheckYourAnswersViewModel(
       Seq(

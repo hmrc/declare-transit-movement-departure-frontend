@@ -19,8 +19,6 @@ package forms.safetyAndSecurity
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class SafetyAndSecurityConsigneeEoriFormProvider @Inject() extends Mappings {
@@ -31,7 +29,7 @@ class SafetyAndSecurityConsigneeEoriFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("safetyAndSecurityConsigneeEori.error.required")
         .verifying(
-          StopOnFirstFail(
+          forms.StopOnFirstFail(
             maxLength(maxLength, "safetyAndSecurityConsigneeEori.error.length"),
             regexp(alphaNumericRegex, "safetyAndSecurityConsigneeEori.error.invalid")
           )

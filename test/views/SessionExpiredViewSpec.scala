@@ -14,25 +14,6 @@
  * limitations under the License.
  */
 
-package pages.routeDetails
+package views
 
-import models.Index
-import pages.behaviours.PageBehaviours
-
-import java.time.LocalDateTime
-
-class ArrivalTimesAtOfficePageSpec extends PageBehaviours {
-
-  "ArrivalTimesAtOfficePage" - {
-
-    val index = Index(0)
-
-    beRetrievable[LocalDateTime](ArrivalTimesAtOfficePage(index))
-
-    beSettable[LocalDateTime](ArrivalTimesAtOfficePage(index))
-
-    beRemovable[LocalDateTime](ArrivalTimesAtOfficePage(index))
-
-    clearDownItems[LocalDateTime](ArrivalTimesAtOfficePage(index))
-  }
-}
+class SessionExpiredViewSpec extends SingleViewSpec("session-expired.njk", hasSignOutLink = false)

@@ -77,13 +77,13 @@ class AddTransitOfficeController @Inject() (
   private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] =
     referenceDataConnector.getCustomsOffices() flatMap {
       customsOfficeList =>
-        val routesCYAHelper          = new RouteDetailsCheckYourAnswersHelper(request.userAnswers)
+        val routesCYAHelper          = new RouteDetailsCheckYourAnswersHelper(request.userAnswers, mode)
         val numberOfTransitOffices   = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
         val index: Seq[Index]        = List.range(0, numberOfTransitOffices).map(Index(_))
         val maxLimitReached: Boolean = if (numberOfTransitOffices >= 9) true else false
         val officeOfTransitRows = index.map {
           index =>
-            routesCYAHelper.officeOfTransitRow(index, customsOfficeList, mode)
+            routesCYAHelper.officeOfTransitRow(index, customsOfficeList)
         }
 
         val singularOrPlural = if (numberOfTransitOffices == 1) "singular" else "plural"

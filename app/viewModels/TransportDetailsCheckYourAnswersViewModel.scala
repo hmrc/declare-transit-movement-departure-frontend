@@ -16,7 +16,7 @@
 
 package viewModels
 
-import models.{CountryList, TransportModeList, UserAnswers}
+import models.{CheckMode, CountryList, TransportModeList, UserAnswers}
 import pages.InlandModePage
 import uk.gov.hmrc.viewmodels.SummaryList
 import utils.TransportDetailsCheckYourAnswersHelper
@@ -28,7 +28,7 @@ object TransportDetailsCheckYourAnswersViewModel {
 
   def apply(userAnswers: UserAnswers, countryList: CountryList, transportModeList: TransportModeList): TransportDetailsCheckYourAnswersViewModel = {
 
-    val checkYourAnswersHelper = new TransportDetailsCheckYourAnswersHelper(userAnswers)
+    val checkYourAnswersHelper = new TransportDetailsCheckYourAnswersHelper(userAnswers, CheckMode)
     val inlandModeCode         = userAnswers.get(InlandModePage).get
 
     val inlandMode: Option[SummaryList.Row]                = checkYourAnswersHelper.inlandMode(transportModeList)

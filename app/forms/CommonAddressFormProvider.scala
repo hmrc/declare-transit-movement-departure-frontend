@@ -23,8 +23,6 @@ import models.reference.Country
 import models.{CommonAddress, CountryList}
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class CommonAddressFormProvider @Inject() extends Mappings {
@@ -33,21 +31,21 @@ class CommonAddressFormProvider @Inject() extends Mappings {
     mapping(
       "AddressLine1" -> text("commonAddress.error.AddressLine1.required", Seq(name))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             regexp(stringFieldRegex, "commonAddress.error.AddressLine1.invalidCharacters", Seq(name)),
             maxLength(buildingAndStreetLength, "commonAddress.error.AddressLine1.length", name)
           )
         ),
       "AddressLine2" -> text("commonAddress.error.AddressLine2.required", Seq(name))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             regexp(stringFieldRegex, "commonAddress.error.AddressLine2.invalidCharacters", Seq(name)),
             maxLength(cityLength, "commonAddress.error.AddressLine2.length", name)
           )
         ),
       "AddressLine3" -> text("commonAddress.error.postalCode.required", Seq(name))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             regexp(stringFieldRegex, "commonAddress.error.postalCode.invalidCharacters", Seq(name)),
             maxLength(postcodeLength, "commonAddress.error.postalCode.length", name)
           )
