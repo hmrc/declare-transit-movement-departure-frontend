@@ -19,7 +19,7 @@ package controllers.traderDetails
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import models.journeyDomain.traderDetails.TraderDetails
-import models.{LocalReferenceNumber, UserAnswers, ValidateReaderLogger}
+import models.{CheckMode, LocalReferenceNumber, UserAnswers, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -59,7 +59,7 @@ class TraderDetailsCheckYourAnswersController @Inject() (
   }
 
   private def createSections(userAnswers: UserAnswers): Seq[Section] = {
-    val checkYourAnswersHelper = new TraderDetailsCheckYourAnswersHelper(userAnswers)
+    val checkYourAnswersHelper = new TraderDetailsCheckYourAnswersHelper(userAnswers, CheckMode)
 
     Seq(
       Section(

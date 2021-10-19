@@ -90,7 +90,7 @@ class AddAnotherSpecialMentionController @Inject() (
     request: DataRequest[AnyContent]
   ): Future[Html] = {
 
-    val cya                   = new SpecialMentionsCheckYourAnswersHelper(request.userAnswers)
+    val cya                   = new SpecialMentionsCheckYourAnswersHelper(request.userAnswers, mode)
     val numberOfReferences    = request.userAnswers.get(DeriveNumberOfSpecialMentions(itemIndex)).getOrElse(0)
     val indexList: Seq[Index] = List.range(0, numberOfReferences).map(Index(_))
 
@@ -98,7 +98,7 @@ class AddAnotherSpecialMentionController @Inject() (
       specialMentions =>
         val referenceRows = indexList.map {
           referenceIndex =>
-            cya.specialMentionType(itemIndex, referenceIndex, specialMentions, mode)
+            cya.specialMentionType(itemIndex, referenceIndex, specialMentions)
         }
 
         val singularOrPlural = if (numberOfReferences == 1) "singular" else "plural"

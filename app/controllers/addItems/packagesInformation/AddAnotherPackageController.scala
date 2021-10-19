@@ -63,7 +63,7 @@ class AddAnotherPackageController @Inject() (
         }
 
         val totalTypes  = request.userAnswers.get(DeriveNumberOfPackages(itemIndex)).getOrElse(0)
-        val packageRows = PackageViewModel.packageRows(itemIndex, totalTypes, request.userAnswers)
+        val packageRows = PackageViewModel.packageRows(itemIndex, totalTypes, request.userAnswers, mode)
 
         val singularOrPlural = if (totalTypes == 1) "singular" else "plural"
 
@@ -93,7 +93,7 @@ class AddAnotherPackageController @Inject() (
             formWithErrors => {
 
               val totalTypes  = request.userAnswers.get(DeriveNumberOfPackages(itemIndex)).getOrElse(0)
-              val packageRows = PackageViewModel.packageRows(itemIndex, totalTypes, request.userAnswers)
+              val packageRows = PackageViewModel.packageRows(itemIndex, totalTypes, request.userAnswers, mode)
 
               val singularOrPlural = if (totalTypes == 1) "singular" else "plural"
 

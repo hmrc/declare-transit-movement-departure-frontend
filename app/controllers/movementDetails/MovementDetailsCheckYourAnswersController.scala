@@ -19,7 +19,7 @@ package controllers.movementDetails
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import models.journeyDomain.MovementDetails
-import models.{LocalReferenceNumber, UserAnswers, ValidateReaderLogger}
+import models.{CheckMode, LocalReferenceNumber, UserAnswers, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -58,7 +58,7 @@ class MovementDetailsCheckYourAnswersController @Inject() (
   }
 
   private def createSections(userAnswers: UserAnswers): Seq[Section] = {
-    val checkYourAnswersHelper = new MovementDetailsCheckYourAnswersHelper(userAnswers)
+    val checkYourAnswersHelper = new MovementDetailsCheckYourAnswersHelper(userAnswers, CheckMode)
 
     Seq(
       Section(

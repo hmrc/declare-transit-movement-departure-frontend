@@ -17,18 +17,18 @@
 package utils
 
 import controllers.traderDetails.routes
-import models.{CheckMode, CommonAddress, UserAnswers}
+import models.{CommonAddress, Mode, UserAnswers}
 import pages.traderDetails._
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 
-class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
   def principalTirHolderIdPage: Option[Row] = getAnswerAndBuildRow[String](
     page = PrincipalTirHolderIdPage,
     formatAnswer = formatAsLiteral,
     prefix = "principalTirHolderId",
     id = None,
-    call = routes.PrincipalTirHolderIdController.onPageLoad(lrn, CheckMode)
+    call = routes.PrincipalTirHolderIdController.onPageLoad(lrn, mode)
   )
 
   def consigneeAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
@@ -36,7 +36,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsAddress,
     prefix = "consigneeAddress",
     id = None,
-    call = routes.ConsigneeAddressController.onPageLoad(lrn, CheckMode)
+    call = routes.ConsigneeAddressController.onPageLoad(lrn, mode)
   )
 
   def principalAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
@@ -44,7 +44,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsAddress,
     prefix = "principalAddress",
     id = None,
-    call = routes.PrincipalAddressController.onPageLoad(lrn, CheckMode)
+    call = routes.PrincipalAddressController.onPageLoad(lrn, mode)
   )
 
   def consigneeName: Option[Row] = getAnswerAndBuildRow[String](
@@ -52,7 +52,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsLiteral,
     prefix = "consigneeName",
     id = None,
-    call = routes.ConsigneeNameController.onPageLoad(lrn, CheckMode)
+    call = routes.ConsigneeNameController.onPageLoad(lrn, mode)
   )
 
   def whatIsConsigneeEori: Option[Row] = getAnswerAndBuildRow[String](
@@ -60,7 +60,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsLiteral,
     prefix = "whatIsConsigneeEori",
     id = None,
-    call = routes.WhatIsConsigneeEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.WhatIsConsigneeEoriController.onPageLoad(lrn, mode)
   )
 
   def isConsigneeEoriKnown: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -68,7 +68,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsYesOrNo,
     prefix = "isConsigneeEoriKnown",
     id = None,
-    call = routes.IsConsigneeEoriKnownController.onPageLoad(lrn, CheckMode)
+    call = routes.IsConsigneeEoriKnownController.onPageLoad(lrn, mode)
   )
 
   def consignorName: Option[Row] = getAnswerAndBuildRow[String](
@@ -76,7 +76,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsLiteral,
     prefix = "consignorName",
     id = None,
-    call = routes.ConsignorNameController.onPageLoad(lrn, CheckMode)
+    call = routes.ConsignorNameController.onPageLoad(lrn, mode)
   )
 
   def addConsignee: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -84,7 +84,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsYesOrNo,
     prefix = "addConsignee",
     id = Some("change-consignee-same-for-all-items"),
-    call = routes.AddConsigneeController.onPageLoad(lrn, CheckMode)
+    call = routes.AddConsigneeController.onPageLoad(lrn, mode)
   )
 
   def consignorAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
@@ -92,7 +92,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsAddress,
     prefix = "consignorAddress",
     id = None,
-    call = routes.ConsignorAddressController.onPageLoad(lrn, CheckMode)
+    call = routes.ConsignorAddressController.onPageLoad(lrn, mode)
   )
 
   def consignorEori: Option[Row] = getAnswerAndBuildRow[String](
@@ -100,7 +100,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsLiteral,
     prefix = "consignorEori",
     id = None,
-    call = routes.ConsignorEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.ConsignorEoriController.onPageLoad(lrn, mode)
   )
 
   def addConsignor: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -108,7 +108,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsYesOrNo,
     prefix = "addConsignor",
     id = Some("change-consignor-same-for-all-items"),
-    call = routes.AddConsignorController.onPageLoad(lrn, CheckMode)
+    call = routes.AddConsignorController.onPageLoad(lrn, mode)
   )
 
   def isConsignorEoriKnown: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -116,7 +116,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsYesOrNo,
     prefix = "isConsignorEoriKnown",
     id = None,
-    call = routes.IsConsignorEoriKnownController.onPageLoad(lrn, CheckMode)
+    call = routes.IsConsignorEoriKnownController.onPageLoad(lrn, mode)
   )
 
   def principalName: Option[Row] = getAnswerAndBuildRow[String](
@@ -124,7 +124,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsLiteral,
     prefix = "principalName",
     id = None,
-    call = routes.PrincipalNameController.onPageLoad(lrn, CheckMode)
+    call = routes.PrincipalNameController.onPageLoad(lrn, mode)
   )
 
   def isPrincipalEoriKnown: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -132,7 +132,7 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsYesOrNo,
     prefix = "isPrincipalEoriKnown",
     id = Some("change-is-principal-eori-known"),
-    call = routes.IsPrincipalEoriKnownController.onPageLoad(lrn, CheckMode)
+    call = routes.IsPrincipalEoriKnownController.onPageLoad(lrn, mode)
   )
 
   def whatIsPrincipalEori: Option[Row] = getAnswerAndBuildRow[String](
@@ -140,6 +140,6 @@ class TraderDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Chec
     formatAnswer = formatAsLiteral,
     prefix = "whatIsPrincipalEori",
     id = None,
-    call = routes.WhatIsPrincipalEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.WhatIsPrincipalEoriController.onPageLoad(lrn, mode)
   )
 }

@@ -18,23 +18,23 @@ package utils
 
 import controllers.routeDetails.routes
 import models.reference.{CountryCode, CountryOfDispatch, CustomsOffice}
-import models.{CheckMode, CountryList, CustomsOfficeList, Index, Mode, UserAnswers}
+import models.{CountryList, CustomsOfficeList, Index, Mode, UserAnswers}
 import pages.QuestionPage
 import pages.routeDetails._
 import play.api.libs.json.Reads
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDateTime
 
-class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
   def arrivalDatesAtOffice(index: Index): Option[Row] = getAnswerAndBuildRow[LocalDateTime](
     page = ArrivalDatesAtOfficePage(index),
-    formatAnswer = date => lit"${Format.dateFormattedDDMMYYYY(LocalDate.of(date.getYear, date.getMonth, date.getDayOfMonth)).toLowerCase}",
+    formatAnswer = dateTime => formatAsLiteral(formatAsDate(dateTime)),
     prefix = "arrivalDatesAtOffice",
     id = Some(s"change-arrival-dates-at-office-of-transit-${index.display}"),
-    call = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, CheckMode),
+    call = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, mode),
     args = index.display
   )
 
@@ -47,7 +47,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
         prefix = "destinationOffice",
         answer = answer,
         id = Some("change-destination-office"),
-        call = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode)
+        call = routes.DestinationOfficeController.onPageLoad(lrn, mode)
       )
   )
 
@@ -60,7 +60,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
         prefix = "addAnotherTransitOffice",
         answer = answer,
         id = Some(s"change-office-of-transit-${index.display}"),
-        call = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, CheckMode),
+        call = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode),
         args = index.display
       )
   )
@@ -71,7 +71,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     countryList = countryList,
     prefix = "countryOfDispatch",
     id = Some("change-country-of-dispatch"),
-    call = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode)
+    call = routes.CountryOfDispatchController.onPageLoad(lrn, mode)
   )
 
   def destinationCountry(countryList: CountryList): Option[Row] = getAnswerAndBuildSimpleCountryRow[CountryCode](
@@ -80,10 +80,10 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     countryList = countryList,
     prefix = "destinationCountry",
     id = Some("change-destination-country"),
-    call = routes.DestinationCountryController.onPageLoad(lrn, CheckMode)
+    call = routes.DestinationCountryController.onPageLoad(lrn, mode)
   )
 
-  def officeOfTransitRow(index: Index, customsOfficeList: CustomsOfficeList, mode: Mode): Option[Row] =
+  def officeOfTransitRow(index: Index, customsOfficeList: CustomsOfficeList): Option[Row] =
     getAnswerAndBuildOfficeRow[String](
       page = AddAnotherTransitOfficePage(index),
       formatAnswer = formatAsSelf,
@@ -93,9 +93,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
           label = label,
           value = userAnswers
             .get(ArrivalDatesAtOfficePage(index))
-            .fold("")(
-              dateTime => s"${Format.dateFormattedDDMMYYYY(LocalDate.of(dateTime.getYear, dateTime.getMonth, dateTime.getDayOfMonth)).toLowerCase}"
-            ),
+            .fold("")(formatAsDate),
           id = s"office-of-transit-${index.display}",
           changeCall = routes.OfficeOfTransitCountryController.onPageLoad(lrn, index, mode),
           removeCall = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index, mode)
@@ -108,7 +106,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends Check
     countryList = countryList,
     prefix = "movementDestinationCountry",
     id = Some("change-movement-destination-country"),
-    call = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode)
+    call = routes.MovementDestinationCountryController.onPageLoad(lrn, mode)
   )
 
   private def getAnswerAndBuildOfficeRow[T](

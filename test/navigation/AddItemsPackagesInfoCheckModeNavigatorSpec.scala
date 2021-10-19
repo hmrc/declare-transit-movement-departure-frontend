@@ -136,7 +136,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
         }
 
         "DeclareMark" - {
-          "must go to CheckYourAnswers" in {
+          "must go to AddAnother" in {
             forAll(arbitrary[UserAnswers], arbitrary[String]) {
               (answers, declareMark) =>
                 val updatedAnswers = answers
@@ -144,7 +144,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareMarkPage(index, index), CheckMode, updatedAnswers)
-                  .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
+                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, CheckMode))
             }
           }
         }

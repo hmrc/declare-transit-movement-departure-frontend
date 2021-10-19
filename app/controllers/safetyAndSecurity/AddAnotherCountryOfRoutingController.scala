@@ -88,7 +88,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
 
   private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
-    val cyaHelper                = new SafetyAndSecurityCheckYourAnswersHelper(request.userAnswers)
+    val cyaHelper                = new SafetyAndSecurityCheckYourAnswersHelper(request.userAnswers, mode)
     val numberOfRoutingCountries = request.userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)
     val indexList: Seq[Index]    = List.range(0, numberOfRoutingCountries).map(Index(_))
     referenceDataConnector.getCountryList() flatMap {

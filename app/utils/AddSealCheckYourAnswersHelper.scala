@@ -18,20 +18,20 @@ package utils
 
 import controllers.goodsSummary.routes
 import models.domain.SealDomain
-import models.{CheckMode, Index, UserAnswers}
+import models.{Index, Mode, UserAnswers}
 import pages.SealIdDetailsPage
 import queries.SealsQuery
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-class AddSealCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class AddSealCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
   def sealRow(sealIndex: Index): Option[Row] = getAnswerAndBuildRemovableRow[SealDomain](
     page = SealIdDetailsPage(sealIndex),
     formatAnswer = sealDomain => lit"${sealDomain.numberOrMark}",
     id = s"seal-${sealIndex.display}",
-    changeCall = routes.SealIdDetailsController.onPageLoad(lrn, sealIndex, CheckMode),
-    removeCall = routes.ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, CheckMode)
+    changeCall = routes.SealIdDetailsController.onPageLoad(lrn, sealIndex, mode),
+    removeCall = routes.ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, mode)
   )
 
   def sealsRow(): Option[Row] = getAnswerAndBuildDynamicRow[Seq[SealDomain]](
@@ -39,6 +39,6 @@ class AddSealCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourA
     formatAnswer = seals => Html(seals.map(_.numberOrMark).mkString("<br>")),
     dynamicPrefix = seals => s"sealIdDetails.${if (seals.size == 1) "singular" else "plural"}",
     dynamicId = seals => Some(s"change-${if (seals.size == 1) "seal" else "seals"}"),
-    call = routes.SealsInformationController.onPageLoad(lrn, CheckMode)
+    call = routes.SealsInformationController.onPageLoad(lrn, mode)
   )
 }

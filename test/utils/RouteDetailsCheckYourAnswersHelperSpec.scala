@@ -21,7 +21,7 @@ import commonTestUtils.UserAnswersSpecHelper
 import controllers.routeDetails.routes
 import generators.Generators
 import models.reference.{Country, CountryCode, CountryOfDispatch, CustomsOffice}
-import models.{CheckMode, CountryList, CustomsOfficeList, Mode, NormalMode}
+import models.{CheckMode, CountryList, CustomsOfficeList, Mode}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.routeDetails._
 import uk.gov.hmrc.viewmodels.MessageInterpolators
@@ -31,7 +31,7 @@ import java.time.{LocalDate, LocalDateTime}
 
 class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper with Generators {
 
-  private val mode: Mode               = NormalMode
+  private val mode: Mode               = CheckMode
   private val countryCode: CountryCode = CountryCode("COUNTRY CODE")
   private val country: Country         = Country(countryCode, "COUNTRY DESCRIPTION")
 
@@ -47,8 +47,8 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
-          val result = helper.officeOfTransitRow(index, CustomsOfficeList(Nil), mode)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
+          val result = helper.officeOfTransitRow(index, CustomsOfficeList(Nil))
           result mustBe None
         }
 
@@ -56,8 +56,8 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
-          val result = helper.officeOfTransitRow(index, CustomsOfficeList(Nil), mode)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
+          val result = helper.officeOfTransitRow(index, CustomsOfficeList(Nil))
           result mustBe None
         }
       }
@@ -71,8 +71,8 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
             val answers = emptyUserAnswers
               .unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
 
-            val helper = new RouteDetailsCheckYourAnswersHelper(answers)
-            val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(customsOffice)), mode)
+            val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
+            val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(customsOffice)))
 
             val label = lit"${customsOffice.name} (${customsOffice.id})"
 
@@ -108,8 +108,8 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               .unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
               .unsafeSetVal(ArrivalDatesAtOfficePage(index))(arrivalDate)
 
-            val helper = new RouteDetailsCheckYourAnswersHelper(answers)
-            val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(customsOffice)), mode)
+            val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
+            val result = helper.officeOfTransitRow(index, CustomsOfficeList(Seq(customsOffice)))
 
             val label = lit"${customsOffice.name} (${customsOffice.id})"
 
@@ -146,7 +146,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.movementDestinationCountry(CountryList(Nil))
           result mustBe None
         }
@@ -158,7 +158,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(MovementDestinationCountryPage)(countryCode)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.movementDestinationCountry(CountryList(Seq(country)))
 
           val label = msg"movementDestinationCountry.checkYourAnswersLabel"
@@ -170,7 +170,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.MovementDestinationCountryController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-movement-destination-country")
                 )
@@ -183,7 +183,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(MovementDestinationCountryPage)(countryCode)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.movementDestinationCountry(CountryList(Nil))
 
           val label = msg"movementDestinationCountry.checkYourAnswersLabel"
@@ -195,7 +195,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.MovementDestinationCountryController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.MovementDestinationCountryController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-movement-destination-country")
                 )
@@ -214,7 +214,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.destinationCountry(CountryList(Nil))
           result mustBe None
         }
@@ -226,7 +226,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(DestinationCountryPage)(countryCode)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.destinationCountry(CountryList(Seq(country)))
 
           val label = msg"destinationCountry.checkYourAnswersLabel"
@@ -238,7 +238,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.DestinationCountryController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.DestinationCountryController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-destination-country")
                 )
@@ -251,7 +251,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(DestinationCountryPage)(countryCode)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.destinationCountry(CountryList(Nil))
 
           val label = msg"destinationCountry.checkYourAnswersLabel"
@@ -263,7 +263,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.DestinationCountryController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.DestinationCountryController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-destination-country")
                 )
@@ -282,7 +282,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.countryOfDispatch(CountryList(Nil))
           result mustBe None
         }
@@ -296,7 +296,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.countryOfDispatch(CountryList(Seq(country)))
 
           val label = msg"countryOfDispatch.checkYourAnswersLabel"
@@ -308,7 +308,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.CountryOfDispatchController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-country-of-dispatch")
                 )
@@ -321,7 +321,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(CountryOfDispatchPage)(countryOfDispatch)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.countryOfDispatch(CountryList(Nil))
 
           val label = msg"countryOfDispatch.checkYourAnswersLabel"
@@ -333,7 +333,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.CountryOfDispatchController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.CountryOfDispatchController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-country-of-dispatch")
                 )
@@ -352,7 +352,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.destinationOffice(CustomsOfficeList(Nil))
           result mustBe None
         }
@@ -361,7 +361,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(DestinationOfficePage)(customsOffice)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.destinationOffice(CustomsOfficeList(Nil))
 
           result mustBe None
@@ -374,7 +374,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(DestinationOfficePage)(customsOffice)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.destinationOffice(CustomsOfficeList(Seq(customsOffice)))
 
           val label = msg"destinationOffice.checkYourAnswersLabel"
@@ -386,7 +386,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.DestinationOfficeController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.DestinationOfficeController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-destination-office")
                 )
@@ -405,7 +405,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.addAnotherTransitOffice(index, CustomsOfficeList(Nil))
           result mustBe None
         }
@@ -414,7 +414,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.addAnotherTransitOffice(index, CustomsOfficeList(Nil))
 
           result mustBe None
@@ -427,7 +427,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(AddAnotherTransitOfficePage(index))(customsOffice.id)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.addAnotherTransitOffice(index, CustomsOfficeList(Seq(customsOffice)))
 
           val label = msg"addAnotherTransitOffice.checkYourAnswersLabel".withArgs(index.display)
@@ -439,7 +439,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = CheckMode).url,
+                  href = routes.OfficeOfTransitCountryController.onPageLoad(lrn = lrn, index = index, mode = mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-office-of-transit-${index.display}")
                 )
@@ -458,7 +458,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.arrivalDatesAtOffice(index)
           result mustBe None
         }
@@ -474,7 +474,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(ArrivalDatesAtOfficePage(index))(arrivalDate)
 
-          val helper = new RouteDetailsCheckYourAnswersHelper(answers)
+          val helper = new RouteDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.arrivalDatesAtOffice(index)
 
           val label = msg"arrivalDatesAtOffice.checkYourAnswersLabel".withArgs(index.display)
@@ -486,7 +486,7 @@ class RouteDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, CheckMode).url,
+                  href = routes.ArrivalDatesAtOfficeController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-arrival-dates-at-office-of-transit-${index.display}")
                 )

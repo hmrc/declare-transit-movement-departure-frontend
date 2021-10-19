@@ -54,9 +54,10 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
     case TotalPiecesPage(itemIndex, packageIndex) =>
       ua => Some(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, CheckMode))
     case AddMarkPage(itemIndex, packageIndex) => ua => addMarkCheckMode(itemIndex, packageIndex, ua)
-    case DeclareMarkPage(itemIndex, _)        => ua => Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))
-    case AddAnotherPackagePage(itemIndex)     => ua => addAnotherPackageCheckMode(itemIndex, ua)
-    case RemovePackagePage(itemIndex)         => ua => Some(removePackage(itemIndex, CheckMode)(ua))
+    case DeclareMarkPage(itemIndex, _) =>
+      ua => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, CheckMode))
+    case AddAnotherPackagePage(itemIndex) => ua => addAnotherPackageCheckMode(itemIndex, ua)
+    case RemovePackagePage(itemIndex)     => ua => Some(removePackage(itemIndex, CheckMode)(ua))
   }
 
   def packageTypeNormalMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =

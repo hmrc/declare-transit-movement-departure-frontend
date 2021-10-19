@@ -58,7 +58,7 @@ class SafetyAndSecurityNavigator @Inject() () extends Navigator {
     case ConveyanceReferenceNumberPage            => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn))
     case AddPlaceOfUnloadingCodePage              => ua => addPlaceOfUnloadingCodePage(ua, CheckMode)
     case PlaceOfUnloadingCodePage                 => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn))
-    case CountryOfRoutingPage(_)                  => ua => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn))
+    case CountryOfRoutingPage(_)                  => ua => Some(routes.AddAnotherCountryOfRoutingController.onPageLoad(ua.lrn, CheckMode))
     case AddAnotherCountryOfRoutingPage           => ua => addAnotherCountryOfRouting(ua, CheckMode)
     case ConfirmRemoveCountryPage                 => ua => Some(removeCountry(CheckMode)(ua))
 
