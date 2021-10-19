@@ -33,20 +33,24 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.DeclarationSubmissionService
 import uk.gov.hmrc.http.HttpResponse
-
+import uk.gov.hmrc.mongo.lock.MongoLockRepository
+import scala.concurrent.duration.Duration
 import scala.concurrent.Future
 
 class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendererApp with BeforeAndAfterEach with MockitoSugar with JsonMatchers {
 
   private val mockDeclarationSubmissionService = mock[DeclarationSubmissionService]
+  private val mockMongoLockRepository          = mock[MongoLockRepository]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind[DeclarationSubmissionService].toInstance(mockDeclarationSubmissionService))
+      .overrides(bind[MongoLockRepository].toInstance(mockMongoLockRepository))
 
   override def beforeEach: Unit = {
     reset(mockDeclarationSubmissionService)
+    reset(mockMongoLockRepository)
     super.beforeEach
   }
 
@@ -58,6 +62,8 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
+      when(mockMongoLockRepository.takeLock(any[String], any[String], any[Duration])).thenReturn(Future.successful(true))
 
       val appConfig = app.injector.instanceOf[FrontendAppConfig]
 
@@ -83,7 +89,10 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
     "must redirect to 'Departure declaration sent' page on valid submission" in {
       dataRetrievalWithData(emptyUserAnswers)
+
       when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(ACCEPTED, ""))))
+
+      when(mockMongoLockRepository.takeLock(any[String], any[String], any[Duration])).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.DeclarationSummaryController.onSubmit(lrn).url)
 
@@ -101,6 +110,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
       when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(genServerError, ""))))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+      when(mockMongoLockRepository.takeLock(any[String], any[String], any[Duration])).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, routes.DeclarationSummaryController.onSubmit(lrn).url)
 

@@ -28,9 +28,11 @@ import services.DeclarationSubmissionService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.DeclarationSummaryViewModel
-
+import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.DurationInt
 
 class DeclarationSummaryController @Inject() (
   override val messagesApi: MessagesApi,
@@ -41,7 +43,8 @@ class DeclarationSummaryController @Inject() (
   val renderer: Renderer,
   val appConfig: FrontendAppConfig,
   errorHandler: ErrorHandler,
-  submissionService: DeclarationSubmissionService
+  submissionService: DeclarationSubmissionService,
+  mongoLockRepository: MongoLockRepository
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -61,17 +64,36 @@ class DeclarationSummaryController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData).async {
       implicit request =>
-        submissionService.submit(request.userAnswers) flatMap {
 
-          case Right(value) =>
-            value.status match {
-              case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
-              case status if is4xx(status) => errorHandler.onClientError(request, status)
-              case _ =>
-                renderTechnicalDifficultiesPage
-            }
-          case Left(_) => // TODO we can pass this value back to help debug
-            errorHandler.onClientError(request, BAD_REQUEST)
+        val lockId   = request.eoriNumber.toString
+        val owner    = java.util.UUID.randomUUID().toString
+        val duration = 30.seconds
+
+        val guarantees: List[String] = request.userAnswers.data.value.get("guarantees"). match {
+
+          case Some(_)  => ???
+
+          case None => List()
+
         }
+
+        mongoLockRepository.takeLock(lockId, owner, duration).flatMap {
+          taken =>
+            if (taken) submissionService.submit(request.userAnswers) flatMap {
+
+              case Right(value) =>
+                value.status match {
+                  case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
+                  case status if is4xx(status) => errorHandler.onClientError(request, status)
+                  case _                       => renderTechnicalDifficultiesPage
+                }
+
+              case Left(_) => // TODO we can pass this value back to help debug
+                errorHandler.onClientError(request, BAD_REQUEST)
+            }
+            else
+              ??? //redirect here to another page which says something like "rate limit issues, know yourself"
+        }
+
     }
 }

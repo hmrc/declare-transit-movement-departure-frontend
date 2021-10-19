@@ -16,6 +16,7 @@ object AppDependencies {
     "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.0.0-play-28",
     "uk.gov.hmrc"                %% "play-nunjucks"                   % "0.33.0-play-28",
     "uk.gov.hmrc"                %% "play-nunjucks-viewmodel"         % "0.15.0-play-28",
+    "uk.gov.hmrc.mongo"          %% "hmrc-mongo-play-28"              % "0.55.0",
     "org.webjars.npm"             % "govuk-frontend"                  % "3.13.0",
     "org.webjars.npm"             % "hmrc-frontend"                   % "1.35.2",
     "com.typesafe.play"          %% "play-iteratees"                  % "2.6.1",
