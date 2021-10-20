@@ -30,10 +30,11 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.DeclarationSummaryViewModel
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import javax.inject.Inject
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, JsObject, Json, Reads}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
+import scala.util.{Failure, Success, Try}
 
 class DeclarationSummaryController @Inject() (
   override val messagesApi: MessagesApi,
@@ -65,42 +66,85 @@ class DeclarationSummaryController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData).async {
       implicit request =>
+        val jsonGuarantees = Json.parse(request.userAnswers.data.value.get("guarantees").getOrElse("").toString)
 
-        val lockId   = request.eoriNumber.toString
-        val owner    = java.util.UUID.randomUUID().toString
-        val duration = 30.seconds
+        implicit val a: Format[guarantees] = Json.format[guarantees]
+        implicit val b: Reads[guarantees]  = Json.reads[guarantees]
+
+        val mylist = jsonGuarantees.as[List[guarantees]]
 
 
-        println("tojson \n\n\n\n\n\n"+Json.toJson(request.userAnswers)+"\n\n\n\n\n\n")
+        //todo transform mylist into a list of booleans using map/flatmap etc
 
-
-    /*  todo need to bring in a way to get GNR numbers
-
-         val guarantees: List[String] = request.userAnswers.data.value.get("guarantees") match {
-
-          case Some(_)  => ???
-
-          case None => List()
-
-        }*/
-
-        mongoLockRepository.takeLock(lockId, owner, duration).flatMap {
-          taken =>
-            if (taken) submissionService.submit(request.userAnswers) flatMap {
-
-              case Right(value) =>
-                value.status match {
-                  case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
-                  case status if is4xx(status) => errorHandler.onClientError(request, status)
-                  case _                       => renderTechnicalDifficultiesPage
-                }
-
-              case Left(_) => // TODO we can pass this value back to help debug
-                errorHandler.onClientError(request, BAD_REQUEST)
-            }
-            else
-              ??? //redirect here to another page which says something like "rate limit issues, know yourself"
+        val t = mylist.map {
+          x =>
+            val lockId   = (request.userAnswers.eoriNumber.toString + x.guaranteeReference.trim.toLowerCase).hashCode.toString
+            val owner    = java.util.UUID.randomUUID().toString
+            val duration = 3600.seconds
+            val c:Future[Boolean] = mongoLockRepository.takeLock(lockId, owner, duration)
+            c.onComplete(
+              
+            )
         }
 
+        t.foreach(
+          x => println("\n***T****\n\n\n " + x + "\n\n\n")
+        )
+
+        //var flag = returnX(mylist, request.userAnswers.eoriNumber.toString)
+
+        if (f) {
+
+          println(s"****flag\n\n\n\nflag is $flag\n\n\n\n")
+
+          submissionService.submit(request.userAnswers) flatMap {
+
+            case Right(value) =>
+              value.status match {
+                case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
+                case status if is4xx(status) => errorHandler.onClientError(request, status)
+                case _                       => renderTechnicalDifficultiesPage
+              }
+
+            case Left(_) => // TODO we can pass this value back to help debug
+              errorHandler.onClientError(request, BAD_REQUEST)
+          }
+        } else {
+          println(s"****flag\n\n\n\nflag is $flag\n\n\n\n")
+          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+        }
     }
+
+  private def returnX(list: List[guarantees], eroriNumber: String): Boolean = {
+
+    var output = true
+
+    list.foreach {
+      guarantee =>
+        val lockId   = (eroriNumber + guarantee.guaranteeReference.trim.toLowerCase).hashCode.toString
+        val owner    = java.util.UUID.randomUUID().toString
+        val duration = 3600.seconds
+
+        mongoLockRepository.takeLock(lockId, owner, duration).onComplete {
+          case Success(value) =>
+            value match {
+              case false => output = false
+              case true  =>
+            }
+
+          case Failure(_) => output = false
+
+        }
+    }
+
+    output
+  }
+
+  case class guarantees(
+    guaranteeType: String,
+    guaranteeReference: String,
+    liabilityAmount: String,
+    accessCode: String
+  )
+
 }
