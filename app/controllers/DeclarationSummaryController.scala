@@ -69,76 +69,51 @@ class DeclarationSummaryController @Inject() (
         val jsonGuarantees = Json.parse(request.userAnswers.data.value.get("guarantees").getOrElse("").toString)
 
         implicit val a: Format[guarantees] = Json.format[guarantees]
-        implicit val b: Reads[guarantees]  = Json.reads[guarantees]
+        implicit val b: Reads[guarantees] = Json.reads[guarantees]
 
         val mylist = jsonGuarantees.as[List[guarantees]]
-
-
-        //todo transform mylist into a list of booleans using map/flatmap etc
-
-        val t = mylist.map {
-          x =>
-            val lockId   = (request.userAnswers.eoriNumber.toString + x.guaranteeReference.trim.toLowerCase).hashCode.toString
-            val owner    = java.util.UUID.randomUUID().toString
-            val duration = 3600.seconds
-            val c:Future[Boolean] = mongoLockRepository.takeLock(lockId, owner, duration)
-            c.onComplete(
-              
-            )
-        }
-
-        t.foreach(
-          x => println("\n***T****\n\n\n " + x + "\n\n\n")
-        )
-
-        //var flag = returnX(mylist, request.userAnswers.eoriNumber.toString)
-
-        if (f) {
-
-          println(s"****flag\n\n\n\nflag is $flag\n\n\n\n")
-
-          submissionService.submit(request.userAnswers) flatMap {
-
-            case Right(value) =>
-              value.status match {
-                case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
-                case status if is4xx(status) => errorHandler.onClientError(request, status)
-                case _                       => renderTechnicalDifficultiesPage
-              }
-
-            case Left(_) => // TODO we can pass this value back to help debug
-              errorHandler.onClientError(request, BAD_REQUEST)
-          }
-        } else {
-          println(s"****flag\n\n\n\nflag is $flag\n\n\n\n")
-          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-        }
-    }
-
-  private def returnX(list: List[guarantees], eroriNumber: String): Boolean = {
-
-    var output = true
-
-    list.foreach {
-      guarantee =>
-        val lockId   = (eroriNumber + guarantee.guaranteeReference.trim.toLowerCase).hashCode.toString
-        val owner    = java.util.UUID.randomUUID().toString
+        val owner = java.util.UUID.randomUUID().toString
         val duration = 3600.seconds
 
-        mongoLockRepository.takeLock(lockId, owner, duration).onComplete {
-          case Success(value) =>
-            value match {
-              case false => output = false
-              case true  =>
+        try{
+
+          mylist.foreach {
+          x =>
+            mongoLockRepository
+              .takeLock((request.userAnswers.eoriNumber.toString + x.guaranteeReference.trim.toLowerCase).hashCode.toString, owner, duration)
+              .flatMap {
+                taken =>
+                  if (taken) {
+                    println(s"\n\n\n\n\n\n\n\ntaken!!!!!$taken\n\n\n\n\n\n")
+                    Future.successful(true)
+                  } else {
+                    println(s"\n\n\n\n\n\n\n\ntaken!!!!!$taken\n\n\n\n\n\n")
+                    throw new Exception("Lock already taken - rate limit issues")
+                  }
+              }
+        }
+
+       }catch {
+          case e: Exception =>
+            println(s"\n\n\n\n\n\n\n${e.getMessage}\n\n\n\n\n\n\n")
+            Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+        }
+
+        submissionService.submit(request.userAnswers) flatMap {
+
+          case Right(value) =>
+            println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
+            value.status match {
+              case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
+              case status if is4xx(status) => errorHandler.onClientError(request, status)
+              case _                       => renderTechnicalDifficultiesPage
             }
 
-          case Failure(_) => output = false
-
+          case Left(_) => // TODO we can pass this value back to help debug
+            println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
+            errorHandler.onClientError(request, BAD_REQUEST)
         }
     }
-
-    output
-  }
 
   case class guarantees(
     guaranteeType: String,
