@@ -120,6 +120,10 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
     }
 
+    "must ??? when lock is not taken " in {
+      ???
+    }
+
   }
 
 }

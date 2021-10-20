@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.DeclarationSummaryViewModel
 import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import javax.inject.Inject
+import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
@@ -69,13 +70,19 @@ class DeclarationSummaryController @Inject() (
         val owner    = java.util.UUID.randomUUID().toString
         val duration = 30.seconds
 
-        val guarantees: List[String] = request.userAnswers.data.value.get("guarantees"). match {
+
+        println("tojson \n\n\n\n\n\n"+Json.toJson(request.userAnswers)+"\n\n\n\n\n\n")
+
+
+    /*  todo need to bring in a way to get GNR numbers
+
+         val guarantees: List[String] = request.userAnswers.data.value.get("guarantees") match {
 
           case Some(_)  => ???
 
           case None => List()
 
-        }
+        }*/
 
         mongoLockRepository.takeLock(lockId, owner, duration).flatMap {
           taken =>
