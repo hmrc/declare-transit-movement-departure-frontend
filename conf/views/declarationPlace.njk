@@ -32,26 +32,36 @@
 
           {{ csrf() | safe }}
 
-          <h1 class="govuk-heading-xl">
-            {{ messages("declarationPlace.heading") }}
+
+
+        <div class="govuk-form-group {%- if form.value.error %} govuk-form-group--error{% endif %} ">
+
+          <h1 class="govuk-label-wrapper">
+              <label class="govuk-label govuk-label--xl" for="postcode">
+                    {{ messages("declarationPlace.heading") }}
+              </label>
           </h1>
 
-          <p class = "govuk-body"> {{ messages('declarationPlace.paragraph') }} </p>
-          <p class = "govuk-label" > {{ messages('postcode') }} </p>
+        <p class = "govuk-body"> {{ messages('declarationPlace.paragraph') }} </p>
+        <p class = "govuk-label" > {{ messages('postcode') }} </p>
 
-          {{ govukInput({
-             label: {
-               text: messages('transportChargesPaymentMethod.heading'),
-               classes: "govuk-visually-hidden"
-             },
-            id: "value",
-            name: "value",
-            value: form.value.value,
-            hint: {
-               text: messages('postcodeExample')
-            },
-            errorMessage: form.value.error
-          }) }}
+        <div id="postcode-hint" class="govuk-hint">
+                {{ messages('postcodeExample') }}
+        </div>
+
+            {%- if form.value.error %}
+              <span id="declaration-place-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">{{ messages('error.title.prefix') }}</span> {{ form.value.error.text }}
+                  </span>
+            {% endif %}
+
+            <input class="govuk-input {%- if form.value.error %} govuk-input--error{% endif %}"
+            id="postcode"
+            name="value"
+            type="text"
+            aria-describedby="postcode-hint"
+            {%- if form.value.value %} value="{{ form.value.value}}"{% endif %}>
+         </div>
 
           {{ govukButton({
             text: messages("site.continue"),

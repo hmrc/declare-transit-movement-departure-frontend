@@ -16,7 +16,7 @@
 
 package viewModels
 
-import models.{Index, UserAnswers}
+import models.{CheckMode, Index, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList
 import utils.GuaranteeDetailsCheckYourAnswersHelper
 import viewModels.sections.Section
@@ -27,7 +27,7 @@ object GuaranteeDetailsCheckYourAnswersViewModel {
 
   def apply(userAnswers: UserAnswers, index: Index): GuaranteeDetailsCheckYourAnswersViewModel = {
 
-    val checkYourAnswersHelper                      = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers)
+    val checkYourAnswersHelper                      = new GuaranteeDetailsCheckYourAnswersHelper(userAnswers, CheckMode)
     val guaranteeType: Option[SummaryList.Row]      = checkYourAnswersHelper.guaranteeType(index)
     val guaranteeReference: Option[SummaryList.Row] = checkYourAnswersHelper.guaranteeReference(index)
     val otherReference: Option[SummaryList.Row]     = checkYourAnswersHelper.otherReference(index)

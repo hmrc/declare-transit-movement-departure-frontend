@@ -30,10 +30,10 @@ POST       /:lrn/route/:index/add-another-office-of-transit                     
 GET        /:lrn/route/:index/change-add-another-office-of-transit                  controllers.routeDetails.AddAnotherTransitOfficeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
 POST       /:lrn/route/:index/change-add-another-office-of-transit                 controllers.routeDetails.AddAnotherTransitOfficeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
 
-GET        /:lrn/route/:index/arrival-times-at-office-of-transit                  controllers.routeDetails.ArrivalTimesAtOfficeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
-POST       /:lrn/route/:index/arrival-times-at-office-of-transit                  controllers.routeDetails.ArrivalTimesAtOfficeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
-GET        /:lrn/route/:index/change-arrival-times-at-office-of-transit           controllers.routeDetails.ArrivalTimesAtOfficeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
-POST       /:lrn/route/:index/change-arrival-times-at-office-of-transit           controllers.routeDetails.ArrivalTimesAtOfficeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+GET        /:lrn/route/:index/arrival-dates-at-office-of-transit                  controllers.routeDetails.ArrivalDatesAtOfficeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:lrn/route/:index/arrival-dates-at-office-of-transit                  controllers.routeDetails.ArrivalDatesAtOfficeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:lrn/route/:index/change-arrival-dates-at-office-of-transit           controllers.routeDetails.ArrivalDatesAtOfficeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:lrn/route/:index/change-arrival-dates-at-office-of-transit           controllers.routeDetails.ArrivalDatesAtOfficeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = CheckMode)
 
 GET        /:lrn/route/:index/confirm-remove-office-of-transit                         controllers.routeDetails.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
 POST       /:lrn/route/:index/confirm-remove-office-of-transit                         controllers.routeDetails.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)

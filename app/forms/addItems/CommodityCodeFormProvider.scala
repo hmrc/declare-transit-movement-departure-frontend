@@ -20,8 +20,6 @@ import forms.mappings.Mappings
 import models.Index
 import models.domain.StringFieldRegex.{commodityCodeCharactersRegex, commodityCodeFormatRegex}
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class CommodityCodeFormProvider @Inject() extends Mappings {
@@ -30,7 +28,7 @@ class CommodityCodeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("commodityCode.error.required", Seq(index.display))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(8, "commodityCode.error.length", index.display),
             regexp(commodityCodeCharactersRegex, "commodityCode.errors.invalidCharacters", index.display),
             regexp(commodityCodeFormatRegex, "commodityCode.errors.invalidFormat", index.display)

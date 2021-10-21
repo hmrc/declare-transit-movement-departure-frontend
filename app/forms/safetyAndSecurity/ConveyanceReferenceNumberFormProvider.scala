@@ -19,8 +19,6 @@ package forms.safetyAndSecurity
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class ConveyanceReferenceNumberFormProvider @Inject() extends Mappings {
@@ -31,7 +29,7 @@ class ConveyanceReferenceNumberFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("conveyanceReferenceNumber.error.required")
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             minLength(minLength, "conveyanceReferenceNumber.error.minLength", minLength),
             maxLength(maxLength, "conveyanceReferenceNumber.error.maxLength", maxLength),
             regexp(alphaNumericRegex, "conveyanceReferenceNumber.error.invalid")

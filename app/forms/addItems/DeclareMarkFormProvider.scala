@@ -19,8 +19,6 @@ package forms.addItems
 import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class DeclareMarkFormProvider @Inject() extends Mappings {
@@ -32,7 +30,7 @@ class DeclareMarkFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("declareMark.error.required", Seq(packageIndex))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(maxLength, "declareMark.error.length", packageIndex, maxLength),
             regexp(regex, "declareMark.error.format", packageIndex),
             emptyNumberOfPackages(totalPackages, packageIndex)

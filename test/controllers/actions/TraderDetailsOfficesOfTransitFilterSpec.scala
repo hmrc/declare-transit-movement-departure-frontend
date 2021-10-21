@@ -129,6 +129,21 @@ class TraderDetailsOfficesOfTransitFilterSpec extends SpecBase with UserAnswersS
         contentAsString(result) mustBe "fake ok result value"
       }
 
+      "and there is previous data, and the previous loops are all complete, must return OK" in {
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(0)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(0)))("Test")
+          .unsafeSetVal(OfficeOfTransitCountryPage(Index(1)))(CountryCode("GB"))
+          .unsafeSetVal(AddAnotherTransitOfficePage(Index(1)))("Test")
+
+        val actionFilter = new TraderDetailsOfficesOfTransitFilter(Index(0))
+        val dataRequest  = DataRequest(fakeRequest, userAnswers.eoriNumber, userAnswers)
+        val result       = actionFilter.invokeBlock(dataRequest, fakeOkResult)
+
+        status(result) mustBe OK
+        contentAsString(result) mustBe "fake ok result value"
+      }
+
       "and the index is not the next valid index, and the previous loops are all complete, must go to Add Transit Office page" in {
         val userAnswers = emptyUserAnswers
           .unsafeSetVal(AddSecurityDetailsPage)(false)

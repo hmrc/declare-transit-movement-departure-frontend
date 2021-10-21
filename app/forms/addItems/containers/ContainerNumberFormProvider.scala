@@ -19,8 +19,6 @@ package forms.addItems.containers
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class ContainerNumberFormProvider @Inject() extends Mappings {
@@ -31,7 +29,7 @@ class ContainerNumberFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("containerNumber.error.required")
         .verifying(
-          StopOnFirstFail(
+          forms.StopOnFirstFail(
             maxLength(containerNumberMaxLength, "containerNumber.error.length", containerNumberMaxLength),
             regexp(stringFieldRegex, "containerNumber.error.invalid")
           )

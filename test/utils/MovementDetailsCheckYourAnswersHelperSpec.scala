@@ -19,12 +19,14 @@ package utils
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.movementDetails.routes
-import models.{CheckMode, RepresentativeCapacity}
+import models.{CheckMode, Mode, RepresentativeCapacity}
 import pages.generalInformation._
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 
 class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper {
+
+  val mode: Mode = CheckMode
 
   "MovementDetailsCheckYourAnswersHelper" - {
 
@@ -35,7 +37,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.preLodgeDeclarationPage
           result mustBe None
         }
@@ -46,7 +48,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers.unsafeSetVal(PreLodgeDeclarationPage)(true)
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.preLodgeDeclarationPage
 
           val label = msg"preLodgeDeclaration.checkYourAnswersLabel"
@@ -58,7 +60,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.PreLodgeDeclarationController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.PreLodgeDeclarationController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-pre-lodge-declaration")
                 )
@@ -78,7 +80,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.representativeCapacity
           result mustBe None
         }
@@ -89,7 +91,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers.unsafeSetVal(RepresentativeCapacityPage)(representativeCapacity)
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.representativeCapacity
 
           val label = msg"representativeCapacity.checkYourAnswersLabel"
@@ -101,7 +103,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.RepresentativeCapacityController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.RepresentativeCapacityController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-representative-capacity")
                 )
@@ -121,7 +123,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.representativeName
           result mustBe None
         }
@@ -132,7 +134,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers.unsafeSetVal(RepresentativeNamePage)(representativeName)
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.representativeName
 
           val label = msg"representativeName.checkYourAnswersLabel"
@@ -144,7 +146,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.RepresentativeNameController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.RepresentativeNameController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-representative-name")
                 )
@@ -162,7 +164,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.containersUsedPage
           result mustBe None
         }
@@ -173,7 +175,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers.unsafeSetVal(ContainersUsedPage)(true)
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.containersUsedPage
 
           val label = msg"containersUsed.checkYourAnswersLabel"
@@ -185,7 +187,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.ContainersUsedPageController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.ContainersUsedPageController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-containers-used")
                 )
@@ -203,7 +205,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.declarationForSomeoneElse
           result mustBe None
         }
@@ -214,7 +216,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers.unsafeSetVal(DeclarationForSomeoneElsePage)(true)
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.declarationForSomeoneElse
 
           val label = msg"declarationForSomeoneElse.checkYourAnswersLabel"
@@ -226,7 +228,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-declaration-for-someone-else")
                 )
@@ -246,7 +248,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.declarationPlace
           result mustBe None
         }
@@ -257,7 +259,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
 
           val answers = emptyUserAnswers.unsafeSetVal(DeclarationPlacePage)(declarationPlace)
 
-          val helper = new MovementDetailsCheckYourAnswersHelper(answers)
+          val helper = new MovementDetailsCheckYourAnswersHelper(answers, mode)
           val result = helper.declarationPlace
 
           val label = msg"declarationPlace.checkYourAnswersLabel"
@@ -269,7 +271,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.DeclarationPlaceController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.DeclarationPlaceController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-declaration-place")
                 )

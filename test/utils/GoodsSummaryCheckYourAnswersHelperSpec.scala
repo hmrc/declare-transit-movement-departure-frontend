@@ -19,7 +19,7 @@ package utils
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.goodsSummary.routes
-import models.CheckMode
+import models.{CheckMode, Mode}
 import pages._
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
@@ -27,6 +27,8 @@ import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import java.time.LocalDate
 
 class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper {
+
+  val mode: Mode = CheckMode
 
   private val location: String = "LOCATION"
 
@@ -39,7 +41,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.agreedLocationOfGoods
           result mustBe None
         }
@@ -50,7 +52,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(AgreedLocationOfGoodsPage)(location)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.agreedLocationOfGoods
 
           val label = msg"agreedLocationOfGoods.checkYourAnswersLabel"
@@ -62,7 +64,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AgreedLocationOfGoodsController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -79,7 +81,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.loadingPlace
           result mustBe None
         }
@@ -90,7 +92,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(LoadingPlacePage)(location)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.loadingPlace
 
           val label = msg"loadingPlace.checkYourAnswersLabel"
@@ -102,7 +104,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.routes.LoadingPlaceController.onPageLoad(lrn, CheckMode).url,
+                  href = controllers.routes.LoadingPlaceController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -119,7 +121,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.addAgreedLocationOfGoods
           result mustBe None
         }
@@ -130,7 +132,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(AddAgreedLocationOfGoodsPage)(true)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.addAgreedLocationOfGoods
 
           val label = msg"addAgreedLocationOfGoods.checkYourAnswersLabel"
@@ -142,7 +144,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddAgreedLocationOfGoodsController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -159,7 +161,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.sealsInformation
           result mustBe None
         }
@@ -170,7 +172,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(SealsInformationPage)(true)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.sealsInformation
 
           val label = msg"sealsInformation.checkYourAnswersLabel"
@@ -182,7 +184,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.SealsInformationController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.SealsInformationController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -202,7 +204,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.controlResultDateLimit
           result mustBe None
         }
@@ -213,7 +215,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(ControlResultDateLimitPage)(dateLimit)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.controlResultDateLimit
 
           val label = msg"controlResultDateLimit.checkYourAnswersLabel"
@@ -225,7 +227,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.ControlResultDateLimitController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.ControlResultDateLimitController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-control-result-date-limit")
                 )
@@ -243,7 +245,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.addSeals
           result mustBe None
         }
@@ -254,7 +256,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(AddSealsPage)(true)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.addSeals
 
           val label = msg"addSeals.checkYourAnswersLabel"
@@ -266,7 +268,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddSealsController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddSealsController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-add-seals")
                 )
@@ -284,7 +286,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.customsApprovedLocation
           result mustBe None
         }
@@ -295,7 +297,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(CustomsApprovedLocationPage)(location)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.customsApprovedLocation
 
           val label = msg"customsApprovedLocation.checkYourAnswersLabel"
@@ -307,7 +309,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.CustomsApprovedLocationController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.CustomsApprovedLocationController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-customs-approved-location")
                 )
@@ -325,7 +327,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.addCustomsApprovedLocation
           result mustBe None
         }
@@ -336,7 +338,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(AddCustomsApprovedLocationPage)(true)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.addCustomsApprovedLocation
 
           val label = msg"addCustomsApprovedLocation.checkYourAnswersLabel"
@@ -348,7 +350,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddCustomsApprovedLocationController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddCustomsApprovedLocationController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-add-customs-approved-location")
                 )
@@ -366,7 +368,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.authorisedLocationCode
           result mustBe None
         }
@@ -377,7 +379,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
 
           val answers = emptyUserAnswers.unsafeSetVal(AuthorisedLocationCodePage)(location)
 
-          val helper = new GoodsSummaryCheckYourAnswersHelper(answers)
+          val helper = new GoodsSummaryCheckYourAnswersHelper(answers, mode)
           val result = helper.authorisedLocationCode
 
           val label = msg"authorisedLocationCode.checkYourAnswersLabel"
@@ -389,7 +391,7 @@ class GoodsSummaryCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSp
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AuthorisedLocationCodeController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AuthorisedLocationCodeController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-authorised-location-code")
                 )

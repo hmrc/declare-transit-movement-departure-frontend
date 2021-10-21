@@ -89,7 +89,7 @@ class AddAnotherContainerController @Inject() (
     }
 
   private def renderPage(itemIndex: Index, mode: Mode, form: Form[_])(implicit request: DataRequest[AnyContent]): Future[Html] = {
-    val cyaHelper          = new ContainersCheckYourAnswersHelper(request.userAnswers)
+    val cyaHelper          = new ContainersCheckYourAnswersHelper(request.userAnswers, mode)
     val numberOfContainers = request.userAnswers.get(DeriveNumberOfContainers(itemIndex)).getOrElse(0)
     val indexList          = List.range(0, numberOfContainers).map(Index(_))
     val containerRows = indexList.map {

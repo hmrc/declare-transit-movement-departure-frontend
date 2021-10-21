@@ -19,8 +19,6 @@ package forms.addItems.traderDetails
 import forms.mappings.Mappings
 import models.Index
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class TraderDetailsConsigneeNameFormProvider @Inject() extends Mappings {
@@ -32,7 +30,7 @@ class TraderDetailsConsigneeNameFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("traderDetailsConsigneeName.error.required", Seq(index.display))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(maxLengthConsigneeName, "traderDetailsConsigneeName.error.length"),
             regexp(consigneeNameRegex, "traderDetailsConsigneeName.error.invalid", index.display)
           )

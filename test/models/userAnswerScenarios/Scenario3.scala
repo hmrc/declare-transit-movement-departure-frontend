@@ -100,11 +100,11 @@ case object Scenario3 extends UserAnswerScenario {
     .unsafeSetVal(pages.routeDetails.DestinationOfficePage)(CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None))
     .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
     .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+    .unsafeSetVal(pages.routeDetails.ArrivalDatesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 12, 0))
     .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(true)
     .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
     .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+    .unsafeSetVal(pages.routeDetails.ArrivalDatesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 7, 12, 0))
     .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(false)
     /*
      * Transport Details
@@ -163,11 +163,9 @@ case object Scenario3 extends UserAnswerScenario {
     .unsafeSetVal(pages.IsCommodityCodeKnownPage(firstGoodItem))(true)
     .unsafeSetVal(pages.addItems.CommodityCodePage(firstGoodItem))("ComoCode1")
     .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
-    .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(0)))(false)
     .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(0)))(false)
     .unsafeSetVal(pages.addItems.AddAnotherPackagePage(firstGoodItem))(true)
     .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(1)))(PackageType(PackageType.unpackedCodes.head, "GD1PKG2"))
-    .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(1)))(true)
     .unsafeSetVal(pages.addItems.HowManyPackagesPage(firstGoodItem, Index(1)))(23)
     .unsafeSetVal(pages.addItems.TotalPiecesPage(firstGoodItem, Index(1)))(12)
     .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(1)))(true)
@@ -240,7 +238,7 @@ case object Scenario3 extends UserAnswerScenario {
     CountryOfDispatch(CountryCode("SC"), false),
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
-    Some(NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 21, 12))), List.empty))
+    Some(NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 7, 12, 0))), List.empty))
   )
 
   private val movementDetails = NormalMovementDetails(

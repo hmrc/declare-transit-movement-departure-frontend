@@ -34,8 +34,7 @@ case class PackageTypePage(itemIndex: Index, packageIndex: Index) extends Questi
     value match {
       case Some(_) =>
         for {
-          ua <- userAnswers.remove(DeclareNumberOfPackagesPage(itemIndex, packageIndex))
-          ua <- ua.remove(HowManyPackagesPage(itemIndex, packageIndex))
+          ua <- userAnswers.remove(HowManyPackagesPage(itemIndex, packageIndex))
           ua <- ua.remove(TotalPiecesPage(itemIndex, packageIndex))
           ua <- ua.remove(AddMarkPage(itemIndex, packageIndex))
           ua <- ua.remove(DeclareMarkPage(itemIndex, packageIndex))

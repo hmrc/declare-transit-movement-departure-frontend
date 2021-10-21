@@ -21,8 +21,6 @@ import forms.mappings.Mappings
 import models.Index
 import models.domain.StringFieldRegex.{eoriNumberRegex, stringFieldRegex}
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class TraderDetailsConsigneeEoriNumberFormProvider @Inject() extends Mappings {
@@ -31,7 +29,7 @@ class TraderDetailsConsigneeEoriNumberFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("traderDetailsConsigneeEoriNumber.error.required", Seq(index.display))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(maxLengthEoriNumber, "traderDetailsConsigneeEoriNumber.error.length"),
             regexp(stringFieldRegex, "traderDetailsConsigneeEoriNumber.error.invalid"),
             regexp(eoriNumberRegex, "traderDetailsConsigneeEoriNumber.error.invalidFormat")

@@ -19,6 +19,8 @@ import models.reference._
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.viewmodels.{Content, Html, MessageInterpolators, Text}
 
+import java.time.LocalDateTime
+
 package object utils {
   val defaultOption: JsObject = Json.obj("value" -> "", "text" -> "Select")
 
@@ -185,5 +187,7 @@ package object utils {
   def formatAsSelf[T](answer: T): T = answer
 
   def formatAsMasked[T]: T => Content = _ => lit"••••"
+
+  def formatAsDate: LocalDateTime => String = dateTime => Format.dateFormattedDDMMYYYY(dateTime.toLocalDate).toLowerCase
 
 }

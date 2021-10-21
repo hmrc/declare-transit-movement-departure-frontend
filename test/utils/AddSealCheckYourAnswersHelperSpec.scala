@@ -19,14 +19,16 @@ package utils
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.goodsSummary.routes._
-import models.CheckMode
 import models.domain.SealDomain
+import models.{CheckMode, Mode}
 import pages.SealIdDetailsPage
 import queries.SealsQuery
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.{Html, MessageInterpolators}
 
 class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper {
+
+  val mode: Mode = CheckMode
 
   "AddSealCheckYourAnswersHelper" - {
 
@@ -39,7 +41,7 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
 
           val answers = emptyUserAnswers
 
-          val helper = new AddSealCheckYourAnswersHelper(answers)
+          val helper = new AddSealCheckYourAnswersHelper(answers, mode)
           val result = helper.sealRow(sealIndex)
           result mustBe None
         }
@@ -50,7 +52,7 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
 
           val answers = emptyUserAnswers.unsafeSetVal(SealIdDetailsPage(sealIndex))(sealDomain)
 
-          val helper = new AddSealCheckYourAnswersHelper(answers)
+          val helper = new AddSealCheckYourAnswersHelper(answers, mode)
           val result = helper.sealRow(sealIndex)
 
           val label = lit"${sealDomain.numberOrMark}"
@@ -62,13 +64,13 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = SealIdDetailsController.onPageLoad(lrn, sealIndex, CheckMode).url,
+                  href = SealIdDetailsController.onPageLoad(lrn, sealIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-seal-${sealIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
-                  href = ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, CheckMode).url,
+                  href = ConfirmRemoveSealController.onPageLoad(lrn, sealIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"remove-seal-${sealIndex.display}")
                 )
@@ -86,7 +88,7 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
 
           val answers = emptyUserAnswers
 
-          val helper = new AddSealCheckYourAnswersHelper(answers)
+          val helper = new AddSealCheckYourAnswersHelper(answers, mode)
           val result = helper.sealsRow()
           result mustBe None
         }
@@ -101,7 +103,7 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
 
             val answers = emptyUserAnswers.unsafeSetVal(SealsQuery())(Seq(sealDomain))
 
-            val helper = new AddSealCheckYourAnswersHelper(answers)
+            val helper = new AddSealCheckYourAnswersHelper(answers, mode)
             val result = helper.sealsRow()
 
             val label = msg"sealIdDetails.singular.checkYourAnswersLabel"
@@ -113,7 +115,7 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = SealsInformationController.onPageLoad(lrn, CheckMode).url,
+                    href = SealsInformationController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-seal")
                   )
@@ -129,7 +131,7 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
 
             val answers = emptyUserAnswers.unsafeSetVal(SealsQuery())(Seq(sealDomain1, sealDomain2))
 
-            val helper = new AddSealCheckYourAnswersHelper(answers)
+            val helper = new AddSealCheckYourAnswersHelper(answers, mode)
             val result = helper.sealsRow()
 
             val label = msg"sealIdDetails.plural.checkYourAnswersLabel"
@@ -141,7 +143,7 @@ class AddSealCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHel
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = SealsInformationController.onPageLoad(lrn, CheckMode).url,
+                    href = SealsInformationController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> "change-seals")
                   )

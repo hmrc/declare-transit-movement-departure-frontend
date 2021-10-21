@@ -26,14 +26,14 @@ import pages.routeDetails.DestinationOfficePage
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
   def defaultAmount(index: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
     page = DefaultAmountPage(index),
     formatAnswer = formatAsYesOrNo,
     prefix = "defaultAmount",
     id = Some("change-default-amount"),
-    call = routes.DefaultAmountController.onPageLoad(lrn, index, CheckMode)
+    call = routes.DefaultAmountController.onPageLoad(lrn, index, mode)
   )
 
   def guaranteeType(index: Index): Option[Row] =
@@ -46,7 +46,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
           formatAnswer = guaranteeType => msg"guaranteeType.${GuaranteeType.getId(guaranteeType.toString)}",
           prefix = "guaranteeType",
           id = Some("change-guarantee-type"),
-          call = routes.GuaranteeTypeController.onPageLoad(lrn, index, CheckMode)
+          call = routes.GuaranteeTypeController.onPageLoad(lrn, index, mode)
         )
     }
 
@@ -55,7 +55,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     formatAnswer = formatAsMasked,
     prefix = "accessCode",
     id = Some("change-access-code"),
-    call = routes.AccessCodeController.onPageLoad(lrn, index, CheckMode)
+    call = routes.AccessCodeController.onPageLoad(lrn, index, mode)
   )
 
   def otherReference(index: Index): Option[Row] = getAnswerAndBuildRow[String](
@@ -63,7 +63,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     formatAnswer = formatAsLiteral,
     prefix = "otherReference",
     id = Some("change-other-reference"),
-    call = routes.OtherReferenceController.onPageLoad(lrn, index, CheckMode)
+    call = routes.OtherReferenceController.onPageLoad(lrn, index, mode)
   )
 
   def tirLiabilityAmount(index: Index): Option[Row] =
@@ -74,7 +74,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
           formatAnswer = formatAsLiteral,
           prefix = "liabilityAmount",
           id = Some("change-liability-amount"),
-          call = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode)
+          call = routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, mode)
         )
       case _ =>
         None
@@ -89,9 +89,9 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
         }
 
         val call = if (officeOfDeparture.countryId.code == "GB" && destinationOffice.countryId.code == "GB") {
-          routes.LiabilityAmountController.onPageLoad(lrn, index, CheckMode)
+          routes.LiabilityAmountController.onPageLoad(lrn, index, mode)
         } else {
-          routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, CheckMode)
+          routes.OtherReferenceLiabilityAmountController.onPageLoad(lrn, index, mode)
         }
 
         Some(
@@ -112,7 +112,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     formatAnswer = formatAsLiteral,
     prefix = "guaranteeReference",
     id = Some("change-guarantee-reference"),
-    call = routes.GuaranteeReferenceController.onPageLoad(lrn, index, CheckMode)
+    call = routes.GuaranteeReferenceController.onPageLoad(lrn, index, mode)
   )
 
   def tirGuaranteeReference(index: Index): Option[Row] = getAnswerAndBuildRow[String](
@@ -120,7 +120,7 @@ class GuaranteeDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     formatAnswer = formatAsLiteral,
     prefix = "tirGuaranteeReference",
     id = Some("change-tir-guarantee-reference"),
-    call = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, CheckMode)
+    call = routes.TIRGuaranteeReferenceController.onPageLoad(lrn, index, mode)
   )
 
   def guaranteeRow(index: Index, isTir: Boolean): Option[Row] =

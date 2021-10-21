@@ -17,7 +17,7 @@
 package viewModels
 
 import derivable.DeriveNumberOfSeals
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList
 import utils.{AddSealCheckYourAnswersHelper, GoodsSummaryCheckYourAnswersHelper}
 import viewModels.sections.Section
@@ -28,8 +28,8 @@ object GoodsSummaryCheckYourAnswersViewModel {
 
   def apply(userAnswers: UserAnswers): GoodsSummaryCheckYourAnswersViewModel = {
 
-    val goodsSummaryCheckYourAnswersHelper = new GoodsSummaryCheckYourAnswersHelper(userAnswers)
-    val addSealHelper                      = new AddSealCheckYourAnswersHelper(userAnswers)
+    val goodsSummaryCheckYourAnswersHelper = new GoodsSummaryCheckYourAnswersHelper(userAnswers, CheckMode)
+    val addSealHelper                      = new AddSealCheckYourAnswersHelper(userAnswers, CheckMode)
 
     val authorisedLocationCode: Option[SummaryList.Row]     = goodsSummaryCheckYourAnswersHelper.authorisedLocationCode
     val controlResultDateLimit: Option[SummaryList.Row]     = goodsSummaryCheckYourAnswersHelper.controlResultDateLimit

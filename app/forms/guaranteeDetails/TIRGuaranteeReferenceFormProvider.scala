@@ -20,8 +20,6 @@ import forms.Constants.tirGuaranteeReferenceMaxLength
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class TIRGuaranteeReferenceFormProvider @Inject() extends Mappings {
@@ -30,7 +28,7 @@ class TIRGuaranteeReferenceFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("tirGuaranteeReference.error.required")
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(tirGuaranteeReferenceMaxLength, "tirGuaranteeReference.error.length"),
             regexp(stringFieldRegex, "tirGuaranteeReference.error.invalid")
           )

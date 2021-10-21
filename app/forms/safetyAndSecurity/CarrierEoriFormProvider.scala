@@ -20,8 +20,6 @@ import forms.Constants.maxLengthEoriNumber
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.{alphaNumericRegex, eoriNumberRegex}
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class CarrierEoriFormProvider @Inject() extends Mappings {
@@ -30,7 +28,7 @@ class CarrierEoriFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("carrierEori.error.required")
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(maxLengthEoriNumber, "carrierEori.error.length"),
             regexp(alphaNumericRegex, "carrierEori.error.invalidCharacters"),
             regexp(eoriNumberRegex, "carrierEori.error.invalidFormat")

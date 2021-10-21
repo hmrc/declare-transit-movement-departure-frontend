@@ -20,8 +20,6 @@ import forms.mappings.Mappings
 import models.Index
 import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class DocumentReferenceFormProvider @Inject() extends Mappings {
@@ -32,7 +30,7 @@ class DocumentReferenceFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("documentReference.error.required")
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(maxLength, "documentReference.error.length"),
             regexp(stringFieldRegex, "documentReference.error.invalidCharacters")
           )

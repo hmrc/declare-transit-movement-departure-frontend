@@ -23,7 +23,7 @@ import derivable.DeriveNumberOfOfficeOfTransits
 import models.journeyDomain.RouteDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
-import models.{DeclarationType, Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
+import models.{CheckMode, DeclarationType, Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
 import pages.DeclarationTypePage
 import pages.routeDetails.MovementDestinationCountryPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -64,13 +64,11 @@ class RouteDetailsCheckYourAnswersController @Inject() (
               }
 
               val json = Json.obj(
-                "lrn"      -> lrn,
-                "sections" -> Json.toJson(sections),
-                "addOfficesOfTransitUrl" -> routes.OfficeOfTransitCountryController
-                  .onPageLoad(lrn, Index(request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)), NormalMode)
-                  .url,
-                "nextPageUrl"          -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
-                "showOfficesOfTransit" -> decType
+                "lrn"                    -> lrn,
+                "sections"               -> Json.toJson(sections),
+                "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url,
+                "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
+                "showOfficesOfTransit"   -> decType
               )
 
               ValidateReaderLogger[RouteDetails](request.userAnswers)
@@ -84,7 +82,7 @@ class RouteDetailsCheckYourAnswersController @Inject() (
   }
 
   private def createSections(countryCode: CountryCode)(implicit hc: HeaderCarrier, request: DataRequest[AnyContent]): Future[Seq[Section]] = {
-    val checkYourAnswersHelper = new RouteDetailsCheckYourAnswersHelper(request.userAnswers)
+    val checkYourAnswersHelper = new RouteDetailsCheckYourAnswersHelper(request.userAnswers, CheckMode)
 
     for {
       countryList            <- referenceDataConnector.getCountryList()
@@ -116,7 +114,7 @@ class RouteDetailsCheckYourAnswersController @Inject() (
           index =>
             Seq(
               routesCYAHelper.addAnotherTransitOffice(index, customsOfficeList),
-              routesCYAHelper.arrivalTimesAtOffice(index)
+              routesCYAHelper.arrivalDatesAtOffice(index)
             ).flatten
         }
         Section(msg"officesOfTransit.checkYourAnswersLabel", rows)
