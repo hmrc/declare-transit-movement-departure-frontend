@@ -22,19 +22,18 @@ import handlers.ErrorHandler
 import models.{LocalReferenceNumber, ValidateTaskListViewLogger}
 import pages.TechnicalDifficultiesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.{Format, Json, Reads}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import services.DeclarationSubmissionService
 import uk.gov.hmrc.http.HttpReads.{is2xx, is4xx}
+import uk.gov.hmrc.mongo.lock.MongoLockRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.DeclarationSummaryViewModel
-import uk.gov.hmrc.mongo.lock.MongoLockRepository
-import javax.inject.Inject
-import play.api.libs.json.{Format, JsObject, Json, Reads}
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.Inject
 import scala.concurrent.duration.DurationInt
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ExecutionContext, Future}
 
 class DeclarationSummaryController @Inject() (
   override val messagesApi: MessagesApi,
@@ -66,25 +65,24 @@ class DeclarationSummaryController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData).async {
       implicit request =>
-        val jsonGuarantees = Json.parse(request.userAnswers.data.value.get("guarantees").getOrElse("").toString)
+        val jsonGuarantees = Json.parse(request.userAnswers.data.value.getOrElse("guarantees", "").toString)
 
-        implicit val a: Format[guarantees] = Json.format[guarantees]
-        implicit val b: Reads[guarantees]  = Json.reads[guarantees]
+        implicit val a: Format[Guarantees] = Json.format[Guarantees]
+        implicit val b: Reads[Guarantees]  = Json.reads[Guarantees]
 
-        val listOfGuarantees = jsonGuarantees.as[List[guarantees]]
+        val listOfGuarantees = jsonGuarantees.as[List[Guarantees]]
         val owner            = java.util.UUID.randomUUID().toString
-        val duration         = 3600.seconds
+        val duration         = 60.seconds
+        val lockId           = (request.userAnswers.eoriNumber.toString + listOfGuarantees.head.guaranteeReference.trim.toLowerCase).hashCode.toString
 
-     //   try {
-
-          mongoLockRepository
-            .takeLock((request.userAnswers.eoriNumber.toString + listOfGuarantees.head.guaranteeReference.trim.toLowerCase).hashCode.toString, owner, duration)
-            .flatMap{
-              lockTaken => if(true) {
+        mongoLockRepository
+          .takeLock(lockId, owner, duration)
+          .flatMap {
+            lockTaken =>
+              if (lockTaken) {
                 submissionService.submit(request.userAnswers) flatMap {
 
                   case Right(value) =>
-                    println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
                     value.status match {
                       case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
                       case status if is4xx(status) => errorHandler.onClientError(request, status)
@@ -92,56 +90,16 @@ class DeclarationSummaryController @Inject() (
                     }
 
                   case Left(_) => // TODO we can pass this value back to help debug
-                    println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
                     errorHandler.onClientError(request, BAD_REQUEST)
                 }
-              }else{
-                Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+              } else {
+                Future.successful(Redirect(routes.SessionExpiredController.onPageLoad())) // TODO this will need to be redirected to a different page
               }
-            }
-
-
-     /*   val afterForeach: Unit =   listOfGuarantees.foreach {
-            guarantee =>
-              println(s"***X*****\n\n\n\n\n\n\n\n$guarantee\n\n\n\n\n\n")
-              mongoLockRepository
-                .takeLock((request.userAnswers.eoriNumber.toString + guarantee.guaranteeReference.trim.toLowerCase).hashCode.toString, owner, duration)
-                .onComplete {
-                  taken =>
-                    if (taken.get) {
-                      println(s"**true\n\n\n\n\n\n\n\ntaken!!!!!$taken\n\n\n\n\n\n")
-                      Future.successful(true)
-                    } else {
-                      println(s"**false\n\n\n\n\n\n\n\ntaken!!!!!$taken\n\n\n\n\n\n")
-                      throw new Exception("Rate Limits have been surpassed ")
-                    }
-                }
-          }*/
-
-        /*  submissionService.submit(request.userAnswers) flatMap {
-
-            case Right(value) =>
-              println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
-              value.status match {
-                case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
-                case status if is4xx(status) => errorHandler.onClientError(request, status)
-                case _                       => renderTechnicalDifficultiesPage
-              }
-
-            case Left(_) => // TODO we can pass this value back to help debug
-              println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
-              errorHandler.onClientError(request, BAD_REQUEST)
           }
-
-        } catch {
-          case e: Exception =>
-            println(s"**Exception***\n\n\n\n\n\n\n${e.getMessage}\n\n\n\n\n\n\n")
-            Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-        }*/
 
     }
 
-  case class guarantees(
+  case class Guarantees(
     guaranteeType: String,
     guaranteeReference: String,
     liabilityAmount: String,

@@ -65,6 +65,12 @@ trait SpecBase
 
   val emptyUserAnswers: UserAnswers = UserAnswers(lrn, eoriNumber, Json.obj())
 
+  val nonEmptyUserAnswers: UserAnswers = UserAnswers(
+    lrn,
+    eoriNumber,
+    Json.obj("guarantees" -> Json.arr(Json.obj("guaranteeType" -> "1", "guaranteeReference" -> "123", "liabilityAmount" -> "0", "accessCode" -> "1234")))
+  )
+
   val principalName: String = "principalName"
 
   val carrierName: String = "carrierName"

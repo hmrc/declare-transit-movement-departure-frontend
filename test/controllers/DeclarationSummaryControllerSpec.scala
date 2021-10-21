@@ -58,7 +58,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
     "return OK and the correct view for a GET" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      dataRetrievalWithData(nonEmptyUserAnswers)
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -88,7 +88,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
     }
 
     "must redirect to 'Departure declaration sent' page on valid submission" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      dataRetrievalWithData(nonEmptyUserAnswers)
 
       when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(ACCEPTED, ""))))
 
@@ -104,7 +104,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
     }
 
     "must show TechnicalDifficulties page when there is a server side error" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      dataRetrievalWithData(nonEmptyUserAnswers)
       val genServerError = Gen.chooseNum(500, 599).sample.value
 
       when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(genServerError, ""))))
@@ -120,8 +120,17 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
     }
 
-    "must ??? when lock is not taken " in {
-      ???
+    "must redirect to ??? page when lock is not taken " in { //TODO update when redirect page is decided
+      dataRetrievalWithData(nonEmptyUserAnswers)
+
+      when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
+      when(mockMongoLockRepository.takeLock(any[String], any[String], any[Duration])).thenReturn(Future.successful(false))
+
+      val request = FakeRequest(POST, routes.DeclarationSummaryController.onSubmit(lrn).url)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
     }
 
   }
