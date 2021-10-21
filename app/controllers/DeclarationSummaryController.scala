@@ -69,50 +69,76 @@ class DeclarationSummaryController @Inject() (
         val jsonGuarantees = Json.parse(request.userAnswers.data.value.get("guarantees").getOrElse("").toString)
 
         implicit val a: Format[guarantees] = Json.format[guarantees]
-        implicit val b: Reads[guarantees] = Json.reads[guarantees]
+        implicit val b: Reads[guarantees]  = Json.reads[guarantees]
 
-        val mylist = jsonGuarantees.as[List[guarantees]]
-        val owner = java.util.UUID.randomUUID().toString
-        val duration = 3600.seconds
+        val listOfGuarantees = jsonGuarantees.as[List[guarantees]]
+        val owner            = java.util.UUID.randomUUID().toString
+        val duration         = 3600.seconds
 
-        try{
+     //   try {
 
-          mylist.foreach {
-          x =>
-            mongoLockRepository
-              .takeLock((request.userAnswers.eoriNumber.toString + x.guaranteeReference.trim.toLowerCase).hashCode.toString, owner, duration)
-              .flatMap {
-                taken =>
-                  if (taken) {
-                    println(s"\n\n\n\n\n\n\n\ntaken!!!!!$taken\n\n\n\n\n\n")
-                    Future.successful(true)
-                  } else {
-                    println(s"\n\n\n\n\n\n\n\ntaken!!!!!$taken\n\n\n\n\n\n")
-                    throw new Exception("Lock already taken - rate limit issues")
-                  }
+          mongoLockRepository
+            .takeLock((request.userAnswers.eoriNumber.toString + listOfGuarantees.head.guaranteeReference.trim.toLowerCase).hashCode.toString, owner, duration)
+            .flatMap{
+              lockTaken => if(true) {
+                submissionService.submit(request.userAnswers) flatMap {
+
+                  case Right(value) =>
+                    println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
+                    value.status match {
+                      case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
+                      case status if is4xx(status) => errorHandler.onClientError(request, status)
+                      case _                       => renderTechnicalDifficultiesPage
+                    }
+
+                  case Left(_) => // TODO we can pass this value back to help debug
+                    println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
+                    errorHandler.onClientError(request, BAD_REQUEST)
+                }
+              }else{
+                Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
               }
-        }
-
-       }catch {
-          case e: Exception =>
-            println(s"\n\n\n\n\n\n\n${e.getMessage}\n\n\n\n\n\n\n")
-            Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-        }
-
-        submissionService.submit(request.userAnswers) flatMap {
-
-          case Right(value) =>
-            println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
-            value.status match {
-              case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
-              case status if is4xx(status) => errorHandler.onClientError(request, status)
-              case _                       => renderTechnicalDifficultiesPage
             }
 
-          case Left(_) => // TODO we can pass this value back to help debug
-            println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
-            errorHandler.onClientError(request, BAD_REQUEST)
-        }
+
+     /*   val afterForeach: Unit =   listOfGuarantees.foreach {
+            guarantee =>
+              println(s"***X*****\n\n\n\n\n\n\n\n$guarantee\n\n\n\n\n\n")
+              mongoLockRepository
+                .takeLock((request.userAnswers.eoriNumber.toString + guarantee.guaranteeReference.trim.toLowerCase).hashCode.toString, owner, duration)
+                .onComplete {
+                  taken =>
+                    if (taken.get) {
+                      println(s"**true\n\n\n\n\n\n\n\ntaken!!!!!$taken\n\n\n\n\n\n")
+                      Future.successful(true)
+                    } else {
+                      println(s"**false\n\n\n\n\n\n\n\ntaken!!!!!$taken\n\n\n\n\n\n")
+                      throw new Exception("Rate Limits have been surpassed ")
+                    }
+                }
+          }*/
+
+        /*  submissionService.submit(request.userAnswers) flatMap {
+
+            case Right(value) =>
+              println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
+              value.status match {
+                case status if is2xx(status) => Future.successful(Redirect(routes.SubmissionConfirmationController.onPageLoad(lrn)))
+                case status if is4xx(status) => errorHandler.onClientError(request, status)
+                case _                       => renderTechnicalDifficultiesPage
+              }
+
+            case Left(_) => // TODO we can pass this value back to help debug
+              println("\n\n\n\n\n\n\n\nsubmissionService.submit called\n\n\n\n\n\n")
+              errorHandler.onClientError(request, BAD_REQUEST)
+          }
+
+        } catch {
+          case e: Exception =>
+            println(s"**Exception***\n\n\n\n\n\n\n${e.getMessage}\n\n\n\n\n\n\n")
+            Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+        }*/
+
     }
 
   case class guarantees(
