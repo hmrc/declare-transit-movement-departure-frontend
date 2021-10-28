@@ -16,9 +16,11 @@
 
 package models.domain
 
+import scala.util.matching.Regex
+
 object StringFieldRegex {
 
-  val stringFieldRegex                     = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
+  val stringFieldRegex: Regex              = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
   val alphaNumericRegex                    = "^[a-zA-Z0-9]*$".r
   val alphaNumericWithSpaceRegex           = "^[a-zA-Z0-9 ]*$".r
   val commodityCodeCharactersRegex         = "^[0-9]*$"
