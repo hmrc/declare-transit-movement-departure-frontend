@@ -20,11 +20,12 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import derivable.DeriveNumberOfOfficeOfTransits
+import models.DeclarationType.Option4
 import models.journeyDomain.RouteDetails
 import models.reference.CountryCode
 import models.requests.DataRequest
 import models.{CheckMode, DeclarationType, Index, LocalReferenceNumber, NormalMode, ValidateReaderLogger}
-import pages.DeclarationTypePage
+import pages.{DeclarationTypePage, OfficeOfDeparturePage}
 import pages.routeDetails.MovementDestinationCountryPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -63,13 +64,35 @@ class RouteDetailsCheckYourAnswersController @Inject() (
                 case _                             => true
               }
 
-              val json = Json.obj(
-                "lrn"                    -> lrn,
-                "sections"               -> Json.toJson(sections),
-                "addOfficesOfTransitUrl" -> routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url,
-                "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
-                "showOfficesOfTransit"   -> decType
-              )
+              val XICountryCode    = request.userAnswers.get(OfficeOfDeparturePage).map(_.countryId).contains(CountryCode("XI"))
+              val OfficesOfTransit = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
+
+              val addOrRemoveOfficeOfTransitUrl = XICountryCode match {
+                case true =>
+                  if (OfficesOfTransit == 0) {
+                    routes.AddOfficeOfTransitController.onPageLoad(lrn, NormalMode).url
+                  } else {
+                    routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
+                  }
+                case _ => routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
+              }
+
+              val json = if (decType) {
+                Json.obj(
+                  "lrn"                    -> lrn,
+                  "sections"               -> Json.toJson(sections),
+                  "addOfficesOfTransitUrl" -> addOrRemoveOfficeOfTransitUrl,
+                  "nextPageUrl"            -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
+                  "showOfficesOfTransit"   -> decType
+                )
+              } else {
+                Json.obj(
+                  "lrn"                  -> lrn,
+                  "sections"             -> Json.toJson(sections),
+                  "nextPageUrl"          -> mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url,
+                  "showOfficesOfTransit" -> decType
+                )
+              }
 
               ValidateReaderLogger[RouteDetails](request.userAnswers)
 

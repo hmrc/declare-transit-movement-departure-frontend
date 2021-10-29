@@ -283,8 +283,11 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "must go from Confirm Remove OfficeOfTransit Page to Add another offices of transit when all records are removed" in {
+        "must go from Confirm Remove OfficeOfTransit Page to Add another offices of transit when all records are removed for a GB movement" in {
           val userAnswers = emptyUserAnswers
+            .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
+            .toOption
+            .value
             .remove(OfficeOfTransitQuery(index))
             .toOption
             .value
@@ -295,6 +298,24 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           navigator
             .nextPage(ConfirmRemoveOfficeOfTransitPage, NormalMode, userAnswers)
             .mustBe(routes.OfficeOfTransitCountryController.onPageLoad(emptyUserAnswers.lrn, index, NormalMode))
+
+        }
+
+        "must go from Confirm Remove OfficeOfTransit Page to AddOfficeOfTransit page when all records are removed for a XI movement" in {
+          val userAnswers = emptyUserAnswers
+            .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("XI"), None))
+            .toOption
+            .value
+            .remove(OfficeOfTransitQuery(index))
+            .toOption
+            .value
+            .set(ConfirmRemoveOfficeOfTransitPage, true)
+            .toOption
+            .value
+
+          navigator
+            .nextPage(ConfirmRemoveOfficeOfTransitPage, NormalMode, userAnswers)
+            .mustBe(routes.AddOfficeOfTransitController.onPageLoad(emptyUserAnswers.lrn, NormalMode))
 
         }
       }

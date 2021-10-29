@@ -21,6 +21,7 @@ import controllers.routeDetails.routes
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.DeclarationType.Option4
 import models._
+import models.reference.{CountryCode, CustomsOffice}
 import pages._
 import pages.routeDetails._
 import play.api.mvc.Call
@@ -99,9 +100,16 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     }
   }
 
-  private def removeOfficeOfTransit(mode: Mode)(ua: UserAnswers) =
+  private def removeOfficeOfTransit(mode: Mode)(ua: UserAnswers): Call = {
+    val XICountryCode         = ua.get(OfficeOfDeparturePage).map(_.countryId).contains(CountryCode("XI"))
+    val nonTIRDeclarationType = !ua.get(DeclarationTypePage).contains(Option4)
     ua.get(DeriveNumberOfOfficeOfTransits) match {
-      case None | Some(0) => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
-      case _              => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
+      case None | Some(0) if XICountryCode && nonTIRDeclarationType =>
+        routes.AddOfficeOfTransitController.onPageLoad(ua.lrn, mode)
+      case None | Some(0) =>
+        routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
+      case _ =>
+        routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
     }
+  }
 }
