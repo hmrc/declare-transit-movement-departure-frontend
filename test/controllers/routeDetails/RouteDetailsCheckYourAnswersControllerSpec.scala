@@ -28,8 +28,8 @@ import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
+import pages.routeDetails.{MovementDestinationCountryPage, OfficeOfTransitCountryPage}
 import pages.{DeclarationTypePage, OfficeOfDeparturePage}
-import pages.routeDetails.{AddOfficeOfTransitPage, MovementDestinationCountryPage, OfficeOfTransitCountryPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsBoolean, JsObject, JsString, Json}

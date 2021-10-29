@@ -259,7 +259,7 @@ class RouteDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "must go from Confirm Remove OfficeOfTransit Page to Added office of transit page" in {
+        "must go from Confirm Remove OfficeOfTransit Page to Added office of transit page when at least one office remains" in {
 
           forAll(arbitrary[UserAnswers]) {
             answers =>

@@ -21,7 +21,7 @@ import controllers.routeDetails.routes
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.DeclarationType.Option4
 import models._
-import models.reference.{CountryCode, CustomsOffice}
+import models.reference.CountryCode
 import pages._
 import pages.routeDetails._
 import play.api.mvc.Call
