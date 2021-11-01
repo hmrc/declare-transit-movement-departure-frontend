@@ -16,6 +16,7 @@
 
 package pages.routeDetails
 
+import derivable.DeriveNumberOfOfficeOfTransits
 import models.{Index, UserAnswers}
 import pages.{ClearAllAddItems, QuestionPage}
 import play.api.libs.json.JsPath
@@ -31,10 +32,14 @@ case object AddOfficeOfTransitPage extends QuestionPage[Boolean] with ClearAllAd
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     val cleanedUpUserAnswers = value match {
       case Some(false) =>
-        userAnswers
-          .remove(OfficeOfTransitCountryPage(Index(0)))
-          .flatMap(_.remove(OfficeOfTransitCountryPage(Index(0))))
-          .flatMap(_.remove(ArrivalDatesAtOfficePage(Index(0))))
+        if (userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0) > 0) {
+          userAnswers
+            .remove(OfficeOfTransitCountryPage(Index(0)))
+            .flatMap(_.remove(OfficeOfTransitCountryPage(Index(0))))
+            .flatMap(_.remove(ArrivalDatesAtOfficePage(Index(0))))
+        } else {
+          Success(userAnswers)
+        }
       case _ => Success(userAnswers)
     }
 
