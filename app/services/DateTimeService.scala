@@ -18,14 +18,13 @@ package services
 
 import com.google.inject.Singleton
 import utils.Format
-
-import java.time.LocalDateTime
+import java.time.{Clock, LocalDateTime}
 
 @Singleton
 @deprecated("Use a clock with java.time instead", "")
 class DateTimeServiceImpl extends DateTimeService {
 
-  override def currentDateTime: LocalDateTime = LocalDateTime.now()
+  override def currentDateTime: LocalDateTime = LocalDateTime.now(Clock.systemDefaultZone())
 
   def dateFormatted: String = currentDateTime.format(Format.dateFormatter)
 }

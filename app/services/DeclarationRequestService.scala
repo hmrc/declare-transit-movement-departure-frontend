@@ -66,6 +66,7 @@ class DeclarationRequestService @Inject() (
       .nextInterchangeControlReferenceId()
       .map {
         icrId =>
+          println("***************\n\n\n\n\n\n\n" + dateTimeService.currentDateTime + "\n\n\n\n\n\n\n")
           UserAnswersReader[JourneyDomain]
             .map(journeyModelToSubmissionModel(_, icrId, dateTimeService.currentDateTime))
             .run(userAnswers)
