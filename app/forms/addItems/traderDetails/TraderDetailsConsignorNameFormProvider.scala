@@ -20,8 +20,6 @@ import forms.mappings.Mappings
 import models.Index
 import models.domain.StringFieldRegex.alphaNumericWithSpaceRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class TraderDetailsConsignorNameFormProvider @Inject() extends Mappings {
@@ -32,7 +30,7 @@ class TraderDetailsConsignorNameFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("traderDetailsConsignorName.error.required", Seq(index.display))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(maxLengthConsignorName, "traderDetailsConsignorName.error.length"),
             regexp(alphaNumericWithSpaceRegex, "traderDetailsConsignorName.error.invalid")
           )

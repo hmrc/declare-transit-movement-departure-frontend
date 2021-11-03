@@ -20,7 +20,7 @@ import models.LocalReferenceNumber
 import play.api.libs.json.Json
 import viewModels.DeclarationSummaryViewModel
 
-class DeclarationSummaryViewSpec extends ViewSpec {
+class DeclarationSummaryViewSpec extends SingleViewSpec("declarationSummary.njk") {
 
   "does not have the a submit button when isDeclarationComplete is false" in {
     val json = Json.obj(
@@ -30,7 +30,7 @@ class DeclarationSummaryViewSpec extends ViewSpec {
       "isDeclarationComplete"  -> false
     )
 
-    val doc = renderDocument("declarationSummary.njk", json).futureValue
+    val doc = renderDocument(json).futureValue
 
     assertNotRenderedById(doc, "submit")
   }
@@ -44,7 +44,7 @@ class DeclarationSummaryViewSpec extends ViewSpec {
       "onSubmitUrl"            -> DeclarationSummaryViewModel.nextPage(LocalReferenceNumber("lrn").get).url
     )
 
-    val doc = renderDocument("declarationSummary.njk", json).futureValue
+    val doc = renderDocument(json).futureValue
 
     assertRenderedById(doc, "submit")
   }

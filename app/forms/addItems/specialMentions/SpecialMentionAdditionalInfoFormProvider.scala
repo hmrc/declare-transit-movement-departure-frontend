@@ -20,8 +20,6 @@ import forms.mappings.Mappings
 import models.Index
 import models.domain.StringFieldRegex.alphaNumericWithSpaceRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class SpecialMentionAdditionalInfoFormProvider @Inject() extends Mappings {
@@ -30,7 +28,7 @@ class SpecialMentionAdditionalInfoFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("specialMentionAdditionalInfo.error.required", Seq(itemIndex.display, referenceIndex.display))
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(70, "specialMentionAdditionalInfo.error.length", itemIndex.display, referenceIndex.display),
             regexp(alphaNumericWithSpaceRegex, "specialMentionAdditionalInfo.error.invalid", Seq(itemIndex.display, referenceIndex.display))
           )

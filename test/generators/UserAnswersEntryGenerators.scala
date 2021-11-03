@@ -605,13 +605,6 @@ trait UserAnswersEntryGenerators {
       } yield (TotalPiecesPage(Index(0), Index(0)), value)
     }
 
-  implicit lazy val arbitraryDeclareNumberOfPackagesUserAnswersEntry: Arbitrary[(DeclareNumberOfPackagesPage, JsValue)] =
-    Arbitrary {
-      for {
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (DeclareNumberOfPackagesPage(Index(0), Index(0)), value)
-    }
-
   implicit lazy val arbitraryCommodityCodeUserAnswersEntry: Arbitrary[(CommodityCodePage, JsValue)] =
     Arbitrary {
       for {
@@ -794,11 +787,11 @@ trait UserAnswersEntryGenerators {
       } yield (ControlResultDateLimitPage, value)
     }
 
-  implicit lazy val arbitraryArrivalTimesAtOfficeUserAnswersEntry: Arbitrary[(ArrivalTimesAtOfficePage, JsValue)] =
+  implicit lazy val arbitraryArrivalDatesAtOfficeUserAnswersEntry: Arbitrary[(ArrivalDatesAtOfficePage, JsValue)] =
     Arbitrary {
       for {
         value <- arbitrary[Int].map(Json.toJson(_))
-      } yield (ArrivalTimesAtOfficePage(Index(0)), value)
+      } yield (ArrivalDatesAtOfficePage(Index(0)), value)
     }
 
   implicit lazy val arbitrarySealIdDetailsUserAnswersEntry: Arbitrary[(SealIdDetailsPage, JsValue)] =

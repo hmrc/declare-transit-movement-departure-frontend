@@ -20,8 +20,6 @@ import forms.Constants.maxLengthAgreedLocationOfGoods
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericWithSpaceRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class AgreedLocationOfGoodsFormProvider @Inject() extends Mappings {

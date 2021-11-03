@@ -103,11 +103,11 @@ case object Scenario6 extends UserAnswerScenario {
     .unsafeSetVal(pages.routeDetails.AddOfficeOfTransitPage)(true)
     .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(0)))(CountryCode("OT1"))
     .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(0)))("TOP12341")
-    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 5, 12))
+    .unsafeSetVal(pages.routeDetails.ArrivalDatesAtOfficePage(Index(0)))(LocalDateTime.of(2020, 5, 5, 12, 0))
     .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(true)
     .unsafeSetVal(pages.routeDetails.OfficeOfTransitCountryPage(Index(1)))(CountryCode("OT2"))
     .unsafeSetVal(pages.routeDetails.AddAnotherTransitOfficePage(Index(1)))("TOP12342")
-    .unsafeSetVal(pages.routeDetails.ArrivalTimesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 21, 12))
+    .unsafeSetVal(pages.routeDetails.ArrivalDatesAtOfficePage(Index(1)))(LocalDateTime.of(2020, 5, 7, 12, 0))
     .unsafeSetVal(pages.routeDetails.AddTransitOfficePage)(false)
     /*
      * Transport Details
@@ -167,11 +167,9 @@ case object Scenario6 extends UserAnswerScenario {
       CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GA"), "SomethingCE"))
     )
     .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD1PKG1"))
-    .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(0)))(false)
     .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(0)))(false)
     .unsafeSetVal(pages.addItems.AddAnotherPackagePage(firstGoodItem))(true)
     .unsafeSetVal(pages.PackageTypePage(firstGoodItem, Index(1)))(PackageType(PackageType.unpackedCodes.head, "GD1PKG2"))
-    .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(firstGoodItem, Index(1)))(false)
     .unsafeSetVal(pages.addItems.TotalPiecesPage(firstGoodItem, Index(1)))(12)
     .unsafeSetVal(pages.addItems.AddMarkPage(firstGoodItem, Index(1)))(true)
     .unsafeSetVal(pages.addItems.DeclareMarkPage(firstGoodItem, Index(1)))("GD1PK2MK")
@@ -236,11 +234,9 @@ case object Scenario6 extends UserAnswerScenario {
       CommonAddress("ConeeLine1", "ConeeLine2", "ConeeL3", Country(CountryCode("GB"), "SomethingCE"))
     )
     .unsafeSetVal(pages.PackageTypePage(secondGoodItem, Index(0)))(PackageType(PackageType.bulkCodes.head, "GD2PKG1"))
-    .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(secondGoodItem, Index(0)))(false)
     .unsafeSetVal(pages.addItems.AddMarkPage(secondGoodItem, Index(0)))(false)
     .unsafeSetVal(pages.addItems.AddAnotherPackagePage(secondGoodItem))(true)
     .unsafeSetVal(pages.PackageTypePage(secondGoodItem, Index(1)))(PackageType(PackageType.unpackedCodes.head, "GD2PKG2"))
-    .unsafeSetVal(pages.addItems.DeclareNumberOfPackagesPage(secondGoodItem, Index(1)))(true)
     .unsafeSetVal(pages.addItems.HowManyPackagesPage(secondGoodItem, Index(1)))(23)
     .unsafeSetVal(pages.addItems.TotalPiecesPage(secondGoodItem, Index(1)))(12)
     .unsafeSetVal(pages.addItems.AddMarkPage(secondGoodItem, Index(1)))(true)
@@ -314,8 +310,8 @@ case object Scenario6 extends UserAnswerScenario {
     CountryCode("DC"),
     CustomsOffice("DOP1234A", "DestinationOfficePage", CountryCode("DO"), None),
     Some(
-      NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 5, 12))),
-                   List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 21, 12))))
+      NonEmptyList(TransitInformation("TOP12341", Some(LocalDateTime.of(2020, 5, 5, 12, 0))),
+                   List(TransitInformation("TOP12342", Some(LocalDateTime.of(2020, 5, 7, 12, 0))))
       )
     )
   )

@@ -19,8 +19,6 @@ package forms.safetyAndSecurity
 import forms.mappings.Mappings
 import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class PlaceOfUnloadingCodeFormProvider @Inject() extends Mappings {
@@ -31,7 +29,7 @@ class PlaceOfUnloadingCodeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("placeOfUnloadingCode.error.required")
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(maxLength, "placeOfUnloadingCode.error.length"),
             regexp(stringFieldRegex, "placeOfUnloadingCode.error.invalid")
           )

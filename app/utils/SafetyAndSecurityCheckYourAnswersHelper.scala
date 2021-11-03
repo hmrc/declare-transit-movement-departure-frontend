@@ -18,21 +18,21 @@ package utils
 
 import controllers.safetyAndSecurity.routes
 import models.reference.{CountryCode, MethodOfPayment}
-import models.{CheckMode, CircumstanceIndicatorList, CommonAddress, CountryList, Index, UserAnswers}
+import models.{CircumstanceIndicatorList, CommonAddress, CountryList, Index, Mode, UserAnswers}
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
 // scalastyle:off number.of.methods
-class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
   def addCarrierEori: Option[Row] = getAnswerAndBuildRow[Boolean](
     page = AddCarrierEoriPage,
     formatAnswer = formatAsYesOrNo,
     prefix = "addCarrierEori",
     id = None,
-    call = routes.AddCarrierEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.AddCarrierEoriController.onPageLoad(lrn, mode)
   )
 
   def addCarrier: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -40,7 +40,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addCarrier",
     id = None,
-    call = routes.AddCarrierController.onPageLoad(lrn, CheckMode)
+    call = routes.AddCarrierController.onPageLoad(lrn, mode)
   )
 
   def addCircumstanceIndicator: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -48,7 +48,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addCircumstanceIndicator",
     id = None,
-    call = routes.AddCircumstanceIndicatorController.onPageLoad(lrn, CheckMode)
+    call = routes.AddCircumstanceIndicatorController.onPageLoad(lrn, mode)
   )
 
   def addCommercialReferenceNumberAllItems: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -56,7 +56,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addCommercialReferenceNumberAllItems",
     id = None,
-    call = routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(lrn, CheckMode)
+    call = routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(lrn, mode)
   )
 
   def addCommercialReferenceNumber: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -64,7 +64,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addCommercialReferenceNumber",
     id = None,
-    call = routes.AddCommercialReferenceNumberController.onPageLoad(lrn, CheckMode)
+    call = routes.AddCommercialReferenceNumberController.onPageLoad(lrn, mode)
   )
 
   def addConveyanceReferenceNumber: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -72,7 +72,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addConveyancerReferenceNumber",
     id = None,
-    call = routes.AddConveyanceReferenceNumberController.onPageLoad(lrn, CheckMode)
+    call = routes.AddConveyanceReferenceNumberController.onPageLoad(lrn, mode)
   )
 
   def addPlaceOfUnloadingCode: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -80,7 +80,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addPlaceOfUnloadingCode",
     id = None,
-    call = routes.AddPlaceOfUnloadingCodeController.onPageLoad(lrn, CheckMode)
+    call = routes.AddPlaceOfUnloadingCodeController.onPageLoad(lrn, mode)
   )
 
   def addSafetyAndSecurityConsigneeEori: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -88,7 +88,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addSafetyAndSecurityConsigneeEori",
     id = None,
-    call = routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, mode)
   )
 
   def addSafetyAndSecurityConsignee: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -96,7 +96,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addSafetyAndSecurityConsignee",
     id = None,
-    call = routes.AddSafetyAndSecurityConsigneeController.onPageLoad(lrn, CheckMode)
+    call = routes.AddSafetyAndSecurityConsigneeController.onPageLoad(lrn, mode)
   )
 
   def addSafetyAndSecurityConsignorEori: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -104,7 +104,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addSafetyAndSecurityConsignorEori",
     id = None,
-    call = routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(lrn, mode)
   )
 
   def addSafetyAndSecurityConsignor: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -112,7 +112,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addSafetyAndSecurityConsignor",
     id = None,
-    call = routes.AddSafetyAndSecurityConsignorController.onPageLoad(lrn, CheckMode)
+    call = routes.AddSafetyAndSecurityConsignorController.onPageLoad(lrn, mode)
   )
 
   def addTransportChargesPaymentMethod: Option[Row] = getAnswerAndBuildRow[Boolean](
@@ -120,7 +120,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsYesOrNo,
     prefix = "addTransportChargesPaymentMethod",
     id = None,
-    call = routes.AddTransportChargesPaymentMethodController.onPageLoad(lrn, CheckMode)
+    call = routes.AddTransportChargesPaymentMethodController.onPageLoad(lrn, mode)
   )
 
   def carrierAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
@@ -128,7 +128,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsAddress,
     prefix = "carrierAddress",
     id = None,
-    call = routes.CarrierAddressController.onPageLoad(lrn, CheckMode)
+    call = routes.CarrierAddressController.onPageLoad(lrn, mode)
   )
 
   def carrierEori: Option[Row] = getAnswerAndBuildRow[String](
@@ -136,7 +136,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "carrierEori",
     id = None,
-    call = routes.CarrierEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.CarrierEoriController.onPageLoad(lrn, mode)
   )
 
   def carrierName: Option[Row] = getAnswerAndBuildRow[String](
@@ -144,7 +144,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "carrierName",
     id = None,
-    call = routes.CarrierNameController.onPageLoad(lrn, CheckMode)
+    call = routes.CarrierNameController.onPageLoad(lrn, mode)
   )
 
   def circumstanceIndicator(circumstanceIndicators: CircumstanceIndicatorList): Option[Row] = getAnswerAndBuildRow[String](
@@ -157,7 +157,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
         )}",
     prefix = "circumstanceIndicator",
     id = None,
-    call = routes.CircumstanceIndicatorController.onPageLoad(lrn, CheckMode)
+    call = routes.CircumstanceIndicatorController.onPageLoad(lrn, mode)
   )
 
   def commercialReferenceNumberAllItems: Option[Row] = getAnswerAndBuildRow[String](
@@ -165,7 +165,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "commercialReferenceNumberAllItems",
     id = None,
-    call = routes.CommercialReferenceNumberAllItemsController.onPageLoad(lrn, CheckMode)
+    call = routes.CommercialReferenceNumberAllItemsController.onPageLoad(lrn, mode)
   )
 
   def conveyanceReferenceNumber: Option[Row] = getAnswerAndBuildRow[String](
@@ -173,7 +173,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "conveyanceReferenceNumber",
     id = None,
-    call = routes.ConveyanceReferenceNumberController.onPageLoad(lrn, CheckMode)
+    call = routes.ConveyanceReferenceNumberController.onPageLoad(lrn, mode)
   )
 
   def placeOfUnloadingCode: Option[Row] = getAnswerAndBuildRow[String](
@@ -181,7 +181,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "placeOfUnloadingCode",
     id = None,
-    call = routes.PlaceOfUnloadingCodeController.onPageLoad(lrn, CheckMode)
+    call = routes.PlaceOfUnloadingCodeController.onPageLoad(lrn, mode)
   )
 
   def safetyAndSecurityConsigneeAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
@@ -189,7 +189,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsAddress,
     prefix = "safetyAndSecurityConsigneeAddress",
     id = None,
-    call = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, CheckMode)
+    call = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, mode)
   )
 
   def safetyAndSecurityConsigneeEori: Option[Row] = getAnswerAndBuildRow[String](
@@ -197,7 +197,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "safetyAndSecurityConsigneeEori",
     id = None,
-    call = routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, mode)
   )
 
   def safetyAndSecurityConsigneeName: Option[Row] = getAnswerAndBuildRow[String](
@@ -205,7 +205,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "safetyAndSecurityConsigneeName",
     id = None,
-    call = routes.SafetyAndSecurityConsigneeNameController.onPageLoad(lrn, CheckMode)
+    call = routes.SafetyAndSecurityConsigneeNameController.onPageLoad(lrn, mode)
   )
 
   def safetyAndSecurityConsignorAddress: Option[Row] = getAnswerAndBuildRow[CommonAddress](
@@ -213,7 +213,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsAddress,
     prefix = "safetyAndSecurityConsignorAddress",
     id = None,
-    call = routes.SafetyAndSecurityConsignorAddressController.onPageLoad(lrn, CheckMode)
+    call = routes.SafetyAndSecurityConsignorAddressController.onPageLoad(lrn, mode)
   )
 
   def safetyAndSecurityConsignorEori: Option[Row] = getAnswerAndBuildRow[String](
@@ -221,7 +221,7 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "safetyAndSecurityConsignorEori",
     id = None,
-    call = routes.SafetyAndSecurityConsignorEoriController.onPageLoad(lrn, CheckMode)
+    call = routes.SafetyAndSecurityConsignorEoriController.onPageLoad(lrn, mode)
   )
 
   def safetyAndSecurityConsignorName: Option[Row] = getAnswerAndBuildRow[String](
@@ -229,15 +229,15 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
     formatAnswer = formatAsLiteral,
     prefix = "safetyAndSecurityConsignorName",
     id = None,
-    call = routes.SafetyAndSecurityConsignorNameController.onPageLoad(lrn, CheckMode)
+    call = routes.SafetyAndSecurityConsignorNameController.onPageLoad(lrn, mode)
   )
 
-  def transportChargesPaymentMethod(): Option[Row] = getAnswerAndBuildRow[MethodOfPayment](
+  def transportChargesPaymentMethod: Option[Row] = getAnswerAndBuildRow[MethodOfPayment](
     page = TransportChargesPaymentMethodPage,
     formatAnswer = formatAsLiteral,
     prefix = "transportChargesPaymentMethod",
     id = None,
-    call = routes.TransportChargesPaymentMethodController.onPageLoad(lrn, CheckMode)
+    call = routes.TransportChargesPaymentMethodController.onPageLoad(lrn, mode)
   )
 
   def countryRow(index: Index, countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
@@ -248,8 +248,8 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
         page = CountryOfRoutingPage(index),
         formatAnswer = formatAnswer,
         id = s"country-${index.display}",
-        changeCall = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode),
-        removeCall = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode)
+        changeCall = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode),
+        removeCall = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, mode)
       )
   )
 
@@ -261,13 +261,13 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers) extends 
         page = CountryOfRoutingPage(index),
         formatAnswer = formatAnswer,
         id = Some(s"change-country-${index.display}"),
-        call = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode)
+        call = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode)
       )
   )
 
   def addAnotherCountryOfRouting(content: Text): AddAnotherViewModel = {
 
-    val addAnotherCountryOfRoutingHref = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url
+    val addAnotherCountryOfRoutingHref = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, mode).url
 
     AddAnotherViewModel(addAnotherCountryOfRoutingHref, content)
   }

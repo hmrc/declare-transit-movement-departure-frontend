@@ -585,7 +585,7 @@ class DeclarationRequestServiceSpec
                 scenario.toModel.routeDetails.asInstanceOf[RouteDetailsWithTransitInformation].transitInformation.map {
                   x =>
                     x.map {
-                      case TransitInformation(transitOffice, arrivalTime) => CustomsOfficeTransit(transitOffice, arrivalTime)
+                      case TransitInformation(transitOffice, arrivalDate) => CustomsOfficeTransit(transitOffice, arrivalDate)
                     }.toList
                 }
 

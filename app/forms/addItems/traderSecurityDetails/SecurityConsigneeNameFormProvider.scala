@@ -21,8 +21,6 @@ import forms.mappings.Mappings
 import models.Index
 import models.domain.StringFieldRegex.consignorNameRegex
 import play.api.data.Form
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-
 import javax.inject.Inject
 
 class SecurityConsigneeNameFormProvider @Inject() extends Mappings {
@@ -31,7 +29,7 @@ class SecurityConsigneeNameFormProvider @Inject() extends Mappings {
     Form(
       "value" -> text("securityConsigneeName.error.required")
         .verifying(
-          StopOnFirstFail[String](
+          forms.StopOnFirstFail[String](
             maxLength(consigneeNameMaxLength, "securityConsigneeName.error.length"),
             regexp(consignorNameRegex, "securityConsigneeName.error.invalid")
           )

@@ -19,11 +19,11 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import forms.ArrivalTimesAtOfficeFormProvider
+import forms.ArrivalDatesAtOfficeFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
-import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalTimesAtOfficePage}
+import pages.routeDetails.{AddAnotherTransitOfficePage, ArrivalDatesAtOfficePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -32,22 +32,20 @@ import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
-import utils._
-import viewModels.DateTimeInput
+import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 
-import java.time.LocalDateTime
+import java.time.{LocalDate, LocalDateTime, LocalTime}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ArrivalTimesAtOfficeController @Inject() (
+class ArrivalDatesAtOfficeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @RouteDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: ArrivalTimesAtOfficeFormProvider,
+  formProvider: ArrivalDatesAtOfficeFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -62,39 +60,33 @@ class ArrivalTimesAtOfficeController @Inject() (
         case Some(officeOfTransitId) =>
           referenceDataConnector.getCustomsOffice(officeOfTransitId) flatMap {
             office =>
-              val form: Form[LocalDateTime] = formProvider(office.name)
+              val form: Form[LocalDate] = formProvider(office.name)
 
-              val preparedForm = request.userAnswers.get(ArrivalTimesAtOfficePage(index)) match {
-                case Some(value) => form.fill(value)
+              val preparedForm = request.userAnswers.get(ArrivalDatesAtOfficePage(index)) match {
+                case Some(value) => form.fill(LocalDate.of(value.getYear, value.getMonth, value.getDayOfMonth))
                 case None        => form
               }
 
-              val amOrPm: Option[String] = preparedForm.value.map {
-                dateTime =>
-                  if (dateTime.getHour > 12) "pm" else "am"
-              }
-
-              loadPage(lrn, index, mode, amOrPm, preparedForm).map(Ok(_))
+              loadPage(lrn, index, mode, preparedForm).map(Ok(_))
           }
         case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
       }
   }
 
-  private def loadPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, selectAMPMValue: Option[String], form: Form[LocalDateTime])(implicit
+  private def loadPage(lrn: LocalReferenceNumber, index: Index, mode: Mode, form: Form[LocalDate])(implicit
     request: Request[AnyContent]
   ): Future[Html] = {
-    val viewModel = DateTimeInput.localDateTime(form("value"))
+    val viewModel = DateInput.localDate(form("value"))
 
     val json = Json.obj(
-      "form"     -> form,
-      "index"    -> index.display,
-      "mode"     -> mode,
-      "lrn"      -> lrn,
-      "amPmList" -> amPmAsJson(selectAMPMValue),
-      "dateTime" -> viewModel
+      "form"  -> form,
+      "index" -> index.display,
+      "mode"  -> mode,
+      "lrn"   -> lrn,
+      "date"  -> viewModel
     )
 
-    renderer.render("arrivalTimesAtOffice.njk", json)
+    renderer.render("arrivalDatesAtOffice.njk", json)
   }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
@@ -103,17 +95,18 @@ class ArrivalTimesAtOfficeController @Inject() (
         case Some(officeOfTransitId) =>
           referenceDataConnector.getCustomsOffice(officeOfTransitId) flatMap {
             office =>
-              val form: Form[LocalDateTime] = formProvider(office.name)
+              val form: Form[LocalDate] = formProvider(office.name)
 
               form
                 .bindFromRequest()
                 .fold(
-                  formWithErrors => loadPage(lrn, index, mode, formWithErrors.data.get("value.amOrPm"), formWithErrors).map(BadRequest(_)),
+                  formWithErrors => loadPage(lrn, index, mode, formWithErrors).map(BadRequest(_)),
                   value =>
                     for {
-                      updatedAnswers <- Future.fromTry(request.userAnswers.set(ArrivalTimesAtOfficePage(index), value))
-                      _              <- sessionRepository.set(updatedAnswers)
-                    } yield Redirect(navigator.nextPage(ArrivalTimesAtOfficePage(index), mode, updatedAnswers))
+                      updatedAnswers <- Future
+                        .fromTry(request.userAnswers.set(ArrivalDatesAtOfficePage(index), LocalDateTime.of(value, LocalTime.of(12, 0))))
+                      _ <- sessionRepository.set(updatedAnswers)
+                    } yield Redirect(navigator.nextPage(ArrivalDatesAtOfficePage(index), mode, updatedAnswers))
                 )
           }
         case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))

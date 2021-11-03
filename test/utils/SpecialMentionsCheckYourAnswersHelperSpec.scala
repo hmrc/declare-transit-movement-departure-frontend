@@ -19,13 +19,15 @@ package utils
 import base.{GeneratorSpec, SpecBase}
 import generators.ReferenceDataGenerators
 import models.reference.SpecialMention
-import models.{CheckMode, NormalMode, SpecialMentionList, UserAnswers}
+import models.{CheckMode, Mode, SpecialMentionList, UserAnswers}
 import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionTypePage}
 import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
 class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorSpec with ReferenceDataGenerators {
+
+  val mode: Mode = CheckMode
 
   "SpecialMentionsCheckYourAnswers" - {
 
@@ -46,9 +48,9 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
             val rowContent = s"(${specialMentionList.list.head.code}) ${specialMentionList.list.head.description}"
 
-            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers)
+            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers, mode)
 
-            val row = cya.specialMentionType(itemIndex, referenceIndex, specialMentionList, NormalMode)
+            val row = cya.specialMentionType(itemIndex, referenceIndex, specialMentionList)
 
             row.value.key.content mustBe Literal(rowContent)
 
@@ -65,9 +67,9 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
               .success
               .value
 
-            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers)
+            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers, mode)
 
-            val row = cya.specialMentionType(itemIndex, referenceIndex, SpecialMentionList(List(SpecialMention("code", "description"))), NormalMode)
+            val row = cya.specialMentionType(itemIndex, referenceIndex, SpecialMentionList(List(SpecialMention("code", "description"))))
 
             row mustBe None
         }
@@ -91,7 +93,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
             val rowContent = s"(${specialMentionList.list.head.code}) ${specialMentionList.list.head.description}"
 
-            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers)
+            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers, mode)
 
             val row = cya.specialMentionTypeNoRemoval(itemIndex, referenceIndex, specialMentionList)
 
@@ -110,7 +112,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
               .success
               .value
 
-            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers)
+            val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers, mode)
 
             val row = cya.specialMentionTypeNoRemoval(itemIndex, referenceIndex, SpecialMentionList(List(SpecialMention("code", "description"))))
 
@@ -125,11 +127,11 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
         val updatedUserAnswers = emptyUserAnswers.set(AddSpecialMentionPage(itemIndex), true).success.value
 
-        val cya = new SpecialMentionsCheckYourAnswersHelper(updatedUserAnswers)
+        val cya = new SpecialMentionsCheckYourAnswersHelper(updatedUserAnswers, mode)
 
         cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
-            controllers.addItems.specialMentions.routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            controllers.addItems.specialMentions.routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
             msg"addItems.checkYourAnswersLabel.specialMentions"
           )
 
@@ -139,11 +141,11 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
         val updatedUserAnswers = emptyUserAnswers.set(AddSpecialMentionPage(itemIndex), false).success.value
 
-        val cya = new SpecialMentionsCheckYourAnswersHelper(updatedUserAnswers)
+        val cya = new SpecialMentionsCheckYourAnswersHelper(updatedUserAnswers, mode)
 
         cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
-            controllers.addItems.specialMentions.routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            controllers.addItems.specialMentions.routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
             msg"addItems.checkYourAnswersLabel.specialMentions"
           )
 
@@ -151,11 +153,11 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
       "must link to AddSpecialMention if they have not answered AddSpecialMention" - {
 
-        val cya = new SpecialMentionsCheckYourAnswersHelper(emptyUserAnswers)
+        val cya = new SpecialMentionsCheckYourAnswersHelper(emptyUserAnswers, mode)
 
         cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
-            controllers.addItems.specialMentions.routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, CheckMode).url,
+            controllers.addItems.specialMentions.routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
             msg"addItems.checkYourAnswersLabel.specialMentions"
           )
 

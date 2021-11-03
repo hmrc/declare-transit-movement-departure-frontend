@@ -20,12 +20,14 @@ import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.safetyAndSecurity.routes
 import models.reference.{CircumstanceIndicator, Country, CountryCode, MethodOfPayment}
-import models.{CheckMode, CircumstanceIndicatorList, CommonAddress, CountryList}
+import models.{CheckMode, CircumstanceIndicatorList, CommonAddress, CountryList, Mode}
 import pages.safetyAndSecurity._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.{Html, MessageInterpolators}
 
 class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHelper {
+
+  val mode: Mode = CheckMode
 
   "SafetyAndSecurityCheckYourAnswerHelper" - {
 
@@ -36,7 +38,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCarrierEori
           result mustBe None
         }
@@ -47,7 +49,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddCarrierEoriPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCarrierEori
 
           val label = msg"addCarrierEori.checkYourAnswersLabel"
@@ -59,7 +61,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddCarrierEoriController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddCarrierEoriController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -76,7 +78,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCarrier
           result mustBe None
         }
@@ -87,7 +89,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddCarrierPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCarrier
 
           val label = msg"addCarrier.checkYourAnswersLabel"
@@ -99,7 +101,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddCarrierController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddCarrierController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -116,7 +118,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCircumstanceIndicator
           result mustBe None
         }
@@ -127,7 +129,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddCircumstanceIndicatorPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCircumstanceIndicator
 
           val label = msg"addCircumstanceIndicator.checkYourAnswersLabel"
@@ -139,7 +141,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddCircumstanceIndicatorController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddCircumstanceIndicatorController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -156,7 +158,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCommercialReferenceNumberAllItems
           result mustBe None
         }
@@ -167,7 +169,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddCommercialReferenceNumberAllItemsPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCommercialReferenceNumberAllItems
 
           val label = msg"addCommercialReferenceNumberAllItems.checkYourAnswersLabel"
@@ -179,7 +181,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddCommercialReferenceNumberAllItemsController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -196,7 +198,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCommercialReferenceNumber
           result mustBe None
         }
@@ -207,7 +209,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddCommercialReferenceNumberPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addCommercialReferenceNumber
 
           val label = msg"addCommercialReferenceNumber.checkYourAnswersLabel"
@@ -219,7 +221,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddCommercialReferenceNumberController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddCommercialReferenceNumberController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -236,7 +238,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addConveyanceReferenceNumber
           result mustBe None
         }
@@ -247,7 +249,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddConveyanceReferenceNumberPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addConveyanceReferenceNumber
 
           val label = msg"addConveyancerReferenceNumber.checkYourAnswersLabel"
@@ -259,7 +261,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddConveyanceReferenceNumberController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddConveyanceReferenceNumberController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -276,7 +278,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addPlaceOfUnloadingCode
           result mustBe None
         }
@@ -287,7 +289,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddPlaceOfUnloadingCodePage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addPlaceOfUnloadingCode
 
           val label = msg"addPlaceOfUnloadingCode.checkYourAnswersLabel"
@@ -299,7 +301,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddPlaceOfUnloadingCodeController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddPlaceOfUnloadingCodeController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -316,7 +318,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addSafetyAndSecurityConsigneeEori
           result mustBe None
         }
@@ -327,7 +329,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddSafetyAndSecurityConsigneeEoriPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addSafetyAndSecurityConsigneeEori
 
           val label = msg"addSafetyAndSecurityConsigneeEori.checkYourAnswersLabel"
@@ -339,7 +341,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddSafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -356,7 +358,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addSafetyAndSecurityConsignee
           result mustBe None
         }
@@ -367,7 +369,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddSafetyAndSecurityConsigneePage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addSafetyAndSecurityConsignee
 
           val label = msg"addSafetyAndSecurityConsignee.checkYourAnswersLabel"
@@ -379,7 +381,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddSafetyAndSecurityConsigneeController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddSafetyAndSecurityConsigneeController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -396,7 +398,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addSafetyAndSecurityConsignorEori
           result mustBe None
         }
@@ -407,7 +409,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddSafetyAndSecurityConsignorEoriPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addSafetyAndSecurityConsignorEori
 
           val label = msg"addSafetyAndSecurityConsignorEori.checkYourAnswersLabel"
@@ -419,7 +421,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -436,7 +438,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addSafetyAndSecurityConsignor
           result mustBe None
         }
@@ -447,7 +449,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddSafetyAndSecurityConsignorPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addSafetyAndSecurityConsignor
 
           val label = msg"addSafetyAndSecurityConsignor.checkYourAnswersLabel"
@@ -459,7 +461,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddSafetyAndSecurityConsignorController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddSafetyAndSecurityConsignorController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -476,7 +478,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addTransportChargesPaymentMethod
           result mustBe None
         }
@@ -487,7 +489,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(AddTransportChargesPaymentMethodPage)(true)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.addTransportChargesPaymentMethod
 
           val label = msg"addTransportChargesPaymentMethod.checkYourAnswersLabel"
@@ -499,7 +501,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.AddTransportChargesPaymentMethodController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.AddTransportChargesPaymentMethodController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -518,7 +520,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.carrierAddress
           result mustBe None
         }
@@ -529,7 +531,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(CarrierAddressPage)(address)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.carrierAddress
 
           val label = msg"carrierAddress.checkYourAnswersLabel"
@@ -541,7 +543,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.CarrierAddressController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.CarrierAddressController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -560,7 +562,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.carrierEori
           result mustBe None
         }
@@ -571,7 +573,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(CarrierEoriPage)(eori)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.carrierEori
 
           val label = msg"carrierEori.checkYourAnswersLabel"
@@ -583,7 +585,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.CarrierEoriController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.CarrierEoriController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -602,7 +604,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.carrierName
           result mustBe None
         }
@@ -613,7 +615,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(CarrierNamePage)(name)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.carrierName
 
           val label = msg"carrierName.checkYourAnswersLabel"
@@ -625,7 +627,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.CarrierNameController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.CarrierNameController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -645,7 +647,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.circumstanceIndicator(CircumstanceIndicatorList(Nil))
           result mustBe None
         }
@@ -658,7 +660,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
             val answers = emptyUserAnswers.unsafeSetVal(CircumstanceIndicatorPage)(indicatorCode)
 
-            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
             val result = helper.circumstanceIndicator(CircumstanceIndicatorList(Nil))
 
             val label = msg"circumstanceIndicator.checkYourAnswersLabel"
@@ -670,7 +672,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.CircumstanceIndicatorController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.CircumstanceIndicatorController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label)
                   )
                 )
@@ -682,7 +684,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
             val answers = emptyUserAnswers.unsafeSetVal(CircumstanceIndicatorPage)(indicatorCode)
 
-            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
             val result = helper.circumstanceIndicator(CircumstanceIndicatorList(Seq(indicator)))
 
             val label = msg"circumstanceIndicator.checkYourAnswersLabel"
@@ -694,7 +696,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.CircumstanceIndicatorController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.CircumstanceIndicatorController.onPageLoad(lrn, mode).url,
                     visuallyHiddenText = Some(label)
                   )
                 )
@@ -714,7 +716,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.commercialReferenceNumberAllItems
           result mustBe None
         }
@@ -725,7 +727,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(CommercialReferenceNumberAllItemsPage)(referenceNumber)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.commercialReferenceNumberAllItems
 
           val label = msg"commercialReferenceNumberAllItems.checkYourAnswersLabel"
@@ -737,7 +739,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.CommercialReferenceNumberAllItemsController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.CommercialReferenceNumberAllItemsController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -756,7 +758,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.conveyanceReferenceNumber
           result mustBe None
         }
@@ -767,7 +769,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(ConveyanceReferenceNumberPage)(referenceNumber)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.conveyanceReferenceNumber
 
           val label = msg"conveyanceReferenceNumber.checkYourAnswersLabel"
@@ -779,7 +781,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.ConveyanceReferenceNumberController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.ConveyanceReferenceNumberController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -798,7 +800,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.placeOfUnloadingCode
           result mustBe None
         }
@@ -809,7 +811,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(PlaceOfUnloadingCodePage)(locationCode)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.placeOfUnloadingCode
 
           val label = msg"placeOfUnloadingCode.checkYourAnswersLabel"
@@ -821,7 +823,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.PlaceOfUnloadingCodeController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.PlaceOfUnloadingCodeController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -840,7 +842,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsigneeAddress
           result mustBe None
         }
@@ -851,7 +853,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(SafetyAndSecurityConsigneeAddressPage)(address)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsigneeAddress
 
           val label = msg"safetyAndSecurityConsigneeAddress.checkYourAnswersLabel"
@@ -863,7 +865,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -882,7 +884,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsigneeEori
           result mustBe None
         }
@@ -893,7 +895,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(SafetyAndSecurityConsigneeEoriPage)(eori)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsigneeEori
 
           val label = msg"safetyAndSecurityConsigneeEori.checkYourAnswersLabel"
@@ -905,7 +907,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.SafetyAndSecurityConsigneeEoriController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -924,7 +926,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsigneeName
           result mustBe None
         }
@@ -935,7 +937,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(SafetyAndSecurityConsigneeNamePage)(name)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsigneeName
 
           val label = msg"safetyAndSecurityConsigneeName.checkYourAnswersLabel"
@@ -947,7 +949,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.SafetyAndSecurityConsigneeNameController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.SafetyAndSecurityConsigneeNameController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -966,7 +968,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsignorAddress
           result mustBe None
         }
@@ -977,7 +979,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(SafetyAndSecurityConsignorAddressPage)(address)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsignorAddress
 
           val label = msg"safetyAndSecurityConsignorAddress.checkYourAnswersLabel"
@@ -989,7 +991,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.SafetyAndSecurityConsignorAddressController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.SafetyAndSecurityConsignorAddressController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -1008,7 +1010,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsignorEori
           result mustBe None
         }
@@ -1019,7 +1021,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(SafetyAndSecurityConsignorEoriPage)(name)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsignorEori
 
           val label = msg"safetyAndSecurityConsignorEori.checkYourAnswersLabel"
@@ -1031,7 +1033,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.SafetyAndSecurityConsignorEoriController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.SafetyAndSecurityConsignorEoriController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -1050,7 +1052,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsignorName
           result mustBe None
         }
@@ -1061,7 +1063,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(SafetyAndSecurityConsignorNamePage)(name)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.safetyAndSecurityConsignorName
 
           val label = msg"safetyAndSecurityConsignorName.checkYourAnswersLabel"
@@ -1073,7 +1075,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.SafetyAndSecurityConsignorNameController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.SafetyAndSecurityConsignorNameController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -1092,8 +1094,8 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
-          val result = helper.transportChargesPaymentMethod()
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
+          val result = helper.transportChargesPaymentMethod
           result mustBe None
         }
       }
@@ -1103,8 +1105,8 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers.unsafeSetVal(TransportChargesPaymentMethodPage)(paymentMethod)
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
-          val result = helper.transportChargesPaymentMethod()
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
+          val result = helper.transportChargesPaymentMethod
 
           val label = msg"transportChargesPaymentMethod.checkYourAnswersLabel"
 
@@ -1115,7 +1117,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.TransportChargesPaymentMethodController.onPageLoad(lrn, CheckMode).url,
+                  href = routes.TransportChargesPaymentMethodController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label)
                 )
               )
@@ -1135,7 +1137,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.countryRow(index, CountryList(Nil))
           result mustBe None
         }
@@ -1148,7 +1150,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
             val answers = emptyUserAnswers.unsafeSetVal(CountryOfRoutingPage(index))(countryCode)
 
-            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
             val result = helper.countryRow(index, CountryList(Nil))
 
             val label = lit"${countryCode.code}"
@@ -1160,13 +1162,13 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode).url,
+                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
-                    href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode).url,
+                    href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"remove-country-${index.display}")
                   )
@@ -1179,7 +1181,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
             val answers = emptyUserAnswers.unsafeSetVal(CountryOfRoutingPage(index))(countryCode)
 
-            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
             val result = helper.countryRow(index, CountryList(Seq(country)))
 
             val label = lit"${country.description}"
@@ -1191,13 +1193,13 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, CheckMode).url,
+                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   ),
                   Action(
                     content = msg"site.delete",
-                    href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, CheckMode).url,
+                    href = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"remove-country-${index.display}")
                   )
@@ -1219,7 +1221,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           val answers = emptyUserAnswers
 
-          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+          val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
           val result = helper.countryOfRoutingRow(index, CountryList(Nil))
           result mustBe None
         }
@@ -1232,7 +1234,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
             val answers = emptyUserAnswers.unsafeSetVal(CountryOfRoutingPage(index))(countryCode)
 
-            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
             val result = helper.countryOfRoutingRow(index, CountryList(Nil))
 
             val label = lit"${countryCode.code}"
@@ -1244,7 +1246,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   )
@@ -1257,7 +1259,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
             val answers = emptyUserAnswers.unsafeSetVal(CountryOfRoutingPage(index))(countryCode)
 
-            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers)
+            val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
             val result = helper.countryOfRoutingRow(index, CountryList(Seq(country)))
 
             val label = lit"${country.description}"
@@ -1269,7 +1271,7 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, CheckMode).url,
+                    href = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode).url,
                     visuallyHiddenText = Some(label),
                     attributes = Map("id" -> s"change-country-${index.display}")
                   )

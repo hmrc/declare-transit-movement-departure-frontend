@@ -19,20 +19,20 @@ package utils
 import controllers.transportDetails.routes
 import models.journeyDomain.TransportDetails.InlandMode.{Mode5or7, Rail}
 import models.reference.CountryCode
-import models.{CheckMode, CountryList, LocalReferenceNumber, Mode, TransportModeList, UserAnswers}
+import models.{CountryList, Mode, TransportModeList, UserAnswers}
 import pages._
 import play.api.mvc.Call
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 
-class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends CheckYourAnswersHelper(userAnswers) {
+class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) extends CheckYourAnswersHelper(userAnswers) {
 
   def modeAtBorder(transportModeList: TransportModeList): Option[Row] = getAnswerAndBuildModeRow(
     page = ModeAtBorderPage,
     transportModeList = transportModeList,
     prefix = "modeAtBorder",
     id = "change-mode-at-border",
-    call = routes.ModeAtBorderController.onPageLoad
+    call = routes.ModeAtBorderController.onPageLoad(lrn, mode)
   )
 
   def modeCrossingBorder(transportModeList: TransportModeList): Option[Row] = getAnswerAndBuildModeRow(
@@ -40,7 +40,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     transportModeList = transportModeList,
     prefix = "modeCrossingBorder",
     id = "change-mode-crossing-border",
-    call = routes.ModeCrossingBorderController.onPageLoad
+    call = routes.ModeCrossingBorderController.onPageLoad(lrn, mode)
   )
 
   def inlandMode(transportModeList: TransportModeList): Option[Row] = getAnswerAndBuildModeRow(
@@ -48,7 +48,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     transportModeList = transportModeList,
     prefix = "inlandMode",
     id = "change-inland-mode",
-    call = routes.InlandModeController.onPageLoad
+    call = routes.InlandModeController.onPageLoad(lrn, mode)
   )
 
   def idCrossingBorder: Option[Row] = getAnswerAndBuildRow[String](
@@ -56,7 +56,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     formatAnswer = formatAsLiteral,
     prefix = "idCrossingBorder",
     id = Some("change-id-crossing-border"),
-    call = routes.IdCrossingBorderController.onPageLoad(lrn, CheckMode)
+    call = routes.IdCrossingBorderController.onPageLoad(lrn, mode)
   )
 
   def nationalityAtDeparture(countryList: CountryList, inlandModeCode: String): Option[Row] =
@@ -69,7 +69,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
         countryList = countryList,
         prefix = "nationalityAtDeparture",
         id = Some("change-nationality-at-departure"),
-        call = routes.NationalityAtDepartureController.onPageLoad(lrn, CheckMode)
+        call = routes.NationalityAtDepartureController.onPageLoad(lrn, mode)
       )
     }
 
@@ -79,7 +79,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     countryList = countryList,
     prefix = "nationalityCrossingBorder",
     id = Some("change-nationality-crossing-border"),
-    call = routes.NationalityCrossingBorderController.onPageLoad(lrn, CheckMode)
+    call = routes.NationalityCrossingBorderController.onPageLoad(lrn, mode)
   )
 
   def idAtDeparture(inlandModeCode: String): Option[Row] =
@@ -91,7 +91,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
         formatAnswer = formatAsLiteral,
         prefix = "idAtDeparture",
         id = None,
-        call = routes.IdAtDepartureController.onPageLoad(lrn, CheckMode)
+        call = routes.IdAtDepartureController.onPageLoad(lrn, mode)
       )
     }
 
@@ -100,7 +100,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     formatAnswer = formatAsYesOrNo,
     prefix = "changeAtBorder",
     id = Some("change-change-at-border"),
-    call = routes.ChangeAtBorderController.onPageLoad(lrn, CheckMode)
+    call = routes.ChangeAtBorderController.onPageLoad(lrn, mode)
   )
 
   def addIdAtDeparture(inlandModeCode: String): Option[Row] =
@@ -112,7 +112,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
         formatAnswer = formatAsYesOrNo,
         prefix = "addIdAtDeparture",
         id = Some("change-add-id-at-departure"),
-        call = routes.AddIdAtDepartureController.onPageLoad(lrn, CheckMode)
+        call = routes.AddIdAtDepartureController.onPageLoad(lrn, mode)
       )
     }
 
@@ -125,7 +125,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
         formatAnswer = formatAsYesOrNo,
         prefix = "addNationalityAtDeparture",
         id = Some("change-add-nationality-at-departure"),
-        call = routes.AddNationalityAtDepartureController.onPageLoad(lrn, CheckMode)
+        call = routes.AddNationalityAtDepartureController.onPageLoad(lrn, mode)
       )
     }
 
@@ -134,7 +134,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
     transportModeList: TransportModeList,
     prefix: String,
     id: String,
-    call: (LocalReferenceNumber, Mode) => Call
+    call: Call
   ): Option[Row] = {
     val format: String => Content = modeCode =>
       lit"${transportModeList
@@ -143,7 +143,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers) extends C
           mode => s"(${mode.code}) ${mode.description}"
         )}"
 
-    getAnswerAndBuildRow[String](page, format, prefix, Some(id), call(lrn, CheckMode))
+    getAnswerAndBuildRow[String](page, format, prefix, Some(id), call)
   }
 
   implicit private class ModeCode(modeCode: String) {

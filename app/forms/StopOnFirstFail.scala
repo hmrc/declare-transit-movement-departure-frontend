@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package pages.routeDetails
+package forms
 
-import models.Index
-import pages.behaviours.PageBehaviours
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
-import java.time.LocalDateTime
+object StopOnFirstFail {
 
-class ArrivalTimesAtOfficePageSpec extends PageBehaviours {
-
-  "ArrivalTimesAtOfficePage" - {
-
-    val index = Index(0)
-
-    beRetrievable[LocalDateTime](ArrivalTimesAtOfficePage(index))
-
-    beSettable[LocalDateTime](ArrivalTimesAtOfficePage(index))
-
-    beRemovable[LocalDateTime](ArrivalTimesAtOfficePage(index))
-
-    clearDownItems[LocalDateTime](ArrivalTimesAtOfficePage(index))
+  def apply[T](constraints: Constraint[T]*) = Constraint {
+    field: T =>
+      constraints.toList dropWhile (_(field) == Valid) match {
+        case Nil             => Valid
+        case constraint :: _ => constraint(field)
+      }
   }
+
+  def constraint[T](message: String, validator: (T) => Boolean) =
+    Constraint(
+      (data: T) => if (validator(data)) Valid else Invalid(Seq(ValidationError(message)))
+    )
 }

@@ -21,6 +21,7 @@ import controllers.routeDetails.routes
 import derivable.DeriveNumberOfOfficeOfTransits
 import models.DeclarationType.Option4
 import models._
+import models.reference.CountryCode
 import pages._
 import pages.routeDetails._
 import play.api.mvc.Call
@@ -45,7 +46,7 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
       ua => Some(redirectToAddTransitOfficeNextPage(ua, index, NormalMode))
     case AddTransitOfficePage =>
       ua => Some(addOfficeOfTransit(NormalMode, ua))
-    case ArrivalTimesAtOfficePage(_) =>
+    case ArrivalDatesAtOfficePage(_) =>
       ua => Some(routes.AddTransitOfficeController.onPageLoad(ua.lrn, NormalMode))
     case ConfirmRemoveOfficeOfTransitPage =>
       ua => Some(removeOfficeOfTransit(NormalMode)(ua))
@@ -76,13 +77,13 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
 
   private def redirectToAddTransitOfficeNextPage(ua: UserAnswers, index: Index, mode: Mode): Call =
     ua.get(AddSecurityDetailsPage) match {
-      case Some(isSelected) if isSelected => routes.ArrivalTimesAtOfficeController.onPageLoad(ua.lrn, index, mode)
+      case Some(isSelected) if isSelected => routes.ArrivalDatesAtOfficeController.onPageLoad(ua.lrn, index, mode)
       case _                              => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
     }
 
   private def isRouteDetailsSectionPage(page: Page): Boolean =
     page match {
-      case CountryOfDispatchPage | DestinationOfficePage | DestinationCountryPage | AddAnotherTransitOfficePage(_) | ArrivalTimesAtOfficePage(_) =>
+      case CountryOfDispatchPage | DestinationOfficePage | DestinationCountryPage | AddAnotherTransitOfficePage(_) | ArrivalDatesAtOfficePage(_) =>
         true
       case _ => false
     }
@@ -99,9 +100,16 @@ class RouteDetailsNavigator @Inject() () extends Navigator {
     }
   }
 
-  private def removeOfficeOfTransit(mode: Mode)(ua: UserAnswers) =
+  private def removeOfficeOfTransit(mode: Mode)(ua: UserAnswers): Call = {
+    val XICountryCode         = ua.get(OfficeOfDeparturePage).map(_.countryId).contains(CountryCode("XI"))
+    val nonTIRDeclarationType = !ua.get(DeclarationTypePage).contains(Option4)
     ua.get(DeriveNumberOfOfficeOfTransits) match {
-      case None | Some(0) => routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
-      case _              => routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
+      case None | Some(0) if XICountryCode && nonTIRDeclarationType =>
+        routes.AddOfficeOfTransitController.onPageLoad(ua.lrn, mode)
+      case None | Some(0) =>
+        routes.OfficeOfTransitCountryController.onPageLoad(ua.lrn, Index(0), mode)
+      case _ =>
+        routes.AddTransitOfficeController.onPageLoad(ua.lrn, mode)
     }
+  }
 }
