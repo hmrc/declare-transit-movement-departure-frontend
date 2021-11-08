@@ -20,7 +20,7 @@ import models.reference.{Country, CountryCode}
 
 class CountryList(val countries: Seq[Country]) {
 
-  def fullList: Seq[Country]                                = countries
+  def fullList: Seq[Country]                                = countries.sortBy(_.description)
   def getCountry(countryCode: CountryCode): Option[Country] = countries.find(_.code == countryCode)
 
   override def equals(obj: Any): Boolean =
