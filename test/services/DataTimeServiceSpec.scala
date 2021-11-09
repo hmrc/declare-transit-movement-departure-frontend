@@ -20,6 +20,7 @@ import java.time.{Clock, ZoneId}
 import base.{MockServiceApp, SpecBase}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.must.Matchers
+import scala.util.matching.Regex
 
 class DataTimeServiceSpec extends SpecBase with MockServiceApp with BeforeAndAfterEach with Matchers {
 
@@ -33,6 +34,15 @@ class DataTimeServiceSpec extends SpecBase with MockServiceApp with BeforeAndAft
       val clockTwo: Clock = Clock.system(ZoneId.of("America/New_York"))
 
       dataTimeService.currentDateTime(clockOne).isEqual(dataTimeService.currentDateTime(clockTwo)) mustBe false
+
+    }
+  }
+
+  "dateFormatted" - {
+
+    "must return a string of 8 digits" in {
+
+      dataTimeService.dateFormatted().matches("\\d{8}") mustBe true
 
     }
   }
