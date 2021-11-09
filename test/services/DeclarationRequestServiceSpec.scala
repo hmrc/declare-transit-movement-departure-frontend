@@ -38,7 +38,7 @@ import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, Prin
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
-
+import org.mockito.ArgumentMatchers.any
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -82,7 +82,7 @@ class DeclarationRequestServiceSpec
             val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
             when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-            when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+            when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
             service.convert(userAnswerScenario.userAnswers).futureValue.isRight mustBe true
         }
@@ -97,7 +97,7 @@ class DeclarationRequestServiceSpec
               val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val result = service.convert(userAnswerScenario.userAnswers).futureValue
 
@@ -118,7 +118,7 @@ class DeclarationRequestServiceSpec
           val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
           when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+          when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
           val updatedUserAnswer = Scenario1.userAnswers
             .unsafeSetVal(ItemTotalGrossMassPage(Index(0)))(100.123)
@@ -140,7 +140,7 @@ class DeclarationRequestServiceSpec
                 val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val userAnswers = userAnswerScenario.userAnswers
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
@@ -164,7 +164,7 @@ class DeclarationRequestServiceSpec
                 val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val userAnswers = userAnswerScenario.userAnswers
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
@@ -191,7 +191,7 @@ class DeclarationRequestServiceSpec
                 val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val userAnswers = userAnswerScenario.userAnswers
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
@@ -215,7 +215,7 @@ class DeclarationRequestServiceSpec
                 val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val userAnswers = userAnswerScenario.userAnswers
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
@@ -242,7 +242,7 @@ class DeclarationRequestServiceSpec
                 val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val userAnswers = userAnswerScenario.userAnswers
                   .unsafeSetVal(PreLodgeDeclarationPage)(true)
@@ -262,7 +262,7 @@ class DeclarationRequestServiceSpec
                 val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val userAnswers = userAnswerScenario.userAnswers
                   .unsafeSetVal(PreLodgeDeclarationPage)(false)
@@ -284,7 +284,7 @@ class DeclarationRequestServiceSpec
             forAll(genSimplifiedScenarios) {
               userAnswerScenario =>
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val result = service.convert(userAnswerScenario.userAnswers).futureValue
 
@@ -305,7 +305,7 @@ class DeclarationRequestServiceSpec
             forAll(genSimplifiedScenarios) {
               userAnswerScenario =>
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val result = service.convert(userAnswerScenario.userAnswers).futureValue
 
@@ -325,7 +325,7 @@ class DeclarationRequestServiceSpec
             forAll(genNormalScenarios) {
               userAnswerScenario =>
                 when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-                when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+                when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
                 val result = service.convert(userAnswerScenario.userAnswers).futureValue
 
@@ -344,7 +344,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(ChangeAtBorderPage)(true)
@@ -364,7 +364,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(ChangeAtBorderPage)(true)
@@ -382,7 +382,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(ChangeAtBorderPage)(false)
@@ -401,7 +401,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(ChangeAtBorderPage)(false)
@@ -423,7 +423,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(ChangeAtBorderPage)(true)
@@ -445,7 +445,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(ChangeAtBorderPage)(true)
@@ -464,7 +464,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(ChangeAtBorderPage)(false)
@@ -486,7 +486,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario, railCodes) {
             (userAnswerScenario, railCode) =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(ChangeAtBorderPage)(false)
@@ -505,7 +505,7 @@ class DeclarationRequestServiceSpec
           forAll(genSimplifiedScenarios) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val result = service.convert(userAnswerScenario.userAnswers).futureValue.value
 
@@ -524,7 +524,7 @@ class DeclarationRequestServiceSpec
           forAll(genNormalScenarios) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val result = service.convert(userAnswerScenario.userAnswers).futureValue.value
 
@@ -540,7 +540,7 @@ class DeclarationRequestServiceSpec
           forAll(genNormalScenarios) {
             userAnswerScenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val userAnswers = userAnswerScenario.userAnswers
                 .unsafeSetVal(IsPrincipalEoriKnownPage)(true)
@@ -567,7 +567,7 @@ class DeclarationRequestServiceSpec
         "Must be empty if Declaration Type is Option 4 (TIR)" in {
 
           when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-          when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+          when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
           val result = service.convert(Scenario7.userAnswers).futureValue.value.customsOfficeTransit
 
@@ -578,7 +578,7 @@ class DeclarationRequestServiceSpec
           forAll(genUserAnswerScenario) {
             scenario =>
               when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-              when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+              when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
               val result: Seq[CustomsOfficeTransit] = service.convert(scenario.userAnswers).futureValue.value.customsOfficeTransit
               val exepectedResult: Option[List[CustomsOfficeTransit]] =
@@ -599,7 +599,7 @@ class DeclarationRequestServiceSpec
       val service = new DeclarationRequestService(mockIcrRepository, mockDateTimeService)
 
       when(mockIcrRepository.nextInterchangeControlReferenceId()).thenReturn(Future.successful(InterchangeControlReference("20190101", 1)))
-      when(mockDateTimeService.currentDateTime).thenReturn(LocalDateTime.now())
+      when(mockDateTimeService.currentDateTime()).thenReturn(LocalDateTime.now())
 
       service.convert(emptyUserAnswers).futureValue.isLeft mustBe true
     }

@@ -16,6 +16,8 @@
 
 package repositories
 
+import java.time.Clock
+
 import com.google.inject.{Inject, Singleton}
 import models.messages.InterchangeControlReference
 import play.api.libs.json.{Json, Reads}
@@ -41,7 +43,7 @@ class InterchangeControlReferenceIdRepository @Inject() (
 
   def nextInterchangeControlReferenceId(): Future[InterchangeControlReference] = {
 
-    val date = dateTimeService.dateFormatted
+    val date = dateTimeService.dateFormatted()
 
     val update = Json.obj(
       "$inc" -> Json.obj(lastIndexKey -> 1)

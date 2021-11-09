@@ -44,9 +44,10 @@ import models.messages.trader._
 import models.{CommonAddress, EoriNumber, UserAnswers}
 import play.api.Logging
 import repositories.InterchangeControlReferenceIdRepository
+import java.time.{Clock, LocalDateTime}
 
-import java.time.LocalDateTime
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 trait DeclarationRequestServiceInt {
@@ -66,9 +67,8 @@ class DeclarationRequestService @Inject() (
       .nextInterchangeControlReferenceId()
       .map {
         icrId =>
-          println("***************\n\n\n\n\n\n\n" + dateTimeService.currentDateTime + "\n\n\n\n\n\n\n")
           UserAnswersReader[JourneyDomain]
-            .map(journeyModelToSubmissionModel(_, icrId, dateTimeService.currentDateTime))
+            .map(journeyModelToSubmissionModel(_, icrId, dateTimeService.currentDateTime()))
             .run(userAnswers)
       }
 

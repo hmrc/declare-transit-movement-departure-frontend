@@ -31,7 +31,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.{InterchangeControlReferenceIdRepository, MongoSuite}
 import utils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
 import xml.XMLWrites._
-
+import org.mockito.ArgumentMatchers.any
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -68,9 +68,9 @@ class UserAnswersToXmlConversionSpec
     when(mockInterchangeControlReference.nextInterchangeControlReferenceId())
       .thenReturn(Future.successful(InterchangeControlReference("20201212", 1)))
 
-    when(mockTimeService.currentDateTime).thenReturn(LocalDateTime.of(2020, 12, 12, 20, 30))
+    when(mockTimeService.currentDateTime()).thenReturn(LocalDateTime.of(2020, 12, 12, 20, 30))
 
-    when(mockTimeService.dateFormatted).thenReturn("20201212")
+    when(mockTimeService.dateFormatted()).thenReturn("20201212")
 
     database.flatMap(_.drop()).futureValue
   }
