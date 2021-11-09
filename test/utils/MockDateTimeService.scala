@@ -20,7 +20,6 @@ import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfterEach, Suite}
 import org.scalatestplus.mockito.MockitoSugar
 import services.DateTimeService
-import org.mockito.ArgumentMatchers.any
 
 trait MockDateTimeService extends MockitoSugar with BeforeAndAfterEach {
   this: Suite =>

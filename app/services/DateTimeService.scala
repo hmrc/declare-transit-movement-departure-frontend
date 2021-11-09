@@ -18,7 +18,7 @@ package services
 
 import com.google.inject.Singleton
 import utils.Format
-import java.time.{Clock, LocalDateTime, ZoneId}
+import java.time.{Clock, LocalDateTime}
 
 @Singleton
 class DateTimeServiceImpl extends DateTimeService {

@@ -16,8 +16,6 @@
 
 package repositories
 
-import java.time.Clock
-
 import com.google.inject.{Inject, Singleton}
 import models.messages.InterchangeControlReference
 import play.api.libs.json.{Json, Reads}

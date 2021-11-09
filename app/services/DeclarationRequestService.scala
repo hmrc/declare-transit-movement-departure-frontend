@@ -44,7 +44,7 @@ import models.messages.trader._
 import models.{CommonAddress, EoriNumber, UserAnswers}
 import play.api.Logging
 import repositories.InterchangeControlReferenceIdRepository
-import java.time.{Clock, LocalDateTime}
+import java.time.LocalDateTime
 
 import javax.inject.Inject
 

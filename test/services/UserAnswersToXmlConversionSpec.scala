@@ -31,7 +31,6 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.{InterchangeControlReferenceIdRepository, MongoSuite}
 import utils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
 import xml.XMLWrites._
-import org.mockito.ArgumentMatchers.any
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

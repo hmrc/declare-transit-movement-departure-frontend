@@ -38,7 +38,6 @@ import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, Prin
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
-import org.mockito.ArgumentMatchers.any
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
