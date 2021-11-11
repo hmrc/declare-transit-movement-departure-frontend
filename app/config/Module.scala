@@ -56,6 +56,6 @@ class Module extends AbstractModule {
     bind(classOf[NameRequiredAction]).to(classOf[NameRequiredActionImpl])
     bind(classOf[DateTimeService]).to(classOf[DateTimeServiceImpl]).asEagerSingleton()
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
-    bind(classOf[Clock]).toInstance(Clock.systemDefaultZone.withZone(ZoneOffset.UTC))
+    bind(classOf[Clock]).toInstance(Clock.systemUTC)
   }
 }
