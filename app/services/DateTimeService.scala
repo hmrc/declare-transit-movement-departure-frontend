@@ -25,15 +25,15 @@ import javax.inject.Inject
 @Singleton
 class DateTimeServiceImpl @Inject() (clock: Clock) extends DateTimeService {
 
-  def currentDateTime(): LocalDateTime = LocalDateTime.now(clock)
+  def currentDateTime: LocalDateTime = LocalDateTime.now(clock)
 
-  def dateFormatted(): String = currentDateTime.format(Format.dateFormatter)
+  def dateFormatted: String = currentDateTime.format(Format.dateFormatter)
 }
 
 trait DateTimeService {
 
-  def currentDateTime(): LocalDateTime
+  def currentDateTime: LocalDateTime
 
-  def dateFormatted(): String
+  def dateFormatted: String
 
 }
