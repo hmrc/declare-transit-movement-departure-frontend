@@ -67,9 +67,9 @@ class UserAnswersToXmlConversionSpec
     when(mockInterchangeControlReference.nextInterchangeControlReferenceId())
       .thenReturn(Future.successful(InterchangeControlReference("20201212", 1)))
 
-    when(mockTimeService.currentDateTime()).thenReturn(LocalDateTime.of(2020, 12, 12, 20, 30))
+    when(mockTimeService.currentDateTime).thenReturn(LocalDateTime.of(2020, 12, 12, 20, 30))
 
-    when(mockTimeService.dateFormatted()).thenReturn("20201212")
+    when(mockTimeService.dateFormatted).thenReturn("20201212")
 
     database.flatMap(_.drop()).futureValue
   }

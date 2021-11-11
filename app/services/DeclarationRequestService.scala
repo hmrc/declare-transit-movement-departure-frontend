@@ -68,7 +68,7 @@ class DeclarationRequestService @Inject() (
       .map {
         icrId =>
           UserAnswersReader[JourneyDomain]
-            .map(journeyModelToSubmissionModel(_, icrId, dateTimeService.currentDateTime()))
+            .map(journeyModelToSubmissionModel(_, icrId, dateTimeService.currentDateTime))
             .run(userAnswers)
       }
 

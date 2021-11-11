@@ -20,18 +20,20 @@ import com.google.inject.Singleton
 import utils.Format
 import java.time.{Clock, LocalDateTime}
 
+import javax.inject.Inject
+
 @Singleton
-class DateTimeServiceImpl extends DateTimeService {
+class DateTimeServiceImpl @Inject() (clock: Clock) extends DateTimeService {
 
-  def currentDateTime(clock: Clock = Clock.systemDefaultZone()): LocalDateTime = LocalDateTime.now(clock)
+  def currentDateTime(): LocalDateTime = LocalDateTime.now(clock)
 
-  def dateFormatted(clock: Clock = Clock.systemDefaultZone()): String = currentDateTime(clock).format(Format.dateFormatter)
+  def dateFormatted(): String = currentDateTime.format(Format.dateFormatter)
 }
 
 trait DateTimeService {
 
-  def currentDateTime(clock: Clock = Clock.systemDefaultZone()): LocalDateTime
+  def currentDateTime(): LocalDateTime
 
-  def dateFormatted(clock: Clock = Clock.systemDefaultZone()): String
+  def dateFormatted(): String
 
 }
