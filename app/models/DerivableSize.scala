@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package derivable
+package models
 
-import models.DerivableSize
-import play.api.libs.json.JsPath
-import queries.Constants.guarantees
+import derivable.Derivable
+import play.api.libs.json.JsObject
 
-case object DeriveNumberOfGuarantees extends DerivableSize {
+trait DerivableSize extends Derivable[List[JsObject], Int] {
 
-  override def path: JsPath = JsPath \ guarantees
+  override val derive: List[JsObject] => Int = _.size
 
 }
