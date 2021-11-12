@@ -88,7 +88,7 @@ class CheckValidIndexActionSpec extends SpecBase with GuiceOneAppPerSuite with G
     "must return internal server error if index is out of range" in {
 
       val result: Future[Result] = harness(Index(4), DeriveNumberOfFoo, userAnswer)
-      status(result) mustBe INTERNAL_SERVER_ERROR
+      status(result) mustBe BAD_REQUEST
     }
   }
 

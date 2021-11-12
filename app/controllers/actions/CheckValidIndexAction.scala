@@ -21,6 +21,7 @@ import models.requests.DataRequest
 import models.{DerivableSize, Index}
 import pages.TechnicalDifficultiesPage
 import play.api.Logging
+import play.api.libs.json.Json
 import play.api.mvc.{ActionFilter, MessagesControllerComponents, Result}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -37,7 +38,6 @@ class CheckValidIndexCompletionAction(
   implicit val executionContext: ExecutionContext
 ) extends ActionFilter[DataRequest]
     with FrontendBaseController
-    with TechnicalDifficultiesPage
     with Logging {
 
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] = {
@@ -49,7 +49,16 @@ class CheckValidIndexCompletionAction(
       Future.successful(None)
     } else {
       logger.info(s"[CheckValidIndexCompletionAction] Index out of bounds")
-      renderTechnicalDifficultiesPage(request, executionContext).map(Some(_))
+
+      val json = Json.obj(
+        "contactUrl" -> appConfig.nctsEnquiriesUrl
+      )
+
+      renderer
+        .render("technicalDifficulties.njk", json)(request)
+        .map(
+          x => Some(BadRequest(x))
+        )
     }
   }
 
