@@ -19,7 +19,7 @@ package controllers.transportDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.NationalityCrossingBorderFormProvider
+import forms.generic.CountryFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CountryList, NormalMode}
@@ -47,10 +47,10 @@ class NationalityCrossingBorderControllerSpec extends SpecBase with MockNunjucks
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new NationalityCrossingBorderFormProvider()
+  private val formProvider = new CountryFormProvider()
   private val country      = Country(CountryCode("GB"), "United Kingdom")
   private val countries    = CountryList(Seq(country))
-  private val form         = formProvider(countries)
+  private val form         = formProvider("nationalityCrossingBorder", countries)
 
   private lazy val nationalityCrossingBorderRoute = routes.NationalityCrossingBorderController.onPageLoad(lrn, NormalMode).url
 

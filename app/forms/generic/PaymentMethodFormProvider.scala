@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.safetyAndSecurity
+package forms.generic
 
 import forms.mappings.Mappings
 import models.MethodOfPaymentList
@@ -23,12 +23,12 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class TransportChargesPaymentMethodFormProvider @Inject() extends Mappings {
+class PaymentMethodFormProvider @Inject() extends Mappings {
 
-  def apply(methodOfPaymentList: MethodOfPaymentList): Form[MethodOfPayment] =
+  def apply(messageKeyPrefix: String, methodOfPaymentList: MethodOfPaymentList): Form[MethodOfPayment] =
     Form(
-      "value" -> text("transportChargesPaymentMethod.error.required")
-        .verifying("transportChargesPaymentMethod.error.required", value => methodOfPaymentList.methodsOfPayment.exists(_.code == value))
+      "value" -> text(s"$messageKeyPrefix.error.required")
+        .verifying(s"$messageKeyPrefix.error.required", value => methodOfPaymentList.methodsOfPayment.exists(_.code == value))
         .transform[MethodOfPayment](value => methodOfPaymentList.getMethodOfPayment(value).get, _.code)
     )
 }

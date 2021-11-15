@@ -18,7 +18,7 @@ package controllers.routeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.MovementDestinationCountryFormProvider
+import forms.generic.CountryFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.userAnswerScenarios.Scenario1.UserAnswersSpecHelperOps
@@ -49,9 +49,9 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new MovementDestinationCountryFormProvider()
+  private val formProvider = new CountryFormProvider()
   private val countries    = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val form         = formProvider(countries)
+  private val form         = formProvider("movementDestinationCountry", countries)
   private val template     = "movementDestinationCountry.njk"
 
   private lazy val movementDestinationCountryRoute = routes.MovementDestinationCountryController.onPageLoad(lrn, NormalMode).url

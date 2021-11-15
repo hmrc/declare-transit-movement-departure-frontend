@@ -18,9 +18,9 @@ package controllers.routeDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.DestinationCountryFormProvider
+import forms.generic.CountryFormProvider
 import models.reference.Country
-import models.{LocalReferenceNumber, Mode}
+import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import pages.routeDetails.DestinationCountryPage
@@ -45,7 +45,7 @@ class DestinationCountryController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: DestinationCountryFormProvider,
+  formProvider: CountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -53,17 +53,17 @@ class DestinationCountryController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
+  private def form(countries: CountryList): Form[Country] = formProvider("destinationCountry", countries)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       referenceDataConnector.getCountryList() flatMap {
         countries =>
-          val form = formProvider(countries)
-
           val preparedForm = request.userAnswers
             .get(DestinationCountryPage)
             .flatMap(countries.getCountry)
-            .map(form.fill)
-            .getOrElse(form)
+            .map(form(countries).fill)
+            .getOrElse(form(countries))
 
           renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok)
       }
@@ -73,7 +73,7 @@ class DestinationCountryController @Inject() (
     implicit request =>
       referenceDataConnector.getCountryList() flatMap {
         countries =>
-          formProvider(countries)
+          form(countries)
             .bindFromRequest()
             .fold(
               formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),

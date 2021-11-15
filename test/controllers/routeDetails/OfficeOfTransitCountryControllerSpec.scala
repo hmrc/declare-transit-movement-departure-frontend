@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.OfficeOfTransitCountryFormProvider
+import forms.generic.CountryFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}
@@ -56,8 +56,8 @@ class OfficeOfTransitCountryControllerSpec
   def onwardRoute = Call("GET", "/foo")
 
   private val countries                         = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val formProvider                      = new OfficeOfTransitCountryFormProvider()
-  private val form                              = formProvider(countries)
+  private val formProvider                      = new CountryFormProvider()
+  private val form                              = formProvider("officeOfTransitCountry", countries)
   private val template                          = "officeOfTransitCountry.njk"
   private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
   private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("JE"), None)

@@ -19,7 +19,7 @@ package controllers.transportDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.NationalityAtDepartureFormProvider
+import forms.generic.CountryFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CountryList, NormalMode}
@@ -47,10 +47,10 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new NationalityAtDepartureFormProvider()
+  private val formProvider = new CountryFormProvider()
   private val country      = Country(CountryCode("GB"), "United Kingdom")
   private val countries    = CountryList(Seq(country))
-  private val form         = formProvider(countries)
+  private val form         = formProvider("nationalityAtDeparture", countries)
 
   private lazy val nationalityAtDepartureRoute = routes.NationalityAtDepartureController.onPageLoad(lrn, NormalMode).url
 

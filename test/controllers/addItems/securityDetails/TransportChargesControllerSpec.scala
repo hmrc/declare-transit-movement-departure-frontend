@@ -19,7 +19,7 @@ package controllers.addItems.securityDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.addItems.securityDetails.TransportChargesFormProvider
+import forms.generic.PaymentMethodFormProvider
 import matchers.JsonMatchers
 import models.reference.MethodOfPayment
 import models.{MethodOfPaymentList, NormalMode}
@@ -45,7 +45,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new TransportChargesFormProvider()
+  private val formProvider = new PaymentMethodFormProvider()
 
   private val methodOfPaymentList = MethodOfPaymentList(
     Seq(
@@ -53,7 +53,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
       MethodOfPayment("B", "Payment by credit card")
     )
   )
-  private val form     = formProvider(methodOfPaymentList)
+  private val form     = formProvider("transportCharges", methodOfPaymentList)
   private val template = "addItems/securityDetails/transportCharges.njk"
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]

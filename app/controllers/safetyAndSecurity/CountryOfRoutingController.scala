@@ -18,9 +18,9 @@ package controllers.safetyAndSecurity
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.safetyAndSecurity.CountryOfRoutingFormProvider
+import forms.generic.CountryFormProvider
 import models.reference.Country
-import models.{DependentSection, Index, LocalReferenceNumber, Mode}
+import models.{CountryList, DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
 import pages.safetyAndSecurity.CountryOfRoutingPage
@@ -46,7 +46,7 @@ class CountryOfRoutingController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: CountryOfRoutingFormProvider,
+  formProvider: CountryFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -57,6 +57,8 @@ class CountryOfRoutingController @Inject() (
 
   private val template = "safetyAndSecurity/countryOfRouting.njk"
 
+  private def form(countries: CountryList): Form[Country] = formProvider("countryOfRouting", countries)
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
@@ -65,13 +67,11 @@ class CountryOfRoutingController @Inject() (
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>
-            val form = formProvider(countries)
-
             val preparedForm = request.userAnswers
               .get(CountryOfRoutingPage(index))
               .flatMap(countries.getCountry)
-              .map(form.fill)
-              .getOrElse(form)
+              .map(form(countries).fill)
+              .getOrElse(form(countries))
 
             renderPage(lrn, index, mode, preparedForm, countries.fullList) map (Ok(_))
         }
@@ -85,7 +85,7 @@ class CountryOfRoutingController @Inject() (
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>
-            formProvider(countries)
+            form(countries)
               .bindFromRequest()
               .fold(
                 formWithErrors => renderPage(lrn, index, mode, formWithErrors, countries.fullList) map (BadRequest(_)),

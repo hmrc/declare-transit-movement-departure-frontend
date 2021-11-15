@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package forms.safetyAndSecurity
+package forms.generic
 
+import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
 import models.MethodOfPaymentList
 import models.reference.MethodOfPayment
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.FormError
 
-class TransportChargesPaymentMethodFormProviderSpec extends StringFieldBehaviours {
+class PaymentMethodFormProviderSpec extends SpecBase with StringFieldBehaviours {
 
-  private val requiredKey = "transportChargesPaymentMethod.error.required"
-  private val maxLength   = 2
+  private val messageKeyPrefix = arbitrary[String].sample.value
+  val requiredKey              = s"$messageKeyPrefix.error.required"
+  val lengthKey                = s"$messageKeyPrefix.error.length"
+  val maxLength                = 100
 
   private val methodOfPaymentList = MethodOfPaymentList(
     Seq(
@@ -32,21 +36,22 @@ class TransportChargesPaymentMethodFormProviderSpec extends StringFieldBehaviour
       MethodOfPayment("B", "Payment by credit card")
     )
   )
-  private val form = new TransportChargesPaymentMethodFormProvider()(methodOfPaymentList)
+
+  val form = new PaymentMethodFormProvider()(messageKeyPrefix, methodOfPaymentList)
 
   ".value" - {
 
     val fieldName = "value"
 
     behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
+      form = form,
+      fieldName = fieldName,
+      validDataGenerator = stringsWithMaxLength(maxLength)
     )
 
     behave like mandatoryField(
-      form,
-      fieldName,
+      form = form,
+      fieldName = fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
 

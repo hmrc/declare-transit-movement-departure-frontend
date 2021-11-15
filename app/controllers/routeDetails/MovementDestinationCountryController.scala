@@ -19,9 +19,9 @@ package controllers.routeDetails
 import cats.data.OptionT
 import cats.implicits._
 import controllers.actions._
-import forms.MovementDestinationCountryFormProvider
+import forms.generic.CountryFormProvider
 import models.reference.Country
-import models.{LocalReferenceNumber, Mode}
+import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import pages.routeDetails.MovementDestinationCountryPage
@@ -49,7 +49,7 @@ class MovementDestinationCountryController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   countriesService: CountriesService,
-  formProvider: MovementDestinationCountryFormProvider,
+  formProvider: CountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -57,6 +57,8 @@ class MovementDestinationCountryController @Inject() (
     with I18nSupport
     with NunjucksSupport
     with Logging {
+
+  private def form(countries: CountryList): Form[Country] = formProvider("movementDestinationCountry", countries)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
@@ -67,8 +69,8 @@ class MovementDestinationCountryController @Inject() (
           preparedForm = request.userAnswers
             .get(MovementDestinationCountryPage)
             .flatMap(countries.getCountry)
-            .map(formProvider(countries).fill)
-            .getOrElse(formProvider(countries))
+            .map(form(countries).fill)
+            .getOrElse(form(countries))
           page <- OptionT.liftF(renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok))
         } yield page
       ).getOrElseF {
@@ -84,7 +86,7 @@ class MovementDestinationCountryController @Inject() (
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
           countries         <- OptionT.liftF(countriesService.getDestinationCountryList(request.userAnswers, excludedCountries))
           page <- OptionT.liftF(
-            formProvider(countries)
+            form(countries)
               .bindFromRequest()
               .fold(
                 formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),

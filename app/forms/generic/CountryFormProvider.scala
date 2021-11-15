@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.generic
 
 import forms.mappings.Mappings
 import models.CountryList
@@ -23,12 +23,12 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class NationalityAtDepartureFormProvider @Inject() extends Mappings {
+class CountryFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList): Form[Country] =
+  def apply(messageKeyPrefix: String, countryList: CountryList): Form[Country] =
     Form(
-      "value" -> text("nationalityAtDeparture.error.required")
-        .verifying("nationalityAtDeparture.error.required", value => countryList.fullList.exists(_.code.code == value))
+      "value" -> text(s"$messageKeyPrefix.error.required")
+        .verifying(s"$messageKeyPrefix.error.required", value => countryList.fullList.exists(_.code.code == value))
         .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
     )
 }

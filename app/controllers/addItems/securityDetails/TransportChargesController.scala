@@ -18,9 +18,9 @@ package controllers.addItems.securityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.addItems.securityDetails.TransportChargesFormProvider
+import forms.generic.PaymentMethodFormProvider
 import models.reference.MethodOfPayment
-import models.{DependentSection, Index, LocalReferenceNumber, Mode}
+import models.{DependentSection, Index, LocalReferenceNumber, MethodOfPaymentList, Mode}
 import navigation.Navigator
 import navigation.annotations.SecurityDetails
 import pages.addItems.securityDetails.TransportChargesPage
@@ -46,7 +46,7 @@ class TransportChargesController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: TransportChargesFormProvider,
+  formProvider: PaymentMethodFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -56,6 +56,9 @@ class TransportChargesController @Inject() (
 
   private val template = "addItems/securityDetails/transportCharges.njk"
 
+  private def form(methodsOfPayment: MethodOfPaymentList): Form[MethodOfPayment] =
+    formProvider("transportCharges", methodsOfPayment)
+
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
@@ -64,15 +67,13 @@ class TransportChargesController @Inject() (
       implicit request =>
         referenceDataConnector.getMethodOfPaymentList() flatMap {
           payments =>
-            val form: Form[MethodOfPayment] = formProvider(payments)
-
             val preparedForm = request.userAnswers
               .get(TransportChargesPage(itemIndex))
               .flatMap(
                 x => payments.getMethodOfPayment(x.code)
               )
-              .map(form.fill)
-              .getOrElse(form)
+              .map(form(payments).fill)
+              .getOrElse(form(payments))
 
             val json = Json.obj(
               "form"     -> preparedForm,
@@ -94,8 +95,7 @@ class TransportChargesController @Inject() (
       implicit request =>
         referenceDataConnector.getMethodOfPaymentList() flatMap {
           payments =>
-            val form = formProvider(payments)
-            form
+            form(payments)
               .bindFromRequest()
               .fold(
                 formWithErrors => {
@@ -103,7 +103,7 @@ class TransportChargesController @Inject() (
                   val json = Json.obj(
                     "form"     -> formWithErrors,
                     "index"    -> itemIndex.display,
-                    "payments" -> getPaymentsAsJson(form.value, payments.methodsOfPayment),
+                    "payments" -> getPaymentsAsJson(formWithErrors.value, payments.methodsOfPayment),
                     "lrn"      -> lrn,
                     "mode"     -> mode
                   )

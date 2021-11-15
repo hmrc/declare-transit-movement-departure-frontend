@@ -14,34 +14,35 @@
  * limitations under the License.
  */
 
-package forms.safetyAndSecurity
+package forms.generic
 
 import forms.behaviours.StringFieldBehaviours
 import models.CountryList
 import models.reference.{Country, CountryCode}
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.FormError
 
-class CountryOfRoutingFormProviderSpec extends StringFieldBehaviours {
+class CountryFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey            = "countryOfRouting.error.required"
-  private val maxLength              = 2
+  private val messageKeyPrefix       = arbitrary[String].sample.value
   private val countries: CountryList = CountryList(Seq(Country(CountryCode("AD"), "Andorra")))
-
-  val form = new CountryOfRoutingFormProvider()(countries)
+  private val form                   = new CountryFormProvider()(messageKeyPrefix, countries)
 
   ".value" - {
 
-    val fieldName = "value"
+    val fieldName   = "value"
+    val requiredKey = s"$messageKeyPrefix.error.required"
+    val maxLength   = 2
 
     behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
+      form = form,
+      fieldName = fieldName,
+      validDataGenerator = stringsWithMaxLength(maxLength)
     )
 
     behave like mandatoryField(
-      form,
-      fieldName,
+      form = form,
+      fieldName = fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
 
@@ -59,4 +60,5 @@ class CountryOfRoutingFormProviderSpec extends StringFieldBehaviours {
       field.errors must be(empty)
     }
   }
+
 }

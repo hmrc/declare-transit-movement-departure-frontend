@@ -20,10 +20,10 @@ import cats.data.OptionT
 import cats.implicits._
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.OfficeOfTransitCountryFormProvider
+import forms.generic.CountryFormProvider
 import models.reference.Country
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{CountryList, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import pages.routeDetails.OfficeOfTransitCountryPage
@@ -50,7 +50,7 @@ class OfficeOfTransitCountryController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: OfficeOfTransitCountryFormProvider,
+  formProvider: CountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   officeOfTransitFilter: TraderDetailsOfficesOfTransitProvider
@@ -60,6 +60,8 @@ class OfficeOfTransitCountryController @Inject() (
     with NunjucksSupport
     with Logging {
 
+  private def form(countries: CountryList): Form[Country] = formProvider("officeOfTransitCountry", countries)
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData andThen officeOfTransitFilter(index)).async {
       implicit request =>
@@ -67,12 +69,11 @@ class OfficeOfTransitCountryController @Inject() (
           for {
             excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
             transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
-            form = formProvider(transitCountryList)
             preparedForm = request.userAnswers
               .get(OfficeOfTransitCountryPage(index))
               .flatMap(transitCountryList.getCountry)
-              .map(form.fill)
-              .getOrElse(form)
+              .map(form(transitCountryList).fill)
+              .getOrElse(form(transitCountryList))
             page <- OptionT.liftF(renderPage(lrn, index, mode, preparedForm, transitCountryList.fullList, Results.Ok))
           } yield page
         ).getOrElseF {
@@ -88,7 +89,7 @@ class OfficeOfTransitCountryController @Inject() (
           excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
           transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
           page <- OptionT.liftF(
-            formProvider(transitCountryList)
+            form(transitCountryList)
               .bindFromRequest()
               .fold(
                 formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.fullList, Results.BadRequest),
@@ -103,7 +104,7 @@ class OfficeOfTransitCountryController @Inject() (
                           lrn,
                           index,
                           mode,
-                          formProvider(transitCountryList)
+                          form(transitCountryList)
                             .withError(FormError("value", "officeOfTransitCountry.error.noTransitOffice"))
                             .fill(value),
                           transitCountryList.fullList,

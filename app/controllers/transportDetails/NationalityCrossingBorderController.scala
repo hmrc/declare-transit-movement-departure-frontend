@@ -18,9 +18,9 @@ package controllers.transportDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.NationalityCrossingBorderFormProvider
+import forms.generic.CountryFormProvider
 import models.reference.Country
-import models.{DependentSection, LocalReferenceNumber, Mode}
+import models.{CountryList, DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TransportDetails
 import pages.NationalityCrossingBorderPage
@@ -46,13 +46,15 @@ class NationalityCrossingBorderController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: NationalityCrossingBorderFormProvider,
+  formProvider: CountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
+
+  private def form(countries: CountryList): Form[Country] = formProvider("nationalityCrossingBorder", countries)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     (identify
@@ -62,13 +64,11 @@ class NationalityCrossingBorderController @Inject() (
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>
-            val form = formProvider(countries)
-
             val preparedForm = request.userAnswers
               .get(NationalityCrossingBorderPage)
               .flatMap(countries.getCountry)
-              .map(form.fill)
-              .getOrElse(form)
+              .map(form(countries).fill)
+              .getOrElse(form(countries))
 
             renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok)
         }
@@ -82,7 +82,7 @@ class NationalityCrossingBorderController @Inject() (
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>
-            formProvider(countries)
+            form(countries)
               .bindFromRequest()
               .fold(
                 formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),

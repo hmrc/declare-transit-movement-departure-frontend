@@ -18,7 +18,7 @@ package controllers.routeDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.CountryOfDispatchFormProvider
+import forms.generic.CountryFormProvider
 import models.reference.{Country, CountryOfDispatch}
 import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -45,7 +45,7 @@ class CountryOfDispatchController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: CountryOfDispatchFormProvider,
+  formProvider: CountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -53,19 +53,19 @@ class CountryOfDispatchController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
+  private def form(countries: CountryList): Form[Country] = formProvider("countryOfDispatch", countries)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       referenceDataConnector.getCountryList() flatMap {
         countries =>
-          val form = formProvider(countries)
-
           val preparedForm = request.userAnswers
             .get(CountryOfDispatchPage)
             .flatMap(
               x => countries.getCountry(x.country)
             )
-            .map(form.fill)
-            .getOrElse(form)
+            .map(form(countries).fill)
+            .getOrElse(form(countries))
 
           renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok)
       }
@@ -75,7 +75,7 @@ class CountryOfDispatchController @Inject() (
     implicit request =>
       referenceDataConnector.getCountryList() flatMap {
         countries =>
-          formProvider(countries)
+          form(countries)
             .bindFromRequest()
             .fold(
               formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
