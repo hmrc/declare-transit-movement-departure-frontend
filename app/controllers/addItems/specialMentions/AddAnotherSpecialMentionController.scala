@@ -19,7 +19,7 @@ package controllers.addItems.specialMentions
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfSpecialMentions
-import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
+import forms.generic.YesNoFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -47,7 +47,7 @@ class AddAnotherSpecialMentionController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddAnotherSpecialMentionFormProvider,
+  formProvider: YesNoFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -56,7 +56,7 @@ class AddAnotherSpecialMentionController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("addAnotherSpecialMention")
   private val template = "addItems/specialMentions/addAnotherSpecialMention.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =

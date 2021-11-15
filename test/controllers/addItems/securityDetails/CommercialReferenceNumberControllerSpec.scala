@@ -18,7 +18,7 @@ package controllers.addItems.securityDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.securityDetails.CommercialReferenceNumberFormProvider
+import forms.generic.StringFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.SecurityDetails
@@ -43,8 +43,8 @@ class CommercialReferenceNumberControllerSpec extends SpecBase with MockNunjucks
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new CommercialReferenceNumberFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new StringFormProvider()
+  private val form         = formProvider("commercialReferenceNumber", 70)
   private val template     = "addItems/securityDetails/commercialReferenceNumber.njk"
 
   lazy val commercialReferenceNumberRoute = routes.CommercialReferenceNumberController.onPageLoad(lrn, index, NormalMode).url
@@ -63,9 +63,9 @@ class CommercialReferenceNumberControllerSpec extends SpecBase with MockNunjucks
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(GET, commercialReferenceNumberRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, commercialReferenceNumberRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -95,9 +95,9 @@ class CommercialReferenceNumberControllerSpec extends SpecBase with MockNunjucks
       val userAnswers = emptyUserAnswers.set(CommercialReferenceNumberPage(index), "answer").success.value
       dataRetrievalWithData(userAnswers)
 
-      val request        = FakeRequest(GET, commercialReferenceNumberRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, commercialReferenceNumberRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -145,10 +145,10 @@ class CommercialReferenceNumberControllerSpec extends SpecBase with MockNunjucks
 
       dataRetrievalWithData(emptyUserAnswers)
 
-      val request        = FakeRequest(POST, commercialReferenceNumberRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, commercialReferenceNumberRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

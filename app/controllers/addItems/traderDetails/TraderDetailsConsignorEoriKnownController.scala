@@ -17,11 +17,12 @@
 package controllers.addItems.traderDetails
 
 import controllers.actions._
-import forms.addItems.traderDetails.TraderDetailsConsignorEoriKnownFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsTraderDetails
 import pages.addItems.traderDetails.TraderDetailsConsignorEoriKnownPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -41,7 +42,7 @@ class TraderDetailsConsignorEoriKnownController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: TraderDetailsConsignorEoriKnownFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -51,6 +52,8 @@ class TraderDetailsConsignorEoriKnownController @Inject() (
 
   private val template = "addItems/traderDetails/traderDetailsConsignorEoriKnown.njk"
 
+  private def form(index: Index): Form[Boolean] = formProvider("traderDetailsConsignorEoriKnown", index)
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
@@ -58,8 +61,8 @@ class TraderDetailsConsignorEoriKnownController @Inject() (
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
         val preparedForm = request.userAnswers.get(TraderDetailsConsignorEoriKnownPage(index)) match {
-          case None        => formProvider(index)
-          case Some(value) => formProvider(index).fill(value)
+          case None        => form(index)
+          case Some(value) => form(index).fill(value)
         }
 
         val json = Json.obj(
@@ -79,7 +82,7 @@ class TraderDetailsConsignorEoriKnownController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(index)
+        form(index)
           .bindFromRequest()
           .fold(
             formWithErrors => {

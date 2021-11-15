@@ -18,7 +18,7 @@ package controllers.goodsSummary
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.AddCustomsApprovedLocationFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.GoodsSummary
@@ -48,8 +48,8 @@ class AddCustomsApprovedLocationControllerSpec extends SpecBase with MockNunjuck
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[GoodsSummary]).toInstance(new FakeNavigator(onwardRoute)))
 
-  val formProvider = new AddCustomsApprovedLocationFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("addCustomsApprovedLocation")
 
   lazy val addCustomsApprovedLocationRoute = routes.AddCustomsApprovedLocationController.onPageLoad(lrn, NormalMode).url
 

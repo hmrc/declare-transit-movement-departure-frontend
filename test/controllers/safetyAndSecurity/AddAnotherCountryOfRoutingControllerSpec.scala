@@ -19,7 +19,7 @@ package controllers.safetyAndSecurity
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
-import forms.safetyAndSecurity.AddAnotherCountryOfRoutingFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CountryList, NormalMode}
@@ -44,11 +44,11 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with MockNunjuck
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddAnotherCountryOfRoutingFormProvider()
+  private val formProvider = new YesNoFormProvider()
 
   private val mockReferenceDataConnector = mock[ReferenceDataConnector]
   val countries                          = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val form                       = formProvider()
+  private val form                       = formProvider("addAnotherCountryOfRouting")
   private val template                   = "safetyAndSecurity/addAnotherCountryOfRouting.njk"
 
   private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url

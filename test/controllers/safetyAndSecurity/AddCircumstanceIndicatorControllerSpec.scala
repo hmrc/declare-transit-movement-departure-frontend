@@ -18,7 +18,7 @@ package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoute}
-import forms.safetyAndSecurity.AddCircumstanceIndicatorFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.SafetyAndSecurity
@@ -43,8 +43,8 @@ class AddCircumstanceIndicatorControllerSpec extends SpecBase with MockNunjucksR
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddCircumstanceIndicatorFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addCircumstanceIndicator")
   private val template     = "safetyAndSecurity/addCircumstanceIndicator.njk"
 
   lazy val addCircumstanceIndicatorRoute = routes.AddCircumstanceIndicatorController.onPageLoad(lrn, NormalMode).url

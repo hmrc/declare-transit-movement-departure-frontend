@@ -17,11 +17,12 @@
 package controllers.addItems.specialMentions
 
 import controllers.actions._
-import forms.addItems.specialMentions.AddSpecialMentionFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsSpecialMentions
 import pages.addItems.specialMentions.AddSpecialMentionPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -41,7 +42,7 @@ class AddSpecialMentionController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddSpecialMentionFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -51,6 +52,8 @@ class AddSpecialMentionController @Inject() (
 
   private val template = "addItems/specialMentions/addSpecialMention.njk"
 
+  private def form(index: Index): Form[Boolean] = formProvider("addSpecialMention", index)
+
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
@@ -58,8 +61,8 @@ class AddSpecialMentionController @Inject() (
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
         val preparedForm = request.userAnswers.get(AddSpecialMentionPage(itemIndex)) match {
-          case None        => formProvider(itemIndex)
-          case Some(value) => formProvider(itemIndex).fill(value)
+          case None        => form(itemIndex)
+          case Some(value) => form(itemIndex).fill(value)
         }
 
         val json = Json.obj(
@@ -79,7 +82,7 @@ class AddSpecialMentionController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(itemIndex)
+        form(itemIndex)
           .bindFromRequest()
           .fold(
             formWithErrors => {

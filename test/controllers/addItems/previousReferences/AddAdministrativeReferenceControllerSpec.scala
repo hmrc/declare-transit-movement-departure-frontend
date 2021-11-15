@@ -18,7 +18,7 @@ package controllers.addItems.previousReferences
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.AddAdministrativeReferenceFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItems.AddItemsAdminReference
@@ -43,8 +43,8 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddAdministrativeReferenceFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addAdministrativeReference")
   private val template     = "addItems/addAdministrativeReference.njk"
 
   lazy val addAdministrativeReferenceRoute = routes.AddAdministrativeReferenceController.onPageLoad(lrn, index, NormalMode).url

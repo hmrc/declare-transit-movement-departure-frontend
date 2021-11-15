@@ -18,7 +18,7 @@ package controllers.transportDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.ChangeAtBorderFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.TransportDetails
@@ -43,8 +43,8 @@ class ChangeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ChangeAtBorderFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("changeAtBorder")
 
   lazy val changeAtBorderRoute = routes.ChangeAtBorderController.onPageLoad(lrn, NormalMode).url
 

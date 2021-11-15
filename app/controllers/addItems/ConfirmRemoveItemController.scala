@@ -17,7 +17,7 @@
 package controllers.addItems
 
 import controllers.actions._
-import forms.addItems.ConfirmRemoveItemFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItems
@@ -42,7 +42,7 @@ class ConfirmRemoveItemController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: ConfirmRemoveItemFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -52,13 +52,14 @@ class ConfirmRemoveItemController @Inject() (
 
   private val template = "addItems/confirmRemoveItem.njk"
 
+  private val form = formProvider("removeItem")
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val form = formProvider()
         val json = Json.obj(
           "form"   -> form,
           "mode"   -> mode,
@@ -76,7 +77,6 @@ class ConfirmRemoveItemController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val form = formProvider()
         form
           .bindFromRequest()
           .fold(

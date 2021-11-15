@@ -18,7 +18,7 @@ package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddAnotherPackageFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItems.AddItemsPackagesInfo
@@ -43,8 +43,8 @@ class AddAnotherPackageControllerSpec extends SpecBase with MockNunjucksRenderer
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AddAnotherPackageFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("addAnotherPackage")
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

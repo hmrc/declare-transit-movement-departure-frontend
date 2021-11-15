@@ -17,11 +17,12 @@
 package controllers.addItems.packagesInformation
 
 import controllers.actions._
-import forms.addItems.RemovePackageFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsPackagesInfo
 import pages.addItems.RemovePackagePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,7 +43,7 @@ class RemovePackageController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: RemovePackageFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -52,17 +53,17 @@ class RemovePackageController @Inject() (
 
   private val template = "addItems/removePackage.njk"
 
+  private def form(index: Index): Form[Boolean] = formProvider("removePackage", index)
+
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val form = formProvider(packageIndex.display)
-
         val preparedForm = request.userAnswers.get(RemovePackagePage(itemIndex)) match {
-          case None        => form
-          case Some(value) => form.fill(value)
+          case None        => form(packageIndex)
+          case Some(value) => form(packageIndex).fill(value)
         }
 
         val json = Json.obj(
@@ -83,9 +84,7 @@ class RemovePackageController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val form = formProvider(packageIndex.display)
-
-        form
+        form(packageIndex)
           .bindFromRequest()
           .fold(
             formWithErrors => {

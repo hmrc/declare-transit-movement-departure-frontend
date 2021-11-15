@@ -18,7 +18,7 @@ package controllers.movementDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.ContainersUsedPageFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.MovementDetails
@@ -43,8 +43,8 @@ class ContainersUsedControllerSpec extends SpecBase with MockNunjucksRendererApp
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContainersUsedPageFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("containersUsed")
 
   lazy val containersUsedPageRoute = routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
 

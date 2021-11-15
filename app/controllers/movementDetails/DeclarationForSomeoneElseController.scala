@@ -17,7 +17,7 @@
 package controllers.movementDetails
 
 import controllers.actions._
-import forms.DeclarationForSomeoneElseFormProvider
+import forms.generic.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.MovementDetails
@@ -40,7 +40,7 @@ class DeclarationForSomeoneElseController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: DeclarationForSomeoneElseFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -48,7 +48,7 @@ class DeclarationForSomeoneElseController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("declarationForSomeoneElse")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>

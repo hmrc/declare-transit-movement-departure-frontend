@@ -17,7 +17,7 @@
 package controllers.routeDetails
 
 import controllers.actions._
-import forms.AddOfficeOfTransitFormProvider
+import forms.generic.YesNoFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
@@ -40,7 +40,7 @@ class AddOfficeOfTransitController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: AddOfficeOfTransitFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -48,7 +48,7 @@ class AddOfficeOfTransitController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("addOfficeOfTransit")
   private val template = "addOfficeOfTransit.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {

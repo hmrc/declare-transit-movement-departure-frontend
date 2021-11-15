@@ -17,11 +17,12 @@
 package controllers.addItems.packagesInformation
 
 import controllers.actions._
-import forms.addItems.AddMarkFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsPackagesInfo
 import pages.addItems.AddMarkPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -41,7 +42,7 @@ class AddMarkController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddMarkFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,17 +50,17 @@ class AddMarkController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
+  private def form(index: Index): Form[Boolean] = formProvider("addMark", index)
+
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val form = formProvider(packageIndex.display)
-
         val preparedForm = request.userAnswers.get(AddMarkPage(itemIndex, packageIndex)) match {
-          case None        => form
-          case Some(value) => form.fill(value)
+          case None        => form(packageIndex)
+          case Some(value) => form(packageIndex).fill(value)
         }
 
         val json = Json.obj(
@@ -81,9 +82,7 @@ class AddMarkController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        val form = formProvider(packageIndex.display)
-
-        form
+        form(packageIndex)
           .bindFromRequest()
           .fold(
             formWithErrors => {

@@ -17,7 +17,7 @@
 package controllers
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.AddSecurityDetailsFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.PreTaskListDetails
@@ -42,8 +42,8 @@ class AddSecurityDetailsControllerSpec extends SpecBase with MockNunjucksRendere
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AddSecurityDetailsFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("addSecurityDetails")
 
   lazy val addSecurityDetailsRoute = routes.AddSecurityDetailsController.onPageLoad(lrn, NormalMode).url
 

@@ -18,7 +18,7 @@ package controllers.addItems
 
 import controllers.actions._
 import derivable.DeriveNumberOfItems
-import forms.addItems.AddAnotherItemFormProvider
+import forms.generic.YesNoFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
@@ -46,7 +46,7 @@ class AddAnotherItemController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddAnotherItemFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -54,7 +54,7 @@ class AddAnotherItemController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("addAnotherItem")
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] =
     (identify

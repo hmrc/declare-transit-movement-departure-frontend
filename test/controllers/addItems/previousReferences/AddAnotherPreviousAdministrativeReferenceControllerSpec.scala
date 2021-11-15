@@ -19,7 +19,7 @@ package controllers.addItems.previousReferences
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.reference.PreviousReferencesDocumentType
 import models.{NormalMode, PreviousReferencesDocumentTypeList, UserAnswers}
@@ -50,8 +50,8 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider         = new AddAnotherPreviousAdministrativeReferenceFormProvider()
-  private val form                 = formProvider()
+  private val formProvider         = new YesNoFormProvider()
+  private val form                 = formProvider("addAnotherPreviousAdministrativeReference")
   private val template             = "addItems/addAnotherPreviousAdministrativeReference.njk"
   private val mockRefDataConnector = mock[ReferenceDataConnector]
 

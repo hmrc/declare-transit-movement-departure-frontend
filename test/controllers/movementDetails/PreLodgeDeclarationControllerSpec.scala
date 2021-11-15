@@ -17,7 +17,7 @@
 package controllers.movementDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.movementDetails.PreLodgeDeclarationFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.MovementDetails
@@ -42,8 +42,8 @@ class PreLodgeDeclarationControllerSpec extends SpecBase with MockNunjucksRender
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new PreLodgeDeclarationFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("preLodgeDeclaration")
   private val template     = "movementDetails/preLodgeDeclaration.njk"
 
   lazy val preLodgeDeclarationRoute = routes.PreLodgeDeclarationController.onPageLoad(lrn, NormalMode).url

@@ -17,7 +17,7 @@
 package controllers.addItems.previousReferences
 
 import controllers.actions._
-import forms.ConfirmRemovePreviousAdministrativeReferenceFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsAdminReference
@@ -42,7 +42,7 @@ class ConfirmRemovePreviousAdministrativeReferenceController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: ConfirmRemovePreviousAdministrativeReferenceFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -50,7 +50,7 @@ class ConfirmRemovePreviousAdministrativeReferenceController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("confirmRemovePreviousAdministrativeReference")
   private val template = "addItems/confirmRemovePreviousAdministrativeReference.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =

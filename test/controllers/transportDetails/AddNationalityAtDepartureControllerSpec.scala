@@ -18,7 +18,7 @@ package controllers.transportDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.AddNationalityAtDepartureFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.TransportDetails
@@ -43,8 +43,8 @@ class AddNationalityAtDepartureControllerSpec extends SpecBase with MockNunjucks
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AddNationalityAtDepartureFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("addNationalityAtDeparture")
 
   lazy val addNationalityAtDepartureRoute = routes.AddNationalityAtDepartureController.onPageLoad(lrn, NormalMode).url
 

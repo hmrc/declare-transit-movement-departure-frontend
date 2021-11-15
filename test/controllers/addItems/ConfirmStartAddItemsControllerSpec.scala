@@ -18,7 +18,7 @@ package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.ConfirmStartAddItemsFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.UserAnswers
 import navigation.annotations.addItems.AddItemsItemDetails
@@ -43,8 +43,8 @@ class ConfirmStartAddItemsControllerSpec extends SpecBase with MockNunjucksRende
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new ConfirmStartAddItemsFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("confirmStartAddItems")
   private val template     = "addItems/confirmStartAddItems.njk"
 
   lazy val startAddItemsRoute = controllers.addItems.itemDetails.routes.ConfirmStartAddItemsController.onPageLoad(lrn).url

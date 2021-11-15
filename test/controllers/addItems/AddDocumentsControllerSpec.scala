@@ -18,7 +18,7 @@ package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddDocumentsFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItems.AddItemsDocument
@@ -43,8 +43,8 @@ class AddDocumentsControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddDocumentsFormProvider()
-  private val form         = formProvider(index)
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addDocuments", index)
   private val template     = "addItems/addDocuments.njk"
 
   lazy val addDocumentsRoute = controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(lrn, itemIndex, NormalMode).url

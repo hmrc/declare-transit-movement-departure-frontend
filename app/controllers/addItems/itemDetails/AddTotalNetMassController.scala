@@ -17,11 +17,12 @@
 package controllers.addItems.itemDetails
 
 import controllers.actions._
-import forms.addItems.AddTotalNetMassFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsItemDetails
 import pages.AddTotalNetMassPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -41,13 +42,15 @@ class AddTotalNetMassController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddTotalNetMassFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
+
+  private def form(index: Index): Form[Boolean] = formProvider("addTotalNetMass", index)
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
@@ -56,8 +59,8 @@ class AddTotalNetMassController @Inject() (
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
         val preparedForm = request.userAnswers.get(AddTotalNetMassPage(index)) match {
-          case None        => formProvider(index: Index)
-          case Some(value) => formProvider(index: Index).fill(value)
+          case None        => form(index)
+          case Some(value) => form(index).fill(value)
         }
 
         val json = Json.obj(
@@ -77,7 +80,7 @@ class AddTotalNetMassController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(index: Index)
+        form(index)
           .bindFromRequest()
           .fold(
             formWithErrors => {

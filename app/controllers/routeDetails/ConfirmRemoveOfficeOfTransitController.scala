@@ -19,7 +19,7 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfOfficeOfTransits
-import forms.ConfirmRemoveOfficeOfTransitFormProvider
+import forms.generic.YesNoFormProvider
 import handlers.ErrorHandler
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
@@ -50,7 +50,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   requireData: DataRequiredAction,
   errorHandler: ErrorHandler,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: ConfirmRemoveOfficeOfTransitFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -58,7 +58,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("confirmRemoveOfficeOfTransit")
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>

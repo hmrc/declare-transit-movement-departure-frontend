@@ -19,7 +19,7 @@ package controllers.routeDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.ConfirmRemoveOfficeOfTransitFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.reference.{CountryCode, CustomsOffice}
 import models.{Id, Index, NormalMode, UserAnswers}
@@ -46,8 +46,8 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider                                   = new ConfirmRemoveOfficeOfTransitFormProvider()
-  val form                                           = formProvider()
+  val formProvider                                   = new YesNoFormProvider()
+  val form                                           = formProvider("confirmRemoveOfficeOfTransit")
   private val mockReferenceDataConnector             = mock[ReferenceDataConnector]
   private val customsOffice                          = CustomsOffice("id", "name", CountryCode("GB"), None)
   lazy val confirmRemoveOfficeOfTransitRoute: String = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, index, NormalMode).url

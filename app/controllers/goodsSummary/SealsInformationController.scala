@@ -18,7 +18,7 @@ package controllers.goodsSummary
 
 import controllers.actions._
 import derivable.DeriveNumberOfSeals
-import forms.SealsInformationFormProvider
+import forms.generic.YesNoFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -43,7 +43,7 @@ class SealsInformationController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: SealsInformationFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -51,7 +51,7 @@ class SealsInformationController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  val form = formProvider()
+  private val form = formProvider("sealsInformation")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>

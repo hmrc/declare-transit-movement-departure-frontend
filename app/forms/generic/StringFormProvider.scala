@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package forms.addItems
+package forms.generic
 
 import forms.mappings.Mappings
-import models.Index
+import models.domain.StringFieldRegex.stringFieldRegex
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class AddAnotherDocumentFormProvider @Inject() extends Mappings {
+class StringFormProvider @Inject() extends Mappings {
 
-  def apply(index: Index): Form[Boolean] =
+  def apply(messageKeyPrefix: String, maximumLength: Int): Form[String] =
     Form(
-      "value" -> boolean("addAnotherDocument.error.required", "error.boolean", Seq(index.display))
+      "value" -> text(s"$messageKeyPrefix.error.required")
+        .verifying(
+          forms.StopOnFirstFail[String](
+            maxLength(maximumLength, s"$messageKeyPrefix.error.length"),
+            regexp(stringFieldRegex, s"$messageKeyPrefix.error.invalidCharacters")
+          )
+        )
     )
 }

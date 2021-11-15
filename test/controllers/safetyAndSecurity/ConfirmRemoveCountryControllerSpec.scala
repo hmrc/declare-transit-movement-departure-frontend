@@ -18,7 +18,7 @@ package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoute}
-import forms.safetyAndSecurity.ConfirmRemoveCountryFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.SafetyAndSecurity
@@ -42,8 +42,8 @@ class ConfirmRemoveCountryControllerSpec extends SpecBase with MockNunjucksRende
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new ConfirmRemoveCountryFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("confirmRemoveCountry")
   private val template     = "confirmRemoveCountry.njk"
 
   lazy val confirmRemoveCountryRoute = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, NormalMode).url

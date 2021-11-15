@@ -18,7 +18,7 @@ package controllers.routeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.AddOfficeOfTransitFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.RouteDetails
@@ -43,8 +43,8 @@ class AddOfficeOfTransitControllerSpec extends SpecBase with MockNunjucksRendere
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddOfficeOfTransitFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addOfficeOfTransit")
   private val template     = "addOfficeOfTransit.njk"
 
   lazy val addOfficeOfTransitRoute = routes.AddOfficeOfTransitController.onPageLoad(lrn, NormalMode).url

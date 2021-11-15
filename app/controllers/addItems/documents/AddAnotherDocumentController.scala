@@ -19,7 +19,7 @@ package controllers.addItems.documents
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfDocuments
-import forms.addItems.AddAnotherDocumentFormProvider
+import forms.generic.YesNoFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -47,7 +47,7 @@ class AddAnotherDocumentController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddAnotherDocumentFormProvider,
+  formProvider: YesNoFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -56,13 +56,15 @@ class AddAnotherDocumentController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
+  private def form(index: Index): Form[Boolean] = formProvider("addAnotherDocument", index)
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        renderPage(lrn, index, mode, formProvider(index)).map(Ok(_))
+        renderPage(lrn, index, mode, form(index)).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
@@ -71,7 +73,7 @@ class AddAnotherDocumentController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(index)
+        form(index)
           .bindFromRequest()
           .fold(
             formWithErrors => renderPage(lrn, index, mode, formWithErrors).map(BadRequest(_)),

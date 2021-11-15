@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package forms.addItems
+package forms.generic
 
 import forms.mappings.Mappings
+import models.Index
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class AddAnotherPreviousAdministrativeReferenceFormProvider @Inject() extends Mappings {
+class YesNoFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(messageKeyPrefix: String): Form[Boolean] = apply(messageKeyPrefix, Nil)
+
+  def apply(messageKeyPrefix: String, index: Index): Form[Boolean] = apply(messageKeyPrefix, Seq(index.display))
+
+  def apply(messageKeyPrefix: String, args: Seq[Any]): Form[Boolean] =
     Form(
-      "value" -> boolean("addAnotherPreviousAdministrativeReference.error.required")
+      "value" -> boolean(s"$messageKeyPrefix.error.required", "error.boolean", args)
     )
 }

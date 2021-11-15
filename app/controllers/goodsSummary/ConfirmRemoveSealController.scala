@@ -18,7 +18,7 @@ package controllers.goodsSummary
 
 import controllers.actions._
 import derivable.DeriveNumberOfSeals
-import forms.ConfirmRemoveSealFormProvider
+import forms.generic.YesNoFormProvider
 import handlers.ErrorHandler
 import models.domain.SealDomain
 import models.requests.DataRequest
@@ -46,7 +46,7 @@ class ConfirmRemoveSealController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: ConfirmRemoveSealFormProvider,
+  formProvider: YesNoFormProvider,
   errorHandler: ErrorHandler,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -57,13 +57,14 @@ class ConfirmRemoveSealController @Inject() (
 
   private val confirmRemoveSealTemplate = "/confirmRemoveSeal.njk"
 
+  private def form(sealDomain: SealDomain): Form[Boolean] = formProvider("confirmRemoveSeal", Seq(sealDomain.numberOrMark))
+
   def onPageLoad(lrn: LocalReferenceNumber, sealIndex: Index, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData).async {
       implicit request =>
         request.userAnswers.get(SealIdDetailsPage(sealIndex)) match {
           case Some(seal) =>
-            val form = formProvider(seal)
-            renderPage(lrn, sealIndex, mode, form, seal).map(Ok(_))
+            renderPage(lrn, sealIndex, mode, form(seal), seal).map(Ok(_))
           case _ =>
             renderErrorPage(mode)
         }
@@ -74,7 +75,7 @@ class ConfirmRemoveSealController @Inject() (
       implicit request =>
         request.userAnswers.get(SealIdDetailsPage(sealIndex)) match {
           case Some(seal) =>
-            formProvider(seal)
+            form(seal)
               .bindFromRequest()
               .fold(
                 formWithErrors => renderPage(lrn, sealIndex, mode, formWithErrors, seal).map(BadRequest(_)),

@@ -18,7 +18,7 @@ package controllers.transportDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.AddIdAtDepartureFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.TransportDetails
@@ -43,8 +43,8 @@ class AddIdAtDepartureControllerSpec extends SpecBase with MockNunjucksRendererA
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AddIdAtDepartureFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("addIdAtDeparture")
 
   lazy val addIdAtDepartureRoute = routes.AddIdAtDepartureController.onPageLoad(lrn, NormalMode).url
 

@@ -17,7 +17,7 @@
 package controllers.addItems.documents
 
 import controllers.actions._
-import forms.addItems.ConfirmRemoveDocumentFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
@@ -42,7 +42,7 @@ class ConfirmRemoveDocumentController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: ConfirmRemoveDocumentFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -50,7 +50,7 @@ class ConfirmRemoveDocumentController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("confirmRemoveDocument")
   private val template = "addItems/confirmRemoveDocument.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =

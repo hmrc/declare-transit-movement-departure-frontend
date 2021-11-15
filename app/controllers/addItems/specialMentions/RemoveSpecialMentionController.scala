@@ -17,7 +17,7 @@
 package controllers.addItems.specialMentions
 
 import controllers.actions._
-import forms.addItems.specialMentions.RemoveSpecialMentionFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsSpecialMentions
@@ -42,7 +42,7 @@ class RemoveSpecialMentionController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: RemoveSpecialMentionFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -50,7 +50,7 @@ class RemoveSpecialMentionController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("removeSpecialMention")
   private val template = "addItems/specialMentions/removeSpecialMention.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =

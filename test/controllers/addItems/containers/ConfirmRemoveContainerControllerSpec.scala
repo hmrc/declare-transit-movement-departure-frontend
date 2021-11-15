@@ -18,7 +18,7 @@ package controllers.addItems.containers
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.containers.ConfirmRemoveContainerFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.addItems.AddItemsContainer
@@ -42,8 +42,8 @@ class ConfirmRemoveContainerControllerSpec extends SpecBase with MockNunjucksRen
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new ConfirmRemoveContainerFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("confirmRemoveContainer")
   private val template     = "addItems/containers/confirmRemoveContainer.njk"
 
   lazy val confirmRemoveContainerRoute = routes.ConfirmRemoveContainerController.onPageLoad(lrn, index, containerIndex, NormalMode).url

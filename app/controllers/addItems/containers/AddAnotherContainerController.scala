@@ -18,7 +18,7 @@ package controllers.addItems.containers
 
 import controllers.actions._
 import derivable.DeriveNumberOfContainers
-import forms.addItems.containers.AddAnotherContainerFormProvider
+import forms.generic.YesNoFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -44,7 +44,7 @@ class AddAnotherContainerController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: AddAnotherContainerFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -52,7 +52,7 @@ class AddAnotherContainerController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("addAnotherContainer")
   private val template = "addItems/containers/addAnotherContainer.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =

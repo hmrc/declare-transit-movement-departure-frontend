@@ -17,7 +17,7 @@
 package controllers.safetyAndSecurity
 
 import controllers.actions._
-import forms.safetyAndSecurity.ConfirmRemoveCountryFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
@@ -42,7 +42,7 @@ class ConfirmRemoveCountryController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: ConfirmRemoveCountryFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -51,6 +51,7 @@ class ConfirmRemoveCountryController @Inject() (
     with NunjucksSupport {
 
   private val template = "confirmRemoveCountry.njk"
+  private val form     = formProvider("confirmRemoveCountry")
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
@@ -58,8 +59,6 @@ class ConfirmRemoveCountryController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        val form = formProvider()
-
         val json = Json.obj(
           "form"   -> form,
           "mode"   -> mode,
@@ -77,7 +76,6 @@ class ConfirmRemoveCountryController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        val form = formProvider()
         form
           .bindFromRequest()
           .fold(

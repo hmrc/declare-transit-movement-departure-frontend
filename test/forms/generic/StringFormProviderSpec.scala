@@ -14,44 +14,49 @@
  * limitations under the License.
  */
 
-package forms.addItems.securityDetails
+package forms.generic
 
-import base.SpecBase
 import forms.behaviours.StringFieldBehaviours
+import org.scalacheck.Arbitrary._
 import play.api.data.FormError
 
-class CommercialReferenceNumberFormProviderSpec extends SpecBase with StringFieldBehaviours {
+class StringFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "commercialReferenceNumber.error.required"
-  private val lengthKey   = "commercialReferenceNumber.error.length"
-  private val invalidKey  = "commercialReferenceNumber.error.invalidCharacters"
-  private val maxLength   = 70
-  private val form        = new CommercialReferenceNumberFormProvider()()
+  private val messageKeyPrefix = arbitrary[String].sample.value
+  private val maxLength        = arbitrary[Int].sample.value
+  private val requiredKey      = s"$messageKeyPrefix.error.required"
+  private val lengthKey        = s"$messageKeyPrefix.error.length"
+  private val invalidKey       = s"$messageKeyPrefix.error.invalidCharacters"
+  private val form             = new StringFormProvider()(messageKeyPrefix, maxLength)
 
   ".value" - {
 
     val fieldName = "value"
 
     behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
+      form = form,
+      fieldName = fieldName,
+      validDataGenerator = stringsWithMaxLength(maxLength)
     )
 
     behave like fieldWithMaxLength(
-      form,
-      fieldName,
+      form = form,
+      fieldName = fieldName,
       maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
     behave like mandatoryField(
-      form,
-      fieldName,
+      form = form,
+      fieldName = fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    behave like fieldWithInvalidCharacters(form, fieldName, invalidKey, maxLength)
+    behave like fieldWithInvalidCharacters(
+      form = form,
+      fieldName = fieldName,
+      invalidKey = invalidKey,
+      length = maxLength
+    )
   }
-
 }

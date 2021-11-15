@@ -18,7 +18,7 @@ package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoute}
-import forms.safetyAndSecurity.AddConveyancerReferenceNumberFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.SafetyAndSecurity
@@ -43,8 +43,8 @@ class AddConveyanceReferenceNumberControllerSpec extends SpecBase with MockNunju
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddConveyancerReferenceNumberFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addConveyancerReferenceNumber")
   private val template     = "safetyAndSecurity/addConveyanceReferenceNumber.njk"
 
   lazy val addConveyanceReferenceNumberRoute = routes.AddConveyanceReferenceNumberController.onPageLoad(lrn, NormalMode).url

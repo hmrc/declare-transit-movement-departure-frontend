@@ -19,7 +19,7 @@ package controllers.routeDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.AddTransitOfficeFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CustomsOfficeList, NormalMode}
@@ -44,8 +44,8 @@ class AddTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererA
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AddTransitOfficeFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("addTransitOffice")
 
   lazy val addTransitOfficeRoute           = routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
   private val mockRefDataConnector         = mock[ReferenceDataConnector]

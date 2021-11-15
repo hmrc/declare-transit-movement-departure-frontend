@@ -18,7 +18,7 @@ package controllers.goodsSummary
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.ConfirmRemoveSealsFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.GoodsSummary
@@ -43,8 +43,8 @@ class ConfirmRemoveSealsControllerSpec extends SpecBase with MockNunjucksRendere
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider        = new ConfirmRemoveSealsFormProvider()
-  val form: Form[Boolean] = formProvider()
+  val formProvider        = new YesNoFormProvider()
+  val form: Form[Boolean] = formProvider("confirmRemoveSeals")
 
   lazy val confirmRemoveSealsRoute: String = routes.ConfirmRemoveSealsController.onPageLoad(lrn, NormalMode).url
 

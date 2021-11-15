@@ -19,7 +19,7 @@ package controllers.addItems
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddAnotherDocumentFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.reference.DocumentType
 import models.{DocumentTypeList, NormalMode}
@@ -44,8 +44,8 @@ class AddAnotherDocumentControllerSpec extends SpecBase with MockNunjucksRendere
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider                                 = new AddAnotherDocumentFormProvider()
-  private val form                                         = formProvider(index)
+  private val formProvider                                 = new YesNoFormProvider()
+  private val form                                         = formProvider("addAnotherDocument", index)
   private val template                                     = "addItems/addAnotherDocument.njk"
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   val documentType1: DocumentType                          = DocumentType("1", "11", transportDocument = true)

@@ -17,7 +17,7 @@
 package controllers.guaranteeDetails
 
 import controllers.actions._
-import forms.ConfirmRemoveGuaranteeFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
@@ -42,7 +42,7 @@ class ConfirmRemoveGuaranteeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: ConfirmRemoveGuaranteeFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -50,7 +50,7 @@ class ConfirmRemoveGuaranteeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("confirmRemoveGuarantee")
   private val template = "guaranteeDetails/confirmRemoveGuarantee.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index): Action[AnyContent] =

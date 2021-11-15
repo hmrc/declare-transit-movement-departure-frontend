@@ -18,7 +18,7 @@ package controllers.addItems.securityDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.securityDetails.AddDangerousGoodsCodeFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.SecurityDetails
@@ -43,8 +43,8 @@ class AddDangerousGoodsCodeControllerSpec extends SpecBase with MockNunjucksRend
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddDangerousGoodsCodeFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addDangerousGoodsCode")
   private val template     = "addItems/securityDetails/addDangerousGoodsCode.njk"
 
   lazy val addDangerousGoodsCodeRoute = routes.AddDangerousGoodsCodeController.onPageLoad(lrn, index, NormalMode).url

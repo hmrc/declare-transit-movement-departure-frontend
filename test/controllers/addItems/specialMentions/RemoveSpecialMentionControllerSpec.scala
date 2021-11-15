@@ -17,7 +17,7 @@
 package controllers.addItems.specialMentions
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.addItems.specialMentions.RemoveSpecialMentionFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItems.AddItemsSpecialMentions
@@ -42,8 +42,8 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new RemoveSpecialMentionFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("removeSpecialMention")
   private val template     = "addItems/specialMentions/removeSpecialMention.njk"
 
   lazy val removeSpecialMentionRoute = routes.RemoveSpecialMentionController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url

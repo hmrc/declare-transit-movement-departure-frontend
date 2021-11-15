@@ -17,7 +17,7 @@
 package controllers.guaranteeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.ConfirmRemoveGuaranteeFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import navigation.annotations.GuaranteeDetails
 import navigation.{FakeNavigator, Navigator}
@@ -40,8 +40,8 @@ class ConfirmRemoveGuaranteeControllerSpec extends SpecBase with MockNunjucksRen
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new ConfirmRemoveGuaranteeFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("confirmRemoveGuarantee")
   private val template     = "guaranteeDetails/confirmRemoveGuarantee.njk"
 
   lazy val confirmRemoveGuaranteeRoute = routes.ConfirmRemoveGuaranteeController.onPageLoad(lrn, index).url

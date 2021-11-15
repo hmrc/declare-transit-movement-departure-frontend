@@ -19,7 +19,7 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfOfficeOfTransits
-import forms.AddTransitOfficeFormProvider
+import forms.generic.YesNoFormProvider
 import models.requests.DataRequest
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -44,7 +44,7 @@ class AddTransitOfficeController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: AddTransitOfficeFormProvider,
+  formProvider: YesNoFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -53,7 +53,7 @@ class AddTransitOfficeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("addTransitOffice")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData).async {

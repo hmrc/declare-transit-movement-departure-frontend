@@ -18,7 +18,7 @@ package controllers.addItems.previousReferences
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.ConfirmRemovePreviousAdministrativeReferenceFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItems.AddItemsAdminReference
@@ -48,8 +48,8 @@ class ConfirmRemovePreviousAdministrativeReferenceControllerSpec
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new ConfirmRemovePreviousAdministrativeReferenceFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("confirmRemovePreviousAdministrativeReference")
   private val template     = "addItems/confirmRemovePreviousAdministrativeReference.njk"
 
   lazy val confirmRemovePreviousAdministrativeReferenceRoute =

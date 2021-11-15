@@ -18,7 +18,7 @@ package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddAnotherItemFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import navigation.annotations.addItems.AddItems
 import navigation.{FakeNavigator, Navigator}
@@ -42,8 +42,8 @@ class AddAnotherItemControllerSpec extends SpecBase with MockNunjucksRendererApp
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AddAnotherItemFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("addAnotherItem")
 
   lazy val addAnotherItemRoute = routes.AddAnotherItemController.onPageLoad(lrn).url
 

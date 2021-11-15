@@ -18,7 +18,7 @@ package controllers.goodsSummary
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.SealsInformationFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{Index, NormalMode}
 import navigation.annotations.GoodsSummary
@@ -44,8 +44,8 @@ class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererA
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider        = new SealsInformationFormProvider()
-  val form: Form[Boolean] = formProvider()
+  val formProvider        = new YesNoFormProvider()
+  val form: Form[Boolean] = formProvider("sealsInformation")
 
   lazy val sealsInformationRoute: String = routes.SealsInformationController.onPageLoad(lrn, NormalMode).url
 

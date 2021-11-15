@@ -18,7 +18,7 @@ package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoute}
-import forms.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.SafetyAndSecurityTraderDetails
@@ -43,8 +43,8 @@ class AddSafetyAndSecurityConsignorEoriControllerSpec extends SpecBase with Mock
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddSafetyAndSecurityConsignorEoriFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addSafetyAndSecurityConsignorEori")
   private val template     = "safetyAndSecurity/addSafetyAndSecurityConsignorEori.njk"
 
   lazy val addSafetyAndSecurityConsignorEoriRoute = routes.AddSafetyAndSecurityConsignorEoriController.onPageLoad(lrn, NormalMode).url

@@ -18,7 +18,7 @@ package controllers.addItems.containers
 
 import controllers.actions._
 import derivable.DeriveNumberOfContainers
-import forms.addItems.containers.ConfirmRemoveContainerFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsContainer
@@ -43,7 +43,7 @@ class ConfirmRemoveContainerController @Inject() (
   getData: DataRetrievalActionProvider,
   checkDependentSection: CheckDependentSectionAction,
   requireData: DataRequiredAction,
-  formProvider: ConfirmRemoveContainerFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -51,7 +51,7 @@ class ConfirmRemoveContainerController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("confirmRemoveContainer")
   private val template = "addItems/containers/confirmRemoveContainer.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, containerIndex: Index, mode: Mode): Action[AnyContent] =

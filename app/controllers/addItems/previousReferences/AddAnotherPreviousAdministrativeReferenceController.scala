@@ -19,7 +19,7 @@ package controllers.addItems.previousReferences
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
-import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
+import forms.generic.YesNoFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -48,7 +48,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: AddAnotherPreviousAdministrativeReferenceFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -56,7 +56,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("addAnotherPreviousAdministrativeReference")
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

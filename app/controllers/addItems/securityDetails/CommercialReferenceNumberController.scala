@@ -17,11 +17,12 @@
 package controllers.addItems.securityDetails
 
 import controllers.actions._
-import forms.addItems.securityDetails.CommercialReferenceNumberFormProvider
+import forms.generic.StringFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SecurityDetails
 import pages.addItems.securityDetails.CommercialReferenceNumberPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -41,7 +42,7 @@ class CommercialReferenceNumberController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: CommercialReferenceNumberFormProvider,
+  formProvider: StringFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -51,6 +52,8 @@ class CommercialReferenceNumberController @Inject() (
 
   private val template = "addItems/securityDetails/commercialReferenceNumber.njk"
 
+  private val form: Form[String] = formProvider("commercialReferenceNumber", 70)
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
@@ -58,8 +61,8 @@ class CommercialReferenceNumberController @Inject() (
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
         val preparedForm = request.userAnswers.get(CommercialReferenceNumberPage(index)) match {
-          case None        => formProvider()
-          case Some(value) => formProvider().fill(value)
+          case None        => form
+          case Some(value) => form.fill(value)
         }
 
         val json = Json.obj(
@@ -78,7 +81,7 @@ class CommercialReferenceNumberController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider()
+        form
           .bindFromRequest()
           .fold(
             formWithErrors => {

@@ -18,7 +18,7 @@ package controllers.movementDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoute}
-import forms.DeclarationForSomeoneElseFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.MovementDetails
@@ -43,8 +43,8 @@ class DeclarationForSomeoneElseControllerSpec extends SpecBase with MockNunjucks
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new DeclarationForSomeoneElseFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("declarationForSomeoneElse")
 
   lazy val declarationForSomeoneElseRoute = routes.DeclarationForSomeoneElseController.onPageLoad(lrn, NormalMode).url
 

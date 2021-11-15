@@ -17,7 +17,7 @@
 package controllers.addItems.containers
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.addItems.containers.AddAnotherContainerFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.addItems.AddItemsContainer
@@ -41,8 +41,8 @@ class AddAnotherContainerControllerSpec extends SpecBase with MockNunjucksRender
 
   def onwardRoute = routes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, NormalMode)
 
-  private val formProvider = new AddAnotherContainerFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addAnotherContainer")
   private val template     = "addItems/containers/addAnotherContainer.njk"
 
   private def expectedJson(form: Form[_]) = Json.obj(

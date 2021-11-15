@@ -18,7 +18,7 @@ package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddTotalNetMassFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItems.AddItemsItemDetails
@@ -43,8 +43,8 @@ class AddTotalNetMassControllerSpec extends SpecBase with MockNunjucksRendererAp
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AddTotalNetMassFormProvider()
-  val form         = formProvider(index)
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("addTotalNetMass", index)
 
   lazy val addTotalNetMassRoute = controllers.addItems.itemDetails.routes.AddTotalNetMassController.onPageLoad(lrn, index, NormalMode).url
 

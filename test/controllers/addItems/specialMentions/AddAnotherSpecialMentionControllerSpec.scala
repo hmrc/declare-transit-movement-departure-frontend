@@ -18,7 +18,7 @@ package controllers.addItems.specialMentions
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
-import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, SpecialMentionList, UserAnswers}
 import navigation.annotations.addItems.AddItemsSpecialMentions
@@ -43,8 +43,8 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddAnotherSpecialMentionFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addAnotherSpecialMention")
   private val template     = "addItems/specialMentions/addAnotherSpecialMention.njk"
 
   private lazy val addAnotherSpecialMentionRoute = routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, NormalMode).url

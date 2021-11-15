@@ -18,7 +18,7 @@ package controllers.safetyAndSecurity
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoute}
-import forms.safetyAndSecurity.AddPlaceOfUnloadingCodeFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.SafetyAndSecurity
@@ -43,8 +43,8 @@ class AddPlaceOfUnloadingCodeControllerSpec extends SpecBase with MockNunjucksRe
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddPlaceOfUnloadingCodeFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addPlaceOfUnloadingCode")
   private val template     = "safetyAndSecurity/addPlaceOfUnloadingCode.njk"
 
   lazy val addPlaceOfUnloadingCodeRoute = routes.AddPlaceOfUnloadingCodeController.onPageLoad(lrn, NormalMode).url

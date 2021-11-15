@@ -18,7 +18,7 @@ package controllers.guaranteeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.DefaultAmountFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.GuaranteeDetails
@@ -43,8 +43,8 @@ class DefaultAmountControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new DefaultAmountFormProvider()
-  val form         = formProvider()
+  val formProvider = new YesNoFormProvider()
+  val form         = formProvider("defaultAmount")
 
   lazy val defaultAmountRoute = routes.DefaultAmountController.onPageLoad(lrn, index, NormalMode).url
 

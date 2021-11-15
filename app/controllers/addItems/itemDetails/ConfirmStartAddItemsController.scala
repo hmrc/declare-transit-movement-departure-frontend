@@ -17,7 +17,7 @@
 package controllers.addItems.itemDetails
 
 import controllers.actions._
-import forms.ConfirmStartAddItemsFormProvider
+import forms.generic.YesNoFormProvider
 import models.{DependentSection, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsItemDetails
@@ -43,7 +43,7 @@ class ConfirmStartAddItemsController @Inject() (
   getData: DataRetrievalActionProvider,
   checkDependentSection: CheckDependentSectionAction,
   requireData: DataRequiredAction,
-  formProvider: ConfirmStartAddItemsFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -52,7 +52,7 @@ class ConfirmStartAddItemsController @Inject() (
     with NunjucksSupport
     with Logging {
 
-  private val form     = formProvider()
+  private val form     = formProvider("confirmStartAddItems")
   private val template = "addItems/confirmStartAddItems.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] = (identify

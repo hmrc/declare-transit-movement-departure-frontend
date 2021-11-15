@@ -18,7 +18,7 @@ package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.RemovePackageFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.addItems.AddItemsPackagesInfo
@@ -42,8 +42,8 @@ class RemovePackageControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new RemovePackageFormProvider()
-  private val form         = formProvider(index.display)
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("removePackage", index)
   private val template     = "addItems/removePackage.njk"
 
   lazy val removePackageRoute = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, index, index, NormalMode).url

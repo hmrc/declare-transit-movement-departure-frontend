@@ -18,7 +18,7 @@ package controllers.addItems.previousReferences
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.AddExtraInformationFormProvider
+import forms.generic.YesNoFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.addItems.AddItemsAdminReference
@@ -43,8 +43,8 @@ class AddExtraInformationControllerSpec extends SpecBase with MockNunjucksRender
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddExtraInformationFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new YesNoFormProvider()
+  private val form         = formProvider("addExtraInformation")
   private val template     = "addItems/addExtraInformation.njk"
 
   lazy val addExtraInformationRoute        = routes.AddExtraInformationController.onPageLoad(lrn, index, referenceIndex, NormalMode).url

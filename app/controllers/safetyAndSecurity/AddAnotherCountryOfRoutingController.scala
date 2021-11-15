@@ -19,7 +19,7 @@ package controllers.safetyAndSecurity
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfCountryOfRouting
-import forms.safetyAndSecurity.AddAnotherCountryOfRoutingFormProvider
+import forms.generic.YesNoFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -48,7 +48,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: AddAnotherCountryOfRoutingFormProvider,
+  formProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -56,7 +56,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("addAnotherCountryOfRouting")
   private val template = "safetyAndSecurity/addAnotherCountryOfRouting.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
