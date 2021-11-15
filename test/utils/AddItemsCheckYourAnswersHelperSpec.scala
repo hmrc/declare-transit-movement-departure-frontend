@@ -1373,49 +1373,6 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       }
     }
 
-    "packageSectionRow" - {
-
-      val packageType: PackageType = PackageType("CODE", "DESCRIPTION")
-
-      "return None" - {
-        "PackageTypePage undefined at index" in {
-
-          val answers = emptyUserAnswers
-
-          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
-          val result = helper.packageSectionRow(itemIndex, packageIndex)
-          result mustBe None
-        }
-      }
-
-      "return Some(row)" - {
-        "PackageTypePage defined at index" in {
-
-          val answers = emptyUserAnswers.unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(packageType)
-
-          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
-          val result = helper.packageSectionRow(itemIndex, packageIndex)
-
-          val label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display)
-
-          result mustBe Some(
-            Row(
-              key = Key(label, classes = Seq("govuk-!-width-one-half")),
-              value = Value(lit"$packageType"),
-              actions = List(
-                Action(
-                  content = msg"site.edit",
-                  href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
-                  visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-package-${packageIndex.display}")
-                )
-              )
-            )
-          )
-        }
-      }
-    }
-
     "packageType" - {
 
       val packageType: PackageType = PackageType("CODE", "DESCRIPTION")

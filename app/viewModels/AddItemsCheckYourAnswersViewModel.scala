@@ -124,7 +124,7 @@ object AddItemsCheckYourAnswersViewModel {
     List.range(0, numberOfPackages).map {
       packagePosition =>
         val isFirst = packagePosition == 0
-        val isLast  = packagePosition == numberOfPackages
+        val isLast  = packagePosition == numberOfPackages - 1
         packagesSection(checkYourAnswersHelper, index, Index(packagePosition), isFirst, isLast)
     }
   }

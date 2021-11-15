@@ -18,7 +18,7 @@ package viewModels
 
 import base.SpecBase
 import models.reference._
-import models.{DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
+import models.{DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
@@ -46,7 +46,10 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     .set(PackageTypePage(index, itemIndex), PackageType("AB", "Description") ).success.value
     .set(HowManyPackagesPage(index, itemIndex), 123).success.value
 
-  private val data = AddItemsCheckYourAnswersViewModel(updatedAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList)
+  private def viewModel(userAnswers: UserAnswers) =
+    AddItemsCheckYourAnswersViewModel(userAnswers, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList)
+
+  private val data = viewModel(updatedAnswers)
 
   private val updatedAnswersWithUnpackedPackages = emptyUserAnswers
     .set(ItemDescriptionPage(index), "test").success.value
@@ -60,8 +63,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     .set(PackageTypePage(index, itemIndex), PackageType("NE", "Description") ).success.value
     .set(TotalPiecesPage(index, itemIndex), 123).success.value
 
-  private val dataWithUnpackedPackes = AddItemsCheckYourAnswersViewModel(updatedAnswersWithUnpackedPackages, index, documentTypeList, previousReferencesDocumentTypeList, specialMentionList)
-
+  private val dataWithUnpackedPackages = viewModel(updatedAnswersWithUnpackedPackages)
 
   "AddItemsCheckYourAnswersViewModel" - {
 
@@ -87,12 +89,28 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
 
     "packages section have title and contain all rows when package type is not unpacked" in {
       data.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
-      data.sections(3).rows.length mustEqual 1
+      data.sections(3).rows.length mustEqual 2
     }
 
     "packages section have title and contain all rows when package type is unpacked" in {
-      dataWithUnpackedPackes.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
-      dataWithUnpackedPackes.sections(3).rows.length mustEqual 1
+      dataWithUnpackedPackages.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
+      dataWithUnpackedPackages.sections(3).rows.length mustEqual 2
+    }
+
+    "packages sections must have section for each package" in {
+      val answers = updatedAnswers
+        .set(PackageTypePage(index, Index(1)), PackageType("AB", "Description") ).success.value
+        .set(HowManyPackagesPage(index, Index(1)), 123).success.value
+
+      val result = viewModel(answers)
+
+      result.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
+      result.sections(3).rows.length mustEqual 2
+      result.sections(3).addAnother mustNot be(defined)
+
+      result.sections(4).sectionTitle mustNot be(defined)
+      result.sections(4).rows.length mustEqual 2
+      result.sections(4).addAnother.get.content mustBe msg"addItems.checkYourAnswersLabel.packages.addRemove"
     }
   }
   // format: on

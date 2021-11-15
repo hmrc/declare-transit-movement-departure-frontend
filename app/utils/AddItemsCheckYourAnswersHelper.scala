@@ -278,14 +278,6 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     removeCall = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
-  def packageSectionRow(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildSectionRow[PackageType](
-    page = PackageTypePage(itemIndex, packageIndex),
-    formatAnswer = formatAsLiteral,
-    label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display),
-    id = Some(s"change-package-${packageIndex.display}"),
-    call = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode)
-  )
-
   def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](
     page = PackageTypePage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
