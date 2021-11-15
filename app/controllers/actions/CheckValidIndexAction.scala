@@ -19,7 +19,6 @@ package controllers.actions
 import config.FrontendAppConfig
 import models.requests.DataRequest
 import models.{DerivableSize, Index}
-import pages.TechnicalDifficultiesPage
 import play.api.Logging
 import play.api.libs.json.Json
 import play.api.mvc.{ActionFilter, MessagesControllerComponents, Result}
@@ -42,24 +41,31 @@ class CheckValidIndexCompletionAction(
 
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] = {
 
-    val getListLength = request.userAnswers.get(derivable).getOrElse(0)
-    val listToIndex   = if (getListLength > 0) getListLength else 1
+    val getListLength = request.userAnswers.get(derivable)
 
-    if (index.position <= listToIndex) {
-      Future.successful(None)
-    } else {
-      logger.info(s"[CheckValidIndexCompletionAction] Index out of bounds")
+    // format: off
 
-      val json = Json.obj(
-        "contactUrl" -> appConfig.nctsEnquiriesUrl
-      )
-
-      renderer
-        .render("technicalDifficulties.njk", json)(request)
-        .map(
-          x => Some(BadRequest(x))
-        )
+    getListLength match {
+      case Some(0) | None   if index.position > 0          => renderTechnicalDifficultiesPage(request)
+      case Some(listLength) if index.position > listLength => renderTechnicalDifficultiesPage(request)
+      case _                                               => Future.successful(None)
     }
+
+    // format: on
+  }
+
+  private def renderTechnicalDifficultiesPage[A](request: DataRequest[A]): Future[Some[Result]] = {
+    logger.info(s"[CheckValidIndexCompletionAction] Index out of bounds")
+
+    val json = Json.obj(
+      "contactUrl" -> appConfig.nctsEnquiriesUrl
+    )
+
+    renderer
+      .render("technicalDifficulties.njk", json)(request)
+      .map(
+        x => Some(BadRequest(x))
+      )
   }
 
 }
