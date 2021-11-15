@@ -16,12 +16,11 @@
 
 package derivable
 
+import models.DerivableSize
 import play.api.libs.json.{JsObject, JsPath}
 import queries.Constants.routeDetailsOfficesOfTransit
 
-case object DeriveNumberOfOfficeOfTransits extends Derivable[List[JsObject], Int] {
-
-  override val derive: List[JsObject] => Int = _.size
+case object DeriveNumberOfOfficeOfTransits extends DerivableSize {
 
   override def path: JsPath = JsPath \ routeDetailsOfficesOfTransit
 }
