@@ -17,6 +17,7 @@
 package controllers.addItems.previousReferences
 
 import controllers.actions._
+import derivable.{DeriveNumberOfItems, DeriveNumberOfPreviousAdministrativeReferences}
 import forms.AddExtraInformationFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class AddExtraInformationController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: AddExtraInformationFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -79,7 +81,9 @@ class AddExtraInformationController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(referenceIndex, DeriveNumberOfPreviousAdministrativeReferences(itemIndex))).async {
       implicit request =>
         form
           .bindFromRequest()

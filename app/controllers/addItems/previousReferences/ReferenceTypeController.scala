@@ -18,6 +18,7 @@ package controllers.addItems.previousReferences
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.{DeriveNumberOfItems, DeriveNumberOfPreviousAdministrativeReferences}
 import forms.ReferenceTypeFormProvider
 import models.reference.PreviousReferencesDocumentType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -45,6 +46,7 @@ class ReferenceTypeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: ReferenceTypeFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
@@ -89,7 +91,9 @@ class ReferenceTypeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(referenceIndex, DeriveNumberOfPreviousAdministrativeReferences(itemIndex))).async {
       implicit request =>
         referenceDataConnector.getPreviousReferencesDocumentTypes() flatMap {
           previousDocuments =>

@@ -17,6 +17,7 @@
 package controllers.addItems.previousReferences
 
 import controllers.actions._
+import derivable.{DeriveNumberOfItems, DeriveNumberOfPreviousAdministrativeReferences}
 import forms.ConfirmRemovePreviousAdministrativeReferenceFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -42,6 +43,7 @@ class ConfirmRemovePreviousAdministrativeReferenceController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: ConfirmRemovePreviousAdministrativeReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -80,7 +82,9 @@ class ConfirmRemovePreviousAdministrativeReferenceController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)
+      andThen checkValidIndexAction(referenceIndex, DeriveNumberOfPreviousAdministrativeReferences(index))).async {
       implicit request =>
         form
           .bindFromRequest()

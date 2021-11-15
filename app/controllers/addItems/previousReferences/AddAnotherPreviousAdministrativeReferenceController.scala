@@ -18,7 +18,7 @@ package controllers.addItems.previousReferences
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import derivable.DeriveNumberOfPreviousAdministrativeReferences
+import derivable.{DeriveNumberOfItems, DeriveNumberOfPreviousAdministrativeReferences}
 import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -47,6 +47,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: AddAnotherPreviousAdministrativeReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -71,7 +72,8 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)).async {
       implicit request =>
         form
           .bindFromRequest()
