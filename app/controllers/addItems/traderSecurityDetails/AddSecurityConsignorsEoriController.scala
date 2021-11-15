@@ -17,6 +17,7 @@
 package controllers.addItems.traderSecurityDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.addItems.traderSecurityDetails.AddSecurityConsignorsEoriFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class AddSecurityConsignorsEoriController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: AddSecurityConsignorsEoriFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -78,7 +80,8 @@ class AddSecurityConsignorsEoriController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)).async {
       implicit request =>
         form
           .bindFromRequest()

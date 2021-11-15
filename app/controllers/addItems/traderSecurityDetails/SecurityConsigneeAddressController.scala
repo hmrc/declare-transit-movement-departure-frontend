@@ -18,6 +18,7 @@ package controllers.addItems.traderSecurityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -44,6 +45,7 @@ class SecurityConsigneeAddressController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   requireName: NameRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: CommonAddressFormProvider,
@@ -88,6 +90,7 @@ class SecurityConsigneeAddressController @Inject() (
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)
       andThen requireName(SecurityConsigneeNamePage(index))).async {
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
