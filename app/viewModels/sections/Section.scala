@@ -36,6 +36,9 @@ object Section {
 
   def apply(sectionTitle: Text, rows: Seq[Row], addAnother: AddAnotherViewModel): Section = new Section(Some(sectionTitle), None, rows, Some(addAnother))
 
+  def apply(sectionTitle: Option[Text], sectionSubTitle: Text, rows: Seq[Row], addAnother: Option[AddAnotherViewModel]): Section =
+    new Section(sectionTitle, Some(sectionSubTitle), rows, addAnother)
+
   implicit def sectionWrites(implicit messages: Messages): OWrites[Section] =
     (
       (__ \ "sectionTitle").write[Option[Text]] and
