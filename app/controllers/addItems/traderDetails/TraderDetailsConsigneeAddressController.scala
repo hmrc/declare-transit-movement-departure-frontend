@@ -19,6 +19,7 @@ package controllers.addItems.traderDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
+import derivable.DeriveNumberOfItems
 import forms.CommonAddressFormProvider
 import models.reference.{Country, CountryCode}
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -45,6 +46,7 @@ class TraderDetailsConsigneeAddressController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -91,7 +93,8 @@ class TraderDetailsConsigneeAddressController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)).async {
       implicit request =>
         request.userAnswers.get(TraderDetailsConsigneeNamePage(index)) match {
           case Some(consigneeName) =>

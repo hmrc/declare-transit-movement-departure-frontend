@@ -17,6 +17,7 @@
 package controllers.addItems.traderDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.addItems.traderDetails.TraderDetailsConsigneeEoriKnownFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class TraderDetailsConsigneeEoriKnownController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: TraderDetailsConsigneeEoriKnownFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -77,7 +79,8 @@ class TraderDetailsConsigneeEoriKnownController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)).async {
       implicit request =>
         formProvider(index)
           .bindFromRequest()
