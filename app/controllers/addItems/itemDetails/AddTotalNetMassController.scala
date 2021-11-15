@@ -17,6 +17,7 @@
 package controllers.addItems.itemDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.addItems.AddTotalNetMassFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class AddTotalNetMassController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: AddTotalNetMassFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -75,7 +77,8 @@ class AddTotalNetMassController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)).async {
       implicit request =>
         formProvider(index: Index)
           .bindFromRequest()

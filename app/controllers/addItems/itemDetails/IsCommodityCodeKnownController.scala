@@ -17,6 +17,7 @@
 package controllers.addItems.itemDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.IsCommodityCodeKnownFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -39,6 +40,7 @@ class IsCommodityCodeKnownController @Inject() (
   @AddItemsItemDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
+  checkValidIndexAction: CheckValidIndexAction,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: IsCommodityCodeKnownFormProvider,
@@ -75,7 +77,9 @@ class IsCommodityCodeKnownController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)).async {
+
       implicit request =>
         formProvider(index)
           .bindFromRequest()
