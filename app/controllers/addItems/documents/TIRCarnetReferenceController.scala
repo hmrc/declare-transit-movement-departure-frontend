@@ -17,6 +17,7 @@
 package controllers.addItems.documents
 
 import controllers.actions._
+import derivable.{DeriveNumberOfDocuments, DeriveNumberOfItems}
 import forms.addItems.TIRCarnetReferenceFormProvider
 import models.DeclarationType.Option4
 import models.{Index, LocalReferenceNumber, Mode}
@@ -43,6 +44,7 @@ class TIRCarnetReferenceController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: TIRCarnetReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -75,7 +77,12 @@ class TIRCarnetReferenceController @Inject() (
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
-    (identify andThen getData(lrn) andThen requireData).async {
+    (identify
+      andThen getData(lrn)
+      andThen requireData
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(documentIndex, DeriveNumberOfDocuments(itemIndex))).async {
+
       implicit request =>
         request.userAnswers.get(DeclarationTypePage) match {
           case Some(Option4) =>

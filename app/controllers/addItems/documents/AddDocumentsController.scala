@@ -17,6 +17,7 @@
 package controllers.addItems.documents
 
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.addItems.AddDocumentsFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class AddDocumentsController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: AddDocumentsFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -77,7 +79,8 @@ class AddDocumentsController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)).async {
       implicit request =>
         formProvider(itemIndex)
           .bindFromRequest()

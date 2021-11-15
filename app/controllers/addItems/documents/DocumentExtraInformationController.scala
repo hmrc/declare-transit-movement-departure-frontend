@@ -17,6 +17,7 @@
 package controllers.addItems.documents
 
 import controllers.actions._
+import derivable.{DeriveNumberOfDocuments, DeriveNumberOfItems}
 import forms.addItems.DocumentExtraInformationFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class DocumentExtraInformationController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: DocumentExtraInformationFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -76,7 +78,9 @@ class DocumentExtraInformationController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)
+      andThen checkValidIndexAction(documentIndex, DeriveNumberOfDocuments(index))).async {
       implicit request =>
         formProvider(index)
           .bindFromRequest()

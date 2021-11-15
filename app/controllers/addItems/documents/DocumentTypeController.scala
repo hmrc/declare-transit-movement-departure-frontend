@@ -18,6 +18,7 @@ package controllers.addItems.documents
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.{DeriveNumberOfDocuments, DeriveNumberOfItems}
 import forms.addItems.DocumentTypeFormProvider
 import models.reference.DocumentType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -45,6 +46,7 @@ class DocumentTypeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: DocumentTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -88,7 +90,10 @@ class DocumentTypeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)
+      andThen checkValidIndexAction(documentIndex, DeriveNumberOfDocuments(index))).async {
+
       implicit request =>
         referenceDataConnector.getDocumentTypes() flatMap {
           documents =>

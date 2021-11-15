@@ -16,7 +16,9 @@
 
 package controllers.addItems.documents
 
+import com.codahale.metrics.DerivativeGauge
 import controllers.actions._
+import derivable.{DeriveNumberOfDocuments, DeriveNumberOfItems}
 import forms.addItems.ConfirmRemoveDocumentFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -42,6 +44,7 @@ class ConfirmRemoveDocumentController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: ConfirmRemoveDocumentFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -80,7 +83,9 @@ class ConfirmRemoveDocumentController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(documentIndex, DeriveNumberOfDocuments(itemIndex))).async {
       implicit request =>
         form
           .bindFromRequest()

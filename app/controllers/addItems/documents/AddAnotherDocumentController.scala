@@ -18,7 +18,7 @@ package controllers.addItems.documents
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import derivable.DeriveNumberOfDocuments
+import derivable.{DeriveNumberOfDocuments, DeriveNumberOfItems}
 import forms.addItems.AddAnotherDocumentFormProvider
 import models.requests.DataRequest
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -47,6 +47,7 @@ class AddAnotherDocumentController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: AddAnotherDocumentFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
@@ -69,7 +70,8 @@ class AddAnotherDocumentController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)).async {
       implicit request =>
         formProvider(index)
           .bindFromRequest()
