@@ -66,7 +66,7 @@ trait Constraints {
         if (input >= minimum && input <= maximum) {
           Valid
         } else {
-          Invalid(errorKey, itemIndex, maximum)
+          Invalid(errorKey, itemIndex, minimum, maximum)
         }
     }
 
