@@ -18,6 +18,7 @@ package controllers.addItems.specialMentions
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.{DeriveNumberOfItems, DeriveNumberOfSpecialMentions}
 import forms.addItems.specialMentions.SpecialMentionTypeFormProvider
 import models.reference.SpecialMention
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -45,6 +46,7 @@ class SpecialMentionTypeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: SpecialMentionTypeFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
@@ -89,7 +91,9 @@ class SpecialMentionTypeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(referenceIndex, DeriveNumberOfSpecialMentions(itemIndex))).async {
       implicit request =>
         referenceDataConnector.getSpecialMention() flatMap {
           specialMention =>
@@ -118,27 +122,4 @@ class SpecialMentionTypeController @Inject() (
               )
         }
     }
-  //  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
-//    (identify andThen getData(lrn) andThen requireData).async {
-//      implicit request =>
-//        form
-//          .bindFromRequest()
-//          .fold(
-//            formWithErrors => {
-//
-//              val json = Json.obj(
-//                "form" -> formWithErrors,
-//                "lrn"  -> lrn,
-//                "mode" -> mode
-//              )
-//
-//              renderer.render(template, json).map(BadRequest(_))
-//            },
-//            value =>
-//              for {
-//                updatedAnswers <- Future.fromTry(request.userAnswers.set(SpecialMentionTypePage(itemIndex, referenceIndex), value))
-//                _              <- sessionRepository.set(updatedAnswers)
-//              } yield Redirect(navigator.nextPage(SpecialMentionTypePage(itemIndex, referenceIndex), mode, updatedAnswers))
-//          )
-//    }
 }

@@ -17,6 +17,7 @@
 package controllers.addItems.specialMentions
 
 import controllers.actions._
+import derivable.{DeriveNumberOfItems, DeriveNumberOfSpecialMentions}
 import forms.addItems.specialMentions.SpecialMentionAdditionalInfoFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class SpecialMentionAdditionalInfoController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: SpecialMentionAdditionalInfoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -77,7 +79,9 @@ class SpecialMentionAdditionalInfoController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(referenceIndex, DeriveNumberOfSpecialMentions(itemIndex))).async {
       implicit request =>
         formProvider(itemIndex, referenceIndex)
           .bindFromRequest()
