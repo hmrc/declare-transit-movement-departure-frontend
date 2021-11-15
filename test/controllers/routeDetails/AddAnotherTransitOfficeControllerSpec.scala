@@ -19,7 +19,7 @@ package controllers.routeDetails
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.AddAnotherTransitOfficeFormProvider
+import forms.generic.CustomsOfficeFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}
@@ -50,7 +50,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
   private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
   private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
-  val form                                      = new AddAnotherTransitOfficeFormProvider()(customsOffices, "United Kingdom")
+  val form                                      = new CustomsOfficeFormProvider()("addAnotherTransitOffice", customsOffices, "United Kingdom")
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 

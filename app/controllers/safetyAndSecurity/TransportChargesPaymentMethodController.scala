@@ -57,7 +57,7 @@ class TransportChargesPaymentMethodController @Inject() (
   private val template = "safetyAndSecurity/transportChargesPaymentMethod.njk"
 
   private def form(methodsOfPayment: MethodOfPaymentList): Form[MethodOfPayment] =
-    formProvider("countryOfRouting", methodsOfPayment)
+    formProvider("transportChargesPaymentMethod", methodsOfPayment)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
     (identify

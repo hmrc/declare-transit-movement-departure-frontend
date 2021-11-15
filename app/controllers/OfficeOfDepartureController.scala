@@ -18,12 +18,14 @@ package controllers
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.OfficeOfDepartureFormProvider
-import models.{CountryList, LocalReferenceNumber, Mode}
+import forms.generic.CustomsOfficeFormProvider
+import models.reference.CustomsOffice
+import models.{CountryList, CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
 import pages.OfficeOfDeparturePage
 import pages.addItems.IsNonEuOfficePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -44,7 +46,7 @@ class OfficeOfDepartureController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: OfficeOfDepartureFormProvider,
+  formProvider: CustomsOfficeFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
@@ -54,18 +56,20 @@ class OfficeOfDepartureController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
+  private def form(customsOffices: CustomsOfficeList): Form[CustomsOffice] =
+    formProvider("officeOfDeparture", customsOffices)
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
         customsOffices =>
-          val form = formProvider(customsOffices)
           val preparedForm = request.userAnswers
             .get(OfficeOfDeparturePage)
             .flatMap(
               x => customsOffices.getCustomsOffice(x.id)
             )
-            .map(form.fill)
-            .getOrElse(form)
+            .map(form(customsOffices).fill)
+            .getOrElse(form(customsOffices))
 
           val json = Json.obj(
             "form"           -> preparedForm,
@@ -82,15 +86,14 @@ class OfficeOfDepartureController @Inject() (
     implicit request =>
       customsOfficesService.getCustomsOfficesOfDeparture.flatMap {
         customsOffices =>
-          val form = formProvider(customsOffices)
-          form
+          form(customsOffices)
             .bindFromRequest()
             .fold(
               formWithErrors => {
                 val json = Json.obj(
                   "form"           -> formWithErrors,
                   "lrn"            -> lrn,
-                  "customsOffices" -> getCustomsOfficesAsJson(form.value, customsOffices.getAll),
+                  "customsOffices" -> getCustomsOfficesAsJson(formWithErrors.value, customsOffices.getAll),
                   "mode"           -> mode
                 )
 

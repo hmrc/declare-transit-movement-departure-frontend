@@ -20,7 +20,7 @@ import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import derivable.DeriveOfficesOfTransitIds
-import forms.AddAnotherTransitOfficeFormProvider
+import forms.generic.CustomsOfficeFormProvider
 import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
 import models.{CustomsOfficeList, Index, LocalReferenceNumber, Mode}
@@ -48,7 +48,7 @@ class AddAnotherTransitOfficeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: AddAnotherTransitOfficeFormProvider,
+  formProvider: CustomsOfficeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   officeOfTransitFilter: TraderDetailsOfficesOfTransitProvider
@@ -57,6 +57,9 @@ class AddAnotherTransitOfficeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
+  private def form(customsOffices: CustomsOfficeList, countryName: String): Form[CustomsOffice] =
+    formProvider("addAnotherTransitOffice", customsOffices, countryName)
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify andThen getData(lrn) andThen requireData andThen officeOfTransitFilter(index)).async {
       implicit request =>
@@ -64,13 +67,11 @@ class AddAnotherTransitOfficeController @Inject() (
           case Some(countryCode) =>
             getCustomsOfficeAndCountryName(countryCode) flatMap {
               case (customsOffices, countryName) =>
-                val form: Form[CustomsOffice] = formProvider(customsOffices, countryName)
-
                 val preparedForm: Form[CustomsOffice] = request.userAnswers
                   .get(AddAnotherTransitOfficePage(index))
                   .flatMap(customsOffices.getCustomsOffice)
-                  .map(form.fill)
-                  .getOrElse(form)
+                  .map(form(customsOffices, countryName).fill)
+                  .getOrElse(form(customsOffices, countryName))
 
                 val selectedCustomsOfficeIds = request.userAnswers.get(DeriveOfficesOfTransitIds).getOrElse(Nil)
 
@@ -95,11 +96,9 @@ class AddAnotherTransitOfficeController @Inject() (
         case Some(countryCode) =>
           getCustomsOfficeAndCountryName(countryCode) flatMap {
             case (customsOffices, countryName) =>
-              val form = formProvider(customsOffices, countryName)
-
               val selectedCustomsOfficeIds = request.userAnswers.get(DeriveOfficesOfTransitIds).getOrElse(Nil)
 
-              form
+              form(customsOffices, countryName)
                 .bindFromRequest()
                 .fold(
                   formWithErrors => {

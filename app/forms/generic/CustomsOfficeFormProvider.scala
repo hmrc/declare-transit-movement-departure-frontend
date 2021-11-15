@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.generic
 
 import forms.mappings.Mappings
 import models.CustomsOfficeList
@@ -23,12 +23,18 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class OfficeOfDepartureFormProvider @Inject() extends Mappings {
+class CustomsOfficeFormProvider @Inject() extends Mappings {
 
-  def apply(customsOffices: CustomsOfficeList): Form[CustomsOffice] =
+  def apply(messageKeyPrefix: String, customsOffices: CustomsOfficeList): Form[CustomsOffice] =
+    apply(messageKeyPrefix, customsOffices, Nil)
+
+  def apply(messageKeyPrefix: String, customsOffices: CustomsOfficeList, countryName: String): Form[CustomsOffice] =
+    apply(messageKeyPrefix, customsOffices, Seq(countryName))
+
+  private def apply(messageKeyPrefix: String, customsOffices: CustomsOfficeList, args: Seq[Any]): Form[CustomsOffice] =
     Form(
-      "value" -> text("officeOfDeparture.error.required")
-        .verifying("officeOfDeparture.error.required", value => customsOffices.getAll.exists(_.id == value))
+      "value" -> text(s"$messageKeyPrefix.error.required", args)
+        .verifying(s"$messageKeyPrefix.error.required", value => customsOffices.getAll.exists(_.id == value))
         .transform[CustomsOffice](value => customsOffices.getCustomsOffice(value).get, _.id)
     )
 }

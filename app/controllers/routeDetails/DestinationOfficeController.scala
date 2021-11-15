@@ -20,7 +20,7 @@ import cats.data.OptionT
 import cats.implicits._
 import connectors.ReferenceDataConnector
 import controllers.actions._
-import forms.DestinationOfficeFormProvider
+import forms.generic.CustomsOfficeFormProvider
 import models.reference.CustomsOffice
 import models.{CustomsOfficeList, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -49,7 +49,7 @@ class DestinationOfficeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
-  formProvider: DestinationOfficeFormProvider,
+  formProvider: CustomsOfficeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -57,6 +57,9 @@ class DestinationOfficeController @Inject() (
     with I18nSupport
     with NunjucksSupport
     with Logging {
+
+  private def form(customsOffices: CustomsOfficeList, countryName: String): Form[CustomsOffice] =
+    formProvider("destinationOffice", customsOffices, countryName)
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
@@ -72,8 +75,8 @@ class DestinationOfficeController @Inject() (
             .flatMap(
               x => customsOffices.getCustomsOffice(x.id)
             )
-            .map(formProvider(customsOffices, countryName).fill)
-            .getOrElse(formProvider(customsOffices, countryName))
+            .map(form(customsOffices, countryName).fill)
+            .getOrElse(form(customsOffices, countryName))
           page <- OptionT.liftF(renderPage(lrn, mode, preparedForm, customsOffices, countryName, Results.Ok))
         } yield page
       ).getOrElseF {
@@ -92,7 +95,7 @@ class DestinationOfficeController @Inject() (
           countryList         <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
           countryName = countryList.getCountry(movementDestination).fold(movementDestination.code)(_.description)
           page <- OptionT.liftF(
-            formProvider(customsOffices, countryName)
+            form(customsOffices, countryName)
               .bindFromRequest()
               .fold(
                 formWithErrors => renderPage(lrn, mode, formWithErrors, customsOffices, countryName, Results.BadRequest),

@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.OfficeOfDepartureFormProvider
+import forms.generic.CustomsOfficeFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}
@@ -54,8 +54,8 @@ class OfficeOfDepartureControllerSpec extends SpecBase with MockNunjucksRenderer
   val xiCustomsOffices: CustomsOfficeList    = CustomsOfficeList(Seq(xiCustomsOffice1))
   val nonEuTransitCountries: Seq[Country]    = Seq(Country(CountryCode("GB"), "description"))
   val nonEuTransitCountriesList: CountryList = CountryList(nonEuTransitCountries)
-  val gbForm                                 = new OfficeOfDepartureFormProvider()(customsOffices)
-  val xiForm                                 = new OfficeOfDepartureFormProvider()(xiCustomsOffices)
+  val gbForm                                 = new CustomsOfficeFormProvider()("officeOfDeparture", customsOffices)
+  val xiForm                                 = new CustomsOfficeFormProvider()("officeOfDeparture", xiCustomsOffices)
 
   private val mockRefDataConnector: ReferenceDataConnector     = mock[ReferenceDataConnector]
   private val mockFrontendAppConfig: FrontendAppConfig         = mock[FrontendAppConfig]

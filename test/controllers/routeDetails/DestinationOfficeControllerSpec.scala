@@ -20,7 +20,7 @@ import base.{MockNunjucksRendererApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
-import forms.DestinationOfficeFormProvider
+import forms.generic.CustomsOfficeFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.{CountryList, CustomsOfficeList, NormalMode}
@@ -58,7 +58,7 @@ class DestinationOfficeControllerSpec
   private val customsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
   private val customsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
-  private val form                              = new DestinationOfficeFormProvider()(customsOffices, "United Kingdom")
+  private val form                              = new CustomsOfficeFormProvider()("destinationOffice", customsOffices, "United Kingdom")
   private val mockReferenceDataConnector        = mock[ReferenceDataConnector]
   private lazy val destinationOfficeRoute       = routes.DestinationOfficeController.onPageLoad(lrn, NormalMode).url
 
