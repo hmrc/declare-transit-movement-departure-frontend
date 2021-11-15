@@ -18,7 +18,7 @@ package controllers.movementDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoute}
-import forms.RepresentativeNameFormProvider
+import forms.generic.string.NameFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.MovementDetails
@@ -43,8 +43,8 @@ class RepresentativeNameControllerSpec extends SpecBase with MockNunjucksRendere
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new RepresentativeNameFormProvider()
-  val form         = formProvider()
+  val formProvider = new NameFormProvider()
+  val form         = formProvider("representativeName")
 
   lazy val representativeNameRoute =
     routes.RepresentativeNameController.onPageLoad(lrn, NormalMode).url

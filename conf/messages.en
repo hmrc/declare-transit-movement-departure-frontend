@@ -201,7 +201,7 @@ principal.cya.section.heading = Principal
 principalName.checkYourAnswersLabel =  Principal’s name
 principalName.error.required =  Enter the principal's name
 principalName.error.length = PrincipalName must be 35 characters or less
-principalName.error.invalidCharacters =  The principal's name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, underscores, and greater than (>) and less than (<) signs
+principalName.error.invalid =  The principal's name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, underscores, and greater than (>) and less than (<) signs
 
 whatIsPrincipalEori.title = What is the principal’s EORI number?
 whatIsPrincipalEori.heading = What is the principal’s EORI number?
@@ -233,6 +233,7 @@ consignorName.checkYourAnswersLabel = Consignor’s name
 consignorName.error.required = Enter the consignor’s name
 consignorName.error.length = Consignor’s name must be 35 characters or less
 consignorName.error.invalid = Consignor’s name must only include letters a to z without accents and numbers 0 to 9 or blank spaces
+
 consignorEori.title = What is the consignor’s EORI number?
 consignorEori.heading = What is the consignor’s EORI number?
 consignorEori.checkYourAnswersLabel = Consignor’s EORI number
@@ -1223,7 +1224,7 @@ carrierName.heading = What is the carrier’s name?
 carrierName.checkYourAnswersLabel =  Carrier’s name
 carrierName.error.required =  Enter the carrier’s name
 carrierName.error.length = carrier’s name must be 35 characters or less
-carrierName.error.invalidCharacters = The carrier's name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+carrierName.error.invalid = The carrier's name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
 
 cancellationDecisionUpdate.title = Cancellation decision
 cancellationDecisionUpdate.heading = Cancellation decision

@@ -17,7 +17,7 @@
 package controllers.safetyAndSecurity
 
 import controllers.actions._
-import forms.safetyAndSecurity.CarrierNameFormProvider
+import forms.generic.string.NameFormProvider
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurityTraderDetails
@@ -41,7 +41,7 @@ class CarrierNameController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: CarrierNameFormProvider,
+  formProvider: NameFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,7 +49,7 @@ class CarrierNameController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("carrierName")
   private val template = "safetyAndSecurity/carrierName.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =

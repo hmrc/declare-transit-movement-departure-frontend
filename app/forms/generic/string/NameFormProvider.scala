@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package forms.generic.string
 
-import forms.mappings.Mappings
 import models.domain.StringFieldRegex.alphaNumericWithSpaceRegex
-import play.api.data.Form
+
 import javax.inject.Inject
+import scala.util.matching.Regex
 
-class RepresentativeNameFormProvider @Inject() extends Mappings {
-
-  val maxLengthRepresentativeName = 35
-
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("representativeName.error.required")
-        .verifying(
-          StopOnFirstFail[String](
-            maxLength(maxLengthRepresentativeName, "representativeName.error.length"),
-            regexp(alphaNumericWithSpaceRegex, "representativeName.error.invalid")
-          )
-        )
-    )
+class NameFormProvider @Inject() extends StringFormProvider {
+  override val maximumLength: Int = 35
+  override val regex: Regex       = alphaNumericWithSpaceRegex
 }

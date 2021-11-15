@@ -18,7 +18,7 @@ package controllers.traderDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.ConsignorNameFormProvider
+import forms.generic.string.NameFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.TraderDetails
@@ -43,8 +43,8 @@ class ConsignorNameControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new ConsignorNameFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new NameFormProvider()
+  private val form         = formProvider("consignorName")
 
   private lazy val consignorNameRoute = routes.ConsignorNameController.onPageLoad(lrn, NormalMode).url
 

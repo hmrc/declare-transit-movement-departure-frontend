@@ -17,7 +17,7 @@
 package controllers.traderDetails
 
 import controllers.actions._
-import forms.ConsignorNameFormProvider
+import forms.generic.string.NameFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
@@ -40,7 +40,7 @@ class ConsignorNameController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: ConsignorNameFormProvider,
+  formProvider: NameFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -48,7 +48,7 @@ class ConsignorNameController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("consignorName")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>

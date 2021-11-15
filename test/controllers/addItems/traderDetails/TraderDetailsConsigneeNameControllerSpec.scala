@@ -17,7 +17,7 @@
 package controllers.addItems.traderDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.addItems.traderDetails.TraderDetailsConsigneeNameFormProvider
+import forms.generic.string.NameFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.addItems.AddItemsTraderDetails
@@ -42,8 +42,8 @@ class TraderDetailsConsigneeNameControllerSpec extends SpecBase with MockNunjuck
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new TraderDetailsConsigneeNameFormProvider()
-  private val form         = formProvider(index)
+  private val formProvider = new NameFormProvider()
+  private val form         = formProvider("traderDetailsConsigneeName", index)
   private val template     = "addItems/traderDetails/traderDetailsConsigneeName.njk"
 
   lazy val traderDetailsConsigneeNameRoute = routes.TraderDetailsConsigneeNameController.onPageLoad(lrn, index, NormalMode).url
