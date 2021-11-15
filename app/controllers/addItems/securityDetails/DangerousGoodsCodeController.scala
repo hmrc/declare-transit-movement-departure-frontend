@@ -18,6 +18,7 @@ package controllers.addItems.securityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.addItems.securityDetails.DangerousGoodsCodeFormProvider
 import models.reference.DangerousGoodsCode
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -45,6 +46,7 @@ class DangerousGoodsCodeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: DangerousGoodsCodeFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
@@ -88,7 +90,8 @@ class DangerousGoodsCodeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)).async {
       implicit request =>
         referenceDataConnector.getDangerousGoodsCodeList() flatMap {
           dangerousGoodsCodes =>

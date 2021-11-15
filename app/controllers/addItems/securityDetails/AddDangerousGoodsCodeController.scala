@@ -17,6 +17,7 @@
 package controllers.addItems.securityDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.addItems.securityDetails.AddDangerousGoodsCodeFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class AddDangerousGoodsCodeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: AddDangerousGoodsCodeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -77,7 +79,8 @@ class AddDangerousGoodsCodeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)).async {
       implicit request =>
         formProvider()
           .bindFromRequest()

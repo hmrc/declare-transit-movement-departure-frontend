@@ -18,6 +18,7 @@ package controllers.addItems.securityDetails
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.addItems.securityDetails.TransportChargesFormProvider
 import models.reference.MethodOfPayment
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -45,6 +46,7 @@ class TransportChargesController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: TransportChargesFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -90,7 +92,8 @@ class TransportChargesController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)).async {
       implicit request =>
         referenceDataConnector.getMethodOfPaymentList() flatMap {
           payments =>

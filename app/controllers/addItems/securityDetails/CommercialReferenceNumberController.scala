@@ -17,6 +17,7 @@
 package controllers.addItems.securityDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfItems
 import forms.addItems.securityDetails.CommercialReferenceNumberFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class CommercialReferenceNumberController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: CommercialReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -76,7 +78,8 @@ class CommercialReferenceNumberController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)).async {
       implicit request =>
         formProvider()
           .bindFromRequest()
