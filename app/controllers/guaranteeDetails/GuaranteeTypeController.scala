@@ -17,7 +17,7 @@
 package controllers.guaranteeDetails
 
 import controllers.actions._
-import forms.guaranteeDetails.GuaranteeTypeFormProvider
+import forms.generic.EnumerableFormProvider
 import models.{DependentSection, GuaranteeType, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
@@ -41,7 +41,7 @@ class GuaranteeTypeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: GuaranteeTypeFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,7 +49,7 @@ class GuaranteeTypeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[GuaranteeType]("guaranteeType")
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

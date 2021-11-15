@@ -17,7 +17,7 @@
 package controllers.safetyAndSecurity
 
 import controllers.actions._
-import forms.safetyAndSecurity.CommercialReferenceNumberAllItemsFormProvider
+import forms.generic.string.CommercialReferenceNumberFormProvider
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
@@ -41,7 +41,7 @@ class CommercialReferenceNumberAllItemsController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: CommercialReferenceNumberAllItemsFormProvider,
+  formProvider: CommercialReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,7 +49,7 @@ class CommercialReferenceNumberAllItemsController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("commercialReferenceNumberAllItems")
   private val template = "safetyAndSecurity/commercialReferenceNumberAllItems.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =

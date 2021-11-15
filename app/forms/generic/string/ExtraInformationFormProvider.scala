@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package forms.generic.string
 
-import forms.mappings.Mappings
-import models.RepresentativeCapacity
-import play.api.data.Form
+import models.domain.StringFieldRegex.stringFieldRegex
 
 import javax.inject.Inject
+import scala.util.matching.Regex
 
-class RepresentativeCapacityFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[RepresentativeCapacity] =
-    Form(
-      "value" -> enumerable[RepresentativeCapacity]("representativeCapacity.error.required")
-    )
+class ExtraInformationFormProvider @Inject() extends StringFormProvider {
+  override val maximumLength: Int = 26
+  override val regex: Regex       = stringFieldRegex
 }

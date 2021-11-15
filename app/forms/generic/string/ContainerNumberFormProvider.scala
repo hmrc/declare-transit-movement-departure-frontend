@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-package forms.addItems
+package forms.generic.string
 
-import forms.mappings.Mappings
-import models.Index
 import models.domain.StringFieldRegex.stringFieldRegex
-import play.api.data.Form
+
 import javax.inject.Inject
+import scala.util.matching.Regex
 
-class DocumentExtraInformationFormProvider @Inject() extends Mappings {
-
-  val maxLength = 26
-
-  def apply(index: Index): Form[String] =
-    Form(
-      "value" -> text("documentExtraInformation.error.required", Seq(index.display))
-        .verifying(
-          forms.StopOnFirstFail[String](
-            maxLength(maxLength, "documentExtraInformation.error.length", index.display),
-            regexp(stringFieldRegex, "documentExtraInformation.error.invalid")
-          )
-        )
-    )
+class ContainerNumberFormProvider @Inject() extends StringFormProvider {
+  override val maximumLength: Int = 17
+  override val regex: Regex       = stringFieldRegex
 }

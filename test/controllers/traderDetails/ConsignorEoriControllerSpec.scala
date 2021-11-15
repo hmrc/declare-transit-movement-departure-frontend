@@ -18,7 +18,7 @@ package controllers.traderDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.ConsignorEoriFormProvider
+import forms.generic.string.EoriNumberFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.TraderDetails
@@ -43,8 +43,8 @@ class ConsignorEoriControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new ConsignorEoriFormProvider()
-  private val form         = formProvider()
+  private val formProvider = new EoriNumberFormProvider()
+  private val form         = formProvider("consignorEori")
   private val validEori    = "AB123456789012345"
 
   private lazy val consignorEoriRoute = routes.ConsignorEoriController.onPageLoad(lrn, NormalMode).url

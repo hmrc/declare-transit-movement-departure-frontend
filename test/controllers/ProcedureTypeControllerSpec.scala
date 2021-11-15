@@ -17,7 +17,7 @@
 package controllers
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.ProcedureTypeFormProvider
+import forms.generic.EnumerableFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, ProcedureType}
 import navigation.annotations.PreTaskListDetails
@@ -45,8 +45,8 @@ class ProcedureTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
   lazy val procedureTypeRoute =
     routes.ProcedureTypeController.onPageLoad(lrn, NormalMode).url
 
-  val formProvider = new ProcedureTypeFormProvider()
-  val form         = formProvider()
+  val formProvider = new EnumerableFormProvider()
+  val form         = formProvider[ProcedureType]("procedureType")
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

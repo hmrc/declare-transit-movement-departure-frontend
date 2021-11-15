@@ -17,7 +17,7 @@
 package controllers.addItems.containers
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.addItems.containers.ContainerNumberFormProvider
+import forms.generic.string.ContainerNumberFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.addItems.AddItemsContainer
@@ -43,7 +43,7 @@ class ContainerNumberControllerSpec extends SpecBase with MockNunjucksRendererAp
   private def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new ContainerNumberFormProvider()
-  private val form         = formProvider()
+  private val form         = formProvider("containerNumber")
   private val template     = "addItems/containers/containerNumber.njk"
 
   private lazy val containerNumberRoute = routes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, NormalMode).url

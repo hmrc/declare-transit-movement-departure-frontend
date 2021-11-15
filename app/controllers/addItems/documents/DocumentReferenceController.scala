@@ -17,11 +17,12 @@
 package controllers.addItems.documents
 
 import controllers.actions._
-import forms.addItems.DocumentReferenceFormProvider
+import forms.generic.string.DocumentReferenceFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
 import pages.addItems.DocumentReferencePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -51,6 +52,8 @@ class DocumentReferenceController @Inject() (
 
   private val template = "addItems/documentReference.njk"
 
+  private def form(index: Index): Form[String] = formProvider("documentReference", index)
+
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, documentIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
@@ -58,8 +61,8 @@ class DocumentReferenceController @Inject() (
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
         val preparedForm = request.userAnswers.get(DocumentReferencePage(itemIndex, documentIndex)) match {
-          case None        => formProvider(itemIndex)
-          case Some(value) => formProvider(itemIndex).fill(value)
+          case None        => form(itemIndex)
+          case Some(value) => form(itemIndex).fill(value)
         }
 
         val json = Json.obj(
@@ -79,7 +82,7 @@ class DocumentReferenceController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(itemIndex)
+        form(itemIndex)
           .bindFromRequest()
           .fold(
             formWithErrors => {

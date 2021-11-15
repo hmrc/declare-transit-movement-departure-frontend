@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package forms.guaranteeDetails
+package forms.generic.string
 
-import forms.mappings.Mappings
-import models.GuaranteeType
-import play.api.data.Form
+import models.domain.StringFieldRegex.stringFieldRegex
 
 import javax.inject.Inject
+import scala.util.matching.Regex
 
-class GuaranteeTypeFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[GuaranteeType] =
-    Form(
-      "value" -> enumerable[GuaranteeType]("guaranteeType.error.required")
-    )
+class CommercialReferenceNumberFormProvider @Inject() extends StringFormProvider {
+  override val maximumLength: Int = 70
+  override val regex: Regex       = stringFieldRegex
 }

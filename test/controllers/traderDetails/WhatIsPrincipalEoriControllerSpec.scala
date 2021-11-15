@@ -18,7 +18,7 @@ package controllers.traderDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.WhatIsPrincipalEoriFormProvider
+import forms.generic.string.EoriNumberFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import models.reference.{CountryCode, CustomsOffice}
@@ -45,8 +45,8 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
 
   private def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new WhatIsPrincipalEoriFormProvider()
-  private val form         = formProvider(true, CountryCode("GB"))
+  private val formProvider = new EoriNumberFormProvider()
+  private val form         = formProvider("whatIsPrincipalEori", true, CountryCode("GB"))
   private val validEori    = "GB123456789012345"
 
   private lazy val whatIsPrincipalEoriRoute = routes.WhatIsPrincipalEoriController.onPageLoad(lrn, NormalMode).url

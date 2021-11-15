@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions._
-import forms.DeclarationTypeFormProvider
+import forms.generic.EnumerableFormProvider
 import models.{DeclarationType, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
@@ -40,7 +40,7 @@ class DeclarationTypeController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: DeclarationTypeFormProvider,
+  formProvider: EnumerableFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -48,7 +48,7 @@ class DeclarationTypeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  private val form = formProvider[DeclarationType]("declarationType")
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>

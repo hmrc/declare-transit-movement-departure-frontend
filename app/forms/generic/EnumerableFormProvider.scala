@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package forms.safetyAndSecurity
+package forms.generic
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.alphaNumericRegex
+import models.Enumerable
 import play.api.data.Form
+
 import javax.inject.Inject
 
-class SafetyAndSecurityConsignorEoriFormProvider @Inject() extends Mappings {
+class EnumerableFormProvider @Inject() extends Mappings {
 
-  val maxLength = 17
-
-  def apply(): Form[String] =
+  def apply[T](messageKeyPrefix: String)(implicit e: Enumerable[T]): Form[T] =
     Form(
-      "value" -> text("safetyAndSecurityConsignorEori.error.required")
-        .verifying(
-          forms.StopOnFirstFail(
-            maxLength(maxLength, "safetyAndSecurityConsignorEori.error.length"),
-            regexp(alphaNumericRegex, "safetyAndSecurityConsignorEori.error.invalid")
-          )
-        )
+      "value" -> enumerable[T](s"$messageKeyPrefix.error.required")
     )
 }

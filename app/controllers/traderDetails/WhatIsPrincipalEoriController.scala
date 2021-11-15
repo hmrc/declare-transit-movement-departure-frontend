@@ -17,8 +17,10 @@
 package controllers.traderDetails
 
 import controllers.actions._
-import forms.WhatIsPrincipalEoriFormProvider
+import forms.generic.string.EoriNumberFormProvider
 import models.ProcedureType.Simplified
+import models.reference.CountryCode
+import models.requests.DataRequest
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TraderDetails
@@ -42,7 +44,7 @@ class WhatIsPrincipalEoriController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: WhatIsPrincipalEoriFormProvider,
+  formProvider: EoriNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -50,14 +52,19 @@ class WhatIsPrincipalEoriController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
+  private def form(countryCode: CountryCode)(implicit request: DataRequest[AnyContent]) = formProvider(
+    messageKeyPrefix = "whatIsPrincipalEori",
+    simplified = request.userAnswers.get(ProcedureTypePage).contains(Simplified),
+    countryCode = countryCode
+  )
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       request.userAnswers.get(OfficeOfDeparturePage) match {
         case Some(officeOfDeparture) =>
-          val isSimplified = request.userAnswers.get(ProcedureTypePage).contains(Simplified)
           val preparedForm = request.userAnswers.get(WhatIsPrincipalEoriPage) match {
-            case None        => formProvider(isSimplified, officeOfDeparture.countryId)
-            case Some(value) => formProvider(isSimplified, officeOfDeparture.countryId).fill(value)
+            case None        => form(officeOfDeparture.countryId)
+            case Some(value) => form(officeOfDeparture.countryId).fill(value)
           }
           val json = Json.obj(
             "form" -> preparedForm,
@@ -73,12 +80,7 @@ class WhatIsPrincipalEoriController @Inject() (
     implicit request =>
       request.userAnswers.get(OfficeOfDeparturePage) match {
         case Some(officeOfDeparture) =>
-          val isSimplified = request.userAnswers.get(ProcedureTypePage) match {
-            case Some(Simplified) => true
-            case _                => false
-          }
-
-          formProvider(isSimplified, officeOfDeparture.countryId)
+          form(officeOfDeparture.countryId)
             .bindFromRequest()
             .fold(
               formWithErrors => {

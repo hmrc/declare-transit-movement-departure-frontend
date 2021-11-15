@@ -17,11 +17,12 @@
 package controllers.addItems.traderSecurityDetails
 
 import controllers.actions._
-import forms.addItems.traderSecurityDetails.SecurityConsignorEoriFormProvider
+import forms.generic.string.EoriNumberFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.TradersSecurityDetails
 import pages.addItems.traderSecurityDetails.SecurityConsignorEoriPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -41,7 +42,7 @@ class SecurityConsignorEoriController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: SecurityConsignorEoriFormProvider,
+  formProvider: EoriNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -51,6 +52,8 @@ class SecurityConsignorEoriController @Inject() (
 
   private val template = "addItems/traderSecurityDetails/securityConsignorEori.njk"
 
+  private val form: Form[String] = formProvider("securityConsignorEori")
+
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
@@ -58,8 +61,8 @@ class SecurityConsignorEoriController @Inject() (
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
         val preparedForm = request.userAnswers.get(SecurityConsignorEoriPage(index)) match {
-          case None        => formProvider(index)
-          case Some(value) => formProvider(index).fill(value)
+          case None        => form
+          case Some(value) => form.fill(value)
         }
 
         val json = Json.obj(
@@ -78,7 +81,7 @@ class SecurityConsignorEoriController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        formProvider(index)
+        form
           .bindFromRequest()
           .fold(
             formWithErrors => {

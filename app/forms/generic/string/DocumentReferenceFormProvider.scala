@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package forms.generic.string
 
-import forms.mappings.Mappings
-import models.DeclarationType
-import play.api.data.Form
+import models.domain.StringFieldRegex.stringFieldRegex
 
 import javax.inject.Inject
+import scala.util.matching.Regex
 
-class DeclarationTypeFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[DeclarationType] =
-    Form(
-      "value" -> enumerable[DeclarationType]("declarationType.error.required")
-    )
+class DocumentReferenceFormProvider @Inject() extends StringFormProvider {
+  override val maximumLength: Int = 35
+  override val regex: Regex       = stringFieldRegex
 }

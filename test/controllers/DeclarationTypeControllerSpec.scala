@@ -19,7 +19,7 @@ package controllers
 import base.{MockNunjucksRendererApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.{routes => mainRoutes}
-import forms.DeclarationTypeFormProvider
+import forms.generic.EnumerableFormProvider
 import matchers.JsonMatchers
 import models.ProcedureType.Normal
 import models.reference.{CountryCode, CustomsOffice}
@@ -54,8 +54,8 @@ class DeclarationTypeControllerSpec
 
   lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
 
-  val formProvider    = new DeclarationTypeFormProvider()
-  val form            = formProvider()
+  val formProvider    = new EnumerableFormProvider()
+  val form            = formProvider[DeclarationType]("declarationType")
   val gbCustomsOffice = CustomsOffice("Id", "Name", CountryCode("GB"), None)
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

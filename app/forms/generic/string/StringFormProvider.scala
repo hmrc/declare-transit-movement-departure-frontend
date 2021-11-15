@@ -14,24 +14,33 @@
  * limitations under the License.
  */
 
-package forms.addItems.containers
+package forms.generic.string
 
 import forms.mappings.Mappings
-import models.domain.StringFieldRegex.stringFieldRegex
+import models.Index
 import play.api.data.Form
+
 import javax.inject.Inject
+import scala.util.matching.Regex
 
-class ContainerNumberFormProvider @Inject() extends Mappings {
+abstract class StringFormProvider @Inject() extends Mappings {
 
-  private lazy val containerNumberMaxLength = 17
+  val maximumLength: Int
+  val regex: Regex
 
-  def apply(): Form[String] =
+  def apply(messageKeyPrefix: String): Form[String] =
+    apply(messageKeyPrefix, Nil)
+
+  def apply(messageKeyPrefix: String, index: Index): Form[String] =
+    apply(messageKeyPrefix, Seq(index.display))
+
+  def apply(messageKeyPrefix: String, args: Seq[Any]): Form[String] =
     Form(
-      "value" -> text("containerNumber.error.required")
+      "value" -> text(s"$messageKeyPrefix.error.required", args)
         .verifying(
-          forms.StopOnFirstFail(
-            maxLength(containerNumberMaxLength, "containerNumber.error.length", containerNumberMaxLength),
-            regexp(stringFieldRegex, "containerNumber.error.invalid")
+          forms.StopOnFirstFail[String](
+            maxLength(maximumLength, s"$messageKeyPrefix.error.length"),
+            regexp(regex, s"$messageKeyPrefix.error.invalid")
           )
         )
     )

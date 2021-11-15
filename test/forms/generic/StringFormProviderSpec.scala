@@ -17,17 +17,28 @@
 package forms.generic
 
 import forms.behaviours.StringFieldBehaviours
+import forms.generic.string.StringFormProvider
+import models.domain.StringFieldRegex.stringFieldRegex
 import org.scalacheck.Arbitrary._
+import org.scalacheck.Gen
 import play.api.data.FormError
+
+import scala.util.matching.Regex
 
 class StringFormProviderSpec extends StringFieldBehaviours {
 
   private val messageKeyPrefix = arbitrary[String].sample.value
-  private val maxLength        = arbitrary[Int].sample.value
+  private val maxLength        = Gen.choose(1, 100).sample.value
   private val requiredKey      = s"$messageKeyPrefix.error.required"
   private val lengthKey        = s"$messageKeyPrefix.error.length"
-  private val invalidKey       = s"$messageKeyPrefix.error.invalidCharacters"
-  private val form             = new StringFormProvider()(messageKeyPrefix, maxLength)
+  private val invalidKey       = s"$messageKeyPrefix.error.invalid"
+
+  private class ArbitraryStringFormProvider(max: Int) extends StringFormProvider {
+    override val maximumLength: Int = max
+    override val regex: Regex       = stringFieldRegex
+  }
+
+  private val form = new ArbitraryStringFormProvider(maxLength)(messageKeyPrefix)
 
   ".value" - {
 

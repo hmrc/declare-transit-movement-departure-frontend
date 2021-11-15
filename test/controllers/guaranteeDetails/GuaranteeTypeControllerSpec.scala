@@ -17,7 +17,7 @@
 package controllers.guaranteeDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
-import forms.guaranteeDetails.GuaranteeTypeFormProvider
+import forms.generic.EnumerableFormProvider
 import matchers.JsonMatchers
 import models.{GuaranteeType, NormalMode}
 import navigation.annotations.GuaranteeDetails
@@ -44,8 +44,8 @@ class GuaranteeTypeControllerSpec extends SpecBase with MockNunjucksRendererApp 
 
   lazy val guaranteeTypeRoute = routes.GuaranteeTypeController.onPageLoad(lrn, index, NormalMode).url
 
-  val formProvider = new GuaranteeTypeFormProvider()
-  val form         = formProvider()
+  val formProvider = new EnumerableFormProvider()
+  val form         = formProvider[GuaranteeType]("guaranteeType")
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

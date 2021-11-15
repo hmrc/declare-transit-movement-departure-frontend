@@ -18,7 +18,7 @@ package controllers.addItems
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.DocumentReferenceFormProvider
+import forms.generic.string.DocumentReferenceFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.addItems.AddItemsDocument
@@ -44,7 +44,7 @@ class DocumentReferenceControllerSpec extends SpecBase with MockNunjucksRenderer
   def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new DocumentReferenceFormProvider()
-  private val form         = formProvider(index)
+  private val form         = formProvider("documentReference", index)
   private val template     = "addItems/documentReference.njk"
 
   lazy val documentReferenceRoute = controllers.addItems.documents.routes.DocumentReferenceController.onPageLoad(lrn, index, documentIndex, NormalMode).url

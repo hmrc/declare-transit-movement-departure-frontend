@@ -18,7 +18,7 @@ package controllers.movementDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoute}
-import forms.RepresentativeCapacityFormProvider
+import forms.generic.EnumerableFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, RepresentativeCapacity}
 import navigation.annotations.MovementDetails
@@ -46,8 +46,8 @@ class RepresentativeCapacityControllerSpec extends SpecBase with MockNunjucksRen
   lazy val representativeCapacityRoute =
     routes.RepresentativeCapacityController.onPageLoad(lrn, NormalMode).url
 
-  val formProvider = new RepresentativeCapacityFormProvider()
-  val form         = formProvider()
+  val formProvider = new EnumerableFormProvider()
+  val form         = formProvider[RepresentativeCapacity]("representativeCapacity")
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

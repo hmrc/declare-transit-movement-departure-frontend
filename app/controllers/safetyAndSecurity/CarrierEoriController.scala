@@ -17,7 +17,7 @@
 package controllers.safetyAndSecurity
 
 import controllers.actions._
-import forms.safetyAndSecurity.CarrierEoriFormProvider
+import forms.generic.string.EoriNumberFormProvider
 import models.{DependentSection, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurityTraderDetails
@@ -41,7 +41,7 @@ class CarrierEoriController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: CarrierEoriFormProvider,
+  formProvider: EoriNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -49,7 +49,7 @@ class CarrierEoriController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("carrierEori")
   private val template = "safetyAndSecurity/carrierEori.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =

@@ -18,7 +18,7 @@ package controllers.addItems.securityDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.generic.StringFormProvider
+import forms.generic.string.CommercialReferenceNumberFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.SecurityDetails
@@ -43,8 +43,8 @@ class CommercialReferenceNumberControllerSpec extends SpecBase with MockNunjucks
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new StringFormProvider()
-  private val form         = formProvider("commercialReferenceNumber", 70)
+  private val formProvider = new CommercialReferenceNumberFormProvider()
+  private val form         = formProvider("commercialReferenceNumber")
   private val template     = "addItems/securityDetails/commercialReferenceNumber.njk"
 
   lazy val commercialReferenceNumberRoute = routes.CommercialReferenceNumberController.onPageLoad(lrn, index, NormalMode).url

@@ -37,14 +37,14 @@ class YesNoFormProviderSpec extends BooleanFieldBehaviours {
       val form  = new YesNoFormProvider()(messageKeyPrefix, index)
 
       behave like booleanField(
-        form,
-        fieldName,
+        form = form,
+        fieldName = fieldName,
         invalidError = FormError(fieldName, invalidKey, Seq(index.display))
       )
 
       behave like mandatoryField(
-        form,
-        fieldName,
+        form = form,
+        fieldName = fieldName,
         requiredError = FormError(fieldName, requiredKey, Seq(index.display))
       )
     }
@@ -54,14 +54,14 @@ class YesNoFormProviderSpec extends BooleanFieldBehaviours {
       val form = new YesNoFormProvider()(messageKeyPrefix)
 
       behave like booleanField(
-        form,
-        fieldName,
+        form = form,
+        fieldName = fieldName,
         invalidError = FormError(fieldName, invalidKey)
       )
 
       behave like mandatoryField(
-        form,
-        fieldName,
+        form = form,
+        fieldName = fieldName,
         requiredError = FormError(fieldName, requiredKey)
       )
     }

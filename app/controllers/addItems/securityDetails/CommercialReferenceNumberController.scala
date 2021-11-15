@@ -17,7 +17,7 @@
 package controllers.addItems.securityDetails
 
 import controllers.actions._
-import forms.generic.StringFormProvider
+import forms.generic.string.CommercialReferenceNumberFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SecurityDetails
@@ -42,7 +42,7 @@ class CommercialReferenceNumberController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  formProvider: StringFormProvider,
+  formProvider: CommercialReferenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -52,7 +52,7 @@ class CommercialReferenceNumberController @Inject() (
 
   private val template = "addItems/securityDetails/commercialReferenceNumber.njk"
 
-  private val form: Form[String] = formProvider("commercialReferenceNumber", 70)
+  private val form: Form[String] = formProvider("commercialReferenceNumber")
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

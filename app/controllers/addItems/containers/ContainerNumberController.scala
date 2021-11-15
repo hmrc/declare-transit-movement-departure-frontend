@@ -17,7 +17,7 @@
 package controllers.addItems.containers
 
 import controllers.actions._
-import forms.addItems.containers.ContainerNumberFormProvider
+import forms.generic.string.ContainerNumberFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsContainer
@@ -49,7 +49,7 @@ class ContainerNumberController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
+  private val form     = formProvider("containerNumber")
   private val template = "addItems/containers/containerNumber.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, containerIndex: Index, mode: Mode): Action[AnyContent] =

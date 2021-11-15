@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-package forms
+package forms.generic
 
 import forms.behaviours.OptionFieldBehaviours
-import models.DeclarationType
+import models.RepresentativeCapacity
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.FormError
 
-class DeclarationTypeFormProviderSpec extends OptionFieldBehaviours {
+class EnumerableFormProviderSpec extends OptionFieldBehaviours {
 
-  private val form = new DeclarationTypeFormProvider()()
+  private val messageKeyPrefix = arbitrary[String].sample.value
+  private val form             = new EnumerableFormProvider()[RepresentativeCapacity](messageKeyPrefix)
 
   ".value" - {
 
     val fieldName   = "value"
-    val requiredKey = "declarationType.error.required"
+    val requiredKey = s"$messageKeyPrefix.error.required"
 
-    behave like optionsField[DeclarationType](
-      form,
-      fieldName,
-      validValues = DeclarationType.values,
+    behave like optionsField[RepresentativeCapacity](
+      form = form,
+      fieldName = fieldName,
+      validValues = RepresentativeCapacity.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 
     behave like mandatoryField(
-      form,
-      fieldName,
+      form = form,
+      fieldName = fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
   }

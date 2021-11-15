@@ -52,7 +52,7 @@ class TraderDetailsConsigneeEoriKnownController @Inject() (
 
   private val template = "addItems/traderDetails/traderDetailsConsigneeEoriKnown.njk"
 
-  private def form(index: Index): Form[Boolean] = formProvider("commercialReferenceNumber", index)
+  private def form(index: Index): Form[Boolean] = formProvider("traderDetailsConsigneeEoriKnown", index)
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
     (identify

@@ -1002,7 +1002,7 @@ securityConsignorEori.heading = What is the security consignor’s EORI number?
 securityConsignorEori.checkYourAnswersLabel = Security consignor’s EORI number
 securityConsignorEori.error.required = Enter the security consignor’s EORI number
 securityConsignorEori.error.length = The security consignor’s EORI number must be 17 characters or less
-securityConsignorEori.error.invalid = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
+securityConsignorEori.error.invalidCharacters = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
 securityConsignorEori.error.invalidFormat = Enter the security consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
 securityConsigneeEori.title = What is the security consignee’s EORI number?
@@ -1010,7 +1010,7 @@ securityConsigneeEori.heading = What is the security consignee’s EORI number?
 securityConsigneeEori.checkYourAnswersLabel = Security consignee’s EORI number
 securityConsigneeEori.error.required = Enter the security consignee’s EORI number
 securityConsigneeEori.error.length = The security consignee’s EORI number must be 17 characters or less
-securityConsigneeEori.error.invalid = The security consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
+securityConsigneeEori.error.invalidCharacters = The security consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
 securityConsigneeEori.error.invalidFormat = Enter the security consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
 securityConsignorAddress.title = What is the security consignor’s address
@@ -1147,9 +1147,9 @@ safetyAndSecurityConsignorEori.title = What is the security consignor’s EORI n
 safetyAndSecurityConsignorEori.heading = What is the security consignor’s EORI number?
 safetyAndSecurityConsignorEori.checkYourAnswersLabel = Security consignor’s EORI number
 safetyAndSecurityConsignorEori.error.required = Enter the security consignor’s EORI number
-safetyAndSecurityConsignorEori.error.length = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
-safetyAndSecurityConsignorEori.error.invalid = The security consignor’s EORI number must be 17 characters or less
-safetyAndSecurityConsignorEori.error.country.required = Enter the country of the security consignor’s address
+safetyAndSecurityConsignorEori.error.length = The security consignor’s EORI number must be 17 characters or less
+safetyAndSecurityConsignorEori.error.invalidCharacters = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
+safetyAndSecurityConsignorEori.error.invalidFormat = Enter the security consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
 safetyAndSecurityConsignorName.title = What is the security consignor’s name?
 safetyAndSecurityConsignorName.heading = What is the security consignor’s name?
@@ -1181,7 +1181,8 @@ safetyAndSecurityConsigneeEori.heading = What is the security consignee’s EORI
 safetyAndSecurityConsigneeEori.checkYourAnswersLabel = Security consignee’s EORI number
 safetyAndSecurityConsigneeEori.error.required = Enter the security consignee’s EORI number
 safetyAndSecurityConsigneeEori.error.length = The security consignee’s EORI number must be 17 characters or less
-safetyAndSecurityConsigneeEori.error.invalid = The security consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
+safetyAndSecurityConsigneeEori.error.invalidCharacters = The security consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
+safetyAndSecurityConsigneeEori.error.invalidFormat = Enter the security consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
 safetyAndSecurityConsigneeName.title = What is the security consignee’s name?
 safetyAndSecurityConsigneeName.heading = What is the security consignee’s name?

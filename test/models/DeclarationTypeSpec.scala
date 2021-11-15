@@ -18,7 +18,7 @@ package models
 
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
-import forms.DeclarationTypeFormProvider
+import forms.generic.EnumerableFormProvider
 import generators.Generators
 import models.DeclarationType.{Option1, Option2, Option3, Option4}
 import models.ProcedureType.{Normal, Simplified}
@@ -69,31 +69,31 @@ class DeclarationTypeSpec
     "Radio options" - {
       "Must return the correct number of radios" - {
         "When Office of Departure is 'GB'" in {
-          val form          = new DeclarationTypeFormProvider()
+          val form          = new EnumerableFormProvider()[DeclarationType]("declarationType")
           val customsOffice = CustomsOffice("id", "name", CountryCode("GB"), None)
           val userAnswers   = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
-          val radios        = DeclarationType.radios(form(), userAnswers)()
+          val radios        = DeclarationType.radios(form, userAnswers)()
           val expected      = Seq(Option1.toString, Option2.toString)
           radios.map(_.value) mustBe expected
 
         }
         "When Office of Departure is 'XI' and the departure type is Simplified" in {
-          val form          = new DeclarationTypeFormProvider()
+          val form          = new EnumerableFormProvider()[DeclarationType]("declarationType")
           val customsOffice = CustomsOffice("id", "name", CountryCode("XI"), None)
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
             .unsafeSetVal(ProcedureTypePage)(Simplified)
-          val radios   = DeclarationType.radios(form(), userAnswers)()
+          val radios   = DeclarationType.radios(form, userAnswers)()
           val expected = Seq(Option1.toString, Option2.toString, Option3.toString)
           radios.map(_.value) mustBe expected
         }
         "When Office of Departure is 'XI' and the departure type is Normal" in {
-          val form          = new DeclarationTypeFormProvider()
+          val form          = new EnumerableFormProvider()[DeclarationType]("declarationType")
           val customsOffice = CustomsOffice("id", "name", CountryCode("XI"), None)
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(OfficeOfDeparturePage)(customsOffice)
             .unsafeSetVal(ProcedureTypePage)(Normal)
-          val radios   = DeclarationType.radios(form(), userAnswers)()
+          val radios   = DeclarationType.radios(form, userAnswers)()
           val expected = Seq(Option1.toString, Option2.toString, Option3.toString, Option4.toString)
           radios.map(_.value) mustBe expected
         }
