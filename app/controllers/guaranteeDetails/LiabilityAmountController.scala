@@ -17,6 +17,7 @@
 package controllers.guaranteeDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfGuarantees
 import forms.LiabilityAmountFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -40,6 +41,7 @@ class LiabilityAmountController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   requireData: DataRequiredAction,
   formProvider: LiabilityAmountFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -76,7 +78,8 @@ class LiabilityAmountController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.GuaranteeDetails)).async {
+      andThen checkDependentSection(DependentSection.GuaranteeDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfGuarantees)).async {
       implicit request =>
         form
           .bindFromRequest()

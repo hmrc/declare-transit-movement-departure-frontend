@@ -17,6 +17,7 @@
 package controllers.guaranteeDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfGuarantees
 import forms.guaranteeDetails.GuaranteeReferenceFormProvider
 import models.GuaranteeType.FlatRateVoucher
 import models.messages.guarantee.GuaranteeReferenceWithGrn
@@ -43,6 +44,7 @@ class GuaranteeReferenceController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: GuaranteeReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -78,7 +80,8 @@ class GuaranteeReferenceController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.GuaranteeDetails)).async {
+      andThen checkDependentSection(DependentSection.GuaranteeDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfGuarantees)).async {
       implicit request =>
         val grnMaxLength: Int = grnMaxLengthValue(request.userAnswers, index)
         formProvider(grnMaxLength)

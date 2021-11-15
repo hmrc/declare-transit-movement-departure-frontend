@@ -17,6 +17,7 @@
 package controllers.guaranteeDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfGuarantees
 import forms.ConfirmRemoveGuaranteeFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, NormalMode}
 import navigation.Navigator
@@ -42,6 +43,7 @@ class ConfirmRemoveGuaranteeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: ConfirmRemoveGuaranteeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -73,7 +75,8 @@ class ConfirmRemoveGuaranteeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.GuaranteeDetails)).async {
+      andThen checkDependentSection(DependentSection.GuaranteeDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfGuarantees)).async {
       implicit request =>
         form
           .bindFromRequest()

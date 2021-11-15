@@ -17,6 +17,7 @@
 package controllers.guaranteeDetails
 
 import controllers.actions._
+import derivable.DeriveNumberOfGuarantees
 import forms.guaranteeDetails.TIRGuaranteeReferenceFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -40,6 +41,7 @@ class TIRGuaranteeReferenceController @Inject() (
   @GuaranteeDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
+  checkValidIndexAction: CheckValidIndexAction,
   requireData: DataRequiredAction,
   formProvider: TIRGuaranteeReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -69,27 +71,31 @@ class TIRGuaranteeReferenceController @Inject() (
       renderer.render(template, json).map(Ok(_))
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+    (identify
+      andThen getData(lrn)
+      andThen requireData
+      andThen checkValidIndexAction(index, DeriveNumberOfGuarantees)).async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => {
 
-            val json = Json.obj(
-              "form"  -> formWithErrors,
-              "index" -> index.display,
-              "lrn"   -> lrn,
-              "mode"  -> mode
-            )
+              val json = Json.obj(
+                "form"  -> formWithErrors,
+                "index" -> index.display,
+                "lrn"   -> lrn,
+                "mode"  -> mode
+              )
 
-            renderer.render(template, json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              userAnswers <- Future.fromTry(request.userAnswers.set(TIRGuaranteeReferencePage(index), value))
-              _           <- sessionRepository.set(userAnswers)
-            } yield Redirect(navigator.nextPage(TIRGuaranteeReferencePage(index), mode, userAnswers))
-        )
-  }
+              renderer.render(template, json).map(BadRequest(_))
+            },
+            value =>
+              for {
+                userAnswers <- Future.fromTry(request.userAnswers.set(TIRGuaranteeReferencePage(index), value))
+                _           <- sessionRepository.set(userAnswers)
+              } yield Redirect(navigator.nextPage(TIRGuaranteeReferencePage(index), mode, userAnswers))
+          )
+    }
 }
