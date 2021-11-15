@@ -17,6 +17,7 @@
 package controllers.addItems.packagesInformation
 
 import controllers.actions._
+import derivable.{DeriveNumberOfItems, DeriveNumberOfPackages}
 import forms.addItems.HowManyPackagesFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class HowManyPackagesController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: HowManyPackagesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -78,7 +80,9 @@ class HowManyPackagesController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(packageIndex, DeriveNumberOfPackages(itemIndex))).async {
       implicit request =>
         val form = formProvider(itemIndex.display)
 

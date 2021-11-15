@@ -17,6 +17,7 @@
 package controllers.addItems.packagesInformation
 
 import controllers.actions._
+import derivable.{DeriveNumberOfItems, DeriveNumberOfPackages}
 import forms.addItems.RemovePackageFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
@@ -42,6 +43,7 @@ class RemovePackageController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: RemovePackageFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -81,7 +83,9 @@ class RemovePackageController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(packageIndex, DeriveNumberOfPackages(itemIndex))).async {
       implicit request =>
         val form = formProvider(packageIndex.display)
 

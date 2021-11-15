@@ -18,6 +18,7 @@ package controllers.addItems.packagesInformation
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.{DeriveNumberOfItems, DeriveNumberOfPackages}
 import forms.addItems.PackageTypeFormProvider
 import models.reference.PackageType
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -44,6 +45,7 @@ class PackageTypeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   @AddItemsPackagesInfo navigator: Navigator,
@@ -89,7 +91,9 @@ class PackageTypeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(packageIndex, DeriveNumberOfPackages(itemIndex))).async {
       implicit request =>
         referenceDataConnector.getPackageTypes().flatMap {
           packageTypes =>
