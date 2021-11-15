@@ -17,6 +17,7 @@
 package controllers.addItems.containers
 
 import controllers.actions._
+import derivable.{DeriveNumberOfContainers, DeriveNumberOfItems}
 import forms.addItems.containers.ContainerNumberFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -41,6 +42,7 @@ class ContainerNumberController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: ContainerNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -77,7 +79,9 @@ class ContainerNumberController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(itemIndex, DeriveNumberOfItems)
+      andThen checkValidIndexAction(containerIndex, DeriveNumberOfContainers(itemIndex))).async {
       implicit request =>
         form
           .bindFromRequest()

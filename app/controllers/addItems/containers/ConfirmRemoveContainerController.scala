@@ -17,7 +17,7 @@
 package controllers.addItems.containers
 
 import controllers.actions._
-import derivable.DeriveNumberOfContainers
+import derivable.{DeriveNumberOfContainers, DeriveNumberOfItems}
 import forms.addItems.containers.ConfirmRemoveContainerFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -42,6 +42,7 @@ class ConfirmRemoveContainerController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   requireData: DataRequiredAction,
   formProvider: ConfirmRemoveContainerFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -77,7 +78,9 @@ class ConfirmRemoveContainerController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.ItemDetails)).async {
+      andThen checkDependentSection(DependentSection.ItemDetails)
+      andThen checkValidIndexAction(index, DeriveNumberOfItems)
+      andThen checkValidIndexAction(containerIndex, DeriveNumberOfContainers(index))).async {
       implicit request =>
         form
           .bindFromRequest()

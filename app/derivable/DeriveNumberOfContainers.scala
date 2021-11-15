@@ -16,13 +16,11 @@
 
 package derivable
 
-import models.Index
-import play.api.libs.json.{JsObject, JsPath}
+import models.{DerivableSize, Index}
+import play.api.libs.json.JsPath
 import queries.Constants.{containers, items}
 
-final case class DeriveNumberOfContainers(itemIndex: Index) extends Derivable[List[JsObject], Int] {
-
-  override val derive: List[JsObject] => Int = _.size
+final case class DeriveNumberOfContainers(itemIndex: Index) extends DerivableSize {
 
   override def path: JsPath = JsPath \ items \ itemIndex.position \ containers
 }
