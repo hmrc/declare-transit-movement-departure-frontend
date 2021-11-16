@@ -456,7 +456,7 @@ class SafetyAndSecurityNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           forAll(arbitrary[UserAnswers]) {
             answers =>
               val updatedAnswers = answers
-                .remove(CountriesOfRoutingQuery(index)).success.value
+                .remove(CountriesOfRoutingQuery()).success.value
               navigator
                 .nextPage(ConfirmRemoveCountryPage, NormalMode, updatedAnswers)
                 .mustBe(routes.CountryOfRoutingController.onPageLoad(updatedAnswers.lrn, index, NormalMode))

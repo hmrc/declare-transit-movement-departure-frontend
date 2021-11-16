@@ -98,6 +98,23 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
         )
     }
 
+  def getAnswerAndBuildSectionRow[T](
+    page: QuestionPage[T],
+    formatAnswer: T => Text,
+    label: Text,
+    id: Option[String],
+    call: Call
+  )(implicit rds: Reads[T]): Option[Row] =
+    userAnswers.get(page) map {
+      answer =>
+        buildSectionRow(
+          label = label,
+          answer = formatAnswer(answer),
+          id = id,
+          call = call
+        )
+    }
+
   def buildRow(
     prefix: String,
     answer: Content,
@@ -128,6 +145,27 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     Row(
       key = Key(label),
       value = Value(lit""),
+      actions = List(
+        Action(
+          content = msg"site.edit",
+          href = call.url,
+          visuallyHiddenText = Some(label),
+          attributes = id.fold[Map[String, String]](Map.empty)(
+            id => Map("id" -> id)
+          )
+        )
+      )
+    )
+
+  def buildSectionRow(
+    label: Text,
+    answer: Content,
+    id: Option[String],
+    call: Call
+  ): Row =
+    Row(
+      key = Key(label, classes = Seq("govuk-!-width-one-half")),
+      value = Value(answer),
       actions = List(
         Action(
           content = msg"site.edit",
@@ -180,7 +218,7 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       getAnswerAndBuildRow = formatAnswer =>
         getAnswerAndBuildRow[T](
           page = page,
-          formatAnswer = formatAnswer,
+          formatAnswer = reformatAsLiteral(formatAnswer),
           prefix = prefix,
           id = id,
           call = call
@@ -190,11 +228,11 @@ private[utils] class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def getAnswerAndBuildCountryRow[T](
     getCountryCode: T => CountryCode,
     countryList: CountryList,
-    getAnswerAndBuildRow: (T => Text) => Option[Row]
+    getAnswerAndBuildRow: (T => String) => Option[Row]
   ): Option[Row] = {
-    val formatAnswer: T => Text = x => {
+    val formatAnswer: T => String = x => {
       val countryCode: CountryCode = getCountryCode(x)
-      lit"${countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)}"
+      formatAsCountry(countryCode)(countryList)
     }
     getAnswerAndBuildRow(formatAnswer)
   }

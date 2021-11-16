@@ -22,6 +22,7 @@ import controllers.safetyAndSecurity.routes
 import models.reference.{CircumstanceIndicator, Country, CountryCode, MethodOfPayment}
 import models.{CheckMode, CircumstanceIndicatorList, CommonAddress, CountryList, Mode}
 import pages.safetyAndSecurity._
+import queries.CountriesOfRoutingQuery
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.{Html, MessageInterpolators}
 
@@ -1211,38 +1212,38 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
       }
     }
 
-    "countryOfRoutingRow" - {
+    "countriesOfRoutingRow" - {
 
       val countryCode: CountryCode = CountryCode("CODE")
       val country: Country         = Country(countryCode, "DESCRIPTION")
 
       "return None" - {
-        "CountryOfRoutingPage undefined at index" in {
+        "CountriesOfRoutingQuery undefined at index" in {
 
           val answers = emptyUserAnswers
 
           val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
-          val result = helper.countryOfRoutingRow(index, CountryList(Nil))
+          val result = helper.countryOfRoutingSectionRow(index, CountryList(Nil))
           result mustBe None
         }
       }
 
       "return Some(row)" - {
-        "CountryOfRoutingPage defined at index" - {
+        "CountriesOfRoutingQuery defined at index" - {
 
           "country code not found" in {
 
-            val answers = emptyUserAnswers.unsafeSetVal(CountryOfRoutingPage(index))(countryCode)
+            val answers = emptyUserAnswers.unsafeSetVal(CountriesOfRoutingQuery())(Seq(countryCode))
 
             val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
-            val result = helper.countryOfRoutingRow(index, CountryList(Nil))
+            val result = helper.countryOfRoutingSectionRow(index, CountryList(Nil))
 
-            val label = lit"${countryCode.code}"
+            val label = msg"addAnotherCountryOfRouting.countryOfRoutingList.label".withArgs(index.display)
 
             result mustBe Some(
               Row(
-                key = Key(label),
-                value = Value(lit""),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
+                value = Value(lit"${countryCode.code}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
@@ -1257,17 +1258,17 @@ class SafetyAndSecurityCheckYourAnswersHelperSpec extends SpecBase with UserAnsw
 
           "country code found" in {
 
-            val answers = emptyUserAnswers.unsafeSetVal(CountryOfRoutingPage(index))(countryCode)
+            val answers = emptyUserAnswers.unsafeSetVal(CountriesOfRoutingQuery())(Seq(countryCode))
 
             val helper = new SafetyAndSecurityCheckYourAnswersHelper(answers, mode)
-            val result = helper.countryOfRoutingRow(index, CountryList(Seq(country)))
+            val result = helper.countryOfRoutingSectionRow(index, CountryList(Seq(country)))
 
-            val label = lit"${country.description}"
+            val label = msg"addAnotherCountryOfRouting.countryOfRoutingList.label".withArgs(index.display)
 
             result mustBe Some(
               Row(
-                key = Key(label),
-                value = Value(lit""),
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
+                value = Value(lit"${country.description}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",

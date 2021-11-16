@@ -29,7 +29,7 @@ object SafetyAndSecurityCheckYourAnswersViewModel {
 
     val countriesOfRoutingRows: Seq[SummaryList.Row] = List.range(0, userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)).flatMap {
       countryOfRoutingPosition =>
-        cyah.countryOfRoutingRow(Index(countryOfRoutingPosition), countries)
+        cyah.countryOfRoutingSectionRow(Index(countryOfRoutingPosition), countries)
     }
 
     Seq(

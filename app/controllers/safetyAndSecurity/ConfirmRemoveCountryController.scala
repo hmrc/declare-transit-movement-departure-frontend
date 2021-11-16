@@ -21,11 +21,10 @@ import forms.safetyAndSecurity.ConfirmRemoveCountryFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
-import pages.safetyAndSecurity.ConfirmRemoveCountryPage
+import pages.safetyAndSecurity.{ConfirmRemoveCountryPage, CountryOfRoutingPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import queries.CountriesOfRoutingQuery
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -96,7 +95,7 @@ class ConfirmRemoveCountryController @Inject() (
             value =>
               if (value) {
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.remove(CountriesOfRoutingQuery(index)))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.remove(CountryOfRoutingPage(index)))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(ConfirmRemoveCountryPage, mode, updatedAnswers))
               } else {

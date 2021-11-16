@@ -21,7 +21,7 @@ import generators.ReferenceDataGenerators
 import models.reference.SpecialMention
 import models.{CheckMode, Mode, SpecialMentionList, UserAnswers}
 import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionTypePage}
-import uk.gov.hmrc.viewmodels.Text.Literal
+import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
 
@@ -76,7 +76,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
       }
     }
 
-    "specialMentionTypeNoRemoval must " - {
+    "specialMentionSectionRow must " - {
 
       "display row if answer exists in reference data" in {
 
@@ -95,9 +95,10 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
             val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers, mode)
 
-            val row = cya.specialMentionTypeNoRemoval(itemIndex, referenceIndex, specialMentionList)
+            val row = cya.specialMentionSectionRow(itemIndex, referenceIndex, specialMentionList)
 
-            row.value.key.content mustBe Literal(rowContent)
+            row.value.key.content mustBe Message("addAnotherSpecialMention.specialMentionList.label", referenceIndex.display)
+            row.value.value.content mustBe Literal(rowContent)
 
             row.value.actions.length mustBe 1
         }
@@ -114,7 +115,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
             val cya = new SpecialMentionsCheckYourAnswersHelper(updatedAnswers, mode)
 
-            val row = cya.specialMentionTypeNoRemoval(itemIndex, referenceIndex, SpecialMentionList(List(SpecialMention("code", "description"))))
+            val row = cya.specialMentionSectionRow(itemIndex, referenceIndex, SpecialMentionList(List(SpecialMention("code", "description"))))
 
             row mustBe None
         }

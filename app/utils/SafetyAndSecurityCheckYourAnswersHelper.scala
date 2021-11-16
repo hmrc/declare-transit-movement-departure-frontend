@@ -244,22 +244,23 @@ class SafetyAndSecurityCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mo
     getCountryCode = countryCode => countryCode,
     countryList = countries,
     getAnswerAndBuildRow = formatAnswer =>
-      getAnswerAndBuildRemovableRow(
+      getAnswerAndBuildRemovableRow[CountryCode](
         page = CountryOfRoutingPage(index),
-        formatAnswer = formatAnswer,
+        formatAnswer = reformatAsLiteral(formatAnswer),
         id = s"country-${index.display}",
         changeCall = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode),
         removeCall = routes.ConfirmRemoveCountryController.onPageLoad(lrn, index, mode)
       )
   )
 
-  def countryOfRoutingRow(index: Index, countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
+  def countryOfRoutingSectionRow(index: Index, countries: CountryList): Option[Row] = getAnswerAndBuildCountryRow[CountryCode](
     getCountryCode = countryCode => countryCode,
     countryList = countries,
     getAnswerAndBuildRow = formatAnswer =>
-      getAnswerAndBuildValuelessRow(
+      getAnswerAndBuildSectionRow[CountryCode](
         page = CountryOfRoutingPage(index),
-        formatAnswer = formatAnswer,
+        formatAnswer = reformatAsLiteral(formatAnswer),
+        label = msg"addAnotherCountryOfRouting.countryOfRoutingList.label".withArgs(index.display),
         id = Some(s"change-country-${index.display}"),
         call = routes.CountryOfRoutingController.onPageLoad(lrn, index, mode)
       )

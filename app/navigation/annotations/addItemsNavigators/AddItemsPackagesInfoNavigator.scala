@@ -81,7 +81,7 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
     }
 
   def addMarkNormalMode(itemIndex: Index, packageIndex: Index, ua: UserAnswers): Option[Call] =
-    (ua.get(AddMarkPage(itemIndex, packageIndex))) match {
+    ua.get(AddMarkPage(itemIndex, packageIndex)) match {
       case Some(true)  => Some(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(ua.lrn, itemIndex, packageIndex, NormalMode))
       case Some(false) => Some(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(ua.lrn, itemIndex, NormalMode))
       case _           => Some(mainRoutes.SessionExpiredController.onPageLoad())
@@ -101,9 +101,9 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
         Some(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(ua.lrn, itemIndex, Index(nextPackageIndex), NormalMode))
       case (Some(false), Some(false), _) =>
         Some(specialMentionsRoutes.AddSpecialMentionController.onPageLoad(ua.lrn, itemIndex, NormalMode))
-      case (Some(false), _, 0) =>
+      case (Some(false), Some(true), 0) =>
         Some(containerRoutes.ContainerNumberController.onPageLoad(ua.lrn, itemIndex, Index(0), NormalMode))
-      case (Some(false), _, _) =>
+      case (Some(false), Some(true), _) =>
         Some(containerRoutes.AddAnotherContainerController.onPageLoad(ua.lrn, itemIndex, NormalMode))
       case _ =>
         Some(mainRoutes.SessionExpiredController.onPageLoad())
@@ -114,7 +114,7 @@ class AddItemsPackagesInfoNavigator @Inject() () extends Navigator {
       case (Some(true), _, _) =>
         val nextPackageIndex: Int = ua.get(DeriveNumberOfPackages(itemIndex)).getOrElse(0)
         Some(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(ua.lrn, itemIndex, Index(nextPackageIndex), CheckMode))
-      case (Some(false), _, 0) =>
+      case (Some(false), Some(true), 0) =>
         Some(containerRoutes.ContainerNumberController.onPageLoad(ua.lrn, itemIndex, Index(0), CheckMode))
       case (Some(false), _, _) =>
         Some(addItemsRoutes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex))

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import models.CommonAddress
+import models.{CommonAddress, CountryList}
 import models.reference._
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.viewmodels.{Content, Html, MessageInterpolators, Text}
@@ -187,6 +187,11 @@ package object utils {
   def formatAsSelf[T](answer: T): T = answer
 
   def formatAsMasked[T]: T => Content = _ => lit"••••"
+
+  def formatAsCountry(countryCode: CountryCode)(countryList: CountryList): String =
+    countryList.getCountry(countryCode).map(_.description).getOrElse(countryCode.code)
+
+  def reformatAsLiteral[T](formatAnswer: T => String): T => Text = answer => formatAsLiteral(formatAnswer(answer))
 
   def formatAsDate: LocalDateTime => String = dateTime => Format.dateFormattedDDMMYYYY(dateTime.toLocalDate).toLowerCase
 

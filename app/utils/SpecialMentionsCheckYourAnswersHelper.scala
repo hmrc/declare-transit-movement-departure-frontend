@@ -39,13 +39,14 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
         )
     )
 
-  def specialMentionTypeNoRemoval(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList): Option[Row] =
+  def specialMentionSectionRow(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList): Option[Row] =
     getAnswerAndBuildSpecialMentionRow(
       page = SpecialMentionTypePage(itemIndex, referenceIndex),
       specialMentions = specialMentions,
-      buildRow = label =>
-        buildValuelessRow(
-          label = label,
+      buildRow = answer =>
+        buildSectionRow(
+          label = msg"addAnotherSpecialMention.specialMentionList.label".withArgs(referenceIndex.display),
+          answer = answer,
           id = Some(s"change-special-mentions-${itemIndex.display}-${referenceIndex.display}"),
           call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
         )
