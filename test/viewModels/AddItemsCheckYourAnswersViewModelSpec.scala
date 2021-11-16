@@ -28,9 +28,11 @@ import pages.addItems.specialMentions.SpecialMentionTypePage
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 
 class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPropertyChecks {
-  // format: off
 
-  private val documentTypeList = DocumentTypeList(Seq(DocumentType("code", "name", true)))
+  // format: off
+  // scalastyle:off magic.number
+
+  private val documentTypeList = DocumentTypeList(Seq(DocumentType("code", "name", transportDocument = true)))
   private val previousReferencesDocumentTypeList = PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType("code", Some("name"))))
   private val specialMentionList = SpecialMentionList(Seq(SpecialMention("code", "name")))
 
@@ -98,20 +100,31 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     }
 
     "packages sections must have section for each package" in {
-      val answers = updatedAnswers
-        .set(PackageTypePage(index, Index(1)), PackageType("AB", "Description") ).success.value
-        .set(HowManyPackagesPage(index, Index(1)), 123).success.value
+      val answers = (0 to 2).foldLeft(emptyUserAnswers)((acc, i) => {
+        acc
+          .set(PackageTypePage(index, Index(i)), PackageType("AB", "Description") ).success.value
+          .set(HowManyPackagesPage(index, Index(i)), 1).success.value
+      })
 
       val result = viewModel(answers)
 
       result.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
+      result.sections(3).sectionSubTitle.get mustBe msg"addAnotherPackage.packageList.label".withArgs(1)
       result.sections(3).rows.length mustEqual 2
       result.sections(3).addAnother mustNot be(defined)
 
       result.sections(4).sectionTitle mustNot be(defined)
+      result.sections(4).sectionSubTitle.get mustBe msg"addAnotherPackage.packageList.label".withArgs(2)
       result.sections(4).rows.length mustEqual 2
-      result.sections(4).addAnother.get.content mustBe msg"addItems.checkYourAnswersLabel.packages.addRemove"
+      result.sections(4).addAnother mustNot be(defined)
+
+      result.sections(5).sectionTitle mustNot be(defined)
+      result.sections(5).sectionSubTitle.get mustBe msg"addAnotherPackage.packageList.label".withArgs(3)
+      result.sections(5).rows.length mustEqual 2
+      result.sections(5).addAnother.get.content mustBe msg"addItems.checkYourAnswersLabel.packages.addRemove"
     }
   }
+
   // format: on
+  // scalastyle:on magic.number
 }
