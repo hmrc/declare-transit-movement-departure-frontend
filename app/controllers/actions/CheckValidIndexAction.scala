@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import models.requests.DataRequest
 import models.{DerivableSize, Index}
 import play.api.Logging
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{ActionFilter, MessagesControllerComponents, Result}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CheckValidIndexCompletionAction(
   val index: Index,
-  val derivable: DerivableSize,
+  val derivable: DerivableSize[JsObject],
   val controllerComponents: MessagesControllerComponents,
   val appConfig: FrontendAppConfig,
   val renderer: Renderer,
@@ -71,7 +71,7 @@ class CheckValidIndexCompletionAction(
 }
 
 trait CheckValidIndexAction {
-  def apply(index: Index, derivableSize: DerivableSize): ActionFilter[DataRequest]
+  def apply(index: Index, derivableSize: DerivableSize[JsObject]): ActionFilter[DataRequest]
 }
 
 class CheckValidIndexActionImpl @Inject() (ec: ExecutionContext,
@@ -80,6 +80,6 @@ class CheckValidIndexActionImpl @Inject() (ec: ExecutionContext,
                                            renderer: Renderer
 ) extends CheckValidIndexAction {
 
-  override def apply(index: Index, derivableSize: DerivableSize): ActionFilter[DataRequest] =
+  override def apply(index: Index, derivableSize: DerivableSize[JsObject]): ActionFilter[DataRequest] =
     new CheckValidIndexCompletionAction(index, derivableSize, controllerComponents, appConfig, renderer, ec)
 }

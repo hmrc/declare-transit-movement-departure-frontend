@@ -18,6 +18,7 @@ package controllers.safetyAndSecurity
 
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.DeriveNumberOfCountryOfRouting
 import forms.safetyAndSecurity.CountryOfRoutingFormProvider
 import models.reference.Country
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
@@ -46,6 +47,7 @@ class CountryOfRoutingController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: CountryOfRoutingFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,

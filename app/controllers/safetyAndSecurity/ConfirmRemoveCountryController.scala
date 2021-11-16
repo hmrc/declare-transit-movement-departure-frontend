@@ -17,6 +17,7 @@
 package controllers.safetyAndSecurity
 
 import controllers.actions._
+import derivable.DeriveNumberOfCountryOfRouting
 import forms.safetyAndSecurity.ConfirmRemoveCountryFormProvider
 import models.{DependentSection, Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -42,6 +43,7 @@ class ConfirmRemoveCountryController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: ConfirmRemoveCountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer

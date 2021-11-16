@@ -49,6 +49,7 @@ class AddAnotherTransitOfficeController @Inject() (
   requireData: DataRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: AddAnotherTransitOfficeFormProvider,
+  checkValidIndexAction: CheckValidIndexAction,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   officeOfTransitFilter: TraderDetailsOfficesOfTransitProvider
@@ -89,40 +90,41 @@ class AddAnotherTransitOfficeController @Inject() (
         }
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
-    implicit request =>
-      request.userAnswers.get(OfficeOfTransitCountryPage(index)) match {
-        case Some(countryCode) =>
-          getCustomsOfficeAndCountryName(countryCode) flatMap {
-            case (customsOffices, countryName) =>
-              val form = formProvider(customsOffices, countryName)
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+    (identify andThen getData(lrn) andThen requireData).async {
+      implicit request =>
+        request.userAnswers.get(OfficeOfTransitCountryPage(index)) match {
+          case Some(countryCode) =>
+            getCustomsOfficeAndCountryName(countryCode) flatMap {
+              case (customsOffices, countryName) =>
+                val form = formProvider(customsOffices, countryName)
 
-              val selectedCustomsOfficeIds = request.userAnswers.get(DeriveOfficesOfTransitIds).getOrElse(Nil)
+                val selectedCustomsOfficeIds = request.userAnswers.get(DeriveOfficesOfTransitIds).getOrElse(Nil)
 
-              form
-                .bindFromRequest()
-                .fold(
-                  formWithErrors => {
-                    val json = Json.obj(
-                      "form"           -> formWithErrors,
-                      "lrn"            -> lrn,
-                      "customsOffices" -> getCustomsOfficesAsJson(formWithErrors.value, customsOffices.filterNot(selectedCustomsOfficeIds)),
-                      "countryName"    -> countryName,
-                      "index"          -> index.display,
-                      "mode"           -> mode
-                    )
-                    renderer.render("addAnotherTransitOffice.njk", json).map(BadRequest(_))
-                  },
-                  value =>
-                    for {
-                      updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAnotherTransitOfficePage(index), value.id))
-                      _              <- sessionRepository.set(updatedAnswers)
-                    } yield Redirect(navigator.nextPage(AddAnotherTransitOfficePage(index), mode, updatedAnswers))
-                )
-          }
-        case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
-      }
-  }
+                form
+                  .bindFromRequest()
+                  .fold(
+                    formWithErrors => {
+                      val json = Json.obj(
+                        "form"           -> formWithErrors,
+                        "lrn"            -> lrn,
+                        "customsOffices" -> getCustomsOfficesAsJson(formWithErrors.value, customsOffices.filterNot(selectedCustomsOfficeIds)),
+                        "countryName"    -> countryName,
+                        "index"          -> index.display,
+                        "mode"           -> mode
+                      )
+                      renderer.render("addAnotherTransitOffice.njk", json).map(BadRequest(_))
+                    },
+                    value =>
+                      for {
+                        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAnotherTransitOfficePage(index), value.id))
+                        _              <- sessionRepository.set(updatedAnswers)
+                      } yield Redirect(navigator.nextPage(AddAnotherTransitOfficePage(index), mode, updatedAnswers))
+                  )
+            }
+          case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
+        }
+    }
 
   //TODO Refactor - 1) Make concurrent calls 2) Use transit country lookup by code
   private def getCustomsOfficeAndCountryName(countryCode: CountryCode)(implicit request: DataRequest[AnyContent]): Future[(CustomsOfficeList, String)] =

@@ -22,7 +22,7 @@ import generators.Generators
 import models.requests.DataRequest
 import models.{DerivableSize, EoriNumber, Index, UserAnswers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.libs.json.{JsPath, Json}
+import play.api.libs.json.{JsObject, JsPath, Json}
 import play.api.mvc.{AnyContent, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -31,7 +31,7 @@ import scala.concurrent.Future
 
 class CheckValidIndexActionSpec extends SpecBase with GuiceOneAppPerSuite with Generators with UserAnswersSpecHelper {
 
-  def harness(index: Index, derivableSize: DerivableSize, userAnswers: UserAnswers): Future[Result] = {
+  def harness(index: Index, derivableSize: DerivableSize[JsObject], userAnswers: UserAnswers): Future[Result] = {
 
     lazy val actionProvider = app.injector.instanceOf[CheckValidIndexActionImpl]
 
@@ -47,7 +47,7 @@ class CheckValidIndexActionSpec extends SpecBase with GuiceOneAppPerSuite with G
 
   "CheckValidIndexAction" - {
 
-    case object DeriveNumberOfFoo extends DerivableSize {
+    case object DeriveNumberOfFoo extends DerivableSize[JsObject] {
 
       override def path: JsPath = JsPath \ "Foo"
 

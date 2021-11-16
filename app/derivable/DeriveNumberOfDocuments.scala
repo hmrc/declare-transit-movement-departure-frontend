@@ -17,10 +17,10 @@
 package derivable
 
 import models.{DerivableSize, Index}
-import play.api.libs.json.JsPath
+import play.api.libs.json.{JsObject, JsPath}
 import queries.Constants.{documents, items}
 
-case class DeriveNumberOfDocuments(itemIndex: Index) extends DerivableSize {
+case class DeriveNumberOfDocuments(itemIndex: Index) extends DerivableSize[JsObject] {
 
   override def path: JsPath = JsPath \ items \ itemIndex.position \ documents
 }

@@ -17,10 +17,9 @@
 package models
 
 import derivable.Derivable
-import play.api.libs.json.JsObject
 
-trait DerivableSize extends Derivable[List[JsObject], Int] {
+trait DerivableSize[A] extends Derivable[List[A], Int] {
 
-  override val derive: List[JsObject] => Int = _.size
+  override val derive: List[A] => Int = _.size
 
 }
