@@ -18,22 +18,22 @@ package services
 
 import com.google.inject.Singleton
 import utils.Format
+import java.time.{Clock, LocalDateTime}
 
-import java.time.LocalDateTime
+import javax.inject.Inject
 
 @Singleton
-@deprecated("Use a clock with java.time instead", "")
-class DateTimeServiceImpl extends DateTimeService {
+class DateTimeServiceImpl @Inject() (clock: Clock) extends DateTimeService {
 
-  override def currentDateTime: LocalDateTime = LocalDateTime.now()
+  def currentDateTime: LocalDateTime = LocalDateTime.now(clock)
 
   def dateFormatted: String = currentDateTime.format(Format.dateFormatter)
 }
 
-@deprecated("Use a clock with java.time instead", "")
 trait DateTimeService {
 
   def currentDateTime: LocalDateTime
 
   def dateFormatted: String
+
 }

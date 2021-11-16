@@ -16,6 +16,8 @@
 
 package config
 
+import java.time.{Clock, ZoneOffset}
+
 import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
@@ -54,5 +56,6 @@ class Module extends AbstractModule {
     bind(classOf[NameRequiredAction]).to(classOf[NameRequiredActionImpl])
     bind(classOf[DateTimeService]).to(classOf[DateTimeServiceImpl]).asEagerSingleton()
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
+    bind(classOf[Clock]).toInstance(Clock.systemUTC)
   }
 }
