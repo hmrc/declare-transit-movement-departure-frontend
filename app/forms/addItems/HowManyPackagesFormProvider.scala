@@ -23,13 +23,16 @@ import javax.inject.Inject
 
 class HowManyPackagesFormProvider @Inject() extends Mappings {
 
-  def apply(itemIndex: Int): Form[Int] =
+  def apply(itemIndex: Int): Form[Int] = {
+    val minimumNumberOfPackages = 1
+    val maximumNumberOfPackages = 99999
     Form(
       "value" -> int(
         "howManyPackages.error.required",
         "howManyPackages.error.wholeNumber",
         "howManyPackages.error.nonNumeric",
         Seq(itemIndex.toString)
-      ).verifying(inRange(itemIndex, 0, 9999, "howManyPackages.error.outOfRange"))
+      ).verifying(inRange(itemIndex, minimumNumberOfPackages, maximumNumberOfPackages, "howManyPackages.error.outOfRange"))
     )
+  }
 }

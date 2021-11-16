@@ -401,14 +401,6 @@ addAnotherTransitOffice.checkYourAnswersLabel = Office of transit {0}
 addAnotherTransitOffice.paragraph = If there is no office of transit, enter the office of destination or port of arrival.
 addAnotherTransitOffice.error.required = Enter the office of transit in {0} that you want to add
 
-totalPackages.title = How many packages are you declaring?
-totalPackages.heading = How many packages are you declaring?
-totalPackages.checkYourAnswersLabel = How many packages are you declaring?
-totalPackages.error.nonNumeric = How many packages you are declaring must only include numbers 0 to 9
-totalPackages.error.required =  Enter how many packages you are declaring
-totalPackages.error.wholeNumber = Enter how many packages you are declaring using whole numbers
-totalPackages.error.outOfRange = TotalPackages must be between {0} and {1}
-
 totalGrossMass.title = What is the total gross mass in kilograms?
 totalGrossMass.heading = What is the total gross mass in kilograms?
 totalGrossMass.checkYourAnswersLabel = What is the total gross mass in kilograms?
@@ -619,7 +611,7 @@ totalPieces.heading = How many pieces have been used for item {0}?
 totalPieces.error.nonNumeric = How many pieces have been used for item {0} must only include numbers 0 to 9
 totalPieces.error.required = Enter how many pieces have been used for item {0}
 totalPieces.error.wholeNumber = How many pieces have been used for item {0} using whole numbers
-totalPieces.error.outOfRange = The pieces used for item {0} must be {1} or less
+totalPieces.error.outOfRange = The pieces used for item {0} must be between {1} and {2}
 totalPieces.checkYourAnswersLabel = Number of pieces
 
 addMark.title = Do you need to add a mark or number for package {0}?
@@ -662,7 +654,7 @@ howManyPackages.checkYourAnswersLabel = Number of packages
 howManyPackages.error.nonNumeric = How many packages have been used for item {0} must only include numbers 0 to 9
 howManyPackages.error.required = Enter how many packages have been used for item {0}
 howManyPackages.error.wholeNumber = Enter how many packages have been used for item {0} using whole numbers
-howManyPackages.error.outOfRange = The packages used for item {0} must be {1} or less
+howManyPackages.error.outOfRange = The packages used for item {0} must be between {1} and {2}
 
 removePackage.title = Are you sure you want to remove package {0}?
 removePackage.heading = Are you sure you want to remove package {0}?

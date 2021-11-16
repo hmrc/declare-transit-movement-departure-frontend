@@ -24,8 +24,8 @@ class HowManyPackagesFormProviderSpec extends IntFieldBehaviours {
   ".value" - {
 
     val fieldName          = "value"
-    val minimum            = 0
-    val maximum            = 9999
+    val minimum            = 1
+    val maximum            = 99999
     val validDataGenerator = intsInRangeWithCommas(minimum, maximum)
     val itemIndex          = 1
 
@@ -49,7 +49,7 @@ class HowManyPackagesFormProviderSpec extends IntFieldBehaviours {
       fieldName,
       minimum = minimum,
       maximum = maximum,
-      expectedError = FormError(fieldName, "howManyPackages.error.outOfRange", Seq(itemIndex, maximum))
+      expectedError = FormError(fieldName, "howManyPackages.error.outOfRange", Seq(itemIndex, minimum, maximum))
     )
 
     behave like mandatoryField(

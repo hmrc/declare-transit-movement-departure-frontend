@@ -49,7 +49,7 @@ class TotalPiecesFormProviderSpec extends IntFieldBehaviours {
       fieldName,
       minimum = minimum,
       maximum = maximum,
-      expectedError = FormError(fieldName, "totalPieces.error.outOfRange", Seq(itemIndex, maximum))
+      expectedError = FormError(fieldName, "totalPieces.error.outOfRange", Seq(itemIndex, minimum, maximum))
     )
 
     behave like mandatoryField(
