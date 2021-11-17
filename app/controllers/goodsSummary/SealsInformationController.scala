@@ -87,7 +87,9 @@ class SealsInformationController @Inject() (
     val singularOrPlural = if (numberOfSeals == 1) "singular" else "plural"
     val onSubmit = if (numberOfSeals < 10) {
       routes.SealsInformationController.onSubmit(lrn, mode).url
-    } else { routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url }
+    } else {
+      routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url
+    }
 
     val json = Json.obj(
       "form"        -> form,

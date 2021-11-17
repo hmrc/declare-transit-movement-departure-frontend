@@ -95,28 +95,27 @@ class ArrivalDatesAtOfficeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)
-      ).async {
-    implicit request =>
-      request.userAnswers.get(AddAnotherTransitOfficePage(index)) match {
-        case Some(officeOfTransitId) =>
-          referenceDataConnector.getCustomsOffice(officeOfTransitId) flatMap {
-            office =>
-              val form: Form[LocalDate] = formProvider(office.name)
+      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)).async {
+      implicit request =>
+        request.userAnswers.get(AddAnotherTransitOfficePage(index)) match {
+          case Some(officeOfTransitId) =>
+            referenceDataConnector.getCustomsOffice(officeOfTransitId) flatMap {
+              office =>
+                val form: Form[LocalDate] = formProvider(office.name)
 
-              form
-                .bindFromRequest()
-                .fold(
-                  formWithErrors => loadPage(lrn, index, mode, formWithErrors).map(BadRequest(_)),
-                  value =>
-                    for {
-                      updatedAnswers <- Future
-                        .fromTry(request.userAnswers.set(ArrivalDatesAtOfficePage(index), LocalDateTime.of(value, LocalTime.of(12, 0))))
-                      _ <- sessionRepository.set(updatedAnswers)
-                    } yield Redirect(navigator.nextPage(ArrivalDatesAtOfficePage(index), mode, updatedAnswers))
-                )
-          }
-        case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
-      }
-  }
+                form
+                  .bindFromRequest()
+                  .fold(
+                    formWithErrors => loadPage(lrn, index, mode, formWithErrors).map(BadRequest(_)),
+                    value =>
+                      for {
+                        updatedAnswers <- Future
+                          .fromTry(request.userAnswers.set(ArrivalDatesAtOfficePage(index), LocalDateTime.of(value, LocalTime.of(12, 0))))
+                        _ <- sessionRepository.set(updatedAnswers)
+                      } yield Redirect(navigator.nextPage(ArrivalDatesAtOfficePage(index), mode, updatedAnswers))
+                  )
+            }
+          case _ => Future.successful(Redirect(mainRoutes.SessionExpiredController.onPageLoad()))
+        }
+    }
 }

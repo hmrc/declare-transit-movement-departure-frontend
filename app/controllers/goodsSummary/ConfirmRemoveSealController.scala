@@ -74,8 +74,7 @@ class ConfirmRemoveSealController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkValidIndexAction(sealIndex, DeriveNumberOfSeals)
-      ).async {
+      andThen checkValidIndexAction(sealIndex, DeriveNumberOfSeals)).async {
       implicit request =>
         request.userAnswers.get(SealIdDetailsPage(sealIndex)) match {
           case Some(seal) =>

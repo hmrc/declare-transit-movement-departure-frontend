@@ -94,8 +94,7 @@ class AddAnotherTransitOfficeController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)
-      ).async {
+      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)).async {
       implicit request =>
         request.userAnswers.get(OfficeOfTransitCountryPage(index)) match {
           case Some(countryCode) =>

@@ -83,7 +83,8 @@ class CountryOfRoutingController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
+      andThen checkDependentSection(DependentSection.SafetyAndSecurity)
+      andThen checkValidIndexAction(index, DeriveNumberOfCountryOfRouting)).async {
       implicit request =>
         referenceDataConnector.getCountryList() flatMap {
           countries =>

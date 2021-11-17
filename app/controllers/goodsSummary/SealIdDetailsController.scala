@@ -70,8 +70,7 @@ class SealIdDetailsController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkValidIndexAction(sealIndex, DeriveNumberOfSeals)
-      ).async {
+      andThen checkValidIndexAction(sealIndex, DeriveNumberOfSeals)).async {
       implicit request =>
         val seals = request.userAnswers.get(SealsQuery()).getOrElse(Seq.empty)
 

@@ -16,7 +16,6 @@
 
 package controllers.addItems.documents
 
-import com.codahale.metrics.DerivativeGauge
 import controllers.actions._
 import derivable.{DeriveNumberOfDocuments, DeriveNumberOfItems}
 import forms.addItems.ConfirmRemoveDocumentFormProvider

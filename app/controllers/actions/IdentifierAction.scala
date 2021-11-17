@@ -89,8 +89,11 @@ class AuthenticatedIdentifierAction @Inject() (
         val hasGroupEnrolment = for {
           newGroupEnrolment <- enrolmentStoreConnector.checkGroupEnrolments(groupId, config.newEnrolmentKey)
           legacyGroupEnrolment <-
-            if (newGroupEnrolment) { Future.successful(newGroupEnrolment) }
-            else { enrolmentStoreConnector.checkGroupEnrolments(groupId, config.legacyEnrolmentKey) }
+            if (newGroupEnrolment) {
+              Future.successful(newGroupEnrolment)
+            } else {
+              enrolmentStoreConnector.checkGroupEnrolments(groupId, config.legacyEnrolmentKey)
+            }
         } yield newGroupEnrolment || legacyGroupEnrolment
 
         hasGroupEnrolment flatMap {

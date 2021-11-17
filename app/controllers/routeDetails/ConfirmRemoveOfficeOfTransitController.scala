@@ -78,28 +78,27 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)
-    ).async {
-    implicit request =>
-      request.userAnswers.get(AddAnotherTransitOfficePage(index)) match {
-        case Some(officeOfTransitId) =>
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors => renderPage(lrn, index, officeOfTransitId, mode, formWithErrors).map(BadRequest(_)),
-              value =>
-                if (value) {
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.remove(OfficeOfTransitQuery(index)))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(ConfirmRemoveOfficeOfTransitPage, mode, updatedAnswers))
-                } else {
-                  Future.successful(Redirect(navigator.nextPage(ConfirmRemoveOfficeOfTransitPage, mode, request.userAnswers)))
-                }
-            )
-        case _ => renderErrorPage(mode)
-      }
-  }
+      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)).async {
+      implicit request =>
+        request.userAnswers.get(AddAnotherTransitOfficePage(index)) match {
+          case Some(officeOfTransitId) =>
+            form
+              .bindFromRequest()
+              .fold(
+                formWithErrors => renderPage(lrn, index, officeOfTransitId, mode, formWithErrors).map(BadRequest(_)),
+                value =>
+                  if (value) {
+                    for {
+                      updatedAnswers <- Future.fromTry(request.userAnswers.remove(OfficeOfTransitQuery(index)))
+                      _              <- sessionRepository.set(updatedAnswers)
+                    } yield Redirect(navigator.nextPage(ConfirmRemoveOfficeOfTransitPage, mode, updatedAnswers))
+                  } else {
+                    Future.successful(Redirect(navigator.nextPage(ConfirmRemoveOfficeOfTransitPage, mode, request.userAnswers)))
+                  }
+              )
+          case _ => renderErrorPage(mode)
+        }
+    }
 
   private def renderPage(lrn: LocalReferenceNumber, index: Index, officeOfTransitId: String, mode: Mode, form: Form[Boolean])(implicit
     request: DataRequest[AnyContent]

@@ -87,46 +87,45 @@ class OfficeOfTransitCountryController @Inject() (
     (identify
       andThen getData(lrn)
       andThen requireData
-      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)
-      ).async {
-    implicit request =>
-      (
-        for {
-          excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
-          page <- OptionT.liftF(
-            formProvider(transitCountryList)
-              .bindFromRequest()
-              .fold(
-                formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.fullList, Results.BadRequest),
-                value =>
-                  for {
-                    customsOfficeList <- referenceDataConnector.getCustomsOfficesOfTheCountry(value.code, transitOfficeRoles)
-                    result <-
-                      if (customsOfficeList.getAll.nonEmpty) {
-                        redirect(index, request, value, mode)
-                      } else {
-                        renderPage(
-                          lrn,
-                          index,
-                          mode,
-                          formProvider(transitCountryList)
-                            .withError(FormError("value", "officeOfTransitCountry.error.noTransitOffice"))
-                            .fill(value),
-                          transitCountryList.fullList,
-                          Results.BadRequest
-                        )
-                      }
+      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)).async {
+      implicit request =>
+        (
+          for {
+            excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
+            transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
+            page <- OptionT.liftF(
+              formProvider(transitCountryList)
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.fullList, Results.BadRequest),
+                  value =>
+                    for {
+                      customsOfficeList <- referenceDataConnector.getCustomsOfficesOfTheCountry(value.code, transitOfficeRoles)
+                      result <-
+                        if (customsOfficeList.getAll.nonEmpty) {
+                          redirect(index, request, value, mode)
+                        } else {
+                          renderPage(
+                            lrn,
+                            index,
+                            mode,
+                            formProvider(transitCountryList)
+                              .withError(FormError("value", "officeOfTransitCountry.error.noTransitOffice"))
+                              .fill(value),
+                            transitCountryList.fullList,
+                            Results.BadRequest
+                          )
+                        }
 
-                  } yield result
-              )
-          )
-        } yield page
-      ).getOrElseF {
-        logger.warn(s"[Controller][OfficeOfTransitCountry][onPageLoad] OfficeOfDeparturePage is missing")
-        Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-      }
-  }
+                    } yield result
+                )
+            )
+          } yield page
+        ).getOrElseF {
+          logger.warn(s"[Controller][OfficeOfTransitCountry][onPageLoad] OfficeOfDeparturePage is missing")
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        }
+    }
 
   private def redirect(index: Index, request: DataRequest[AnyContent], value: Country, mode: Mode) =
     for {
