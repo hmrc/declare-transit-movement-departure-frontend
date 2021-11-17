@@ -18,7 +18,7 @@ package pages
 
 import config.FrontendAppConfig
 import play.api.libs.json.Json
-import play.api.mvc.{Request, Result}
+import play.api.mvc.{Request, Result, Results}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 

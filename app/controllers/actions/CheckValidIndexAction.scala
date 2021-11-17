@@ -19,8 +19,9 @@ package controllers.actions
 import config.FrontendAppConfig
 import models.requests.DataRequest
 import models.{DerivableSize, Index}
+import pages.TechnicalDifficultiesPage
 import play.api.Logging
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{Json, Reads}
 import play.api.mvc.{ActionFilter, MessagesControllerComponents, Result}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -28,16 +29,18 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckValidIndexCompletionAction(
+class CheckValidIndexCompletionAction[T](
   val index: Index,
-  val derivable: DerivableSize[JsObject],
+  val derivable: DerivableSize[T],
   val controllerComponents: MessagesControllerComponents,
-  val appConfig: FrontendAppConfig,
   val renderer: Renderer,
+  val appConfig: FrontendAppConfig,
   implicit val executionContext: ExecutionContext
-) extends ActionFilter[DataRequest]
+)(implicit reads: Reads[List[T]])
+    extends ActionFilter[DataRequest]
     with FrontendBaseController
-    with Logging {
+    with Logging
+    with TechnicalDifficultiesPage {
 
   override protected def filter[A](request: DataRequest[A]): Future[Option[Result]] = {
 
@@ -46,9 +49,9 @@ class CheckValidIndexCompletionAction(
     // format: off
 
     getListLength match {
-      case Some(0) | None   if index.position > 0          => renderTechnicalDifficultiesPage(request)
+      case Some(0) | None if index.position > 0 => renderTechnicalDifficultiesPage(request)
       case Some(listLength) if index.position > listLength => renderTechnicalDifficultiesPage(request)
-      case _                                               => Future.successful(None)
+      case _ => Future.successful(None)
     }
 
     // format: on
@@ -71,15 +74,16 @@ class CheckValidIndexCompletionAction(
 }
 
 trait CheckValidIndexAction {
-  def apply(index: Index, derivableSize: DerivableSize[JsObject]): ActionFilter[DataRequest]
+  def apply[T](index: Index, derivableSize: DerivableSize[T])(implicit reads: Reads[List[T]]): ActionFilter[DataRequest]
 }
 
-class CheckValidIndexActionImpl @Inject() (ec: ExecutionContext,
-                                           controllerComponents: MessagesControllerComponents,
-                                           appConfig: FrontendAppConfig,
-                                           renderer: Renderer
+class CheckValidIndexActionImpl @Inject() (
+  controllerComponents: MessagesControllerComponents,
+  renderer: Renderer,
+  executionContext: ExecutionContext,
+  appConfig: FrontendAppConfig
 ) extends CheckValidIndexAction {
 
-  override def apply(index: Index, derivableSize: DerivableSize[JsObject]): ActionFilter[DataRequest] =
-    new CheckValidIndexCompletionAction(index, derivableSize, controllerComponents, appConfig, renderer, ec)
+  override def apply[T](index: Index, derivableSize: DerivableSize[T])(implicit reads: Reads[List[T]]): ActionFilter[DataRequest] =
+    new CheckValidIndexCompletionAction(index, derivableSize, controllerComponents, renderer, appConfig, executionContext)
 }
