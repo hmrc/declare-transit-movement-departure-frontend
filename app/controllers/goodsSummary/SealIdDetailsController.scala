@@ -17,6 +17,7 @@
 package controllers.goodsSummary
 
 import controllers.actions._
+import derivable.DeriveNumberOfSeals
 import forms.SealIdDetailsFormProvider
 import models.domain.SealDomain
 import models.requests.DataRequest
@@ -43,6 +44,7 @@ class SealIdDetailsController @Inject() (
   @GoodsSummary navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
+  checkValidIndexAction: CheckValidIndexAction,
   requireData: DataRequiredAction,
   formProvider: SealIdDetailsFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -65,7 +67,11 @@ class SealIdDetailsController @Inject() (
   }
 
   def onSubmit(lrn: LocalReferenceNumber, sealIndex: Index, mode: Mode): Action[AnyContent] =
-    (identify andThen getData(lrn) andThen requireData).async {
+    (identify
+      andThen getData(lrn)
+      andThen requireData
+      andThen checkValidIndexAction(sealIndex, DeriveNumberOfSeals)
+      ).async {
       implicit request =>
         val seals = request.userAnswers.get(SealsQuery()).getOrElse(Seq.empty)
 

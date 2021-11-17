@@ -49,9 +49,9 @@ class CheckValidIndexCompletionAction[T](
     // format: off
 
     getListLength match {
-      case Some(0) | None if index.position > 0 => renderTechnicalDifficultiesPage(request)
+      case Some(0) | None   if index.position > 0          => renderTechnicalDifficultiesPage(request)
       case Some(listLength) if index.position > listLength => renderTechnicalDifficultiesPage(request)
-      case _ => Future.successful(None)
+      case _                                               => Future.successful(None)
     }
 
     // format: on

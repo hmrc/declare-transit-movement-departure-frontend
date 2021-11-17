@@ -50,6 +50,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
   requireData: DataRequiredAction,
   errorHandler: ErrorHandler,
   referenceDataConnector: ReferenceDataConnector,
+  checkValidIndexAction: CheckValidIndexAction,
   formProvider: ConfirmRemoveOfficeOfTransitFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -73,7 +74,12 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
       }
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+    (identify
+      andThen getData(lrn)
+      andThen requireData
+      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)
+    ).async {
     implicit request =>
       request.userAnswers.get(AddAnotherTransitOfficePage(index)) match {
         case Some(officeOfTransitId) =>

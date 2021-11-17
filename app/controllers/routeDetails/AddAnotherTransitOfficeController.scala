@@ -19,7 +19,7 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
-import derivable.DeriveOfficesOfTransitIds
+import derivable.{DeriveNumberOfOfficeOfTransits, DeriveOfficesOfTransitIds}
 import forms.AddAnotherTransitOfficeFormProvider
 import models.reference.{CountryCode, CustomsOffice}
 import models.requests.DataRequest
@@ -91,7 +91,11 @@ class AddAnotherTransitOfficeController @Inject() (
     }
 
   def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
-    (identify andThen getData(lrn) andThen requireData).async {
+    (identify
+      andThen getData(lrn)
+      andThen requireData
+      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)
+      ).async {
       implicit request =>
         request.userAnswers.get(OfficeOfTransitCountryPage(index)) match {
           case Some(countryCode) =>

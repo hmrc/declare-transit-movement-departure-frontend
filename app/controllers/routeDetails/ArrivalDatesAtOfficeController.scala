@@ -19,6 +19,7 @@ package controllers.routeDetails
 import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
+import derivable.DeriveNumberOfOfficeOfTransits
 import forms.ArrivalDatesAtOfficeFormProvider
 import models.{Index, LocalReferenceNumber, Mode}
 import navigation.Navigator
@@ -47,6 +48,7 @@ class ArrivalDatesAtOfficeController @Inject() (
   requireData: DataRequiredAction,
   formProvider: ArrivalDatesAtOfficeFormProvider,
   referenceDataConnector: ReferenceDataConnector,
+  checkValidIndexAction: CheckValidIndexAction,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -89,7 +91,12 @@ class ArrivalDatesAtOfficeController @Inject() (
     renderer.render("arrivalDatesAtOffice.njk", json)
   }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+    (identify
+      andThen getData(lrn)
+      andThen requireData
+      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)
+      ).async {
     implicit request =>
       request.userAnswers.get(AddAnotherTransitOfficePage(index)) match {
         case Some(officeOfTransitId) =>

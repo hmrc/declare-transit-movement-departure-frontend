@@ -47,6 +47,7 @@ class ConfirmRemoveSealController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: ConfirmRemoveSealFormProvider,
+  checkValidIndexAction: CheckValidIndexAction,
   errorHandler: ErrorHandler,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -70,7 +71,11 @@ class ConfirmRemoveSealController @Inject() (
     }
 
   def onSubmit(lrn: LocalReferenceNumber, sealIndex: Index, mode: Mode): Action[AnyContent] =
-    (identify andThen getData(lrn) andThen requireData).async {
+    (identify
+      andThen getData(lrn)
+      andThen requireData
+      andThen checkValidIndexAction(sealIndex, DeriveNumberOfSeals)
+      ).async {
       implicit request =>
         request.userAnswers.get(SealIdDetailsPage(sealIndex)) match {
           case Some(seal) =>

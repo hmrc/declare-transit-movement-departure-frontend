@@ -20,6 +20,7 @@ import cats.data.OptionT
 import cats.implicits._
 import connectors.ReferenceDataConnector
 import controllers.actions._
+import derivable.DeriveNumberOfOfficeOfTransits
 import forms.OfficeOfTransitCountryFormProvider
 import models.reference.Country
 import models.requests.DataRequest
@@ -51,6 +52,7 @@ class OfficeOfTransitCountryController @Inject() (
   requireData: DataRequiredAction,
   referenceDataConnector: ReferenceDataConnector,
   formProvider: OfficeOfTransitCountryFormProvider,
+  checkValidIndexAction: CheckValidIndexAction,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   officeOfTransitFilter: TraderDetailsOfficesOfTransitProvider
@@ -81,7 +83,12 @@ class OfficeOfTransitCountryController @Inject() (
         }
     }
 
-  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
+  def onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
+    (identify
+      andThen getData(lrn)
+      andThen requireData
+      andThen checkValidIndexAction(index, DeriveNumberOfOfficeOfTransits)
+      ).async {
     implicit request =>
       (
         for {
