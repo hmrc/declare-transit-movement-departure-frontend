@@ -36,12 +36,27 @@ trait Formatters {
       Map(key -> value)
   }
 
+  private[mappings] def trimmedStringFormatter(errorKey: String, args: Seq[Any] = Seq.empty): Formatter[String] = new Formatter[String] {
+
+    private def error(key: String) = Left(Seq(FormError(key, errorKey, args)))
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
+      data.get(key) match {
+        case None                        => error(key)
+        case Some(s) if s.trim().isEmpty => error(key)
+        case Some(s)                     => Right(s.trim())
+      }
+
+    override def unbind(key: String, value: String): Map[String, String] =
+      Map(key -> value)
+  }
+
   private[mappings] def booleanFormatter(requiredKey: String, invalidKey: String, args: Seq[Any] = Seq.empty): Formatter[Boolean] =
     new Formatter[Boolean] {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] =
         baseFormatter
           .bind(key, data)
           .right
@@ -51,7 +66,7 @@ trait Formatters {
             case _       => Left(Seq(FormError(key, invalidKey, args)))
           }
 
-      def unbind(key: String, value: Boolean) = Map(key -> value.toString)
+      def unbind(key: String, value: Boolean): Map[String, String] = Map(key -> value.toString)
     }
 
   private[mappings] def intFormatter(requiredKey: String, wholeNumberKey: String, nonNumericKey: String, args: Seq[String] = Seq.empty): Formatter[Int] =
@@ -61,7 +76,7 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] =
         baseFormatter
           .bind(key, data)
           .right
@@ -79,7 +94,7 @@ trait Formatters {
                 )
           }
 
-      override def unbind(key: String, value: Int) =
+      override def unbind(key: String, value: Int): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
 

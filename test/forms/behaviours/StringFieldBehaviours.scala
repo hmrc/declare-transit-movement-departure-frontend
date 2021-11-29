@@ -42,8 +42,8 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def fieldWithInvalidCharacters(form: Form[_], fieldName: String, invalidKey: String, length: Int) =
-    s"must not bind strings with invalid characters" in {
+  def fieldWithInvalidCharacters(form: Form[_], fieldName: String, invalidKey: String, length: Int): Unit =
+    "must not bind strings with invalid characters" in {
 
       val expectedError          = FormError(fieldName, invalidKey)
       val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~<>,±üçñèé@]{$length}")
@@ -55,8 +55,8 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def fieldWithInvalidCharacters(form: Form[_], fieldName: String, invalidKey: String, length: Int, args: Any*) =
-    s"must not bind strings with invalid characters" in {
+  def fieldWithInvalidCharacters(form: Form[_], fieldName: String, invalidKey: String, length: Int, args: Any*): Unit =
+    "must not bind strings with invalid characters" in {
 
       val expectedError          = Seq(FormError(fieldName, invalidKey, args.toList))
       val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~<>,±üçñèé@]{$length}")
@@ -68,8 +68,8 @@ trait StringFieldBehaviours extends FieldBehaviours {
       }
     }
 
-  def postcodeWithInvalidFormat(form: Form[_], fieldName: String, invalidKey: String, length: Int, args: Any*) =
-    s"must not bind postcode with invalid format" in {
+  def postcodeWithInvalidFormat(form: Form[_], fieldName: String, invalidKey: String, length: Int, args: Any*): Unit =
+    "must not bind postcode with invalid format" in {
 
       val expectedError          = Seq(FormError(fieldName, invalidKey, args.toList))
       val generator: Gen[String] = RegexpGen.from("^[a-zA-Z]{1,2}([10-12]{1,2}|[10-12][a-zA-Z])\\s*[10-12][a-zA-Z]{4}$")
@@ -80,4 +80,16 @@ trait StringFieldBehaviours extends FieldBehaviours {
           result.errors must equal(expectedError)
       }
     }
+
+  def mandatoryTrimmedField(form: Form[_], fieldName: String, requiredError: FormError): Unit = {
+
+    mandatoryField(form, fieldName, requiredError)
+
+    "must not bind values that trim to empty" in {
+
+      val result = form.bind(Map(fieldName -> " ")).apply(fieldName)
+      result.errors mustEqual Seq(requiredError)
+    }
+  }
+
 }

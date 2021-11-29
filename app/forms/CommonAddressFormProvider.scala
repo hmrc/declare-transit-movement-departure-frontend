@@ -29,21 +29,21 @@ class CommonAddressFormProvider @Inject() extends Mappings {
 
   def apply(countryList: CountryList, name: String): Form[CommonAddress] = Form(
     mapping(
-      "AddressLine1" -> text("commonAddress.error.AddressLine1.required", Seq(name))
+      "AddressLine1" -> trimmedText("commonAddress.error.AddressLine1.required", Seq(name))
         .verifying(
           forms.StopOnFirstFail[String](
             regexp(stringFieldRegex, "commonAddress.error.AddressLine1.invalidCharacters", Seq(name)),
             maxLength(buildingAndStreetLength, "commonAddress.error.AddressLine1.length", name)
           )
         ),
-      "AddressLine2" -> text("commonAddress.error.AddressLine2.required", Seq(name))
+      "AddressLine2" -> trimmedText("commonAddress.error.AddressLine2.required", Seq(name))
         .verifying(
           forms.StopOnFirstFail[String](
             regexp(stringFieldRegex, "commonAddress.error.AddressLine2.invalidCharacters", Seq(name)),
             maxLength(cityLength, "commonAddress.error.AddressLine2.length", name)
           )
         ),
-      "AddressLine3" -> text("commonAddress.error.postalCode.required", Seq(name))
+      "AddressLine3" -> trimmedText("commonAddress.error.postalCode.required", Seq(name))
         .verifying(
           forms.StopOnFirstFail[String](
             regexp(stringFieldRegex, "commonAddress.error.postalCode.invalidCharacters", Seq(name)),
