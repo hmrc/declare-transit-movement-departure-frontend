@@ -38,7 +38,7 @@ footer.links.privacy = Privacy policy
 footer.links.terms = Terms and conditions
 
 language.cymraeg = Cymraeg
-language.change.cymraeg = Newid yr iaith i'r Gymraeg
+language.change.cymraeg = Newid yr iaith i’r Gymraeg
 language.english = English
 language.change.english = Change the language to English
 language.switcher = Language switcher
@@ -199,9 +199,9 @@ principalName.title =  What is the principal’s name?
 principalName.heading =  What is the principal’s name?
 principal.cya.section.heading = Principal
 principalName.checkYourAnswersLabel =  Principal’s name
-principalName.error.required =  Enter the principal's name
+principalName.error.required =  Enter the principal’s name
 principalName.error.length = PrincipalName must be 35 characters or less
-principalName.error.invalidCharacters =  The principal's name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, underscores, and greater than (>) and less than (<) signs
+principalName.error.invalidCharacters =  The principal’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks, underscores, and greater than (>) and less than (<) signs
 
 whatIsPrincipalEori.title = What is the principal’s EORI number?
 whatIsPrincipalEori.heading = What is the principal’s EORI number?
@@ -267,7 +267,7 @@ whatIsConsigneeEori.error.length = The consignee’s EORI number must be 17 char
 whatIsConsigneeEori.error.invalidCharacters = The consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
 whatIsConsigneeEori.error.invalidFormat = Enter the consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
-consignorAddress.title = What is the consignor's address?
+consignorAddress.title = What is the consignor’s address?
 consignorAddress.heading = What is {0}’s address?
 consignorAddress.AddressLine1 = Address line 1
 consignorAddress.AddressLine2 = Address line 2
@@ -275,7 +275,7 @@ consignorAddress.postalCode = Postal code
 consignorAddress.AddressLine4 = Country
 consignorAddress.checkYourAnswersLabel = Consignor’s address
 
-commonAddress.title = What is the consignor's address?
+commonAddress.title = What is the consignor’s address?
 commonAddress.heading = What is {0}’s address?
 commonAddress.AddressLine1 = Address line 1
 commonAddress.AddressLine2 = Address line 2
@@ -311,7 +311,7 @@ destinationCountry.checkYourAnswersLabel = Country goods are ending
 destinationCountry.label = This may not be where the transit movement ends.
 destinationCountry.error.required = Enter the country the goods are ending in
 
-consigneeAddress.title = What is the consignee's address?
+consigneeAddress.title = What is the consignee’s address?
 consigneeAddress.heading = What is {0}’s address?
 consigneeAddress.AddressLine1 = Address line 1
 consigneeAddress.AddressLine2 = Address line 2
@@ -974,10 +974,10 @@ usingSameMethodOfPayment.heading = Are you using the same payment method for all
 usingSameMethodOfPayment.checkYourAnswersLabel = Same payment method for all items?
 usingSameMethodOfPayment.error.required = Select yes if you are using the same payment method for all items
 
-useTradersDetails.title = Do you want to use this trader's details for the security information?
-useTradersDetails.heading = Do you want to use this trader's details for the security information?
-useTradersDetails.checkYourAnswersLabel = Use this trader's details for the security information?
-useTradersDetails.error.required = Select yes if you want to use this trader's details for the security information
+useTradersDetails.title = Do you want to use this trader’s details for the security information?
+useTradersDetails.heading = Do you want to use this trader’s details for the security information?
+useTradersDetails.checkYourAnswersLabel = Use this trader’s details for the security information?
+useTradersDetails.error.required = Select yes if you want to use this trader’s details for the security information
 
 addSecurityConsignorsEori.title = Do you know the security consignor’s EORI number?
 addSecurityConsignorsEori.heading = Do you know the security consignor’s EORI number?
@@ -1208,10 +1208,10 @@ carrierAddress.error.required = Enter carrierAddress
 
 carrierEori.title = What is the carrier’s EORI number?
 carrierEori.heading = What is the carrier’s EORI number?
-carrierEori.checkYourAnswersLabel = Carrier's EORI number
+carrierEori.checkYourAnswersLabel = Carrier’s EORI number
 carrierEori.error.required = Enter the carrier’s EORI number
 carrierEori.error.length =  The carrier’s EORI number must be 17 characters or less
-carrierEori.error.invalidCharacters = The carrier's EORI number must only include letters a to z without accents and numbers 0 to 9
+carrierEori.error.invalidCharacters = The carrier’s EORI number must only include letters a to z without accents and numbers 0 to 9
 carrierEori.error.invalidFormat = Enter the carrier’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 
 carrierName.title =  What is the carrier’s name?
@@ -1219,7 +1219,7 @@ carrierName.heading = What is the carrier’s name?
 carrierName.checkYourAnswersLabel =  Carrier’s name
 carrierName.error.required =  Enter the carrier’s name
 carrierName.error.length = carrier’s name must be 35 characters or less
-carrierName.error.invalidCharacters = The carrier's name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
+carrierName.error.invalidCharacters = The carrier’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
 
 cancellationDecisionUpdate.title = Cancellation decision
 cancellationDecisionUpdate.heading = Cancellation decision
