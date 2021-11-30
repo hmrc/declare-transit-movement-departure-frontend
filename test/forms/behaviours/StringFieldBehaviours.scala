@@ -87,7 +87,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
     "must not bind values that trim to empty" in {
 
-      val result = form.bind(Map(fieldName -> " ")).apply(fieldName)
+      val result = form.bind(Map(fieldName -> "   ")).apply(fieldName)
       result.errors mustEqual Seq(requiredError)
     }
   }

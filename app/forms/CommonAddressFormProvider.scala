@@ -31,7 +31,6 @@ class CommonAddressFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         "AddressLine1" -> trimmedText("commonAddress.error.AddressLine1.required", Seq(name))
-          .transform[String](value => value.trim(), value => value.trim())
           .verifying(
             forms.StopOnFirstFail[String](
               regexp(stringFieldRegex, "commonAddress.error.AddressLine1.invalidCharacters", Seq(name)),
@@ -39,7 +38,6 @@ class CommonAddressFormProvider @Inject() extends Mappings {
             )
           ),
         "AddressLine2" -> trimmedText("commonAddress.error.AddressLine2.required", Seq(name))
-          .transform[String](value => value.trim(), value => value)
           .verifying(
             forms.StopOnFirstFail[String](
               regexp(stringFieldRegex, "commonAddress.error.AddressLine2.invalidCharacters", Seq(name)),
@@ -47,7 +45,6 @@ class CommonAddressFormProvider @Inject() extends Mappings {
             )
           ),
         "AddressLine3" -> trimmedText("commonAddress.error.postalCode.required", Seq(name))
-          .transform[String](value => value.trim(), value => value)
           .verifying(
             forms.StopOnFirstFail[String](
               regexp(stringFieldRegex, "commonAddress.error.postalCode.invalidCharacters", Seq(name)),

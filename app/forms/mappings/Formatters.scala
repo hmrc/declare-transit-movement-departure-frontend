@@ -45,7 +45,6 @@ trait Formatters {
         case None                        => error(key)
         case Some(s) if s.trim().isEmpty => error(key)
         case Some(s) =>
-          println(s"bind '$s' -> '${s.trim()}'")
           Right(s.trim())
       }
 
