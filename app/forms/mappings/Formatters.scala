@@ -44,8 +44,7 @@ trait Formatters {
       data.get(key) match {
         case None                        => error(key)
         case Some(s) if s.trim().isEmpty => error(key)
-        case Some(s) =>
-          Right(s.trim())
+        case Some(s)                     => Right(s.trim())
       }
 
     override def unbind(key: String, value: String): Map[String, String] =
