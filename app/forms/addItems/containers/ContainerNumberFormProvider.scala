@@ -27,7 +27,7 @@ class ContainerNumberFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("containerNumber.error.required")
+      "value" -> trimmedText("containerNumber.error.required")
         .verifying(
           forms.StopOnFirstFail(
             maxLength(containerNumberMaxLength, "containerNumber.error.length", containerNumberMaxLength),

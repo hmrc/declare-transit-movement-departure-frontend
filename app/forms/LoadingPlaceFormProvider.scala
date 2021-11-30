@@ -26,7 +26,7 @@ class LoadingPlaceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("loadingPlace.error.required")
+      "value" -> trimmedText("loadingPlace.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(placeOfLoadingGoodsCodeLength, "loadingPlace.error.length"),

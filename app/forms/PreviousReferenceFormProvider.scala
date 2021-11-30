@@ -27,7 +27,7 @@ class PreviousReferenceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("previousReference.error.required")
+      "value" -> trimmedText("previousReference.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxLength, "previousReference.error.length"),

@@ -18,22 +18,19 @@ package models.domain
 
 object StringFieldRegex {
 
-  val stringFieldRegex                     = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
-  val alphaNumericRegex                    = "^[a-zA-Z0-9]*$".r
-  val alphaNumericWithSpaceRegex           = "^[a-zA-Z0-9 ]*$".r
-  val commodityCodeCharactersRegex         = "^[0-9]*$"
-  val commodityCodeFormatRegex             = "^([0-9]{6}|[0-9]{8})$"
-  val liabilityAmountCharactersRegex       = "^$|^[0-9.]*$"
-  val liabilityAmountFormatRegex           = "^$|([0-9]*(?:\\.[0-9]{1,2})?)$"
-  val greaterThanZeroRegex                 = "^$|([1-9]{1}[0-9.]*)$"
-  val zeroOrGreaterThanOneRegex            = "^(0)$|^(0\\.0)$|^(0\\.00)$|^([1-9]{1}[0-9.]*)$"
-  val validPostcodeCharactersRegex: String = "^[a-zA-Z\\s*0-9]*$"
-  val postCodeRegex: String                = "^[a-zA-Z]{1,2}([0-9]{1,2}|[0-9][a-zA-Z])\\s*[0-9][a-zA-Z]{2}$"
-  val eoriNumberRegex: String              = "^[a-zA-Z]{2}[0-9a-zA-Z]{1,15}"
-  val consignorNameRegex                   = s"^[a-zA-Z0-9&'@\\/.\\-%? ]{1,35}"
-  val addressRegex: String                 = "^[a-zA-Z0-9/@?%,.\\- ]*$"
-  val authorisedLocationCodeRegex          = "^[a-zA-Z0-9&'@/.%-? ]*$"
-  val principalTirHolderIdFormatRegex      = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{7}$"
-  val principalTirHolderIdCharRegex        = "[a-zA-Z0-9\\/]*".r
+  val stringFieldRegex                = "[\\sa-zA-Z0-9&'@/.\\-? ]*".r
+  val alphaNumericRegex               = "^[a-zA-Z0-9]*$".r
+  val alphaNumericWithSpaceRegex      = "^[a-zA-Z0-9 ]*$".r
+  val commodityCodeCharactersRegex    = "^[0-9]*$"
+  val commodityCodeFormatRegex        = "^([0-9]{6}|[0-9]{8})$"
+  val liabilityAmountCharactersRegex  = "^$|^[0-9.]*$"
+  val liabilityAmountFormatRegex      = "^$|([0-9]*(?:\\.[0-9]{1,2})?)$"
+  val greaterThanZeroRegex            = "^$|([1-9]{1}[0-9.]*)$"
+  val zeroOrGreaterThanOneRegex       = "^(0)$|^(0\\.0)$|^(0\\.00)$|^([1-9]{1}[0-9.]*)$"
+  val eoriNumberRegex: String         = "^[a-zA-Z]{2}[0-9a-zA-Z]{1,15}"
+  val consignorNameRegex              = "^[a-zA-Z0-9&'@\\/.\\-%? ]{1,35}"
+  val authorisedLocationCodeRegex     = "^[a-zA-Z0-9&'@/.%-? ]*$"
+  val principalTirHolderIdFormatRegex = "^[a-zA-Z]{3}\\/[0-9]{3}\\/[0-9]{7}$"
+  val principalTirHolderIdCharRegex   = "[a-zA-Z0-9\\/]*".r
 
 }
