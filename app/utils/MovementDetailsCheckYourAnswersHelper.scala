@@ -53,7 +53,7 @@ class MovementDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     formatAnswer = formatAsYesOrNo,
     prefix = "containersUsed",
     id = Some("change-containers-used"),
-    call = routes.ContainersUsedPageController.onPageLoad(lrn, mode)
+    call = routes.ContainersUsedController.onPageLoad(lrn, mode)
   )
 
   def declarationForSomeoneElse: Option[Row] = getAnswerAndBuildRow[Boolean](
