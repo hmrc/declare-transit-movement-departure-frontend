@@ -28,10 +28,11 @@
         {% endif %}
 
         <form action="{{ routes.controllers.safetyAndSecurity.AddCommercialReferenceNumberAllItemsController.onSubmit(lrn, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('safetyAndSecurity.preHeading')}}</span>
+          <span class="govuk-caption-xl">{{messages('safetyAndSecurity.preHeading')}}</span>
           {{ csrf() | safe }}
 
           {{ govukRadios({
+            classes: "govuk-radios--inline",
             name: 'value',
             fieldset: {
               legend: {
@@ -46,7 +47,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

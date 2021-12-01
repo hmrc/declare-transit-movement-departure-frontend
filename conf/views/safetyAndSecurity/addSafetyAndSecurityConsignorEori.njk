@@ -28,10 +28,11 @@
         {% endif %}
 
         <form action="{{ routes.controllers.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriController.onSubmit(lrn, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('safetyAndSecurity.preHeading')}}</span>
+          <span class="govuk-caption-xl">{{messages('safetyAndSecurity.preHeading')}}</span>
           {{ csrf() | safe }}
 
           {{ govukRadios({
+            classes: "govuk-radios--inline",
             name: 'value',
             fieldset: {
               legend: {

@@ -30,15 +30,15 @@
 
         <span class="govuk-caption-xl">{{messages('safetyAndSecurity.preHeading')}}</span>
         <h1 class="govuk-heading-xl">
-        {{ messages(heading) }}
+          {{ messages(heading) }}
         </h1>
 
-         {{ govukSummaryList({
-               classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
-               rows: countryRows
-            }) }}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
+          rows: countryRows
+        }) }}
 
-          <form action="{{ routes.controllers.safetyAndSecurity.AddAnotherCountryOfRoutingController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.safetyAndSecurity.AddAnotherCountryOfRoutingController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
@@ -58,7 +58,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

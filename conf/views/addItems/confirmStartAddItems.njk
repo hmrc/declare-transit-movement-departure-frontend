@@ -34,6 +34,7 @@
           {{ csrf() | safe }}
 
           {{ govukRadios({
+            classes: "govuk-radios--inline",
             name: 'value',
             fieldset: {
               legend: {
@@ -43,12 +44,11 @@
               }
             },
             hint: {
-                html:  govukWarningText({
-                        text: messages('confirmStartAddItems.info.safety') if safety else messages('confirmStartAddItems.info.nonSafety'),
-                        iconFallbackText: "Warning",
-                        classes: "govuk-!-padding-top-5"
-                      })
-
+              html: govukWarningText({
+                text: messages('confirmStartAddItems.info.safety') if safety else messages('confirmStartAddItems.info.nonSafety'),
+                iconFallbackText: "Warning",
+                classes: "govuk-!-padding-top-5"
+              })
             },
             items: radios,
             errorMessage: form.value.error
@@ -56,7 +56,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

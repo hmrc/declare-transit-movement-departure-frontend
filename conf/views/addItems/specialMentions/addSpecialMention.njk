@@ -30,17 +30,18 @@
         <form action="{{ routes.controllers.addItems.specialMentions.AddSpecialMentionController.onSubmit(lrn, itemIndex, mode).url }}" method="post">
           <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
-         <h1 class="govuk-heading-xl"> {{ messages("addSpecialMention.heading", index) }}  </h1>
+          <h1 class="govuk-heading-xl"> {{ messages("addSpecialMention.heading", index) }}  </h1>
 
           {{ csrf() | safe }}
 
           {{ govukRadios({
+            classes: "govuk-radios--inline",
             name: 'value',
             fieldset: {
               legend: {
                 text: messages('addSpecialMention.paragraph'),
-                                isPageHeading: false,
-                                classes: "govuk-label--medium"
+                isPageHeading: false,
+                classes: "govuk-label--medium"
               }
             },
             items: radios,
@@ -49,7 +50,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

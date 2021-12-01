@@ -29,14 +29,14 @@
         {% endif %}
 
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
-                <h1 class="govuk-heading-xl">
-                  {{ messages(pageTitle, containerTotal) }}
-                </h1>
+        <h1 class="govuk-heading-xl">
+          {{ messages(pageTitle, containerTotal) }}
+        </h1>
 
-          {{ govukSummaryList({
-                    classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
-                    rows: containerRows
-                }) }}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
+          rows: containerRows
+        }) }}
 
         <form action="{{ routes.controllers.addItems.containers.AddAnotherContainerController.onSubmit(lrn, index, mode).url }}" method="post">
 
@@ -58,7 +58,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

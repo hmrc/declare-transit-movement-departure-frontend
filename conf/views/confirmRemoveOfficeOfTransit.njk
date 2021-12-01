@@ -27,45 +27,44 @@
           }) }}
         {% endif %}
 
-
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
 
+        <fieldset class="govuk-fieldset">
 
-       <fieldset class="govuk-fieldset">
-
-       <legend>
-        <h1 class="govuk-heading-xl"> {{ messages("confirmRemoveOfficeOfTransit.heading") }} </h1>
-       </legend>
+          <legend>
+            <h1 class="govuk-heading-xl"> {{ messages("confirmRemoveOfficeOfTransit.heading") }} </h1>
+          </legend>
 
           <dl class="govuk-summary-list">
-                 <div class="govuk-summary-list__row">
-                     <dt class="govuk-summary-list__key">
-                    {{ messages("confirmRemoveOfficeOfTransit.Label") }}
-                     </dt>
-                     <dd class="govuk-summary-list__value">
-                     {{ officeOfTransit }}
-                     </dd>
-                 </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                {{ messages("confirmRemoveOfficeOfTransit.Label") }}
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ officeOfTransit }}
+              </dd>
+            </div>
           </dl>
 
-        <form action="{{ routes.controllers.routeDetails.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn, index, mode).url }}" method="post">
+          <form action="{{ routes.controllers.routeDetails.ConfirmRemoveOfficeOfTransitController.onSubmit(lrn, index, mode).url }}" method="post">
 
-          {{ csrf() | safe }}
+            {{ csrf() | safe }}
 
-          {{ govukRadios({
-            name: 'value',
-            items: radios,
-            errorMessage: form.value.error
-          }) }}
+            {{ govukRadios({
+              classes: "govuk-radios--inline",
+              name: 'value',
+              items: radios,
+              errorMessage: form.value.error
+            }) }}
 
-          </fieldset>
+          </form>
 
-          {{ govukButton({
-            text: messages("site.continue"),
-            attributes: {id:"submit"}
-          }) }}
+        </fieldset>
 
-        </form>
+        {{ govukButton({
+          text: messages("site.continue"),
+          attributes: {id: "submit"}
+        }) }}
 
       </div>
     </div>
