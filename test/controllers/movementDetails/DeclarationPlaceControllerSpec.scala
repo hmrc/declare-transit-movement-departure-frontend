@@ -86,7 +86,7 @@ class DeclarationPlaceControllerSpec extends SpecBase with MockNunjucksRendererA
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers =
-        emptyUserAnswers.set(DeclarationPlacePage, "answer").success.value
+        emptyUserAnswers.set(DeclarationPlacePage, "AB1 1AB").success.value
       dataRetrievalWithData(userAnswers)
 
       val request        = FakeRequest(GET, declarationPlaceRoute)
@@ -100,7 +100,7 @@ class DeclarationPlaceControllerSpec extends SpecBase with MockNunjucksRendererA
       verify(mockRenderer, times(1))
         .render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "answer"))
+      val filledForm = form.bind(Map("value" -> "AB1 1AB"))
 
       val expectedJson =
         Json.obj("form" -> filledForm, "lrn" -> lrn, "mode" -> NormalMode)
@@ -118,7 +118,7 @@ class DeclarationPlaceControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val request =
         FakeRequest(POST, declarationPlaceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "AB1 1AB"))
 
       val result = route(app, request).value
 
@@ -176,7 +176,7 @@ class DeclarationPlaceControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val request =
         FakeRequest(POST, declarationPlaceRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "AB1 1AB"))
 
       val result = route(app, request).value
 
