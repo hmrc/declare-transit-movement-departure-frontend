@@ -40,7 +40,7 @@ class DeclarationPlaceFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like mandatoryField(
+    behave like mandatoryTrimmedField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
