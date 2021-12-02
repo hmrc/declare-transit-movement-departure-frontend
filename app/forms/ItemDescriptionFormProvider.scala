@@ -26,7 +26,7 @@ class ItemDescriptionFormProvider @Inject() extends Mappings {
 
   def apply(index: Index): Form[String] =
     Form(
-      "value" -> text("itemDescription.error.required", Seq(index.display))
+      "value" -> trimmedText("itemDescription.error.required", Seq(index.display))
         .verifying(
           StopOnFirstFail[String](
             maxLength(280, "itemDescription.error.length", index.display),

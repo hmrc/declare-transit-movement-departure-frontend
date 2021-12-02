@@ -26,7 +26,7 @@ class AgreedLocationOfGoodsFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("agreedLocationOfGoods.error.required")
+      "value" -> trimmedText("agreedLocationOfGoods.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxLengthAgreedLocationOfGoods, "agreedLocationOfGoods.error.length"),

@@ -27,7 +27,7 @@ class CommercialReferenceNumberAllItemsFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("commercialReferenceNumberAllItems.error.required")
+      "value" -> trimmedText("commercialReferenceNumberAllItems.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(maxLength, "commercialReferenceNumberAllItems.error.length"),

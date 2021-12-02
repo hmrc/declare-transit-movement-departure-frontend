@@ -27,7 +27,7 @@ class PlaceOfUnloadingCodeFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("placeOfUnloadingCode.error.required")
+      "value" -> trimmedText("placeOfUnloadingCode.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(maxLength, "placeOfUnloadingCode.error.length"),

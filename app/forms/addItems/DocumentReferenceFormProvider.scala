@@ -28,7 +28,7 @@ class DocumentReferenceFormProvider @Inject() extends Mappings {
 
   def apply(index: Index): Form[String] =
     Form(
-      "value" -> text("documentReference.error.required")
+      "value" -> trimmedText("documentReference.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(maxLength, "documentReference.error.length"),

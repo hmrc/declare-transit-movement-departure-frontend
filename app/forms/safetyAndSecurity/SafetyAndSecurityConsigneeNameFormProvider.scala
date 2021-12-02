@@ -27,7 +27,7 @@ class SafetyAndSecurityConsigneeNameFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("safetyAndSecurityConsigneeName.error.required")
+      "value" -> trimmedText("safetyAndSecurityConsigneeName.error.required")
         .verifying(
           forms.StopOnFirstFail(maxLength(maxLength, "safetyAndSecurityConsigneeName.error.length"),
                                 regexp(stringFieldRegex, "safetyAndSecurityConsigneeName.error.invalid")

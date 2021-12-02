@@ -16,7 +16,7 @@
 
 package config
 
-import java.time.{Clock, ZoneOffset}
+import java.time.Clock
 
 import com.google.inject.AbstractModule
 import controllers.actions._

@@ -27,6 +27,4 @@ object Constants {
   lazy val tirCarnetReferenceMaxLength    = 11
   lazy val tirCarnetReferenceMinLength    = 10
   lazy val tirGuaranteeReferenceMaxLength = 35
-  lazy val addressRegex: String           = "^[a-zA-Z0-9/@?%,.\\- ]*$"
-
 }
