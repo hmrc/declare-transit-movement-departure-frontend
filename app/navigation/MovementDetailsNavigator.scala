@@ -28,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 class MovementDetailsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case PreLodgeDeclarationPage       => ua => Some(routes.ContainersUsedPageController.onPageLoad(ua.lrn, NormalMode))
+    case PreLodgeDeclarationPage       => ua => Some(routes.ContainersUsedController.onPageLoad(ua.lrn, NormalMode))
     case ContainersUsedPage            => ua => Some(routes.DeclarationPlaceController.onPageLoad(ua.lrn, NormalMode))
     case DeclarationPlacePage          => ua => Some(routes.DeclarationForSomeoneElseController.onPageLoad(ua.lrn, NormalMode))
     case DeclarationForSomeoneElsePage => ua => Some(isDeclarationForSomeoneElse(ua, NormalMode))

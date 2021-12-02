@@ -28,28 +28,29 @@
         {% endif %}
 
         <form action="{{ routes.controllers.addItems.documents.AddDocumentsController.onSubmit(lrn, index, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
-        <h1 class="govuk-heading-xl"> {{ messages("addDocuments.heading", index) }}  </h1>
+          <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
+          <h1 class="govuk-heading-xl"> {{ messages("addDocuments.heading", index) }}  </h1>
 
-        {{ csrf() | safe }}
+          {{ csrf() | safe }}
 
-        {{ govukRadios({
-          name: 'value',
-          fieldset: {
-            legend: {
-              text: messages('addDocuments.paragraph'),
-              isPageHeading: false,
-              classes: "govuk-label--medium"
-            }
-          },
-          items: radios,
-          errorMessage: form.value.error
-        }) }}
+          {{ govukRadios({
+            classes: "govuk-radios--inline",
+            name: 'value',
+            fieldset: {
+              legend: {
+                text: messages('addDocuments.paragraph'),
+                isPageHeading: false,
+                classes: "govuk-label--medium"
+              }
+            },
+            items: radios,
+            errorMessage: form.value.error
+          }) }}
 
-        {{ govukButton({
-          text: messages("site.continue"),
-          attributes: {id:"submit"}
-        }) }}
+          {{ govukButton({
+            text: messages("site.continue"),
+            attributes: {id: "submit"}
+          }) }}
 
         </form>
 

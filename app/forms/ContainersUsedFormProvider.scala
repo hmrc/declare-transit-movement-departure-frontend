@@ -21,7 +21,7 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class ContainersUsedPageFormProvider @Inject() extends Mappings {
+class ContainersUsedFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(

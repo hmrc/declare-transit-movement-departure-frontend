@@ -28,16 +28,15 @@
           }) }}
         {% endif %}
 
-
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
         <h1 class="govuk-heading-xl"> {{ heading }} </h1>
 
-          {{ govukSummaryList({
-                classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
-                rows: itemRows
-            }) }}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
+          rows: itemRows
+        }) }}
 
-          <form action="{{ routes.controllers.addItems.AddAnotherItemController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.AddAnotherItemController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
@@ -46,10 +45,10 @@
             name: 'value',
             fieldset: {
               legend: {
-                  text: messages('addAnotherItem.paragraph'),
-                  isPageHeading: false,
-                  classes: "govuk-fieldset__legend--m"
-                }
+                text: messages('addAnotherItem.paragraph'),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
             },
             items: radios,
             errorMessage: form.value.error
@@ -57,7 +56,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

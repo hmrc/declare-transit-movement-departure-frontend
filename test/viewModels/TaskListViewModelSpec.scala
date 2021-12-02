@@ -117,7 +117,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
           val userAnswers = emptyUserAnswers.unsafeSetVal(ProcedureTypePage)(ProcedureType.Simplified)
           val viewModel   = TaskListViewModel(userAnswers)
 
-          val expectedHref: String = controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
+          val expectedHref: String = controllers.movementDetails.routes.ContainersUsedController.onPageLoad(lrn, NormalMode).url
 
           viewModel.getHref(movementSectionName).value mustEqual expectedHref
         }
@@ -152,7 +152,7 @@ class TaskListViewModelSpec extends SpecBase with GeneratorSpec with UserAnswers
 
           val viewModel = TaskListViewModel(userAnswers)
 
-          val expectedHref: String = controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
+          val expectedHref: String = controllers.movementDetails.routes.ContainersUsedController.onPageLoad(lrn, NormalMode).url
 
           viewModel.getHref(movementSectionName).value mustEqual expectedHref
 

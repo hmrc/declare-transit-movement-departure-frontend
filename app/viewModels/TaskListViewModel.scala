@@ -43,7 +43,7 @@ private[viewModels] class TaskListViewModel(userAnswers: UserAnswers) {
   private def movementDetailsStartPage(procedureType: Option[ProcedureType]): String =
     procedureType match {
       case Some(Normal)     => controllers.movementDetails.routes.PreLodgeDeclarationController.onPageLoad(userAnswers.lrn, NormalMode).url
-      case Some(Simplified) => controllers.movementDetails.routes.ContainersUsedPageController.onPageLoad(userAnswers.lrn, NormalMode).url
+      case Some(Simplified) => controllers.movementDetails.routes.ContainersUsedController.onPageLoad(userAnswers.lrn, NormalMode).url
       case _                => controllers.routes.SessionExpiredController.onPageLoad().url
     }
 

@@ -1,7 +1,7 @@
-GET        /:lrn/movement-details/containers-used                        controllers.movementDetails.ContainersUsedPageController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-POST       /:lrn/movement-details/containers-used                        controllers.movementDetails.ContainersUsedPageController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
-GET        /:lrn/movement-details/change-containers-used                  controllers.movementDetails.ContainersUsedPageController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
-POST       /:lrn/movement-details/change-containers-used                  controllers.movementDetails.ContainersUsedPageController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+GET        /:lrn/movement-details/containers-used                        controllers.movementDetails.ContainersUsedController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+POST       /:lrn/movement-details/containers-used                        controllers.movementDetails.ContainersUsedController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
+GET        /:lrn/movement-details/change-containers-used                  controllers.movementDetails.ContainersUsedController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
+POST       /:lrn/movement-details/change-containers-used                  controllers.movementDetails.ContainersUsedController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:lrn/movement-details/declaration-place                        controllers.movementDetails.DeclarationPlaceController.onPageLoad(lrn: LocalReferenceNumber, mode: Mode = NormalMode)
 POST       /:lrn/movement-details/declaration-place                        controllers.movementDetails.DeclarationPlaceController.onSubmit(lrn: LocalReferenceNumber, mode: Mode = NormalMode)

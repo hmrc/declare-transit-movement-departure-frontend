@@ -18,7 +18,7 @@ package controllers.movementDetails
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.ContainersUsedPageFormProvider
+import forms.ContainersUsedFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.annotations.MovementDetails
@@ -43,17 +43,17 @@ class ContainersUsedControllerSpec extends SpecBase with MockNunjucksRendererApp
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContainersUsedPageFormProvider()
+  val formProvider = new ContainersUsedFormProvider()
   val form         = formProvider()
 
-  lazy val containersUsedPageRoute = routes.ContainersUsedPageController.onPageLoad(lrn, NormalMode).url
+  lazy val containersUsedPageRoute = routes.ContainersUsedController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[MovementDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
-  "ContainersUsedPage Controller" - {
+  "ContainersUsed Controller" - {
 
     "must return OK and the correct view for a GET" in {
       dataRetrievalWithData(emptyUserAnswers)

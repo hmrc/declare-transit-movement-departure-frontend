@@ -23,7 +23,7 @@ class ContainersUsedFormProviderSpec extends BooleanFieldBehaviours {
 
   private val requiredKey = "containersUsed.error.required"
   private val invalidKey  = "error.boolean"
-  private val form        = new ContainersUsedPageFormProvider()()
+  private val form        = new ContainersUsedFormProvider()()
 
   ".value" - {
 

@@ -32,33 +32,33 @@
         <h1 class="govuk-heading-xl"> {{ heading }} </h1>
 
         {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
-                                rows: guaranteeRows
-                            }) }}
+          classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
+          rows: guaranteeRows
+        }) }}
 
         <form action="{{ routes.controllers.guaranteeDetails.AddAnotherGuaranteeController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
           {% if allowMoreGuarantees %}
-          {{ govukRadios({
-            classes: "govuk-radios--inline",
-            name: 'value',
-            fieldset: {
-              legend: {
-                text: radioHeading,
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            items: radios,
-            errorMessage: form.value.error
-          }) }}
+            {{ govukRadios({
+              classes: "govuk-radios--inline",
+              name: 'value',
+              fieldset: {
+                legend: {
+                  text: radioHeading,
+                  isPageHeading: false,
+                  classes: "govuk-fieldset__legend--m"
+                }
+              },
+              items: radios,
+              errorMessage: form.value.error
+            }) }}
           {% endif %}
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

@@ -32,6 +32,7 @@
           {{ csrf() | safe }}
 
           {{ govukRadios({
+            classes: "govuk-radios--inline",
             idPrefix: 'add-safety-and-security-details',
             name: 'value',
             fieldset: {
@@ -41,17 +42,17 @@
                 classes: "govuk-fieldset__legend--xl"
               }
             },
-             hint: {
-                    text: messages('addSecurityDetails.paragraph'),
-                    classes: "govuk-label--medium"
-                    },
+            hint: {
+              text: messages('addSecurityDetails.paragraph'),
+              classes: "govuk-label--medium"
+            },
             items: radios,
             errorMessage: form.value.error
           }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>
