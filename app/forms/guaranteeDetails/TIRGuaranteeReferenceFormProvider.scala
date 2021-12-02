@@ -26,7 +26,7 @@ class TIRGuaranteeReferenceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("tirGuaranteeReference.error.required")
+      "value" -> trimmedText("tirGuaranteeReference.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(tirGuaranteeReferenceMaxLength, "tirGuaranteeReference.error.length"),

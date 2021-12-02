@@ -26,7 +26,7 @@ class IdAtDepartureFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("idAtDeparture.error.required")
+      "value" -> trimmedText("idAtDeparture.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(vehicleIdMaxLength, "idAtDeparture.error.length"),

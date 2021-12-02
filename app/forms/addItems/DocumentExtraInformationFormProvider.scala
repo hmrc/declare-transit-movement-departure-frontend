@@ -28,7 +28,7 @@ class DocumentExtraInformationFormProvider @Inject() extends Mappings {
 
   def apply(index: Index): Form[String] =
     Form(
-      "value" -> text("documentExtraInformation.error.required", Seq(index.display))
+      "value" -> trimmedText("documentExtraInformation.error.required", Seq(index.display))
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(maxLength, "documentExtraInformation.error.length", index.display),

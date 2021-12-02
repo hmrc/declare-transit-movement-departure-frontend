@@ -27,7 +27,7 @@ class AuthorisedLocationCodeFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("authorisedLocationCode.error.required")
+      "value" -> trimmedText("authorisedLocationCode.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(authorisedLocationCodeMaxLength, "authorisedLocationCode.error.length"),

@@ -27,7 +27,7 @@ class CarrierNameFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("carrierName.error.required")
+      "value" -> trimmedText("carrierName.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
             maxLength(maxLengthCarrierlName, "carrierName.error.length"),

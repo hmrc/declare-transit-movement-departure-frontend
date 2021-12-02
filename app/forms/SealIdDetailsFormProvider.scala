@@ -29,7 +29,7 @@ class SealIdDetailsFormProvider @Inject() extends Mappings {
 
   def apply(index: Index, seals: Seq[SealDomain] = Seq.empty[SealDomain]): Form[String] =
     Form(
-      "value" -> text("sealIdDetails.error.required")
+      "value" -> trimmedText("sealIdDetails.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxSealsNumberLength, "sealIdDetails.error.length"),

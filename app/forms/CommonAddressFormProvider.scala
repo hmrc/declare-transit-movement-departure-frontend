@@ -23,35 +23,37 @@ import models.reference.Country
 import models.{CommonAddress, CountryList}
 import play.api.data.Form
 import play.api.data.Forms.mapping
+
 import javax.inject.Inject
 
 class CommonAddressFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: CountryList, name: String): Form[CommonAddress] = Form(
-    mapping(
-      "AddressLine1" -> text("commonAddress.error.AddressLine1.required", Seq(name))
-        .verifying(
-          forms.StopOnFirstFail[String](
-            regexp(stringFieldRegex, "commonAddress.error.AddressLine1.invalidCharacters", Seq(name)),
-            maxLength(buildingAndStreetLength, "commonAddress.error.AddressLine1.length", name)
-          )
-        ),
-      "AddressLine2" -> text("commonAddress.error.AddressLine2.required", Seq(name))
-        .verifying(
-          forms.StopOnFirstFail[String](
-            regexp(stringFieldRegex, "commonAddress.error.AddressLine2.invalidCharacters", Seq(name)),
-            maxLength(cityLength, "commonAddress.error.AddressLine2.length", name)
-          )
-        ),
-      "AddressLine3" -> text("commonAddress.error.postalCode.required", Seq(name))
-        .verifying(
-          forms.StopOnFirstFail[String](
-            regexp(stringFieldRegex, "commonAddress.error.postalCode.invalidCharacters", Seq(name)),
-            maxLength(postcodeLength, "commonAddress.error.postalCode.length", name)
-          )
-        ),
-      "country" -> text("commonAddress.error.country.required", Seq(name))
-        .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
-    )(CommonAddress.apply)(CommonAddress.unapply)
-  )
+  def apply(countryList: CountryList, name: String): Form[CommonAddress] =
+    Form(
+      mapping(
+        "AddressLine1" -> trimmedText("commonAddress.error.AddressLine1.required", Seq(name))
+          .verifying(
+            forms.StopOnFirstFail[String](
+              regexp(stringFieldRegex, "commonAddress.error.AddressLine1.invalidCharacters", Seq(name)),
+              maxLength(buildingAndStreetLength, "commonAddress.error.AddressLine1.length", name)
+            )
+          ),
+        "AddressLine2" -> trimmedText("commonAddress.error.AddressLine2.required", Seq(name))
+          .verifying(
+            forms.StopOnFirstFail[String](
+              regexp(stringFieldRegex, "commonAddress.error.AddressLine2.invalidCharacters", Seq(name)),
+              maxLength(cityLength, "commonAddress.error.AddressLine2.length", name)
+            )
+          ),
+        "AddressLine3" -> trimmedText("commonAddress.error.postalCode.required", Seq(name))
+          .verifying(
+            forms.StopOnFirstFail[String](
+              regexp(stringFieldRegex, "commonAddress.error.postalCode.invalidCharacters", Seq(name)),
+              maxLength(postcodeLength, "commonAddress.error.postalCode.length", name)
+            )
+          ),
+        "country" -> text("commonAddress.error.country.required", Seq(name))
+          .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
+      )(CommonAddress.apply)(CommonAddress.unapply)
+    )
 }

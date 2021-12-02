@@ -26,7 +26,7 @@ class TIRCarnetReferenceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("tirCarnetReference.error.required")
+      "value" -> trimmedText("tirCarnetReference.error.required")
         .verifying(
           forms.StopOnFirstFail[String](
             minLength(tirCarnetReferenceMinLength, "tirCarnetReference.error.minLength", tirCarnetReferenceMinLength),
