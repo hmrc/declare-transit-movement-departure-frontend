@@ -27,7 +27,7 @@ class RepresentativeNameFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("representativeName.error.required")
+      "value" -> trimmedText("representativeName.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxLengthRepresentativeName, "representativeName.error.length"),

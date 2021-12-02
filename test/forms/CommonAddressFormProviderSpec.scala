@@ -49,7 +49,7 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
       lengthError = FormError(fieldName, lengthKey, Seq(name))
     )
 
-    behave like mandatoryField(
+    behave like mandatoryTrimmedField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey, Seq(name))
@@ -78,7 +78,7 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
       lengthError = FormError(fieldName, lengthKey, Seq(name))
     )
 
-    behave like mandatoryField(
+    behave like mandatoryTrimmedField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey, Seq(name))
@@ -108,7 +108,7 @@ class CommonAddressFormProviderSpec extends StringFieldBehaviours {
       lengthError = FormError(fieldName, lengthKey, Seq(name))
     )
 
-    behave like mandatoryField(
+    behave like mandatoryTrimmedField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey, Seq(name))
