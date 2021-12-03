@@ -42,7 +42,7 @@
 
           <p class = "govuk-body">{{ messages('controlResultDateLimit.paragraph1') }}</p>
           <p class = "govuk-body">{{ messages('controlResultDateLimit.paragraph2') }}
-            <a href={{ config.contactUrl }} target="_blank" rel="noopener noreferrer"> {{ messages("technicalDifficulties.contact.link") }}</a>.
+            <a href={{ config.contactUrl }} class="govuk-link" target="_blank" rel="noopener noreferrer"> {{ messages("technicalDifficulties.contact.link") }}</a>.
           </p>
 
           {{ csrf() | safe }}
