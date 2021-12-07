@@ -22,12 +22,12 @@ import javax.inject.Inject
 
 class DeclarationPlaceFormProvider @Inject() extends Mappings {
 
-  val postCodeRegex: String = "^[a-zA-Z0-9]+([\\s]{1}[a-zA-Z0-9]+)*"
+  val postCodeRegex: String = "^[a-zA-Z]{1,2}[0-9][0-9a-zA-Z]?\\s?[0-9][a-zA-Z]{2}$"
   val maxLengthPostCode     = 9
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("declarationPlace.error.required")
+      "value" -> trimmedText("declarationPlace.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxLengthPostCode, "declarationPlace.error.length"),
