@@ -34,7 +34,7 @@
 
 
 
-        <div class="govuk-form-group {%- if form.value.error %} govuk-form-group--error{% endif %} ">
+        <div class="govuk-form-group {%- if form.postcode.error %} govuk-form-group--error{% endif %} ">
 
           <h1 class="govuk-label-wrapper">
               <label class="govuk-label govuk-label--xl" for="postcode">
@@ -49,18 +49,18 @@
                 {{ messages('postcodeExample') }}
         </div>
 
-            {%- if form.value.error %}
+            {%- if form.postcode.error %}
               <span id="declaration-place-error" class="govuk-error-message">
-                  <span class="govuk-visually-hidden">{{ messages('error.title.prefix') }}</span> {{ form.value.error.text }}
+                  <span class="govuk-visually-hidden">{{ messages('error.title.prefix') }}</span> {{ form.postcode.error.text }}
                   </span>
             {% endif %}
 
-            <input class="govuk-input govuk-input--width-10 {%- if form.value.error %} govuk-input--error{% endif %}"
+            <input class="govuk-input govuk-input--width-10 {%- if form.postcode.error %} govuk-input--error{% endif %}"
             id="postcode"
-            name="value"
+            name="postcode"
             type="text"
             aria-describedby="postcode-hint"
-            {%- if form.value.value %} value="{{ form.value.value}}"{% endif %}>
+            {%- if form.postcode.value %} value="{{ form.postcode.value}}"{% endif %}>
          </div>
 
           {{ govukButton({

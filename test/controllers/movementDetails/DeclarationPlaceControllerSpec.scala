@@ -100,7 +100,7 @@ class DeclarationPlaceControllerSpec extends SpecBase with MockNunjucksRendererA
       verify(mockRenderer, times(1))
         .render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "AB1 1AB"))
+      val filledForm = form.bind(Map("postcode" -> "AB1 1AB"))
 
       val expectedJson =
         Json.obj("form" -> filledForm, "lrn" -> lrn, "mode" -> NormalMode)
@@ -118,7 +118,7 @@ class DeclarationPlaceControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val request =
         FakeRequest(POST, declarationPlaceRoute)
-          .withFormUrlEncodedBody(("value", "AB1 1AB"))
+          .withFormUrlEncodedBody(("postcode", "AB1 1AB"))
 
       val result = route(app, request).value
 
@@ -134,8 +134,8 @@ class DeclarationPlaceControllerSpec extends SpecBase with MockNunjucksRendererA
         .thenReturn(Future.successful(Html("")))
 
       val request = FakeRequest(POST, declarationPlaceRoute)
-        .withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
+        .withFormUrlEncodedBody(("postcode", ""))
+      val boundForm      = form.bind(Map("postcode" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -176,7 +176,7 @@ class DeclarationPlaceControllerSpec extends SpecBase with MockNunjucksRendererA
 
       val request =
         FakeRequest(POST, declarationPlaceRoute)
-          .withFormUrlEncodedBody(("value", "AB1 1AB"))
+          .withFormUrlEncodedBody(("postcode", "AB1 1AB"))
 
       val result = route(app, request).value
 

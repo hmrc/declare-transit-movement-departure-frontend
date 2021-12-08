@@ -27,7 +27,7 @@ class DeclarationPlaceFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> trimmedText("declarationPlace.error.required")
+      "postcode" -> trimmedText("declarationPlace.error.required")
         .verifying(
           StopOnFirstFail[String](
             maxLength(maxLengthPostCode, "declarationPlace.error.length"),
