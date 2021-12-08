@@ -32,7 +32,7 @@ class DeclarationPlaceFormProviderSpec extends StringFieldBehaviours {
 
   ".value" - {
 
-    val fieldName = "value"
+    val fieldName = "postcode"
 
     behave like fieldThatBindsValidData(
       form,
