@@ -35,11 +35,18 @@
 
           {{ csrf() | safe }}
 
+          <p class = "govuk-body">{{ messages('controlResultDateLimit.paragraph1') }}</p>
+          <p class = "govuk-body">{{ messages('controlResultDateLimit.paragraph2') }}
+            <a href={{ config.contactUrl }} class="govuk-link" target="_blank" rel="noopener noreferrer"> {{ messages("technicalDifficulties.contact.link") }}</a>.
+          </p>
+
           {{ dateInputWithParagraphMacro({
-            label: {
-              text: messages("controlResultDateLimit.heading"),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
+            fieldset: {
+              legend: {
+                text: messages("controlResultDateLimit.heading"),
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
             },
             paragraph: {
               text: messages('controlResultDateLimit.paragraph1')

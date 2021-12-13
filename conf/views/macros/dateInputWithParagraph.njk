@@ -31,16 +31,6 @@
 
      {#- Capture the HTML so we can optionally nest it in a fieldset -#}
      {% set innerHtml %}
-     {% if params.label %}
-       {{ govukLabel({
-         html: params.label.html,
-         text: params.label.text,
-         classes: params.label.classes,
-         isPageHeading: params.label.isPageHeading,
-         attributes: params.label.attributes,
-         for: params.id
-       }) | indent(2) | trim }}
-     {% endif %}
      {% if params.paragraph %}
       <p class = "govuk-body">{{ params.paragraph.text }}</p>
      {% endif %}

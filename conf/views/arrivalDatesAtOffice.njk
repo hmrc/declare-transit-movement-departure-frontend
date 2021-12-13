@@ -1,7 +1,7 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/dateInputWithParagraph.njk"        import dateInputWithParagraph as dateInputWithParagraphMacro %}
+{% from "govuk/components/date-input/macro.njk"    import govukDateInput %}
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -35,11 +35,13 @@
 
           {{ csrf() | safe }}
 
-          {{ dateInputWithParagraphMacro({
-            label: {
-              text: messages("arrivalDatesAtOffice.heading"),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
+          {{ govukDateInput({
+            fieldset: {
+              legend: {
+                text: messages("arrivalDatesAtOffice.heading"),
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
             },
             hint: {
               text: messages('arrivalDatesAtOffice.hint')
