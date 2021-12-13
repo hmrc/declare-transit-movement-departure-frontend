@@ -16,7 +16,7 @@
 
 package pages.traderDetails
 
-import models.ProcedureType.{Normal, Simplified}
+import models.ProcedureType.Simplified
 import models.UserAnswers
 import pages.{ClearAllAddItems, ProcedureTypePage, QuestionPage}
 import play.api.libs.json.JsPath
