@@ -4,7 +4,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/label/macro.njk" import govukLabel %}
 
-{% macro dateInputWithParagraph(params) %}
+{% macro dateInputWithHeader(params) %}
 
      {#- a record of other elements that we need to associate with the input using
         aria-describedby – for example hints or error messages -#}
@@ -40,14 +40,6 @@
          attributes: params.label.attributes,
          for: params.id
        }) | indent(2) | trim }}
-     {% endif %}
-     {% if params.paragraph %}
-      <p class = "govuk-body">{{ params.paragraph.text }}</p>
-     {% endif %}
-     {% if params.paragraphWithLink %}
-      <p class = "govuk-body">{{  params.paragraphWithLink.text }}
-        <a href={{ params.paragraphWithLink.href }} class="govuk-link" target="_blank" rel="noopener noreferrer"> {{ params.paragraphWithLink.hrefText }}</a>
-      </p>
      {% endif %}
      {% if params.hint %}
        {% set hintId = params.id + "-hint" %}

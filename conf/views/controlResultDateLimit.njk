@@ -1,7 +1,7 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "macros/dateInputWithParagraph.njk"        import dateInputWithParagraph as dateInputWithParagraphMacro %}
+{% from "macros/dateInputWithHeader.njk"           import dateInputWithHeader as dateInputWithHeaderMacro %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
@@ -30,27 +30,28 @@
 
         <span class="govuk-caption-xl">{{ messages('goodsSummary.preHeading') }}</span>
 
-        <form action="{{ routes.controllers.goodsSummary.ControlResultDateLimitController.onSubmit(lrn, mode).url }}" method="post">
+        {% set hintHtml = [
+        "<p class='govuk-body'>", messages('controlResultDateLimit.paragraph1'), "</p>",
+        "<p class='govuk-body'>", messages('controlResultDateLimit.paragraph2'), " ",
+            "<a href=", config.contactUrl, "class='govuk-link' target='_blank' rel='noopener noreferrer'>",
+            messages('technicalDifficulties.contact.link'),
+             "</a>",
+        "</p>"
+        ] | join %}
 
+        <form action="{{ routes.controllers.goodsSummary.ControlResultDateLimitController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
-          {{ dateInputWithParagraphMacro({
+          {{ dateInputWithHeaderMacro({
             label: {
               text: messages("controlResultDateLimit.heading"),
               isPageHeading: true,
               classes: "govuk-label--xl"
             },
-            paragraph: {
-              text: messages('controlResultDateLimit.paragraph1')
-            },
-            paragraphWithLink: {
-              text: messages('controlResultDateLimit.paragraph2'),
-              href: config.contactUrl,
-              hrefText: messages("technicalDifficulties.contact.link")
-            },
             hint: {
-              text: messages('controlResultDateLimit.hint')
+              text: messages('controlResultDateLimit.hint'),
+              html: hintHtml
             },
             errorMessage: date.error,
             items: date.items
