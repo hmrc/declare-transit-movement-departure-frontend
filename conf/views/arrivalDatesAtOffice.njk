@@ -1,7 +1,7 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "govuk/components/date-input/macro.njk"    import govukDateInput %}
+{% from "macros/dateInputWithParagraph.njk"        import dateInputWithParagraph as dateInputWithParagraphMacro %}
 {% from "govuk/components/select/macro.njk"        import govukSelect %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -33,25 +33,21 @@
 
         <form action="{{ routes.controllers.routeDetails.ArrivalDatesAtOfficeController.onSubmit(lrn, index, mode).url }}" method="post">
 
-        {% call govukFieldset({
-          legend: {
-            text: messages("arrivalDatesAtOffice.heading"),
-            classes: "govuk-fieldset__legend--xl",
-            isPageHeading: true
-          }
-        }) %}
-
           {{ csrf() | safe }}
 
-        {{ govukDateInput({
-          hint: {
-            text: messages('arrivalDatesAtOffice.hint')
-          },
-          errorMessage: date.error,
-          items: date.items
-        }) }}
+          {{ dateInputWithParagraphMacro({
+            label: {
+              text: messages("arrivalDatesAtOffice.heading"),
+              isPageHeading: true,
+              classes: "govuk-label--xl"
+            },
+            hint: {
+              text: messages('arrivalDatesAtOffice.hint')
+            },
+            errorMessage: date.error,
+            items: date.items
+          }) }}
 
-        {% endcall %}
 
           {{ govukButton({
             text: messages("site.continue"),
