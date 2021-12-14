@@ -282,7 +282,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = PackageTypePage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
     prefix = "packageType",
-    id = Some(s"change-package-${packageIndex.display}"),
+    id = Some("change-package-type"),
     call = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
@@ -290,7 +290,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = HowManyPackagesPage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
     prefix = "howManyPackages",
-    id = None,
+    id = Some("change-number-of-packages"),
     call = controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
@@ -298,8 +298,24 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = TotalPiecesPage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
     prefix = "totalPieces",
-    id = None,
+    id = Some("change-total-pieces"),
     call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, mode)
+  )
+
+  def addMark(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddMarkPage(itemIndex, packageIndex),
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addMark",
+    id = Some("change-add-mark"),
+    call = controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(lrn, itemIndex, packageIndex, mode)
+  )
+
+  def mark(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DeclareMarkPage(itemIndex, packageIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "declareMark",
+    id = Some("change-mark"),
+    call = controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
   def addAnotherPackage(itemIndex: Index, content: Text): AddAnotherViewModel = {

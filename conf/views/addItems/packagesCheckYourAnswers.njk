@@ -25,9 +25,7 @@
           {{ messages("packagesCheckYourAnswers.heading") }}
         </h1>
 
-        {% for section in sections %}
-          {{ sectionMacro(section.sectionTitle, section.rows, section.addAnother, section.sectionSubTitle) }}
-        {% endfor %}
+        {{ sectionMacro(section.sectionTitle, section.rows) }}
 
         {{ csrf() | safe }}
 

@@ -1407,7 +1407,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-package-${packageIndex.display}")
+                  attributes = Map("id" -> s"change-package-type")
                 )
               )
             )
@@ -1449,7 +1449,8 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 Action(
                   content = msg"site.edit",
                   href = HowManyPackagesController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
-                  visuallyHiddenText = Some(label)
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-number-of-packages")
                 )
               )
             )
@@ -1491,7 +1492,92 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 Action(
                   content = msg"site.edit",
                   href = TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
-                  visuallyHiddenText = Some(label)
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-total-pieces")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "addMark" - {
+
+      "return None" - {
+        "AddMarkPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addMark(itemIndex, packageIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "AddMarkPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddMarkPage(itemIndex, packageIndex))(true)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addMark(itemIndex, packageIndex)
+
+          val label = msg"addMark.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(msg"site.yes"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = AddMarkController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-add-mark")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "mark" - {
+
+      val markOrNumber: String = "mark"
+
+      "return None" - {
+        "DeclareMarkPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.mark(itemIndex, packageIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "DeclareMarkPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DeclareMarkPage(itemIndex, packageIndex))(markOrNumber)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.mark(itemIndex, packageIndex)
+
+          val label = msg"declareMark.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$markOrNumber"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = DeclareMarkController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-mark")
                 )
               )
             )

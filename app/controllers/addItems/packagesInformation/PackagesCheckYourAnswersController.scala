@@ -24,6 +24,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewModels.PackagesCheckYourAnswersViewModel
 import viewModels.sections.Section
 
 import javax.inject.Inject
@@ -47,10 +48,11 @@ class PackagesCheckYourAnswersController @Inject() (
       andThen requireData).async {
       implicit request =>
         val json = {
-          val sections: Seq[Section] = Nil
+          val section: Section =
+            PackagesCheckYourAnswersViewModel(request.userAnswers, itemIndex, packageIndex, mode).section
 
           Json.obj(
-            "sections"    -> Json.toJson(sections),
+            "section"     -> Json.toJson(section),
             "nextPageUrl" -> routes.AddAnotherPackageController.onPageLoad(lrn, itemIndex, mode).url
           )
         }

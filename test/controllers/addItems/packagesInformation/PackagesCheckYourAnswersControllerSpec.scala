@@ -62,7 +62,7 @@ class PackagesCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksR
         "nextPageUrl" -> routes.AddAnotherPackageController.onPageLoad(lrn, itemIndex, NormalMode).url
       )
 
-      val jsonWithoutConfig = jsonCaptor.getValue - configKey - "sections"
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey - "section"
 
       templateCaptor.getValue mustEqual "addItems/packagesCheckYourAnswers.njk"
       jsonWithoutConfig mustBe expectedJson
