@@ -284,7 +284,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     formatAnswer = formatAsLiteral,
     label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display),
     id = Some(s"change-package-${packageIndex.display}"),
-    call = packageRoutes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode)
+    call = packageRoutes.PackagesCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
   def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](

@@ -1407,7 +1407,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  href = PackagesCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-package-${packageIndex.display}")
                 )
