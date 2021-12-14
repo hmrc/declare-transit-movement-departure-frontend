@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.packagesInformation
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.HowManyPackagesFormProvider
+import forms.addItems.DeclareMarkFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import navigation.annotations.addItems.AddItemsPackagesInfo
@@ -27,7 +27,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.addItems.HowManyPackagesPage
+import pages.addItems.DeclareMarkPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -39,30 +39,28 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  val formProvider = new HowManyPackagesFormProvider()
-  val form         = formProvider(index.display)
+class DeclareMarkControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = 1
+  val formProvider = new DeclareMarkFormProvider()
+  val form         = formProvider(None, index.display)
 
-  lazy val howManyPackagesRoute = controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(lrn, index, index, NormalMode).url
+  lazy val declareMarkRoute = controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
 
-  "HowManyPackages Controller" - {
+  "DeclareMark Controller" - {
 
     "must return OK and the correct view for a GET" in {
       dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, howManyPackagesRoute)
+      val request        = FakeRequest(GET, declareMarkRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -74,14 +72,14 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
 
       val expectedJson = Json.obj(
         "form"         -> form,
-        "lrn"          -> lrn,
         "mode"         -> NormalMode,
-        "displayIndex" -> itemIndex.display,
+        "lrn"          -> lrn,
+        "displayIndex" -> packageIndex.display,
         "itemIndex"    -> itemIndex.display,
         "packageIndex" -> packageIndex.display
       )
 
-      templateCaptor.getValue mustEqual "addItems/howManyPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/declareMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
@@ -90,9 +88,9 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = emptyUserAnswers.set(HowManyPackagesPage(index, index), validAnswer).success.value
+      val userAnswers = emptyUserAnswers.set(DeclareMarkPage(index, index), "answer").success.value
       dataRetrievalWithData(userAnswers)
-      val request        = FakeRequest(GET, howManyPackagesRoute)
+      val request        = FakeRequest(GET, declareMarkRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -102,35 +100,34 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> validAnswer.toString))
+      val filledForm = form.bind(Map("value" -> "answer"))
 
       val expectedJson = Json.obj(
         "form"         -> filledForm,
         "lrn"          -> lrn,
         "mode"         -> NormalMode,
-        "displayIndex" -> itemIndex.display,
+        "displayIndex" -> packageIndex.display,
         "itemIndex"    -> itemIndex.display,
         "packageIndex" -> packageIndex.display
       )
 
-      templateCaptor.getValue mustEqual "addItems/howManyPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/declareMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
     "must redirect to the next page when valid data is submitted" in {
       dataRetrievalWithData(emptyUserAnswers)
+
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
-        FakeRequest(POST, howManyPackagesRoute)
-          .withFormUrlEncodedBody(("value", validAnswer.toString))
+        FakeRequest(POST, declareMarkRoute)
+          .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual onwardRoute.url
-
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
@@ -138,8 +135,8 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, howManyPackagesRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm      = form.bind(Map("value" -> "invalid value"))
+      val request        = FakeRequest(POST, declareMarkRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm      = form.bind(Map("value" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -153,25 +150,26 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
         "form"         -> boundForm,
         "lrn"          -> lrn,
         "mode"         -> NormalMode,
-        "displayIndex" -> itemIndex.display,
+        "displayIndex" -> packageIndex.display,
         "itemIndex"    -> itemIndex.display,
         "packageIndex" -> packageIndex.display
       )
 
-      templateCaptor.getValue mustEqual "addItems/howManyPackages.njk"
+      templateCaptor.getValue mustEqual "addItems/declareMark.njk"
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-
       dataRetrievalNoData()
 
-      val request = FakeRequest(GET, howManyPackagesRoute)
+      val request = FakeRequest(GET, declareMarkRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
+
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
@@ -179,8 +177,8 @@ class HowManyPackagesControllerSpec extends SpecBase with MockNunjucksRendererAp
       dataRetrievalNoData()
 
       val request =
-        FakeRequest(POST, howManyPackagesRoute)
-          .withFormUrlEncodedBody(("value", validAnswer.toString))
+        FakeRequest(POST, declareMarkRoute)
+          .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(app, request).value
 

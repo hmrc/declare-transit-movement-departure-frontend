@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.packagesInformation
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import connectors.ReferenceDataConnector

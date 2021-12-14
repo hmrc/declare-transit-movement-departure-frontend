@@ -69,6 +69,7 @@ goodsSummary.preHeading = Goods summary
 guaranteeDetails.preHeading = Guarantee details
 items.preHeading = Items
 safetyAndSecurity.preHeading = Safety and security
+packages.preHeading = Packages
 
 routeDetailsCheckYourAnswers.heading = Check your answers
 routeDetailsCheckYourAnswers.title = Check your answers
@@ -655,6 +656,9 @@ howManyPackages.error.nonNumeric = How many packages have been used for item {0}
 howManyPackages.error.required = Enter how many packages have been used for item {0}
 howManyPackages.error.wholeNumber = Enter how many packages have been used for item {0} using whole numbers
 howManyPackages.error.outOfRange = The packages used for item {0} must be between {1} and {2}
+
+packagesCheckYourAnswers.title = Check your answers
+packagesCheckYourAnswers.heading = Check your answers
 
 removePackage.title = Are you sure you want to remove package {0}?
 removePackage.heading = Are you sure you want to remove package {0}?
