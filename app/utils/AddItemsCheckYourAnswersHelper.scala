@@ -18,6 +18,7 @@ package utils
 
 import controllers.addItems.containers.{routes => containerRoutes}
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
+import controllers.addItems.packagesInformation.{routes => packageRoutes}
 import controllers.addItems.routes
 import controllers.addItems.securityDetails.{routes => securityDetailsRoutes}
 import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
@@ -276,6 +277,14 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     id = s"package-${packageIndex.display}",
     changeCall = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode),
     removeCall = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, mode)
+  )
+
+  def packageSectionRow(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildSectionRow[PackageType](
+    page = PackageTypePage(itemIndex, packageIndex),
+    formatAnswer = formatAsLiteral,
+    label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display),
+    id = Some(s"change-package-${packageIndex.display}"),
+    call = packageRoutes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
   def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](

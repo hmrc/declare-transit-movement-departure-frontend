@@ -37,20 +37,22 @@ object AddItemsCheckYourAnswersViewModel {
     val specialMentionsCheckYourAnswers = new SpecialMentionsCheckYourAnswersHelper(userAnswers, CheckMode)
 
     AddItemsCheckYourAnswersViewModel(
-      itemsDetailsSection(checkYourAnswersHelper, index) ++
-        traderConsignorDetailsSection(checkYourAnswersHelper, index) ++
-        traderConsigneeDetailsSection(checkYourAnswersHelper, index) ++
-        packagesSections(checkYourAnswersHelper, index)(userAnswers) ++
-        containersSection(checkYourAnswersHelper, index)(userAnswers) ++
-        specialMentionsSection(specialMentionsCheckYourAnswers, index, specialMentionList)(userAnswers) ++
-        documentsSection(checkYourAnswersHelper, index, documentTypeList)(userAnswers) ++
-        referencesSection(checkYourAnswersHelper, index, previousDocumentTypes)(userAnswers) ++
-        securitySection(checkYourAnswersHelper, index) ++
+      Seq(
+        itemsDetailsSection(checkYourAnswersHelper, index),
+        traderConsignorDetailsSection(checkYourAnswersHelper, index),
+        traderConsigneeDetailsSection(checkYourAnswersHelper, index),
+        packagesSection(checkYourAnswersHelper, index)(userAnswers),
+        containersSection(checkYourAnswersHelper, index)(userAnswers),
+        specialMentionsSection(specialMentionsCheckYourAnswers, index, specialMentionList)(userAnswers),
+        documentsSection(checkYourAnswersHelper, index, documentTypeList)(userAnswers),
+        referencesSection(checkYourAnswersHelper, index, previousDocumentTypes)(userAnswers),
+        securitySection(checkYourAnswersHelper, index),
         traderSecuritySection(checkYourAnswersHelper, index)
+      )
     )
   }
 
-  private def traderSecuritySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Seq(
+  private def traderSecuritySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) =
     Section(
       msg"addItems.checkYourAnswersLabel.security",
       Seq(
@@ -64,9 +66,8 @@ object AddItemsCheckYourAnswersViewModel {
         checkYourAnswersHelper.securityConsigneeAddress(index)
       ).flatten
     )
-  )
 
-  private def securitySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Seq(
+  private def securitySection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) =
     Section(
       msg"addItems.checkYourAnswersLabel.safetyAndSecurity",
       Seq(
@@ -76,9 +77,8 @@ object AddItemsCheckYourAnswersViewModel {
         checkYourAnswersHelper.dangerousGoodsCode(index)
       ).flatten
     )
-  )
 
-  private def itemsDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Seq(
+  private def itemsDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) =
     Section(
       msg"addItems.checkYourAnswersLabel.itemDetails",
       Seq(
@@ -90,9 +90,8 @@ object AddItemsCheckYourAnswersViewModel {
         checkYourAnswersHelper.commodityCode(index)
       ).flatten
     )
-  )
 
-  private def traderConsignorDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Seq(
+  private def traderConsignorDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) =
     Section(
       msg"addItems.checkYourAnswersLabel.traderDetails",
       msg"addItems.checkYourAnswersLabel.traderDetails.consignor",
@@ -103,9 +102,8 @@ object AddItemsCheckYourAnswersViewModel {
         checkYourAnswersHelper.traderDetailsConsignorAddress(index)
       ).flatten
     )
-  )
 
-  private def traderConsigneeDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) = Seq(
+  private def traderConsigneeDetailsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index) =
     Section(
       None,
       Some(msg"addItems.checkYourAnswersLabel.traderDetails.consignee"),
@@ -117,36 +115,18 @@ object AddItemsCheckYourAnswersViewModel {
       ).flatten,
       None
     )
-  )
 
-  private def packagesSections(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index)(implicit userAnswers: UserAnswers): Seq[Section] = {
-    val numberOfPackages = userAnswers.get(DeriveNumberOfPackages(index)).getOrElse(0)
-    List.range(0, numberOfPackages).map {
-      packagePosition =>
-        val isFirst = packagePosition == 0
-        val isLast  = packagePosition == numberOfPackages - 1
-        packagesSection(checkYourAnswersHelper, index, Index(packagePosition), isFirst, isLast)
-    }
-  }
-
-  private def packagesSection(
-    checkYourAnswersHelper: AddItemsCheckYourAnswersHelper,
-    index: Index,
-    packageIndex: Index,
-    isFirst: Boolean,
-    isLast: Boolean
-  ): Section = {
-    val packageRows: Seq[SummaryList.Row] = Seq(
-      checkYourAnswersHelper.packageType(index, packageIndex),
-      checkYourAnswersHelper.totalPieces(index, packageIndex),
-      checkYourAnswersHelper.numberOfPackages(index, packageIndex)
-    ).flatten
+  private def packagesSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index)(implicit userAnswers: UserAnswers): Section = {
+    val packageRows: Seq[SummaryList.Row] =
+      List.range(0, userAnswers.get(DeriveNumberOfPackages(index)).getOrElse(0)).flatMap {
+        packagePosition =>
+          checkYourAnswersHelper.packageSectionRow(index, Index(packagePosition))
+      }
 
     Section(
-      if (isFirst) Some(msg"addItems.checkYourAnswersLabel.packages") else None,
-      msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display),
+      msg"addItems.checkYourAnswersLabel.packages",
       packageRows,
-      if (isLast) Some(checkYourAnswersHelper.addAnotherPackage(index, msg"addItems.checkYourAnswersLabel.packages.addRemove")) else None
+      checkYourAnswersHelper.addAnotherPackage(index, msg"addItems.checkYourAnswersLabel.packages.addRemove")
     )
   }
 
@@ -161,12 +141,10 @@ object AddItemsCheckYourAnswersViewModel {
           checkYourAnswersHelper.previousReferenceSectionRow(index, Index(position), previousDocumentTypes)
       }
 
-    Seq(
-      Section(
-        msg"addItems.checkYourAnswersLabel.references",
-        Seq(checkYourAnswersHelper.addAdministrativeReference(index).toSeq, referencesRows).flatten,
-        checkYourAnswersHelper.addAnotherPreviousReferences(index, msg"addItems.checkYourAnswersLabel.references.addRemove")
-      )
+    Section(
+      msg"addItems.checkYourAnswersLabel.references",
+      Seq(checkYourAnswersHelper.addAdministrativeReference(index).toSeq, referencesRows).flatten,
+      checkYourAnswersHelper.addAnotherPreviousReferences(index, msg"addItems.checkYourAnswersLabel.references.addRemove")
     )
   }
 
@@ -179,46 +157,40 @@ object AddItemsCheckYourAnswersViewModel {
           checkYourAnswersHelper.documentSectionRow(index, Index(documentPosition), documentTypeList)
       }
 
-    Seq(
-      Section(
-        msg"addItems.checkYourAnswersLabel.documents",
-        Seq(checkYourAnswersHelper.addDocuments(index).toSeq, documentRows).flatten,
-        checkYourAnswersHelper.addAnotherDocument(index, msg"addItems.checkYourAnswersLabel.documents.addRemove")
-      )
+    Section(
+      msg"addItems.checkYourAnswersLabel.documents",
+      Seq(checkYourAnswersHelper.addDocuments(index).toSeq, documentRows).flatten,
+      checkYourAnswersHelper.addAnotherDocument(index, msg"addItems.checkYourAnswersLabel.documents.addRemove")
     )
   }
 
-  private def containersSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index)(implicit userAnswers: UserAnswers): Seq[Section] = {
+  private def containersSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index)(implicit userAnswers: UserAnswers): Section = {
     val containerRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfContainers(index)).getOrElse(0)).flatMap {
         containerPosition =>
           checkYourAnswersHelper.containerSectionRow(index, Index(containerPosition))
       }
 
-    Seq(
-      Section(
-        msg"addItems.checkYourAnswersLabel.containers",
-        containerRows,
-        checkYourAnswersHelper.addAnotherContainer(index, msg"addItems.checkYourAnswersLabel.containers.addRemove")
-      )
+    Section(
+      msg"addItems.checkYourAnswersLabel.containers",
+      containerRows,
+      checkYourAnswersHelper.addAnotherContainer(index, msg"addItems.checkYourAnswersLabel.containers.addRemove")
     )
   }
 
   private def specialMentionsSection(checkYourAnswersHelper: SpecialMentionsCheckYourAnswersHelper, index: Index, specialMentionList: SpecialMentionList)(
     implicit userAnswers: UserAnswers
-  ): Seq[Section] = {
+  ): Section = {
     val containerRows: Seq[SummaryList.Row] =
       List.range(0, userAnswers.get(DeriveNumberOfSpecialMentions(index)).getOrElse(0)).flatMap {
         containerPosition =>
           checkYourAnswersHelper.specialMentionSectionRow(index, Index(containerPosition), specialMentionList)
       }
 
-    Seq(
-      Section(
-        msg"addItems.checkYourAnswersLabel.specialMentions",
-        Seq(checkYourAnswersHelper.addSpecialMention(index).toSeq, containerRows).flatten,
-        checkYourAnswersHelper.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions.addRemove")
-      )
+    Section(
+      msg"addItems.checkYourAnswersLabel.specialMentions",
+      Seq(checkYourAnswersHelper.addSpecialMention(index).toSeq, containerRows).flatten,
+      checkYourAnswersHelper.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions.addRemove")
     )
   }
 
