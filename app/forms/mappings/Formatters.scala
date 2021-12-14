@@ -53,17 +53,15 @@ trait Formatters {
 
   private[mappings] def postcodeFormatter(errorKey: String, args: Seq[Any] = Seq.empty): Formatter[String] = new Formatter[String] {
 
-    private def error(key: String) = Left(Seq(FormError(key, errorKey, args)))
+    private def formattedPostcode(string: String) =
+      string.patch(string.length - 3, " ", 0)
 
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
-      data.get(key) match {
-        case None                                     => error(key)
-        case Some(s) if s.replaceAll(" ", "").isEmpty => error(key)
-        case Some(s) =>
-          val postcodeWithoutSpaces: String   = s.replaceAll(" ", "")
-          val splitPostcode: (String, String) = postcodeWithoutSpaces.splitAt(postcodeWithoutSpaces.length - 3)
-          Right(splitPostcode._1 + " " + splitPostcode._2)
-      }
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] = {
+
+      val result: Option[String] = data.get(key).map(_.replaceAll(" ", "")).filterNot(_.isEmpty)
+
+      Either.cond(result.isDefined, formattedPostcode(result.get), Seq(FormError(key, errorKey, args)))
+    }
 
     override def unbind(key: String, value: String): Map[String, String] =
       Map(key -> value)
