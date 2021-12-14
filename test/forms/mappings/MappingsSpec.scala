@@ -118,6 +118,45 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
     }
   }
 
+  "formattedPostcode" - {
+
+    val testForm: Form[String] =
+      Form(
+        "value" -> formattedPostcode()
+      )
+
+    "must bind a valid string" in {
+      val result = testForm.bind(Map("value" -> "AB1 1AB"))
+      result.get mustEqual "AB1 1AB"
+    }
+
+    "must bind a valid string with spaces" in {
+      val result = testForm.bind(Map("value" -> "A B 1 1 A B"))
+      result.get mustEqual "AB1 1AB"
+    }
+
+    "must not bind an empty string" in {
+      val result = testForm.bind(Map("value" -> ""))
+      result.errors must contain(FormError("value", "error.required"))
+    }
+
+    "must not bind an empty map" in {
+      val result = testForm.bind(Map.empty[String, String])
+      result.errors must contain(FormError("value", "error.required"))
+    }
+
+    "must return a custom error message" in {
+      val form   = Form("value" -> text("custom.error"))
+      val result = form.bind(Map("value" -> ""))
+      result.errors must contain(FormError("value", "custom.error"))
+    }
+
+    "must unbind a valid value" in {
+      val result = testForm.fill("AB1 1AB   ")
+      result.apply("value").value.value mustEqual "AB1 1AB   "
+    }
+  }
+
   "boolean" - {
 
     val testForm: Form[Boolean] =

@@ -50,7 +50,7 @@ class DeclarationPlaceFormProviderSpec extends StringFieldBehaviours {
 
       val expectedError = List(FormError(fieldName, lengthKey, Seq(maxLength)))
 
-      forAll(stringsLongerThan(maxLength + 1)) {
+      forAll(stringsLongerThan(maxLength)) {
         string =>
           val result = form.bind(Map(fieldName -> string)).apply(fieldName)
           result.errors mustBe expectedError
@@ -59,7 +59,7 @@ class DeclarationPlaceFormProviderSpec extends StringFieldBehaviours {
 
     "must not bind strings with invalid characters" in {
       val expectedError          = FormError(fieldName, invalidKey, Seq(Seq.empty))
-      val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~,±üçñèé@]{9}")
+      val generator: Gen[String] = RegexpGen.from(s"[!£^*(){}_+=:;|`~,±üçñèé@]{8}")
       forAll(generator) {
         invalidString =>
           val result: Field = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
