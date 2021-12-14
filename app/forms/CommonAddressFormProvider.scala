@@ -21,8 +21,9 @@ import models.Address.Constants.{buildingAndStreetLength, cityLength, postcodeLe
 import models.domain.StringFieldRegex.stringFieldRegex
 import models.reference.Country
 import models.{CommonAddress, CountryList}
-import play.api.data.{Form, Mapping}
+import play.api.data.Form
 import play.api.data.Forms.mapping
+
 import javax.inject.Inject
 
 class CommonAddressFormProvider @Inject() extends Mappings {

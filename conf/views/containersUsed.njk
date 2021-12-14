@@ -27,28 +27,29 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.movementDetails.ContainersUsedPageController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.movementDetails.ContainersUsedController.onSubmit(lrn, mode).url }}" method="post">
         
-        <span class="govuk-caption-xl">{{messages('movementDetails.preHeading')}}</span>
+          <span class="govuk-caption-xl">{{messages('movementDetails.preHeading')}}</span>
 
           {{ csrf() | safe }}
 
           {{ govukRadios({
-              name: 'value',
-              fieldset: {
-                legend: {
-                  text: messages('containersUsed.heading'),
-                  isPageHeading: true,
-                  classes: "govuk-fieldset__legend--xl"
-                }
-              },
-              items: radios,
-              errorMessage: form.value.error
+            classes: "govuk-radios--inline",
+            name: 'value',
+            fieldset: {
+              legend: {
+                text: messages('containersUsed.heading'),
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
+            },
+            items: radios,
+            errorMessage: form.value.error
           }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
-              attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

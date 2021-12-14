@@ -16,8 +16,6 @@
 
 package config
 
-import java.time.Clock
-
 import com.google.inject.AbstractModule
 import controllers.actions._
 import navigation._
@@ -25,6 +23,8 @@ import navigation.annotations._
 import navigation.annotations.addItems._
 import navigation.annotations.addItemsNavigators._
 import services.{DateTimeService, DateTimeServiceImpl}
+
+import java.time.Clock
 
 class Module extends AbstractModule {
 

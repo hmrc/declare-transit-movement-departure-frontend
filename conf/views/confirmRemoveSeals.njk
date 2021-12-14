@@ -28,29 +28,30 @@
         {% endif %}
 
         <form action="{{ routes.controllers.goodsSummary.ConfirmRemoveSealsController.onSubmit(lrn, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
+          <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
           {{ csrf() | safe }}
 
-        <fieldset class="govuk-fieldset" aria-describedby="remove-seals-hint">
+          <fieldset class="govuk-fieldset" aria-describedby="remove-seals-hint">
 
-        <legend>
-            <h1 class="govuk-heading-xl">{{ messages('confirmRemoveSeals.heading') }}</h1>
-        </legend>
+            <legend>
+              <h1 class="govuk-heading-xl">{{ messages('confirmRemoveSeals.heading') }}</h1>
+            </legend>
         
-        <span class="govuk-fieldset__legend govuk-body" id="remove-seals-hint">{{ messages('confirmRemoveSeals.paragraph') }}</span>
+            <span class="govuk-fieldset__legend govuk-body" id="remove-seals-hint">{{ messages('confirmRemoveSeals.paragraph') }}</span>
 
-          {{ govukRadios({
-            name: 'value',
-            items: radios,
-            errorMessage: form.value.error
-          }) }}
+            {{ govukRadios({
+              classes: "govuk-radios--inline",
+              name: 'value',
+              items: radios,
+              errorMessage: form.value.error
+            }) }}
 
           </fieldset>
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

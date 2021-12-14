@@ -31,48 +31,48 @@
         <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
         <h1 class="govuk-heading-xl"> {{ heading }} </h1>
 
-          {{ govukSummaryList({
-                classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
-                rows: officeOfTransitRows
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
+          rows: officeOfTransitRows
+        }) }}
+
+        {% if maxLimitReached %}
+
+          <p class="govuk-body" data-testId="maxLimit"> {{ messages('addTransitOffice.maxLimit.label') }} </p>
+
+          {{ govukButton({
+            text: messages("site.continue"),
+            href: redirectUrlOnReachingMaxLimit,
+            attributes: {id:"submit"}
+          }) }}
+
+        {% else %}
+          <form action="{{ routes.controllers.routeDetails.AddTransitOfficeController.onSubmit(lrn, mode).url }}" method="post" data-testId="addOfficeRadio">
+
+            {{ csrf() | safe }}
+
+            {{ govukRadios({
+              classes: "govuk-radios--inline",
+              idPrefix: "foo",
+              name: 'value',
+              fieldset: {
+                legend: {
+                  text: messages('addTransitOffice.paragraph'),
+                  isPageHeading: false,
+                  classes: "govuk-fieldset__legend--m"
+                }
+              },
+              items: radios,
+              errorMessage: form.value.error
             }) }}
 
-          {% if maxLimitReached %}
+            {{ govukButton({
+              text: messages("site.continue"),
+              attributes: {id: "submit"}
+            }) }}
 
-              <p class="govuk-body" data-testId="maxLimit"> {{ messages('addTransitOffice.maxLimit.label') }} </p>
-
-                {{ govukButton({
-                    text: messages("site.continue"),
-                    href: redirectUrlOnReachingMaxLimit,
-                    attributes: {id:"submit"}
-                  }) }}
-
-          {% else %}
-            <form action="{{ routes.controllers.routeDetails.AddTransitOfficeController.onSubmit(lrn, mode).url }}" method="post" data-testId="addOfficeRadio">
-
-              {{ csrf() | safe }}
-
-              {{ govukRadios({
-                classes: "govuk-radios--inline",
-                idPrefix: "foo",
-                name: 'value',
-                fieldset: {
-                  legend: {
-                    text: messages('addTransitOffice.paragraph'),
-                    isPageHeading: false,
-                    classes: "govuk-fieldset__legend--m"
-                  }
-                },
-                items: radios,
-                errorMessage: form.value.error
-              }) }}
-
-              {{ govukButton({
-                  text: messages("site.continue"),
-                  attributes: {id:"submit"}
-                }) }}
-
-              </form>
-          {% endif %}
+          </form>
+        {% endif %}
       </div>
     </div>
   </div>

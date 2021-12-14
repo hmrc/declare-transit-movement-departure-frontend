@@ -37,7 +37,7 @@ class MovementDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyCheck
           answers =>
             navigator
               .nextPage(PreLodgeDeclarationPage, NormalMode, answers)
-              .mustBe(movementDetailsRoute.ContainersUsedPageController.onPageLoad(answers.lrn, NormalMode))
+              .mustBe(movementDetailsRoute.ContainersUsedController.onPageLoad(answers.lrn, NormalMode))
         }
       }
 

@@ -17,7 +17,7 @@
 package controllers.movementDetails
 
 import controllers.actions._
-import forms.ContainersUsedPageFormProvider
+import forms.ContainersUsedFormProvider
 import models.{LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.MovementDetails
@@ -33,14 +33,14 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContainersUsedPageController @Inject() (
+class ContainersUsedController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   @MovementDetails navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: ContainersUsedPageFormProvider,
+  formProvider: ContainersUsedFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)

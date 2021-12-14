@@ -32,17 +32,17 @@
         <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
         <h1 class="govuk-heading-xl"> {{ heading }} </h1>
 
-          {{ govukSummaryList({
-                        classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
-                        rows: documentRows
-                    }) }}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
+          rows: documentRows
+        }) }}
 
         <form action="{{ routes.controllers.addItems.documents.AddAnotherDocumentController.onSubmit(lrn, index, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
           {{ govukRadios({
-           classes: "govuk-radios--inline",
+            classes: "govuk-radios--inline",
             name: 'value',
             fieldset: {
               legend: {
@@ -57,7 +57,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

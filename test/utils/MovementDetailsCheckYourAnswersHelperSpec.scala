@@ -187,7 +187,7 @@ class MovementDetailsCheckYourAnswersHelperSpec extends SpecBase with UserAnswer
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = routes.ContainersUsedPageController.onPageLoad(lrn, mode).url,
+                  href = routes.ContainersUsedController.onPageLoad(lrn, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> "change-containers-used")
                 )

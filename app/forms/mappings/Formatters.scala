@@ -60,9 +60,8 @@ trait Formatters {
         case None                                     => error(key)
         case Some(s) if s.replaceAll(" ", "").isEmpty => error(key)
         case Some(s) =>
-          val postcodeWithoutSpaces: String    = s.replaceAll(" ", "")
-          val postcodeWithoutSpacesLength: Int = postcodeWithoutSpaces.length
-          val splitPostcode: (String, String)  = postcodeWithoutSpaces.splitAt(postcodeWithoutSpacesLength - 3)
+          val postcodeWithoutSpaces: String   = s.replaceAll(" ", "")
+          val splitPostcode: (String, String) = postcodeWithoutSpaces.splitAt(postcodeWithoutSpaces.length - 3)
           Right(splitPostcode._1 + " " + splitPostcode._2)
       }
 

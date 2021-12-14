@@ -34,8 +34,8 @@
         </h1>
 
         {{ govukSummaryList({
-            classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
-            rows: packageRows
+          classes: 'govuk-!-margin-bottom-9 ctc-add-to-a-list',
+          rows: packageRows
         }) }}
 
         <form action="{{ routes.controllers.addItems.packagesInformation.AddAnotherPackageController.onSubmit(lrn, itemIndex, mode).url }}" method="post">
@@ -58,7 +58,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>
