@@ -29,7 +29,6 @@
 
         <form action="{{ routes.controllers.addItems.documents.AddDocumentsController.onSubmit(lrn, index, mode).url }}" method="post">
           <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
-          <h1 class="govuk-heading-xl"> {{ messages("addDocuments.heading", index) }}  </h1>
 
           {{ csrf() | safe }}
 
@@ -38,10 +37,14 @@
             name: 'value',
             fieldset: {
               legend: {
-                text: messages('addDocuments.paragraph'),
-                isPageHeading: false,
-                classes: "govuk-label--medium"
+                text: messages("addDocuments.heading", index),
+                isPageHeading: true,
+                classes: "govuk-label--xl govuk-!-padding-bottom-5"
               }
+            },
+            hint: {
+              text:  messages('addDocuments.paragraph'),
+              classes: "hint-as-label"
             },
             items: radios,
             errorMessage: form.value.error

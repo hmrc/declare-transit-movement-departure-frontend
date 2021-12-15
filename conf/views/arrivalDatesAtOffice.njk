@@ -33,25 +33,23 @@
 
         <form action="{{ routes.controllers.routeDetails.ArrivalDatesAtOfficeController.onSubmit(lrn, index, mode).url }}" method="post">
 
-        {% call govukFieldset({
-          legend: {
-            text: messages("arrivalDatesAtOffice.heading"),
-            classes: "govuk-fieldset__legend--xl",
-            isPageHeading: true
-          }
-        }) %}
-
           {{ csrf() | safe }}
 
-        {{ govukDateInput({
-          hint: {
-            text: messages('arrivalDatesAtOffice.hint')
-          },
-          errorMessage: date.error,
-          items: date.items
-        }) }}
+          {{ govukDateInput({
+            fieldset: {
+              legend: {
+                text: messages("arrivalDatesAtOffice.heading"),
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
+            },
+            hint: {
+              text: messages('arrivalDatesAtOffice.hint')
+            },
+            errorMessage: date.error,
+            items: date.items
+          }) }}
 
-        {% endcall %}
 
           {{ govukButton({
             text: messages("site.continue"),
