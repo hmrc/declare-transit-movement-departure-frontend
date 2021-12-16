@@ -37,9 +37,9 @@ class PackagesCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
 
       "when how many packages" in {
         val userAnswers = emptyUserAnswers
-          .set(PackageTypePage(index, itemIndex), PackageType("AB", "Description") ).success.value
-          .set(HowManyPackagesPage(index, itemIndex), 123).success.value
-          .set(DeclareMarkPage(index, itemIndex), "mark").success.value
+          .set(PackageTypePage(itemIndex, packageIndex), PackageType("AB", "Description")).success.value
+          .set(HowManyPackagesPage(itemIndex, packageIndex), 123).success.value
+          .set(DeclareMarkPage(itemIndex, packageIndex), "mark").success.value
 
         val result = viewModel(userAnswers)
         result.section.rows.length mustEqual 3
@@ -47,10 +47,10 @@ class PackagesCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
 
       "when total pieces" in {
         val userAnswers = emptyUserAnswers
-          .set(PackageTypePage(index, itemIndex), PackageType("AB", "Description") ).success.value
-          .set(TotalPiecesPage(index, itemIndex), 123).success.value
-          .set(AddMarkPage(index, itemIndex), true).success.value
-          .set(DeclareMarkPage(index, itemIndex), "mark").success.value
+          .set(PackageTypePage(itemIndex, packageIndex), PackageType("AB", "Description")).success.value
+          .set(TotalPiecesPage(itemIndex, packageIndex), 123).success.value
+          .set(AddMarkPage(itemIndex, packageIndex), true).success.value
+          .set(DeclareMarkPage(itemIndex, packageIndex), "mark").success.value
 
         val result = viewModel(userAnswers)
         result.section.rows.length mustEqual 4
