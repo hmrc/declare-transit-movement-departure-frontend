@@ -43,11 +43,11 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
 
         "SpecialMentionType when true" in {
 
-          val userAnswers = emptyUserAnswers.set(AddSpecialMentionPage(index), true).success.value
+          val userAnswers = emptyUserAnswers.set(AddSpecialMentionPage(itemIndex), true).success.value
 
           navigator
-            .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, index, index, NormalMode))
+            .nextPage(AddSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, NormalMode))
         }
 
         "to TIRCarnetReference page when false and " +
@@ -58,8 +58,8 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
               .unsafeSetVal(DeclarationTypePage)(Option4)
 
             navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
+              .nextPage(AddSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+              .mustBe(controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(userAnswers.lrn, itemIndex, itemIndex, NormalMode))
           }
 
         "to standard add document journey when false and " +
@@ -82,15 +82,15 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
 
             val userAnswers = emptyUserAnswers
               .unsafeSetVal(AddSecurityDetailsPage)(true)
-              .unsafeSetVal(DocumentTypePage(index, referenceIndex))("documentType")
-              .unsafeSetVal(DocumentReferencePage(index, referenceIndex))("documentReference")
-              .unsafeSetVal(AddExtraDocumentInformationPage(index, referenceIndex))(true)
-              .unsafeSetVal(DocumentExtraInformationPage(index, referenceIndex))("documentExtraInformation")
+              .unsafeSetVal(DocumentTypePage(itemIndex, referenceIndex))("documentType")
+              .unsafeSetVal(DocumentReferencePage(itemIndex, referenceIndex))("documentReference")
+              .unsafeSetVal(AddExtraDocumentInformationPage(itemIndex, referenceIndex))(true)
+              .unsafeSetVal(DocumentExtraInformationPage(itemIndex, referenceIndex))("documentExtraInformation")
               .unsafeSetVal(DeclarationTypePage)(Option4)
 
             navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
+              .nextPage(AddSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+              .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
           }
 
         "to AddDocuments when set to false and safety " +
@@ -101,8 +101,8 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
             navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
+              .nextPage(AddSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+              .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
           }
 
         "to DocumentType when set to false " +
@@ -118,8 +118,8 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
             navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
+              .nextPage(AddSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+              .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, itemIndex, NormalMode))
           }
 
         "to AddDocumentType when set to false and AddSecurityDetailsPage is 'Yes' " +
@@ -153,8 +153,8 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
             navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
+              .nextPage(AddSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+              .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, itemIndex, NormalMode))
           }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and " +
@@ -169,22 +169,22 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
               .unsafeSetVal(DeclarationTypePage)(Option1)
 
             navigator
-              .nextPage(AddSpecialMentionPage(index), NormalMode, userAnswers)
-              .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
+              .nextPage(AddSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+              .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
           }
 
       }
 
       "must go from SpecialMentionType to SpecialMentionAdditionalInfo" in {
         navigator
-          .nextPage(SpecialMentionTypePage(index, index), NormalMode, emptyUserAnswers)
-          .mustBe(routes.SpecialMentionAdditionalInfoController.onPageLoad(emptyUserAnswers.lrn, index, index, NormalMode))
+          .nextPage(SpecialMentionTypePage(itemIndex, referenceIndex), NormalMode, emptyUserAnswers)
+          .mustBe(routes.SpecialMentionAdditionalInfoController.onPageLoad(emptyUserAnswers.lrn, itemIndex, referenceIndex, NormalMode))
       }
 
-      "must go from SpecialMentionAdditionalInfo to AddAnotherSpecialMention" in {
+      "must go from SpecialMentionAdditionalInfo to CYA" in {
         navigator
-          .nextPage(SpecialMentionAdditionalInfoPage(index, index), NormalMode, emptyUserAnswers)
-          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, NormalMode))
+          .nextPage(SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex), NormalMode, emptyUserAnswers)
+          .mustBe(routes.SpecialMentionCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn, itemIndex, referenceIndex, NormalMode))
       }
 
       "must go from RemoveSpecialMentionController" - {
@@ -192,26 +192,20 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
         "to AddAnotherSpecialMentionController when at least one special mention exists" in {
 
           val userAnswers = emptyUserAnswers
-            .set(SpecialMentionTypePage(index, index), "value")
+            .set(SpecialMentionTypePage(itemIndex, referenceIndex), "value")
             .success
             .value
 
           navigator
-            .nextPage(RemoveSpecialMentionPage(index, index), NormalMode, userAnswers)
-            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, index, NormalMode))
+            .nextPage(RemoveSpecialMentionPage(itemIndex, referenceIndex), NormalMode, userAnswers)
+            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
         }
 
         "to AddSpecialMentionPage when no special mentions exist" in {
           navigator
-            .nextPage(RemoveSpecialMentionPage(index, index), NormalMode, emptyUserAnswers)
-            .mustBe(routes.AddSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, NormalMode))
+            .nextPage(RemoveSpecialMentionPage(itemIndex, referenceIndex), NormalMode, emptyUserAnswers)
+            .mustBe(routes.AddSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, itemIndex, NormalMode))
         }
-      }
-
-      "must go from SpecialMentionAdditionalInfoPage to AddAnotherSpecialMention" in {
-        navigator
-          .nextPage(SpecialMentionAdditionalInfoPage(index, index), NormalMode, emptyUserAnswers)
-          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, NormalMode))
       }
 
       "must go from AddAnotherSpecialMention" - {
@@ -219,23 +213,23 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
         "to SpecialMentionType when set to true" in {
 
           val userAnswers = emptyUserAnswers
-            .unsafeSetVal(AddAnotherSpecialMentionPage(index))(true)
+            .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(true)
 
           navigator
-            .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, index, index, NormalMode))
+            .nextPage(AddAnotherSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, NormalMode))
         }
 
         "to AddDocuments when set to false and safeTye and security is selected as 'No'" in {
 
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddSecurityDetailsPage)(false)
-            .unsafeSetVal(AddAnotherSpecialMentionPage(index))(false)
+            .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
 
           navigator
-            .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
+            .nextPage(AddAnotherSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
         }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and  AddCircumstanceIndicatorPage is 'No' and it is the first Item and AddCommercialReferenceNumberPage is false" in {
@@ -243,13 +237,13 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
-            .unsafeSetVal(AddAnotherSpecialMentionPage(index))(false)
+            .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
 
           navigator
-            .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
+            .nextPage(AddAnotherSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, itemIndex, NormalMode))
         }
 
         "to AddDocumentType when set to false and AddSecurityDetailsPage is 'Yes' and  AddCircumstanceIndicatorPage is 'No' and it is the not the first Item and AddCommercialReferenceNumberPage is false" in {
@@ -258,7 +252,7 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
           val userAnswers = emptyUserAnswers
             .unsafeSetVal(AddCircumstanceIndicatorPage)(false)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
-            .unsafeSetVal(AddAnotherSpecialMentionPage(index))(false)
+            .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(AddAnotherSpecialMentionPage(nextIndex))(false)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
@@ -276,13 +270,13 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
             .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
             .unsafeSetVal(CircumstanceIndicatorPage)(circumstanceIndicator)
             .unsafeSetVal(AddSecurityDetailsPage)(true)
-            .unsafeSetVal(AddAnotherSpecialMentionPage(index))(false)
+            .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
 
           navigator
-            .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, index, itemIndex, NormalMode))
+            .nextPage(AddAnotherSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(userAnswers.lrn, itemIndex, itemIndex, NormalMode))
         }
 
         "to DocumentType when set to false and AddSecurityDetailsPage is 'Yes' and  AddCircumstanceIndicatorPage is 'Yes' and CircumstanceIndicator other then E, D, C and B" in {
@@ -291,13 +285,13 @@ class AddItemsSpecialMentionsNormalModeNavigatorSpec extends SpecBase with Scala
             .unsafeSetVal(AddCircumstanceIndicatorPage)(true)
             .unsafeSetVal(CircumstanceIndicatorPage)("something")
             .unsafeSetVal(AddSecurityDetailsPage)(true)
-            .unsafeSetVal(AddAnotherSpecialMentionPage(index))(false)
+            .unsafeSetVal(AddAnotherSpecialMentionPage(itemIndex))(false)
             .unsafeSetVal(AddCommercialReferenceNumberPage)(false)
             .unsafeSetVal(DeclarationTypePage)(Option1)
 
           navigator
-            .nextPage(AddAnotherSpecialMentionPage(index), NormalMode, userAnswers)
-            .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, index, NormalMode))
+            .nextPage(AddAnotherSpecialMentionPage(itemIndex), NormalMode, userAnswers)
+            .mustBe(controllers.addItems.documents.routes.AddDocumentsController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
         }
       }
     }

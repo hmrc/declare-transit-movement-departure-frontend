@@ -81,12 +81,12 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
 
 
     "AddDocumentExtraInformationPage must go to" - {
-      "AddAnotherDocumentPage if user selects 'No'" in {
+      "CYA if user selects 'No'" in {
         val updatedAnswers = emptyUserAnswers
           .set(AddExtraDocumentInformationPage(index, documentIndex), false).success.value
         navigator
           .nextPage(AddExtraDocumentInformationPage(index, documentIndex), CheckMode, updatedAnswers)
-          .mustBe(controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
+          .mustBe(controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
       }
 
       "DocumentExtraInformationPage if user selects 'Yes'" in {
@@ -98,12 +98,12 @@ class AddItemsDocumentCheckModeNavigatorSpec extends SpecBase with ScalaCheckPro
       }
     }
 
-    "DocumentExtraInformationPage must go to AddAnotherDocumentPage" in {
+    "DocumentExtraInformationPage must go to CYA" in {
       val updatedAnswers = emptyUserAnswers
         .set(DocumentExtraInformationPage(index, documentIndex), "Test").success.value
       navigator
         .nextPage(DocumentExtraInformationPage(index, documentIndex), CheckMode, updatedAnswers)
-        .mustBe(controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(updatedAnswers.lrn, index, CheckMode))
+        .mustBe(controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index, documentIndex, CheckMode))
     }
 
     "AddAnotherDocumentPage must go to" - {

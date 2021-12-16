@@ -36,8 +36,8 @@ class AddItemsDocumentNavigator @Inject() () extends Navigator {
     case DocumentReferencePage(index, documentIndex) =>
       ua => Some(controllers.addItems.documents.routes.AddExtraDocumentInformationController.onPageLoad(ua.lrn, index, documentIndex, NormalMode))
     case AddExtraDocumentInformationPage(index, documentIndex) => ua => addExtraDocumentInformationRoute(ua, index, documentIndex, NormalMode)
-    case DocumentExtraInformationPage(index, _) =>
-      ua => Some(controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(ua.lrn, index, NormalMode))
+    case DocumentExtraInformationPage(index, documentIndex) =>
+      ua => Some(controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(ua.lrn, index, documentIndex, NormalMode))
     case AddAnotherDocumentPage(index)       => ua => addAnotherDocumentNormalModeRoute(ua, index)
     case ConfirmRemoveDocumentPage(index, _) => ua => Some(confirmRemoveDocumentRoute(ua, index, NormalMode))
     case TIRCarnetReferencePage(index, documentIndex) =>
@@ -51,8 +51,8 @@ class AddItemsDocumentNavigator @Inject() () extends Navigator {
     case DocumentReferencePage(index, documentIndex) =>
       ua => Some(controllers.addItems.documents.routes.AddExtraDocumentInformationController.onPageLoad(ua.lrn, index, documentIndex, CheckMode))
     case AddExtraDocumentInformationPage(index, documentIndex) => ua => addExtraDocumentInformationRoute(ua, index, documentIndex, CheckMode)
-    case DocumentExtraInformationPage(index, _) =>
-      ua => Some(controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(ua.lrn, index, CheckMode))
+    case DocumentExtraInformationPage(index, documentIndex) =>
+      ua => Some(controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(ua.lrn, index, documentIndex, CheckMode))
     case AddAnotherDocumentPage(index)       => ua => addAnotherDocumentCheckModeRoute(ua, index)
     case ConfirmRemoveDocumentPage(index, _) => ua => Some(confirmRemoveDocumentRoute(ua, index, CheckMode))
     case TIRCarnetReferencePage(index, documentIndex) =>
@@ -93,7 +93,7 @@ class AddItemsDocumentNavigator @Inject() () extends Navigator {
   private def addExtraDocumentInformationRoute(ua: UserAnswers, index: Index, documentIndex: Index, mode: Mode) =
     ua.get(AddExtraDocumentInformationPage(index, documentIndex)) map {
       case true  => controllers.addItems.documents.routes.DocumentExtraInformationController.onPageLoad(ua.lrn, index, documentIndex, mode)
-      case false => controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(ua.lrn, index, mode)
+      case false => controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(ua.lrn, index, documentIndex, mode)
     }
 
   private def addDocumentNormalModeRoute(ua: UserAnswers, index: Index) =

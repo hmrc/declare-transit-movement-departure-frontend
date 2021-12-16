@@ -52,8 +52,8 @@ class AddItemsSpecialMentionsNavigator @Inject() () extends Navigator {
         }
     case SpecialMentionTypePage(itemIndex, referenceIndex) =>
       userAnswers => Some(routes.SpecialMentionAdditionalInfoController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, CheckMode))
-    case SpecialMentionAdditionalInfoPage(itemIndex, _) =>
-      userAnswers => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, CheckMode))
+    case SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex) =>
+      userAnswers => Some(routes.SpecialMentionCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, CheckMode))
     case AddAnotherSpecialMentionPage(itemIndex) =>
       userAnswers =>
         userAnswers.get(AddAnotherSpecialMentionPage(itemIndex)) match {
@@ -84,8 +84,8 @@ class AddItemsSpecialMentionsNavigator @Inject() () extends Navigator {
   }
 
   private def specialMentionAdditionalInfoPage: PartialFunction[Page, UserAnswers => Option[Call]] = {
-    case SpecialMentionAdditionalInfoPage(itemIndex, _) =>
-      userAnswers => Some(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, NormalMode))
+    case SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex) =>
+      userAnswers => Some(routes.SpecialMentionCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, NormalMode))
   }
 
   private def addAnotherSpecialMentionPage: PartialFunction[Page, UserAnswers => Option[Call]] = {
