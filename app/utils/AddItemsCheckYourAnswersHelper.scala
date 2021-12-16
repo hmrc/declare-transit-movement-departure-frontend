@@ -285,7 +285,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     formatAnswer = formatAsLiteral,
     label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display),
     id = Some(s"change-package-${packageIndex.display}"),
-    call = packageRoutes.PackagesCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode)
+    call = packageRoutes.PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
   def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](
@@ -437,7 +437,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = ReferenceTypePage(index, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "referenceType",
-    id = Some(s"change-reference-type-${referenceIndex.display}"),
+    id = Some("change-reference-type"),
     call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode)
   )
 
@@ -445,7 +445,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = PreviousReferencePage(index, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "previousReference",
-    id = Some(s"change-previous-reference-${referenceIndex.display}"),
+    id = Some("change-previous-reference"),
     call = previousReferencesRoutes.PreviousReferenceController.onPageLoad(lrn, index, referenceIndex, mode)
   )
 
@@ -453,7 +453,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = AddExtraInformationPage(index, referenceIndex),
     formatAnswer = formatAsYesOrNo,
     prefix = "addExtraInformation",
-    id = Some(s"change-add-extra-reference-information-${referenceIndex.display}"),
+    id = Some("change-add-extra-reference-information"),
     call = previousReferencesRoutes.AddExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode)
   )
 
@@ -461,7 +461,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = ExtraInformationPage(index, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "extraInformation",
-    id = Some(s"change-extra-reference-information-${referenceIndex.display}"),
+    id = Some("change-extra-reference-information"),
     call = previousReferencesRoutes.ExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode)
   )
 
@@ -469,7 +469,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = TIRCarnetReferencePage(itemIndex, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "tirCarnetReference",
-    id = Some(s"change-tir-carnet-reference-${referenceIndex.display}"),
+    id = Some("change-tir-carnet-reference"),
     call = documentRoutes.TIRCarnetReferenceController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 
@@ -477,7 +477,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = DocumentTypePage(itemIndex, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "documentType",
-    id = Some(s"change-document-type-${referenceIndex.display}"),
+    id = Some("change-document-type"),
     call = documentRoutes.DocumentTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 
@@ -485,7 +485,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = DocumentReferencePage(itemIndex, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "documentReference",
-    id = Some(s"change-document-reference-${referenceIndex.display}"),
+    id = Some("change-document-reference"),
     call = documentRoutes.DocumentReferenceController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 
@@ -493,7 +493,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = AddExtraDocumentInformationPage(itemIndex, referenceIndex),
     formatAnswer = formatAsYesOrNo,
     prefix = "addExtraDocumentInformation",
-    id = Some(s"change-add-extra-document-information-${referenceIndex.display}"),
+    id = Some("change-add-extra-document-information"),
     call = documentRoutes.AddExtraDocumentInformationController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 
@@ -501,7 +501,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = DocumentExtraInformationPage(itemIndex, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "documentExtraInformation",
-    id = Some(s"change-extra-document-information-${referenceIndex.display}"),
+    id = Some("change-extra-document-information"),
     call = documentRoutes.DocumentExtraInformationController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 

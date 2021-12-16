@@ -30,7 +30,7 @@ import viewModels.sections.Section
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class PackagesCheckYourAnswersController @Inject() (
+class PackageCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
@@ -59,6 +59,6 @@ class PackagesCheckYourAnswersController @Inject() (
 
         ValidateReaderLogger[SafetyAndSecurity](request.userAnswers)
 
-        renderer.render("addItems/packagesCheckYourAnswers.njk", json).map(Ok(_))
+        renderer.render("addItems/packageCheckYourAnswers.njk", json).map(Ok(_))
     }
 }

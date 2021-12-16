@@ -58,8 +58,8 @@ POST       /:lrn/add-items/:itemIndex/packages/:packageIndex/remove-package     
 GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/change-remove-package                        controllers.addItems.packagesInformation.RemovePackageController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)
 POST       /:lrn/add-items/:itemIndex/packages/:packageIndex/change-remove-package                        controllers.addItems.packagesInformation.RemovePackageController.onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)
 
-GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/check-answers              controllers.addItems.packagesInformation.PackagesCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = NormalMode)
-GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/change-answers             controllers.addItems.packagesInformation.PackagesCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)
+GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/check-answers              controllers.addItems.packagesInformation.PackageCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = NormalMode)
+GET        /:lrn/add-items/:itemIndex/packages/:packageIndex/change-answers             controllers.addItems.packagesInformation.PackageCheckYourAnswersController.onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode = CheckMode)
 
 GET        /:lrn/add-items/item-details/:index/commodity-code                        controllers.addItems.itemDetails.CommodityCodeController.onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)
 POST       /:lrn/add-items/item-details/:index/commodity-code                        controllers.addItems.itemDetails.CommodityCodeController.onSubmit(lrn: LocalReferenceNumber, index: Index, mode: Mode = NormalMode)

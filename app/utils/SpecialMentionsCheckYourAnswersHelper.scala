@@ -64,7 +64,7 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = SpecialMentionTypePage(itemIndex, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "specialMentionType",
-    id = None,
+    id = Some("change-special-mention-type"),
     call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 
@@ -72,7 +72,7 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     page = SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex),
     formatAnswer = formatAsLiteral,
     prefix = "specialMentionAdditionalInfo",
-    id = None,
+    id = Some("change-special-mention-additional-information"),
     call = specialMentionRoutes.SpecialMentionAdditionalInfoController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 

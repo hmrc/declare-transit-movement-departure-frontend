@@ -202,7 +202,8 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
                 Action(
                   content = msg"site.edit",
                   href = routes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode).url,
-                  visuallyHiddenText = Some(label)
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-special-mention-type")
                 )
               )
             )
@@ -244,7 +245,8 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
                 Action(
                   content = msg"site.edit",
                   href = routes.SpecialMentionAdditionalInfoController.onPageLoad(lrn, itemIndex, referenceIndex, mode).url,
-                  visuallyHiddenText = Some(label)
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-special-mention-additional-information")
                 )
               )
             )

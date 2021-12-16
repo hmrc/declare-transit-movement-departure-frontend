@@ -69,7 +69,11 @@ goodsSummary.preHeading = Goods summary
 guaranteeDetails.preHeading = Guarantee details
 items.preHeading = Items
 safetyAndSecurity.preHeading = Safety and security
-packages.preHeading = Packages
+
+package.preHeading = Packages
+specialMention.preHeading = Special mentions
+document.preHeading = Produced documents and work certificates
+reference.preHeading = Previous administrative references
 
 routeDetailsCheckYourAnswers.heading = Check your answers
 routeDetailsCheckYourAnswers.title = Check your answers
@@ -825,6 +829,9 @@ extraInformation.error.required = Enter the extra information for this document
 extraInformation.error.length = The extra information for this document must be 26 characters or less
 extraInformation.error.invalid = The extra information for this document must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 
+referenceCheckYourAnswers.title = Check your answers
+referenceCheckYourAnswers.heading = Check your answers
+
 confirmRemovePreviousAdministrativeReference.title = Are you sure you want to remove this previous administrative reference?
 confirmRemovePreviousAdministrativeReference.heading = Are you sure you want to remove this previous administrative reference?
 confirmRemovePreviousAdministrativeReference.checkYourAnswersLabel = confirmRemovePreviousAdministrativeReference
@@ -847,6 +854,9 @@ specialMentionAdditionalInfo.heading = What information do you need to add for s
 specialMentionAdditionalInfo.error.required = Enter the information you need to add for special mention {0} for item {1}
 specialMentionAdditionalInfo.error.length = The information you need to add for special mention {0} for item {1} must be 70 characters or less
 specialMentionAdditionalInfo.error.invalid = The information you need to add for special mention {0} for item {1} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+specialMentionCheckYourAnswers.title = Check your answers
+specialMentionCheckYourAnswers.heading = Check your answers
 
 addAnotherSpecialMention.title.singular = You have added 1 special mention for item {0}
 addAnotherSpecialMention.title.plural = You have added {0} special mentions for item {1}
@@ -918,6 +928,9 @@ documentType.title = What type of document do you need to add?
 documentType.heading = What type of document do you need to add?
 documentType.checkYourAnswersLabel = Document type
 documentType.error.required = Enter the type of document you need to add
+
+documentCheckYourAnswers.title = Check your answers
+documentCheckYourAnswers.heading = Check your answers
 
 submissionConfirmation.title = Departure declaration sent
 submissionConfirmation.heading = Departure declaration sent

@@ -132,7 +132,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(AddMarkPage(itemIndex, packageIndex), NormalMode, updatedAnswers)
-                  .mustBe(packageRoutes.PackagesCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
+                  .mustBe(packageRoutes.PackageCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
         }
@@ -146,7 +146,7 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareMarkPage(itemIndex, packageIndex), NormalMode, updatedAnswers)
-                  .mustBe(packageRoutes.PackagesCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
+                  .mustBe(packageRoutes.PackageCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
         }

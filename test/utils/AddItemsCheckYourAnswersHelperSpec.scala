@@ -1407,7 +1407,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = PackagesCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  href = PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-package-${packageIndex.display}")
                 )
@@ -2178,7 +2178,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-reference-type-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-reference-type")
                 )
               )
             )
@@ -2221,7 +2221,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = PreviousReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-previous-reference-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-previous-reference")
                 )
               )
             )
@@ -2256,13 +2256,13 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           result mustBe Some(
             Row(
               key = Key(label, classes = Seq("govuk-!-width-one-half")),
-              value = Value(msg"site.yes"),
+              value = Value(msg"site.ye"),
               actions = List(
                 Action(
                   content = msg"site.edit",
                   href = AddExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-add-extra-reference-information-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-add-extra-reference-information")
                 )
               )
             )
@@ -2305,7 +2305,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = ExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-extra-reference-information-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-extra-reference-information")
                 )
               )
             )
@@ -2348,7 +2348,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = TIRCarnetReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-tir-carnet-reference-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-tir-carnet-reference")
                 )
               )
             )
@@ -2391,7 +2391,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = DocumentTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-type-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-document-type")
                 )
               )
             )
@@ -2434,7 +2434,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = DocumentReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-reference-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-document-reference")
                 )
               )
             )
@@ -2475,7 +2475,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = AddExtraDocumentInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-add-extra-document-information-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-add-extra-document-information")
                 )
               )
             )
@@ -2518,7 +2518,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = DocumentExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-extra-document-information-${referenceIndex.display}")
+                  attributes = Map("id" -> "change-extra-document-information")
                 )
               )
             )

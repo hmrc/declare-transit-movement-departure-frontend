@@ -32,14 +32,14 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class PackagesCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class PackageCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val packagesCyaRoute: String =
-    routes.PackagesCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, NormalMode).url
+    routes.PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, NormalMode).url
 
-  "PackagesCheckYourAnswersController" - {
+  "PackageCheckYourAnswersController" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -64,7 +64,7 @@ class PackagesCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksR
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey - "section"
 
-      templateCaptor.getValue mustEqual "addItems/packagesCheckYourAnswers.njk"
+      templateCaptor.getValue mustEqual "addItems/packageCheckYourAnswers.njk"
       jsonWithoutConfig mustBe expectedJson
     }
   }

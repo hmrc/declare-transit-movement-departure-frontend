@@ -131,7 +131,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(AddMarkPage(itemIndex, packageIndex), CheckMode, updatedAnswers)
-                  .mustBe(packageRoutes.PackagesCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, CheckMode))
+                  .mustBe(packageRoutes.PackageCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, CheckMode))
             }
           }
         }
@@ -145,7 +145,7 @@ class AddItemsPackagesInfoCheckModeNavigatorSpec extends SpecBase with ScalaChec
 
                 navigator
                   .nextPage(DeclareMarkPage(itemIndex, packageIndex), CheckMode, updatedAnswers)
-                  .mustBe(packageRoutes.PackagesCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, CheckMode))
+                  .mustBe(packageRoutes.PackageCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, CheckMode))
             }
           }
         }
