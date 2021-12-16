@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.addItems.packagesInformation
+package controllers.addItems.previousReferences
 
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode, ValidateReaderLogger}
@@ -23,13 +23,13 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewModels.PackagesCheckYourAnswersViewModel
+import viewModels.ReferencesCheckYourAnswersViewModel
 import viewModels.sections.Section
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class PackageCheckYourAnswersController @Inject() (
+class ReferenceCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
@@ -41,21 +41,21 @@ class PackageCheckYourAnswersController @Inject() (
     with ValidateReaderLogger
     with I18nSupport {
 
-  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, packageIndex: Index, mode: Mode): Action[AnyContent] =
+  def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData).async {
       implicit request =>
         val json = {
           val section: Section =
-            PackagesCheckYourAnswersViewModel(request.userAnswers, itemIndex, packageIndex, mode).section
+            ReferencesCheckYourAnswersViewModel(request.userAnswers, itemIndex, referenceIndex, mode).section
 
           Json.obj(
             "section"     -> Json.toJson(section),
-            "nextPageUrl" -> routes.AddAnotherPackageController.onPageLoad(lrn, itemIndex, mode).url
+            "nextPageUrl" -> routes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, mode).url
           )
         }
 
-        renderer.render("addItems/packageCheckYourAnswers.njk", json).map(Ok(_))
+        renderer.render("addItems/referenceCheckYourAnswers.njk", json).map(Ok(_))
     }
 }

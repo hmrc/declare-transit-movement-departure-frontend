@@ -2256,7 +2256,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           result mustBe Some(
             Row(
               key = Key(label, classes = Seq("govuk-!-width-one-half")),
-              value = Value(msg"site.ye"),
+              value = Value(msg"site.yes"),
               actions = List(
                 Action(
                   content = msg"site.edit",

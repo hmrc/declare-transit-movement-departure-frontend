@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.addItems.packagesInformation
+package controllers.addItems.previousReferences
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import matchers.JsonMatchers
@@ -32,14 +32,14 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class PackageCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class ReferenceCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val packageCyaRoute: String =
-    routes.PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, NormalMode).url
+  lazy val referenceCyaRoute: String =
+    routes.ReferenceCheckYourAnswersController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
 
-  "PackageCheckYourAnswersController" - {
+  "ReferenceCheckYourAnswersController" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -48,7 +48,7 @@ class PackageCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRe
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request                                = FakeRequest(GET, packageCyaRoute)
+      val request                                = FakeRequest(GET, referenceCyaRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -59,12 +59,12 @@ class PackageCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRe
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "nextPageUrl" -> routes.AddAnotherPackageController.onPageLoad(lrn, itemIndex, NormalMode).url
+        "nextPageUrl" -> routes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, NormalMode).url
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey - "section"
 
-      templateCaptor.getValue mustEqual "addItems/packageCheckYourAnswers.njk"
+      templateCaptor.getValue mustEqual "addItems/referenceCheckYourAnswers.njk"
       jsonWithoutConfig mustBe expectedJson
     }
   }

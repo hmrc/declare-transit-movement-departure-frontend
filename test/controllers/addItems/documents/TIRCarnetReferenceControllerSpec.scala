@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.documents
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
