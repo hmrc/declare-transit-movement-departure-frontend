@@ -60,6 +60,22 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     call = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode)
   )
 
+  def specialMentionTypeRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = SpecialMentionTypePage(itemIndex, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "specialMentionType",
+    id = None,
+    call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+  )
+
+  def specialMentionAdditionalInfoRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "specialMentionAdditionalInfo",
+    id = None,
+    call = specialMentionRoutes.SpecialMentionAdditionalInfoController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+  )
+
   def addAnother(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
     val addAnotherContainerHref = userAnswers.get(AddSpecialMentionPage(itemIndex)) match {

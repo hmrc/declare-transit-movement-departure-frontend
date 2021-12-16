@@ -17,10 +17,13 @@
 package utils
 
 import base.{GeneratorSpec, SpecBase}
+import controllers.addItems.specialMentions.routes
 import generators.ReferenceDataGenerators
 import models.reference.SpecialMention
+import models.userAnswerScenarios.Scenario1.UserAnswersSpecHelperOps
 import models.{CheckMode, Mode, SpecialMentionList, UserAnswers}
-import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionTypePage}
+import pages.addItems.specialMentions.{AddSpecialMentionPage, SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
+import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.Text.{Literal, Message}
 import uk.gov.hmrc.viewmodels._
 import viewModels.AddAnotherViewModel
@@ -132,7 +135,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
         cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
-            controllers.addItems.specialMentions.routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
+            routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
             msg"addItems.checkYourAnswersLabel.specialMentions"
           )
 
@@ -146,7 +149,7 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
         cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
-            controllers.addItems.specialMentions.routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
+            routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
             msg"addItems.checkYourAnswersLabel.specialMentions"
           )
 
@@ -158,12 +161,96 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
         cya.addAnother(index, msg"addItems.checkYourAnswersLabel.specialMentions") mustBe
           AddAnotherViewModel(
-            controllers.addItems.specialMentions.routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
+            routes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url,
             msg"addItems.checkYourAnswersLabel.specialMentions"
           )
 
       }
 
+    }
+
+    "specialMentionTypeRow" - {
+
+      val specialMentionTyne: String = "TYPE"
+
+      "return None" - {
+        "SpecialMentionTypePage undefined at itemIndex" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new SpecialMentionsCheckYourAnswersHelper(answers, mode)
+          val result = helper.specialMentionTypeRow(itemIndex, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "SpecialMentionTypePage defined at itemIndex" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(SpecialMentionTypePage(itemIndex, referenceIndex))(specialMentionTyne)
+
+          val helper = new SpecialMentionsCheckYourAnswersHelper(answers, mode)
+          val result = helper.specialMentionTypeRow(itemIndex, referenceIndex)
+
+          val label = msg"specialMentionType.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$specialMentionTyne"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label)
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "specialMentionAdditionalInfoRow" - {
+
+      val additionalInformation: String = "INFO"
+
+      "return None" - {
+        "SpecialMentionAdditionalInfoPage undefined at itemIndex" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new SpecialMentionsCheckYourAnswersHelper(answers, mode)
+          val result = helper.specialMentionAdditionalInfoRow(itemIndex, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "SpecialMentionAdditionalInfoPage defined at itemIndex" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex))(additionalInformation)
+
+          val helper = new SpecialMentionsCheckYourAnswersHelper(answers, mode)
+          val result = helper.specialMentionAdditionalInfoRow(itemIndex, referenceIndex)
+
+          val label = msg"specialMentionAdditionalInfo.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$additionalInformation"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = routes.SpecialMentionAdditionalInfoController.onPageLoad(lrn, itemIndex, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label)
+                )
+              )
+            )
+          )
+        }
+      }
     }
 
   }

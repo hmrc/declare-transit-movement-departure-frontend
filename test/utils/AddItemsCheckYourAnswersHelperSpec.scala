@@ -2144,5 +2144,388 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       }
     }
 
+    "referenceTypeRow" - {
+
+      val refType: String = "TYPE"
+
+      "return None" - {
+        "ReferenceTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.referenceTypeRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "ReferenceTypePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(refType)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.referenceTypeRow(index, referenceIndex)
+
+          val label = msg"referenceType.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$refType"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-reference-type-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "previousReferenceRow" - {
+
+      val reference: String = "REFERENCE"
+
+      "return None" - {
+        "PreviousReferencePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.previousReferenceRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "PreviousReferencePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(PreviousReferencePage(index, referenceIndex))(reference)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.previousReferenceRow(index, referenceIndex)
+
+          val label = msg"previousReference.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$reference"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = PreviousReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-previous-reference-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "addExtraReferenceInformationRow" - {
+
+      "return None" - {
+        "AddExtraInformationPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addExtraReferenceInformationRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "AddExtraInformationPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddExtraInformationPage(index, referenceIndex))(true)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addExtraReferenceInformationRow(index, referenceIndex)
+
+          val label = msg"addExtraInformation.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(msg"site.yes"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = AddExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-add-extra-reference-information-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "extraReferenceInformationRow" - {
+
+      val extraInfo: String = "INFO"
+
+      "return None" - {
+        "ExtraInformationPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.extraReferenceInformationRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "ExtraInformationPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ExtraInformationPage(index, referenceIndex))(extraInfo)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.extraReferenceInformationRow(index, referenceIndex)
+
+          val label = msg"extraInformation.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$extraInfo"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = ExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-extra-reference-information-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "tirCarnetReferenceRow" - {
+
+      val reference: String = "REFERENCE"
+
+      "return None" - {
+        "TIRCarnetReferencePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.tirCarnetReferenceRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "TIRCarnetReferencePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage(index, referenceIndex))(reference)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.tirCarnetReferenceRow(index, referenceIndex)
+
+          val label = msg"tirCarnetReference.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$reference"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = TIRCarnetReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-tir-carnet-reference-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "documentTypeRow" - {
+
+      val docType: String = "TYPE"
+
+      "return None" - {
+        "DocumentTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentTypeRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "DocumentTypePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(docType)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentTypeRow(index, referenceIndex)
+
+          val label = msg"documentType.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$docType"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = DocumentTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-document-type-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "documentReferenceRow" - {
+
+      val reference: String = "REFERENCE"
+
+      "return None" - {
+        "DocumentReferencePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentReferenceRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "DocumentReferencePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentReferencePage(index, referenceIndex))(reference)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentReferenceRow(index, referenceIndex)
+
+          val label = msg"documentReference.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$reference"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = DocumentReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-document-reference-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "addExtraDocumentInformationRow" - {
+
+      "return None" - {
+        "AddExtraDocumentInformationPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addExtraDocumentInformationRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "AddExtraDocumentInformationPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddExtraDocumentInformationPage(index, referenceIndex))(true)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addExtraDocumentInformationRow(index, referenceIndex)
+
+          val label = msg"addExtraDocumentInformation.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(msg"site.yes"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = AddExtraDocumentInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-add-extra-document-information-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "extraDocumentInformationRow" - {
+
+      val information: String = "INFORMATION"
+
+      "return None" - {
+        "DocumentExtraInformationPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.extraDocumentInformationRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "DocumentExtraInformationPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentExtraInformationPage(index, referenceIndex))(information)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.extraDocumentInformationRow(index, referenceIndex)
+
+          val label = msg"documentExtraInformation.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$information"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = DocumentExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-extra-document-information-${referenceIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
   }
 }

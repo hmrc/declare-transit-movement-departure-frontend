@@ -17,8 +17,9 @@
 package utils
 
 import controllers.addItems.containers.{routes => containerRoutes}
-import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
+import controllers.addItems.documents.{routes => documentRoutes}
 import controllers.addItems.packagesInformation.{routes => packageRoutes}
+import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.routes
 import controllers.addItems.securityDetails.{routes => securityDetailsRoutes}
 import controllers.addItems.traderDetails.{routes => traderDetailsRoutes}
@@ -430,6 +431,78 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     prefix = "securityConsignorEori",
     id = None,
     call = tradersSecurityDetailsRoutes.SecurityConsignorEoriController.onPageLoad(lrn, index, mode)
+  )
+
+  def referenceTypeRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = ReferenceTypePage(index, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "referenceType",
+    id = Some(s"change-reference-type-${referenceIndex.display}"),
+    call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode)
+  )
+
+  def previousReferenceRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = PreviousReferencePage(index, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "previousReference",
+    id = Some(s"change-previous-reference-${referenceIndex.display}"),
+    call = previousReferencesRoutes.PreviousReferenceController.onPageLoad(lrn, index, referenceIndex, mode)
+  )
+
+  def addExtraReferenceInformationRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddExtraInformationPage(index, referenceIndex),
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addExtraInformation",
+    id = Some(s"change-add-extra-reference-information-${referenceIndex.display}"),
+    call = previousReferencesRoutes.AddExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode)
+  )
+
+  def extraReferenceInformationRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = ExtraInformationPage(index, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "extraInformation",
+    id = Some(s"change-extra-reference-information-${referenceIndex.display}"),
+    call = previousReferencesRoutes.ExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode)
+  )
+
+  def tirCarnetReferenceRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = TIRCarnetReferencePage(itemIndex, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "tirCarnetReference",
+    id = Some(s"change-tir-carnet-reference-${referenceIndex.display}"),
+    call = documentRoutes.TIRCarnetReferenceController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+  )
+
+  def documentTypeRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DocumentTypePage(itemIndex, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "documentType",
+    id = Some(s"change-document-type-${referenceIndex.display}"),
+    call = documentRoutes.DocumentTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+  )
+
+  def documentReferenceRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DocumentReferencePage(itemIndex, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "documentReference",
+    id = Some(s"change-document-reference-${referenceIndex.display}"),
+    call = documentRoutes.DocumentReferenceController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+  )
+
+  def addExtraDocumentInformationRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddExtraDocumentInformationPage(itemIndex, referenceIndex),
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addExtraDocumentInformation",
+    id = Some(s"change-add-extra-document-information-${referenceIndex.display}"),
+    call = documentRoutes.AddExtraDocumentInformationController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+  )
+
+  def extraDocumentInformationRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DocumentExtraInformationPage(itemIndex, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "documentExtraInformation",
+    id = Some(s"change-extra-document-information-${referenceIndex.display}"),
+    call = documentRoutes.DocumentExtraInformationController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 
   private def getAnswerAndBuildPreviousReferenceRow(
