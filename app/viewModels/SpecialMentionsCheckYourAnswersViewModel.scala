@@ -16,7 +16,7 @@
 
 package viewModels
 
-import models.{Index, Mode, UserAnswers}
+import models.{Index, Mode, SpecialMentionList, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList
 import utils.SpecialMentionsCheckYourAnswersHelper
 import viewModels.sections.Section
@@ -27,14 +27,15 @@ object SpecialMentionsCheckYourAnswersViewModel {
     userAnswers: UserAnswers,
     itemIndex: Index,
     referenceIndex: Index,
-    mode: Mode
+    mode: Mode,
+    specialMentions: SpecialMentionList
   ): SpecialMentionsCheckYourAnswersViewModel = {
 
     val checkYourAnswersHelper = new SpecialMentionsCheckYourAnswersHelper(userAnswers, mode)
 
     def specialMentionRows: Seq[SummaryList.Row] =
       Seq(
-        checkYourAnswersHelper.specialMentionTypeRow(itemIndex, referenceIndex),
+        checkYourAnswersHelper.specialMentionTypeRow(itemIndex, referenceIndex, specialMentions),
         checkYourAnswersHelper.specialMentionAdditionalInfoRow(itemIndex, referenceIndex)
       ).flatten
 

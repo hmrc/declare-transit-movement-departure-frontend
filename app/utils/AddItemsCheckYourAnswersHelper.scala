@@ -451,13 +451,18 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     call = tradersSecurityDetailsRoutes.SecurityConsignorEoriController.onPageLoad(lrn, index, mode)
   )
 
-  def referenceTypeRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
-    page = ReferenceTypePage(index, referenceIndex),
-    formatAnswer = formatAsLiteral,
-    prefix = "referenceType",
-    id = Some("change-reference-type"),
-    call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode)
-  )
+  def referenceTypeRow(index: Index, referenceIndex: Index, documents: PreviousReferencesDocumentTypeList): Option[Row] =
+    getAnswerAndBuildPreviousReferenceRow(
+      page = ReferenceTypePage(index, referenceIndex),
+      documents = documents,
+      buildRow = answer =>
+        buildRow(
+          prefix = "referenceType",
+          answer = answer,
+          id = Some("change-reference-type"),
+          call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode)
+        )
+    )
 
   def previousReferenceRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = PreviousReferencePage(index, referenceIndex),
@@ -491,36 +496,43 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     call = documentRoutes.TIRCarnetReferenceController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 
-  def documentTypeRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
-    page = DocumentTypePage(itemIndex, referenceIndex),
-    formatAnswer = formatAsLiteral,
-    prefix = "documentType",
-    id = Some("change-document-type"),
-    call = documentRoutes.DocumentTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
-  )
+  def documentTypeRow(itemIndex: Index, documentIndex: Index, documentTypes: DocumentTypeList): Option[Row] =
+    userAnswers.get(DocumentTypePage(itemIndex, documentIndex)).flatMap {
+      answer =>
+        documentTypes.getDocumentType(answer).map {
+          documentType =>
+            val label = lit"(${documentType.code}) ${documentType.description}"
+            buildRow(
+              prefix = "documentType",
+              answer = label,
+              id = Some("change-document-type"),
+              call = documentRoutes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, mode)
+            )
+        }
+    }
 
-  def documentReferenceRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
-    page = DocumentReferencePage(itemIndex, referenceIndex),
+  def documentReferenceRow(itemIndex: Index, documentIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DocumentReferencePage(itemIndex, documentIndex),
     formatAnswer = formatAsLiteral,
     prefix = "documentReference",
     id = Some("change-document-reference"),
-    call = documentRoutes.DocumentReferenceController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+    call = documentRoutes.DocumentReferenceController.onPageLoad(lrn, itemIndex, documentIndex, mode)
   )
 
-  def addExtraDocumentInformationRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
-    page = AddExtraDocumentInformationPage(itemIndex, referenceIndex),
+  def addExtraDocumentInformationRow(itemIndex: Index, documentIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddExtraDocumentInformationPage(itemIndex, documentIndex),
     formatAnswer = formatAsYesOrNo,
     prefix = "addExtraDocumentInformation",
     id = Some("change-add-extra-document-information"),
-    call = documentRoutes.AddExtraDocumentInformationController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+    call = documentRoutes.AddExtraDocumentInformationController.onPageLoad(lrn, itemIndex, documentIndex, mode)
   )
 
-  def extraDocumentInformationRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
-    page = DocumentExtraInformationPage(itemIndex, referenceIndex),
+  def extraDocumentInformationRow(itemIndex: Index, documentIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DocumentExtraInformationPage(itemIndex, documentIndex),
     formatAnswer = formatAsLiteral,
     prefix = "documentExtraInformation",
     id = Some("change-extra-document-information"),
-    call = documentRoutes.DocumentExtraInformationController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+    call = documentRoutes.DocumentExtraInformationController.onPageLoad(lrn, itemIndex, documentIndex, mode)
   )
 
   private def getAnswerAndBuildPreviousReferenceRow(

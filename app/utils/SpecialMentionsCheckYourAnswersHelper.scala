@@ -60,13 +60,18 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     call = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode)
   )
 
-  def specialMentionTypeRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
-    page = SpecialMentionTypePage(itemIndex, referenceIndex),
-    formatAnswer = formatAsLiteral,
-    prefix = "specialMentionType",
-    id = Some("change-special-mention-type"),
-    call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
-  )
+  def specialMentionTypeRow(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList): Option[Row] =
+    getAnswerAndBuildSpecialMentionRow(
+      page = SpecialMentionTypePage(itemIndex, referenceIndex),
+      specialMentions = specialMentions,
+      buildRow = answer =>
+        buildRow(
+          prefix = "specialMentionType",
+          answer = answer,
+          id = Some("change-special-mention-type"),
+          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+        )
+    )
 
   def specialMentionAdditionalInfoRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
     page = SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex),

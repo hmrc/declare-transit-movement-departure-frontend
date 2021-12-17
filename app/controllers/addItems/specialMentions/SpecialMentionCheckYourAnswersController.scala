@@ -16,6 +16,7 @@
 
 package controllers.addItems.specialMentions
 
+import connectors.ReferenceDataConnector
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -24,7 +25,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.SpecialMentionsCheckYourAnswersViewModel
-import viewModels.sections.Section
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -34,6 +34,7 @@ class SpecialMentionCheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
+  referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -46,16 +47,18 @@ class SpecialMentionCheckYourAnswersController @Inject() (
       andThen getData(lrn)
       andThen requireData).async {
       implicit request =>
-        val json = {
-          val section: Section =
-            SpecialMentionsCheckYourAnswersViewModel(request.userAnswers, itemIndex, referenceIndex, mode).section
+        referenceDataConnector.getSpecialMention().flatMap {
+          specialMentions =>
+            val json = {
+              val viewModel = SpecialMentionsCheckYourAnswersViewModel(request.userAnswers, itemIndex, referenceIndex, mode, specialMentions)
 
-          Json.obj(
-            "section"     -> Json.toJson(section),
-            "nextPageUrl" -> routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url
-          )
+              Json.obj(
+                "section"     -> Json.toJson(viewModel.section),
+                "nextPageUrl" -> routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, mode).url
+              )
+            }
+
+            renderer.render("addItems/specialMentions/specialMentionCheckYourAnswers.njk", json).map(Ok(_))
         }
-
-        renderer.render("addItems/specialMentions/specialMentionCheckYourAnswers.njk", json).map(Ok(_))
     }
 }

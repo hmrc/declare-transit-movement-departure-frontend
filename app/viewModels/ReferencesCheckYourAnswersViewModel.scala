@@ -16,7 +16,7 @@
 
 package viewModels
 
-import models.{Index, Mode, UserAnswers}
+import models.{Index, Mode, PreviousReferencesDocumentTypeList, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList
 import utils.AddItemsCheckYourAnswersHelper
 import viewModels.sections.Section
@@ -27,14 +27,15 @@ object ReferencesCheckYourAnswersViewModel {
     userAnswers: UserAnswers,
     itemIndex: Index,
     referenceIndex: Index,
-    mode: Mode
+    mode: Mode,
+    previousReferencesDocumentTypes: PreviousReferencesDocumentTypeList
   ): ReferencesCheckYourAnswersViewModel = {
 
     val checkYourAnswersHelper = new AddItemsCheckYourAnswersHelper(userAnswers, mode)
 
     def referenceRows: Seq[SummaryList.Row] =
       Seq(
-        checkYourAnswersHelper.referenceTypeRow(itemIndex, referenceIndex),
+        checkYourAnswersHelper.referenceTypeRow(itemIndex, referenceIndex, previousReferencesDocumentTypes),
         checkYourAnswersHelper.previousReferenceRow(itemIndex, referenceIndex),
         checkYourAnswersHelper.addExtraReferenceInformationRow(itemIndex, referenceIndex),
         checkYourAnswersHelper.extraReferenceInformationRow(itemIndex, referenceIndex)

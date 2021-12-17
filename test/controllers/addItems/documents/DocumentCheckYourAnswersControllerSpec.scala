@@ -17,12 +17,15 @@
 package controllers.addItems.documents
 
 import base.{MockNunjucksRendererApp, SpecBase}
+import connectors.ReferenceDataConnector
 import matchers.JsonMatchers
-import models.NormalMode
+import models.{DocumentTypeList, NormalMode}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -39,6 +42,13 @@ class DocumentCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksR
   lazy val documentCyaRoute: String =
     routes.DocumentCheckYourAnswersController.onPageLoad(lrn, itemIndex, documentIndex, NormalMode).url
 
+  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+
   "DocumentCheckYourAnswersController" - {
 
     "must return OK and the correct view for a GET" in {
@@ -47,6 +57,9 @@ class DocumentCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksR
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
+
+      when(mockRefDataConnector.getDocumentTypes()(any(), any()))
+        .thenReturn(Future.successful(DocumentTypeList(Nil)))
 
       val request                                = FakeRequest(GET, documentCyaRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])

@@ -16,7 +16,8 @@
 
 package viewModels
 
-import models.{Index, Mode, UserAnswers}
+import models.{DocumentTypeList, Index, Mode, UserAnswers}
+import pages.addItems.TIRCarnetReferencePage
 import uk.gov.hmrc.viewmodels.SummaryList
 import utils.AddItemsCheckYourAnswersHelper
 import viewModels.sections.Section
@@ -27,19 +28,27 @@ object DocumentsCheckYourAnswersViewModel {
     userAnswers: UserAnswers,
     itemIndex: Index,
     documentIndex: Index,
-    mode: Mode
+    mode: Mode,
+    documentTypes: DocumentTypeList
   ): DocumentsCheckYourAnswersViewModel = {
 
     val checkYourAnswersHelper = new AddItemsCheckYourAnswersHelper(userAnswers, mode)
 
     def documentRows: Seq[SummaryList.Row] =
-      Seq(
-        checkYourAnswersHelper.tirCarnetReferenceRow(itemIndex, documentIndex),
-        checkYourAnswersHelper.documentTypeRow(itemIndex, documentIndex),
-        checkYourAnswersHelper.documentReferenceRow(itemIndex, documentIndex),
-        checkYourAnswersHelper.addExtraDocumentInformationRow(itemIndex, documentIndex),
-        checkYourAnswersHelper.extraDocumentInformationRow(itemIndex, documentIndex)
-      ).flatten
+      (userAnswers.get(TIRCarnetReferencePage(itemIndex, documentIndex)) match {
+        case Some(_) =>
+          Seq(
+            checkYourAnswersHelper.tirCarnetReferenceRow(itemIndex, documentIndex),
+            checkYourAnswersHelper.extraDocumentInformationRow(itemIndex, documentIndex)
+          )
+        case None =>
+          Seq(
+            checkYourAnswersHelper.documentTypeRow(itemIndex, documentIndex, documentTypes),
+            checkYourAnswersHelper.documentReferenceRow(itemIndex, documentIndex),
+            checkYourAnswersHelper.addExtraDocumentInformationRow(itemIndex, documentIndex),
+            checkYourAnswersHelper.extraDocumentInformationRow(itemIndex, documentIndex)
+          )
+      }).flatten
 
     DocumentsCheckYourAnswersViewModel(
       Section(documentRows)

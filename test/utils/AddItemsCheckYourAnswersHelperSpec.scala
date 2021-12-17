@@ -2146,43 +2146,87 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
     "referenceTypeRow" - {
 
-      val refType: String = "TYPE"
+      val code = "code"
 
       "return None" - {
+
         "ReferenceTypePage undefined at index" in {
 
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
-          val result = helper.referenceTypeRow(index, referenceIndex)
+          val result = helper.referenceTypeRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+          result mustBe None
+        }
+
+        "reference type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(code)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.referenceTypeRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+
           result mustBe None
         }
       }
 
       "return Some(row)" - {
-        "ReferenceTypePage defined at index" in {
+        "ReferenceTypePage defined at index" - {
 
-          val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(refType)
+          "description defined" in {
 
-          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
-          val result = helper.referenceTypeRow(index, referenceIndex)
+            val description = "description"
+            val reference   = PreviousReferencesDocumentType(code, Some(description))
 
-          val label = msg"referenceType.checkYourAnswersLabel"
+            val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(code)
 
-          result mustBe Some(
-            Row(
-              key = Key(label, classes = Seq("govuk-!-width-one-half")),
-              value = Value(lit"$refType"),
-              actions = List(
-                Action(
-                  content = msg"site.edit",
-                  href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
-                  visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> "change-reference-type")
+            val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+            val result = helper.referenceTypeRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Seq(reference)))
+
+            val label = msg"referenceType.checkYourAnswersLabel"
+
+            result mustBe Some(
+              Row(
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
+                value = Value(lit"($code) $description"),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    visuallyHiddenText = Some(label),
+                    attributes = Map("id" -> "change-reference-type")
+                  )
                 )
               )
             )
-          )
+          }
+
+          "description not defined" in {
+
+            val reference = PreviousReferencesDocumentType(code, None)
+
+            val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(code)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+            val result = helper.referenceTypeRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Seq(reference)))
+
+            val label = msg"referenceType.checkYourAnswersLabel"
+
+            result mustBe Some(
+              Row(
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
+                value = Value(lit"(${reference.code}) "),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    visuallyHiddenText = Some(label),
+                    attributes = Map("id" -> "change-reference-type")
+                  )
+                )
+              )
+            )
+          }
         }
       }
     }
@@ -2359,15 +2403,27 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
     "documentTypeRow" - {
 
-      val docType: String = "TYPE"
+      val documentCode: String   = "DOCUMENT CODE"
+      val document: DocumentType = DocumentType(documentCode, "DESCRIPTION", transportDocument = true)
 
       "return None" - {
+
         "DocumentTypePage undefined at index" in {
 
           val answers = emptyUserAnswers
 
           val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
-          val result = helper.documentTypeRow(index, referenceIndex)
+          val result = helper.documentTypeRow(index, referenceIndex, DocumentTypeList(Nil))
+          result mustBe None
+        }
+
+        "document type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentTypeRow(index, referenceIndex, DocumentTypeList(Nil))
+
           result mustBe None
         }
       }
@@ -2375,17 +2431,17 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
       "return Some(row)" - {
         "DocumentTypePage defined at index" in {
 
-          val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(docType)
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
 
           val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
-          val result = helper.documentTypeRow(index, referenceIndex)
+          val result = helper.documentTypeRow(index, referenceIndex, DocumentTypeList(Seq(document)))
 
           val label = msg"documentType.checkYourAnswersLabel"
 
           result mustBe Some(
             Row(
               key = Key(label, classes = Seq("govuk-!-width-one-half")),
-              value = Value(lit"$docType"),
+              value = Value(lit"(${document.code}) ${document.description}"),
               actions = List(
                 Action(
                   content = msg"site.edit",

@@ -17,7 +17,8 @@
 package viewModels
 
 import base.SpecBase
-import models.{NormalMode, UserAnswers}
+import models.reference.SpecialMention
+import models.{NormalMode, SpecialMentionList, UserAnswers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems.specialMentions.{SpecialMentionAdditionalInfoPage, SpecialMentionTypePage}
 
@@ -25,15 +26,18 @@ class SpecialMentionsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCh
 
   // format: off
 
+  private val code = "code"
+  private val specialMention = SpecialMention(code, "description")
+
   private def viewModel(userAnswers: UserAnswers): SpecialMentionsCheckYourAnswersViewModel =
-    SpecialMentionsCheckYourAnswersViewModel(userAnswers, itemIndex, referenceIndex, NormalMode)
+    SpecialMentionsCheckYourAnswersViewModel(userAnswers, itemIndex, referenceIndex, NormalMode, SpecialMentionList(Seq(specialMention)))
 
   "SpecialMentionsCheckYourAnswersViewModel" - {
 
     "display the correct number of rows" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SpecialMentionTypePage(itemIndex, referenceIndex), "type").success.value
+        .set(SpecialMentionTypePage(itemIndex, referenceIndex), code).success.value
         .set(SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex), "info").success.value
 
       val result = viewModel(userAnswers)

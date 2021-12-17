@@ -17,7 +17,8 @@
 package viewModels
 
 import base.SpecBase
-import models.{NormalMode, UserAnswers}
+import models.reference.DocumentType
+import models.{DocumentTypeList, NormalMode, UserAnswers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems._
 
@@ -25,8 +26,11 @@ class DocumentsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPro
 
   // format: off
 
+  private val code = "code"
+  private val document: DocumentType = DocumentType(code, "description", transportDocument = true)
+
   private def viewModel(userAnswers: UserAnswers): DocumentsCheckYourAnswersViewModel =
-    DocumentsCheckYourAnswersViewModel(userAnswers, itemIndex, packageIndex, NormalMode)
+    DocumentsCheckYourAnswersViewModel(userAnswers, itemIndex, packageIndex, NormalMode, DocumentTypeList(Seq(document)))
 
   "DocumentsCheckYourAnswersViewModel" - {
 
@@ -35,6 +39,7 @@ class DocumentsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPro
       "when TIR carnet reference" in {
         val userAnswers = emptyUserAnswers
           .set(TIRCarnetReferencePage(itemIndex, documentIndex), "ref").success.value
+          .set(DocumentTypePage(itemIndex, documentIndex), code).success.value
           .set(DocumentExtraInformationPage(itemIndex, documentIndex), "info").success.value
 
         val result = viewModel(userAnswers)
@@ -43,7 +48,7 @@ class DocumentsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPro
 
       "when not TIR carnet reference" in {
         val userAnswers = emptyUserAnswers
-          .set(DocumentTypePage(itemIndex, documentIndex), "type").success.value
+          .set(DocumentTypePage(itemIndex, documentIndex), code).success.value
           .set(DocumentReferencePage(itemIndex, documentIndex), "ref").success.value
           .set(AddExtraDocumentInformationPage(itemIndex, documentIndex), true).success.value
           .set(DocumentExtraInformationPage(itemIndex, documentIndex), "info").success.value

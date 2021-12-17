@@ -16,6 +16,7 @@
 
 package controllers.addItems.documents
 
+import connectors.ReferenceDataConnector
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -24,7 +25,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.DocumentsCheckYourAnswersViewModel
-import viewModels.sections.Section
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -34,6 +34,7 @@ class DocumentCheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
+  referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -46,16 +47,18 @@ class DocumentCheckYourAnswersController @Inject() (
       andThen getData(lrn)
       andThen requireData).async {
       implicit request =>
-        val json = {
-          val section: Section =
-            DocumentsCheckYourAnswersViewModel(request.userAnswers, itemIndex, documentIndex, mode).section
+        referenceDataConnector.getDocumentTypes().flatMap {
+          documentTypes =>
+            val json = {
+              val viewModel = DocumentsCheckYourAnswersViewModel(request.userAnswers, itemIndex, documentIndex, mode, documentTypes)
 
-          Json.obj(
-            "section"     -> Json.toJson(section),
-            "nextPageUrl" -> routes.AddAnotherDocumentController.onPageLoad(lrn, itemIndex, mode).url
-          )
+              Json.obj(
+                "section"     -> Json.toJson(viewModel.section),
+                "nextPageUrl" -> routes.AddAnotherDocumentController.onPageLoad(lrn, itemIndex, mode).url
+              )
+            }
+
+            renderer.render("addItems/documentCheckYourAnswers.njk", json).map(Ok(_))
         }
-
-        renderer.render("addItems/documentCheckYourAnswers.njk", json).map(Ok(_))
     }
 }

@@ -171,15 +171,27 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
 
     "specialMentionTypeRow" - {
 
-      val specialMentionTyne: String = "TYPE"
+      val code           = "code"
+      val specialMention = SpecialMention(code, "description")
 
       "return None" - {
+
         "SpecialMentionTypePage undefined at itemIndex" in {
 
           val answers = emptyUserAnswers
 
           val helper = new SpecialMentionsCheckYourAnswersHelper(answers, mode)
-          val result = helper.specialMentionTypeRow(itemIndex, referenceIndex)
+          val result = helper.specialMentionTypeRow(itemIndex, referenceIndex, SpecialMentionList(Nil))
+          result mustBe None
+        }
+
+        "special mention type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(SpecialMentionTypePage(index, referenceIndex))(code)
+
+          val helper = new SpecialMentionsCheckYourAnswersHelper(answers, mode)
+          val result = helper.specialMentionTypeRow(index, referenceIndex, SpecialMentionList(Nil))
+
           result mustBe None
         }
       }
@@ -187,17 +199,17 @@ class SpecialMentionsCheckYourAnswersHelperSpec extends SpecBase with GeneratorS
       "return Some(row)" - {
         "SpecialMentionTypePage defined at itemIndex" in {
 
-          val answers = emptyUserAnswers.unsafeSetVal(SpecialMentionTypePage(itemIndex, referenceIndex))(specialMentionTyne)
+          val answers = emptyUserAnswers.unsafeSetVal(SpecialMentionTypePage(itemIndex, referenceIndex))(code)
 
           val helper = new SpecialMentionsCheckYourAnswersHelper(answers, mode)
-          val result = helper.specialMentionTypeRow(itemIndex, referenceIndex)
+          val result = helper.specialMentionTypeRow(itemIndex, referenceIndex, SpecialMentionList(Seq(specialMention)))
 
           val label = msg"specialMentionType.checkYourAnswersLabel"
 
           result mustBe Some(
             Row(
               key = Key(label, classes = Seq("govuk-!-width-one-half")),
-              value = Value(lit"$specialMentionTyne"),
+              value = Value(lit"($code) ${specialMention.description}"),
               actions = List(
                 Action(
                   content = msg"site.edit",

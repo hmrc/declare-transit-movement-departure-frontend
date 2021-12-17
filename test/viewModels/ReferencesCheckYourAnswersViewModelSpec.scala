@@ -17,7 +17,8 @@
 package viewModels
 
 import base.SpecBase
-import models.{NormalMode, UserAnswers}
+import models.reference.PreviousReferencesDocumentType
+import models.{NormalMode, PreviousReferencesDocumentTypeList, UserAnswers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.addItems._
 
@@ -25,15 +26,18 @@ class ReferencesCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckPr
 
   // format: off
 
+  private val code = "code"
+  private val reference = PreviousReferencesDocumentType(code, None)
+
   private def viewModel(userAnswers: UserAnswers): ReferencesCheckYourAnswersViewModel =
-    ReferencesCheckYourAnswersViewModel(userAnswers, itemIndex, packageIndex, NormalMode)
+    ReferencesCheckYourAnswersViewModel(userAnswers, itemIndex, packageIndex, NormalMode, PreviousReferencesDocumentTypeList(Seq(reference)))
 
   "ReferencesCheckYourAnswersViewModel" - {
 
     "display the correct number of rows" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ReferenceTypePage(itemIndex, documentIndex), "type").success.value
+        .set(ReferenceTypePage(itemIndex, documentIndex), code).success.value
         .set(PreviousReferencePage(itemIndex, documentIndex), "ref").success.value
         .set(AddExtraInformationPage(itemIndex, documentIndex), true).success.value
         .set(ExtraInformationPage(itemIndex, documentIndex), "info").success.value
