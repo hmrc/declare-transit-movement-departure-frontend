@@ -663,8 +663,8 @@ howManyPackages.error.required = Enter how many packages have been used for item
 howManyPackages.error.wholeNumber = Enter how many packages have been used for item {0} using whole numbers
 howManyPackages.error.outOfRange = The packages used for item {0} must be between {1} and {2}
 
-packagesCheckYourAnswers.title = Check your answers
-packagesCheckYourAnswers.heading = Check your answers
+packageCheckYourAnswers.title = Check your answers
+packageCheckYourAnswers.heading = Check your answers
 
 removePackage.title = Are you sure you want to remove package {0}?
 removePackage.heading = Are you sure you want to remove package {0}?

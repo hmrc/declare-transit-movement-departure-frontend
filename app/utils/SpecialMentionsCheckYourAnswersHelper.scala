@@ -33,8 +33,8 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
       buildRow = label =>
         buildRemovableRow(
           label = label,
-          id = s"special-mentions-${itemIndex.display}-${referenceIndex.display}",
-          changeCall = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
+          id = s"special-mention-${referenceIndex.display}",
+          changeCall = specialMentionRoutes.SpecialMentionCheckYourAnswersController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
           removeCall = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode)
         )
     )

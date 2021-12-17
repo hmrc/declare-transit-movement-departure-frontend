@@ -182,9 +182,9 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, mode).url,
+                  href = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"change-document-${documentIndex.display}")
                 )
               )
             )
@@ -209,15 +209,15 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, mode).url,
+                  href = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"change-document-${documentIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"remove-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"remove-document-${documentIndex.display}")
                 )
               )
             )
@@ -256,7 +256,6 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
       "return Some(row)" - {
 
-        // TODO - investigate if this test needs changing
         "Option4 declaration type and first index" in {
 
           val answers = emptyUserAnswers
@@ -266,18 +265,18 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
           val result = helper.documentSectionRow(index, referenceIndex, DocumentTypeList(Seq(document)))
 
-          val label = lit"(${document.code}) ${document.description}"
+          val label = msg"addDocuments.documentList.label".withArgs(documentIndex.display)
 
           result mustBe Some(
             Row(
-              key = Key(label),
-              value = Value(lit""),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"(${document.code}) ${document.description}"),
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, mode).url,
+                  href = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"change-document-${documentIndex.display}")
                 )
               )
             )
@@ -1194,15 +1193,15 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    href = ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-reference-document-type-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"change-reference-document-${referenceIndex.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"remove-reference-document-${referenceIndex.display}")
                   )
                 )
               )
@@ -1229,15 +1228,15 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    href = ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-reference-document-type-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"change-reference-document-${referenceIndex.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"remove-reference-document-${referenceIndex.display}")
                   )
                 )
               )
@@ -1357,7 +1356,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  href = PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-package-${packageIndex.display}")
                 ),

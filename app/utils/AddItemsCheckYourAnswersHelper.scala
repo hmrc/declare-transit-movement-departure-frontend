@@ -64,26 +64,44 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
   }
 
   def documentRow(index: Index, documentIndex: Index, documentTypes: DocumentTypeList): Option[Row] =
-    getAnswerAndBuildDocumentRow(index, documentIndex, documentTypes)(
-      label =>
-        buildRemovableRow(
-          label = label,
-          id = s"document-${index.display}-${documentIndex.display}",
-          changeCall = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, mode),
-          removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, mode)
-        )
-    )
+    userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
+      answer =>
+        documentTypes.getDocumentType(answer).map {
+          documentType =>
+            val label = lit"(${documentType.code}) ${documentType.description}"
+
+            userAnswers.get(DeclarationTypePage) match {
+              case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
+                buildValuelessRow(
+                  label = label,
+                  id = Some(s"change-document-${documentIndex.display}"),
+                  call = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode)
+                )
+              case _ =>
+                buildRemovableRow(
+                  label = label,
+                  id = s"document-${documentIndex.display}",
+                  changeCall = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode),
+                  removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, mode)
+                )
+            }
+        }
+    }
 
   def documentSectionRow(index: Index, documentIndex: Index, documentTypes: DocumentTypeList): Option[Row] =
-    getAnswerAndBuildDocumentRow(index, documentIndex, documentTypes)(
-      label =>
-        buildSectionRow(
-          label = msg"addDocuments.documentList.label".withArgs(documentIndex.display),
-          answer = label,
-          id = Some(s"change-document-${documentIndex.display}"),
-          call = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode)
-        )
-    )
+    userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
+      answer =>
+        documentTypes.getDocumentType(answer).map {
+          documentType =>
+            val label = lit"(${documentType.code}) ${documentType.description}"
+            buildSectionRow(
+              label = msg"addDocuments.documentList.label".withArgs(documentIndex.display),
+              answer = label,
+              id = Some(s"change-document-${documentIndex.display}"),
+              call = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode)
+            )
+        }
+    }
 
   def itemRow(index: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
     page = ItemDescriptionPage(index),
@@ -248,8 +266,8 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
       buildRow = label =>
         buildRemovableRow(
           label = label,
-          id = s"reference-document-type-${index.display}-${referenceIndex.display}",
-          changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode),
+          id = s"reference-document-${referenceIndex.display}",
+          changeCall = previousReferencesRoutes.ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode),
           removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode)
         )
     )
@@ -276,7 +294,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = PackageTypePage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
     id = s"package-${packageIndex.display}",
-    changeCall = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode),
+    changeCall = controllers.addItems.packagesInformation.routes.PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode),
     removeCall = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
@@ -516,32 +534,6 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
           buildRow(lit"(${doc.code}) ${doc.description.getOrElse("")}")
       }
   }
-
-  private def getAnswerAndBuildDocumentRow(
-    index: Index,
-    documentIndex: Index,
-    documentTypes: DocumentTypeList
-  )(
-    buildAlternativeRow: Text => Row
-  ): Option[Row] =
-    userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
-      answer =>
-        documentTypes.getDocumentType(answer).map {
-          documentType =>
-            val label = lit"(${documentType.code}) ${documentType.description}"
-
-            userAnswers.get(DeclarationTypePage) match {
-              case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
-                buildValuelessRow(
-                  label = label,
-                  id = Some(s"change-document-${index.display}-${documentIndex.display}"),
-                  call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, mode)
-                )
-              case _ =>
-                buildAlternativeRow(label)
-            }
-        }
-    }
 
 }
 // scalastyle:on number.of.methods
