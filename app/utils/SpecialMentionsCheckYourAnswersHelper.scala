@@ -47,8 +47,8 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
         buildSectionRow(
           label = msg"addAnotherSpecialMention.specialMentionList.label".withArgs(referenceIndex.display),
           answer = answer,
-          id = Some(s"change-special-mentions-${itemIndex.display}-${referenceIndex.display}"),
-          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+          id = Some(s"change-special-mention-${referenceIndex.display}"),
+          call = specialMentionRoutes.SpecialMentionCheckYourAnswersController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
         )
     )
 

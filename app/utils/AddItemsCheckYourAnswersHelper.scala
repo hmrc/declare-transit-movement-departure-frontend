@@ -80,8 +80,8 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
         buildSectionRow(
           label = msg"addDocuments.documentList.label".withArgs(documentIndex.display),
           answer = label,
-          id = Some(s"change-document-${index.display}-${documentIndex.display}"),
-          call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, mode)
+          id = Some(s"change-document-${documentIndex.display}"),
+          call = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode)
         )
     )
 
@@ -236,8 +236,8 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
         buildSectionRow(
           label = msg"addAdministrativeReference.administrativeReferenceList.label".withArgs(referenceIndex.display),
           answer = answer,
-          id = Some(s"change-item-${index.display}-${referenceIndex.display}"),
-          call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode)
+          id = Some(s"change-reference-${referenceIndex.display}"),
+          call = previousReferencesRoutes.ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode)
         )
     )
 

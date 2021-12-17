@@ -256,6 +256,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
 
       "return Some(row)" - {
 
+        // TODO - investigate if this test needs changing
         "Option4 declaration type and first index" in {
 
           val answers = emptyUserAnswers
@@ -301,9 +302,9 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, mode).url,
+                  href = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, itemIndex, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"change-document-${documentIndex.display}")
                 )
               )
             )
@@ -1102,9 +1103,9 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    href = ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-item-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"change-reference-${referenceIndex.display}")
                   )
                 )
               )
@@ -1131,9 +1132,9 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    href = ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-item-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"change-reference-${referenceIndex.display}")
                   )
                 )
               )
