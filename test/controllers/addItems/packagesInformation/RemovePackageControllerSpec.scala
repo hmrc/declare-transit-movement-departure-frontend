@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package controllers.addItems
+package controllers.addItems.packagesInformation
 
 import base.{MockNunjucksRendererApp, SpecBase}
 import controllers.{routes => mainRoutes}
-import forms.addItems.AddExtraDocumentInformationFormProvider
+import forms.addItems.RemovePackageFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, UserAnswers}
-import navigation.annotations.addItems.AddItemsDocument
+import models.NormalMode
+import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.addItems.AddExtraDocumentInformationPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -39,66 +38,29 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class AddExtraDocumentInformationControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class RemovePackageControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AddExtraDocumentInformationFormProvider()
-  private val form         = formProvider(index)
-  private val template     = "addItems/addExtraDocumentInformation.njk"
+  private val formProvider = new RemovePackageFormProvider()
+  private val form         = formProvider(index.display)
+  private val template     = "addItems/removePackage.njk"
 
-  lazy val addExtraDocumentInformationRoute =
-    controllers.addItems.documents.routes.AddExtraDocumentInformationController.onPageLoad(lrn, index, documentIndex, NormalMode).url
+  lazy val removePackageRoute = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, index, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
 
-  "AddExtraDocumentInformation Controller" - {
+  "RemovePackage Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-
       dataRetrievalWithData(emptyUserAnswers)
-
-      val request        = FakeRequest(GET, addExtraDocumentInformationRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
-
-      val result = route(app, request).value
-
-      status(result) mustEqual OK
-
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj(
-        "form"          -> form,
-        "mode"          -> NormalMode,
-        "lrn"           -> lrn,
-        "index"         -> index.display,
-        "documentIndex" -> documentIndex.display,
-        "radios"        -> Radios.yesNo(form("value"))
-      )
-
-      val jsonWithoutConfig = jsonCaptor.getValue - configKey
-
-      templateCaptor.getValue mustEqual template
-      jsonWithoutConfig mustBe expectedJson
-
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = UserAnswers(lrn, eoriNumber).set(AddExtraDocumentInformationPage(index, documentIndex), true).success.value
-      dataRetrievalWithData(userAnswers)
-
-      val request        = FakeRequest(GET, addExtraDocumentInformationRoute)
+      val request        = FakeRequest(GET, removePackageRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -108,32 +70,28 @@ class AddExtraDocumentInformationControllerSpec extends SpecBase with MockNunjuc
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "true"))
-
       val expectedJson = Json.obj(
-        "form"          -> filledForm,
-        "mode"          -> NormalMode,
-        "lrn"           -> lrn,
-        "index"         -> index.display,
-        "documentIndex" -> documentIndex.display,
-        "radios"        -> Radios.yesNo(filledForm("value"))
+        "form"         -> form,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "radios"       -> Radios.yesNo(form("value"))
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
 
       templateCaptor.getValue mustEqual template
       jsonWithoutConfig mustBe expectedJson
-
     }
 
     "must redirect to the next page when valid data is submitted" in {
+      dataRetrievalWithData(emptyUserAnswers)
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
-
       val request =
-        FakeRequest(POST, addExtraDocumentInformationRoute)
+        FakeRequest(POST, removePackageRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -141,17 +99,14 @@ class AddExtraDocumentInformationControllerSpec extends SpecBase with MockNunjuc
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
-
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
+      dataRetrievalWithData(emptyUserAnswers)
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
-
-      val request        = FakeRequest(POST, addExtraDocumentInformationRoute).withFormUrlEncodedBody(("value", ""))
+      val request        = FakeRequest(POST, removePackageRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
@@ -163,33 +118,31 @@ class AddExtraDocumentInformationControllerSpec extends SpecBase with MockNunjuc
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"          -> boundForm,
-        "mode"          -> NormalMode,
-        "lrn"           -> lrn,
-        "index"         -> index.display,
-        "documentIndex" -> documentIndex.display,
-        "radios"        -> Radios.yesNo(boundForm("value"))
+        "form"         -> boundForm,
+        "itemIndex"    -> itemIndex.display,
+        "packageIndex" -> packageIndex.display,
+        "mode"         -> NormalMode,
+        "lrn"          -> lrn,
+        "radios"       -> Radios.yesNo(boundForm("value"))
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
 
       templateCaptor.getValue mustEqual template
       jsonWithoutConfig mustBe expectedJson
-
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
       dataRetrievalNoData()
 
-      val request = FakeRequest(GET, addExtraDocumentInformationRoute)
+      val request = FakeRequest(GET, removePackageRoute)
 
       val result = route(app, request).value
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
-
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
@@ -197,7 +150,7 @@ class AddExtraDocumentInformationControllerSpec extends SpecBase with MockNunjuc
       dataRetrievalNoData()
 
       val request =
-        FakeRequest(POST, addExtraDocumentInformationRoute)
+        FakeRequest(POST, removePackageRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(app, request).value
@@ -205,7 +158,6 @@ class AddExtraDocumentInformationControllerSpec extends SpecBase with MockNunjuc
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
-
     }
   }
 }

@@ -17,6 +17,8 @@
 package utils
 
 import controllers.addItems.containers.{routes => containerRoutes}
+import controllers.addItems.documents.{routes => documentRoutes}
+import controllers.addItems.packagesInformation.{routes => packageRoutes}
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.routes
 import controllers.addItems.securityDetails.{routes => securityDetailsRoutes}
@@ -62,26 +64,44 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
   }
 
   def documentRow(index: Index, documentIndex: Index, documentTypes: DocumentTypeList): Option[Row] =
-    getAnswerAndBuildDocumentRow(index, documentIndex, documentTypes)(
-      label =>
-        buildRemovableRow(
-          label = label,
-          id = s"document-${index.display}-${documentIndex.display}",
-          changeCall = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, mode),
-          removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, mode)
-        )
-    )
+    userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
+      answer =>
+        documentTypes.getDocumentType(answer).map {
+          documentType =>
+            val label = lit"(${documentType.code}) ${documentType.description}"
+
+            userAnswers.get(DeclarationTypePage) match {
+              case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
+                buildValuelessRow(
+                  label = label,
+                  id = Some(s"change-document-${documentIndex.display}"),
+                  call = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode)
+                )
+              case _ =>
+                buildRemovableRow(
+                  label = label,
+                  id = s"document-${documentIndex.display}",
+                  changeCall = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode),
+                  removeCall = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, mode)
+                )
+            }
+        }
+    }
 
   def documentSectionRow(index: Index, documentIndex: Index, documentTypes: DocumentTypeList): Option[Row] =
-    getAnswerAndBuildDocumentRow(index, documentIndex, documentTypes)(
-      label =>
-        buildSectionRow(
-          label = msg"addDocuments.documentList.label".withArgs(documentIndex.display),
-          answer = label,
-          id = Some(s"change-document-${index.display}-${documentIndex.display}"),
-          call = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, mode)
-        )
-    )
+    userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
+      answer =>
+        documentTypes.getDocumentType(answer).map {
+          documentType =>
+            val label = lit"(${documentType.code}) ${documentType.description}"
+            buildSectionRow(
+              label = msg"addDocuments.documentList.label".withArgs(documentIndex.display),
+              answer = label,
+              id = Some(s"change-document-${documentIndex.display}"),
+              call = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode)
+            )
+        }
+    }
 
   def itemRow(index: Index): Option[Row] = getAnswerAndBuildRemovableRow[String](
     page = ItemDescriptionPage(index),
@@ -234,8 +254,8 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
         buildSectionRow(
           label = msg"addAdministrativeReference.administrativeReferenceList.label".withArgs(referenceIndex.display),
           answer = answer,
-          id = Some(s"change-item-${index.display}-${referenceIndex.display}"),
-          call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode)
+          id = Some(s"change-reference-${referenceIndex.display}"),
+          call = previousReferencesRoutes.ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode)
         )
     )
 
@@ -246,8 +266,8 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
       buildRow = label =>
         buildRemovableRow(
           label = label,
-          id = s"reference-document-type-${index.display}-${referenceIndex.display}",
-          changeCall = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode),
+          id = s"reference-document-${referenceIndex.display}",
+          changeCall = previousReferencesRoutes.ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode),
           removeCall = previousReferencesRoutes.ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode)
         )
     )
@@ -274,15 +294,23 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = PackageTypePage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
     id = s"package-${packageIndex.display}",
-    changeCall = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode),
+    changeCall = controllers.addItems.packagesInformation.routes.PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode),
     removeCall = controllers.addItems.packagesInformation.routes.RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, mode)
+  )
+
+  def packageSectionRow(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildSectionRow[PackageType](
+    page = PackageTypePage(itemIndex, packageIndex),
+    formatAnswer = formatAsLiteral,
+    label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display),
+    id = Some(s"change-package-${packageIndex.display}"),
+    call = packageRoutes.PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
   def packageType(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[PackageType](
     page = PackageTypePage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
     prefix = "packageType",
-    id = Some(s"change-package-${packageIndex.display}"),
+    id = Some("change-package-type"),
     call = controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
@@ -290,7 +318,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = HowManyPackagesPage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
     prefix = "howManyPackages",
-    id = None,
+    id = Some("change-number-of-packages"),
     call = controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
@@ -298,8 +326,24 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     page = TotalPiecesPage(itemIndex, packageIndex),
     formatAnswer = formatAsLiteral,
     prefix = "totalPieces",
-    id = None,
+    id = Some("change-total-pieces"),
     call = controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, mode)
+  )
+
+  def addMark(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddMarkPage(itemIndex, packageIndex),
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addMark",
+    id = Some("change-add-mark"),
+    call = controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(lrn, itemIndex, packageIndex, mode)
+  )
+
+  def mark(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DeclareMarkPage(itemIndex, packageIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "declareMark",
+    id = Some("change-mark"),
+    call = controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(lrn, itemIndex, packageIndex, mode)
   )
 
   def addAnotherPackage(itemIndex: Index, content: Text): AddAnotherViewModel = {
@@ -407,6 +451,90 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     call = tradersSecurityDetailsRoutes.SecurityConsignorEoriController.onPageLoad(lrn, index, mode)
   )
 
+  def referenceTypeRow(index: Index, referenceIndex: Index, documents: PreviousReferencesDocumentTypeList): Option[Row] =
+    getAnswerAndBuildPreviousReferenceRow(
+      page = ReferenceTypePage(index, referenceIndex),
+      documents = documents,
+      buildRow = answer =>
+        buildRow(
+          prefix = "referenceType",
+          answer = answer,
+          id = Some("change-reference-type"),
+          call = previousReferencesRoutes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode)
+        )
+    )
+
+  def previousReferenceRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = PreviousReferencePage(index, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "previousReference",
+    id = Some("change-previous-reference"),
+    call = previousReferencesRoutes.PreviousReferenceController.onPageLoad(lrn, index, referenceIndex, mode)
+  )
+
+  def addExtraReferenceInformationRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddExtraInformationPage(index, referenceIndex),
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addExtraInformation",
+    id = Some("change-add-extra-reference-information"),
+    call = previousReferencesRoutes.AddExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode)
+  )
+
+  def extraReferenceInformationRow(index: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = ExtraInformationPage(index, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "extraInformation",
+    id = Some("change-extra-reference-information"),
+    call = previousReferencesRoutes.ExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode)
+  )
+
+  def tirCarnetReferenceRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = TIRCarnetReferencePage(itemIndex, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "tirCarnetReference",
+    id = Some("change-tir-carnet-reference"),
+    call = documentRoutes.TIRCarnetReferenceController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+  )
+
+  def documentTypeRow(itemIndex: Index, documentIndex: Index, documentTypes: DocumentTypeList): Option[Row] =
+    userAnswers.get(DocumentTypePage(itemIndex, documentIndex)).flatMap {
+      answer =>
+        documentTypes.getDocumentType(answer).map {
+          documentType =>
+            val label = lit"(${documentType.code}) ${documentType.description}"
+            buildRow(
+              prefix = "documentType",
+              answer = label,
+              id = Some("change-document-type"),
+              call = documentRoutes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, mode)
+            )
+        }
+    }
+
+  def documentReferenceRow(itemIndex: Index, documentIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DocumentReferencePage(itemIndex, documentIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "documentReference",
+    id = Some("change-document-reference"),
+    call = documentRoutes.DocumentReferenceController.onPageLoad(lrn, itemIndex, documentIndex, mode)
+  )
+
+  def addExtraDocumentInformationRow(itemIndex: Index, documentIndex: Index): Option[Row] = getAnswerAndBuildRow[Boolean](
+    page = AddExtraDocumentInformationPage(itemIndex, documentIndex),
+    formatAnswer = formatAsYesOrNo,
+    prefix = "addExtraDocumentInformation",
+    id = Some("change-add-extra-document-information"),
+    call = documentRoutes.AddExtraDocumentInformationController.onPageLoad(lrn, itemIndex, documentIndex, mode)
+  )
+
+  def extraDocumentInformationRow(itemIndex: Index, documentIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = DocumentExtraInformationPage(itemIndex, documentIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "documentExtraInformation",
+    id = Some("change-extra-document-information"),
+    call = documentRoutes.DocumentExtraInformationController.onPageLoad(lrn, itemIndex, documentIndex, mode)
+  )
+
   private def getAnswerAndBuildPreviousReferenceRow(
     page: QuestionPage[String],
     documents: PreviousReferencesDocumentTypeList,
@@ -418,32 +546,6 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
           buildRow(lit"(${doc.code}) ${doc.description.getOrElse("")}")
       }
   }
-
-  private def getAnswerAndBuildDocumentRow(
-    index: Index,
-    documentIndex: Index,
-    documentTypes: DocumentTypeList
-  )(
-    buildAlternativeRow: Text => Row
-  ): Option[Row] =
-    userAnswers.get(DocumentTypePage(index, documentIndex)).flatMap {
-      answer =>
-        documentTypes.getDocumentType(answer).map {
-          documentType =>
-            val label = lit"(${documentType.code}) ${documentType.description}"
-
-            userAnswers.get(DeclarationTypePage) match {
-              case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
-                buildValuelessRow(
-                  label = label,
-                  id = Some(s"change-document-${index.display}-${documentIndex.display}"),
-                  call = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, mode)
-                )
-              case _ =>
-                buildAlternativeRow(label)
-            }
-        }
-    }
 
 }
 // scalastyle:on number.of.methods

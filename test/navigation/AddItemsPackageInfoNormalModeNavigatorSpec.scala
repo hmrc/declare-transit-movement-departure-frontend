@@ -19,6 +19,7 @@ package navigation
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.containers.{routes => containerRoutes}
+import controllers.addItems.packagesInformation.{routes => packageRoutes}
 import controllers.addItems.specialMentions.{routes => specialMentionsRoutes}
 import generators.Generators
 import models.reference.PackageType
@@ -49,11 +50,11 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
             forAll(arbitrary[UserAnswers], arbitrary[PackageType]) {
               (answers, packageType) =>
                 val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
 
                 navigator
-                  .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.HowManyPackagesController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
+                  .nextPage(PackageTypePage(itemIndex, packageIndex), NormalMode, updatedAnswers)
+                  .mustBe(packageRoutes.HowManyPackagesController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
 
@@ -62,11 +63,11 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
             forAll(arbitrary[UserAnswers], arbitraryBulkPackageType.arbitrary) {
               (answers, packageType) =>
                 val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
 
                 navigator
-                  .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .nextPage(PackageTypePage(itemIndex, packageIndex), NormalMode, updatedAnswers)
+                  .mustBe(packageRoutes.AddMarkController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
 
@@ -75,11 +76,11 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
             forAll(arbitrary[UserAnswers], arbitraryUnPackedPackageType.arbitrary) {
               (answers, packageType) =>
                 val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
 
                 navigator
-                  .nextPage(PackageTypePage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.TotalPiecesController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .nextPage(PackageTypePage(itemIndex, packageIndex), NormalMode, updatedAnswers)
+                  .mustBe(packageRoutes.TotalPiecesController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
         }
@@ -88,12 +89,12 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
             forAll(arbitrary[UserAnswers], arbitrary[PackageType], arbitrary[Int]) {
               (answers, packageType, howManyPackages) =>
                 val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
-                  .set(HowManyPackagesPage(index, index), howManyPackages).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
+                  .set(HowManyPackagesPage(itemIndex, packageIndex), howManyPackages).success.value
 
                 navigator
-                  .nextPage(HowManyPackagesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .nextPage(HowManyPackagesPage(itemIndex, packageIndex), NormalMode, updatedAnswers)
+                  .mustBe(packageRoutes.DeclareMarkController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
 
@@ -105,8 +106,8 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
                   .set(TotalPackagesPage, totalPieces).success.value
 
                 navigator
-                  .nextPage(TotalPiecesPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.AddMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .nextPage(TotalPiecesPage(itemIndex, packageIndex), NormalMode, updatedAnswers)
+                  .mustBe(packageRoutes.AddMarkController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
         }
@@ -116,36 +117,36 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddMarkPage(index, index), true).success.value
+                  .set(AddMarkPage(itemIndex, packageIndex), true).success.value
 
                 navigator
-                  .nextPage(AddMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.DeclareMarkController.onPageLoad(answers.lrn, index, index, NormalMode))
+                  .nextPage(AddMarkPage(itemIndex, packageIndex), NormalMode, updatedAnswers)
+                  .mustBe(packageRoutes.DeclareMarkController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
-          "must go to AddAnotherPackage if answers if 'No'" in {
+          "must go to CYA if answers if 'No'" in {
             forAll(arbitrary[UserAnswers]) {
               answers =>
                 val updatedAnswers = answers
-                  .set(AddMarkPage(index, index), false).success.value
+                  .set(AddMarkPage(itemIndex, packageIndex), false).success.value
 
                 navigator
-                  .nextPage(AddMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
+                  .nextPage(AddMarkPage(itemIndex, packageIndex), NormalMode, updatedAnswers)
+                  .mustBe(packageRoutes.PackageCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
         }
 
         "DeclareMark" - {
-          "must go to AddAnotherPackage" in {
+          "must go to CYA" in {
             forAll(arbitrary[UserAnswers], arbitrary[String]) {
               (answers, declareMark) =>
                 val updatedAnswers = answers
-                  .set(DeclareMarkPage(index, index), declareMark).success.value
+                  .set(DeclareMarkPage(itemIndex, packageIndex), declareMark).success.value
 
                 navigator
-                  .nextPage(DeclareMarkPage(index, index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
+                  .nextPage(DeclareMarkPage(itemIndex, packageIndex), NormalMode, updatedAnswers)
+                  .mustBe(packageRoutes.PackageCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, packageIndex, NormalMode))
             }
           }
         }
@@ -155,14 +156,14 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
             forAll(arbitrary[UserAnswers], arbitrary[PackageType]) {
               (answers, packageType) =>
                 val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
                   .set(AddAnotherPackagePage(index), true).success.value
 
                 val nextPackageIndex = Index(index.position + 1)
 
                 navigator
                   .nextPage(AddAnotherPackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, NormalMode))
+                  .mustBe(packageRoutes.PackageTypeController.onPageLoad(answers.lrn, index, nextPackageIndex, NormalMode))
             }
           }
 
@@ -217,13 +218,13 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
             forAll(arbitrary[UserAnswers], arbitrary[PackageType]) {
               (answers, packageType) =>
                 val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
-                  .set(PackageTypePage(index, index), packageType).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
                   .set(AddAnotherPackagePage(index), true).success.value
                   .set(RemovePackagePage(index), false).success.value
                 navigator
                   .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
+                  .mustBe(packageRoutes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
@@ -231,23 +232,23 @@ class AddItemsPackageInfoNormalModeNavigatorSpec extends SpecBase with ScalaChec
             forAll(arbitrary[UserAnswers], arbitrary[PackageType]) {
               (answers, packageType) =>
                 val updatedAnswers = answers
-                  .set(PackageTypePage(index, index), packageType).success.value
-                  .set(PackageTypePage(index, index), packageType).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
+                  .set(PackageTypePage(itemIndex, packageIndex), packageType).success.value
                   .set(AddAnotherPackagePage(index), true).success.value
                   .set(RemovePackagePage(index), true).success.value
                 navigator
                   .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-                  .mustBe(controllers.addItems.packagesInformation.routes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
+                  .mustBe(packageRoutes.AddAnotherPackageController.onPageLoad(answers.lrn, index, NormalMode))
             }
           }
 
           "must go to PackageType page when 'Yes' is selected and all the packages are removed" in {
             val updatedAnswers = emptyUserAnswers
-              .remove(PackagesQuery(index, index)).success.value
+              .remove(PackagesQuery(itemIndex, packageIndex)).success.value
               .set(RemovePackagePage(index), true).success.value
             navigator
               .nextPage(RemovePackagePage(index), NormalMode, updatedAnswers)
-              .mustBe(controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(updatedAnswers.lrn, index, index, NormalMode))
+              .mustBe(packageRoutes.PackageTypeController.onPageLoad(updatedAnswers.lrn, itemIndex, packageIndex, NormalMode))
           }
         }
 

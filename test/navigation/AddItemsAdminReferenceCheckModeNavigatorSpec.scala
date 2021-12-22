@@ -41,11 +41,11 @@ class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCh
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswers = answers
-            .set(AddAdministrativeReferencePage(index), false).success.value
+            .set(AddAdministrativeReferencePage(itemIndex), false).success.value
             .set(AddSecurityDetailsPage, false).success.value
           navigator
-            .nextPage(AddAdministrativeReferencePage(index), CheckMode, updatedAnswers)
-            .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, index))
+            .nextPage(AddAdministrativeReferencePage(itemIndex), CheckMode, updatedAnswers)
+            .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(updatedAnswers.lrn, itemIndex))
       }
     }
 
@@ -53,8 +53,8 @@ class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCh
       forAll(arbitrary[UserAnswers]) {
         answers =>
           navigator
-            .nextPage(ReferenceTypePage(index, referenceIndex), CheckMode, answers)
-            .mustBe(previousReferenceRoutes.PreviousReferenceController.onPageLoad(answers.lrn, index, referenceIndex, CheckMode))
+            .nextPage(ReferenceTypePage(itemIndex, referenceIndex), CheckMode, answers)
+            .mustBe(previousReferenceRoutes.PreviousReferenceController.onPageLoad(answers.lrn, itemIndex, referenceIndex, CheckMode))
       }
     }
 
@@ -62,41 +62,41 @@ class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCh
       forAll(arbitrary[UserAnswers]) {
         answers =>
           navigator
-            .nextPage(PreviousReferencePage(index, referenceIndex), CheckMode, answers)
-            .mustBe(previousReferenceRoutes.AddExtraInformationController.onPageLoad(answers.lrn, index, referenceIndex, CheckMode))
+            .nextPage(PreviousReferencePage(itemIndex, referenceIndex), CheckMode, answers)
+            .mustBe(previousReferenceRoutes.AddExtraInformationController.onPageLoad(answers.lrn, itemIndex, referenceIndex, CheckMode))
       }
     }
 
     "must go from 'add extra information' page to 'extra information' page on selecting 'Yes'" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
-          val updatedAnswer = answers.set(AddExtraInformationPage(index, referenceIndex), true).success.value
+          val updatedAnswer = answers.set(AddExtraInformationPage(itemIndex, referenceIndex), true).success.value
 
           navigator
-            .nextPage(AddExtraInformationPage(index, referenceIndex), CheckMode, updatedAnswer)
-            .mustBe(previousReferenceRoutes.ExtraInformationController.onPageLoad(answers.lrn, index, referenceIndex, CheckMode))
+            .nextPage(AddExtraInformationPage(itemIndex, referenceIndex), CheckMode, updatedAnswer)
+            .mustBe(previousReferenceRoutes.ExtraInformationController.onPageLoad(answers.lrn, itemIndex, referenceIndex, CheckMode))
       }
     }
 
-    "must go from 'add extra information' page to 'Add another reference' page on selecting 'No'" in {
+    "must go from 'add extra information' page to 'CYA' page on selecting 'No'" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
-          val updatedAnswer = answers.set(AddExtraInformationPage(index, referenceIndex), false).success.value
+          val updatedAnswer = answers.set(AddExtraInformationPage(itemIndex, referenceIndex), false).success.value
 
           navigator
-            .nextPage(AddExtraInformationPage(index, referenceIndex), CheckMode, updatedAnswer)
-            .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.lrn, index, CheckMode))
+            .nextPage(AddExtraInformationPage(itemIndex, referenceIndex), CheckMode, updatedAnswer)
+            .mustBe(previousReferenceRoutes.ReferenceCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, referenceIndex, CheckMode))
       }
     }
 
-    "must go from 'extra information' page to 'Add another reference' page" in {
+    "must go from 'extra information' page to 'CYA' page" in {
       forAll(arbitrary[UserAnswers]) {
         answers =>
-          val updatedAnswer = answers.set(ExtraInformationPage(index, referenceIndex), "text").success.value
+          val updatedAnswer = answers.set(ExtraInformationPage(itemIndex, referenceIndex), "text").success.value
 
           navigator
-            .nextPage(ExtraInformationPage(index, referenceIndex), CheckMode, updatedAnswer)
-            .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(answers.lrn, index, CheckMode))
+            .nextPage(ExtraInformationPage(itemIndex, referenceIndex), CheckMode, updatedAnswer)
+            .mustBe(previousReferenceRoutes.ReferenceCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex, referenceIndex, CheckMode))
       }
     }
 
@@ -104,12 +104,12 @@ class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCh
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswer = answers
-            .remove(PreviousReferencesQuery(index)).success.value
-            .set(AddAnotherPreviousAdministrativeReferencePage(index), true).success.value
+            .remove(PreviousReferencesQuery(itemIndex)).success.value
+            .set(AddAnotherPreviousAdministrativeReferencePage(itemIndex), true).success.value
 
           navigator
-            .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), CheckMode, updatedAnswer)
-            .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.lrn, index, index, CheckMode))
+            .nextPage(AddAnotherPreviousAdministrativeReferencePage(itemIndex), CheckMode, updatedAnswer)
+            .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(answers.lrn, itemIndex, referenceIndex, CheckMode))
       }
     }
 
@@ -117,12 +117,12 @@ class AddItemsAdminReferenceCheckModeNavigatorSpec extends SpecBase with ScalaCh
       forAll(arbitrary[UserAnswers]) {
         answers =>
           val updatedAnswer = answers
-            .remove(PreviousReferencesQuery(index)).success.value
-            .set(AddAnotherPreviousAdministrativeReferencePage(index), false).success.value
+            .remove(PreviousReferencesQuery(itemIndex)).success.value
+            .set(AddAnotherPreviousAdministrativeReferencePage(itemIndex), false).success.value
 
           navigator
-            .nextPage(AddAnotherPreviousAdministrativeReferencePage(index), CheckMode, updatedAnswer)
-            .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, index))
+            .nextPage(AddAnotherPreviousAdministrativeReferencePage(itemIndex), CheckMode, updatedAnswer)
+            .mustBe(routes.ItemsCheckYourAnswersController.onPageLoad(answers.lrn, itemIndex))
       }
     }
 

@@ -33,8 +33,8 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
       buildRow = label =>
         buildRemovableRow(
           label = label,
-          id = s"special-mentions-${itemIndex.display}-${referenceIndex.display}",
-          changeCall = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
+          id = s"special-mention-${referenceIndex.display}",
+          changeCall = specialMentionRoutes.SpecialMentionCheckYourAnswersController.onPageLoad(lrn, itemIndex, referenceIndex, mode),
           removeCall = specialMentionRoutes.RemoveSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, mode)
         )
     )
@@ -47,8 +47,8 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
         buildSectionRow(
           label = msg"addAnotherSpecialMention.specialMentionList.label".withArgs(referenceIndex.display),
           answer = answer,
-          id = Some(s"change-special-mentions-${itemIndex.display}-${referenceIndex.display}"),
-          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+          id = Some(s"change-special-mention-${referenceIndex.display}"),
+          call = specialMentionRoutes.SpecialMentionCheckYourAnswersController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
         )
     )
 
@@ -58,6 +58,27 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     prefix = "addSpecialMention",
     id = None,
     call = specialMentionRoutes.AddSpecialMentionController.onPageLoad(lrn, itemIndex, mode)
+  )
+
+  def specialMentionTypeRow(itemIndex: Index, referenceIndex: Index, specialMentions: SpecialMentionList): Option[Row] =
+    getAnswerAndBuildSpecialMentionRow(
+      page = SpecialMentionTypePage(itemIndex, referenceIndex),
+      specialMentions = specialMentions,
+      buildRow = answer =>
+        buildRow(
+          prefix = "specialMentionType",
+          answer = answer,
+          id = Some("change-special-mention-type"),
+          call = specialMentionRoutes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
+        )
+    )
+
+  def specialMentionAdditionalInfoRow(itemIndex: Index, referenceIndex: Index): Option[Row] = getAnswerAndBuildRow[String](
+    page = SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex),
+    formatAnswer = formatAsLiteral,
+    prefix = "specialMentionAdditionalInfo",
+    id = Some("change-special-mention-additional-information"),
+    call = specialMentionRoutes.SpecialMentionAdditionalInfoController.onPageLoad(lrn, itemIndex, referenceIndex, mode)
   )
 
   def addAnother(itemIndex: Index, content: Text): AddAnotherViewModel = {

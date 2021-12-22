@@ -70,6 +70,11 @@ guaranteeDetails.preHeading = Guarantee details
 items.preHeading = Items
 safetyAndSecurity.preHeading = Safety and security
 
+package.preHeading = Packages
+specialMention.preHeading = Special mentions
+document.preHeading = Produced documents and work certificates
+reference.preHeading = Previous administrative references
+
 routeDetailsCheckYourAnswers.heading = Check your answers
 routeDetailsCheckYourAnswers.title = Check your answers
 
@@ -616,10 +621,12 @@ totalPieces.checkYourAnswersLabel = Number of pieces
 
 addMark.title = Do you need to add a mark or number for package {0}?
 addMark.heading = Do you need to add a mark or number for package {0}?
+addMark.checkYourAnswersLabel = Add a mark?
 addMark.error.required = Select yes if you need to add a mark or number for package {0}
 
 declareMark.title = What is the mark or number for package {0}?
 declareMark.heading = What is the mark or number for package {0}?
+declareMark.checkYourAnswersLabel = Mark or number
 declareMark.error.required = Enter the mark or number for package {0}
 declareMark.error.length = The mark or number for package {0} must be {1} characters or less
 declareMark.error.emptyNumberOfPackages = Mark or number for package {0} must be 1 or more
@@ -655,6 +662,9 @@ howManyPackages.error.nonNumeric = How many packages have been used for item {0}
 howManyPackages.error.required = Enter how many packages have been used for item {0}
 howManyPackages.error.wholeNumber = Enter how many packages have been used for item {0} using whole numbers
 howManyPackages.error.outOfRange = The packages used for item {0} must be between {1} and {2}
+
+packageCheckYourAnswers.title = Check your answers
+packageCheckYourAnswers.heading = Check your answers
 
 removePackage.title = Are you sure you want to remove package {0}?
 removePackage.heading = Are you sure you want to remove package {0}?
@@ -790,19 +800,19 @@ addAdministrativeReference.administrativeReferenceList.label = Proof of customs 
 
 referenceType.title = What type of reference do you want to add?
 referenceType.heading = What type of reference do you want to add?
-referenceType.checkYourAnswersLabel = referenceType
+referenceType.checkYourAnswersLabel = Reference type
 referenceType.error.required = Enter the type of reference you want to add
 
 previousReference.title = What is the previous document reference?
 previousReference.heading = What is the previous document reference?
-previousReference.checkYourAnswersLabel = What is the previous document reference?
+previousReference.checkYourAnswersLabel = Previous document reference
 previousReference.error.required = Enter the previous document reference
 previousReference.error.invalidCharacters = The previous document reference must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
 previousReference.error.length = The previous document reference must be 35 characters or less
 
 addExtraInformation.title = Do you need to add any extra information for this document?
 addExtraInformation.heading = Do you need to add any extra information for this document?
-addExtraInformation.checkYourAnswersLabel = addExtraInformation
+addExtraInformation.checkYourAnswersLabel = Add extra information?
 addExtraInformation.error.required = Select yes if you need to add any extra information for this document
 
 addAnotherPreviousAdministrativeReference.title.singular = You have added 1 previous administrative reference
@@ -814,10 +824,13 @@ addAnotherPreviousAdministrativeReference.error.required = Select yes if you nee
 
 extraInformation.title = What extra information for this document do you need to add?
 extraInformation.heading = What extra information for this document do you need to add?
-extraInformation.checkYourAnswersLabel = extraInformation
+extraInformation.checkYourAnswersLabel = Extra information
 extraInformation.error.required = Enter the extra information for this document
 extraInformation.error.length = The extra information for this document must be 26 characters or less
 extraInformation.error.invalid = The extra information for this document must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+
+referenceCheckYourAnswers.title = Check your answers
+referenceCheckYourAnswers.heading = Check your answers
 
 confirmRemovePreviousAdministrativeReference.title = Are you sure you want to remove this previous administrative reference?
 confirmRemovePreviousAdministrativeReference.heading = Are you sure you want to remove this previous administrative reference?
@@ -834,13 +847,17 @@ specialMentionType.title = What type of special mention do you want to add for i
 specialMentionType.heading = What type of special mention do you want to add for item {0}?
 specialMentionType.error.required = Enter the type of special mention that you want to add for item {0}
 specialMentionType.error.length = SpecialMentionType must be 100 characters or less
-specialMentionType.checkYourAnswersLabel = Special mention {0}
+specialMentionType.checkYourAnswersLabel = Special mention type
 
 specialMentionAdditionalInfo.title = What information do you need to add for special mention {0} for item {1}?
 specialMentionAdditionalInfo.heading = What information do you need to add for special mention {0} for item {1}?
 specialMentionAdditionalInfo.error.required = Enter the information you need to add for special mention {0} for item {1}
 specialMentionAdditionalInfo.error.length = The information you need to add for special mention {0} for item {1} must be 70 characters or less
 specialMentionAdditionalInfo.error.invalid = The information you need to add for special mention {0} for item {1} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
+specialMentionAdditionalInfo.checkYourAnswersLabel = Additional information
+
+specialMentionCheckYourAnswers.title = Check your answers
+specialMentionCheckYourAnswers.heading = Check your answers
 
 addAnotherSpecialMention.title.singular = You have added 1 special mention for item {0}
 addAnotherSpecialMention.title.plural = You have added {0} special mentions for item {1}
@@ -875,6 +892,7 @@ addAnotherContainer.containerList.label = Shipping container {0}
 addExtraDocumentInformation.title = Do you need to add any extra information for document {0}?
 addExtraDocumentInformation.heading = Do you need to add any extra information for document {0}?
 addExtraDocumentInformation.error.required = Select yes if you need to add any extra information for document {0}
+addExtraDocumentInformation.checkYourAnswersLabel = Add extra information?
 
 addDocuments.title = Do you need to add any produced documents or work certificates for item {0}?
 addDocuments.heading = Do you need to add any produced documents or work certificates for item {0}?
@@ -892,7 +910,7 @@ documentReference.error.length = The document reference must be 35 characters or
 
 documentExtraInformation.title = What extra information do you need to add for document {0}?
 documentExtraInformation.heading = What extra information do you need to add for document {0}?
-documentExtraInformation.checkYourAnswersLabel = Extra information for document {0}
+documentExtraInformation.checkYourAnswersLabel = Extra information
 documentExtraInformation.error.required = Enter the extra information for document {0}
 documentExtraInformation.error.length = Document extra information must be 26 characters or less
 documentExtraInformation.error.invalid = The extra information for this document must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
@@ -912,6 +930,9 @@ documentType.title = What type of document do you need to add?
 documentType.heading = What type of document do you need to add?
 documentType.checkYourAnswersLabel = Document type
 documentType.error.required = Enter the type of document you need to add
+
+documentCheckYourAnswers.title = Check your answers
+documentCheckYourAnswers.heading = Check your answers
 
 submissionConfirmation.title = Departure declaration sent
 submissionConfirmation.heading = Departure declaration sent

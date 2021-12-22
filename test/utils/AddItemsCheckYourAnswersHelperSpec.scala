@@ -182,9 +182,9 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, mode).url,
+                  href = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"change-document-${documentIndex.display}")
                 )
               )
             )
@@ -209,15 +209,15 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, mode).url,
+                  href = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"change-document-${documentIndex.display}")
                 ),
                 Action(
                   content = msg"site.delete",
                   href = controllers.addItems.documents.routes.ConfirmRemoveDocumentController.onPageLoad(lrn, index, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"remove-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"remove-document-${documentIndex.display}")
                 )
               )
             )
@@ -265,18 +265,18 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
           val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
           val result = helper.documentSectionRow(index, referenceIndex, DocumentTypeList(Seq(document)))
 
-          val label = lit"(${document.code}) ${document.description}"
+          val label = msg"addDocuments.documentList.label".withArgs(documentIndex.display)
 
           result mustBe Some(
             Row(
-              key = Key(label),
-              value = Value(lit""),
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"(${document.code}) ${document.description}"),
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.addItems.documents.routes.TIRCarnetReferenceController.onPageLoad(lrn, index, documentIndex, mode).url,
+                  href = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, index, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"change-document-${documentIndex.display}")
                 )
               )
             )
@@ -301,9 +301,9 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, documentIndex, mode).url,
+                  href = controllers.addItems.documents.routes.DocumentCheckYourAnswersController.onPageLoad(lrn, itemIndex, documentIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-document-${index.display}-${documentIndex.display}")
+                  attributes = Map("id" -> s"change-document-${documentIndex.display}")
                 )
               )
             )
@@ -1102,9 +1102,9 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    href = ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-item-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"change-reference-${referenceIndex.display}")
                   )
                 )
               )
@@ -1131,9 +1131,9 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    href = ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-item-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"change-reference-${referenceIndex.display}")
                   )
                 )
               )
@@ -1193,15 +1193,15 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    href = ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-reference-document-type-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"change-reference-document-${referenceIndex.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"remove-reference-document-${referenceIndex.display}")
                   )
                 )
               )
@@ -1228,15 +1228,15 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 actions = List(
                   Action(
                     content = msg"site.edit",
-                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    href = ReferenceCheckYourAnswersController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"change-reference-document-type-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"change-reference-document-${referenceIndex.display}")
                   ),
                   Action(
                     content = msg"site.delete",
                     href = ConfirmRemovePreviousAdministrativeReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
                     visuallyHiddenText = Some(label),
-                    attributes = Map("id" -> s"remove-reference-document-type-${index.display}-${referenceIndex.display}")
+                    attributes = Map("id" -> s"remove-reference-document-${referenceIndex.display}")
                   )
                 )
               )
@@ -1356,7 +1356,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               actions = List(
                 Action(
                   content = msg"site.edit",
-                  href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  href = PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"change-package-${packageIndex.display}")
                 ),
@@ -1365,6 +1365,51 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   href = RemovePackageController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
                   visuallyHiddenText = Some(label),
                   attributes = Map("id" -> s"remove-package-${packageIndex.display}")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "packageSectionRow" - {
+
+      val description: String      = "DESCRIPTION"
+      val code: String             = "CODE"
+      val packageType: PackageType = PackageType(code, description)
+
+      "return None" - {
+        "PackageTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.packageSectionRow(itemIndex, packageIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "PackageTypePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(PackageTypePage(itemIndex, packageIndex))(packageType)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.packageSectionRow(itemIndex, packageIndex)
+
+          val label = msg"addAnotherPackage.packageList.label".withArgs(packageIndex.display)
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$description ($code)"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = PackageCheckYourAnswersController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-package-${packageIndex.display}")
                 )
               )
             )
@@ -1407,7 +1452,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
                   visuallyHiddenText = Some(label),
-                  attributes = Map("id" -> s"change-package-${packageIndex.display}")
+                  attributes = Map("id" -> s"change-package-type")
                 )
               )
             )
@@ -1449,7 +1494,8 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 Action(
                   content = msg"site.edit",
                   href = HowManyPackagesController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
-                  visuallyHiddenText = Some(label)
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-number-of-packages")
                 )
               )
             )
@@ -1491,7 +1537,92 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                 Action(
                   content = msg"site.edit",
                   href = TotalPiecesController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
-                  visuallyHiddenText = Some(label)
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> s"change-total-pieces")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "addMark" - {
+
+      "return None" - {
+        "AddMarkPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addMark(itemIndex, packageIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "AddMarkPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddMarkPage(itemIndex, packageIndex))(true)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addMark(itemIndex, packageIndex)
+
+          val label = msg"addMark.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(msg"site.yes"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = AddMarkController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-add-mark")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "mark" - {
+
+      val markOrNumber: String = "mark"
+
+      "return None" - {
+        "DeclareMarkPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.mark(itemIndex, packageIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "DeclareMarkPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DeclareMarkPage(itemIndex, packageIndex))(markOrNumber)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.mark(itemIndex, packageIndex)
+
+          val label = msg"declareMark.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$markOrNumber"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = DeclareMarkController.onPageLoad(lrn, itemIndex, packageIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-mark")
                 )
               )
             )
@@ -2005,6 +2136,445 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
                   content = msg"site.edit",
                   href = SecurityConsignorEoriController.onPageLoad(lrn, index, mode).url,
                   visuallyHiddenText = Some(label)
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "referenceTypeRow" - {
+
+      val code = "code"
+
+      "return None" - {
+
+        "ReferenceTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.referenceTypeRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+          result mustBe None
+        }
+
+        "reference type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(code)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.referenceTypeRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Nil))
+
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "ReferenceTypePage defined at index" - {
+
+          "description defined" in {
+
+            val description = "description"
+            val reference   = PreviousReferencesDocumentType(code, Some(description))
+
+            val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(code)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+            val result = helper.referenceTypeRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Seq(reference)))
+
+            val label = msg"referenceType.checkYourAnswersLabel"
+
+            result mustBe Some(
+              Row(
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
+                value = Value(lit"($code) $description"),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    visuallyHiddenText = Some(label),
+                    attributes = Map("id" -> "change-reference-type")
+                  )
+                )
+              )
+            )
+          }
+
+          "description not defined" in {
+
+            val reference = PreviousReferencesDocumentType(code, None)
+
+            val answers = emptyUserAnswers.unsafeSetVal(ReferenceTypePage(index, referenceIndex))(code)
+
+            val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+            val result = helper.referenceTypeRow(index, referenceIndex, PreviousReferencesDocumentTypeList(Seq(reference)))
+
+            val label = msg"referenceType.checkYourAnswersLabel"
+
+            result mustBe Some(
+              Row(
+                key = Key(label, classes = Seq("govuk-!-width-one-half")),
+                value = Value(lit"(${reference.code}) "),
+                actions = List(
+                  Action(
+                    content = msg"site.edit",
+                    href = ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                    visuallyHiddenText = Some(label),
+                    attributes = Map("id" -> "change-reference-type")
+                  )
+                )
+              )
+            )
+          }
+        }
+      }
+    }
+
+    "previousReferenceRow" - {
+
+      val reference: String = "REFERENCE"
+
+      "return None" - {
+        "PreviousReferencePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.previousReferenceRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "PreviousReferencePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(PreviousReferencePage(index, referenceIndex))(reference)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.previousReferenceRow(index, referenceIndex)
+
+          val label = msg"previousReference.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$reference"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = PreviousReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-previous-reference")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "addExtraReferenceInformationRow" - {
+
+      "return None" - {
+        "AddExtraInformationPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addExtraReferenceInformationRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "AddExtraInformationPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddExtraInformationPage(index, referenceIndex))(true)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addExtraReferenceInformationRow(index, referenceIndex)
+
+          val label = msg"addExtraInformation.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(msg"site.yes"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = AddExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-add-extra-reference-information")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "extraReferenceInformationRow" - {
+
+      val extraInfo: String = "INFO"
+
+      "return None" - {
+        "ExtraInformationPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.extraReferenceInformationRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "ExtraInformationPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(ExtraInformationPage(index, referenceIndex))(extraInfo)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.extraReferenceInformationRow(index, referenceIndex)
+
+          val label = msg"extraInformation.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$extraInfo"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = ExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-extra-reference-information")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "tirCarnetReferenceRow" - {
+
+      val reference: String = "REFERENCE"
+
+      "return None" - {
+        "TIRCarnetReferencePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.tirCarnetReferenceRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "TIRCarnetReferencePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(TIRCarnetReferencePage(index, referenceIndex))(reference)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.tirCarnetReferenceRow(index, referenceIndex)
+
+          val label = msg"tirCarnetReference.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$reference"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = TIRCarnetReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-tir-carnet-reference")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "documentTypeRow" - {
+
+      val documentCode: String   = "DOCUMENT CODE"
+      val document: DocumentType = DocumentType(documentCode, "DESCRIPTION", transportDocument = true)
+
+      "return None" - {
+
+        "DocumentTypePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentTypeRow(index, referenceIndex, DocumentTypeList(Nil))
+          result mustBe None
+        }
+
+        "document type not found" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentTypeRow(index, referenceIndex, DocumentTypeList(Nil))
+
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "DocumentTypePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentTypePage(index, referenceIndex))(documentCode)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentTypeRow(index, referenceIndex, DocumentTypeList(Seq(document)))
+
+          val label = msg"documentType.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"(${document.code}) ${document.description}"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = DocumentTypeController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-document-type")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "documentReferenceRow" - {
+
+      val reference: String = "REFERENCE"
+
+      "return None" - {
+        "DocumentReferencePage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentReferenceRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "DocumentReferencePage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentReferencePage(index, referenceIndex))(reference)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.documentReferenceRow(index, referenceIndex)
+
+          val label = msg"documentReference.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$reference"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = DocumentReferenceController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-document-reference")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "addExtraDocumentInformationRow" - {
+
+      "return None" - {
+        "AddExtraDocumentInformationPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addExtraDocumentInformationRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "AddExtraDocumentInformationPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(AddExtraDocumentInformationPage(index, referenceIndex))(true)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addExtraDocumentInformationRow(index, referenceIndex)
+
+          val label = msg"addExtraDocumentInformation.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(msg"site.yes"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = AddExtraDocumentInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-add-extra-document-information")
+                )
+              )
+            )
+          )
+        }
+      }
+    }
+
+    "extraDocumentInformationRow" - {
+
+      val information: String = "INFORMATION"
+
+      "return None" - {
+        "DocumentExtraInformationPage undefined at index" in {
+
+          val answers = emptyUserAnswers
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.extraDocumentInformationRow(index, referenceIndex)
+          result mustBe None
+        }
+      }
+
+      "return Some(row)" - {
+        "DocumentExtraInformationPage defined at index" in {
+
+          val answers = emptyUserAnswers.unsafeSetVal(DocumentExtraInformationPage(index, referenceIndex))(information)
+
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.extraDocumentInformationRow(index, referenceIndex)
+
+          val label = msg"documentExtraInformation.checkYourAnswersLabel"
+
+          result mustBe Some(
+            Row(
+              key = Key(label, classes = Seq("govuk-!-width-one-half")),
+              value = Value(lit"$information"),
+              actions = List(
+                Action(
+                  content = msg"site.edit",
+                  href = DocumentExtraInformationController.onPageLoad(lrn, index, referenceIndex, mode).url,
+                  visuallyHiddenText = Some(label),
+                  attributes = Map("id" -> "change-extra-document-information")
                 )
               )
             )

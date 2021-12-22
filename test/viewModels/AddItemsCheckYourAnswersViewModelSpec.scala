@@ -18,7 +18,7 @@ package viewModels
 
 import base.SpecBase
 import models.reference._
-import models.{DocumentTypeList, Index, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
+import models.{DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
@@ -91,37 +91,12 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
 
     "packages section have title and contain all rows when package type is not unpacked" in {
       data.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
-      data.sections(3).rows.length mustEqual 2
+      data.sections(3).rows.length mustEqual 1
     }
 
     "packages section have title and contain all rows when package type is unpacked" in {
       dataWithUnpackedPackages.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
-      dataWithUnpackedPackages.sections(3).rows.length mustEqual 2
-    }
-
-    "packages sections must have section for each package" in {
-      val answers = (0 to 2).foldLeft(emptyUserAnswers)((acc, i) => {
-        acc
-          .set(PackageTypePage(index, Index(i)), PackageType("AB", "Description") ).success.value
-          .set(HowManyPackagesPage(index, Index(i)), 1).success.value
-      })
-
-      val result = viewModel(answers)
-
-      result.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
-      result.sections(3).sectionSubTitle.get mustBe msg"addAnotherPackage.packageList.label".withArgs(1)
-      result.sections(3).rows.length mustEqual 2
-      result.sections(3).addAnother mustNot be(defined)
-
-      result.sections(4).sectionTitle mustNot be(defined)
-      result.sections(4).sectionSubTitle.get mustBe msg"addAnotherPackage.packageList.label".withArgs(2)
-      result.sections(4).rows.length mustEqual 2
-      result.sections(4).addAnother mustNot be(defined)
-
-      result.sections(5).sectionTitle mustNot be(defined)
-      result.sections(5).sectionSubTitle.get mustBe msg"addAnotherPackage.packageList.label".withArgs(3)
-      result.sections(5).rows.length mustEqual 2
-      result.sections(5).addAnother.get.content mustBe msg"addItems.checkYourAnswersLabel.packages.addRemove"
+      dataWithUnpackedPackages.sections(3).rows.length mustEqual 1
     }
   }
 

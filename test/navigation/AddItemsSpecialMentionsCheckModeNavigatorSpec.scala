@@ -33,80 +33,74 @@ class AddItemsSpecialMentionsCheckModeNavigatorSpec extends SpecBase with ScalaC
 
     "in check mode" - {
 
-      "must go from SpecialMentionAdditionalInfoPage to AddAnotherSpecialMentionController" in {
-        navigator
-          .nextPage(SpecialMentionAdditionalInfoPage(index, itemIndex), CheckMode, emptyUserAnswers)
-          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, CheckMode))
-      }
-
       "must go from AddSpecialMentionPage to SpecialMentionTypeController when" - {
 
         "AddSpecialMentionPage is true and no special mentions exist" in {
-          val userAnswers = emptyUserAnswers.set(AddSpecialMentionPage(index), true).success.value
+          val userAnswers = emptyUserAnswers.set(AddSpecialMentionPage(itemIndex), true).success.value
 
           navigator
-            .nextPage(AddSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, index, index, CheckMode))
+            .nextPage(AddSpecialMentionPage(itemIndex), CheckMode, userAnswers)
+            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, CheckMode))
         }
 
         "AddSpecialMentionPage is true and 1 special mention exists" in {
 
           val userAnswers = emptyUserAnswers
-            .set(AddSpecialMentionPage(index), true)
+            .set(AddSpecialMentionPage(itemIndex), true)
             .success
             .value
-            .set(SpecialMentionTypePage(index, index), "value")
+            .set(SpecialMentionTypePage(itemIndex, referenceIndex), "value")
             .success
             .value
 
           navigator
-            .nextPage(AddSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, index, CheckMode))
+            .nextPage(AddSpecialMentionPage(itemIndex), CheckMode, userAnswers)
+            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, CheckMode))
         }
 
         "AddSpecialMentionPage is false" in {
 
           val userAnswers = emptyUserAnswers
-            .set(AddSpecialMentionPage(index), false)
+            .set(AddSpecialMentionPage(itemIndex), false)
             .success
             .value
 
           navigator
-            .nextPage(AddSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
+            .nextPage(AddSpecialMentionPage(itemIndex), CheckMode, userAnswers)
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex))
         }
       }
 
       "must go from SpecialMentionType to SpecialMentionAdditionalInfo" in {
         navigator
-          .nextPage(SpecialMentionTypePage(index, index), CheckMode, emptyUserAnswers)
-          .mustBe(routes.SpecialMentionAdditionalInfoController.onPageLoad(emptyUserAnswers.lrn, index, index, CheckMode))
+          .nextPage(SpecialMentionTypePage(itemIndex, referenceIndex), CheckMode, emptyUserAnswers)
+          .mustBe(routes.SpecialMentionAdditionalInfoController.onPageLoad(emptyUserAnswers.lrn, itemIndex, referenceIndex, CheckMode))
       }
 
       "must go from SpecialMentionAdditionalInfo to AddAnotherSpecialMention" in {
         navigator
-          .nextPage(SpecialMentionAdditionalInfoPage(index, index), CheckMode, emptyUserAnswers)
-          .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, CheckMode))
+          .nextPage(SpecialMentionAdditionalInfoPage(itemIndex, referenceIndex), CheckMode, emptyUserAnswers)
+          .mustBe(routes.SpecialMentionCheckYourAnswersController.onPageLoad(emptyUserAnswers.lrn, itemIndex, referenceIndex, CheckMode))
       }
 
       "must go from AddAnotherSpecialMention" - {
 
         "to SpecialMentionType when set to true" in {
 
-          val userAnswers = emptyUserAnswers.set(AddAnotherSpecialMentionPage(index), true).success.value
+          val userAnswers = emptyUserAnswers.set(AddAnotherSpecialMentionPage(itemIndex), true).success.value
 
           navigator
-            .nextPage(AddAnotherSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, index, index, CheckMode))
+            .nextPage(AddAnotherSpecialMentionPage(itemIndex), CheckMode, userAnswers)
+            .mustBe(routes.SpecialMentionTypeController.onPageLoad(userAnswers.lrn, itemIndex, referenceIndex, CheckMode))
         }
 
         "to ItemsCheckYourAnswers when set to false" in {
 
-          val userAnswers = emptyUserAnswers.set(AddAnotherSpecialMentionPage(index), false).success.value
+          val userAnswers = emptyUserAnswers.set(AddAnotherSpecialMentionPage(itemIndex), false).success.value
 
           navigator
-            .nextPage(AddAnotherSpecialMentionPage(index), CheckMode, userAnswers)
-            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, index))
+            .nextPage(AddAnotherSpecialMentionPage(itemIndex), CheckMode, userAnswers)
+            .mustBe(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(userAnswers.lrn, itemIndex))
         }
       }
 
@@ -115,19 +109,19 @@ class AddItemsSpecialMentionsCheckModeNavigatorSpec extends SpecBase with ScalaC
         "to AddAnotherSpecialMentionController when at least one special mention exists" in {
 
           val userAnswers = emptyUserAnswers
-            .set(SpecialMentionTypePage(index, index), "value")
+            .set(SpecialMentionTypePage(itemIndex, referenceIndex), "value")
             .success
             .value
 
           navigator
-            .nextPage(RemoveSpecialMentionPage(index, index), CheckMode, userAnswers)
-            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, index, CheckMode))
+            .nextPage(RemoveSpecialMentionPage(itemIndex, referenceIndex), CheckMode, userAnswers)
+            .mustBe(routes.AddAnotherSpecialMentionController.onPageLoad(userAnswers.lrn, itemIndex, CheckMode))
         }
 
         "to AddSpecialMentionPage when no special mentions exist" in {
           navigator
-            .nextPage(RemoveSpecialMentionPage(index, index), CheckMode, emptyUserAnswers)
-            .mustBe(routes.AddSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, index, CheckMode))
+            .nextPage(RemoveSpecialMentionPage(itemIndex, referenceIndex), CheckMode, emptyUserAnswers)
+            .mustBe(routes.AddSpecialMentionController.onPageLoad(emptyUserAnswers.lrn, itemIndex, CheckMode))
         }
       }
     }
