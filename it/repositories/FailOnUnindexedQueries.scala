@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.scalatest.concurrent.ScalaFutures
 import reactivemongo.api.bson.collection.BSONSerializationPack
 import reactivemongo.api.commands.Command
 import reactivemongo.api.{FailoverStrategy, ReadPreference}
-import reactivemongo.bson.BSONDocument
+import reactivemongo.api.bson.BSONDocument
 import reactivemongo.core.errors.ReactiveMongoException
 
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,9 @@
 package repositories
 
 import com.typesafe.config.ConfigFactory
-import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
 import org.scalatest.TestSuite
 import play.api.Configuration
-import play.api.libs.json.Json
-import reactivemongo.api.bson.BSONDocument
-import reactivemongo.api.indexes.IndexType
 import reactivemongo.api.{AsyncDriver, DefaultDB, MongoConnection}
-import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
