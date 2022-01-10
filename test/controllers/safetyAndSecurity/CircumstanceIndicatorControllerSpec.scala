@@ -73,7 +73,7 @@ class CircumstanceIndicatorControllerSpec
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockReferenceDataConnector)
     super.beforeEach()
   }

@@ -63,7 +63,7 @@ class DocumentTypeControllerSpec extends SpecBase with AppWithDefaultMockFixture
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(fakeNavigator))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }

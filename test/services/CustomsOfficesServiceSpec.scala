@@ -43,7 +43,7 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   override def beforeEach = {
     reset(mockFrontendAppConfig, mockRefDataConnector)
-    super.beforeEach
+    super.beforeEach()
   }
 
   "CustomsOfficesService" - {

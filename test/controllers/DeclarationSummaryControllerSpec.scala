@@ -45,9 +45,9 @@ class DeclarationSummaryControllerSpec extends SpecBase with AppWithDefaultMockF
       .guiceApplicationBuilder()
       .overrides(bind[DeclarationSubmissionService].toInstance(mockDeclarationSubmissionService))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockDeclarationSubmissionService)
-    super.beforeEach
+    super.beforeEach()
   }
 
   "DeclarationSummary Controller" - {

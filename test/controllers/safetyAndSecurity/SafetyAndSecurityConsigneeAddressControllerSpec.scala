@@ -59,9 +59,9 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
 
   lazy val safetyAndSecurityConsigneeAddressRoute = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, NormalMode).url
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockReferenceDataConnector)
-    super.beforeEach
+    super.beforeEach()
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

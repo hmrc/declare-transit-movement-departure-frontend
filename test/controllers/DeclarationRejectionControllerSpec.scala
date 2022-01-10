@@ -39,9 +39,9 @@ class DeclarationRejectionControllerSpec extends SpecBase with AppWithDefaultMoc
   private val mockDepartureMessageService = mock[DepartureMessageService]
   private val template                    = "declarationRejection.njk"
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockDepartureMessageService)
-    super.beforeEach
+    super.beforeEach()
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

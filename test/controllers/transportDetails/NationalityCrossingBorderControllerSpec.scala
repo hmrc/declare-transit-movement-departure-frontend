@@ -62,9 +62,9 @@ class NationalityCrossingBorderControllerSpec extends SpecBase with AppWithDefau
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(fakeNavigator))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockReferenceDataConnector)
-    super.beforeEach
+    super.beforeEach()
   }
 
   "NationalityCrossingBorder Controller" - {

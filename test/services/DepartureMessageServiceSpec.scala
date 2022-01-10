@@ -35,7 +35,7 @@ class DepartureMessageServiceSpec extends SpecBase with AppWithDefaultMockFixtur
 
   private val mockDepartureConnector: DepartureMovementConnector = mock[DepartureMovementConnector]
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     reset(mockDepartureConnector)
   }

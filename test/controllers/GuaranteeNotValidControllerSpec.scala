@@ -38,9 +38,9 @@ class GuaranteeNotValidControllerSpec extends SpecBase with AppWithDefaultMockFi
 
   private val mockGuaranteeNotValidService = mock[DepartureMessageService]
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockGuaranteeNotValidService)
-    super.beforeEach
+    super.beforeEach()
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

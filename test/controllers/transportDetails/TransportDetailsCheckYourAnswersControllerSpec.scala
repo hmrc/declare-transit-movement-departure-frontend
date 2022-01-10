@@ -53,9 +53,9 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWi
       .guiceApplicationBuilder()
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockReferenceDataConnector)
-    super.beforeEach
+    super.beforeEach()
   }
 
   "TransportDetailsCheckYourAnswers Controller" - {

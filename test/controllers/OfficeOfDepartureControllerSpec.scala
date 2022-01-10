@@ -60,9 +60,9 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
   lazy val officeOfDepartureRoute: String                      = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockFrontendAppConfig, mockRefDataConnector, mockCustomsOfficesService)
-    super.beforeEach
+    super.beforeEach()
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

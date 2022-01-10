@@ -61,7 +61,7 @@ class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(fakeNavigator))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }

@@ -38,9 +38,9 @@ class CancellationDecisionUpdateControllerSpec extends SpecBase with AppWithDefa
 
   private val mockDepartureMessageService = mock[DepartureMessageService]
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockDepartureMessageService)
-    super.beforeEach
+    super.beforeEach()
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =

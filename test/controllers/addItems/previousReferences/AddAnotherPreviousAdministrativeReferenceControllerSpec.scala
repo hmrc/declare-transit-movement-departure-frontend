@@ -68,7 +68,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsAdminReference]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
     super.beforeEach()
   }

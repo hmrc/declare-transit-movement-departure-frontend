@@ -63,7 +63,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SecurityDetails]).toInstance(fakeNavigator))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }
