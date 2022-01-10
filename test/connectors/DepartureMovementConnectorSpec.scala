@@ -16,7 +16,7 @@
 
 package connectors
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import generators.MessagesModelGenerators
@@ -35,7 +35,6 @@ import models.{
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
@@ -45,15 +44,20 @@ import java.time.LocalDate
 import scala.concurrent.Future
 import scala.xml.NodeSeq
 
-class DepartureMovementConnectorSpec extends SpecBase with WireMockServerHandler with ScalaCheckPropertyChecks with MessagesModelGenerators {
+class DepartureMovementConnectorSpec
+    extends SpecBase
+    with AppWithDefaultMockFixtures
+    with WireMockServerHandler
+    with ScalaCheckPropertyChecks
+    with MessagesModelGenerators {
 
   val stubUrl = "/transits-movements-trader-at-departure/movements/departures/"
 
-  lazy val app: Application = new GuiceApplicationBuilder()
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
+    .guiceApplicationBuilder()
     .configure(
       conf = "microservice.services.departures.port" -> server.port()
     )
-    .build()
 
   private lazy val connector                = app.injector.instanceOf[DepartureMovementConnector]
   private val errorResponsesCodes: Gen[Int] = Gen.chooseNum(400, 599)

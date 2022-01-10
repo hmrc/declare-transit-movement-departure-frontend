@@ -30,8 +30,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   private val form = formProvider()
   private val template = "$className;format="decap"$.njk"
 
-
-
   val validAnswer = $minimum$
 
   lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, NormalMode).url

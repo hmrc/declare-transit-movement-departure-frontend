@@ -37,8 +37,6 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
 
-
-
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
   lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(lrn, NormalMode).url

@@ -26,8 +26,6 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-
-
   private val formProvider = new $className$FormProvider()
   private val form = formProvider()
   private val template = "$className;format="decap"$.njk"

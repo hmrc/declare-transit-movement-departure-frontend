@@ -16,7 +16,7 @@
 
 package connectors
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
 import models.reference._
@@ -35,7 +35,6 @@ import models.{
 import org.scalacheck.Gen
 import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import play.mvc.Http.MimeTypes.JSON
@@ -44,15 +43,15 @@ import play.mvc.Http.Status._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ReferenceDataConnectorSpec extends SpecBase with WireMockServerHandler with ScalaCheckPropertyChecks {
+class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixtures with WireMockServerHandler with ScalaCheckPropertyChecks {
 
   private val startUrl = "transit-movements-trader-reference-data"
 
-  lazy val app: Application = new GuiceApplicationBuilder()
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
+    .guiceApplicationBuilder()
     .configure(
       conf = "microservice.services.referenceData.port" -> server.port()
     )
-    .build()
 
   private lazy val connector: ReferenceDataConnector = app.injector.instanceOf[ReferenceDataConnector]
 
