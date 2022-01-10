@@ -100,7 +100,7 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
     }
 
     "referenceSection" - {
-      
+
       "must display all rows with add another link when given more than one previous administration reference" in {
 
         val updatedUserAnswers = updatedAnswers
