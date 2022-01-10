@@ -16,7 +16,7 @@
 
 package controllers.guaranteeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.guaranteeDetails.GuaranteeReferenceFormProvider
 import matchers.JsonMatchers
@@ -33,7 +33,6 @@ import pages.guaranteeDetails.{GuaranteeReferencePage, GuaranteeTypePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,9 +40,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class GuaranteeReferenceControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new GuaranteeReferenceFormProvider()
   private val form         = formProvider(GuaranteeReferenceWithGrn.Constants.guaranteeReferenceNumberLength)
@@ -58,7 +55,7 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
   "GuaranteeReference Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -86,7 +83,7 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
     "must populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = emptyUserAnswers.set(GuaranteeReferencePage(index), "123456789012345678901234").success.value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -115,7 +112,7 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
 
     "must redirect to the next page when valid data is submitted for type that takes 24 chars" in {
       val userAnswers = emptyUserAnswers.set(GuaranteeTypePage(index), FlatRateVoucher).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -131,7 +128,7 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
 
     "must redirect to the next page when valid data is submitted for type that takes 17 chars" in {
       val userAnswers = emptyUserAnswers.set(GuaranteeTypePage(index), GuaranteeWaiver).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -146,7 +143,7 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -173,7 +170,7 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, guaranteeReferenceRoute)
 
@@ -185,7 +182,7 @@ class GuaranteeReferenceControllerSpec extends SpecBase with MockNunjucksRendere
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, guaranteeReferenceRoute)

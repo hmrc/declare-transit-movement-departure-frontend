@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import matchers.JsonMatchers.containJson
 import models.InvalidGuaranteeCode.G01
 import models.{GuaranteeNotValidMessage, InvalidGuaranteeReasonCode}
@@ -34,7 +34,7 @@ import services.DepartureMessageService
 
 import scala.concurrent.Future
 
-class GuaranteeNotValidControllerSpec extends SpecBase with MockNunjucksRendererApp with BeforeAndAfterEach {
+class GuaranteeNotValidControllerSpec extends SpecBase with AppWithDefaultMockFixtures with BeforeAndAfterEach {
 
   private val mockGuaranteeNotValidService = mock[DepartureMessageService]
 
@@ -49,7 +49,7 @@ class GuaranteeNotValidControllerSpec extends SpecBase with MockNunjucksRenderer
       .overrides(bind[DepartureMessageService].toInstance(mockGuaranteeNotValidService))
 
   "return OK and the correct guarantee not valid view for a GET" in {
-    dataRetrievalNoData()
+    setUserAnswers(None)
     val message = GuaranteeNotValidMessage(lrn.toString, Seq(InvalidGuaranteeReasonCode("ref", G01, None)))
     when(mockRenderer.render(any(), any())(any()))
       .thenReturn(Future.successful(Html("")))
@@ -57,9 +57,9 @@ class GuaranteeNotValidControllerSpec extends SpecBase with MockNunjucksRenderer
     when(mockGuaranteeNotValidService.guaranteeNotValidMessage(any())(any(), any()))
       .thenReturn(Future.successful(Some(message)))
 
-    val request        = FakeRequest(GET, routes.GuaranteeNotValidController.onPageLoad(departureId).url)
-    val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-    val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+    val request                                = FakeRequest(GET, routes.GuaranteeNotValidController.onPageLoad(departureId).url)
+    val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+    val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
     val result = route(app, request).value
 
@@ -87,7 +87,7 @@ class GuaranteeNotValidControllerSpec extends SpecBase with MockNunjucksRenderer
     when(mockRenderer.render(any(), any())(any()))
       .thenReturn(Future.successful(Html("")))
 
-    dataRetrievalNoData()
+    setUserAnswers(None)
 
     val request = FakeRequest(GET, routes.GuaranteeNotValidController.onPageLoad(departureId).url)
 

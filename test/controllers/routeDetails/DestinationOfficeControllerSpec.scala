@@ -16,7 +16,7 @@
 
 package controllers.routeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
@@ -35,7 +35,6 @@ import pages.routeDetails.{DestinationOfficePage, MovementDestinationCountryPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -45,13 +44,11 @@ import scala.concurrent.Future
 
 class DestinationOfficeControllerSpec
     extends SpecBase
-    with MockNunjucksRendererApp
+    with AppWithDefaultMockFixtures
     with MockitoSugar
     with NunjucksSupport
     with JsonMatchers
     with UserAnswersSpecHelper {
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val countryCode                       = CountryCode("GB")
   private val countries                         = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
@@ -76,7 +73,7 @@ class DestinationOfficeControllerSpec
         .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -122,7 +119,7 @@ class DestinationOfficeControllerSpec
         .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -164,7 +161,7 @@ class DestinationOfficeControllerSpec
 
     "must redirect to session expired when destination country value is 'None'" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -185,7 +182,7 @@ class DestinationOfficeControllerSpec
       val userAnswers = emptyUserAnswers
         .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -208,7 +205,7 @@ class DestinationOfficeControllerSpec
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
         .unsafeSetVal(DestinationOfficePage)(customsOffice1)
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -254,7 +251,7 @@ class DestinationOfficeControllerSpec
         .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("DES")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
@@ -279,7 +276,7 @@ class DestinationOfficeControllerSpec
         .unsafeSetVal(MovementDestinationCountryPage)(countryCode)
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -311,7 +308,7 @@ class DestinationOfficeControllerSpec
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, destinationOfficeRoute)
 
@@ -324,7 +321,7 @@ class DestinationOfficeControllerSpec
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, destinationOfficeRoute)

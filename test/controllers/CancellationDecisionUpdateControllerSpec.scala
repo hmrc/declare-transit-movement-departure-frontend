@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import matchers.JsonMatchers
 import models.CancellationDecisionUpdateMessage
 import org.mockito.ArgumentCaptor
@@ -34,7 +34,7 @@ import services.DepartureMessageService
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class CancellationDecisionUpdateControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {
+class CancellationDecisionUpdateControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with JsonMatchers {
 
   private val mockDepartureMessageService = mock[DepartureMessageService]
 
@@ -59,11 +59,11 @@ class CancellationDecisionUpdateControllerSpec extends SpecBase with MockNunjuck
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, routes.CancellationDecisionUpdateController.onPageLoad(departureId).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, routes.CancellationDecisionUpdateController.onPageLoad(departureId).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -87,7 +87,7 @@ class CancellationDecisionUpdateControllerSpec extends SpecBase with MockNunjuck
     when(mockRenderer.render(any(), any())(any()))
       .thenReturn(Future.successful(Html("")))
 
-    dataRetrievalWithData(emptyUserAnswers)
+    setUserAnswers(Some(emptyUserAnswers))
 
     val request = FakeRequest(GET, routes.CancellationDecisionUpdateController.onPageLoad(departureId).url)
 

@@ -16,7 +16,7 @@
 
 package controllers.safetyAndSecurity
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CircumstanceIndicatorFormProvider
@@ -35,7 +35,6 @@ import pages.safetyAndSecurity.{CircumstanceIndicatorPage, PlaceOfUnloadingCodeP
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -46,13 +45,11 @@ import scala.concurrent.Future
 
 class CircumstanceIndicatorControllerSpec
     extends SpecBase
-    with MockNunjucksRendererApp
+    with AppWithDefaultMockFixtures
     with MockitoSugar
     with NunjucksSupport
     with JsonMatchers
     with BeforeAndAfterEach {
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val formProvider               = new CircumstanceIndicatorFormProvider()
   private val template                   = "safetyAndSecurity/circumstanceIndicator.njk"
@@ -89,11 +86,11 @@ class CircumstanceIndicatorControllerSpec
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, circumstanceIndicatorRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, circumstanceIndicatorRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -122,11 +119,11 @@ class CircumstanceIndicatorControllerSpec
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       val userAnswers = emptyUserAnswers.set(CircumstanceIndicatorPage, "A").success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, circumstanceIndicatorRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, circumstanceIndicatorRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -154,7 +151,7 @@ class CircumstanceIndicatorControllerSpec
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       circumstanceIndicatorList.circumstanceIndicators.foreach {
         indicator =>
           val request =
@@ -177,7 +174,7 @@ class CircumstanceIndicatorControllerSpec
 
       val updatedAnswers = emptyUserAnswers
         .unsafeSetVal(PlaceOfUnloadingCodePage)("unloadingcode")
-      dataRetrievalWithData(updatedAnswers)
+      setUserAnswers(Some(updatedAnswers))
       val request =
         FakeRequest(POST, circumstanceIndicatorCheckModeRoute)
           .withFormUrlEncodedBody(("value", "E"))
@@ -194,7 +191,7 @@ class CircumstanceIndicatorControllerSpec
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       val request =
         FakeRequest(POST, circumstanceIndicatorCheckModeRoute)
           .withFormUrlEncodedBody(("value", "E"))
@@ -212,12 +209,12 @@ class CircumstanceIndicatorControllerSpec
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(POST, circumstanceIndicatorRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, circumstanceIndicatorRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -238,7 +235,7 @@ class CircumstanceIndicatorControllerSpec
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, circumstanceIndicatorRoute)
 
@@ -252,7 +249,7 @@ class CircumstanceIndicatorControllerSpec
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, circumstanceIndicatorRoute)

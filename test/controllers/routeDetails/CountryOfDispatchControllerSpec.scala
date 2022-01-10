@@ -16,7 +16,7 @@
 
 package controllers.routeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.CountryOfDispatchFormProvider
@@ -33,7 +33,6 @@ import pages.routeDetails.CountryOfDispatchPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,11 +40,9 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class CountryOfDispatchControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new CountryOfDispatchFormProvider()
   private val countries    = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
@@ -67,7 +64,7 @@ class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRenderer
   "CountryOfDispatch Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
@@ -96,7 +93,7 @@ class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRenderer
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = emptyUserAnswers.set(CountryOfDispatchPage, CountryOfDispatch(CountryCode("GB"), isNotEu = true)).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -131,7 +128,7 @@ class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockReferenceDataConnector.getNonEUTransitCountryList()(any(), any())).thenReturn(Future.successful(countries))
 
@@ -147,7 +144,7 @@ class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
@@ -174,7 +171,7 @@ class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, countryOfDispatchRoute)
 
@@ -185,7 +182,7 @@ class CountryOfDispatchControllerSpec extends SpecBase with MockNunjucksRenderer
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, countryOfDispatchRoute)

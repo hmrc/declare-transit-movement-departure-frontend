@@ -16,7 +16,7 @@
 
 package controllers.transportDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
@@ -37,7 +37,7 @@ import play.twirl.api.Html
 
 import scala.concurrent.Future
 
-class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {
+class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with JsonMatchers {
 
   def onwardRoute(lrn: LocalReferenceNumber) = Call("GET", s"/manage-transit-movements-departures/$lrn/task-list")
 
@@ -63,7 +63,7 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with MockN
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers.set(InlandModePage, "1").success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -74,9 +74,9 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with MockN
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
 
-      val request        = FakeRequest(GET, routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

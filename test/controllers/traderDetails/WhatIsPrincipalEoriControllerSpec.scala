@@ -16,7 +16,7 @@
 
 package controllers.traderDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.WhatIsPrincipalEoriFormProvider
 import matchers.JsonMatchers
@@ -33,7 +33,6 @@ import pages.traderDetails.WhatIsPrincipalEoriPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,9 +40,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  private def onwardRoute = Call("GET", "/foo")
+class WhatIsPrincipalEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new WhatIsPrincipalEoriFormProvider()
   private val form         = formProvider(true, CountryCode("GB"))
@@ -64,11 +61,11 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
         .thenReturn(Future.successful(Html("")))
       val updatedUserAnswers = emptyUserAnswers.set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None)).success.value
 
-      dataRetrievalWithData(updatedUserAnswers)
+      setUserAnswers(Some(updatedUserAnswers))
 
-      val request        = FakeRequest(GET, whatIsPrincipalEoriRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, whatIsPrincipalEoriRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -98,11 +95,11 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
         .set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None))
         .success
         .value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, whatIsPrincipalEoriRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, whatIsPrincipalEoriRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -128,7 +125,7 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
 
       val updatedUserAnswers = emptyUserAnswers.set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None)).success.value
 
-      dataRetrievalWithData(updatedUserAnswers)
+      setUserAnswers(Some(updatedUserAnswers))
       val request =
         FakeRequest(POST, whatIsPrincipalEoriRoute)
           .withFormUrlEncodedBody(("value", validEori))
@@ -145,12 +142,12 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
         .thenReturn(Future.successful(Html("")))
 
       val updatedUserAnswers = emptyUserAnswers.set(OfficeOfDeparturePage, CustomsOffice("id", "name", CountryCode("GB"), None)).success.value
-      dataRetrievalWithData(updatedUserAnswers)
+      setUserAnswers(Some(updatedUserAnswers))
 
-      val request        = FakeRequest(POST, whatIsPrincipalEoriRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, whatIsPrincipalEoriRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -170,7 +167,7 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, whatIsPrincipalEoriRoute)
 
@@ -183,7 +180,7 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, whatIsPrincipalEoriRoute)
@@ -199,7 +196,7 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
     "must redirect to Session Expired for a POST if no office of departure is found" in {
 
       val updatedUserAnswers = emptyUserAnswers.remove(OfficeOfDeparturePage).success.value
-      dataRetrievalWithData(updatedUserAnswers)
+      setUserAnswers(Some(updatedUserAnswers))
 
       val request =
         FakeRequest(POST, whatIsPrincipalEoriRoute)
@@ -215,7 +212,7 @@ class WhatIsPrincipalEoriControllerSpec extends SpecBase with MockNunjucksRender
     "must redirect to Session Expired for a Get if no office of departure is found" in {
 
       val updatedUserAnswers = emptyUserAnswers.remove(OfficeOfDeparturePage).success.value
-      dataRetrievalWithData(updatedUserAnswers)
+      setUserAnswers(Some(updatedUserAnswers))
       val request = FakeRequest(GET, whatIsPrincipalEoriRoute)
       val result  = route(app, request).value
 

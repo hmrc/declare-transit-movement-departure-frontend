@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import config.FrontendAppConfig
 import matchers.JsonMatchers
 import org.mockito.ArgumentCaptor
@@ -36,7 +36,7 @@ import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.Future
 
-class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendererApp with BeforeAndAfterEach with MockitoSugar with JsonMatchers {
+class DeclarationSummaryControllerSpec extends SpecBase with AppWithDefaultMockFixtures with BeforeAndAfterEach with MockitoSugar with JsonMatchers {
 
   private val mockDeclarationSubmissionService = mock[DeclarationSubmissionService]
 
@@ -54,16 +54,16 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
 
     "return OK and the correct view for a GET" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
       val appConfig = app.injector.instanceOf[FrontendAppConfig]
 
-      val request        = FakeRequest(GET, routes.DeclarationSummaryController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, routes.DeclarationSummaryController.onPageLoad(lrn).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -82,7 +82,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
     }
 
     "must redirect to 'Departure declaration sent' page on valid submission" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(ACCEPTED, ""))))
 
       val request = FakeRequest(POST, routes.DeclarationSummaryController.onSubmit(lrn).url)
@@ -95,7 +95,7 @@ class DeclarationSummaryControllerSpec extends SpecBase with MockNunjucksRendere
     }
 
     "must show TechnicalDifficulties page when there is a server side error" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       val genServerError = Gen.chooseNum(500, 599).sample.value
 
       when(mockDeclarationSubmissionService.submit(any())(any())).thenReturn(Future.successful(Right(HttpResponse(genServerError, ""))))

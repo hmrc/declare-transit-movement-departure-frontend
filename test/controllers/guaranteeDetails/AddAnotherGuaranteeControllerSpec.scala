@@ -16,14 +16,14 @@
 
 package controllers.guaranteeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.AddAnotherGuaranteeFormProvider
 import matchers.JsonMatchers
 import models.DeclarationType.Option4
 import models.GuaranteeType
 import models.GuaranteeType.TIR
+import navigation.Navigator
 import navigation.annotations.GuaranteeDetails
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -33,7 +33,6 @@ import pages.guaranteeDetails.{GuaranteeTypePage, TIRGuaranteeReferencePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,9 +40,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class AddAnotherGuaranteeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new AddAnotherGuaranteeFormProvider()
   private val template     = "guaranteeDetails/addAnotherGuarantee.njk"
@@ -56,7 +53,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[GuaranteeDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[GuaranteeDetails]).toInstance(fakeNavigator))
 
   val guarantee: GuaranteeType = GuaranteeType.FlatRateVoucher
 
@@ -67,16 +64,11 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(
-        emptyUserAnswers
-          .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher)
-          .success
-          .value
-      )
+      setUserAnswers(Some(emptyUserAnswers.set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher).success.value))
 
-      val request        = FakeRequest(GET, addAnotherGuaranteeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherGuaranteeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -106,22 +98,24 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(
-        emptyUserAnswers
-          .set(GuaranteeTypePage(index), TIR)
-          .success
-          .value
-          .set(TIRGuaranteeReferencePage(index), "guaranteeRef")
-          .success
-          .value
-          .set(DeclarationTypePage, Option4)
-          .success
-          .value
+      setUserAnswers(
+        Some(
+          emptyUserAnswers
+            .set(GuaranteeTypePage(index), TIR)
+            .success
+            .value
+            .set(TIRGuaranteeReferencePage(index), "guaranteeRef")
+            .success
+            .value
+            .set(DeclarationTypePage, Option4)
+            .success
+            .value
+        )
       )
 
-      val request        = FakeRequest(GET, addAnotherGuaranteeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherGuaranteeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -151,16 +145,18 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(
-        emptyUserAnswers
-          .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher)
-          .success
-          .value
+      setUserAnswers(
+        Some(
+          emptyUserAnswers
+            .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher)
+            .success
+            .value
+        )
       )
 
-      val request        = FakeRequest(GET, addAnotherGuaranteeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAnotherGuaranteeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -188,7 +184,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, addAnotherGuaranteeRoute)
@@ -207,17 +203,19 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(
-        emptyUserAnswers
-          .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher)
-          .success
-          .value
+      setUserAnswers(
+        Some(
+          emptyUserAnswers
+            .set(GuaranteeTypePage(index), GuaranteeType.FlatRateVoucher)
+            .success
+            .value
+        )
       )
 
-      val request        = FakeRequest(POST, addAnotherGuaranteeRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = standardGuaranteeForm.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addAnotherGuaranteeRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = standardGuaranteeForm.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -243,7 +241,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, addAnotherGuaranteeRoute)
 
@@ -257,7 +255,7 @@ class AddAnotherGuaranteeControllerSpec extends SpecBase with MockNunjucksRender
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, addAnotherGuaranteeRoute)

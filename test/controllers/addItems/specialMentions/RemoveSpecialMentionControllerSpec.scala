@@ -16,12 +16,12 @@
 
 package controllers.addItems.specialMentions
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.addItems.specialMentions.RemoveSpecialMentionFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
+import navigation.Navigator
 import navigation.annotations.addItems.AddItemsSpecialMentions
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, verifyNoInteractions, when}
@@ -30,7 +30,6 @@ import pages.addItems.specialMentions.{RemoveSpecialMentionPage, SpecialMentionT
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -38,9 +37,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class RemoveSpecialMentionControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new RemoveSpecialMentionFormProvider()
   private val form         = formProvider()
@@ -51,7 +48,7 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(fakeNavigator))
 
   "RemoveSpecialMention Controller" - {
 
@@ -60,11 +57,11 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, removeSpecialMentionRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, removeSpecialMentionRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -94,11 +91,11 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = UserAnswers(lrn, eoriNumber).set(RemoveSpecialMentionPage(itemIndex, referenceIndex), true).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, removeSpecialMentionRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, removeSpecialMentionRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -129,7 +126,7 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       val updatedUserAnswers                             = emptyUserAnswers.set(SpecialMentionTypePage(index, referenceIndex), "value").success.value
-      dataRetrievalWithData(updatedUserAnswers)
+      setUserAnswers(Some(updatedUserAnswers))
 
       val request =
         FakeRequest(POST, removeSpecialMentionRoute)
@@ -149,7 +146,7 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       val updatedUserAnswers = emptyUserAnswers.set(SpecialMentionTypePage(index, referenceIndex), "value").success.value
-      dataRetrievalWithData(updatedUserAnswers)
+      setUserAnswers(Some(updatedUserAnswers))
 
       val request =
         FakeRequest(POST, removeSpecialMentionRoute)
@@ -169,12 +166,12 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(POST, removeSpecialMentionRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, removeSpecialMentionRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -200,7 +197,7 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, removeSpecialMentionRoute)
 
@@ -214,7 +211,7 @@ class RemoveSpecialMentionControllerSpec extends SpecBase with MockNunjucksRende
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, removeSpecialMentionRoute)

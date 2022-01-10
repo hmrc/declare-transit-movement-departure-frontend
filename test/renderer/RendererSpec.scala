@@ -16,7 +16,7 @@
 
 package renderer
 
-import base.MockNunjucksRendererApp
+import base.AppWithDefaultMockFixtures
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -25,18 +25,15 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Application
 import play.api.libs.json._
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 
 import scala.concurrent.Future
 
-class RendererSpec extends AnyFreeSpec with Matchers with MockNunjucksRendererApp with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
+class RendererSpec extends AnyFreeSpec with Matchers with AppWithDefaultMockFixtures with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
 
   implicit private val request: FakeRequest[_] = FakeRequest()
-
-  override def fakeApplication(): Application = applicationBuilder(None).build()
 
   "render" - {
 
@@ -47,8 +44,8 @@ class RendererSpec extends AnyFreeSpec with Matchers with MockNunjucksRendererAp
         when(mockRenderer.render(any(), any())(any()))
           .thenReturn(Future.successful(Html("")))
 
-        val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-        val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+        val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+        val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
         val renderer = app.injector.instanceOf[Renderer]
 
@@ -69,8 +66,8 @@ class RendererSpec extends AnyFreeSpec with Matchers with MockNunjucksRendererAp
         when(mockRenderer.render(any(), any())(any()))
           .thenReturn(Future.successful(Html("")))
 
-        val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-        val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+        val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+        val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
         val renderer = app.injector.instanceOf[Renderer]
 
@@ -92,8 +89,8 @@ class RendererSpec extends AnyFreeSpec with Matchers with MockNunjucksRendererAp
         when(mockRenderer.render(any(), any())(any()))
           .thenReturn(Future.successful(Html("")))
 
-        val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-        val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+        val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+        val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
         val renderer = app.injector.instanceOf[Renderer]
 

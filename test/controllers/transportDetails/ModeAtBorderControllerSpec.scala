@@ -16,15 +16,15 @@
 
 package controllers.transportDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.ModeAtBorderFormProvider
 import matchers.JsonMatchers
 import models.reference.TransportMode
 import models.{NormalMode, TransportModeList}
+import navigation.Navigator
 import navigation.annotations.TransportDetails
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
@@ -33,7 +33,6 @@ import pages.ModeAtBorderPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -42,9 +41,7 @@ import utils.transportModesAsJson
 
 import scala.concurrent.Future
 
-class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class ModeAtBorderControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider   = new ModeAtBorderFormProvider()
   val transportMode  = TransportMode("1", "Sea transport")
@@ -58,7 +55,7 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(fakeNavigator))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
 
   override def beforeEach: Unit = {
@@ -69,7 +66,7 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
   "ModeAtBorder Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -77,9 +74,9 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
       when(mockReferenceDataConnector.getTransportModes()(any(), any()))
         .thenReturn(Future.successful(transportModes))
 
-      val request        = FakeRequest(GET, modeAtBorderRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, modeAtBorderRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -101,7 +98,7 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
       val userAnswers = emptyUserAnswers.set(ModeAtBorderPage, "1").success.value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -109,9 +106,9 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
       when(mockReferenceDataConnector.getTransportModes()(any(), any()))
         .thenReturn(Future.successful(transportModes))
 
-      val request        = FakeRequest(GET, modeAtBorderRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, modeAtBorderRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -134,7 +131,7 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
     "must redirect to the next page when valid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any()))
         .thenReturn(Future.successful(true))
@@ -154,7 +151,7 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -162,10 +159,10 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
       when(mockReferenceDataConnector.getTransportModes()(any(), any()))
         .thenReturn(Future.successful(transportModes))
 
-      val request        = FakeRequest(POST, modeAtBorderRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, modeAtBorderRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -185,7 +182,7 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, modeAtBorderRoute)
 
@@ -198,7 +195,7 @@ class ModeAtBorderControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, modeAtBorderRoute)

@@ -16,7 +16,7 @@
 
 package controllers.goodsSummary
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.SealsInformationFormProvider
 import matchers.JsonMatchers
@@ -32,7 +32,6 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -40,9 +39,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute: Call = Call("GET", "/foo")
+class SealsInformationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider        = new SealsInformationFormProvider()
   val form: Form[Boolean] = formProvider()
@@ -63,14 +60,14 @@ class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererA
         .success
         .value
 
-      dataRetrievalWithData(updatedAnswers)
+      setUserAnswers(Some(updatedAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, sealsInformationRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, sealsInformationRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -101,15 +98,15 @@ class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererA
         .set(SealIdDetailsPage(Index(1)), sealDomain2)
         .success
         .value
-      dataRetrievalWithData(updatedAnswers)
+      setUserAnswers(Some(updatedAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, sealsInformationRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
-      val result         = route(app, request).value
+      val request                                = FakeRequest(GET, sealsInformationRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val result                                 = route(app, request).value
 
       status(result) mustEqual OK
 
@@ -130,7 +127,7 @@ class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererA
 
     "must redirect to the next page when valid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -151,15 +148,15 @@ class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererA
         .set(SealIdDetailsPage(Index(0)), sealDomain)
         .success
         .value
-      dataRetrievalWithData(updatedAnswers)
+      setUserAnswers(Some(updatedAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, sealsInformationRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, sealsInformationRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -183,7 +180,7 @@ class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererA
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, sealsInformationRoute)
 
@@ -196,7 +193,7 @@ class SealsInformationControllerSpec extends SpecBase with MockNunjucksRendererA
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, sealsInformationRoute)

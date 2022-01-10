@@ -16,7 +16,7 @@
 
 package controllers.transportDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.NationalityAtDepartureFormProvider
@@ -33,7 +33,6 @@ import pages.NationalityAtDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,11 +40,9 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class NationalityAtDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new NationalityAtDepartureFormProvider()
   private val country      = Country(CountryCode("GB"), "United Kingdom")
@@ -74,7 +71,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
 
     "must return OK and the correct view for a GET" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -108,7 +105,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
 
       val userAnswers = emptyUserAnswers.set(NationalityAtDeparturePage, CountryCode("GB")).success.value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -142,7 +139,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
 
     "must redirect to the next page when valid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any()))
         .thenReturn(Future.successful(true))
@@ -162,7 +159,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -196,7 +193,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, nationalityAtDepartureRoute)
 
@@ -209,7 +206,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRen
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, nationalityAtDepartureRoute)

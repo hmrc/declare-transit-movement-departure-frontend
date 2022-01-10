@@ -16,7 +16,7 @@
 
 package controllers.routeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.MovementDestinationCountryFormProvider
 import matchers.JsonMatchers
@@ -34,7 +34,6 @@ import pages.routeDetails.MovementDestinationCountryPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -43,11 +42,9 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val mockCountriesService: CountriesService = mock[CountriesService]
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new MovementDestinationCountryFormProvider()
   private val countries    = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
@@ -79,7 +76,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       when(mockCountriesService.getDestinationCountryList(any(), any())(any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, movementDestinationCountryRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -118,7 +115,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       when(mockCountriesService.getDestinationCountryList(any(), any())(any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, movementDestinationCountryRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -158,7 +155,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       when(mockCountriesService.getDestinationCountryList(any(), any())(any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, movementDestinationCountryRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -196,7 +193,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       when(mockCountriesService.getDestinationCountryList(any(), any())(any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request =
         FakeRequest(POST, movementDestinationCountryRoute)
@@ -219,7 +216,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
       when(mockCountriesService.getDestinationCountryList(any(), eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(POST, movementDestinationCountryRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))
@@ -245,7 +242,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, movementDestinationCountryRoute)
 
@@ -259,7 +256,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with MockNunjuck
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, movementDestinationCountryRoute)

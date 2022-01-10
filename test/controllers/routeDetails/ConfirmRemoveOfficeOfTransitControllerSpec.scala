@@ -16,7 +16,7 @@
 
 package controllers.routeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.ConfirmRemoveOfficeOfTransitFormProvider
@@ -33,7 +33,6 @@ import pages.routeDetails.AddAnotherTransitOfficePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -42,9 +41,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider                                   = new ConfirmRemoveOfficeOfTransitFormProvider()
   val form                                           = formProvider()
@@ -62,14 +59,14 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
 
     "must return OK and the correct view for a GET" in {
       val userAnswers = emptyUserAnswers.set(AddAnotherTransitOfficePage(index), "id").toOption.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCustomsOffice(any())(any(), any())).thenReturn(Future.successful(customsOffice))
 
-      val request        = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -98,15 +95,15 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
         .remove(OfficeOfTransitQuery(index))
         .toOption
         .value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
       when(mockReferenceDataConnector.getCustomsOffice(any())(any(), any())).thenReturn(Future.successful(customsOffice))
 
-      val request        = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -125,7 +122,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
     }
 
     "must return error page when there are multiple office of transit and user tries to remove the last office of transit that is already removed" in {
-      val updatedAnswer = emptyUserAnswers
+      val updatedAnswers = emptyUserAnswers
         .set(AddAnotherTransitOfficePage(index), "id1")
         .success
         .value
@@ -135,15 +132,15 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
         .remove(AddAnotherTransitOfficePage(Index(1)))
         .success
         .value
-      dataRetrievalWithData(updatedAnswer)
+      setUserAnswers(Some(updatedAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCustomsOffice(any())(any(), any())).thenReturn(Future.successful(customsOffice))
 
-      val confirmRemoveRoute = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, Index(1), NormalMode).url
-      val request            = FakeRequest(GET, confirmRemoveRoute)
-      val templateCaptor     = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor         = ArgumentCaptor.forClass(classOf[JsObject])
+      val confirmRemoveRoute                     = routes.ConfirmRemoveOfficeOfTransitController.onPageLoad(lrn, Index(1), NormalMode).url
+      val request                                = FakeRequest(GET, confirmRemoveRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -165,7 +162,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
     "must redirect to the next page when valid data is submitted" in {
       val id          = Id()
       val userAnswers = emptyUserAnswers.set(AddAnotherTransitOfficePage(index), "id").toOption.value
-      dataRetrievalWithData(userAnswers.copy(id = id))
+      setUserAnswers(Some(userAnswers.copy(id = id)))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
@@ -191,15 +188,15 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
 
     "must return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = emptyUserAnswers.set(AddAnotherTransitOfficePage(index), "id").toOption.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCustomsOffice(any())(any(), any())).thenReturn(Future.successful(customsOffice))
 
-      val request        = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, confirmRemoveOfficeOfTransitRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -221,7 +218,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, confirmRemoveOfficeOfTransitRoute)
 
@@ -233,7 +230,7 @@ class ConfirmRemoveOfficeOfTransitControllerSpec extends SpecBase with MockNunju
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, confirmRemoveOfficeOfTransitRoute)
