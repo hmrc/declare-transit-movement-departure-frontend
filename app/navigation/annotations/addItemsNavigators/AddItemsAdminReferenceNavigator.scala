@@ -128,10 +128,10 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
 
   private def removePreviousAdministrativeReference(itemIndex: Index, mode: Mode)(ua: UserAnswers): Call = {
 
-    val t2Declaration: Boolean      = ua.get(DeclarationTypePage).fold(false)(t2Options.contains)
-    val countryOfDeparture: Boolean = ua.get(IsNonEuOfficePage).getOrElse(false)
+    val t2Declaration: Boolean           = ua.get(DeclarationTypePage).fold(false)(t2Options.contains)
+    val nonEUOfficeOfDeparture: Boolean  = ua.get(IsNonEuOfficePage).getOrElse(false)
 
-    val isMandatoryJourney = t2Declaration && countryOfDeparture
+    val isMandatoryJourney = t2Declaration && nonEUOfficeOfDeparture
 
     val numberOfReferences = ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)).getOrElse(0)
 
