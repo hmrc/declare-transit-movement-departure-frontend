@@ -1292,34 +1292,15 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
         val content = Literal("foo")
 
         "with href pointing to AddAnotherPreviousAdministrativeReferenceController" - {
-          "when AddAdministrativeReferencePage is true" in {
 
-            val answers = emptyUserAnswers.unsafeSetVal(AddAdministrativeReferencePage(itemIndex))(true)
+          val answers = emptyUserAnswers.unsafeSetVal(AddAdministrativeReferencePage(itemIndex))(true)
 
-            val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
-            val result = helper.addAnotherPreviousReferences(itemIndex, content)
-            result mustBe AddAnotherViewModel(
-              href = AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, mode).url,
-              content = content
-            )
-          }
-        }
-
-        "with href pointing to AddAdministrativeReferenceController" - {
-          "when AddAdministrativeReferencePage is false or undefined" in {
-
-            forAll(arbitrary[Option[Boolean]].retryUntil(!_.contains(true))) {
-              maybeBool =>
-                val answers = emptyUserAnswers.unsafeSetOpt(AddAdministrativeReferencePage(itemIndex))(maybeBool)
-
-                val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
-                val result = helper.addAnotherPreviousReferences(itemIndex, content)
-                result mustBe AddAnotherViewModel(
-                  href = AddAdministrativeReferenceController.onPageLoad(lrn, itemIndex, mode).url,
-                  content = content
-                )
-            }
-          }
+          val helper = new AddItemsCheckYourAnswersHelper(answers, mode)
+          val result = helper.addAnotherPreviousReferences(itemIndex, content)
+          result mustBe AddAnotherViewModel(
+            href = AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, mode).url,
+            content = content
+          )
         }
       }
     }

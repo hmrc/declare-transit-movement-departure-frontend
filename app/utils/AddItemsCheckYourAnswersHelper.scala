@@ -282,12 +282,9 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
 
   def addAnotherPreviousReferences(itemIndex: Index, content: Text): AddAnotherViewModel = {
 
-    val addAnotherPackageHref = userAnswers.get(AddAdministrativeReferencePage(itemIndex)) match {
-      case Some(true) => previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, mode).url
-      case _          => previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(lrn, itemIndex, mode).url
-    }
+    val route = previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(lrn, itemIndex, mode).url
 
-    AddAnotherViewModel(addAnotherPackageHref, content)
+    AddAnotherViewModel(route, content)
   }
 
   def packageRow(itemIndex: Index, packageIndex: Index): Option[Row] = getAnswerAndBuildRemovableRow[PackageType](

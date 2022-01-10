@@ -98,6 +98,33 @@ class AddItemsCheckYourAnswersViewModelSpec extends SpecBase with ScalaCheckProp
       dataWithUnpackedPackages.sections(3).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.packages"
       dataWithUnpackedPackages.sections(3).rows.length mustEqual 1
     }
+
+    "referenceSection" - {
+      
+      "must display all rows with add another link when given more than one previous administration reference" in {
+
+        val updatedUserAnswers = updatedAnswers
+          .set(AddAdministrativeReferencePage(itemIndex), true).success.value
+          .set(ReferenceTypePage(itemIndex, referenceIndex), "code").success.value
+
+        val updatedViewModel = viewModel(updatedUserAnswers)
+
+        updatedViewModel.sections(7).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.references"
+        updatedViewModel.sections(7).rows.length mustEqual 2
+        updatedViewModel.sections(7).addAnother.isDefined mustBe true
+      }
+
+      "must display all rows without add another link when given no previous administration reference" in {
+        val updatedUserAnswers = updatedAnswers
+          .set(AddAdministrativeReferencePage(itemIndex), false).success.value
+
+        val updatedViewModel = viewModel(updatedUserAnswers)
+
+        updatedViewModel.sections(7).sectionTitle.get mustBe msg"addItems.checkYourAnswersLabel.references"
+        updatedViewModel.sections(7).rows.length mustEqual 1
+        updatedViewModel.sections(7).addAnother.isDefined mustBe false
+      }
+    }
   }
 
   // format: on
