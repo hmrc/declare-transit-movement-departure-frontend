@@ -82,7 +82,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to log in " in {
 
-        setNoExistingUserAnswers()
+        setUserAnswers(None)
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -108,7 +108,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to log in " in {
 
-        setNoExistingUserAnswers()
+        setUserAnswers(None)
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -133,7 +133,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setNoExistingUserAnswers()
+        setUserAnswers(None)
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -159,7 +159,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setNoExistingUserAnswers()
+        setUserAnswers(None)
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -185,7 +185,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setNoExistingUserAnswers()
+        setUserAnswers(None)
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -211,7 +211,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setNoExistingUserAnswers()
+        setUserAnswers(None)
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -237,7 +237,7 @@ class AuthActionSpec extends SpecBase with AppWithDefaultMockFixtures {
 
       "must redirect the user to the unauthorised page" in {
 
-        setNoExistingUserAnswers()
+        setUserAnswers(None)
 
         val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]

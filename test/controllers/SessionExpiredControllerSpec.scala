@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -27,13 +27,13 @@ import play.twirl.api.Html
 
 import scala.concurrent.Future
 
-class SessionExpiredControllerSpec extends SpecBase with MockNunjucksRendererApp {
+class SessionExpiredControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   "Session Expired Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

@@ -16,7 +16,7 @@
 
 package controllers.movementDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
 import models.DeclarationType
@@ -31,7 +31,6 @@ import pages.generalInformation.PreLodgeDeclarationPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -39,9 +38,7 @@ import play.twirl.api.Html
 import scala.concurrent.Future
 
 // format: off
-class MovementDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class MovementDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with JsonMatchers {
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -50,14 +47,14 @@ class MovementDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNu
   "MovementDetailsCheckYourAnswers Controller" - {
 
     "return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
       val request        = FakeRequest(GET, routes.MovementDetailsCheckYourAnswersController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]     = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -86,10 +83,10 @@ class MovementDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNu
         .set(DeclarationTypePage, DeclarationType.Option1).success.value
         .set(PreLodgeDeclarationPage, true).success.value
 
-      dataRetrievalWithData(ua)
+      setUserAnswers(Some(ua))
       val request        = FakeRequest(GET, routes.MovementDetailsCheckYourAnswersController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]     = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
       status(result)

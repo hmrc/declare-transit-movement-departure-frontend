@@ -16,7 +16,7 @@
 
 package services
 
-import base.{MockServiceApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.DepartureMovementConnector
 import generators.MessagesModelGenerators
 import models.journeyDomain.ReaderError
@@ -36,7 +36,12 @@ import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.Future
 
-class DeclarationSubmissionServiceSpec extends SpecBase with MockServiceApp with BeforeAndAfterEach with MessagesModelGenerators with ScalaCheckPropertyChecks {
+class DeclarationSubmissionServiceSpec
+    extends SpecBase
+    with AppWithDefaultMockFixtures
+    with BeforeAndAfterEach
+    with MessagesModelGenerators
+    with ScalaCheckPropertyChecks {
 
   private val mockDepartureMovementConnector           = mock[DepartureMovementConnector]
   private val mockDeclarationRequestService            = mock[DeclarationRequestService]

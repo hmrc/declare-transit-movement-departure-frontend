@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.{routes => mainRoutes}
 import forms.DeclarationTypeFormProvider
@@ -24,8 +24,8 @@ import matchers.JsonMatchers
 import models.ProcedureType.Normal
 import models.reference.{CountryCode, CustomsOffice}
 import models.{DeclarationType, NormalMode}
+import navigation.Navigator
 import navigation.annotations.PreTaskListDetails
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -34,7 +34,6 @@ import pages.{DeclarationTypePage, OfficeOfDeparturePage, ProcedureTypePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -44,13 +43,11 @@ import scala.concurrent.Future
 
 class DeclarationTypeControllerSpec
     extends SpecBase
-    with MockNunjucksRendererApp
+    with AppWithDefaultMockFixtures
     with MockitoSugar
     with NunjucksSupport
     with JsonMatchers
     with UserAnswersSpecHelper {
-
-  def onwardRoute = Call("GET", "/foo")
 
   lazy val declarationTypeRoute = routes.DeclarationTypeController.onPageLoad(lrn, NormalMode).url
 
@@ -61,18 +58,18 @@ class DeclarationTypeControllerSpec
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
 
   "DeclarationType Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, declarationTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, declarationTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -102,11 +99,11 @@ class DeclarationTypeControllerSpec
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = emptyUserAnswers.set(DeclarationTypePage, DeclarationType.values.head).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, declarationTypeRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, declarationTypeRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -134,7 +131,7 @@ class DeclarationTypeControllerSpec
 
     "must redirect to the next page when valid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -151,15 +148,15 @@ class DeclarationTypeControllerSpec
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, declarationTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm      = form.bind(Map("value" -> "invalid value"))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, declarationTypeRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val boundForm                              = form.bind(Map("value" -> "invalid value"))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -185,7 +182,7 @@ class DeclarationTypeControllerSpec
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, declarationTypeRoute)
 
@@ -198,7 +195,7 @@ class DeclarationTypeControllerSpec
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, declarationTypeRoute)

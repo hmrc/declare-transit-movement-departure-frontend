@@ -16,47 +16,41 @@
 
 package services
 
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import models.messages.InterchangeControlReference
 import models.userAnswerScenarios._
 import org.mockito.Mockito.{reset, when}
-import org.scalatest.EitherValues
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
+import org.scalatest.concurrent.IntegrationPatience
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.{InterchangeControlReferenceIdRepository, MongoSuite}
 import utils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
 import xml.XMLWrites._
+
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Success
 
 class UserAnswersToXmlConversionSpec
-    extends AnyFreeSpec
-    with Matchers
+    extends SpecBase
+    with AppWithDefaultMockFixtures
     with UserAnswersSpecHelper
     with XMLComparatorSpec
     with XSDSchemaValidationSpec
     with MongoSuite
-    with ScalaFutures
-    with GuiceOneAppPerSuite
     with IntegrationPatience
-    with MockDateTimeService
-    with EitherValues {
+    with MockDateTimeService {
 
   private val mockInterchangeControlReference = mock[InterchangeControlReferenceIdRepository]
 
-  implicit override lazy val app: Application = new GuiceApplicationBuilder()
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
+    .guiceApplicationBuilder()
     .overrides(
       bind[DateTimeService].toInstance(mockTimeService),
       bind[InterchangeControlReferenceIdRepository].toInstance(mockInterchangeControlReference)
     )
-    .build()
 
   class Setup {
 

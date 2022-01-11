@@ -16,13 +16,13 @@
 
 package controllers.safetyAndSecurity
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.AddSafetyAndSecurityConsignorFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
+import navigation.Navigator
 import navigation.annotations.SafetyAndSecurityTraderDetails
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -31,7 +31,6 @@ import pages.safetyAndSecurity.AddSafetyAndSecurityConsignorPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -39,9 +38,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new AddSafetyAndSecurityConsignorFormProvider()
   private val form         = formProvider()
@@ -52,7 +49,7 @@ class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with MockNunj
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurityTraderDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurityTraderDetails]).toInstance(fakeNavigator))
 
   "AddSafetyAndSecurityConsignor Controller" - {
 
@@ -61,11 +58,11 @@ class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with MockNunj
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, addSafetyAndSecurityConsignorRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addSafetyAndSecurityConsignorRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -93,11 +90,11 @@ class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with MockNunj
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = UserAnswers(lrn, eoriNumber).set(AddSafetyAndSecurityConsignorPage, true).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, addSafetyAndSecurityConsignorRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addSafetyAndSecurityConsignorRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -125,7 +122,7 @@ class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with MockNunj
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, addSafetyAndSecurityConsignorRoute)
@@ -144,12 +141,12 @@ class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with MockNunj
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(POST, addSafetyAndSecurityConsignorRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addSafetyAndSecurityConsignorRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -173,7 +170,7 @@ class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with MockNunj
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, addSafetyAndSecurityConsignorRoute)
 
@@ -187,7 +184,7 @@ class AddSafetyAndSecurityConsignorControllerSpec extends SpecBase with MockNunj
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, addSafetyAndSecurityConsignorRoute)

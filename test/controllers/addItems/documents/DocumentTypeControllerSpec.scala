@@ -16,15 +16,15 @@
 
 package controllers.addItems.documents
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.DocumentTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.DocumentType
 import models.{DocumentTypeList, NormalMode}
+import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.mockito.{ArgumentCaptor, Mockito}
@@ -33,7 +33,6 @@ import pages.addItems
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,9 +40,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class DocumentTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new DocumentTypeFormProvider()
 
@@ -63,10 +60,10 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(fakeNavigator))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }
@@ -74,7 +71,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
   "DocumentType Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -119,7 +116,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
       when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
 
       val userAnswers = emptyUserAnswers.set(addItems.DocumentTypePage(itemIndex, documentIndex), "955").success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, documentTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -155,7 +152,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
@@ -173,7 +170,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -205,7 +202,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, documentTypeRoute)
 
@@ -219,7 +216,7 @@ class DocumentTypeControllerSpec extends SpecBase with MockNunjucksRendererApp w
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, documentTypeRoute)

@@ -16,15 +16,15 @@
 
 package controllers.transportDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.NationalityCrossingBorderFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CountryList, NormalMode}
+import navigation.Navigator
 import navigation.annotations.TransportDetails
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
@@ -33,7 +33,6 @@ import pages.NationalityCrossingBorderPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,11 +40,9 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class NationalityCrossingBorderControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class NationalityCrossingBorderControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new NationalityCrossingBorderFormProvider()
   private val country      = Country(CountryCode("GB"), "United Kingdom")
@@ -62,19 +59,19 @@ class NationalityCrossingBorderControllerSpec extends SpecBase with MockNunjucks
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(fakeNavigator))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockReferenceDataConnector)
-    super.beforeEach
+    super.beforeEach()
   }
 
   "NationalityCrossingBorder Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -107,7 +104,7 @@ class NationalityCrossingBorderControllerSpec extends SpecBase with MockNunjucks
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(NationalityCrossingBorderPage, CountryCode("GB")).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -141,7 +138,7 @@ class NationalityCrossingBorderControllerSpec extends SpecBase with MockNunjucks
 
     "must redirect to the next page when valid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
@@ -158,7 +155,7 @@ class NationalityCrossingBorderControllerSpec extends SpecBase with MockNunjucks
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -192,7 +189,7 @@ class NationalityCrossingBorderControllerSpec extends SpecBase with MockNunjucks
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, nationalityCrossingBorderRoute)
 
@@ -205,7 +202,7 @@ class NationalityCrossingBorderControllerSpec extends SpecBase with MockNunjucks
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, nationalityCrossingBorderRoute)

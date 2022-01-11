@@ -16,7 +16,7 @@
 
 package controllers.transportDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.AddNationalityAtDepartureFormProvider
 import matchers.JsonMatchers
@@ -31,7 +31,6 @@ import pages.AddNationalityAtDeparturePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -39,9 +38,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class AddNationalityAtDepartureControllerSpec extends SpecBase with MockNunjucksRendererApp with NunjucksSupport with MockitoSugar with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class AddNationalityAtDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with MockitoSugar with JsonMatchers {
 
   val formProvider = new AddNationalityAtDepartureFormProvider()
   val form         = formProvider()
@@ -60,11 +57,11 @@ class AddNationalityAtDepartureControllerSpec extends SpecBase with MockNunjucks
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, addNationalityAtDepartureRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addNationalityAtDepartureRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -86,13 +83,13 @@ class AddNationalityAtDepartureControllerSpec extends SpecBase with MockNunjucks
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = UserAnswers(lrn, eoriNumber).set(AddNationalityAtDeparturePage, true).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, addNationalityAtDepartureRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addNationalityAtDepartureRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -114,7 +111,7 @@ class AddNationalityAtDepartureControllerSpec extends SpecBase with MockNunjucks
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val request =
@@ -129,15 +126,15 @@ class AddNationalityAtDepartureControllerSpec extends SpecBase with MockNunjucks
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, addNationalityAtDepartureRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addNationalityAtDepartureRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -158,7 +155,7 @@ class AddNationalityAtDepartureControllerSpec extends SpecBase with MockNunjucks
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, addNationalityAtDepartureRoute)
 
@@ -171,7 +168,7 @@ class AddNationalityAtDepartureControllerSpec extends SpecBase with MockNunjucks
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, addNationalityAtDepartureRoute)

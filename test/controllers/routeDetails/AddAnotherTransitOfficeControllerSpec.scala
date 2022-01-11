@@ -16,7 +16,7 @@
 
 package controllers.routeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.AddAnotherTransitOfficeFormProvider
@@ -33,7 +33,6 @@ import pages.routeDetails.{AddAnotherTransitOfficePage, OfficeOfTransitCountryPa
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,9 +40,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class AddAnotherTransitOfficeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val countryCode                       = CountryCode("GB")
   private val countries                         = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
@@ -66,7 +63,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
 
     "must return OK and the correct view for a GET" in {
       val userAnswers = emptyUserAnswers.set(OfficeOfTransitCountryPage(index), countryCode).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
@@ -103,7 +100,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
     }
 
     "must redirect to session expired when destination country value is 'None'" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
@@ -125,7 +122,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
         .set(OfficeOfTransitCountryPage(index), countryCode)
         .success
         .value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any())).thenReturn(Future.successful(customsOffices))
@@ -161,7 +158,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
 
     "must redirect to the next page when valid data is submitted" in {
       val userAnswers = emptyUserAnswers.set(OfficeOfTransitCountryPage(index), countryCode).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
         .thenReturn(Future.successful(customsOffices))
       when(mockRefDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
@@ -179,7 +176,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
 
     "must return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = emptyUserAnswers.set(OfficeOfTransitCountryPage(index), countryCode).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
@@ -209,7 +206,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, addAnotherTransitOfficeRoute)
 
@@ -221,7 +218,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with MockNunjucksRe
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, addAnotherTransitOfficeRoute)

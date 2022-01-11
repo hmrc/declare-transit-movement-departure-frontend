@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import matchers.JsonMatchers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => meq}
@@ -30,7 +30,7 @@ import play.twirl.api.Html
 
 import scala.concurrent.Future
 
-class SubmissionConfirmationControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {
+class SubmissionConfirmationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with JsonMatchers {
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -44,11 +44,11 @@ class SubmissionConfirmationControllerSpec extends SpecBase with MockNunjucksRen
         .thenReturn(Future.successful(Html("")))
       when(mockSessionRepository.remove(any(), any())).thenReturn(Future.successful(()))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, routes.SubmissionConfirmationController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, routes.SubmissionConfirmationController.onPageLoad(lrn).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

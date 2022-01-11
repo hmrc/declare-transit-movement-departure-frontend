@@ -16,7 +16,7 @@
 
 package controllers.safetyAndSecurity
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
@@ -30,7 +30,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -38,9 +37,12 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class SafetyAndSecurityCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class SafetyAndSecurityCheckYourAnswersControllerSpec
+    extends SpecBase
+    with AppWithDefaultMockFixtures
+    with MockitoSugar
+    with NunjucksSupport
+    with JsonMatchers {
 
   private val mockReferenceDataConnector = mock[ReferenceDataConnector]
   val countries                          = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
@@ -66,11 +68,11 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec extends SpecBase with Mock
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorsList))
       when(mockReferenceDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, safetyAndSecurityRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, safetyAndSecurityRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

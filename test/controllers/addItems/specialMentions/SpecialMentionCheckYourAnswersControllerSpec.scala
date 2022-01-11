@@ -16,7 +16,7 @@
 
 package controllers.addItems.specialMentions
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import matchers.JsonMatchers
 import models.{NormalMode, SpecialMentionList}
@@ -27,7 +27,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -35,9 +34,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class SpecialMentionCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute: Call = Call("GET", "/foo")
+class SpecialMentionCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   lazy val specialMentionCyaRoute: String =
     routes.SpecialMentionCheckYourAnswersController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
@@ -53,7 +50,7 @@ class SpecialMentionCheckYourAnswersControllerSpec extends SpecBase with MockNun
 
     "must return OK and the correct view for a GET" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

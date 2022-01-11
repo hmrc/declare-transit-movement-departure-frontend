@@ -16,15 +16,15 @@
 
 package controllers.addItems.packagesInformation
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.addItems.PackageTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.PackageType
 import models.{NormalMode, PackageTypeList}
+import navigation.Navigator
 import navigation.annotations.addItems.AddItemsPackagesInfo
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.mockito.{ArgumentCaptor, Mockito}
@@ -33,7 +33,7 @@ import pages.PackageTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.{Call, Result}
+import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,9 +41,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers with NunjucksSupport {
-
-  private def onwardRoute = Call("GET", "/foo")
+class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with JsonMatchers with NunjucksSupport {
 
   private val packageType1: PackageType = PackageType("AB", "Description 1")
   private val packageType2: PackageType = PackageType("CD", "Description 2")
@@ -60,10 +58,10 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(fakeNavigator))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }
@@ -71,7 +69,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
   "PackageType Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -115,7 +113,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
 
       val userAnswers = emptyUserAnswers.set(PackageTypePage(index, index), packageType1).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, packageTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -151,7 +149,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
     }
 
     "must redirect to the next page when valid data is submitted and set to UserAnswers if there is no previous answers" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
@@ -171,7 +169,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
       val userAnswers = emptyUserAnswers.set(PackageTypePage(index, index), PackageType("AB", "Description 1")).success.value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
 
@@ -187,7 +185,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
@@ -217,7 +215,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, packageTypeRoute)
 
@@ -230,7 +228,7 @@ class PackageTypeControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(POST, packageTypeRoute).withFormUrlEncodedBody(("value", "answer"))
 

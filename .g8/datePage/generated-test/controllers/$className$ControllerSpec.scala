@@ -2,8 +2,8 @@ package controllers
 
 import java.time.{LocalDate, ZoneOffset}
 
-import base.SpecBase
-import base.MockNunjucksRendererApp
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import base.AppWithDefaultMockFixtures
 import forms.$className$FormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
@@ -26,7 +26,7 @@ import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 
 import scala.concurrent.Future
 
-class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new $className$FormProvider()
   private def form = formProvider()
@@ -35,9 +35,7 @@ class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp wi
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(new FakeNavigator(onwardRoute)))
-
-  def onwardRoute = Call("GET", "/foo")
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[$navRoute$]).toInstance(fakeNavigator))
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
@@ -57,12 +55,12 @@ class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp wi
   "$className$ Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor = ArgumentCaptor.forClass(classOf[JsObject])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject] = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, getRequest).value
 
@@ -92,10 +90,10 @@ class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp wi
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = emptyUserAnswers.set($className$Page, validAnswer).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor = ArgumentCaptor.forClass(classOf[JsObject])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject] = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, getRequest).value
 
@@ -129,7 +127,7 @@ class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
     "must redirect to the next page when valid data is submitted" in {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val result = route(app, postRequest).value
 
@@ -144,12 +142,12 @@ class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request = FakeRequest(POST, $className;format="decap"$Route).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor = ArgumentCaptor.forClass(classOf[JsObject])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject] = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -175,7 +173,7 @@ class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val result = route(app, getRequest).value
 
@@ -186,7 +184,7 @@ class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp wi
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val result = route(app, postRequest).value
 

@@ -16,7 +16,7 @@
 
 package controllers.safetyAndSecurity
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriFormProvider
 import matchers.JsonMatchers
@@ -31,7 +31,6 @@ import pages.safetyAndSecurity.AddSafetyAndSecurityConsignorEoriPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -39,9 +38,12 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class AddSafetyAndSecurityConsignorEoriControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class AddSafetyAndSecurityConsignorEoriControllerSpec
+    extends SpecBase
+    with AppWithDefaultMockFixtures
+    with MockitoSugar
+    with NunjucksSupport
+    with JsonMatchers {
 
   private val formProvider = new AddSafetyAndSecurityConsignorEoriFormProvider()
   private val form         = formProvider()
@@ -61,11 +63,11 @@ class AddSafetyAndSecurityConsignorEoriControllerSpec extends SpecBase with Mock
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, addSafetyAndSecurityConsignorEoriRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addSafetyAndSecurityConsignorEoriRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -93,11 +95,11 @@ class AddSafetyAndSecurityConsignorEoriControllerSpec extends SpecBase with Mock
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = UserAnswers(lrn, eoriNumber).set(AddSafetyAndSecurityConsignorEoriPage, true).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, addSafetyAndSecurityConsignorEoriRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addSafetyAndSecurityConsignorEoriRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -125,7 +127,7 @@ class AddSafetyAndSecurityConsignorEoriControllerSpec extends SpecBase with Mock
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, addSafetyAndSecurityConsignorEoriRoute)
@@ -144,12 +146,12 @@ class AddSafetyAndSecurityConsignorEoriControllerSpec extends SpecBase with Mock
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(POST, addSafetyAndSecurityConsignorEoriRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addSafetyAndSecurityConsignorEoriRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -173,7 +175,7 @@ class AddSafetyAndSecurityConsignorEoriControllerSpec extends SpecBase with Mock
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, addSafetyAndSecurityConsignorEoriRoute)
 
@@ -187,7 +189,7 @@ class AddSafetyAndSecurityConsignorEoriControllerSpec extends SpecBase with Mock
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, addSafetyAndSecurityConsignorEoriRoute)

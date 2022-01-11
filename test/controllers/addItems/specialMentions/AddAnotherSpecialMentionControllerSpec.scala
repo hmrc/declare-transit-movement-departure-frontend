@@ -16,13 +16,13 @@
 
 package controllers.addItems.specialMentions
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, SpecialMentionList, UserAnswers}
+import navigation.Navigator
 import navigation.annotations.addItems.AddItemsSpecialMentions
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -31,7 +31,6 @@ import pages.addItems.specialMentions.AddAnotherSpecialMentionPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -39,9 +38,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new AddAnotherSpecialMentionFormProvider()
   private val form         = formProvider()
@@ -54,7 +51,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(fakeNavigator))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
 
   "AddAnotherSpecialMention Controller" - {
@@ -66,7 +63,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
 
       when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request                                = FakeRequest(GET, addAnotherSpecialMentionRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -102,7 +99,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = UserAnswers(lrn, eoriNumber).set(AddAnotherSpecialMentionPage(itemIndex), true).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, addAnotherSpecialMentionRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -134,7 +131,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, addAnotherSpecialMentionRoute)
@@ -153,7 +150,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request                                = FakeRequest(POST, addAnotherSpecialMentionRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))
@@ -183,7 +180,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, addAnotherSpecialMentionRoute)
 
@@ -197,7 +194,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with MockNunjucksR
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, addAnotherSpecialMentionRoute)

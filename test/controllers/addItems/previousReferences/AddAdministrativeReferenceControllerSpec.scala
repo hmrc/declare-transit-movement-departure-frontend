@@ -16,7 +16,7 @@
 
 package controllers.addItems.previousReferences
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.AddAdministrativeReferenceFormProvider
 import matchers.JsonMatchers
@@ -31,7 +31,6 @@ import pages.addItems
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -39,9 +38,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
-class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class AddAdministrativeReferenceControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new AddAdministrativeReferenceFormProvider()
   private val form         = formProvider()
@@ -57,13 +54,13 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
   "AddAdministrativeReference Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, addAdministrativeReferenceRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addAdministrativeReferenceRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -91,10 +88,10 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = UserAnswers(lrn, eoriNumber).set(addItems.AddAdministrativeReferencePage(index), true).success.value
-      dataRetrievalWithData(userAnswers)
-      val request        = FakeRequest(GET, addAdministrativeReferenceRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      setUserAnswers(Some(userAnswers))
+      val request                                = FakeRequest(GET, addAdministrativeReferenceRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -119,7 +116,7 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
     }
 
     "must redirect to the next page when valid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
@@ -134,14 +131,14 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, addAdministrativeReferenceRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addAdministrativeReferenceRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -164,7 +161,7 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, addAdministrativeReferenceRoute)
 
@@ -177,7 +174,7 @@ class AddAdministrativeReferenceControllerSpec extends SpecBase with MockNunjuck
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, addAdministrativeReferenceRoute)

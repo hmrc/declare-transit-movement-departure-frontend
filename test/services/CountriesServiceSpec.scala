@@ -45,7 +45,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAns
 
   override def beforeEach = {
     reset(mockRefDataConnector)
-    super.beforeEach
+    super.beforeEach()
   }
 
   "CountriesService" - {

@@ -16,15 +16,15 @@
 
 package controllers.addItems.securityDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.securityDetails.TransportChargesFormProvider
 import matchers.JsonMatchers
 import models.reference.MethodOfPayment
 import models.{MethodOfPaymentList, NormalMode}
+import navigation.Navigator
 import navigation.annotations.SecurityDetails
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.mockito.{ArgumentCaptor, Mockito}
@@ -33,7 +33,6 @@ import pages.addItems.securityDetails.TransportChargesPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,9 +40,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
+class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new TransportChargesFormProvider()
 
@@ -63,10 +60,10 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SecurityDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SecurityDetails]).toInstance(fakeNavigator))
       .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     Mockito.reset(mockRefDataConnector)
   }
@@ -74,7 +71,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
   "TransportCharges Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -119,7 +116,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
       when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       val userAnswers = emptyUserAnswers.set(TransportChargesPage(index), MethodOfPayment("A", "Payment in cash")).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, transportChargesRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -159,7 +156,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
       when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, transportChargesRoute)
@@ -179,7 +176,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
       when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request                                = FakeRequest(POST, transportChargesRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))
@@ -206,7 +203,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, transportChargesRoute)
 
@@ -220,7 +217,7 @@ class TransportChargesControllerSpec extends SpecBase with MockNunjucksRendererA
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, transportChargesRoute)

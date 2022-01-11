@@ -52,11 +52,8 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     guiceApplicationBuilder()
       .build()
 
-  protected def setExistingUserAnswers(answers: UserAnswers): Unit =
-    when(mockDataRetrievalActionProvider.apply(any())) thenReturn new FakeDataRetrievalAction(Some(answers))
-
-  protected def setNoExistingUserAnswers(): Unit =
-    when(mockDataRetrievalActionProvider.apply(any())) thenReturn new FakeDataRetrievalAction(None)
+  protected def setUserAnswers(answers: Option[UserAnswers]): Unit =
+    when(mockDataRetrievalActionProvider.apply(any())) thenReturn new FakeDataRetrievalAction(answers)
 
   protected val onwardRoute: Call = Call("GET", "/foo")
 
@@ -66,11 +63,12 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
+        bind[CheckDependentSectionAction].to[FakeDependencyCheckActionFilter],
+        bind[NameRequiredAction].to[FakeNameRequiredAction],
         bind[IdentifierAction].to[FakeIdentifierAction],
         bind[NunjucksRenderer].toInstance(mockRenderer),
         bind[SessionRepository].toInstance(mockSessionRepository),
         bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider),
-        bind[MessagesApi].toInstance(Helpers.stubMessagesApi()),
-        bind[Navigator].toInstance(fakeNavigator)
+        bind[MessagesApi].toInstance(Helpers.stubMessagesApi())
       )
 }

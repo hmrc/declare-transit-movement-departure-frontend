@@ -16,13 +16,13 @@
 
 package controllers.traderDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.WhatIsConsigneeEoriFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
+import navigation.Navigator
 import navigation.annotations.TraderDetails
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -31,7 +31,6 @@ import pages.traderDetails.WhatIsConsigneeEoriPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -39,9 +38,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class WhatIsConsigneeEoriControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
-
-  private def onwardRoute = Call("GET", "/foo")
+class WhatIsConsigneeEoriControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new WhatIsConsigneeEoriFormProvider()
   private val form         = formProvider()
@@ -52,7 +49,7 @@ class WhatIsConsigneeEoriControllerSpec extends SpecBase with MockNunjucksRender
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator))
 
   "WhatIsConsigneeEori Controller" - {
 
@@ -61,11 +58,11 @@ class WhatIsConsigneeEoriControllerSpec extends SpecBase with MockNunjucksRender
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, whatIsConsigneeEoriRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, whatIsConsigneeEoriRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -89,11 +86,11 @@ class WhatIsConsigneeEoriControllerSpec extends SpecBase with MockNunjucksRender
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = emptyUserAnswers.set(WhatIsConsigneeEoriPage, validEori).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, whatIsConsigneeEoriRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, whatIsConsigneeEoriRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -117,7 +114,7 @@ class WhatIsConsigneeEoriControllerSpec extends SpecBase with MockNunjucksRender
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, whatIsConsigneeEoriRoute)
@@ -134,12 +131,12 @@ class WhatIsConsigneeEoriControllerSpec extends SpecBase with MockNunjucksRender
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(POST, whatIsConsigneeEoriRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, whatIsConsigneeEoriRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -159,7 +156,7 @@ class WhatIsConsigneeEoriControllerSpec extends SpecBase with MockNunjucksRender
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, whatIsConsigneeEoriRoute)
 
@@ -172,7 +169,7 @@ class WhatIsConsigneeEoriControllerSpec extends SpecBase with MockNunjucksRender
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, whatIsConsigneeEoriRoute)

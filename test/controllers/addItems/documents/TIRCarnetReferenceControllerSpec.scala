@@ -16,14 +16,14 @@
 
 package controllers.addItems.documents
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import forms.addItems.TIRCarnetReferenceFormProvider
 import matchers.JsonMatchers
 import models.DeclarationType.{Option1, Option4}
 import models.NormalMode
+import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -33,7 +33,6 @@ import pages.addItems.TIRCarnetReferencePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -43,13 +42,11 @@ import scala.concurrent.Future
 
 class TIRCarnetReferenceControllerSpec
     extends SpecBase
-    with MockNunjucksRendererApp
+    with AppWithDefaultMockFixtures
     with MockitoSugar
     with NunjucksSupport
     with JsonMatchers
     with UserAnswersSpecHelper {
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new TIRCarnetReferenceFormProvider()
   private val form         = formProvider()
@@ -60,7 +57,7 @@ class TIRCarnetReferenceControllerSpec
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(new FakeNavigator(onwardRoute)))
+      .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(fakeNavigator))
 
   "TIRCarnetReference Controller" - {
 
@@ -69,11 +66,11 @@ class TIRCarnetReferenceControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, tirCarnetReferenceRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, tirCarnetReferenceRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -102,11 +99,11 @@ class TIRCarnetReferenceControllerSpec
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = emptyUserAnswers.set(TIRCarnetReferencePage(index, index), "1234567890").success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, tirCarnetReferenceRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, tirCarnetReferenceRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -138,7 +135,7 @@ class TIRCarnetReferenceControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
@@ -158,7 +155,7 @@ class TIRCarnetReferenceControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
@@ -174,7 +171,7 @@ class TIRCarnetReferenceControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)
@@ -194,12 +191,12 @@ class TIRCarnetReferenceControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(POST, tirCarnetReferenceRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, tirCarnetReferenceRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -222,7 +219,7 @@ class TIRCarnetReferenceControllerSpec
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, tirCarnetReferenceRoute)
 
@@ -236,7 +233,7 @@ class TIRCarnetReferenceControllerSpec
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, tirCarnetReferenceRoute)

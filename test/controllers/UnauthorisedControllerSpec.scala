@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -26,13 +26,13 @@ import play.twirl.api.Html
 
 import scala.concurrent.Future
 
-class UnauthorisedControllerSpec extends SpecBase with MockNunjucksRendererApp {
+class UnauthorisedControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   "Unauthorised Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -43,7 +43,7 @@ class UnauthorisedControllerSpec extends SpecBase with MockNunjucksRendererApp {
 
       status(result) mustEqual OK
 
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), any())(any())
 

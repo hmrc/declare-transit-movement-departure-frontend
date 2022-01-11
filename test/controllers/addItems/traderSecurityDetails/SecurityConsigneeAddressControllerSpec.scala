@@ -16,7 +16,7 @@
 
 package controllers.addItems.traderSecurityDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
@@ -33,7 +33,6 @@ import pages.addItems.traderSecurityDetails.{SecurityConsigneeAddressPage, Secur
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,9 +40,8 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class SecurityConsigneeAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
   private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
@@ -74,11 +72,11 @@ class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksR
 
       val userAnswers = emptyUserAnswers.set(SecurityConsigneeNamePage(index), "foo").success.value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, securityConsigneeAddressRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, securityConsigneeAddressRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -113,11 +111,11 @@ class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksR
         .set(SecurityConsigneeAddressPage(index), securityConsigneeAddress)
         .success
         .value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, securityConsigneeAddressRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, securityConsigneeAddressRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -157,7 +155,7 @@ class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksR
         .success
         .value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request =
         FakeRequest(POST, securityConsigneeAddressRoute)
@@ -180,12 +178,12 @@ class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksR
 
       val userAnswers = emptyUserAnswers.set(SecurityConsigneeNamePage(index), "ConsigneeName").success.value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(POST, securityConsigneeAddressRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> "invalid value"))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, securityConsigneeAddressRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> "invalid value"))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -207,7 +205,7 @@ class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksR
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, securityConsigneeAddressRoute)
 
@@ -221,7 +219,7 @@ class SecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksR
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, securityConsigneeAddressRoute)

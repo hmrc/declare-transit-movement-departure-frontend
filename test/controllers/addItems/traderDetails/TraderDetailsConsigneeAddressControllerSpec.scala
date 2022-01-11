@@ -16,7 +16,7 @@
 
 package controllers.addItems.traderDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
@@ -24,8 +24,8 @@ import generators.Generators
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
 import models.{CommonAddress, CountryList, NormalMode}
+import navigation.Navigator
 import navigation.annotations.addItems.AddItemsTraderDetails
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -34,7 +34,6 @@ import pages.addItems.traderDetails.{TraderDetailsConsigneeAddressPage, TraderDe
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -44,13 +43,12 @@ import scala.concurrent.Future
 
 class TraderDetailsConsigneeAddressControllerSpec
     extends SpecBase
-    with MockNunjucksRendererApp
+    with AppWithDefaultMockFixtures
     with MockitoSugar
     with NunjucksSupport
     with JsonMatchers
     with Generators {
 
-  private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
   private val consigneeName                                      = "consigneeName"
@@ -65,7 +63,7 @@ class TraderDetailsConsigneeAddressControllerSpec
     super
       .guiceApplicationBuilder()
       .overrides(
-        bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsTraderDetails]).toInstance(new FakeNavigator(onwardRoute)),
+        bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsTraderDetails]).toInstance(fakeNavigator),
         bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector)
       )
 
@@ -80,11 +78,11 @@ class TraderDetailsConsigneeAddressControllerSpec
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), "foo").success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, traderDetailsConsigneeAddressRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, traderDetailsConsigneeAddressRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -120,11 +118,11 @@ class TraderDetailsConsigneeAddressControllerSpec
         .set(TraderDetailsConsigneeAddressPage(index), tradersDetailsConsigneeAddress)
         .success
         .value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, traderDetailsConsigneeAddressRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, traderDetailsConsigneeAddressRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -160,7 +158,7 @@ class TraderDetailsConsigneeAddressControllerSpec
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), consigneeName).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request =
         FakeRequest(POST, traderDetailsConsigneeAddressRoute)
@@ -182,12 +180,12 @@ class TraderDetailsConsigneeAddressControllerSpec
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), consigneeName).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(POST, traderDetailsConsigneeAddressRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm      = form.bind(Map("value" -> "invalid value"))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, traderDetailsConsigneeAddressRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val boundForm                              = form.bind(Map("value" -> "invalid value"))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -208,7 +206,7 @@ class TraderDetailsConsigneeAddressControllerSpec
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, traderDetailsConsigneeAddressRoute)
 
@@ -220,7 +218,7 @@ class TraderDetailsConsigneeAddressControllerSpec
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, traderDetailsConsigneeAddressRoute)

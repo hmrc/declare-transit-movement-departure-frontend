@@ -16,7 +16,7 @@
 
 package services
 
-import base.{MockServiceApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.DepartureMovementConnector
 import models.InvalidGuaranteeCode.G01
 import models.{DeclarationRejectionMessage, GuaranteeNotValidMessage, InvalidGuaranteeReasonCode, MessagesLocation, MessagesSummary}
@@ -31,11 +31,11 @@ import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DepartureMessageServiceSpec extends SpecBase with MockServiceApp with BeforeAndAfterEach with Matchers {
+class DepartureMessageServiceSpec extends SpecBase with AppWithDefaultMockFixtures with BeforeAndAfterEach with Matchers {
 
   private val mockDepartureConnector: DepartureMovementConnector = mock[DepartureMovementConnector]
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     reset(mockDepartureConnector)
   }

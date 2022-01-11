@@ -1,7 +1,7 @@
 package controllers
 
-import base.SpecBase
-import base.MockNunjucksRendererApp
+import base.{AppWithDefaultMockFixtures, SpecBase}
+import base.AppWithDefaultMockFixtures
 import matchers.JsonMatchers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -15,7 +15,7 @@ import play.twirl.api.Html
 
 import scala.concurrent.Future
 
-class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {
+class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with JsonMatchers {
 
   "$className$ Controller" - {
 
@@ -24,11 +24,11 @@ class $className$ControllerSpec extends SpecBase with MockNunjucksRendererApp wi
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request = FakeRequest(GET, routes.$className$Controller.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor = ArgumentCaptor.forClass(classOf[JsObject])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject] = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 

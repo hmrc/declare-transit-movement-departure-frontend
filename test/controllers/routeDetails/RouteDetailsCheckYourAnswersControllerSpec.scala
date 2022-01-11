@@ -16,7 +16,7 @@
 
 package controllers.routeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
@@ -39,7 +39,7 @@ import play.twirl.api.Html
 
 import scala.concurrent.Future
 
-class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with JsonMatchers {
+class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with JsonMatchers {
 
   private val countries                            = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   private val customsOfficeGB: CustomsOffice       = CustomsOffice("id", "name", CountryCode("GB"), None)
@@ -72,7 +72,7 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
         .toOption
         .value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
@@ -81,9 +81,9 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -120,7 +120,7 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
         .toOption
         .value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
@@ -129,9 +129,9 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -171,7 +171,7 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
         .toOption
         .value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
@@ -180,9 +180,9 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -217,7 +217,7 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
         .toOption
         .value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
@@ -226,9 +226,9 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -250,7 +250,7 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with MockNunju
     }
 
     "must redirect to session reset page if DestinationCountry data is empty" in {
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request = FakeRequest(GET, routes.RouteDetailsCheckYourAnswersController.onPageLoad(lrn).url)
 

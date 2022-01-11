@@ -16,7 +16,7 @@
 
 package controllers.safetyAndSecurity
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.AddCommercialReferenceNumberAllItemsFormProvider
 import matchers.JsonMatchers
@@ -31,7 +31,6 @@ import pages.safetyAndSecurity.AddCommercialReferenceNumberAllItemsPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -41,12 +40,10 @@ import scala.concurrent.Future
 
 class AddCommercialReferenceNumberAllItemsControllerSpec
     extends SpecBase
-    with MockNunjucksRendererApp
+    with AppWithDefaultMockFixtures
     with MockitoSugar
     with NunjucksSupport
     with JsonMatchers {
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new AddCommercialReferenceNumberAllItemsFormProvider()
   private val form         = formProvider()
@@ -66,11 +63,11 @@ class AddCommercialReferenceNumberAllItemsControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(GET, addCommercialReferenceNumberAllItemsRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addCommercialReferenceNumberAllItemsRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -98,11 +95,11 @@ class AddCommercialReferenceNumberAllItemsControllerSpec
         .thenReturn(Future.successful(Html("")))
 
       val userAnswers = UserAnswers(lrn, eoriNumber).set(AddCommercialReferenceNumberAllItemsPage, true).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, addCommercialReferenceNumberAllItemsRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, addCommercialReferenceNumberAllItemsRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -130,7 +127,7 @@ class AddCommercialReferenceNumberAllItemsControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, addCommercialReferenceNumberAllItemsRoute)
@@ -149,12 +146,12 @@ class AddCommercialReferenceNumberAllItemsControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
-      val request        = FakeRequest(POST, addCommercialReferenceNumberAllItemsRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> ""))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, addCommercialReferenceNumberAllItemsRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> ""))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -178,7 +175,7 @@ class AddCommercialReferenceNumberAllItemsControllerSpec
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, addCommercialReferenceNumberAllItemsRoute)
 
@@ -192,7 +189,7 @@ class AddCommercialReferenceNumberAllItemsControllerSpec
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, addCommercialReferenceNumberAllItemsRoute)

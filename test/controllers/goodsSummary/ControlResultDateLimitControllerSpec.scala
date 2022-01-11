@@ -16,7 +16,7 @@
 
 package controllers.goodsSummary
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.ControlResultDateLimitFormProvider
 import matchers.JsonMatchers
@@ -31,7 +31,7 @@ import pages.ControlResultDateLimitPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -40,12 +40,10 @@ import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
-class ControlResultDateLimitControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class ControlResultDateLimitControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider = new ControlResultDateLimitFormProvider()
   private def form = formProvider()
-
-  def onwardRoute = Call("GET", "/foo")
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -71,13 +69,13 @@ class ControlResultDateLimitControllerSpec extends SpecBase with MockNunjucksRen
 
     "must return OK and the correct view for a GET" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, getRequest).value
 
@@ -101,13 +99,13 @@ class ControlResultDateLimitControllerSpec extends SpecBase with MockNunjucksRen
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(ControlResultDateLimitPage, validAnswer).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, getRequest).value
 
@@ -138,7 +136,7 @@ class ControlResultDateLimitControllerSpec extends SpecBase with MockNunjucksRen
 
     "must redirect to the next page when valid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -151,15 +149,15 @@ class ControlResultDateLimitControllerSpec extends SpecBase with MockNunjucksRen
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val request        = FakeRequest(POST, controlResultDateLimitRoute).withFormUrlEncodedBody(("value", "invalid value"))
-      val boundForm      = form.bind(Map("value" -> "invalid value"))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, controlResultDateLimitRoute).withFormUrlEncodedBody(("value", "invalid value"))
+      val boundForm                              = form.bind(Map("value" -> "invalid value"))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -182,7 +180,7 @@ class ControlResultDateLimitControllerSpec extends SpecBase with MockNunjucksRen
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val result = route(app, getRequest).value
 
@@ -192,7 +190,7 @@ class ControlResultDateLimitControllerSpec extends SpecBase with MockNunjucksRen
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val result = route(app, postRequest).value
 

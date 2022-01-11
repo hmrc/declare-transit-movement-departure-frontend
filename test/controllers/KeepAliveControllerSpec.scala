@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, times, verify, when}
 import play.api.test.FakeRequest
@@ -24,7 +24,7 @@ import play.api.test.Helpers.{GET, route, status, _}
 
 import scala.concurrent.Future
 
-class KeepAliveControllerSpec extends SpecBase with MockNunjucksRendererApp {
+class KeepAliveControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
   "Keep alive controller" - {
     "touch mongo cache when lrn is available" in {
       when(mockSessionRepository.get(any(), any())).thenReturn(Future.successful(Some(emptyUserAnswers)))

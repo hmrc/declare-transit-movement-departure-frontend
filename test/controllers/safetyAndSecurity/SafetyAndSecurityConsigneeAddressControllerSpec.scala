@@ -16,7 +16,7 @@
 
 package controllers.safetyAndSecurity
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.CommonAddressFormProvider
@@ -33,7 +33,6 @@ import pages.safetyAndSecurity.{SafetyAndSecurityConsigneeAddressPage, SafetyAnd
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -42,9 +41,13 @@ import utils.countryJsonList
 
 import scala.concurrent.Future
 
-class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with MockNunjucksRendererApp with MockitoSugar with NunjucksSupport with JsonMatchers {
+class SafetyAndSecurityConsigneeAddressControllerSpec
+    extends SpecBase
+    with AppWithDefaultMockFixtures
+    with MockitoSugar
+    with NunjucksSupport
+    with JsonMatchers {
 
-  private def onwardRoute                                        = Call("GET", "/foo")
   private val country                                            = Country(CountryCode("GB"), "United Kingdom")
   private val countries                                          = CountryList(Seq(country))
   private val consigneeName                                      = "consigneeName"
@@ -56,9 +59,9 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
 
   lazy val safetyAndSecurityConsigneeAddressRoute = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, NormalMode).url
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockReferenceDataConnector)
-    super.beforeEach
+    super.beforeEach()
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -80,11 +83,11 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
 
       val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsigneeNamePage, consigneeName).success.value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, safetyAndSecurityConsigneeAddressRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, safetyAndSecurityConsigneeAddressRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -122,11 +125,11 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
         .set(SafetyAndSecurityConsigneeAddressPage, consignorAddress)
         .success
         .value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(GET, safetyAndSecurityConsigneeAddressRoute)
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(GET, safetyAndSecurityConsigneeAddressRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -169,7 +172,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
         .success
         .value
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request =
         FakeRequest(POST, safetyAndSecurityConsigneeAddressRoute)
@@ -190,12 +193,12 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
       when(mockReferenceDataConnector.getCountryList()(any(), any()))
         .thenReturn(Future.successful(countries))
       val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsigneeNamePage, consigneeName).success.value
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
-      val request        = FakeRequest(POST, safetyAndSecurityConsigneeAddressRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm      = form.bind(Map("value" -> "invalid"))
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
+      val request                                = FakeRequest(POST, safetyAndSecurityConsigneeAddressRoute).withFormUrlEncodedBody(("value", ""))
+      val boundForm                              = form.bind(Map("value" -> "invalid"))
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
       val result = route(app, request).value
 
@@ -216,7 +219,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, safetyAndSecurityConsigneeAddressRoute)
 
@@ -230,7 +233,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec extends SpecBase with Mock
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, safetyAndSecurityConsigneeAddressRoute)

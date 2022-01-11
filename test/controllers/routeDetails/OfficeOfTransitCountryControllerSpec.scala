@@ -16,7 +16,7 @@
 
 package controllers.routeDetails
 
-import base.{MockNunjucksRendererApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
@@ -35,7 +35,6 @@ import pages.routeDetails.OfficeOfTransitCountryPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -45,15 +44,13 @@ import scala.concurrent.Future
 
 class OfficeOfTransitCountryControllerSpec
     extends SpecBase
-    with MockNunjucksRendererApp
+    with AppWithDefaultMockFixtures
     with MockitoSugar
     with NunjucksSupport
     with JsonMatchers
     with UserAnswersSpecHelper {
 
   val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-
-  def onwardRoute = Call("GET", "/foo")
 
   private val countries                         = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   private val formProvider                      = new OfficeOfTransitCountryFormProvider()
@@ -87,7 +84,7 @@ class OfficeOfTransitCountryControllerSpec
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, officeOfTransitCountryRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -127,7 +124,7 @@ class OfficeOfTransitCountryControllerSpec
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, officeOfTransitCountryRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -164,7 +161,7 @@ class OfficeOfTransitCountryControllerSpec
 
       when(mockReferenceDataConnector.getCountriesWithCustomsOffices(any())(any(), any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request = FakeRequest(GET, officeOfTransitCountryRoute)
 
@@ -186,7 +183,7 @@ class OfficeOfTransitCountryControllerSpec
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
         .unsafeSetVal(OfficeOfTransitCountryPage(index))(CountryCode("GB"))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(GET, officeOfTransitCountryRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -225,7 +222,7 @@ class OfficeOfTransitCountryControllerSpec
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request =
         FakeRequest(POST, officeOfTransitCountryRoute)
@@ -244,7 +241,7 @@ class OfficeOfTransitCountryControllerSpec
 
       when(mockReferenceDataConnector.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
 
-      dataRetrievalWithData(emptyUserAnswers)
+      setUserAnswers(Some(emptyUserAnswers))
 
       val request =
         FakeRequest(POST, officeOfTransitCountryRoute)
@@ -266,7 +263,7 @@ class OfficeOfTransitCountryControllerSpec
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
 
-      dataRetrievalWithData(userAnswers)
+      setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(POST, officeOfTransitCountryRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))
@@ -293,7 +290,7 @@ class OfficeOfTransitCountryControllerSpec
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request = FakeRequest(GET, officeOfTransitCountryRoute)
 
@@ -307,7 +304,7 @@ class OfficeOfTransitCountryControllerSpec
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
 
-      dataRetrievalNoData()
+      setUserAnswers(None)
 
       val request =
         FakeRequest(POST, officeOfTransitCountryRoute)

@@ -16,7 +16,7 @@
 
 package services
 
-import base.{GeneratorSpec, MockServiceApp, SpecBase}
+import base.{AppWithDefaultMockFixtures, GeneratorSpec, SpecBase}
 import commonTestUtils.UserAnswersSpecHelper
 import generators.UserAnswersGenerator
 import models.journeyDomain.GoodsSummary.GoodSummarySimplifiedDetails
@@ -38,13 +38,14 @@ import pages.traderDetails.{IsPrincipalEoriKnownPage, PrincipalAddressPage, Prin
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
+
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DeclarationRequestServiceSpec
     extends SpecBase
-    with MockServiceApp
+    with AppWithDefaultMockFixtures
     with GeneratorSpec
     with UserAnswersGenerator
     with BeforeAndAfterEach
