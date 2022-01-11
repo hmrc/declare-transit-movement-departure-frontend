@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
+        <span class="govuk-caption-xl">{{ messages('items.preHeading') }}</span>
 
         <form action="{{ routes.controllers.addItems.packagesInformation.HowManyPackagesController.onSubmit(lrn, itemIndex, packageIndex, mode).url }}" method="post">
 
@@ -44,12 +44,13 @@
             type: "tel",
             value: form.value.value,
             classes: "govuk-input--width-10",
-            errorMessage: form.value.error
+            errorMessage: form.value.error,
+            inputmode: "numeric"
           }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

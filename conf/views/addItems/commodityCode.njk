@@ -28,9 +28,10 @@
         {% endif %}
 
         <form action="{{ routes.controllers.addItems.itemDetails.CommodityCodeController.onSubmit(lrn, index, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
 
-        {{ csrf() | safe }}
+          <span class="govuk-caption-xl">{{ messages('items.preHeading') }}</span>
+
+          {{ csrf() | safe }}
 
           {{ govukInput({
             label: {
@@ -45,12 +46,13 @@
             name: "value",
             value: form.value.value,
             classes: "govuk-input--width-20",
-            errorMessage: form.value.error
+            errorMessage: form.value.error,
+            inputmode: "numeric"
           }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>
