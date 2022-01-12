@@ -29,7 +29,7 @@
 
         <span class="govuk-caption-xl">{{ messages('items.preHeading') }}</span>
 
-        <form action="{{ routes.controllers.addItems.packagesInformation.TotalPiecesController.onSubmit(lrn, itemIndex, packageIndex, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.packagesInformation.TotalPiecesController.onSubmit(lrn, itemIndex, packageIndex, mode).url }}" method="post" novalidate>
 
           {{ csrf() | safe }}
 
@@ -44,7 +44,8 @@
             value: form.value.value,
             classes: "govuk-input--width-10",
             errorMessage: form.value.error,
-            inputmode: "numeric"
+            inputmode: "numeric",
+            pattern: "[0-9]*"
           }) }}
 
           {{ govukButton({
