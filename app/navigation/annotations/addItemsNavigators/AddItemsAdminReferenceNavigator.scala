@@ -19,6 +19,7 @@ package navigation.annotations.addItemsNavigators
 import controllers.addItems.previousReferences.{routes => previousReferencesRoutes}
 import controllers.addItems.{routes => addItemsRoutes}
 import derivable._
+import models.DeclarationType.t2Options
 import models._
 import navigation.Navigator
 import pages._
@@ -125,10 +126,20 @@ class AddItemsAdminReferenceNavigator @Inject() () extends Navigator {
         previousReferencesRoutes.ReferenceCheckYourAnswersController.onPageLoad(ua.lrn, itemIndex, referenceIndex, mode)
     }
 
-  private def removePreviousAdministrativeReference(itemIndex: Index, mode: Mode)(ua: UserAnswers) =
-    ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)) match {
-      case None | Some(0) => previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, mode)
-      case _              => previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, mode)
+  private def removePreviousAdministrativeReference(itemIndex: Index, mode: Mode)(ua: UserAnswers): Call = {
+
+    val t2Declaration: Boolean          = ua.get(DeclarationTypePage).fold(false)(t2Options.contains)
+    val nonEUOfficeOfDeparture: Boolean = ua.get(IsNonEuOfficePage).getOrElse(false)
+
+    val isMandatoryJourney = t2Declaration && nonEUOfficeOfDeparture
+
+    val numberOfReferences = ua.get(DeriveNumberOfPreviousAdministrativeReferences(itemIndex)).getOrElse(0)
+
+    (isMandatoryJourney, numberOfReferences) match {
+      case (true, 0)  => previousReferencesRoutes.ReferenceTypeController.onPageLoad(ua.lrn, itemIndex, Index(0), mode)
+      case (false, 0) => previousReferencesRoutes.AddAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, mode)
+      case _          => previousReferencesRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(ua.lrn, itemIndex, mode)
     }
+  }
 
 }

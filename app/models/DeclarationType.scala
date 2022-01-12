@@ -31,6 +31,8 @@ object DeclarationType extends Enumerable.Implicits {
   case object Option3 extends DeclarationType("T2F", "option3")
   case object Option4 extends DeclarationType("TIR", "option4")
 
+  val t2Options = Seq(Option2, Option3)
+
   val values: Seq[DeclarationType] = Seq(
     Option1,
     Option2,

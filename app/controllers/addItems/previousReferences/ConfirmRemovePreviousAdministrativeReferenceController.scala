@@ -106,7 +106,7 @@ class ConfirmRemovePreviousAdministrativeReferenceController @Inject() (
                 } yield Redirect(navigator.nextPage(ConfirmRemovePreviousAdministrativeReferencePage(index, referenceIndex), mode, updatedAnswers))
               } else {
                 Future.successful(
-                  Redirect((navigator.nextPage(ConfirmRemovePreviousAdministrativeReferencePage(index, referenceIndex), mode, request.userAnswers)))
+                  Redirect(navigator.nextPage(ConfirmRemovePreviousAdministrativeReferencePage(index, referenceIndex), mode, request.userAnswers))
                 )
               }
           )

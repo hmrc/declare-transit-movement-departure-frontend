@@ -141,11 +141,20 @@ object AddItemsCheckYourAnswersViewModel {
           checkYourAnswersHelper.previousReferenceSectionRow(index, Index(position), previousDocumentTypes)
       }
 
-    Section(
-      msg"addItems.checkYourAnswersLabel.references",
-      Seq(checkYourAnswersHelper.addAdministrativeReference(index).toSeq, referencesRows).flatten,
-      checkYourAnswersHelper.addAnotherPreviousReferences(index, msg"addItems.checkYourAnswersLabel.references.addRemove")
-    )
+    val addAdministrativeReferenceRow = checkYourAnswersHelper.addAdministrativeReference(index).toSeq
+
+    val rows = addAdministrativeReferenceRow ++ referencesRows
+
+    userAnswers.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0) match {
+      case 0 =>
+        Section(msg"addItems.checkYourAnswersLabel.references", rows)
+      case _ =>
+        Section(
+          msg"addItems.checkYourAnswersLabel.references",
+          rows,
+          checkYourAnswersHelper.addAnotherPreviousReferences(index, msg"addItems.checkYourAnswersLabel.references.addRemove")
+        )
+    }
   }
 
   private def documentsSection(checkYourAnswersHelper: AddItemsCheckYourAnswersHelper, index: Index, documentTypeList: DocumentTypeList)(implicit

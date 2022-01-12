@@ -21,11 +21,13 @@ import commonTestUtils.UserAnswersSpecHelper
 import controllers.addItems.previousReferences.{routes => previousReferenceRoutes}
 import controllers.addItems.routes
 import generators.Generators
-import models.{Index, NormalMode, UserAnswers}
+import models.DeclarationType.t2Options
+import models.{DeclarationType, Index, NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsAdminReferenceNavigator
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.AddSecurityDetailsPage
+import pages.{AddSecurityDetailsPage, DeclarationTypePage}
 import pages.addItems._
 import pages.safetyAndSecurity.{AddCommercialReferenceNumberAllItemsPage, AddTransportChargesPaymentMethodPage}
 import queries.PreviousReferencesQuery
@@ -276,10 +278,95 @@ class AddItemsAdminReferenceNormalModeNavigatorSpec extends SpecBase with ScalaC
         }
       }
     }
+
+
+    "must go from Remove previous administrative reference" - {
+
+      "when previous administrative references are mandatory" - {
+
+        "and there are existing administrative references" - {
+
+          "to add another previous administrative reference page" in {
+
+            forAll(Gen.oneOf(t2Options)) {
+              t2Option =>
+
+                val updatedAnswer = emptyUserAnswers
+                  .set(ReferenceTypePage(itemIndex, referenceIndex), "Foo").success.value
+                  .set(DeclarationTypePage, t2Option).success.value
+                  .set(IsNonEuOfficePage, true).success.value
+
+
+                navigator
+                  .nextPage(ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, referenceIndex), NormalMode, updatedAnswer)
+                  .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(updatedAnswer.lrn, itemIndex, NormalMode))
+            }
+          }
+        }
+
+        "and there are no existing administrative references" - {
+
+          "to reference type page" in {
+
+            forAll(Gen.oneOf(t2Options)) {
+              t2Option =>
+
+                val updatedAnswer = emptyUserAnswers
+                  .set(DeclarationTypePage, t2Option).success.value
+                  .set(IsNonEuOfficePage, true).success.value
+
+
+                navigator
+                  .nextPage(ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, referenceIndex), NormalMode, updatedAnswer)
+                  .mustBe(previousReferenceRoutes.ReferenceTypeController.onPageLoad(updatedAnswer.lrn, itemIndex, referenceIndex, NormalMode))
+            }
+          }
+        }
+      }
+
+      "when previous administrative references are optional" - {
+
+        "and there are existing administrative references" - {
+
+          "to add another previous administrative reference page" in {
+
+            forAll(arbitrary[DeclarationType]) {
+              declarationType =>
+
+                val updatedAnswer = emptyUserAnswers
+                  .set(ReferenceTypePage(itemIndex, referenceIndex), "Foo").success.value
+                  .set(DeclarationTypePage, declarationType).success.value
+                  .set(IsNonEuOfficePage, false).success.value
+
+
+                navigator
+                  .nextPage(ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, referenceIndex), NormalMode, updatedAnswer)
+                  .mustBe(previousReferenceRoutes.AddAnotherPreviousAdministrativeReferenceController.onPageLoad(updatedAnswer.lrn, itemIndex, NormalMode))
+            }
+          }
+        }
+
+        "and there are no existing administrative references" - {
+
+          "to add administrative references page" in {
+
+            forAll(arbitrary[DeclarationType]) {
+              declarationType =>
+
+                val updatedAnswer = emptyUserAnswers
+                  .set(DeclarationTypePage, declarationType).success.value
+                  .set(IsNonEuOfficePage, false).success.value
+
+
+                navigator
+                  .nextPage(ConfirmRemovePreviousAdministrativeReferencePage(itemIndex, referenceIndex), NormalMode, updatedAnswer)
+                  .mustBe(previousReferenceRoutes.AddAdministrativeReferenceController.onPageLoad(updatedAnswer.lrn, itemIndex, NormalMode))
+            }
+          }
+        }
+      }
+    }
   }
-
-
-
 
   // format: on
 }
