@@ -74,7 +74,7 @@ class OfficeOfTransitCountryController @Inject() (
               .flatMap(transitCountryList.getCountry)
               .map(form.fill)
               .getOrElse(form)
-            page <- OptionT.liftF(renderPage(lrn, index, mode, preparedForm, transitCountryList.fullList, Results.Ok))
+            page <- OptionT.liftF(renderPage(lrn, index, mode, preparedForm, transitCountryList.countries, Results.Ok))
           } yield page
         ).getOrElseF {
           logger.warn(s"[Controller][OfficeOfTransitCountry][onPageLoad] OfficeOfDeparturePage is missing")
@@ -92,7 +92,7 @@ class OfficeOfTransitCountryController @Inject() (
             formProvider(transitCountryList)
               .bindFromRequest()
               .fold(
-                formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.fullList, Results.BadRequest),
+                formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.countries, Results.BadRequest),
                 value =>
                   for {
                     customsOfficeList <- customsOfficesService.getCustomsOfficesForCountry(value.code, transitOfficeRoles)
@@ -107,7 +107,7 @@ class OfficeOfTransitCountryController @Inject() (
                           formProvider(transitCountryList)
                             .withError(FormError("value", "officeOfTransitCountry.error.noTransitOffice"))
                             .fill(value),
-                          transitCountryList.fullList,
+                          transitCountryList.countries,
                           Results.BadRequest
                         )
                       }

@@ -64,16 +64,16 @@ class CountryOfRoutingController @Inject() (
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
         countriesService.getCountries() flatMap {
-          countries =>
-            val form = formProvider(countries)
+          countryList =>
+            val form = formProvider(countryList)
 
             val preparedForm = request.userAnswers
               .get(CountryOfRoutingPage(index))
-              .flatMap(countries.getCountry)
+              .flatMap(countryList.getCountry)
               .map(form.fill)
               .getOrElse(form)
 
-            renderPage(lrn, index, mode, preparedForm, countries.fullList) map (Ok(_))
+            renderPage(lrn, index, mode, preparedForm, countryList.countries) map (Ok(_))
         }
     }
 
@@ -84,11 +84,11 @@ class CountryOfRoutingController @Inject() (
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
         countriesService.getCountries() flatMap {
-          countries =>
-            formProvider(countries)
+          countryList =>
+            formProvider(countryList)
               .bindFromRequest()
               .fold(
-                formWithErrors => renderPage(lrn, index, mode, formWithErrors, countries.fullList) map (BadRequest(_)),
+                formWithErrors => renderPage(lrn, index, mode, formWithErrors, countryList.countries) map (BadRequest(_)),
                 value =>
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfRoutingPage(index), value.code))

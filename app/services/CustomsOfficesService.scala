@@ -18,7 +18,7 @@ package services
 
 import connectors.ReferenceDataConnector
 import models.CustomsOfficeList
-import models.reference.CountryCode
+import models.reference.{CountryCode, CustomsOffice}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -31,9 +31,7 @@ class CustomsOfficesService @Inject() (
   def getCustomsOffices(roles: Seq[String] = Nil)(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     referenceDataConnector
       .getCustomsOffices(roles)
-      .map(
-        customsOffices => CustomsOfficeList(customsOffices.sortBy(_.name))
-      )
+      .map(sort)
 
   def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = {
 
@@ -45,15 +43,21 @@ class CustomsOfficesService @Inject() (
     for {
       gbOffices <- getCustomsOffices("GB")
       niOffices <- getCustomsOffices("XI")
-      offices = (gbOffices.getAll ++ niOffices.getAll).sortBy(_.name)
-    } yield CustomsOfficeList(offices)
+      offices = sort(gbOffices.getAll ++ niOffices.getAll)
+    } yield offices
   }
 
-  def getCustomsOfficesForCountry(countryCode: CountryCode, roles: Seq[String] = Nil)(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+  def getCustomsOfficesForCountry(
+    countryCode: CountryCode,
+    roles: Seq[String] = Nil
+  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     referenceDataConnector
       .getCustomsOfficesForCountry(countryCode, roles)
       .map(
-        x => x.copy(customsOffices = x.customsOffices.sortBy(_.name))
+        customsOfficeList => sort(customsOfficeList.customsOffices)
       )
+
+  private def sort(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
+    CustomsOfficeList(customsOffices.sortBy(_.name))
 
 }

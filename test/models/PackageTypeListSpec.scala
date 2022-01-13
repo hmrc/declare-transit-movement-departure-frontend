@@ -25,15 +25,6 @@ class PackageTypeListSpec extends AnyFreeSpec with Matchers with OptionValues {
 
   "PackageTypeList" - {
 
-    "must return full list" in {
-
-      val packageTypeListData = Seq(PackageType("AB", "Description"))
-
-      val packageTypeList = PackageTypeList(packageTypeListData)
-
-      packageTypeList.fullList mustBe packageTypeListData
-    }
-
     "must return specific PackageType" in {
 
       val packageType1 = PackageType("AB", "Description 1")

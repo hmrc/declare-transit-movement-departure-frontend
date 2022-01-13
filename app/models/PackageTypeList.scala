@@ -18,9 +18,7 @@ package models
 
 import models.reference.PackageType
 
-class PackageTypeList(val packageTypeList: Seq[PackageType]) {
-
-  def fullList: Seq[PackageType]                                   = packageTypeList
+case class PackageTypeList(packageTypeList: Seq[PackageType]) {
   def getPackageType(packageTypeCode: String): Option[PackageType] = packageTypeList.find(_.code == packageTypeCode)
 
   override def equals(obj: Any): Boolean =

@@ -45,12 +45,12 @@ class CarrierAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtu
 
   lazy val carrierAddressRoute = routes.CarrierAddressController.onPageLoad(lrn, NormalMode).url
   private val country          = Country(CountryCode("GB"), "United Kingdom")
-  private val countries        = CountryList(Seq(country))
+  private val countryList      = CountryList(Seq(country))
 
   private val mockCountriesService: CountriesService = mock[CountriesService]
 
   private val formProvider = new CommonAddressFormProvider()
-  private val form         = formProvider(countries, carrierName)
+  private val form         = formProvider(countryList, carrierName)
   private val template     = "safetyAndSecurity/carrierAddress.njk"
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -70,7 +70,7 @@ class CarrierAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         .thenReturn(Future.successful(Html("")))
 
       when(mockCountriesService.getCountries()(any()))
-        .thenReturn(Future.successful(countries))
+        .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.set(CarrierNamePage, "carrierName").success.value
 
@@ -91,7 +91,7 @@ class CarrierAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         "form"        -> form,
         "carrierName" -> carrierName,
         "lrn"         -> lrn,
-        "countries"   -> countryJsonList(form.value.map(_.country), countries.fullList)
+        "countries"   -> countryJsonList(form.value.map(_.country), countryList.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -107,7 +107,7 @@ class CarrierAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         .thenReturn(Future.successful(Html("")))
 
       when(mockCountriesService.getCountries()(any()))
-        .thenReturn(Future.successful(countries))
+        .thenReturn(Future.successful(countryList))
 
       val carrierAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
@@ -145,7 +145,7 @@ class CarrierAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         "form"        -> filledForm,
         "carrierName" -> carrierName,
         "lrn"         -> lrn,
-        "countries"   -> countryJsonList(filledForm.value.map(_.country), countries.fullList)
+        "countries"   -> countryJsonList(filledForm.value.map(_.country), countryList.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -158,7 +158,7 @@ class CarrierAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtu
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers
         .set(CarrierNamePage, "carrierName")
@@ -184,7 +184,7 @@ class CarrierAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtu
         .thenReturn(Future.successful(Html("")))
 
       when(mockCountriesService.getCountries()(any()))
-        .thenReturn(Future.successful(countries))
+        .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers
         .set(CarrierNamePage, "carrierName")

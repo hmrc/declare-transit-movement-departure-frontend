@@ -63,12 +63,12 @@ class CarrierAddressController @Inject() (
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
         countriesService.getCountries() flatMap {
-          countries =>
+          countryList =>
             request.userAnswers.get(CarrierNamePage) match {
               case Some(carrierName) =>
                 val preparedForm = request.userAnswers.get(CarrierAddressPage) match {
-                  case Some(value) => formProvider(countries, carrierName).fill(value)
-                  case None        => formProvider(countries, carrierName)
+                  case Some(value) => formProvider(countryList, carrierName).fill(value)
+                  case None        => formProvider(countryList, carrierName)
                 }
 
                 val json = Json.obj(
@@ -76,7 +76,7 @@ class CarrierAddressController @Inject() (
                   "carrierName" -> carrierName,
                   "lrn"         -> lrn,
                   "mode"        -> mode,
-                  "countries"   -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+                  "countries"   -> countryJsonList(preparedForm.value.map(_.country), countryList.countries)
                 )
 
                 renderer.render(template, json).map(Ok(_))
@@ -96,21 +96,21 @@ class CarrierAddressController @Inject() (
         request.userAnswers.get(CarrierNamePage) match {
           case Some(carrierName) =>
             countriesService.getCountries() flatMap {
-              countries =>
-                formProvider(countries, carrierName)
+              countryList =>
+                formProvider(countryList, carrierName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {
                       val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
                         country =>
-                          countries.getCountry(CountryCode(country))
+                          countryList.getCountry(CountryCode(country))
                       }
                       val json = Json.obj(
                         "form"        -> formWithErrors,
                         "lrn"         -> lrn,
                         "mode"        -> mode,
                         "carrierName" -> carrierName,
-                        "countries"   -> countryJsonList(countryValue, countries.fullList)
+                        "countries"   -> countryJsonList(countryValue, countryList.countries)
                       )
 
                       renderer.render(template, json).map(BadRequest(_))

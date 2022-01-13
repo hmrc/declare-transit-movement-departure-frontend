@@ -23,39 +23,6 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class CountryListSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
-  "fullList" - {
-    "return the full list of countries" in {
-      forAll(nonEmptyListOf[Country](10)) {
-        countries =>
-          val countryList = CountryList(countries.toList)
-
-          countryList.fullList must contain theSameElementsAs countries.toList
-      }
-    }
-
-    "return a list of countries sorted by description when given an unsorted list of countries" in {
-      val unsortedCountries = Seq(
-        Country(CountryCode("AA"), "country5"),
-        Country(CountryCode("BB"), "country6"),
-        Country(CountryCode("CC"), "country1"),
-        Country(CountryCode("DD"), "country3"),
-        Country(CountryCode("EE"), "country4"),
-        Country(CountryCode("FF"), "country2")
-      )
-
-      val sortedCountries = Seq(
-        Country(CountryCode("CC"), "country1"),
-        Country(CountryCode("FF"), "country2"),
-        Country(CountryCode("DD"), "country3"),
-        Country(CountryCode("EE"), "country4"),
-        Country(CountryCode("AA"), "country5"),
-        Country(CountryCode("BB"), "country6")
-      )
-
-      CountryList(unsortedCountries).fullList mustEqual sortedCountries
-    }
-  }
-
   "getCountry" - {
     "return a country if it exists" in {
       forAll(nonEmptyListOf[Country](10)) {

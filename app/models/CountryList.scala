@@ -18,10 +18,7 @@ package models
 
 import models.reference.{Country, CountryCode}
 
-class CountryList(val countries: Seq[Country]) {
-
-  // TODO - delete
-  def fullList: Seq[Country]                                = countries.sortBy(_.description)
+case class CountryList(countries: Seq[Country]) {
   def getCountry(countryCode: CountryCode): Option[Country] = countries.find(_.code == countryCode)
 
   override def equals(obj: Any): Boolean =

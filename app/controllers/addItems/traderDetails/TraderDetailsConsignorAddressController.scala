@@ -63,12 +63,12 @@ class TraderDetailsConsignorAddressController @Inject() (
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
         countriesService.getCountries() flatMap {
-          countries =>
+          countryList =>
             request.userAnswers.get(TraderDetailsConsignorNamePage(index)) match {
               case Some(consignorName) =>
                 val preparedForm = request.userAnswers.get(TraderDetailsConsignorAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consignorName).fill(value)
-                  case None        => formProvider(countries, consignorName)
+                  case Some(value) => formProvider(countryList, consignorName).fill(value)
+                  case None        => formProvider(countryList, consignorName)
                 }
 
                 val json = Json.obj(
@@ -77,7 +77,7 @@ class TraderDetailsConsignorAddressController @Inject() (
                   "mode"          -> mode,
                   "index"         -> index.display,
                   "consignorName" -> consignorName,
-                  "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+                  "countries"     -> countryJsonList(preparedForm.value.map(_.country), countryList.countries)
                 )
 
                 renderer.render(template, json).map(Ok(_))
@@ -96,14 +96,14 @@ class TraderDetailsConsignorAddressController @Inject() (
         request.userAnswers.get(TraderDetailsConsignorNamePage(index)) match {
           case Some(consignorName) =>
             countriesService.getCountries() flatMap {
-              countries =>
-                formProvider(countries, consignorName)
+              countryList =>
+                formProvider(countryList, consignorName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {
                       val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
                         country =>
-                          countries.getCountry(CountryCode(country))
+                          countryList.getCountry(CountryCode(country))
                       }
                       val json = Json.obj(
                         "form"          -> formWithErrors,
@@ -111,7 +111,7 @@ class TraderDetailsConsignorAddressController @Inject() (
                         "mode"          -> mode,
                         "index"         -> index.display,
                         "consignorName" -> consignorName,
-                        "countries"     -> countryJsonList(countryValue, countries.fullList)
+                        "countries"     -> countryJsonList(countryValue, countryList.countries)
                       )
 
                       renderer.render(template, json).map(BadRequest(_))

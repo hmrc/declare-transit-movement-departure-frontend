@@ -63,12 +63,12 @@ class SafetyAndSecurityConsigneeAddressController @Inject() (
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
         countriesService.getCountries() flatMap {
-          countries =>
+          countryList =>
             request.userAnswers.get(SafetyAndSecurityConsigneeNamePage) match {
               case Some(consigneeName) =>
                 val preparedForm = request.userAnswers.get(SafetyAndSecurityConsigneeAddressPage) match {
-                  case Some(value) => formProvider(countries, consigneeName).fill(value)
-                  case None        => formProvider(countries, consigneeName)
+                  case Some(value) => formProvider(countryList, consigneeName).fill(value)
+                  case None        => formProvider(countryList, consigneeName)
                 }
 
                 val json = Json.obj(
@@ -76,7 +76,7 @@ class SafetyAndSecurityConsigneeAddressController @Inject() (
                   "lrn"           -> lrn,
                   "mode"          -> mode,
                   "consigneeName" -> consigneeName,
-                  "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+                  "countries"     -> countryJsonList(preparedForm.value.map(_.country), countryList.countries)
                 )
 
                 renderer.render(template, json).map(Ok(_))
@@ -95,21 +95,21 @@ class SafetyAndSecurityConsigneeAddressController @Inject() (
         request.userAnswers.get(SafetyAndSecurityConsigneeNamePage) match {
           case Some(consigneeName) =>
             countriesService.getCountries() flatMap {
-              countries =>
-                formProvider(countries, consigneeName)
+              countryList =>
+                formProvider(countryList, consigneeName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {
                       val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
                         country =>
-                          countries.getCountry(CountryCode(country))
+                          countryList.getCountry(CountryCode(country))
                       }
                       val json = Json.obj(
                         "form"          -> formWithErrors,
                         "lrn"           -> lrn,
                         "mode"          -> mode,
                         "consigneeName" -> consigneeName,
-                        "countries"     -> countryJsonList(countryValue, countries.fullList)
+                        "countries"     -> countryJsonList(countryValue, countryList.countries)
                       )
 
                       renderer.render(template, json).map(BadRequest(_))

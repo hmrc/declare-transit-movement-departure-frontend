@@ -17,7 +17,7 @@
 package services
 
 import connectors.ReferenceDataConnector
-import models.reference.CountryCode
+import models.reference.{Country, CountryCode}
 import models.{CountryList, DeclarationType, UserAnswers}
 import pages.DeclarationTypePage
 import uk.gov.hmrc.http.HeaderCarrier
@@ -49,17 +49,13 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
 
     referenceDataConnector
       .getCountries(queryParameters)
-      .map(
-        countries => CountryList(countries.sortBy(_.description))
-      )
+      .map(sort)
   }
 
   def getCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
     referenceDataConnector
       .getCountries()
-      .map(
-        countries => CountryList(countries.sortBy(_.description))
-      )
+      .map(sort)
 
   def getTransitCountries(excludedCountries: Seq[CountryCode] = Nil)(implicit hc: HeaderCarrier): Future[CountryList] = {
     val queryParameters = excludedCountries.map(
@@ -68,15 +64,14 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
 
     referenceDataConnector
       .getTransitCountries(queryParameters)
-      .map(
-        countries => CountryList(countries.sortBy(_.description))
-      )
+      .map(sort)
   }
 
   def getNonEuTransitCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
     referenceDataConnector
       .getNonEuTransitCountries()
-      .map(
-        countries => CountryList(countries.sortBy(_.description))
-      )
+      .map(sort)
+
+  private def sort(countries: Seq[Country]): CountryList =
+    CountryList(countries.sortBy(_.description))
 }

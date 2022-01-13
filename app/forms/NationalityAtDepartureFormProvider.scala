@@ -28,7 +28,7 @@ class NationalityAtDepartureFormProvider @Inject() extends Mappings {
   def apply(countryList: CountryList): Form[Country] =
     Form(
       "value" -> text("nationalityAtDeparture.error.required")
-        .verifying("nationalityAtDeparture.error.required", value => countryList.fullList.exists(_.code.code == value))
-        .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
+        .verifying("nationalityAtDeparture.error.required", value => countryList.countries.exists(_.code.code == value))
+        .transform[Country](value => countryList.countries.find(_.code.code == value).get, _.code.code)
     )
 }

@@ -56,33 +56,33 @@ class CountryOfDispatchController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       countriesService.getCountries() flatMap {
-        countries =>
-          val form = formProvider(countries)
+        countryList =>
+          val form = formProvider(countryList)
 
           val preparedForm = request.userAnswers
             .get(CountryOfDispatchPage)
             .flatMap(
-              x => countries.getCountry(x.country)
+              x => countryList.getCountry(x.country)
             )
             .map(form.fill)
             .getOrElse(form)
 
-          renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok)
+          renderPage(lrn, mode, preparedForm, countryList.countries, Results.Ok)
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       countriesService.getCountries() flatMap {
-        countries =>
-          formProvider(countries)
+        countryList =>
+          formProvider(countryList)
             .bindFromRequest()
             .fold(
-              formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
+              formWithErrors => renderPage(lrn, mode, formWithErrors, countryList.countries, Results.BadRequest),
               value =>
                 for {
-                  getNonEuCountries: CountryList <- countriesService.getNonEuTransitCountries()
-                  isNotEu: Boolean = getNonEuCountries.countries.contains(value)
+                  nonEuCountries: CountryList <- countriesService.getNonEuTransitCountries()
+                  isNotEu: Boolean = nonEuCountries.countries.contains(value)
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfDispatchPage, CountryOfDispatch(value.code, isNotEu)))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(CountryOfDispatchPage, mode, updatedAnswers))

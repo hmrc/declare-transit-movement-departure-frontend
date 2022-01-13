@@ -56,12 +56,12 @@ class ConsignorAddressController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       countriesService.getCountries() flatMap {
-        countries =>
+        countryList =>
           request.userAnswers.get(ConsignorNamePage) match {
             case Some(consignorName) =>
               val preparedForm = request.userAnswers.get(ConsignorAddressPage) match {
-                case Some(value) => formProvider(countries, consignorName).fill(value)
-                case None        => formProvider(countries, consignorName)
+                case Some(value) => formProvider(countryList, consignorName).fill(value)
+                case None        => formProvider(countryList, consignorName)
               }
 
               val json = Json.obj(
@@ -69,7 +69,7 @@ class ConsignorAddressController @Inject() (
                 "lrn"           -> lrn,
                 "mode"          -> mode,
                 "consignorName" -> consignorName,
-                "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+                "countries"     -> countryJsonList(preparedForm.value.map(_.country), countryList.countries)
               )
 
               renderer.render("consignorAddress.njk", json).map(Ok(_))
@@ -84,21 +84,21 @@ class ConsignorAddressController @Inject() (
       request.userAnswers.get(ConsignorNamePage) match {
         case Some(consignorName) =>
           countriesService.getCountries() flatMap {
-            countries =>
-              formProvider(countries, consignorName)
+            countryList =>
+              formProvider(countryList, consignorName)
                 .bindFromRequest()
                 .fold(
                   formWithErrors => {
                     val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
                       country =>
-                        countries.getCountry(CountryCode(country))
+                        countryList.getCountry(CountryCode(country))
                     }
                     val json = Json.obj(
                       "form"          -> formWithErrors,
                       "lrn"           -> lrn,
                       "mode"          -> mode,
                       "consignorName" -> consignorName,
-                      "countries"     -> countryJsonList(countryValue, countries.fullList)
+                      "countries"     -> countryJsonList(countryValue, countryList.countries)
                     )
 
                     renderer.render("consignorAddress.njk", json).map(BadRequest(_))

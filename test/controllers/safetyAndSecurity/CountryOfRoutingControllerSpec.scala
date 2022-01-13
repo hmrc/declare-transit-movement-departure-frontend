@@ -47,8 +47,8 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
 
   private val mockCountriesService: CountriesService = mock[CountriesService]
 
-  val countries        = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  val form             = formProvider(countries)
+  val countryList      = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
+  val form             = formProvider(countryList)
   private val template = "safetyAndSecurity/countryOfRouting.njk"
 
   lazy val countryOfRoutingRoute = routes.CountryOfRoutingController.onPageLoad(lrn, index, NormalMode).url
@@ -66,7 +66,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -85,7 +85,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
         "index"     -> index.display,
         "mode"      -> NormalMode,
         "lrn"       -> lrn,
-        "countries" -> countryJsonList(form.value, countries.countries)
+        "countries" -> countryJsonList(form.value, countryList.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -100,7 +100,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.set(CountryOfRoutingPage(index), CountryCode("GB")).success.value
       setUserAnswers(Some(userAnswers))
@@ -122,7 +122,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
         "index"     -> index.display,
         "lrn"       -> lrn,
         "mode"      -> NormalMode,
-        "countries" -> countryJsonList(filledForm.value, countries.countries)
+        "countries" -> countryJsonList(filledForm.value, countryList.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -135,7 +135,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -154,7 +154,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countryList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

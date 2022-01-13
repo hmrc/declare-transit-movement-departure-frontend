@@ -64,10 +64,10 @@ class SecurityConsignorAddressController @Inject() (
       andThen requireName(SecurityConsignorNamePage(index))).async {
       implicit request =>
         countriesService.getCountries() flatMap {
-          countries =>
+          countryList =>
             val preparedForm = request.userAnswers.get(SecurityConsignorAddressPage(index)) match {
-              case Some(value) => formProvider(countries, request.name).fill(value)
-              case None        => formProvider(countries, request.name)
+              case Some(value) => formProvider(countryList, request.name).fill(value)
+              case None        => formProvider(countryList, request.name)
             }
 
             val json = Json.obj(
@@ -76,7 +76,7 @@ class SecurityConsignorAddressController @Inject() (
               "index"         -> index.display,
               "mode"          -> mode,
               "consignorName" -> request.name,
-              "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+              "countries"     -> countryJsonList(preparedForm.value.map(_.country), countryList.countries)
             )
 
             renderer.render(template, json).map(Ok(_))
@@ -91,14 +91,14 @@ class SecurityConsignorAddressController @Inject() (
       andThen requireName(SecurityConsignorNamePage(index))).async {
       implicit request =>
         countriesService.getCountries() flatMap {
-          countries =>
-            formProvider(countries, request.name)
+          countryList =>
+            formProvider(countryList, request.name)
               .bindFromRequest()
               .fold(
                 formWithErrors => {
                   val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
                     country =>
-                      countries.getCountry(CountryCode(country))
+                      countryList.getCountry(CountryCode(country))
                   }
                   val json = Json.obj(
                     "form"          -> formWithErrors,
@@ -106,7 +106,7 @@ class SecurityConsignorAddressController @Inject() (
                     "mode"          -> mode,
                     "index"         -> index.display,
                     "consignorName" -> request.name,
-                    "countries"     -> countryJsonList(countryValue, countries.fullList)
+                    "countries"     -> countryJsonList(countryValue, countryList.countries)
                   )
 
                   renderer.render(template, json).map(BadRequest(_))

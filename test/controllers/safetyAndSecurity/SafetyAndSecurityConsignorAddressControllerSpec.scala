@@ -49,13 +49,13 @@ class SafetyAndSecurityConsignorAddressControllerSpec
     with JsonMatchers {
 
   private val country       = Country(CountryCode("GB"), "United Kingdom")
-  private val countries     = CountryList(Seq(country))
+  private val countryList   = CountryList(Seq(country))
   private val consignorName = "consignorName"
 
   private val mockCountriesService: CountriesService = mock[CountriesService]
 
   private val formProvider = new CommonAddressFormProvider()
-  private val form         = formProvider(countries, consignorName)
+  private val form         = formProvider(countryList, consignorName)
   private val template     = "safetyAndSecurity/safetyAndSecurityConsignorAddress.njk"
 
   lazy val safetyAndSecurityConsignorAddressRoute = routes.SafetyAndSecurityConsignorAddressController.onPageLoad(lrn, NormalMode).url
@@ -80,7 +80,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec
         .thenReturn(Future.successful(Html("")))
 
       when(mockCountriesService.getCountries()(any()))
-        .thenReturn(Future.successful(countries))
+        .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsignorNamePage, consignorName).success.value
 
@@ -101,7 +101,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec
         "mode"          -> NormalMode,
         "lrn"           -> lrn,
         "consignorName" -> consignorName,
-        "countries"     -> countryJsonList(form.value.map(_.country), countries.fullList)
+        "countries"     -> countryJsonList(form.value.map(_.country), countryList.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -116,7 +116,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockCountriesService.getCountries()(any()))
-        .thenReturn(Future.successful(countries))
+        .thenReturn(Future.successful(countryList))
       val consignorAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
@@ -152,7 +152,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec
         "lrn"           -> lrn,
         "mode"          -> NormalMode,
         "consignorName" -> consignorName,
-        "countries"     -> countryJsonList(filledForm.value.map(_.country), countries.fullList)
+        "countries"     -> countryJsonList(filledForm.value.map(_.country), countryList.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -166,7 +166,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockCountriesService.getCountries()(any()))
-        .thenReturn(Future.successful(countries))
+        .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers
         .set(SafetyAndSecurityConsignorNamePage, "ConsignorName")
@@ -192,7 +192,7 @@ class SafetyAndSecurityConsignorAddressControllerSpec
         .thenReturn(Future.successful(Html("")))
 
       when(mockCountriesService.getCountries()(any()))
-        .thenReturn(Future.successful(countries))
+        .thenReturn(Future.successful(countryList))
       val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsignorNamePage, "ConsignorName").success.value
       setUserAnswers(Some(userAnswers))
 
