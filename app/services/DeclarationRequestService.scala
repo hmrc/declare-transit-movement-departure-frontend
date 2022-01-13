@@ -131,7 +131,7 @@ class DeclarationRequestService @Inject() (
             dangerousGoodsCode = itemSection.itemSecurityTraderDetails.flatMap(_.dangerousGoodsCode),
             previousAdministrativeReferences = previousAdministrativeReference(itemSection.previousReferences),
             producedDocuments = producedDocuments(itemSection.producedDocuments),
-            specialMention = SpecialMentionConversion(itemSection.specialMentions, guaranteeDetails, index),
+            specialMention = SpecialMentionConversion((itemSection.specialMentions, guaranteeDetails, index)),
             traderConsignorGoodsItem = collectWhen(goodsItems.size > 1)(traderConsignor(itemSection.consignor)),
             traderConsigneeGoodsItem = collectWhen(goodsItems.size > 1)(traderConsignee(itemSection.consignee)),
             containers = containers(itemSection.containers),

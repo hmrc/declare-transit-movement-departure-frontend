@@ -32,7 +32,7 @@ object AppDependencies {
     "org.pegdown"                 % "pegdown"                  % "1.6.0",
     "org.jsoup"                   % "jsoup"                    % "1.14.3",
     "com.typesafe.play"          %% "play-test"                % current,
-    "org.mockito"                 % "mockito-core"             % "3.12.4",
+    "org.mockito"                 % "mockito-core"             % "4.1.0",
     "org.scalacheck"             %% "scalacheck"               % "1.15.4",
     "wolfendale"                 %% "scalacheck-gen-regexp"    % "0.1.1",
     "com.github.tomakehurst"      % "wiremock-standalone"      % "2.27.2",
