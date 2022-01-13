@@ -17,7 +17,6 @@
 package controllers.addItems.traderDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
 import generators.Generators
@@ -37,6 +36,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -49,10 +49,11 @@ class TraderDetailsConsigneeAddressControllerSpec
     with JsonMatchers
     with Generators {
 
-  private val country                                            = Country(CountryCode("GB"), "United Kingdom")
-  private val countries                                          = CountryList(Seq(country))
-  private val consigneeName                                      = "consigneeName"
-  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val country       = Country(CountryCode("GB"), "United Kingdom")
+  private val countries     = CountryList(Seq(country))
+  private val consigneeName = "consigneeName"
+
+  private val mockCountriesService: CountriesService = mock[CountriesService]
 
   private val formProvider = new CommonAddressFormProvider()
   private val form         = formProvider(countries, consigneeName)
@@ -64,7 +65,7 @@ class TraderDetailsConsigneeAddressControllerSpec
       .guiceApplicationBuilder()
       .overrides(
         bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsTraderDetails]).toInstance(fakeNavigator),
-        bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector)
+        bind[CountriesService].toInstance(mockCountriesService)
       )
 
   "ConsigneeAddress Controller" - {
@@ -74,7 +75,7 @@ class TraderDetailsConsigneeAddressControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), "foo").success.value
@@ -106,7 +107,7 @@ class TraderDetailsConsigneeAddressControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val tradersDetailsConsigneeAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
@@ -154,7 +155,7 @@ class TraderDetailsConsigneeAddressControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), consigneeName).success.value
@@ -176,7 +177,7 @@ class TraderDetailsConsigneeAddressControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(TraderDetailsConsigneeNamePage(index), consigneeName).success.value

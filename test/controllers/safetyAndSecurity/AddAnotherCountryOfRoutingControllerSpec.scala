@@ -17,7 +17,6 @@
 package controllers.safetyAndSecurity
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.AddAnotherCountryOfRoutingFormProvider
 import matchers.JsonMatchers
@@ -35,6 +34,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
@@ -43,10 +43,11 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
 
   private val formProvider = new AddAnotherCountryOfRoutingFormProvider()
 
-  private val mockReferenceDataConnector = mock[ReferenceDataConnector]
-  val countries                          = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val form                       = formProvider()
-  private val template                   = "safetyAndSecurity/addAnotherCountryOfRouting.njk"
+  private val mockCountriesService: CountriesService = mock[CountriesService]
+
+  val countries        = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
+  private val form     = formProvider()
+  private val template = "safetyAndSecurity/addAnotherCountryOfRouting.njk"
 
   private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url
 
@@ -54,7 +55,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "AddAnotherCountryOfRouting Controller" - {
 
@@ -63,7 +64,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -93,7 +94,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -114,7 +115,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(emptyUserAnswers))
 

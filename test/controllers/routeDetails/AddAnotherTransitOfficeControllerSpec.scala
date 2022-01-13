@@ -17,7 +17,6 @@
 package controllers.routeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.AddAnotherTransitOfficeFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -49,7 +49,8 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with AppWithDefault
   private val customsOffices: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice1, customsOffice2))
   val form                                      = new AddAnotherTransitOfficeFormProvider()(customsOffices, "United Kingdom")
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockCountriesService: CountriesService          = mock[CountriesService]
+  private val mockCustomsOfficeService: CustomsOfficesService = mock[CustomsOfficesService]
 
   lazy val addAnotherTransitOfficeRoute: String = routes.AddAnotherTransitOfficeController.onPageLoad(lrn, index, NormalMode).url
 
@@ -57,7 +58,8 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with AppWithDefault
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[RouteDetails]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
+      .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficeService))
 
   "AddAnotherTransitOffice Controller" - {
 
@@ -66,9 +68,9 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with AppWithDefault
       setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
+      when(mockCustomsOfficeService.getCustomsOfficesForCountry(any(), eqTo(Seq("TRA")))(any()))
         .thenReturn(Future.successful(customsOffices))
-      when(mockRefDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getTransitCountries(eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(GET, addAnotherTransitOfficeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -103,7 +105,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with AppWithDefault
       setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
+      when(mockCustomsOfficeService.getCustomsOfficesForCountry(any(), eqTo(Seq("TRA")))(any()))
         .thenReturn(Future.successful(customsOffices))
 
       val request = FakeRequest(GET, addAnotherTransitOfficeRoute)
@@ -125,7 +127,7 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with AppWithDefault
       setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any())).thenReturn(Future.successful(customsOffices))
+      when(mockCustomsOfficeService.getCustomsOfficesForCountry(any(), eqTo(Seq("TRA")))(any())).thenReturn(Future.successful(customsOffices))
 
       val request                                = FakeRequest(GET, addAnotherTransitOfficeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -159,9 +161,9 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with AppWithDefault
     "must redirect to the next page when valid data is submitted" in {
       val userAnswers = emptyUserAnswers.set(OfficeOfTransitCountryPage(index), countryCode).success.value
       setUserAnswers(Some(userAnswers))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
+      when(mockCustomsOfficeService.getCustomsOfficesForCountry(any(), eqTo(Seq("TRA")))(any()))
         .thenReturn(Future.successful(customsOffices))
-      when(mockRefDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getTransitCountries(eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
@@ -179,9 +181,9 @@ class AddAnotherTransitOfficeControllerSpec extends SpecBase with AppWithDefault
       setUserAnswers(Some(userAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(any(), eqTo(Seq("TRA")))(any(), any()))
+      when(mockCustomsOfficeService.getCustomsOfficesForCountry(any(), eqTo(Seq("TRA")))(any()))
         .thenReturn(Future.successful(customsOffices))
-      when(mockRefDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getTransitCountries(eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(POST, addAnotherTransitOfficeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))

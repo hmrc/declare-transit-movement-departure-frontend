@@ -17,7 +17,6 @@
 package controllers.safetyAndSecurity
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.CountryOfRoutingFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
 
@@ -43,8 +43,9 @@ import scala.concurrent.Future
 
 class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  private val formProvider               = new CountryOfRoutingFormProvider()
-  private val mockReferenceDataConnector = mock[ReferenceDataConnector]
+  private val formProvider = new CountryOfRoutingFormProvider()
+
+  private val mockCountriesService: CountriesService = mock[CountriesService]
 
   val countries        = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   val form             = formProvider(countries)
@@ -56,7 +57,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "CountryOfRouting Controller" - {
 
@@ -65,7 +66,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -99,7 +100,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(CountryOfRoutingPage(index), CountryCode("GB")).success.value
       setUserAnswers(Some(userAnswers))
@@ -134,7 +135,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -153,7 +154,7 @@ class CountryOfRoutingControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(emptyUserAnswers))
 

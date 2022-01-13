@@ -74,7 +74,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getDestinationCountryList(any(), any())(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(userAnswers))
 
@@ -88,7 +88,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
       verify(mockCountriesService, times(1))
-        .getDestinationCountryList(any(), eqTo(alwaysExcludedTransitCountries))(any())
+        .getDestinationCountries(any(), eqTo(alwaysExcludedTransitCountries))(any())
 
       val expectedJson = Json.obj(
         "form"        -> form,
@@ -113,7 +113,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getDestinationCountryList(any(), any())(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(userAnswers))
 
@@ -127,7 +127,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
       verify(mockCountriesService, times(1))
-        .getDestinationCountryList(any(), eqTo(alwaysExcludedTransitCountries ++ gbExcludedCountries))(any())
+        .getDestinationCountries(any(), eqTo(alwaysExcludedTransitCountries ++ gbExcludedCountries))(any())
 
       val expectedJson = Json.obj(
         "form"        -> form,
@@ -153,7 +153,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getDestinationCountryList(any(), any())(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(userAnswers))
 
@@ -191,7 +191,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getDestinationCountryList(any(), any())(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(userAnswers))
 
@@ -214,7 +214,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getDestinationCountryList(any(), eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(userAnswers))
 

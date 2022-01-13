@@ -22,7 +22,6 @@ import helper.WireMockServerHandler
 import models.reference._
 import models.{
   CircumstanceIndicatorList,
-  CountryList,
   CustomsOfficeList,
   DangerousGoodsCodeList,
   DocumentTypeList,
@@ -275,13 +274,10 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(customsOfficeResponseJson))
         )
 
-        val expectedResult =
-          CustomsOfficeList(
-            Seq(
-              CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
-              CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
-            )
-          )
+        val expectedResult = Seq(
+          CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
+          CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
+        )
 
         connector.getCustomsOffices().futureValue mustBe expectedResult
       }
@@ -292,13 +288,10 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(customsOfficeResponseJson))
         )
 
-        val expectedResult =
-          CustomsOfficeList(
-            Seq(
-              CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
-              CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
-            )
-          )
+        val expectedResult = Seq(
+          CustomsOffice("testId1", "testName1", CountryCode("GB"), Some("testPhoneNumber")),
+          CustomsOffice("testId2", "testName2", CountryCode("GB"), None)
+        )
 
         connector.getCustomsOffices(Seq("NPM")).futureValue mustBe expectedResult
       }
@@ -323,7 +316,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             )
           )
 
-        connector.getCustomsOfficesOfTheCountry(CountryCode("GB")).futureValue mustBe expectedResult
+        connector.getCustomsOfficesForCountry(CountryCode("GB")).futureValue mustBe expectedResult
       }
 
       "must return a successful future response when roles are defined with a sequence of CustomsOffices" in {
@@ -340,7 +333,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             )
           )
 
-        connector.getCustomsOfficesOfTheCountry(CountryCode("GB"), Seq("TRA")).futureValue mustBe expectedResult
+        connector.getCustomsOfficesForCountry(CountryCode("GB"), Seq("TRA")).futureValue mustBe expectedResult
       }
 
       "must return a successful future response when CustomsOffice is not found" in {
@@ -355,11 +348,11 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
         val expectedResult =
           CustomsOfficeList(Nil)
 
-        connector.getCustomsOfficesOfTheCountry(CountryCode("AR"), Seq("TRA")).futureValue mustBe expectedResult
+        connector.getCustomsOfficesForCountry(CountryCode("AR"), Seq("TRA")).futureValue mustBe expectedResult
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/customs-offices/GB", connector.getCustomsOfficesOfTheCountry(CountryCode("GB")))
+        checkErrorResponse(s"/$startUrl/customs-offices/GB", connector.getCustomsOfficesForCountry(CountryCode("GB")))
       }
     }
 
@@ -370,17 +363,15 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(countryListResponseJson))
         )
 
-        val expectedResult: CountryList = CountryList(
-          Seq(
-            Country(CountryCode("GB"), "United Kingdom"),
-            Country(CountryCode("AD"), "Andorra")
-          )
+        val expectedResult: Seq[Country] = Seq(
+          Country(CountryCode("GB"), "United Kingdom"),
+          Country(CountryCode("AD"), "Andorra")
         )
-        connector.getCountryList.futureValue mustEqual expectedResult
+        connector.getCountries.futureValue mustEqual expectedResult
       }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/countries-full-list", connector.getCountryList)
+        checkErrorResponse(s"/$startUrl/countries-full-list", connector.getCountries)
       }
     }
 
@@ -405,61 +396,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
         connector.getCountries(queryParameters).futureValue mustEqual expectedResult
       }
-    }
-
-    "getCountriesWithCustomsOfficesAndEuMembership" - {
-      "must return Seq of EU Countries when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&membership=eu"))
-            .willReturn(okJson(countryListResponseJson))
-        )
-
-        val expectedResult: CountryList = CountryList(
-          Seq(
-            Country(CountryCode("GB"), "United Kingdom"),
-            Country(CountryCode("AD"), "Andorra")
-          )
-        )
-        connector.getCountriesWithCustomsOfficesAndEuMembership(Seq.empty).futureValue mustEqual expectedResult
-      }
-    }
-
-    "getCountriesWithCustomsOffices" - {
-
-      "when there are no excluded coutries, must return Seq of Country when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY"))
-            .willReturn(okJson(countryListResponseJson))
-        )
-
-        val expectedResult: CountryList = CountryList(
-          Seq(
-            Country(CountryCode("GB"), "United Kingdom"),
-            Country(CountryCode("AD"), "Andorra")
-          )
-        )
-
-        connector.getCountriesWithCustomsOffices(Nil).futureValue mustEqual expectedResult
-      }
-
-      "when there are excluded coutries, then the excluded coutries must be sent as a query paramter and the request returns a Seq of Country when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&exclude=JE&exclude=AB"))
-            .willReturn(okJson(countryListResponseJson))
-        )
-
-        val expectedResult: CountryList = CountryList(
-          Seq(
-            Country(CountryCode("GB"), "United Kingdom"),
-            Country(CountryCode("AD"), "Andorra")
-          )
-        )
-
-        connector.getCountriesWithCustomsOffices(Seq(CountryCode("JE"), CountryCode("AB"))).futureValue mustEqual expectedResult
-      }
 
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/countries?customsOfficeRole=ANY", connector.getCountriesWithCustomsOffices(Nil))
+        checkErrorResponse(s"/$startUrl/countries?customsOfficeRole=ANY", connector.getCountries(Nil))
       }
     }
 
@@ -471,14 +410,12 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(countryListResponseJson))
         )
 
-        val expectedResult: CountryList = CountryList(
-          Seq(
-            Country(CountryCode("GB"), "United Kingdom"),
-            Country(CountryCode("AD"), "Andorra")
-          )
+        val expectedResult: Seq[Country] = Seq(
+          Country(CountryCode("GB"), "United Kingdom"),
+          Country(CountryCode("AD"), "Andorra")
         )
 
-        connector.getTransitCountryList().futureValue mustEqual expectedResult
+        connector.getTransitCountries().futureValue mustEqual expectedResult
       }
 
       "must return Seq of Country when passed with query parameters and is successful" in {
@@ -487,19 +424,22 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(countryListResponseJson))
         )
 
-        val expectedResult: CountryList = CountryList(
-          Seq(
-            Country(CountryCode("GB"), "United Kingdom"),
-            Country(CountryCode("AD"), "Andorra")
-          )
+        val expectedResult: Seq[Country] = Seq(
+          Country(CountryCode("GB"), "United Kingdom"),
+          Country(CountryCode("AD"), "Andorra")
         )
 
-        connector.getTransitCountryList(Seq(CountryCode("JE"), CountryCode("AB"))).futureValue mustEqual expectedResult
+        val queryParameters = Seq(
+          "excludeCountries" -> "JE",
+          "excludeCountries" -> "AB"
+        )
+
+        connector.getTransitCountries(queryParameters).futureValue mustEqual expectedResult
       }
 
       "must return an exception when an error response is returned" in {
 
-        checkErrorResponse(s"/$startUrl/transit-countries", connector.getTransitCountryList())
+        checkErrorResponse(s"/$startUrl/transit-countries", connector.getTransitCountries())
       }
     }
 
@@ -511,19 +451,17 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(nonEUCountryListResponseJson))
         )
 
-        val expectedResult: CountryList = CountryList(
-          Seq(
-            Country(CountryCode("GB"), "United Kingdom"),
-            Country(CountryCode("NO"), "Norway")
-          )
+        val expectedResult: Seq[Country] = Seq(
+          Country(CountryCode("GB"), "United Kingdom"),
+          Country(CountryCode("NO"), "Norway")
         )
 
-        connector.getNonEUTransitCountryList().futureValue mustEqual expectedResult
+        connector.getNonEuTransitCountries().futureValue mustEqual expectedResult
       }
 
       "must return an exception when an error response is returned" in {
 
-        checkErrorResponse(s"/$startUrl/non-eu-transit-countries", connector.getNonEUTransitCountryList())
+        checkErrorResponse(s"/$startUrl/non-eu-transit-countries", connector.getNonEuTransitCountries())
       }
     }
 

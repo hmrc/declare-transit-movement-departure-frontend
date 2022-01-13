@@ -17,7 +17,6 @@
 package controllers.traderDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
@@ -36,16 +35,18 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
 class ConsignorAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  private val country                                            = Country(CountryCode("GB"), "United Kingdom")
-  private val countries                                          = CountryList(Seq(country))
-  private val consignorName                                      = "consignorName"
-  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val country       = Country(CountryCode("GB"), "United Kingdom")
+  private val countries     = CountryList(Seq(country))
+  private val consignorName = "consignorName"
+
+  private val mockCountriesService: CountriesService = mock[CountriesService]
 
   private val formProvider = new CommonAddressFormProvider()
   private val form         = formProvider(countries, consignorName)
@@ -57,7 +58,7 @@ class ConsignorAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       .guiceApplicationBuilder()
       .overrides(
         bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator),
-        bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector)
+        bind(classOf[CountriesService]).toInstance(mockCountriesService)
       )
 
   "ConsignorAddress Controller" - {
@@ -67,7 +68,7 @@ class ConsignorAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(ConsignorNamePage, "foo").success.value
@@ -99,7 +100,7 @@ class ConsignorAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val consignorAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
@@ -146,7 +147,7 @@ class ConsignorAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(ConsignorNamePage, "consignorName").success.value
       setUserAnswers(Some(userAnswers))
@@ -167,7 +168,7 @@ class ConsignorAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(ConsignorNamePage, "consignorName").success.value

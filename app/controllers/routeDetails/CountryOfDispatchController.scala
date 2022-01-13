@@ -16,7 +16,6 @@
 
 package controllers.routeDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.CountryOfDispatchFormProvider
 import models.reference.{Country, CountryOfDispatch}
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
@@ -44,7 +44,7 @@ class CountryOfDispatchController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: CountryOfDispatchFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -55,7 +55,7 @@ class CountryOfDispatchController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
+      countriesService.getCountries() flatMap {
         countries =>
           val form = formProvider(countries)
 
@@ -73,7 +73,7 @@ class CountryOfDispatchController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
+      countriesService.getCountries() flatMap {
         countries =>
           formProvider(countries)
             .bindFromRequest()
@@ -81,7 +81,7 @@ class CountryOfDispatchController @Inject() (
               formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
               value =>
                 for {
-                  getNonEuCountries: CountryList <- referenceDataConnector.getNonEUTransitCountryList
+                  getNonEuCountries: CountryList <- countriesService.getNonEuTransitCountries()
                   isNotEu: Boolean = getNonEuCountries.countries.contains(value)
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfDispatchPage, CountryOfDispatch(value.code, isNotEu)))
                   _              <- sessionRepository.set(updatedAnswers)

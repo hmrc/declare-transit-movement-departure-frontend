@@ -16,7 +16,6 @@
 
 package controllers.addItems.traderDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -45,7 +45,7 @@ class TraderDetailsConsigneeAddressController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -62,7 +62,7 @@ class TraderDetailsConsigneeAddressController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
+        countriesService.getCountries() flatMap {
           countries =>
             request.userAnswers.get(TraderDetailsConsigneeNamePage(index)) match {
               case Some(consigneeName) =>
@@ -95,7 +95,7 @@ class TraderDetailsConsigneeAddressController @Inject() (
       implicit request =>
         request.userAnswers.get(TraderDetailsConsigneeNamePage(index)) match {
           case Some(consigneeName) =>
-            referenceDataConnector.getCountryList() flatMap {
+            countriesService.getCountries() flatMap {
               countries =>
                 formProvider(countries, consigneeName)
                   .bindFromRequest()

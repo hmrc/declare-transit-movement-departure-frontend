@@ -46,19 +46,45 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   "CustomsOfficesService" - {
 
+    "getCustomsOffices" - {
+      "must return a list of sorted GB and NI customs offices" in {
+
+        when(mockRefDataConnector.getCustomsOffices(any())(any(), any()))
+          .thenReturn(Future.successful(gbCustomsOffices.customsOffices))
+
+        service.getCustomsOffices().futureValue.getAll mustBe
+          CustomsOfficeList(Seq(gbCustomsOffice2, gbCustomsOffice1)).getAll
+
+        verify(mockRefDataConnector).getCustomsOffices(eqTo(Nil))(any(), any())
+      }
+    }
+
     "getCustomsOfficesOfDeparture" - {
       "must return a list of sorted GB and NI customs offices" in {
 
-        when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any()))
+        when(mockRefDataConnector.getCustomsOfficesForCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any()))
           .thenReturn(Future.successful(xiCustomsOffices))
-        when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any()))
+        when(mockRefDataConnector.getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any()))
           .thenReturn(Future.successful(gbCustomsOffices))
 
         service.getCustomsOfficesOfDeparture.futureValue.getAll mustBe
           CustomsOfficeList(Seq(gbCustomsOffice2, xiCustomsOffice1, gbCustomsOffice1)).getAll
 
-        verify(mockRefDataConnector).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any())
-        verify(mockRefDataConnector).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any())
+        verify(mockRefDataConnector).getCustomsOfficesForCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any())
+        verify(mockRefDataConnector).getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any())
+      }
+    }
+
+    "getCustomsOfficesForCountry" - {
+      "must return a list of sorted customs offices for a given country" in {
+
+        when(mockRefDataConnector.getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Nil))(any(), any()))
+          .thenReturn(Future.successful(gbCustomsOffices))
+
+        service.getCustomsOfficesForCountry(CountryCode("GB")).futureValue.getAll mustBe
+          CustomsOfficeList(Seq(gbCustomsOffice2, gbCustomsOffice1)).getAll
+
+        verify(mockRefDataConnector).getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Nil))(any(), any())
       }
     }
 

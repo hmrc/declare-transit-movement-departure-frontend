@@ -16,7 +16,6 @@
 
 package controllers.routeDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import derivable.DeriveNumberOfOfficeOfTransits
@@ -30,6 +29,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.MessageInterpolators
@@ -44,7 +44,8 @@ class RouteDetailsCheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
+  customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -63,17 +64,12 @@ class RouteDetailsCheckYourAnswersController @Inject() (
                 case _                             => true
               }
 
-              val XICountryCode    = request.userAnswers.get(OfficeOfDeparturePage).map(_.countryId).contains(CountryCode("XI"))
-              val OfficesOfTransit = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
+              val isXICountryCode          = request.userAnswers.get(OfficeOfDeparturePage).map(_.countryId).contains(CountryCode("XI"))
+              val numberOfOfficesOfTransit = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
 
-              val addOrRemoveOfficeOfTransitUrl = XICountryCode match {
-                case true =>
-                  if (OfficesOfTransit == 0) {
-                    routes.AddOfficeOfTransitController.onPageLoad(lrn, NormalMode).url
-                  } else {
-                    routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
-                  }
-                case _ => routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
+              val addOrRemoveOfficeOfTransitUrl = (isXICountryCode, numberOfOfficesOfTransit) match {
+                case (true, 0) => routes.AddOfficeOfTransitController.onPageLoad(lrn, NormalMode).url
+                case _         => routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
               }
 
               val json = if (decType) {
@@ -107,16 +103,15 @@ class RouteDetailsCheckYourAnswersController @Inject() (
     val checkYourAnswersHelper = new RouteDetailsCheckYourAnswersHelper(request.userAnswers, CheckMode)
 
     for {
-      countryList            <- referenceDataConnector.getCountryList()
-      destCountryList        <- referenceDataConnector.getCountryList()
-      movementCountryList    <- referenceDataConnector.getTransitCountryList(excludeCountries = alwaysExcludedTransitCountries)
-      destOfficeList         <- referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode)
+      countryList            <- countriesService.getCountries()
+      movementCountryList    <- countriesService.getTransitCountries(alwaysExcludedTransitCountries)
+      destOfficeList         <- customsOfficesService.getCustomsOfficesForCountry(countryCode)
       officeOfTransitSection <- officeOfTransitSections(checkYourAnswersHelper)
     } yield {
       val section: Section = Section(
         Seq(
           checkYourAnswersHelper.countryOfDispatch(countryList),
-          checkYourAnswersHelper.destinationCountry(destCountryList),
+          checkYourAnswersHelper.destinationCountry(countryList),
           checkYourAnswersHelper.movementDestinationCountry(movementCountryList),
           checkYourAnswersHelper.destinationOffice(destOfficeList)
         ).flatten
@@ -128,7 +123,7 @@ class RouteDetailsCheckYourAnswersController @Inject() (
   private def officeOfTransitSections(
     routesCYAHelper: RouteDetailsCheckYourAnswersHelper
   )(implicit hc: HeaderCarrier, request: DataRequest[AnyContent]): Future[Section] =
-    referenceDataConnector.getCustomsOffices() map {
+    customsOfficesService.getCustomsOffices() map {
       customsOfficeList =>
         val numberOfTransitOffices = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
         val index: Seq[Index]      = List.range(0, numberOfTransitOffices).map(Index(_))

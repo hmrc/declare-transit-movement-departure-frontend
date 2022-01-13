@@ -17,7 +17,6 @@
 package controllers.transportDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.NationalityAtDepartureFormProvider
 import matchers.JsonMatchers
@@ -36,13 +35,14 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
 class NationalityAtDepartureControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockCountriesService: CountriesService = mock[CountriesService]
 
   private val formProvider = new NationalityAtDepartureFormProvider()
   private val country      = Country(CountryCode("GB"), "United Kingdom")
@@ -60,10 +60,10 @@ class NationalityAtDepartureControllerSpec extends SpecBase with AppWithDefaultM
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   override def beforeEach(): Unit = {
-    reset(mockReferenceDataConnector)
+    reset(mockCountriesService)
     super.beforeEach()
   }
 
@@ -76,7 +76,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with AppWithDefaultM
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(GET, nationalityAtDepartureRoute)
@@ -110,7 +110,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with AppWithDefaultM
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(GET, nationalityAtDepartureRoute)
@@ -144,7 +144,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with AppWithDefaultM
       when(mockSessionRepository.set(any()))
         .thenReturn(Future.successful(true))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val request =
@@ -167,7 +167,7 @@ class NationalityAtDepartureControllerSpec extends SpecBase with AppWithDefaultM
       when(mockSessionRepository.set(any()))
         .thenReturn(Future.successful(true))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(POST, nationalityAtDepartureRoute).withFormUrlEncodedBody(("value", ""))

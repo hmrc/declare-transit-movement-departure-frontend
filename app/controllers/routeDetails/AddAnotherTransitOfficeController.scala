@@ -16,7 +16,6 @@
 
 package controllers.routeDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import derivable.DeriveOfficesOfTransitIds
@@ -33,6 +32,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getCustomsOfficesAsJson
@@ -47,7 +47,8 @@ class AddAnotherTransitOfficeController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
+  customsOfficesService: CustomsOfficesService,
   formProvider: AddAnotherTransitOfficeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
@@ -126,9 +127,9 @@ class AddAnotherTransitOfficeController @Inject() (
 
   //TODO Refactor - 1) Make concurrent calls 2) Use transit country lookup by code
   private def getCustomsOfficeAndCountryName(countryCode: CountryCode)(implicit request: DataRequest[AnyContent]): Future[(CustomsOfficeList, String)] =
-    referenceDataConnector.getCustomsOfficesOfTheCountry(countryCode, transitOfficeRoles) flatMap {
+    customsOfficesService.getCustomsOfficesForCountry(countryCode, transitOfficeRoles) flatMap {
       customsOffices =>
-        referenceDataConnector.getTransitCountryList(excludeCountries = alwaysExcludedTransitCountries) map {
+        countriesService.getTransitCountries(alwaysExcludedTransitCountries) map {
           countryList =>
             val countryName = countryList.getCountry(countryCode).fold(countryCode.code)(_.description)
             (customsOffices, countryName)

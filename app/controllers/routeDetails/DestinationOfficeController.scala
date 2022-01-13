@@ -18,7 +18,6 @@ package controllers.routeDetails
 
 import cats.data.OptionT
 import cats.implicits._
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.DestinationOfficeFormProvider
 import models.reference.CustomsOffice
@@ -34,6 +33,7 @@ import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
 import services.ExcludedCountriesService._
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
@@ -48,7 +48,8 @@ class DestinationOfficeController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
+  customsOfficesService: CustomsOfficesService,
   formProvider: DestinationOfficeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -64,8 +65,8 @@ class DestinationOfficeController @Inject() (
         for {
           movementDestination <- OptionT.fromOption[Future](request.userAnswers.get(MovementDestinationCountryPage))
           excludedCountries   <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          customsOffices      <- OptionT.liftF(referenceDataConnector.getCustomsOfficesOfTheCountry(movementDestination, destinationOfficeRoles))
-          countryList         <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+          customsOffices      <- OptionT.liftF(customsOfficesService.getCustomsOfficesForCountry(movementDestination, destinationOfficeRoles))
+          countryList         <- OptionT.liftF(countriesService.getTransitCountries(excludedCountries))
           countryName = countryList.getCountry(movementDestination).fold(movementDestination.code)(_.description)
           preparedForm = request.userAnswers
             .get(DestinationOfficePage)
@@ -88,8 +89,8 @@ class DestinationOfficeController @Inject() (
         for {
           movementDestination <- OptionT.fromOption[Future](request.userAnswers.get(MovementDestinationCountryPage))
           excludedCountries   <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          customsOffices      <- OptionT.liftF(referenceDataConnector.getCustomsOfficesOfTheCountry(movementDestination, destinationOfficeRoles))
-          countryList         <- OptionT.liftF(referenceDataConnector.getTransitCountryList(excludedCountries))
+          customsOffices      <- OptionT.liftF(customsOfficesService.getCustomsOfficesForCountry(movementDestination, destinationOfficeRoles))
+          countryList         <- OptionT.liftF(countriesService.getTransitCountries(excludedCountries))
           countryName = countryList.getCountry(movementDestination).fold(movementDestination.code)(_.description)
           page <- OptionT.liftF(
             formProvider(customsOffices, countryName)

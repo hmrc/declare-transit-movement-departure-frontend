@@ -16,7 +16,6 @@
 
 package controllers.safetyAndSecurity
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.safetyAndSecurity.CountryOfRoutingFormProvider
 import models.reference.Country
@@ -31,6 +30,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -47,7 +47,7 @@ class CountryOfRoutingController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: CountryOfRoutingFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -63,7 +63,7 @@ class CountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
+        countriesService.getCountries() flatMap {
           countries =>
             val form = formProvider(countries)
 
@@ -83,7 +83,7 @@ class CountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
+        countriesService.getCountries() flatMap {
           countries =>
             formProvider(countries)
               .bindFromRequest()

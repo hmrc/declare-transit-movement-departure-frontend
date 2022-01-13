@@ -25,6 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.SafetyAndSecurityCheckYourAnswersViewModel
 import viewModels.sections.Section
@@ -37,6 +38,7 @@ class SafetyAndSecurityCheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   val controllerComponents: MessagesControllerComponents,
@@ -54,7 +56,7 @@ class SafetyAndSecurityCheckYourAnswersController @Inject() (
       implicit request =>
         val buildJson: Future[JsObject] =
           for {
-            countries              <- referenceDataConnector.getCountryList()
+            countries              <- countriesService.getCountries()
             circumstanceIndicators <- referenceDataConnector.getCircumstanceIndicatorList()
           } yield {
             val sections: Seq[Section] =

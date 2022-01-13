@@ -16,7 +16,6 @@
 
 package controllers.transportDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.NationalityCrossingBorderFormProvider
 import models.reference.Country
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -45,7 +45,7 @@ class NationalityCrossingBorderController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: NationalityCrossingBorderFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -60,7 +60,7 @@ class NationalityCrossingBorderController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
+        countriesService.getCountries() flatMap {
           countries =>
             val form = formProvider(countries)
 
@@ -80,7 +80,7 @@ class NationalityCrossingBorderController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
+        countriesService.getCountries() flatMap {
           countries =>
             formProvider(countries)
               .bindFromRequest()

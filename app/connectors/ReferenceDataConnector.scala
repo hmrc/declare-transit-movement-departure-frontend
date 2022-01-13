@@ -46,63 +46,22 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
 
   private def roleQueryParams(roles: Seq[String]): Seq[(String, String)] = roles.map("role" -> _)
 
-  def getCustomsOffices(roles: Seq[String] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
+  def getCustomsOffices(roles: Seq[String] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[CustomsOffice]] = {
     val serviceUrl = s"${config.referenceDataUrl}/customs-offices"
-    http.GET[Seq[CustomsOffice]](serviceUrl, roleQueryParams(roles)).map(CustomsOfficeList(_))
+    http.GET[Seq[CustomsOffice]](serviceUrl, roleQueryParams(roles))
   }
 
-  def getCustomsOfficesOfTheCountry(countryCode: CountryCode, roles: Seq[String] = Nil)(implicit
-    ec: ExecutionContext,
-    hc: HeaderCarrier
-  ): Future[CustomsOfficeList] = {
+  def getCustomsOfficesForCountry(
+    countryCode: CountryCode,
+    roles: Seq[String] = Nil
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOfficeList] = {
     val serviceUrl = s"${config.referenceDataUrl}/customs-offices/${countryCode.code}"
     http.GET[CustomsOfficeList](serviceUrl, roleQueryParams(roles))
   }
 
-  def getCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+  def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries-full-list"
-    http.GET[Seq[Country]](serviceUrl).map(CountryList(_))
-  }
-
-  def getCountriesWithCustomsOfficesAndCTCMembership(
-    excludeCountries: Seq[CountryCode]
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/countries"
-
-    val customsOfficeQuery    = Seq("customsOfficeRole" -> "ANY")
-    val membership            = Seq("membership" -> "ctc")
-    val excludeCountriesQuery = excludeCountries.map(_.code).map("exclude" -> _)
-
-    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery ++ membership
-    http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
-  }
-
-  def getCountriesWithCustomsOfficesAndEuMembership(
-    excludeCountries: Seq[CountryCode]
-  )(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
-
-    val serviceUrl = s"${config.referenceDataUrl}/countries"
-
-    val customsOfficeQuery    = Seq("customsOfficeRole" -> "ANY")
-    val membership            = Seq("membership" -> "eu")
-    val excludeCountriesQuery = excludeCountries.map(_.code).map("exclude" -> _)
-
-    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery ++ membership
-    http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
-  }
-
-  def getCountriesWithCustomsOffices(excludeCountries: Seq[CountryCode])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
-    val serviceUrl = s"${config.referenceDataUrl}/countries"
-
-    val customsOfficeQuery = Seq("customsOfficeRole" -> "ANY")
-
-    val excludeCountriesQuery = excludeCountries
-      .map(_.code)
-      .map("exclude" -> _)
-
-    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery
-
-    http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
+    http.GET[Seq[Country]](serviceUrl)
   }
 
   def getCountries(queryParameters: Seq[(String, String)])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
@@ -110,19 +69,14 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[Country]](serviceUrl, queryParameters)
   }
 
-  def getTransitCountryList(excludeCountries: Seq[CountryCode] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+  def getTransitCountries(queryParameters: Seq[(String, String)] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/transit-countries"
-
-    val excludeCountriesQueryParams = excludeCountries.map(
-      countryCode => "excludeCountries" -> countryCode.code
-    )
-
-    http.GET[Seq[Country]](serviceUrl, excludeCountriesQueryParams).map(CountryList(_))
+    http.GET[Seq[Country]](serviceUrl, queryParameters)
   }
 
-  def getNonEUTransitCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
+  def getNonEuTransitCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/non-eu-transit-countries"
-    http.GET[Seq[Country]](serviceUrl).map(CountryList(_))
+    http.GET[Seq[Country]](serviceUrl)
   }
 
   def getTransportModes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[TransportModeList] = {

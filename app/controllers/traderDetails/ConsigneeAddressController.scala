@@ -16,7 +16,6 @@
 
 package controllers.traderDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
@@ -30,6 +29,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
@@ -43,7 +43,7 @@ class ConsigneeAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -54,7 +54,7 @@ class ConsigneeAddressController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
+      countriesService.getCountries() flatMap {
         countries =>
           request.userAnswers.get(ConsigneeNamePage) match {
             case Some(consigneeName) =>
@@ -82,7 +82,7 @@ class ConsigneeAddressController @Inject() (
     implicit request =>
       request.userAnswers.get(ConsigneeNamePage) match {
         case Some(consigneeName) =>
-          referenceDataConnector.getCountryList() flatMap {
+          countriesService.getCountries() flatMap {
             countries =>
               formProvider(countries, consigneeName)
                 .bindFromRequest()

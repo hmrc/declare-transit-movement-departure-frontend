@@ -27,17 +27,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
-  def getDestinationCountryList(userAnswers: UserAnswers, excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
+  def getDestinationCountries(userAnswers: UserAnswers, excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
     userAnswers.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => getCountriesWithCustomsOfficesAndEuMembership(excludedCountries)
-      case _                             => getCountriesWithCustomsOfficesAndCtcMembership(excludedCountries)
+      case Some(DeclarationType.Option4) => getCountriesWithCustomsOfficesAndMembership(excludedCountries, "eu")
+      case _                             => getCountriesWithCustomsOfficesAndMembership(excludedCountries, "ctc")
     }
-
-  def getCountriesWithCustomsOfficesAndCtcMembership(excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
-    getCountriesWithCustomsOfficesAndMembership(excludedCountries, "ctc")
-
-  def getCountriesWithCustomsOfficesAndEuMembership(excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
-    getCountriesWithCustomsOfficesAndMembership(excludedCountries, "eu")
 
   private def getCountriesWithCustomsOfficesAndMembership(
     excludedCountries: Seq[CountryCode],
@@ -59,4 +53,30 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
         countries => CountryList(countries.sortBy(_.description))
       )
   }
+
+  def getCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
+    referenceDataConnector
+      .getCountries()
+      .map(
+        countries => CountryList(countries.sortBy(_.description))
+      )
+
+  def getTransitCountries(excludedCountries: Seq[CountryCode] = Nil)(implicit hc: HeaderCarrier): Future[CountryList] = {
+    val queryParameters = excludedCountries.map(
+      countryCode => "excludeCountries" -> countryCode.code
+    )
+
+    referenceDataConnector
+      .getTransitCountries(queryParameters)
+      .map(
+        countries => CountryList(countries.sortBy(_.description))
+      )
+  }
+
+  def getNonEuTransitCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
+    referenceDataConnector
+      .getNonEuTransitCountries()
+      .map(
+        countries => CountryList(countries.sortBy(_.description))
+      )
 }

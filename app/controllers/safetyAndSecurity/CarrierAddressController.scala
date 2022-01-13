@@ -16,7 +16,6 @@
 
 package controllers.safetyAndSecurity
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -42,7 +42,7 @@ class CarrierAddressController @Inject() (
   sessionRepository: SessionRepository,
   @SafetyAndSecurityTraderDetails navigator: Navigator,
   identify: IdentifierAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
@@ -62,7 +62,7 @@ class CarrierAddressController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
+        countriesService.getCountries() flatMap {
           countries =>
             request.userAnswers.get(CarrierNamePage) match {
               case Some(carrierName) =>
@@ -95,7 +95,7 @@ class CarrierAddressController @Inject() (
       implicit request =>
         request.userAnswers.get(CarrierNamePage) match {
           case Some(carrierName) =>
-            referenceDataConnector.getCountryList() flatMap {
+            countriesService.getCountries() flatMap {
               countries =>
                 formProvider(countries, carrierName)
                   .bindFromRequest()

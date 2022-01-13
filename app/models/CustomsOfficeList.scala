@@ -18,7 +18,7 @@ package models
 
 import models.reference.CustomsOffice
 
-class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
+case class CustomsOfficeList(customsOffices: Seq[CustomsOffice]) {
 
   def getAll: Seq[CustomsOffice] =
     customsOffices

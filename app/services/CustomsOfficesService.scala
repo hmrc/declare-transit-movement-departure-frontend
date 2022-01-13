@@ -28,11 +28,18 @@ class CustomsOfficesService @Inject() (
   referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
+  def getCustomsOffices(roles: Seq[String] = Nil)(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOffices(roles)
+      .map(
+        customsOffices => CustomsOfficeList(customsOffices.sortBy(_.name))
+      )
+
   def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = {
 
-    def getCustomsOffices(countryCode: String)(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = {
+    def getCustomsOffices(countryCode: String): Future[CustomsOfficeList] = {
       val departureOfficeRoles: Seq[String] = Seq("DEP")
-      referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode(countryCode), departureOfficeRoles)
+      getCustomsOfficesForCountry(CountryCode(countryCode), departureOfficeRoles)
     }
 
     for {
@@ -41,5 +48,12 @@ class CustomsOfficesService @Inject() (
       offices = (gbOffices.getAll ++ niOffices.getAll).sortBy(_.name)
     } yield CustomsOfficeList(offices)
   }
+
+  def getCustomsOfficesForCountry(countryCode: CountryCode, roles: Seq[String] = Nil)(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOfficesForCountry(countryCode, roles)
+      .map(
+        x => x.copy(customsOffices = x.customsOffices.sortBy(_.name))
+      )
 
 }

@@ -63,7 +63,7 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countries         <- OptionT.liftF(countriesService.getDestinationCountryList(request.userAnswers, excludedCountries))
+          countries         <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries))
           preparedForm = request.userAnswers
             .get(MovementDestinationCountryPage)
             .flatMap(countries.getCountry)
@@ -82,7 +82,7 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countries         <- OptionT.liftF(countriesService.getDestinationCountryList(request.userAnswers, excludedCountries))
+          countries         <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries))
           page <- OptionT.liftF(
             formProvider(countries)
               .bindFromRequest()

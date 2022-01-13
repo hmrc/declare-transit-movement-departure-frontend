@@ -18,7 +18,6 @@ package controllers.routeDetails
 
 import cats.data.OptionT
 import cats.implicits._
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.OfficeOfTransitCountryFormProvider
 import models.reference.Country
@@ -35,6 +34,7 @@ import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
 import services.ExcludedCountriesService.routeDetailsExcludedCountries
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -49,7 +49,8 @@ class OfficeOfTransitCountryController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
+  customsOfficesService: CustomsOfficesService,
   formProvider: OfficeOfTransitCountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
@@ -66,7 +67,7 @@ class OfficeOfTransitCountryController @Inject() (
         (
           for {
             excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-            transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
+            transitCountryList <- OptionT.liftF(countriesService.getCountriesWithCustomsOffices(excludedCountries))
             form = formProvider(transitCountryList)
             preparedForm = request.userAnswers
               .get(OfficeOfTransitCountryPage(index))
@@ -86,7 +87,7 @@ class OfficeOfTransitCountryController @Inject() (
       (
         for {
           excludedCountries  <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          transitCountryList <- OptionT.liftF(referenceDataConnector.getCountriesWithCustomsOffices(excludedCountries))
+          transitCountryList <- OptionT.liftF(countriesService.getCountriesWithCustomsOffices(excludedCountries))
           page <- OptionT.liftF(
             formProvider(transitCountryList)
               .bindFromRequest()
@@ -94,7 +95,7 @@ class OfficeOfTransitCountryController @Inject() (
                 formWithErrors => renderPage(lrn, index, mode, formWithErrors, transitCountryList.fullList, Results.BadRequest),
                 value =>
                   for {
-                    customsOfficeList <- referenceDataConnector.getCustomsOfficesOfTheCountry(value.code, transitOfficeRoles)
+                    customsOfficeList <- customsOfficesService.getCustomsOfficesForCountry(value.code, transitOfficeRoles)
                     result <-
                       if (customsOfficeList.getAll.nonEmpty) {
                         redirect(index, request, value, mode)
