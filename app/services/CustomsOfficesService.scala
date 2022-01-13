@@ -16,7 +16,6 @@
 
 package services
 
-import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import models.CustomsOfficeList
 import models.reference.CountryCode
@@ -26,20 +25,21 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsOfficesService @Inject() (
-  frontendAppConfig: FrontendAppConfig,
   referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
-  private val departureOfficeRoles: Seq[String] = Seq(
-    "DEP"
-  )
+  def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = {
 
-  private def getNICustomsOffices(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
-    referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("XI"), departureOfficeRoles)
+    def getCustomsOffices(countryCode: String)(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = {
+      val departureOfficeRoles: Seq[String] = Seq("DEP")
+      referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode(countryCode), departureOfficeRoles)
+    }
 
-  def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
     for {
-      gbOffices <- referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("GB"), departureOfficeRoles)
-      niOffices <- getNICustomsOffices
-    } yield CustomsOfficeList(gbOffices.getAll ++ niOffices.getAll)
+      gbOffices <- getCustomsOffices("GB")
+      niOffices <- getCustomsOffices("XI")
+      offices = (gbOffices.getAll ++ niOffices.getAll).sortBy(_.name)
+    } yield CustomsOfficeList(offices)
+  }
+
 }

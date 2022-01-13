@@ -29,7 +29,34 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
 
   def getDestinationCountryList(userAnswers: UserAnswers, excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
     userAnswers.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => referenceDataConnector.getCountriesWithCustomsOfficesAndEuMembership(excludedCountries)
-      case _                             => referenceDataConnector.getCountriesWithCustomsOfficesAndCTCMembership(excludedCountries)
+      case Some(DeclarationType.Option4) => getCountriesWithCustomsOfficesAndEuMembership(excludedCountries)
+      case _                             => getCountriesWithCustomsOfficesAndCtcMembership(excludedCountries)
     }
+
+  def getCountriesWithCustomsOfficesAndCtcMembership(excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
+    getCountriesWithCustomsOfficesAndMembership(excludedCountries, "ctc")
+
+  def getCountriesWithCustomsOfficesAndEuMembership(excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
+    getCountriesWithCustomsOfficesAndMembership(excludedCountries, "eu")
+
+  private def getCountriesWithCustomsOfficesAndMembership(
+    excludedCountries: Seq[CountryCode],
+    membership: String
+  )(implicit hc: HeaderCarrier): Future[CountryList] =
+    getCountriesWithCustomsOffices(excludedCountries, Some(Seq("membership" -> membership)))
+
+  def getCountriesWithCustomsOffices(
+    excludedCountries: Seq[CountryCode],
+    membershipQuery: Option[Seq[(String, String)]] = None
+  )(implicit hc: HeaderCarrier): Future[CountryList] = {
+    val customsOfficeQuery                     = Seq("customsOfficeRole" -> "ANY")
+    val excludedCountriesQuery                 = excludedCountries.map(_.code).map("exclude" -> _)
+    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludedCountriesQuery ++ membershipQuery.getOrElse(Nil)
+
+    referenceDataConnector
+      .getCountries(queryParameters)
+      .map(
+        countries => CountryList(countries.sortBy(_.description))
+      )
+  }
 }

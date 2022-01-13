@@ -90,6 +90,20 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
+  private val countriesResponseJson: String =
+    """
+      |[
+      | {
+      |   "code":"GB",
+      |   "description":"United Kingdom"
+      | },
+      | {
+      |   "code":"AD",
+      |   "description":"Andorra"
+      | }
+      |]
+      |""".stripMargin
+
   private val nonEUCountryListResponseJson: String =
     """
       |[
@@ -370,20 +384,26 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
     }
 
-    "getCountriesWithCustomsOfficesAndCTCMembership" - {
+    "getCountries" - {
       "must return Seq of Country when successful" in {
         server.stubFor(
-          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&membership=ctc"))
-            .willReturn(okJson(countryListResponseJson))
+          get(urlEqualTo(s"/$startUrl/countries?customsOfficeRole=ANY&exclude=IT&exclude=DE&membership=ctc"))
+            .willReturn(okJson(countriesResponseJson))
         )
 
-        val expectedResult: CountryList = CountryList(
-          Seq(
-            Country(CountryCode("GB"), "United Kingdom"),
-            Country(CountryCode("AD"), "Andorra")
-          )
+        val expectedResult: Seq[Country] = Seq(
+          Country(CountryCode("GB"), "United Kingdom"),
+          Country(CountryCode("AD"), "Andorra")
         )
-        connector.getCountriesWithCustomsOfficesAndCTCMembership(Seq.empty).futureValue mustEqual expectedResult
+
+        val queryParameters = Seq(
+          "customsOfficeRole" -> "ANY",
+          "exclude"           -> "IT",
+          "exclude"           -> "DE",
+          "membership"        -> "ctc"
+        )
+
+        connector.getCountries(queryParameters).futureValue mustEqual expectedResult
       }
     }
 

@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpClient) extends Logging {
 
   implicit val responseHandlerCustomsOfficeList: HttpReads[CustomsOfficeList] =
-    (method: String, url: String, response: HttpResponse) =>
+    (_: String, _: String, response: HttpResponse) =>
       response.status match {
         case OK =>
           CustomsOfficeList(
@@ -103,6 +103,11 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludeCountriesQuery
 
     http.GET[Seq[Country]](serviceUrl, queryParameters).map(CountryList(_))
+  }
+
+  def getCountries(queryParameters: Seq[(String, String)])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+    val serviceUrl = s"${config.referenceDataUrl}/countries"
+    http.GET[Seq[Country]](serviceUrl, queryParameters)
   }
 
   def getTransitCountryList(excludeCountries: Seq[CountryCode] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CountryList] = {
