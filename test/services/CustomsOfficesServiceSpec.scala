@@ -32,9 +32,9 @@ class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
   val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   val service                                      = new CustomsOfficesService(mockRefDataConnector)
 
-  val gbCustomsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
-  val gbCustomsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
-  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("xi", "ni", CountryCode("XI"), None)
+  val gbCustomsOffice1: CustomsOffice     = CustomsOffice("1", "BOSTON", CountryCode("GB"), None)
+  val gbCustomsOffice2: CustomsOffice     = CustomsOffice("2", "Appledore", CountryCode("GB"), None)
+  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("3", "Belfast", CountryCode("XI"), None)
   val gbCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(gbCustomsOffice1, gbCustomsOffice2))
   val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
   val customsOffices: CustomsOfficeList   = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)

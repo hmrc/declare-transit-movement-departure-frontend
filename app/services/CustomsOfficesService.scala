@@ -58,6 +58,6 @@ class CustomsOfficesService @Inject() (
       )
 
   private def sort(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
-    CustomsOfficeList(customsOffices.sortBy(_.name))
+    CustomsOfficeList(customsOffices.sortBy(_.name.toLowerCase))
 
 }
