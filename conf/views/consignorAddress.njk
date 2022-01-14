@@ -1,12 +1,10 @@
 {% extends "includes/layout.njk" %}
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
-{% from "govuk/components/input/macro.njk"         import govukInput %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
-{% from "govuk/components/select/macro.njk"        import govukSelect %}
-{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
+{% from "macros/hmrc-input--address/macro.njk"     import hmrcInputAddress %}
 
 {% block pageTitle %}
   {{ title(messages("consignorAddress.title"), form.errors) }}
@@ -36,71 +34,21 @@
         {% endif %}
 
         <form action="{{ routes.controllers.traderDetails.ConsignorAddressController.onSubmit(lrn, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('traderDetails.preHeading')}}</span>
+
+          <span class="govuk-caption-xl">{{ messages('traderDetails.preHeading') }}</span>
 
           {{ csrf() | safe }}
 
-          {% call govukFieldset({
-            legend: {
-              text: messages("consignorAddress.heading", consignorName),
-              classes: "govuk-fieldset__legend--l",
-              isPageHeading: true
-            }
-          }) %}
-
-          {{ govukInput ({
-            classes: "govuk-!-width-two-thirds",
-            label: {
-              text: messages('consignorAddress.AddressLine1')
-            },
-            id: "AddressLine1",
-            name: "AddressLine1",
-            value: form.AddressLine1.value,
-            errorMessage: form.AddressLine1.error,
-            autocomplete: "address-line1"
+          {{ hmrcInputAddress({
+            form: form,
+            prefix: "consignorAddress",
+            name: consignorName,
+            countries: countries
           }) }}
-
-          {{ govukInput({
-            classes: "govuk-!-width-two-thirds",
-            label: {
-              text: messages('consignorAddress.AddressLine2')
-            },
-            id: "AddressLine2",
-            name: "AddressLine2",
-            value: form.AddressLine2.value,
-            errorMessage: form.AddressLine2.error,
-            autocomplete: "address-line2"
-          }) }}
-
-          {{ govukInput({
-            classes: "govuk-!-width-two-thirds",
-            label: {
-              text: messages('consignorAddress.postalCode')
-            },
-            id: "AddressLine3",
-            name: "AddressLine3",
-            value: form.AddressLine3.value,
-            errorMessage: form.AddressLine3.error,
-            autocomplete: "postal-code"
-          }) }}
-
-          {{ govukSelect({
-            classes: "govuk-input--width-20 autocomplete",
-            label: {
-               text: messages('consignorAddress.AddressLine4')
-            },
-            id: "country",
-            name: "country",
-            items: countries,
-            value: form.country.value,
-            errorMessage: form.country.error
-          }) }}
-
-        {% endcall %}
 
           {{ govukButton({
             text: messages("site.continue"),
-              attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>
@@ -109,8 +57,4 @@
     </div>
   </div>
 
-{% endblock %}
-
-{% block pageScripts %}
-  <script src="{{ routes.controllers.Assets.versioned("javascripts/accessible-autocomplete.js").url }}"></script>
 {% endblock %}

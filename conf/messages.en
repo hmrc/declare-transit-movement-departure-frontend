@@ -274,10 +274,6 @@ whatIsConsigneeEori.error.invalidFormat = Enter the consignee’s EORI number in
 
 consignorAddress.title = What is the consignor’s address?
 consignorAddress.heading = What is {0}’s address?
-consignorAddress.AddressLine1 = Address line 1
-consignorAddress.AddressLine2 = Address line 2
-consignorAddress.postalCode = Postal code
-consignorAddress.AddressLine4 = Country
 consignorAddress.checkYourAnswersLabel = Consignor’s address
 
 commonAddress.title = What is the consignor’s address?
@@ -318,10 +314,6 @@ destinationCountry.error.required = Enter the country the goods are ending in
 
 consigneeAddress.title = What is the consignee’s address?
 consigneeAddress.heading = What is {0}’s address?
-consigneeAddress.AddressLine1 = Address line 1
-consigneeAddress.AddressLine2 = Address line 2
-consigneeAddress.postalCode = Postal code
-consigneeAddress.AddressLine4 = Country
 consigneeAddress.checkYourAnswersLabel = Consignee’s address
 
 idAtDeparture.title = What is the name, registration or reference of the vehicle at departure?
@@ -675,21 +667,7 @@ traderDetailsConsigneeAddress.heading = What is {0}’s address?
 traderDetailsConsigneeAddress.checkYourAnswersLabel = {0}’s address
 traderDetailsConsigneeAddress.checkYourAnswersLabel.fallback = Consignee
 
-traderDetailsConsigneeAddress.error.line.required = Enter address line {0} of {1}’s address for item {2}
-traderDetailsConsigneeAddress.error.line.invalid = Address line {0} of {1}’s address for item {2} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-traderDetailsConsigneeAddress.error.line.length = Address line {0} of {1}’s address for item {2} must be 35 characters or less
-traderDetailsConsigneeAddress.error.line.country.required = Enter the country of consignee’s address for item {1}
-traderDetailsConsigneeAddress.error.required = Enter {0}’s Address
-traderDetailsConsigneeAddress.error.length = The address for {0} must be 100 characters or less
-traderDetailsConsigneeAddress.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-traderDetailsConsigneeAddress.error.required = Enter the {0} of {1}’s address
-traderDetailsConsigneeAddress.error.max_length = The {0} of {1}’s address must be 35 characters or less
 
-
-traderDetailsConsigneeAddress.AddressLine1 = Address line 1
-traderDetailsConsigneeAddress.AddressLine2 = Address line 2
-traderDetailsConsigneeAddress.postalCode = Postal code
-traderDetailsConsigneeAddress.AddressLine4 = Country
 traderDetailsConsigneeEoriKnown.title = Do you know the consignee’s EORI number for item {0}?
 traderDetailsConsigneeEoriKnown.heading = Do you know the consignee’s EORI number for item {0}?
 traderDetailsConsigneeEoriKnown.checkYourAnswersLabel = Know the consignee’s EORI number for item {0}?
@@ -714,23 +692,6 @@ traderDetailsConsignorAddress.title = What is the consignor’s address for item
 traderDetailsConsignorAddress.heading = What is {0}’s address?
 traderDetailsConsignorAddress.checkYourAnswersLabel = {0}’s address
 traderDetailsConsignorAddress.checkYourAnswersLabel.fallback = Consignor
-traderDetailsConsignorAddress.error.line.required = Enter address line {0} of {1}’s address for item {2}
-traderDetailsConsignorAddress.error.line.invalid = Address line {0} of {1}’s address for item {2} must only include letters a to z without accents, numbers 0 to 9, blank spaces, at signs (@), forward slashes, back slashes, full stops, commas, hyphens, and question marks
-traderDetailsConsignorAddress.error.line.length = Address line {0} of {1}’s address for item {2} must be 35 characters or less
-traderDetailsConsignorAddress.error.line.country.required = Enter the country of consignor’s address for item {1}
-traderDetailsConsignorAddress.heading =  What is {0}’s address?
-traderDetailsConsignorAddress.error.required = Enter {0}’s Address
-traderDetailsConsignorAddress.error.length = The address for {0} must be 100 characters or less
-
-traderDetailsConsignorAddress.error.invalid = The {0} of {1}’s address must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, question marks and spaces
-
-traderDetailsConsignorAddress.error.required = Enter the {0} of {1}’s address
-traderDetailsConsignorAddress.error.max_length = The {0} of {1}’s address must be 35 characters or less
-
-traderDetailsConsignorAddress.AddressLine1 = Address line 1
-traderDetailsConsignorAddress.AddressLine2 = Address line 2
-traderDetailsConsignorAddress.postalCode = Postal code
-traderDetailsConsignorAddress.AddressLine4 = Country
 
 traderDetailsConsignorEoriKnown.title = Do you know the consignor’s EORI number for item {0}?
 traderDetailsConsignorEoriKnown.heading = Do you know the consignor’s EORI number for item {0}?
@@ -1033,19 +994,11 @@ securityConsigneeEori.error.invalidFormat = Enter the security consignee’s EOR
 
 securityConsignorAddress.title = What is the security consignor’s address
 securityConsignorAddress.heading = What is {0}’s address?
-securityConsignorAddress.AddressLine1 = Address line 1
-securityConsignorAddress.AddressLine2 = Address line 2
-securityConsignorAddress.postalCode = Postal code
-securityConsignorAddress.AddressLine4 = Country
 securityConsignorAddress.checkYourAnswersLabel = Consignor address
 
 
 securityConsigneeAddress.title = What is the security consignee’s address
 securityConsigneeAddress.heading = What is {0}’s address?
-securityConsigneeAddress.AddressLine1 = Address line 1
-securityConsigneeAddress.AddressLine2 = Address line 2
-securityConsigneeAddress.postalCode = Postal code
-securityConsigneeAddress.AddressLine4 = Country
 securityConsigneeAddress.checkYourAnswersLabel = Consignee address
 
 
@@ -1156,10 +1109,6 @@ addSafetyAndSecurityConsignorEori.error.required = Select yes if you know the se
 safetyAndSecurityConsignorAddress.title = What is {0}’s address?
 safetyAndSecurityConsignorAddress.heading = What is {0}’s address?
 safetyAndSecurityConsignorAddress.checkYourAnswersLabel = Security consignor’s address
-safetyAndSecurityConsignorAddress.AddressLine1 = Address line 1
-safetyAndSecurityConsignorAddress.AddressLine2 = Address line 2
-safetyAndSecurityConsignorAddress.postalCode   = Postal code
-safetyAndSecurityConsignorAddress.AddressLine4 = Country
 
 safetyAndSecurityConsignorEori.title = What is the security consignor’s EORI number?
 safetyAndSecurityConsignorEori.heading = What is the security consignor’s EORI number?
@@ -1188,10 +1137,6 @@ addSafetyAndSecurityConsigneeEori.error.required = Select yes if you know the se
 
 safetyAndSecurityConsigneeAddress.title = What is {0}’s address?
 safetyAndSecurityConsigneeAddress.heading = What is {0}’s address?
-safetyAndSecurityConsigneeAddress.AddressLine1 = Address line 1
-safetyAndSecurityConsigneeAddress.AddressLine2 = Address line 2
-safetyAndSecurityConsigneeAddress.postalCode   = Postal code
-safetyAndSecurityConsigneeAddress.AddressLine4 = Country
 safetyAndSecurityConsigneeAddress.checkYourAnswersLabel = Security consignee’s address
 
 safetyAndSecurityConsigneeEori.title = What is the security consignee’s EORI number?
@@ -1221,10 +1166,6 @@ addCarrier.error.required = Select yes if you need to add a carrier
 carrierAddress.title = What is {0}’s address?
 carrierAddress.heading = What is {0}’s address?
 carrierAddress.checkYourAnswersLabel = Carrier’s address
-carrierAddress.AddressLine1 = Address line 1
-carrierAddress.AddressLine2 = Address line 2
-carrierAddress.postalCode = Postal code
-carrierAddress.AddressLine4 = Country
 carrierAddress.error.required = Enter carrierAddress
 
 carrierEori.title = What is the carrier’s EORI number?

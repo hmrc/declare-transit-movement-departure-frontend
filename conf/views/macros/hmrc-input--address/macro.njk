@@ -1,0 +1,70 @@
+{% from "govuk/components/input/macro.njk"         import govukInput %}
+{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
+{% from "govuk/components/select/macro.njk"        import govukSelect %}
+
+{% macro hmrcInputAddress(params) %}
+
+  {% call govukFieldset({
+    legend: {
+      text: messages([params.prefix, ".heading"] | join, params.name),
+      classes: "govuk-fieldset__legend--l",
+      isPageHeading: true
+    }
+  }) %}
+
+    {{ govukInput ({
+      classes: "govuk-!-width-two-thirds",
+      label: {
+        text: messages('commonAddress.AddressLine1')
+      },
+      id: "AddressLine1",
+      name: "AddressLine1",
+      value: params.form.AddressLine1.value,
+      errorMessage: params.form.AddressLine1.error,
+      autocomplete: "address-line1"
+    }) }}
+
+    {{ govukInput({
+      classes: "govuk-!-width-two-thirds",
+      label: {
+        text: messages('commonAddress.AddressLine2')
+      },
+      id: "AddressLine2",
+      name: "AddressLine2",
+      value: params.form.AddressLine2.value,
+      errorMessage: params.form.AddressLine2.error,
+      autocomplete: "address-line2"
+    }) }}
+
+    {{ govukInput({
+      classes: "govuk-!-width-two-thirds",
+      label: {
+        text: messages('commonAddress.postalCode')
+      },
+      id: "AddressLine3",
+      name: "AddressLine3",
+      value: params.form.AddressLine3.value,
+      errorMessage: params.form.AddressLine3.error,
+      autocomplete: "postal-code"
+    }) }}
+
+    {{ govukSelect({
+      classes: "govuk-input--width-20 autocomplete",
+      label: {
+        text: messages('commonAddress.AddressLine4')
+      },
+      id: "country",
+      name: "country",
+      errorMessage: params.form.value.error,
+      items: params.countries,
+      value: params.form.country.value,
+      errorMessage: params.form.country.error
+    }) }}
+
+  {% endcall %}
+
+  {% block pageScripts %}
+    <script src="{{ routes.controllers.Assets.versioned("javascripts/accessible-autocomplete.js").url }}"></script>
+  {% endblock %}
+
+{% endmacro %}
