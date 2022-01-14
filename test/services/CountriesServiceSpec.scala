@@ -113,6 +113,19 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAns
       }
     }
 
+    "getCountries" - {
+      "must return a list of sorted countries" in {
+
+        when(mockRefDataConnector.getCountries()(any(), any()))
+          .thenReturn(Future.successful(countries))
+
+        service.getCountries().futureValue mustBe
+          CountryList(Seq(country2, country3, country1))
+
+        verify(mockRefDataConnector).getCountries()(any(), any())
+      }
+    }
+
     "getTransitCountries" - {
       "must return a list of sorted transit countries" in {
 
@@ -132,7 +145,7 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAns
     }
 
     "getNonEuTransitCountries" - {
-      "must return a list of sorted transit countries" in {
+      "must return a list of sorted non-EU transit countries" in {
 
         when(mockRefDataConnector.getNonEuTransitCountries()(any(), any()))
           .thenReturn(Future.successful(countries))
