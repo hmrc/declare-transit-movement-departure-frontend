@@ -39,27 +39,27 @@ class SpecialMentionConversionSpec extends SpecBase with GeneratorSpec with Mode
 
       "must add SpecialMentionGuaranteeLiabilityAmount to the first special mention in a list if index is 0" in {
 
-        val result = SpecialMentionConversion(specialMentions, guaranteeReferences, 0)
+        val result = SpecialMentionConversion((specialMentions, guaranteeReferences, 0))
 
         result mustBe Seq(expectedSpecialMentionLiabilityAmount, expectedSpecialMention)
       }
 
       "must add SpecialMentionGuaranteeLiabilityAmount as the only SpecialMention in the list if other SpecialMentions are not defined" in {
 
-        val result = SpecialMentionConversion(None, guaranteeReferences, 0)
+        val result = SpecialMentionConversion((None, guaranteeReferences, 0))
 
         result mustBe Seq(expectedSpecialMentionLiabilityAmount)
       }
 
       "must add SpecialMentions without SpecialMentionGuaranteeLiabilityAmount when index is not 0 and SpecialMentions are defined" in {
 
-        val result = SpecialMentionConversion(specialMentions, guaranteeReferences, 1)
+        val result = SpecialMentionConversion((specialMentions, guaranteeReferences, 1))
 
         result mustBe Seq(expectedSpecialMention)
       }
 
       "must return empty list when SpecialMentions are not defined and index is not 0" in {
-        val result = SpecialMentionConversion(None, guaranteeReferences, 1)
+        val result = SpecialMentionConversion((None, guaranteeReferences, 1))
 
         result mustBe Seq.empty
       }
