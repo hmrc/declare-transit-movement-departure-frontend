@@ -26,6 +26,7 @@ import wolfendale.scalacheck.regexp.RegexpGen
 class TotalNetMassFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
   private val form = new TotalNetMassFormProvider()(index)
+  private val args = Seq(index.display)
 
   ".value" - {
 
@@ -41,18 +42,18 @@ class TotalNetMassFormProviderSpec extends StringFieldBehaviours with SpecBase {
       form,
       fieldName,
       maxLength = maxLengthNetMass,
-      lengthError = FormError(fieldName, lengthKeyNetMass, Seq(index.display))
+      lengthError = FormError(fieldName, lengthKeyNetMass, args)
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKeyNetMass, Seq(index.display))
+      requiredError = FormError(fieldName, requiredKeyNetMass, args)
     )
 
     "must not bind strings with invalid characters" in {
       val invalidKey             = "totalNetMass.error.invalidCharacters"
-      val expectedError          = FormError(fieldName, invalidKey, Seq(totalNetMassInvalidCharactersRegex))
+      val expectedError          = FormError(fieldName, invalidKey, args)
       val generator: Gen[String] = RegexpGen.from(s"[a-zA-Z!£^*(<>){}_+=:;|`~,±üçñèé@]{15}")
       forAll(generator) {
         invalidString =>
@@ -63,7 +64,7 @@ class TotalNetMassFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
     "must not bind strings with invalid formatting" in {
       val invalidKey             = "totalNetMass.error.invalidFormat"
-      val expectedError          = FormError(fieldName, invalidKey, Seq(totalNetMassInvalidFormatRegex))
+      val expectedError          = FormError(fieldName, invalidKey, args)
       val generator: Gen[String] = RegexpGen.from("^([1-9]\\.[1-9][1-9][1-9][1-9])$")
       forAll(generator) {
         invalidString =>
@@ -74,7 +75,7 @@ class TotalNetMassFormProviderSpec extends StringFieldBehaviours with SpecBase {
 
     "must not bind strings that do not match greater than zero regex" in {
 
-      val expectedError = FormError(fieldName, invalidAmountKeyNetMass, Seq(Seq.empty))
+      val expectedError = FormError(fieldName, invalidAmountKeyNetMass, args)
       val invalidString = "0.000"
       val result        = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
       result.errors must contain(expectedError)
