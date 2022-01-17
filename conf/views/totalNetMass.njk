@@ -28,29 +28,30 @@
         {% endif %}
 
         <form action="{{ routes.controllers.addItems.itemDetails.TotalNetMassController.onSubmit(lrn, index, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
+
+          <span class="govuk-caption-xl">{{ messages('items.preHeading') }}</span>
 
           {{ csrf() | safe }}
 
           {{ govukInput({
-              label: {
-                text: messages("totalNetMass.heading", index),
-                isPageHeading: true,
-                classes: "govuk-label--xl"
-              },
-              hint: {
-                text: messages('totalNetMass.hintText')
-              },
-              id: "value",
-              name: "value",
-              value: form.value.value,
-              errorMessage: form.value.error,
-              classes: "govuk-input--width-10"
-            }) }}
+            label: {
+              text: messages("totalNetMass.heading", index),
+              isPageHeading: true,
+              classes: "govuk-label--xl"
+            },
+            hint: {
+              text: messages('totalNetMass.hintText')
+            },
+            id: "value",
+            name: "value",
+            value: form.value.value,
+            errorMessage: form.value.error,
+            classes: "govuk-input--width-10"
+          }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

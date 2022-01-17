@@ -2,27 +2,27 @@
 
 {% macro hmrcInputCurrency(params) %}
 
-     {{ govukInput({
-        label: {
-          text: params.label,
-          isPageHeading: true,
-          classes: "govuk-label--xl"
-        },
-        hint: {
-          text: params.hint,
-          classes: "hint-as-label"
-        },
-        name: params.name,
-        id: params.id,
-        value: params.value,
-        classes: params.classes,
-        errorMessage: params.errorMessage,
-        prefix: {
-          text: "£"
-        },
-        inputMode: "text",
-        autocomplete: params.autocomplete,
-        spellcheck: false
-     }) }}
+  {{ govukInput({
+    label: {
+      text: params.label,
+      isPageHeading: true,
+      classes: "govuk-label--xl"
+    },
+    hint: {
+      text: params.hint,
+      classes: "hint-as-label"
+    },
+    name: params.name,
+    id: params.id,
+    value: params.value,
+    classes: params.classes,
+    errorMessage: params.errorMessage,
+    prefix: {
+      text: "£"
+    },
+    inputmode: "text",
+    autocomplete: params.autocomplete,
+    spellcheck: false
+  }) }}
 
 {% endmacro %}

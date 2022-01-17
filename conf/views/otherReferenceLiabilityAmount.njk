@@ -27,25 +27,26 @@
           }) }}
         {% endif %}
 
-         <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn, index, mode).url }}" method="post">
-         <span class="govuk-caption-xl">{{messages('guaranteeDetails.preHeading')}}</span>
+        <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn, index, mode).url }}" method="post">
+
+          <span class="govuk-caption-xl">{{ messages('guaranteeDetails.preHeading') }}</span>
+
           {{ csrf() | safe }}
 
-         {{ hmrcInputCurrency({
-              label: messages('liabilityAmount.heading'),
-              hint: messages('liabilityAmount.paragraph'),
-              name: "value",
-              id: "value",
-              value: form.value.value,
-              classes: "govuk-input--width-10",
-              autocomplete: "off",
-              errorMessage: form.value.error
-            })
-          }}
+          {{ hmrcInputCurrency({
+            label: messages('liabilityAmount.heading'),
+            hint: messages('liabilityAmount.paragraph'),
+            name: "value",
+            id: "value",
+            value: form.value.value,
+            classes: "govuk-input--width-10",
+            autocomplete: "off",
+            errorMessage: form.value.error
+          }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>

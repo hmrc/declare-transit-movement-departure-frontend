@@ -28,7 +28,8 @@
         {% endif %}
 
         <form action="{{ routes.controllers.addItems.itemDetails.ItemTotalGrossMassController.onSubmit(lrn, index, mode).url }}" method="post">
-        <span class="govuk-caption-xl">{{messages('items.preHeading')}}</span>
+
+          <span class="govuk-caption-xl">{{ messages('items.preHeading') }}</span>
 
           {{ csrf() | safe }}
 
@@ -50,7 +51,7 @@
 
           {{ govukButton({
             text: messages("site.continue"),
-            attributes: {id:"submit"}
+            attributes: {id: "submit"}
           }) }}
 
         </form>
