@@ -26,7 +26,6 @@ import models.{
   DangerousGoodsCodeList,
   DocumentTypeList,
   MethodOfPaymentList,
-  PackageTypeList,
   PreviousReferencesDocumentTypeList,
   SpecialMentionList
 }
@@ -513,11 +512,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(packageTypeJson))
         )
 
-        val expectResult = PackageTypeList(
-          Seq(
-            PackageType("AB", "description 1"),
-            PackageType("CD", "description 2")
-          )
+        val expectResult = Seq(
+          PackageType("AB", "description 1"),
+          PackageType("CD", "description 2")
         )
 
         connector.getPackageTypes().futureValue mustEqual expectResult

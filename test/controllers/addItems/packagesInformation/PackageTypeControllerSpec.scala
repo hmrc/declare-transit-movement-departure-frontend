@@ -17,7 +17,6 @@
 package controllers.addItems.packagesInformation
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.addItems.PackageTypeFormProvider
 import matchers.JsonMatchers
@@ -37,6 +36,7 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.PackageTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -50,7 +50,7 @@ class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
   private val form = new PackageTypeFormProvider()(packageTypeList)
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockPackageTypesService: PackageTypesService = mock[PackageTypesService]
 
   lazy val packageTypeRoute: String =
     controllers.addItems.packagesInformation.routes.PackageTypeController.onPageLoad(lrn, itemIndex, packageIndex, NormalMode).url
@@ -59,11 +59,11 @@ class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsPackagesInfo]).toInstance(fakeNavigator))
-      .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
+      .overrides(bind[PackageTypesService].toInstance(mockPackageTypesService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    Mockito.reset(mockRefDataConnector)
+    Mockito.reset(mockPackageTypesService)
   }
 
   "PackageType Controller" - {
@@ -73,7 +73,7 @@ class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
+      when(mockPackageTypesService.getPackageTypes()(any())).thenReturn(Future.successful(packageTypeList))
 
       val request                                = FakeRequest(GET, packageTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -110,7 +110,7 @@ class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
+      when(mockPackageTypesService.getPackageTypes()(any())).thenReturn(Future.successful(packageTypeList))
 
       val userAnswers = emptyUserAnswers.set(PackageTypePage(index, index), packageType1).success.value
       setUserAnswers(Some(userAnswers))
@@ -152,7 +152,7 @@ class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
+      when(mockPackageTypesService.getPackageTypes()(any())).thenReturn(Future.successful(packageTypeList))
 
       val request = FakeRequest(POST, packageTypeRoute).withFormUrlEncodedBody(("value", "AB"))
 
@@ -171,7 +171,7 @@ class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       setUserAnswers(Some(userAnswers))
 
-      when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
+      when(mockPackageTypesService.getPackageTypes()(any())).thenReturn(Future.successful(packageTypeList))
 
       val request = FakeRequest(POST, packageTypeRoute).withFormUrlEncodedBody(("value", "AB"))
 
@@ -188,7 +188,7 @@ class PackageTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getPackageTypes()(any(), any())).thenReturn(Future.successful(packageTypeList))
+      when(mockPackageTypesService.getPackageTypes()(any())).thenReturn(Future.successful(packageTypeList))
 
       val request                                = FakeRequest(POST, packageTypeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))
