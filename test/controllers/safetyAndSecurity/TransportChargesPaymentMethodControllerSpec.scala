@@ -74,7 +74,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -106,7 +106,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       val userAnswers = emptyUserAnswers.set(TransportChargesPaymentMethodPage, MethodOfPayment("A", "Payment in cash")).success.value
       setUserAnswers(Some(userAnswers))
@@ -140,7 +140,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -159,7 +159,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

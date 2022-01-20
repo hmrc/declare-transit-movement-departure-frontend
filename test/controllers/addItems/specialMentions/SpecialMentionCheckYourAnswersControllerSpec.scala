@@ -55,7 +55,7 @@ class SpecialMentionCheckYourAnswersControllerSpec extends SpecBase with AppWith
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getSpecialMention()(any(), any()))
+      when(mockRefDataConnector.getSpecialMentionTypes()(any(), any()))
         .thenReturn(Future.successful(SpecialMentionList(Nil)))
 
       val request                                = FakeRequest(GET, specialMentionCyaRoute)

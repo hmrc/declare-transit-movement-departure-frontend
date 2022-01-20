@@ -65,7 +65,7 @@ class CircumstanceIndicatorController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCircumstanceIndicatorList() flatMap {
+        referenceDataConnector.getCircumstanceIndicators() flatMap {
           indicators =>
             val form = formProvider(indicators)
 
@@ -85,7 +85,7 @@ class CircumstanceIndicatorController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCircumstanceIndicatorList() flatMap {
+        referenceDataConnector.getCircumstanceIndicators() flatMap {
           indicatorList =>
             formProvider(indicatorList)
               .bindFromRequest()

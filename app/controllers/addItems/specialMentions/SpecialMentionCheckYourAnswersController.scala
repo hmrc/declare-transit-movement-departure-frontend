@@ -47,7 +47,7 @@ class SpecialMentionCheckYourAnswersController @Inject() (
       andThen getData(lrn)
       andThen requireData).async {
       implicit request =>
-        referenceDataConnector.getSpecialMention().flatMap {
+        referenceDataConnector.getSpecialMentionTypes().flatMap {
           specialMentions =>
             val json = {
               val viewModel = SpecialMentionsCheckYourAnswersViewModel(request.userAnswers, itemIndex, referenceIndex, mode, specialMentions)

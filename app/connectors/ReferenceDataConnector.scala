@@ -59,6 +59,11 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[CustomsOfficeList](serviceUrl, roleQueryParams(roles))
   }
 
+  def getCustomsOffice(id: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOffice] = {
+    val serviceUrl = s"${config.referenceDataUrl}/customs-office/$id"
+    http.GET[CustomsOffice](serviceUrl)
+  }
+
   def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries-full-list"
     http.GET[Seq[Country]](serviceUrl)
@@ -79,14 +84,9 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[Country]](serviceUrl)
   }
 
-  def getTransportModes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[TransportModeList] = {
+  def getTransportModes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[TransportMode]] = {
     val serviceUrl = s"${config.referenceDataUrl}/transport-modes"
-    http.GET[Seq[TransportMode]](serviceUrl).map(TransportModeList)
-  }
-
-  def getCustomsOffice(id: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CustomsOffice] = {
-    val serviceUrl = s"${config.referenceDataUrl}/customs-office/$id"
-    http.GET[CustomsOffice](serviceUrl)
+    http.GET[Seq[TransportMode]](serviceUrl)
   }
 
   def getPackageTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[PackageTypeList] = {
@@ -104,12 +104,12 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[DocumentType]](serviceUrl).map(DocumentTypeList)
   }
 
-  def getSpecialMention()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[SpecialMentionList] = {
+  def getSpecialMentionTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[SpecialMentionList] = {
     val serviceUrl = s"${config.referenceDataUrl}/additional-information"
     http.GET[Seq[SpecialMention]](serviceUrl).map(SpecialMentionList)
   }
 
-  def getDangerousGoodsCodeList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[DangerousGoodsCodeList] = {
+  def getDangerousGoodsCodes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[DangerousGoodsCodeList] = {
     val serviceUrl = s"${config.referenceDataUrl}/dangerous-goods-codes"
     http.GET[Seq[DangerousGoodsCode]](serviceUrl).map(DangerousGoodsCodeList)
   }
@@ -119,12 +119,12 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[DangerousGoodsCode](serviceUrl)
   }
 
-  def getMethodOfPaymentList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[MethodOfPaymentList] = {
+  def getMethodsOfPayment()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[MethodOfPaymentList] = {
     val serviceUrl = s"${config.referenceDataUrl}/method-of-payment"
     http.GET[Seq[MethodOfPayment]](serviceUrl).map(MethodOfPaymentList)
   }
 
-  def getCircumstanceIndicatorList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CircumstanceIndicatorList] = {
+  def getCircumstanceIndicators()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CircumstanceIndicatorList] = {
     val serviceUrl = s"${config.referenceDataUrl}/circumstance-indicators"
     http.GET[Seq[CircumstanceIndicator]](serviceUrl).map(CircumstanceIndicatorList)
   }

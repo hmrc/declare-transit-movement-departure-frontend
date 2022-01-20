@@ -61,7 +61,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaul
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
+      when(mockRefDataConnector.getSpecialMentionTypes()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
 
       setUserAnswers(Some(emptyUserAnswers))
 

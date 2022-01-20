@@ -57,7 +57,7 @@ class SafetyAndSecurityCheckYourAnswersController @Inject() (
         val buildJson: Future[JsObject] =
           for {
             countries              <- countriesService.getCountries()
-            circumstanceIndicators <- referenceDataConnector.getCircumstanceIndicatorList()
+            circumstanceIndicators <- referenceDataConnector.getCircumstanceIndicators()
           } yield {
             val sections: Seq[Section] =
               SafetyAndSecurityCheckYourAnswersViewModel(request.userAnswers, countries, circumstanceIndicators)

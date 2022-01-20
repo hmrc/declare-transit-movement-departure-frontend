@@ -84,7 +84,7 @@ class CircumstanceIndicatorControllerSpec
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
+      when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -116,7 +116,7 @@ class CircumstanceIndicatorControllerSpec
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
+      when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       val userAnswers = emptyUserAnswers.set(CircumstanceIndicatorPage, "A").success.value
       setUserAnswers(Some(userAnswers))
@@ -149,7 +149,7 @@ class CircumstanceIndicatorControllerSpec
 
     "must redirect to the next page when valid data is submitted" in {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
+      when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       setUserAnswers(Some(emptyUserAnswers))
       circumstanceIndicatorList.circumstanceIndicators.foreach {
@@ -170,7 +170,7 @@ class CircumstanceIndicatorControllerSpec
     "must redirect to the next page when valid data is submitted in CheckMode for Indicator E with Unloading Code" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
+      when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       val updatedAnswers = emptyUserAnswers
         .unsafeSetVal(PlaceOfUnloadingCodePage)("unloadingcode")
@@ -189,7 +189,7 @@ class CircumstanceIndicatorControllerSpec
     "must redirect to the next page when valid data is submitted in CheckMode for Indicator E with  Unloading Code not set" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
+      when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       setUserAnswers(Some(emptyUserAnswers))
       val request =
@@ -207,7 +207,7 @@ class CircumstanceIndicatorControllerSpec
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
+      when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

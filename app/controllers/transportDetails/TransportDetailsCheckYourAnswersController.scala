@@ -16,7 +16,6 @@
 
 package controllers.transportDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import models.journeyDomain.TransportDetails
@@ -25,7 +24,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
-import services.CountriesService
+import services.{CountriesService, TransportModesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.TransportDetailsCheckYourAnswersViewModel
 import viewModels.sections.Section
@@ -40,7 +39,7 @@ class TransportDetailsCheckYourAnswersController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   val controllerComponents: MessagesControllerComponents,
-  referenceDataConnector: ReferenceDataConnector,
+  transportModesService: TransportModesService,
   countriesService: CountriesService,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -56,7 +55,7 @@ class TransportDetailsCheckYourAnswersController @Inject() (
       implicit request =>
         countriesService.getCountries().flatMap {
           countryList =>
-            referenceDataConnector.getTransportModes().flatMap {
+            transportModesService.getTransportModes().flatMap {
               transportModeList =>
                 val sections: Seq[Section] = TransportDetailsCheckYourAnswersViewModel(request.userAnswers, countryList, transportModeList).sections
                 val json = Json.obj(

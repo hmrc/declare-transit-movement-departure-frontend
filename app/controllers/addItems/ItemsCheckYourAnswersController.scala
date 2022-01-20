@@ -58,7 +58,7 @@ class ItemsCheckYourAnswersController @Inject() (
           for {
             previousReferencesDocumentTypes <- referenceDataConnector.getPreviousReferencesDocumentTypes()
             documentTypes                   <- referenceDataConnector.getDocumentTypes()
-            specialMentions                 <- referenceDataConnector.getSpecialMention()
+            specialMentions                 <- referenceDataConnector.getSpecialMentionTypes()
           } yield {
 
             val sections: Seq[Section] =

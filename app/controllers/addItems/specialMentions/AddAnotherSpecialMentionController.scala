@@ -94,7 +94,7 @@ class AddAnotherSpecialMentionController @Inject() (
     val numberOfReferences    = request.userAnswers.get(DeriveNumberOfSpecialMentions(itemIndex)).getOrElse(0)
     val indexList: Seq[Index] = List.range(0, numberOfReferences).map(Index(_))
 
-    referenceDataConnector.getSpecialMention() flatMap {
+    referenceDataConnector.getSpecialMentionTypes() flatMap {
       specialMentions =>
         val referenceRows = indexList.map {
           referenceIndex =>

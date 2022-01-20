@@ -62,7 +62,7 @@ class DangerousGoodsCodeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getDangerousGoodsCodeList() flatMap {
+        referenceDataConnector.getDangerousGoodsCodes() flatMap {
           dangerousGoodsCodes =>
             val form: Form[DangerousGoodsCode] = formProvider(dangerousGoodsCodes)
 
@@ -90,7 +90,7 @@ class DangerousGoodsCodeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getDangerousGoodsCodeList() flatMap {
+        referenceDataConnector.getDangerousGoodsCodes() flatMap {
           dangerousGoodsCodes =>
             val form: Form[DangerousGoodsCode] = formProvider(dangerousGoodsCodes)
             form

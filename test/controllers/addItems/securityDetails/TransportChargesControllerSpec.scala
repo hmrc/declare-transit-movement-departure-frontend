@@ -76,7 +76,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       val request                                = FakeRequest(GET, transportChargesRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -113,7 +113,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       val userAnswers = emptyUserAnswers.set(TransportChargesPage(index), MethodOfPayment("A", "Payment in cash")).success.value
       setUserAnswers(Some(userAnswers))
@@ -154,7 +154,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -174,7 +174,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

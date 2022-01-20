@@ -62,7 +62,7 @@ class SpecialMentionTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getSpecialMention() flatMap {
+        referenceDataConnector.getSpecialMentionTypes() flatMap {
           specialMention =>
             val form: Form[SpecialMention] = formProvider(specialMention, itemIndex)
 
@@ -91,7 +91,7 @@ class SpecialMentionTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getSpecialMention() flatMap {
+        referenceDataConnector.getSpecialMentionTypes() flatMap {
           specialMention =>
             val form = formProvider(specialMention, itemIndex)
             form

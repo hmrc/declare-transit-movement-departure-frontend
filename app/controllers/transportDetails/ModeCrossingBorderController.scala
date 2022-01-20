@@ -16,7 +16,6 @@
 
 package controllers.transportDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.ModeCrossingBorderFormProvider
 import models.reference.TransportMode
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.TransportModesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.transportModesAsJson
@@ -48,7 +48,7 @@ class ModeCrossingBorderController @Inject() (
   formProvider: ModeCrossingBorderFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
-  referenceDataConnector: ReferenceDataConnector
+  transportModesService: TransportModesService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -60,7 +60,7 @@ class ModeCrossingBorderController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        referenceDataConnector.getTransportModes() flatMap {
+        transportModesService.getTransportModes() flatMap {
 
           transportModes =>
             val form = formProvider(transportModes)
@@ -81,7 +81,7 @@ class ModeCrossingBorderController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        referenceDataConnector.getTransportModes() flatMap {
+        transportModesService.getTransportModes() flatMap {
 
           transportModes =>
             formProvider(transportModes)

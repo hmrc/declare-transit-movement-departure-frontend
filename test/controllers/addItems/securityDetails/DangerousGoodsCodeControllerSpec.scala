@@ -65,7 +65,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDangerousGoodsCodeList()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
+      when(mockRefDataConnector.getDangerousGoodsCodes()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -104,7 +104,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDangerousGoodsCodeList()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
+      when(mockRefDataConnector.getDangerousGoodsCodes()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
 
       val userAnswers = emptyUserAnswers.set(DangerousGoodsCodePage(index), dangerousGoodsCode1.code).success.value
       setUserAnswers(Some(userAnswers))
@@ -144,7 +144,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
 
     "must redirect to the next page when valid data is submitted" in {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getDangerousGoodsCodeList()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
+      when(mockRefDataConnector.getDangerousGoodsCodes()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
       setUserAnswers(Some(emptyUserAnswers))
 
       val request =
@@ -162,7 +162,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDangerousGoodsCodeList()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
+      when(mockRefDataConnector.getDangerousGoodsCodes()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
       setUserAnswers(Some(emptyUserAnswers))
 
       val request                                = FakeRequest(POST, dangerousGoodsCodeRoute).withFormUrlEncodedBody(("value", ""))

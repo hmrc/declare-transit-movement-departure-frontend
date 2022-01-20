@@ -71,7 +71,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       setUserAnswers(Some(emptyUserAnswers))
 
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
+      when(mockRefDataConnector.getSpecialMentionTypes()(any(), any())).thenReturn(Future.successful(specialMentionList))
 
       val request                                = FakeRequest(GET, specialMentionTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -112,7 +112,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
       val userAnswers = emptyUserAnswers.set(SpecialMentionTypePage(itemIndex, referenceIndex), "10600").success.value
       setUserAnswers(Some(userAnswers))
 
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
+      when(mockRefDataConnector.getSpecialMentionTypes()(any(), any())).thenReturn(Future.successful(specialMentionList))
 
       val request                                = FakeRequest(GET, specialMentionTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -152,7 +152,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
+      when(mockRefDataConnector.getSpecialMentionTypes()(any(), any())).thenReturn(Future.successful(specialMentionList))
 
       val request =
         FakeRequest(POST, specialMentionTypeRoute)
@@ -168,7 +168,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
+      when(mockRefDataConnector.getSpecialMentionTypes()(any(), any())).thenReturn(Future.successful(specialMentionList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

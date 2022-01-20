@@ -28,8 +28,7 @@ import models.{
   MethodOfPaymentList,
   PackageTypeList,
   PreviousReferencesDocumentTypeList,
-  SpecialMentionList,
-  TransportModeList
+  SpecialMentionList
 }
 import org.scalacheck.Gen
 import org.scalatest.Assertion
@@ -473,11 +472,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(transportModeListResponseJson))
         )
 
-        val expectedResult: TransportModeList = TransportModeList(
-          Seq(
-            TransportMode("1", "Sea transport"),
-            TransportMode("10", "Sea transport")
-          )
+        val expectedResult: Seq[TransportMode] = Seq(
+          TransportMode("1", "Sea transport"),
+          TransportMode("10", "Sea transport")
         )
 
         connector.getTransportModes().futureValue mustEqual expectedResult
@@ -584,7 +581,7 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
     }
 
-    "getSpecialMention" - {
+    "getSpecialMentionTypes" - {
 
       "must return list of document types when successful" in {
         server.stubFor(
@@ -599,17 +596,17 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
           )
         )
 
-        connector.getSpecialMention().futureValue mustEqual expectResult
+        connector.getSpecialMentionTypes().futureValue mustEqual expectResult
       }
 
       "must return an exception when an error response is returned" in {
 
-        checkErrorResponse(s"/$startUrl/additional-information", connector.getSpecialMention())
+        checkErrorResponse(s"/$startUrl/additional-information", connector.getSpecialMentionTypes())
       }
 
     }
 
-    "getDangerousGoodsCodeList" - {
+    "getDangerousGoodsCodes" - {
 
       "must return Seq of Dangerous goods codes when successful" in {
         server.stubFor(
@@ -624,12 +621,12 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
           )
         )
 
-        connector.getDangerousGoodsCodeList().futureValue mustEqual expectedResult
+        connector.getDangerousGoodsCodes().futureValue mustEqual expectedResult
       }
 
       "must return an exception when an error response is returned" in {
 
-        checkErrorResponse(s"/$startUrl/dangerous-goods-code", connector.getDangerousGoodsCodeList())
+        checkErrorResponse(s"/$startUrl/dangerous-goods-code", connector.getDangerousGoodsCodes())
       }
     }
 
@@ -648,11 +645,11 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
 
-        checkErrorResponse(s"/$startUrl/dangerous-goods-code/0004", connector.getDangerousGoodsCodeList())
+        checkErrorResponse(s"/$startUrl/dangerous-goods-code/0004", connector.getDangerousGoodsCode("0004"))
       }
     }
 
-    "getMethodOfPayment" - {
+    "getMethodsOfPayment" - {
       "must return list of methods of payment when successful" in {
         server.stubFor(
           get(urlEqualTo(s"/$startUrl/method-of-payment"))
@@ -664,14 +661,14 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             MethodOfPayment("B", "Payment by credit card")
           )
         )
-        connector.getMethodOfPaymentList().futureValue mustEqual expectResult
+        connector.getMethodsOfPayment().futureValue mustEqual expectResult
       }
       "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/method-of-payment", connector.getMethodOfPaymentList())
+        checkErrorResponse(s"/$startUrl/method-of-payment", connector.getMethodsOfPayment())
       }
     }
 
-    "getCircumstanceIndicatorList" - {
+    "getCircumstanceIndicators" - {
 
       "must return Seq of circumstance indicators when successful" in {
         server.stubFor(
@@ -686,12 +683,12 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
           )
         )
 
-        connector.getCircumstanceIndicatorList().futureValue mustEqual expectedResult
+        connector.getCircumstanceIndicators().futureValue mustEqual expectedResult
       }
 
       "must return an exception when an error response is returned" in {
 
-        checkErrorResponse(s"/$startUrl/circumstance-indicators", connector.getCircumstanceIndicatorList())
+        checkErrorResponse(s"/$startUrl/circumstance-indicators", connector.getCircumstanceIndicators())
       }
     }
 

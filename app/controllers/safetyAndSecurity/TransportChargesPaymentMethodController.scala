@@ -62,7 +62,7 @@ class TransportChargesPaymentMethodController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getMethodOfPaymentList() flatMap {
+        referenceDataConnector.getMethodsOfPayment() flatMap {
           payments =>
             val form: Form[MethodOfPayment] = formProvider(payments)
 
@@ -91,7 +91,7 @@ class TransportChargesPaymentMethodController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getMethodOfPaymentList() flatMap {
+        referenceDataConnector.getMethodsOfPayment() flatMap {
           payments =>
             val form = formProvider(payments)
             form

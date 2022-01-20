@@ -69,8 +69,8 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
         .thenReturn(Future.successful(Html("")))
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorsList))
-      when(mockReferenceDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorsList))
+      when(mockReferenceDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

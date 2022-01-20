@@ -54,9 +54,9 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMo
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(DocumentTypeList(Nil)))
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
+      when(mockRefDataConnector.getSpecialMentionTypes()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
       when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(PreviousReferencesDocumentTypeList(Nil)))
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(MethodOfPaymentList(Nil)))
+      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(MethodOfPaymentList(Nil)))
 
       setUserAnswers(Some(emptyUserAnswers))
 
