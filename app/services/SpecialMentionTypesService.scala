@@ -32,5 +32,5 @@ class SpecialMentionTypesService @Inject() (referenceDataConnector: ReferenceDat
       .map(sort)
 
   private def sort(specialMentionTypes: Seq[SpecialMention]): SpecialMentionList =
-    SpecialMentionList(specialMentionTypes.sortBy(_.code.toLowerCase))
+    SpecialMentionList(specialMentionTypes.sortBy(_.toString.toLowerCase))
 }

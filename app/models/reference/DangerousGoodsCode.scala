@@ -18,7 +18,9 @@ package models.reference
 
 import play.api.libs.json.{Json, Reads}
 
-case class DangerousGoodsCode(code: String, description: String)
+case class DangerousGoodsCode(code: String, description: String) {
+  override def toString: String = s"($code) $description"
+}
 
 object DangerousGoodsCode {
 

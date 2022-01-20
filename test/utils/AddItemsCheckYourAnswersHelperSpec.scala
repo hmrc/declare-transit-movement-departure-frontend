@@ -1098,7 +1098,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             result mustBe Some(
               Row(
                 key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                value = Value(lit"($referenceCode) "),
+                value = Value(lit"$referenceCode"),
                 actions = List(
                   Action(
                     content = msg"site.edit",
@@ -1184,7 +1184,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
               PreviousReferencesDocumentTypeList(Seq(PreviousReferencesDocumentType(referenceCode, None)))
             )
 
-            val label = lit"($referenceCode) "
+            val label = lit"$referenceCode"
 
             result mustBe Some(
               Row(
@@ -2196,7 +2196,7 @@ class AddItemsCheckYourAnswersHelperSpec extends SpecBase with UserAnswersSpecHe
             result mustBe Some(
               Row(
                 key = Key(label, classes = Seq("govuk-!-width-one-half")),
-                value = Value(lit"(${reference.code}) "),
+                value = Value(lit"${reference.code}"),
                 actions = List(
                   Action(
                     content = msg"site.edit",

@@ -104,7 +104,7 @@ class ConfirmRemoveOfficeOfTransitController @Inject() (
           "form"            -> form,
           "index"           -> index.display,
           "mode"            -> mode,
-          "officeOfTransit" -> s"${officeOfTransit.name} (${officeOfTransit.id})",
+          "officeOfTransit" -> s"${officeOfTransit.toString}",
           "lrn"             -> lrn,
           "radios"          -> Radios.yesNo(form("value"))
         )

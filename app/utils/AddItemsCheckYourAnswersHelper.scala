@@ -68,7 +68,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
       answer =>
         documentTypes.getDocumentType(answer).map {
           documentType =>
-            val label = lit"(${documentType.code}) ${documentType.description}"
+            val label = lit"${documentType.toString}"
 
             userAnswers.get(DeclarationTypePage) match {
               case Some(Option4) if index.position == 0 & documentIndex.position == 0 =>
@@ -93,7 +93,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
       answer =>
         documentTypes.getDocumentType(answer).map {
           documentType =>
-            val label = lit"(${documentType.code}) ${documentType.description}"
+            val label = lit"${documentType.toString}"
             buildSectionRow(
               label = msg"addDocuments.documentList.label".withArgs(documentIndex.display),
               answer = label,
@@ -498,7 +498,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
       answer =>
         documentTypes.getDocumentType(answer).map {
           documentType =>
-            val label = lit"(${documentType.code}) ${documentType.description}"
+            val label = lit"${documentType.toString}"
             buildRow(
               prefix = "documentType",
               answer = label,
@@ -540,7 +540,7 @@ class AddItemsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) exten
     answer =>
       documents.getPreviousReferencesDocumentType(answer) map {
         doc =>
-          buildRow(lit"(${doc.code}) ${doc.description.getOrElse("")}")
+          buildRow(lit"${doc.toString}")
       }
   }
 

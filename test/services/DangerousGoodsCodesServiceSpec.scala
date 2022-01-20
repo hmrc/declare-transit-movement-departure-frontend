@@ -32,8 +32,8 @@ class DangerousGoodsCodesServiceSpec extends SpecBase with BeforeAndAfterEach {
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new DangerousGoodsCodesService(mockRefDataConnector)
 
-  private val dangerousGoodsCode1 = DangerousGoodsCode("1", "CARTRIDGES FOR WEAPONS with bursting charge")
-  private val dangerousGoodsCode2 = DangerousGoodsCode("2", "AMMONIUM PICRATE dry or wetted with less than 10% water, by mass")
+  private val dangerousGoodsCode1 = DangerousGoodsCode("2", "CARTRIDGES FOR WEAPONS with bursting charge")
+  private val dangerousGoodsCode2 = DangerousGoodsCode("1", "AMMONIUM PICRATE dry or wetted with less than 10% water, by mass")
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)

@@ -18,7 +18,9 @@ package models.reference
 
 import play.api.libs.json.{Json, Reads}
 
-case class CircumstanceIndicator(code: String, description: String)
+case class CircumstanceIndicator(code: String, description: String) {
+  override def toString: String = s"($code) $description"
+}
 
 object CircumstanceIndicator {
   implicit def reads: Reads[CircumstanceIndicator] = Json.reads[CircumstanceIndicator]

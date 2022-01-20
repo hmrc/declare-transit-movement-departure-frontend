@@ -99,7 +99,7 @@ class SpecialMentionsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode
     answer =>
       specialMentions.getSpecialMention(answer) map {
         specialMention =>
-          buildRow(lit"(${specialMention.code}) ${specialMention.description}")
+          buildRow(lit"${specialMention.toString}")
       }
   }
 }

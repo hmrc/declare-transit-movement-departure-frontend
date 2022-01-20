@@ -32,5 +32,5 @@ class DocumentTypesService @Inject() (referenceDataConnector: ReferenceDataConne
       .map(sort)
 
   private def sort(documentTypes: Seq[DocumentType]): DocumentTypeList =
-    DocumentTypeList(documentTypes.sortBy(_.code.toLowerCase))
+    DocumentTypeList(documentTypes.sortBy(_.toString.toLowerCase))
 }

@@ -32,5 +32,5 @@ class PreviousDocumentTypesService @Inject() (referenceDataConnector: ReferenceD
       .map(sort)
 
   private def sort(previousDocumentTypes: Seq[PreviousReferencesDocumentType]): PreviousReferencesDocumentTypeList =
-    PreviousReferencesDocumentTypeList(previousDocumentTypes.sortBy(_.code.toLowerCase))
+    PreviousReferencesDocumentTypeList(previousDocumentTypes.sortBy(_.toString.toLowerCase))
 }

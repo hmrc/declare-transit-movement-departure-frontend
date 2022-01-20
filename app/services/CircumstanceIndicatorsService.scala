@@ -32,5 +32,5 @@ class CircumstanceIndicatorsService @Inject() (referenceDataConnector: Reference
       .map(sort)
 
   private def sort(circumstanceIndicators: Seq[CircumstanceIndicator]): CircumstanceIndicatorList =
-    CircumstanceIndicatorList(circumstanceIndicators.sortBy(_.description.toLowerCase))
+    CircumstanceIndicatorList(circumstanceIndicators.sortBy(_.toString.toLowerCase))
 }

@@ -139,9 +139,7 @@ class TransportDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mod
     val format: String => Content = modeCode =>
       lit"${transportModeList
         .getTransportMode(modeCode)
-        .fold(modeCode)(
-          mode => s"(${mode.code}) ${mode.description}"
-        )}"
+        .fold(modeCode)(_.toString)}"
 
     getAnswerAndBuildRow[String](page, format, prefix, Some(id), call)
   }

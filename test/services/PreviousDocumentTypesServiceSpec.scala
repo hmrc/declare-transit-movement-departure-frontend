@@ -51,7 +51,7 @@ class PreviousDocumentTypesServiceSpec extends SpecBase with BeforeAndAfterEach 
           .thenReturn(Future.successful(Seq(documentType1, documentType2, documentType3, documentType4)))
 
         service.getPreviousDocumentTypes().futureValue mustBe
-          PreviousReferencesDocumentTypeList(Seq(documentType4, documentType2, documentType3, documentType1))
+          PreviousReferencesDocumentTypeList(Seq(documentType2, documentType3, documentType1, documentType4))
 
         verify(mockRefDataConnector).getPreviousReferencesDocumentTypes()(any(), any())
       }

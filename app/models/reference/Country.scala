@@ -18,7 +18,9 @@ package models.reference
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Country(code: CountryCode, description: String)
+case class Country(code: CountryCode, description: String) {
+  override def toString: String = description
+}
 
 object Country {
   implicit val format: OFormat[Country] = Json.format[Country]

@@ -18,7 +18,13 @@ package models.reference
 
 import play.api.libs.json.{Format, Json}
 
-case class PreviousReferencesDocumentType(code: String, description: Option[String])
+case class PreviousReferencesDocumentType(code: String, description: Option[String]) {
+
+  override def toString: String = this match {
+    case PreviousReferencesDocumentType(_, Some(description)) if description.trim.nonEmpty => s"($code) $description"
+    case _                                                                                 => code
+  }
+}
 
 object PreviousReferencesDocumentType {
 
