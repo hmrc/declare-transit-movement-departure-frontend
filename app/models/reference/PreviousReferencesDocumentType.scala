@@ -20,9 +20,9 @@ import play.api.libs.json.{Format, Json}
 
 case class PreviousReferencesDocumentType(code: String, description: Option[String]) {
 
-  override def toString: String = this match {
-    case PreviousReferencesDocumentType(_, Some(description)) if description.trim.nonEmpty => s"($code) $description"
-    case _                                                                                 => code
+  override def toString: String = description match {
+    case Some(value) if value.trim.nonEmpty => s"($code) $value"
+    case _                                  => code
   }
 }
 
