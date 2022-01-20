@@ -17,7 +17,6 @@
 package controllers.safetyAndSecurity
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
 import models.reference.{CircumstanceIndicator, Country, CountryCode, MethodOfPayment}
@@ -33,7 +32,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import services.{CountriesService, MethodsOfPaymentService}
+import services.{CircumstanceIndicatorsService, CountriesService}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -45,9 +44,8 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
     with NunjucksSupport
     with JsonMatchers {
 
-  private val mockReferenceDataConnector             = mock[ReferenceDataConnector]
-  private val mockCountriesService: CountriesService = mock[CountriesService]
-  private val mockMethodsOfPaymentService            = mock[MethodsOfPaymentService]
+  private val mockCountriesService: CountriesService                           = mock[CountriesService]
+  private val mockCircumstanceIndicatorsService: CircumstanceIndicatorsService = mock[CircumstanceIndicatorsService]
 
   val countries                  = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   val circumstanceIndicatorsList = CircumstanceIndicatorList(Seq(CircumstanceIndicator("C", "Road mode of transport")))
@@ -59,9 +57,8 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
-      .overrides(bind(classOf[MethodsOfPaymentService]).toInstance(mockMethodsOfPaymentService))
+      .overrides(bind(classOf[CircumstanceIndicatorsService]).toInstance(mockCircumstanceIndicatorsService))
 
   "SafetyAndSecurityCheckYourAnswersController" - {
 
@@ -71,8 +68,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
         .thenReturn(Future.successful(Html("")))
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorsList))
-      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockCircumstanceIndicatorsService.getCircumstanceIndicators()(any())).thenReturn(Future.successful(circumstanceIndicatorsList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

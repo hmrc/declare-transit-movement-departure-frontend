@@ -19,8 +19,8 @@ package connectors
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
+import models.CustomsOfficeList
 import models.reference._
-import models.{CircumstanceIndicatorList, CustomsOfficeList}
 import org.scalacheck.Gen
 import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -628,11 +628,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(circumstanceIndicatorJson))
         )
 
-        val expectedResult: CircumstanceIndicatorList = CircumstanceIndicatorList(
-          Seq(
-            CircumstanceIndicator("A", "Data1"),
-            CircumstanceIndicator("B", "Data2")
-          )
+        val expectedResult: Seq[CircumstanceIndicator] = Seq(
+          CircumstanceIndicator("A", "Data1"),
+          CircumstanceIndicator("B", "Data2")
         )
 
         connector.getCircumstanceIndicators().futureValue mustEqual expectedResult

@@ -16,7 +16,6 @@
 
 package controllers.safetyAndSecurity
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import models.journeyDomain.SafetyAndSecurity
@@ -25,7 +24,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
-import services.CountriesService
+import services.{CircumstanceIndicatorsService, CountriesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.SafetyAndSecurityCheckYourAnswersViewModel
 import viewModels.sections.Section
@@ -37,8 +36,8 @@ class SafetyAndSecurityCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
-  referenceDataConnector: ReferenceDataConnector,
   countriesService: CountriesService,
+  circumstanceIndicatorsService: CircumstanceIndicatorsService,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   val controllerComponents: MessagesControllerComponents,
@@ -57,7 +56,7 @@ class SafetyAndSecurityCheckYourAnswersController @Inject() (
         val buildJson: Future[JsObject] =
           for {
             countries              <- countriesService.getCountries()
-            circumstanceIndicators <- referenceDataConnector.getCircumstanceIndicators()
+            circumstanceIndicators <- circumstanceIndicatorsService.getCircumstanceIndicators()
           } yield {
             val sections: Seq[Section] =
               SafetyAndSecurityCheckYourAnswersViewModel(request.userAnswers, countries, circumstanceIndicators)
