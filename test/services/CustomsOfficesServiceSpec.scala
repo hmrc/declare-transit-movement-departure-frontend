@@ -17,12 +17,11 @@
 package services
 
 import base.SpecBase
-import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import models.CustomsOfficeList
 import models.reference.{CountryCode, CustomsOffice}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,36 +29,63 @@ import scala.concurrent.Future
 
 class CustomsOfficesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
-  val mockRefDataConnector                = mock[ReferenceDataConnector]
-  val mockFrontendAppConfig               = mock[FrontendAppConfig]
-  val gbCustomsOffice1: CustomsOffice     = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
-  val gbCustomsOffice2: CustomsOffice     = CustomsOffice("id", "name", CountryCode("GB"), None)
-  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("xi", "ni", CountryCode("XI"), None)
+  val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  val service                                      = new CustomsOfficesService(mockRefDataConnector)
+
+  val gbCustomsOffice1: CustomsOffice     = CustomsOffice("1", "BOSTON", CountryCode("GB"), None)
+  val gbCustomsOffice2: CustomsOffice     = CustomsOffice("2", "Appledore", CountryCode("GB"), None)
+  val xiCustomsOffice1: CustomsOffice     = CustomsOffice("3", "Belfast", CountryCode("XI"), None)
   val gbCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(gbCustomsOffice1, gbCustomsOffice2))
   val xiCustomsOffices: CustomsOfficeList = CustomsOfficeList(Seq(xiCustomsOffice1))
   val customsOffices: CustomsOfficeList   = CustomsOfficeList(gbCustomsOffices.getAll ++ xiCustomsOffices.getAll)
 
-  val service = new CustomsOfficesService(mockFrontendAppConfig, mockRefDataConnector)
-
-  override def beforeEach = {
-    reset(mockFrontendAppConfig, mockRefDataConnector)
+  override def beforeEach(): Unit = {
+    reset(mockRefDataConnector)
     super.beforeEach()
   }
 
   "CustomsOfficesService" - {
 
-    "must return a list of GB and NI customs offices" in {
+    "getCustomsOffices" - {
+      "must return a list of sorted GB and NI customs offices" in {
 
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any()))
-        .thenReturn(Future.successful(xiCustomsOffices))
-      when(mockRefDataConnector.getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any()))
-        .thenReturn(Future.successful(gbCustomsOffices))
+        when(mockRefDataConnector.getCustomsOffices(any())(any(), any()))
+          .thenReturn(Future.successful(gbCustomsOffices.customsOffices))
 
-      service.getCustomsOfficesOfDeparture.futureValue.getAll mustBe customsOffices.getAll
+        service.getCustomsOffices().futureValue.getAll mustBe
+          CustomsOfficeList(Seq(gbCustomsOffice2, gbCustomsOffice1)).getAll
 
-      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any())
-      verify(mockRefDataConnector, times(1)).getCustomsOfficesOfTheCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any())
+        verify(mockRefDataConnector).getCustomsOffices(eqTo(Nil))(any(), any())
+      }
+    }
 
+    "getCustomsOfficesOfDeparture" - {
+      "must return a list of sorted GB and NI customs offices" in {
+
+        when(mockRefDataConnector.getCustomsOfficesForCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any()))
+          .thenReturn(Future.successful(xiCustomsOffices))
+        when(mockRefDataConnector.getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any()))
+          .thenReturn(Future.successful(gbCustomsOffices))
+
+        service.getCustomsOfficesOfDeparture.futureValue.getAll mustBe
+          CustomsOfficeList(Seq(gbCustomsOffice2, xiCustomsOffice1, gbCustomsOffice1)).getAll
+
+        verify(mockRefDataConnector).getCustomsOfficesForCountry(eqTo(CountryCode("XI")), eqTo(Seq("DEP")))(any(), any())
+        verify(mockRefDataConnector).getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Seq("DEP")))(any(), any())
+      }
+    }
+
+    "getCustomsOfficesForCountry" - {
+      "must return a list of sorted customs offices for a given country" in {
+
+        when(mockRefDataConnector.getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Nil))(any(), any()))
+          .thenReturn(Future.successful(gbCustomsOffices))
+
+        service.getCustomsOfficesForCountry(CountryCode("GB")).futureValue.getAll mustBe
+          CustomsOfficeList(Seq(gbCustomsOffice2, gbCustomsOffice1)).getAll
+
+        verify(mockRefDataConnector).getCustomsOfficesForCountry(eqTo(CountryCode("GB")), eqTo(Nil))(any(), any())
+      }
     }
 
   }

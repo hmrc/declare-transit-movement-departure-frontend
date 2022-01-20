@@ -17,7 +17,6 @@
 package controllers.addItems.traderSecurityDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
@@ -36,17 +35,20 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
 class SecurityConsignorAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  private val country                                            = Country(CountryCode("GB"), "United Kingdom")
-  private val countries                                          = CountryList(Seq(country))
-  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val formProvider                                       = new CommonAddressFormProvider()
-  private val form                                               = formProvider(countries, "Test")
+  private val country   = Country(CountryCode("GB"), "United Kingdom")
+  private val countries = CountryList(Seq(country))
+
+  private val mockCountriesService: CountriesService = mock[CountriesService]
+
+  private val formProvider = new CommonAddressFormProvider()
+  private val form         = formProvider(countries, "Test")
 
   lazy val securityConsignorAddressRoute = routes.SecurityConsignorAddressController.onPageLoad(lrn, index, NormalMode).url
   private val template                   = "addItems/traderSecurityDetails/securityConsignorAddress.njk"
@@ -56,7 +58,7 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with AppWithDefaul
       .guiceApplicationBuilder()
       .overrides(
         bind(classOf[Navigator]).qualifiedWith(classOf[TradersSecurityDetails]).toInstance(new FakeNavigator(onwardRoute)),
-        bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector)
+        bind[CountriesService].toInstance(mockCountriesService)
       )
 
   "SecurityConsignorAddress Controller" - {
@@ -65,7 +67,7 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with AppWithDefaul
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(SecurityConsignorNamePage(index), "foo").success.value
@@ -95,7 +97,7 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with AppWithDefaul
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val tradersDetailsConsignorAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
@@ -142,7 +144,7 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with AppWithDefaul
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers
@@ -166,7 +168,7 @@ class SecurityConsignorAddressControllerSpec extends SpecBase with AppWithDefaul
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(SecurityConsignorNamePage(index), "ConsignorName").success.value

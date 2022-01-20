@@ -63,13 +63,13 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countries         <- OptionT.liftF(countriesService.getDestinationCountryList(request.userAnswers, excludedCountries))
+          countryList       <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries))
           preparedForm = request.userAnswers
             .get(MovementDestinationCountryPage)
-            .flatMap(countries.getCountry)
-            .map(formProvider(countries).fill)
-            .getOrElse(formProvider(countries))
-          page <- OptionT.liftF(renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok))
+            .flatMap(countryList.getCountry)
+            .map(formProvider(countryList).fill)
+            .getOrElse(formProvider(countryList))
+          page <- OptionT.liftF(renderPage(lrn, mode, preparedForm, countryList.countries, Results.Ok))
         } yield page
       ).getOrElseF {
         logger.warn(s"[Controller][MovementDestinationCountry][onPageLoad] OfficeOfDeparturePage is missing")
@@ -82,12 +82,12 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countries         <- OptionT.liftF(countriesService.getDestinationCountryList(request.userAnswers, excludedCountries))
+          countryList       <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries))
           page <- OptionT.liftF(
-            formProvider(countries)
+            formProvider(countryList)
               .bindFromRequest()
               .fold(
-                formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
+                formWithErrors => renderPage(lrn, mode, formWithErrors, countryList.countries, Results.BadRequest),
                 value =>
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(MovementDestinationCountryPage, value.code))

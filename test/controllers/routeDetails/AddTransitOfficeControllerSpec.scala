@@ -17,7 +17,6 @@
 package controllers.routeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.AddTransitOfficeFormProvider
 import matchers.JsonMatchers
@@ -35,6 +34,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CustomsOfficesService
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
@@ -45,7 +45,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with AppWithDefaultMockFix
   val form         = formProvider()
 
   lazy val addTransitOfficeRoute           = routes.AddTransitOfficeController.onPageLoad(lrn, NormalMode).url
-  private val mockRefDataConnector         = mock[ReferenceDataConnector]
+  private val mockCustomsOfficesService    = mock[CustomsOfficesService]
   val customsOffice                        = CustomsOffice("1", "Transit1", CountryCode("GB"), None)
   val customsOfficeList: CustomsOfficeList = CustomsOfficeList(Seq(customsOffice))
 
@@ -53,7 +53,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with AppWithDefaultMockFix
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[RouteDetails]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "AddTransitOffice Controller" - {
 
@@ -61,7 +61,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with AppWithDefaultMockFix
       setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOffices(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
       val request                                = FakeRequest(GET, addTransitOfficeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -86,7 +86,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with AppWithDefaultMockFix
 
     "must redirect to the next page when valid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOffices(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
       val request =
         FakeRequest(POST, addTransitOfficeRoute)
@@ -103,7 +103,7 @@ class AddTransitOfficeControllerSpec extends SpecBase with AppWithDefaultMockFix
       setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOffices(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
       val request                                = FakeRequest(POST, addTransitOfficeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))

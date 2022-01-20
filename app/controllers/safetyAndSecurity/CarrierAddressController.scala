@@ -16,7 +16,6 @@
 
 package controllers.safetyAndSecurity
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -42,7 +42,7 @@ class CarrierAddressController @Inject() (
   sessionRepository: SessionRepository,
   @SafetyAndSecurityTraderDetails navigator: Navigator,
   identify: IdentifierAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
@@ -62,13 +62,13 @@ class CarrierAddressController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
-          countries =>
+        countriesService.getCountries() flatMap {
+          countryList =>
             request.userAnswers.get(CarrierNamePage) match {
               case Some(carrierName) =>
                 val preparedForm = request.userAnswers.get(CarrierAddressPage) match {
-                  case Some(value) => formProvider(countries, carrierName).fill(value)
-                  case None        => formProvider(countries, carrierName)
+                  case Some(value) => formProvider(countryList, carrierName).fill(value)
+                  case None        => formProvider(countryList, carrierName)
                 }
 
                 val json = Json.obj(
@@ -76,7 +76,7 @@ class CarrierAddressController @Inject() (
                   "carrierName" -> carrierName,
                   "lrn"         -> lrn,
                   "mode"        -> mode,
-                  "countries"   -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+                  "countries"   -> countryJsonList(preparedForm.value.map(_.country), countryList.countries)
                 )
 
                 renderer.render(template, json).map(Ok(_))
@@ -95,22 +95,22 @@ class CarrierAddressController @Inject() (
       implicit request =>
         request.userAnswers.get(CarrierNamePage) match {
           case Some(carrierName) =>
-            referenceDataConnector.getCountryList() flatMap {
-              countries =>
-                formProvider(countries, carrierName)
+            countriesService.getCountries() flatMap {
+              countryList =>
+                formProvider(countryList, carrierName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {
                       val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
                         country =>
-                          countries.getCountry(CountryCode(country))
+                          countryList.getCountry(CountryCode(country))
                       }
                       val json = Json.obj(
                         "form"        -> formWithErrors,
                         "lrn"         -> lrn,
                         "mode"        -> mode,
                         "carrierName" -> carrierName,
-                        "countries"   -> countryJsonList(countryValue, countries.fullList)
+                        "countries"   -> countryJsonList(countryValue, countryList.countries)
                       )
 
                       renderer.render(template, json).map(BadRequest(_))

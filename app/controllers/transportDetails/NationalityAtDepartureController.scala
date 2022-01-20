@@ -16,7 +16,6 @@
 
 package controllers.transportDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.NationalityAtDepartureFormProvider
 import models.reference.Country
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
@@ -45,7 +45,7 @@ class NationalityAtDepartureController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: NationalityAtDepartureFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -60,17 +60,17 @@ class NationalityAtDepartureController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
-          countries =>
-            val form = formProvider(countries)
+        countriesService.getCountries() flatMap {
+          countryList =>
+            val form = formProvider(countryList)
 
             val preparedForm = request.userAnswers
               .get(NationalityAtDeparturePage)
-              .flatMap(countries.getCountry)
+              .flatMap(countryList.getCountry)
               .map(form.fill)
               .getOrElse(form)
 
-            renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok)
+            renderPage(lrn, mode, preparedForm, countryList.countries, Results.Ok)
         }
     }
 
@@ -80,12 +80,12 @@ class NationalityAtDepartureController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
-          countries =>
-            formProvider(countries)
+        countriesService.getCountries() flatMap {
+          countryList =>
+            formProvider(countryList)
               .bindFromRequest()
               .fold(
-                formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
+                formWithErrors => renderPage(lrn, mode, formWithErrors, countryList.countries, Results.BadRequest),
                 value =>
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(NationalityAtDeparturePage, value.code))

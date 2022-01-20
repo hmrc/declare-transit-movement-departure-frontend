@@ -16,7 +16,6 @@
 
 package controllers.routeDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfOfficeOfTransits
 import forms.AddTransitOfficeFormProvider
@@ -31,6 +30,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import renderer.Renderer
+import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.RouteDetailsCheckYourAnswersHelper
@@ -45,7 +45,7 @@ class AddTransitOfficeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: AddTransitOfficeFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -75,12 +75,12 @@ class AddTransitOfficeController @Inject() (
   }
 
   private def renderPage(lrn: LocalReferenceNumber, mode: Mode, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] =
-    referenceDataConnector.getCustomsOffices() flatMap {
+    customsOfficesService.getCustomsOffices() flatMap {
       customsOfficeList =>
         val routesCYAHelper          = new RouteDetailsCheckYourAnswersHelper(request.userAnswers, mode)
         val numberOfTransitOffices   = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
         val index: Seq[Index]        = List.range(0, numberOfTransitOffices).map(Index(_))
-        val maxLimitReached: Boolean = if (numberOfTransitOffices >= 9) true else false
+        val maxLimitReached: Boolean = numberOfTransitOffices >= 9
         val officeOfTransitRows = index.map {
           index =>
             routesCYAHelper.officeOfTransitRow(index, customsOfficeList)

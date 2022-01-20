@@ -25,6 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.TransportDetailsCheckYourAnswersViewModel
 import viewModels.sections.Section
@@ -40,6 +41,7 @@ class TransportDetailsCheckYourAnswersController @Inject() (
   checkDependentSection: CheckDependentSectionAction,
   val controllerComponents: MessagesControllerComponents,
   referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -52,7 +54,7 @@ class TransportDetailsCheckYourAnswersController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        referenceDataConnector.getCountryList().flatMap {
+        countriesService.getCountries().flatMap {
           countryList =>
             referenceDataConnector.getTransportModes().flatMap {
               transportModeList =>

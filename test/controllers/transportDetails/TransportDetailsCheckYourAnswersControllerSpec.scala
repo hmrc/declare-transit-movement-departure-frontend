@@ -34,6 +34,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 
 import scala.concurrent.Future
 
@@ -43,6 +44,7 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWi
 
   lazy val transportDetailsRoute: String                 = routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url
   val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockCountriesService: CountriesService     = mock[CountriesService]
   val transportMode: TransportMode                       = TransportMode("1", "Sea transport")
   val transportModes: TransportModeList                  = TransportModeList(Seq(transportMode))
   private val country                                    = Country(CountryCode("GB"), "United Kingdom")
@@ -52,9 +54,10 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWi
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   override def beforeEach(): Unit = {
-    reset(mockReferenceDataConnector)
+    reset(mockReferenceDataConnector, mockCountriesService)
     super.beforeEach()
   }
 
@@ -71,7 +74,7 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWi
       when(mockReferenceDataConnector.getTransportModes()(any(), any()))
         .thenReturn(Future.successful(transportModes))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(GET, routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url)

@@ -18,7 +18,6 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import config.FrontendAppConfig
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.OfficeOfDepartureFormProvider
 import matchers.JsonMatchers
@@ -38,7 +37,7 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import services.CustomsOfficesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -55,13 +54,13 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
   val gbForm                                 = new OfficeOfDepartureFormProvider()(customsOffices)
   val xiForm                                 = new OfficeOfDepartureFormProvider()(xiCustomsOffices)
 
-  private val mockRefDataConnector: ReferenceDataConnector     = mock[ReferenceDataConnector]
   private val mockFrontendAppConfig: FrontendAppConfig         = mock[FrontendAppConfig]
+  private val mockCountriesService: CountriesService           = mock[CountriesService]
   private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
   lazy val officeOfDepartureRoute: String                      = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
 
   override def beforeEach(): Unit = {
-    reset(mockFrontendAppConfig, mockRefDataConnector, mockCustomsOfficesService)
+    reset(mockFrontendAppConfig, mockCountriesService, mockCustomsOfficesService)
     super.beforeEach()
   }
 
@@ -69,7 +68,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[PreTaskListDetails]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
       .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "OfficeOfDeparture Controller" - {
@@ -150,7 +149,7 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
       setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockCustomsOfficesService.getCustomsOfficesOfDeparture(any())).thenReturn(Future.successful(customsOffices))
-      when(mockRefDataConnector.getNonEUTransitCountryList()(any(), any())).thenReturn(Future.successful(nonEuTransitCountriesList))
+      when(mockCountriesService.getNonEuTransitCountries()(any())).thenReturn(Future.successful(nonEuTransitCountriesList))
 
       val request =
         FakeRequest(POST, officeOfDepartureRoute)

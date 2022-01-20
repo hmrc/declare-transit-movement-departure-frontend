@@ -33,6 +33,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -44,10 +45,12 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
     with NunjucksSupport
     with JsonMatchers {
 
-  private val mockReferenceDataConnector = mock[ReferenceDataConnector]
-  val countries                          = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  val circumstanceIndicatorsList         = CircumstanceIndicatorList(Seq(CircumstanceIndicator("C", "Road mode of transport")))
-  val methodOfPaymentList                = MethodOfPaymentList(Seq(MethodOfPayment("A", "Payment in cash")))
+  private val mockReferenceDataConnector             = mock[ReferenceDataConnector]
+  private val mockCountriesService: CountriesService = mock[CountriesService]
+
+  val countries                  = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
+  val circumstanceIndicatorsList = CircumstanceIndicatorList(Seq(CircumstanceIndicator("C", "Road mode of transport")))
+  val methodOfPaymentList        = MethodOfPaymentList(Seq(MethodOfPayment("A", "Payment in cash")))
 
   lazy val safetyAndSecurityRoute = routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(lrn).url
 
@@ -56,6 +59,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   "SafetyAndSecurityCheckYourAnswersController" - {
 
@@ -64,7 +68,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getCircumstanceIndicatorList()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorsList))
       when(mockReferenceDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
 

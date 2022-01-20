@@ -53,7 +53,7 @@ class CommonAddressFormProvider @Inject() extends Mappings {
             )
           ),
         "country" -> text("commonAddress.error.country.required", Seq(name))
-          .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
+          .transform[Country](value => countryList.countries.find(_.code.code == value).get, _.code.code)
       )(CommonAddress.apply)(CommonAddress.unapply)
     )
 }

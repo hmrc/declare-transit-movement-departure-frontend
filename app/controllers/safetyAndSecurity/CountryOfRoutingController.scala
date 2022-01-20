@@ -16,7 +16,6 @@
 
 package controllers.safetyAndSecurity
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.safetyAndSecurity.CountryOfRoutingFormProvider
 import models.reference.Country
@@ -31,6 +30,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -47,7 +47,7 @@ class CountryOfRoutingController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: CountryOfRoutingFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -63,17 +63,17 @@ class CountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
-          countries =>
-            val form = formProvider(countries)
+        countriesService.getCountries() flatMap {
+          countryList =>
+            val form = formProvider(countryList)
 
             val preparedForm = request.userAnswers
               .get(CountryOfRoutingPage(index))
-              .flatMap(countries.getCountry)
+              .flatMap(countryList.getCountry)
               .map(form.fill)
               .getOrElse(form)
 
-            renderPage(lrn, index, mode, preparedForm, countries.fullList) map (Ok(_))
+            renderPage(lrn, index, mode, preparedForm, countryList.countries) map (Ok(_))
         }
     }
 
@@ -83,12 +83,12 @@ class CountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
-          countries =>
-            formProvider(countries)
+        countriesService.getCountries() flatMap {
+          countryList =>
+            formProvider(countryList)
               .bindFromRequest()
               .fold(
-                formWithErrors => renderPage(lrn, index, mode, formWithErrors, countries.fullList) map (BadRequest(_)),
+                formWithErrors => renderPage(lrn, index, mode, formWithErrors, countryList.countries) map (BadRequest(_)),
                 value =>
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfRoutingPage(index), value.code))

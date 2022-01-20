@@ -16,7 +16,6 @@
 
 package controllers.addItems.traderDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -45,7 +45,7 @@ class TraderDetailsConsigneeAddressController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -62,13 +62,13 @@ class TraderDetailsConsigneeAddressController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
-          countries =>
+        countriesService.getCountries() flatMap {
+          countryList =>
             request.userAnswers.get(TraderDetailsConsigneeNamePage(index)) match {
               case Some(consigneeName) =>
                 val preparedForm = request.userAnswers.get(TraderDetailsConsigneeAddressPage(index)) match {
-                  case Some(value) => formProvider(countries, consigneeName).fill(value)
-                  case None        => formProvider(countries, consigneeName)
+                  case Some(value) => formProvider(countryList, consigneeName).fill(value)
+                  case None        => formProvider(countryList, consigneeName)
                 }
 
                 val json = Json.obj(
@@ -77,7 +77,7 @@ class TraderDetailsConsigneeAddressController @Inject() (
                   "mode"          -> mode,
                   "index"         -> index.display,
                   "consigneeName" -> consigneeName,
-                  "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+                  "countries"     -> countryJsonList(preparedForm.value.map(_.country), countryList.countries)
                 )
 
                 renderer.render(template, json).map(Ok(_))
@@ -95,15 +95,15 @@ class TraderDetailsConsigneeAddressController @Inject() (
       implicit request =>
         request.userAnswers.get(TraderDetailsConsigneeNamePage(index)) match {
           case Some(consigneeName) =>
-            referenceDataConnector.getCountryList() flatMap {
-              countries =>
-                formProvider(countries, consigneeName)
+            countriesService.getCountries() flatMap {
+              countryList =>
+                formProvider(countryList, consigneeName)
                   .bindFromRequest()
                   .fold(
                     formWithErrors => {
                       val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
                         country =>
-                          countries.getCountry(CountryCode(country))
+                          countryList.getCountry(CountryCode(country))
                       }
                       val json = Json.obj(
                         "form"          -> formWithErrors,
@@ -111,7 +111,7 @@ class TraderDetailsConsigneeAddressController @Inject() (
                         "mode"          -> mode,
                         "index"         -> index.display,
                         "consigneeName" -> consigneeName,
-                        "countries"     -> countryJsonList(countryValue, countries.fullList)
+                        "countries"     -> countryJsonList(countryValue, countryList.countries)
                       )
 
                       renderer.render(template, json).map(BadRequest(_))

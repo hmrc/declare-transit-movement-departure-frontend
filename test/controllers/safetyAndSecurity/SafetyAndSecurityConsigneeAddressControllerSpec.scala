@@ -17,7 +17,6 @@
 package controllers.safetyAndSecurity
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
 
@@ -48,19 +48,20 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
     with NunjucksSupport
     with JsonMatchers {
 
-  private val country                                            = Country(CountryCode("GB"), "United Kingdom")
-  private val countries                                          = CountryList(Seq(country))
-  private val consigneeName                                      = "consigneeName"
-  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val country       = Country(CountryCode("GB"), "United Kingdom")
+  private val countryList   = CountryList(Seq(country))
+  private val consigneeName = "consigneeName"
+
+  private val mockCountriesService: CountriesService = mock[CountriesService]
 
   private val formProvider = new CommonAddressFormProvider()
-  private val form         = formProvider(countries, consigneeName)
+  private val form         = formProvider(countryList, consigneeName)
   private val template     = "safetyAndSecurity/safetyAndSecurityConsigneeAddress.njk"
 
   lazy val safetyAndSecurityConsigneeAddressRoute = routes.SafetyAndSecurityConsigneeAddressController.onPageLoad(lrn, NormalMode).url
 
   override def beforeEach(): Unit = {
-    reset(mockReferenceDataConnector)
+    reset(mockCountriesService)
     super.beforeEach()
   }
 
@@ -68,7 +69,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector))
+      .overrides(bind[CountriesService].toInstance(mockCountriesService))
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurityTraderDetails]).toInstance(new FakeNavigator(onwardRoute)))
 
   "SafetyAndSecurityConsigneeAddress Controller" - {
@@ -78,8 +79,8 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
-        .thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any()))
+        .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsigneeNamePage, consigneeName).success.value
 
@@ -100,7 +101,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
         "mode"          -> NormalMode,
         "lrn"           -> lrn,
         "consigneeName" -> consigneeName,
-        "countries"     -> countryJsonList(form.value.map(_.country), countries.fullList)
+        "countries"     -> countryJsonList(form.value.map(_.country), countryList.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -114,8 +115,8 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
-        .thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any()))
+        .thenReturn(Future.successful(countryList))
       val consignorAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
 
       val userAnswers = emptyUserAnswers
@@ -151,7 +152,7 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
         "lrn"           -> lrn,
         "mode"          -> NormalMode,
         "consigneeName" -> consigneeName,
-        "countries"     -> countryJsonList(filledForm.value.map(_.country), countries.fullList)
+        "countries"     -> countryJsonList(filledForm.value.map(_.country), countryList.countries)
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -164,8 +165,8 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
-        .thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any()))
+        .thenReturn(Future.successful(countryList))
 
       val userAnswers = emptyUserAnswers
         .set(SafetyAndSecurityConsigneeNamePage, consigneeName)
@@ -190,8 +191,8 @@ class SafetyAndSecurityConsigneeAddressControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
-        .thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries()(any()))
+        .thenReturn(Future.successful(countryList))
       val userAnswers = emptyUserAnswers.set(SafetyAndSecurityConsigneeNamePage, consigneeName).success.value
       setUserAnswers(Some(userAnswers))
 

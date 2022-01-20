@@ -17,7 +17,6 @@
 package controllers.routeDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
 import models.DeclarationType.{Option1, Option2, Option3, Option4}
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsBoolean, JsObject, JsString, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.{CountriesService, CustomsOfficesService}
 
 import scala.concurrent.Future
 
@@ -46,12 +46,15 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDe
   private val customsOfficeXI: CustomsOffice       = CustomsOffice("id", "name", CountryCode("XI"), None)
   private val customsOfficeList: CustomsOfficeList = CustomsOfficeList(Seq(customsOfficeGB))
   lazy val routeDetailsCheckYourAnswersRoute       = mainRoutes.DeclarationSummaryController.onPageLoad(lrn).url
-  val mockReferenceDataConnector                   = mock[ReferenceDataConnector]
+
+  private val mockCountriesService: CountriesService           = mock[CountriesService]
+  private val mockCustomsOfficesService: CustomsOfficesService = mock[CustomsOfficesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
+      .overrides(bind(classOf[CustomsOfficesService]).toInstance(mockCustomsOfficesService))
 
   "RouteDetailsCheckYourAnswers Controller" - {
 
@@ -73,10 +76,10 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDe
         .value
 
       setUserAnswers(Some(userAnswers))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockReferenceDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getTransitCountries(eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
+      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOffices(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -121,10 +124,10 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDe
         .value
 
       setUserAnswers(Some(userAnswers))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockReferenceDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getTransitCountries(eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
+      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOffices(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -172,10 +175,10 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDe
         .value
 
       setUserAnswers(Some(userAnswers))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockReferenceDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getTransitCountries(eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
+      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOffices(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -218,10 +221,10 @@ class RouteDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWithDe
         .value
 
       setUserAnswers(Some(userAnswers))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getTransitCountryList(eqTo(Seq(CountryCode("JE"))))(any(), any())).thenReturn(Future.successful(countries))
-      when(mockReferenceDataConnector.getCustomsOfficesOfTheCountry(any(), any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
-      when(mockReferenceDataConnector.getCustomsOffices(any())(any(), any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getTransitCountries(eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
+      when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), any())(any())).thenReturn(Future.successful(customsOfficeList))
+      when(mockCustomsOfficesService.getCustomsOffices(any())(any())).thenReturn(Future.successful(customsOfficeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

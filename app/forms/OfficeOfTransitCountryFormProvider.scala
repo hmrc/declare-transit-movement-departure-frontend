@@ -28,7 +28,7 @@ class OfficeOfTransitCountryFormProvider @Inject() extends Mappings {
   def apply(countryList: CountryList): Form[Country] =
     Form(
       "value" -> text("officeOfTransitCountry.error.required")
-        .verifying("officeOfTransitCountry.error.required", value => countryList.fullList.exists(_.code.code == value))
-        .transform[Country](value => countryList.fullList.find(_.code.code == value).get, _.code.code)
+        .verifying("officeOfTransitCountry.error.required", value => countryList.countries.exists(_.code.code == value))
+        .transform[Country](value => countryList.countries.find(_.code.code == value).get, _.code.code)
     )
 }

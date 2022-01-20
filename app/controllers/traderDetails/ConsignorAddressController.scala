@@ -16,7 +16,6 @@
 
 package controllers.traderDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
@@ -44,7 +44,7 @@ class ConsignorAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: CommonAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -55,13 +55,13 @@ class ConsignorAddressController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
-        countries =>
+      countriesService.getCountries() flatMap {
+        countryList =>
           request.userAnswers.get(ConsignorNamePage) match {
             case Some(consignorName) =>
               val preparedForm = request.userAnswers.get(ConsignorAddressPage) match {
-                case Some(value) => formProvider(countries, consignorName).fill(value)
-                case None        => formProvider(countries, consignorName)
+                case Some(value) => formProvider(countryList, consignorName).fill(value)
+                case None        => formProvider(countryList, consignorName)
               }
 
               val json = Json.obj(
@@ -69,7 +69,7 @@ class ConsignorAddressController @Inject() (
                 "lrn"           -> lrn,
                 "mode"          -> mode,
                 "consignorName" -> consignorName,
-                "countries"     -> countryJsonList(preparedForm.value.map(_.country), countries.fullList)
+                "countries"     -> countryJsonList(preparedForm.value.map(_.country), countryList.countries)
               )
 
               renderer.render("consignorAddress.njk", json).map(Ok(_))
@@ -83,22 +83,22 @@ class ConsignorAddressController @Inject() (
     implicit request =>
       request.userAnswers.get(ConsignorNamePage) match {
         case Some(consignorName) =>
-          referenceDataConnector.getCountryList() flatMap {
-            countries =>
-              formProvider(countries, consignorName)
+          countriesService.getCountries() flatMap {
+            countryList =>
+              formProvider(countryList, consignorName)
                 .bindFromRequest()
                 .fold(
                   formWithErrors => {
                     val countryValue: Option[Country] = formWithErrors.data.get("country").flatMap {
                       country =>
-                        countries.getCountry(CountryCode(country))
+                        countryList.getCountry(CountryCode(country))
                     }
                     val json = Json.obj(
                       "form"          -> formWithErrors,
                       "lrn"           -> lrn,
                       "mode"          -> mode,
                       "consignorName" -> consignorName,
-                      "countries"     -> countryJsonList(countryValue, countries.fullList)
+                      "countries"     -> countryJsonList(countryValue, countryList.countries)
                     )
 
                     renderer.render("consignorAddress.njk", json).map(BadRequest(_))

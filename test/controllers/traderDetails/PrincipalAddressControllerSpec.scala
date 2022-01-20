@@ -17,7 +17,6 @@
 package controllers.traderDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
@@ -36,17 +35,19 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
 class PrincipalAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  private val country                                            = Country(CountryCode("GB"), "United Kingdom")
-  private val countries                                          = CountryList(Seq(country))
-  private val formProvider                                       = new CommonAddressFormProvider()
-  private val form                                               = formProvider(countries, principalName)
-  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val country      = Country(CountryCode("GB"), "United Kingdom")
+  private val countries    = CountryList(Seq(country))
+  private val formProvider = new CommonAddressFormProvider()
+  private val form         = formProvider(countries, principalName)
+
+  private val mockCountriesService: CountriesService = mock[CountriesService]
 
   private lazy val principalAddressRoute = routes.PrincipalAddressController.onPageLoad(lrn, NormalMode).url
 
@@ -55,7 +56,7 @@ class PrincipalAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       .guiceApplicationBuilder()
       .overrides(
         bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator),
-        bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector)
+        bind[CountriesService].toInstance(mockCountriesService)
       )
 
   "PrincipalAddress Controller" - {
@@ -65,7 +66,7 @@ class PrincipalAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(PrincipalNamePage, "foo").success.value
@@ -97,7 +98,7 @@ class PrincipalAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers

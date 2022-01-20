@@ -16,7 +16,6 @@
 
 package controllers.routeDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.DestinationCountryFormProvider
 import models.reference.Country
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
@@ -44,7 +44,7 @@ class DestinationCountryController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: DestinationCountryFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -55,28 +55,28 @@ class DestinationCountryController @Inject() (
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
-        countries =>
-          val form = formProvider(countries)
+      countriesService.getCountries() flatMap {
+        countryList =>
+          val form = formProvider(countryList)
 
           val preparedForm = request.userAnswers
             .get(DestinationCountryPage)
-            .flatMap(countries.getCountry)
+            .flatMap(countryList.getCountry)
             .map(form.fill)
             .getOrElse(form)
 
-          renderPage(lrn, mode, preparedForm, countries.fullList, Results.Ok)
+          renderPage(lrn, mode, preparedForm, countryList.countries, Results.Ok)
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
-        countries =>
-          formProvider(countries)
+      countriesService.getCountries() flatMap {
+        countryList =>
+          formProvider(countryList)
             .bindFromRequest()
             .fold(
-              formWithErrors => renderPage(lrn, mode, formWithErrors, countries.fullList, Results.BadRequest),
+              formWithErrors => renderPage(lrn, mode, formWithErrors, countryList.countries, Results.BadRequest),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(DestinationCountryPage, value.code))

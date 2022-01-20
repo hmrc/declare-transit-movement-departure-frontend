@@ -16,30 +16,48 @@
 
 package services
 
-import config.FrontendAppConfig
 import connectors.ReferenceDataConnector
 import models.CustomsOfficeList
-import models.reference.CountryCode
+import models.reference.{CountryCode, CustomsOffice}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsOfficesService @Inject() (
-  frontendAppConfig: FrontendAppConfig,
   referenceDataConnector: ReferenceDataConnector
 )(implicit ec: ExecutionContext) {
 
-  private val departureOfficeRoles: Seq[String] = Seq(
-    "DEP"
-  )
+  def getCustomsOffices(roles: Seq[String] = Nil)(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOffices(roles)
+      .map(sort)
 
-  private def getNICustomsOffices(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
-    referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("XI"), departureOfficeRoles)
+  def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] = {
 
-  def getCustomsOfficesOfDeparture(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    def getCustomsOffices(countryCode: String): Future[CustomsOfficeList] = {
+      val departureOfficeRoles: Seq[String] = Seq("DEP")
+      getCustomsOfficesForCountry(CountryCode(countryCode), departureOfficeRoles)
+    }
+
     for {
-      gbOffices <- referenceDataConnector.getCustomsOfficesOfTheCountry(CountryCode("GB"), departureOfficeRoles)
-      niOffices <- getNICustomsOffices
-    } yield CustomsOfficeList(gbOffices.getAll ++ niOffices.getAll)
+      gbOffices <- getCustomsOffices("GB")
+      niOffices <- getCustomsOffices("XI")
+      offices = sort(gbOffices.getAll ++ niOffices.getAll)
+    } yield offices
+  }
+
+  def getCustomsOfficesForCountry(
+    countryCode: CountryCode,
+    roles: Seq[String] = Nil
+  )(implicit hc: HeaderCarrier): Future[CustomsOfficeList] =
+    referenceDataConnector
+      .getCustomsOfficesForCountry(countryCode, roles)
+      .map(
+        customsOfficeList => sort(customsOfficeList.customsOffices)
+      )
+
+  private def sort(customsOffices: Seq[CustomsOffice]): CustomsOfficeList =
+    CustomsOfficeList(customsOffices.sortBy(_.name.toLowerCase))
+
 }

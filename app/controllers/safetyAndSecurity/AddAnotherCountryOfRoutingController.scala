@@ -16,7 +16,6 @@
 
 package controllers.safetyAndSecurity
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfCountryOfRouting
 import forms.safetyAndSecurity.AddAnotherCountryOfRoutingFormProvider
@@ -32,6 +31,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.SafetyAndSecurityCheckYourAnswersHelper
@@ -47,7 +47,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   formProvider: AddAnotherCountryOfRoutingFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -91,7 +91,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
     val cyaHelper                = new SafetyAndSecurityCheckYourAnswersHelper(request.userAnswers, mode)
     val numberOfRoutingCountries = request.userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)
     val indexList: Seq[Index]    = List.range(0, numberOfRoutingCountries).map(Index(_))
-    referenceDataConnector.getCountryList() flatMap {
+    countriesService.getCountries() flatMap {
       countries =>
         val countryRows = indexList.map {
           index =>

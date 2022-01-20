@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.OfficeOfDepartureFormProvider
 import models.{CountryList, LocalReferenceNumber, Mode}
@@ -29,7 +28,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
-import services.CustomsOfficesService
+import services.{CountriesService, CustomsOfficesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils._
@@ -45,7 +44,7 @@ class OfficeOfDepartureController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: OfficeOfDepartureFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  countriesService: CountriesService,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -98,7 +97,7 @@ class OfficeOfDepartureController @Inject() (
               },
               value =>
                 for {
-                  getNonEuCountries: CountryList <- referenceDataConnector.getNonEUTransitCountryList
+                  getNonEuCountries: CountryList <- countriesService.getNonEuTransitCountries()
                   isNotEu: Boolean = getNonEuCountries.getCountry(value.countryId).isDefined
                   ua1 <- Future.fromTry(request.userAnswers.set(OfficeOfDeparturePage, value))
                   ua2 <- Future.fromTry(ua1.set(IsNonEuOfficePage, isNotEu))

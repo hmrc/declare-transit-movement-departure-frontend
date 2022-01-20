@@ -17,7 +17,6 @@
 package controllers.traderDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.CommonAddressFormProvider
 import matchers.JsonMatchers
@@ -36,25 +35,26 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.CountriesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
 class ConsigneeAddressControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  private val country                                            = Country(CountryCode("GB"), "United Kingdom")
-  private val countries                                          = CountryList(Seq(country))
-  private val consigneeName                                      = "consigneeName"
-  private val form                                               = new CommonAddressFormProvider()(countries, consigneeName)
-  private val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private lazy val consigneeAddressRoute                         = routes.ConsigneeAddressController.onPageLoad(lrn, NormalMode).url
+  private val country                                = Country(CountryCode("GB"), "United Kingdom")
+  private val countries                              = CountryList(Seq(country))
+  private val consigneeName                          = "consigneeName"
+  private val form                                   = new CommonAddressFormProvider()(countries, consigneeName)
+  private val mockCountriesService: CountriesService = mock[CountriesService]
+  private lazy val consigneeAddressRoute             = routes.ConsigneeAddressController.onPageLoad(lrn, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(
         bind(classOf[Navigator]).qualifiedWith(classOf[TraderDetails]).toInstance(fakeNavigator),
-        bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector)
+        bind[CountriesService].toInstance(mockCountriesService)
       )
 
   "ConsigneeAddress Controller" - {
@@ -64,7 +64,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(ConsigneeNamePage, "consigneeName").success.value
@@ -95,7 +95,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val consigneeAddress: CommonAddress = CommonAddress("Address line 1", "Address line 2", "Code", country)
@@ -142,7 +142,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(ConsigneeNamePage, "consigneeName").success.value
@@ -164,7 +164,7 @@ class ConsigneeAddressControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any()))
+      when(mockCountriesService.getCountries()(any()))
         .thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.set(ConsigneeNamePage, "consigneeName").success.value
