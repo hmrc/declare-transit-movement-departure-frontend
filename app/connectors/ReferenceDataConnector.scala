@@ -114,9 +114,9 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[DangerousGoodsCode]](serviceUrl)
   }
 
-  def getMethodsOfPayment()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[MethodOfPaymentList] = {
+  def getMethodsOfPayment()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[MethodOfPayment]] = {
     val serviceUrl = s"${config.referenceDataUrl}/method-of-payment"
-    http.GET[Seq[MethodOfPayment]](serviceUrl).map(MethodOfPaymentList)
+    http.GET[Seq[MethodOfPayment]](serviceUrl)
   }
 
   def getCircumstanceIndicators()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[CircumstanceIndicatorList] = {

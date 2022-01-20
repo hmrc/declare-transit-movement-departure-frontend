@@ -33,7 +33,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import services.CountriesService
+import services.{CountriesService, MethodsOfPaymentService}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -47,6 +47,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
 
   private val mockReferenceDataConnector             = mock[ReferenceDataConnector]
   private val mockCountriesService: CountriesService = mock[CountriesService]
+  private val mockMethodsOfPaymentService            = mock[MethodsOfPaymentService]
 
   val countries                  = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   val circumstanceIndicatorsList = CircumstanceIndicatorList(Seq(CircumstanceIndicator("C", "Road mode of transport")))
@@ -60,6 +61,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
       .overrides(bind(classOf[Navigator]).toInstance(new FakeNavigator(onwardRoute)))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
+      .overrides(bind(classOf[MethodsOfPaymentService]).toInstance(mockMethodsOfPaymentService))
 
   "SafetyAndSecurityCheckYourAnswersController" - {
 
@@ -70,7 +72,7 @@ class SafetyAndSecurityCheckYourAnswersControllerSpec
 
       when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
       when(mockReferenceDataConnector.getCircumstanceIndicators()(any(), any())).thenReturn(Future.successful(circumstanceIndicatorsList))
-      when(mockReferenceDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

@@ -17,7 +17,6 @@
 package controllers.safetyAndSecurity
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.TransportChargesPaymentMethodFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.MethodsOfPaymentService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getPaymentsAsJson
 
@@ -51,9 +51,9 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
       MethodOfPayment("B", "Payment by credit card")
     )
   )
-  private val form                                         = formProvider(methodOfPaymentList)
-  private val template                                     = "safetyAndSecurity/transportChargesPaymentMethod.njk"
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val form                                                 = formProvider(methodOfPaymentList)
+  private val template                                             = "safetyAndSecurity/transportChargesPaymentMethod.njk"
+  private val mockMethodsOfPaymentService: MethodsOfPaymentService = mock[MethodsOfPaymentService]
 
   lazy val transportChargesPaymentMethodRoute = routes.TransportChargesPaymentMethodController.onPageLoad(lrn, NormalMode).url
 
@@ -61,11 +61,11 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SafetyAndSecurity]).toInstance(fakeNavigator))
-      .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
+      .overrides(bind[MethodsOfPaymentService].toInstance(mockMethodsOfPaymentService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockRefDataConnector)
+    reset(mockMethodsOfPaymentService)
   }
 
   "TransportChargesPaymentMethod Controller" - {
@@ -74,7 +74,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -106,7 +106,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       val userAnswers = emptyUserAnswers.set(TransportChargesPaymentMethodPage, MethodOfPayment("A", "Payment in cash")).success.value
       setUserAnswers(Some(userAnswers))
@@ -140,7 +140,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
     "must redirect to the next page when valid data is submitted" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -159,7 +159,7 @@ class TransportChargesPaymentMethodControllerSpec extends SpecBase with AppWithD
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

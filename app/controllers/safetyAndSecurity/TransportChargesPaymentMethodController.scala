@@ -16,7 +16,6 @@
 
 package controllers.safetyAndSecurity
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.safetyAndSecurity.TransportChargesPaymentMethodFormProvider
 import models.reference.MethodOfPayment
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.MethodsOfPaymentService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getPaymentsAsJson
@@ -45,7 +45,7 @@ class TransportChargesPaymentMethodController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  methodsOfPaymentService: MethodsOfPaymentService,
   formProvider: TransportChargesPaymentMethodFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -62,7 +62,7 @@ class TransportChargesPaymentMethodController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getMethodsOfPayment() flatMap {
+        methodsOfPaymentService.getMethodsOfPayment() flatMap {
           payments =>
             val form: Form[MethodOfPayment] = formProvider(payments)
 
@@ -91,7 +91,7 @@ class TransportChargesPaymentMethodController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getMethodsOfPayment() flatMap {
+        methodsOfPaymentService.getMethodsOfPayment() flatMap {
           payments =>
             val form = formProvider(payments)
             form

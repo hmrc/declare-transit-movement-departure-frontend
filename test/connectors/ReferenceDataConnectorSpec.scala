@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
 import models.reference._
-import models.{CircumstanceIndicatorList, CustomsOfficeList, MethodOfPaymentList}
+import models.{CircumstanceIndicatorList, CustomsOfficeList}
 import org.scalacheck.Gen
 import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -609,11 +609,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
           get(urlEqualTo(s"/$startUrl/method-of-payment"))
             .willReturn(okJson(methodOfPaymentJson))
         )
-        val expectResult = MethodOfPaymentList(
-          Seq(
-            MethodOfPayment("A", "Payment in cash"),
-            MethodOfPayment("B", "Payment by credit card")
-          )
+        val expectResult = Seq(
+          MethodOfPayment("A", "Payment in cash"),
+          MethodOfPayment("B", "Payment by credit card")
         )
         connector.getMethodsOfPayment().futureValue mustEqual expectResult
       }
