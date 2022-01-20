@@ -239,10 +239,11 @@ consignorName.checkYourAnswersLabel = Consignor’s name
 consignorName.error.required = Enter the consignor’s name
 consignorName.error.length = Consignor’s name must be 35 characters or less
 consignorName.error.invalid = Consignor’s name must only include letters a to z without accents and numbers 0 to 9 or blank spaces
+
 consignorEori.title = What is the consignor’s EORI number?
 consignorEori.heading = What is the consignor’s EORI number?
 consignorEori.checkYourAnswersLabel = Consignor’s EORI number
-consignorEori.error.required = Enter the consignor’s EORI umber
+consignorEori.error.required = Enter the consignor’s EORI number
 consignorEori.error.length = Consignor’s Eori number must be 17 characters or less
 consignorEori.error.invalidCharacters = The consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
 consignorEori.error.invalidFormat = Enter the consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
@@ -1121,8 +1122,8 @@ safetyAndSecurityConsignorEori.title = What is the security consignor’s EORI n
 safetyAndSecurityConsignorEori.heading = What is the security consignor’s EORI number?
 safetyAndSecurityConsignorEori.checkYourAnswersLabel = Security consignor’s EORI number
 safetyAndSecurityConsignorEori.error.required = Enter the security consignor’s EORI number
-safetyAndSecurityConsignorEori.error.length = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
-safetyAndSecurityConsignorEori.error.invalid = The security consignor’s EORI number must be 17 characters or less
+safetyAndSecurityConsignorEori.error.length = The security consignor’s EORI number must be 17 characters or less
+safetyAndSecurityConsignorEori.error.invalid = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
 safetyAndSecurityConsignorEori.error.country.required = Enter the country of the security consignor’s address
 safetyAndSecurityConsignorEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
