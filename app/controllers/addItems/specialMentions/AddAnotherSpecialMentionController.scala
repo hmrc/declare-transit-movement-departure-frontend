@@ -16,7 +16,6 @@
 
 package controllers.addItems.specialMentions
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfSpecialMentions
 import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
@@ -32,6 +31,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
+import services.SpecialMentionTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.SpecialMentionsCheckYourAnswersHelper
@@ -48,7 +48,7 @@ class AddAnotherSpecialMentionController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: AddAnotherSpecialMentionFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  specialMentionTypesService: SpecialMentionTypesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -94,7 +94,7 @@ class AddAnotherSpecialMentionController @Inject() (
     val numberOfReferences    = request.userAnswers.get(DeriveNumberOfSpecialMentions(itemIndex)).getOrElse(0)
     val indexList: Seq[Index] = List.range(0, numberOfReferences).map(Index(_))
 
-    referenceDataConnector.getSpecialMentionTypes() flatMap {
+    specialMentionTypesService.getSpecialMentionTypes() flatMap {
       specialMentions =>
         val referenceRows = indexList.map {
           referenceIndex =>

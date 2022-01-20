@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
 import models.reference._
-import models.{CircumstanceIndicatorList, CustomsOfficeList, MethodOfPaymentList, SpecialMentionList}
+import models.{CircumstanceIndicatorList, CustomsOfficeList, MethodOfPaymentList}
 import org.scalacheck.Gen
 import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -566,11 +566,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(specialMentionJson))
         )
 
-        val expectResult = SpecialMentionList(
-          Seq(
-            SpecialMention("10600", "Negotiable Bill of lading 'to order blank endorsed'"),
-            SpecialMention("30400", "RET-EXP – Copy 3 to be returned")
-          )
+        val expectResult = Seq(
+          SpecialMention("10600", "Negotiable Bill of lading 'to order blank endorsed'"),
+          SpecialMention("30400", "RET-EXP – Copy 3 to be returned")
         )
 
         connector.getSpecialMentionTypes().futureValue mustEqual expectResult

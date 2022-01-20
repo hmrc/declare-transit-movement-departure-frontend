@@ -18,8 +18,8 @@ package services
 
 import base.SpecBase
 import connectors.ReferenceDataConnector
-import models.DocumentTypeList
-import models.reference.DocumentType
+import models.SpecialMentionList
+import models.reference.SpecialMention
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -27,32 +27,32 @@ import org.scalatest.BeforeAndAfterEach
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DocumentTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
+class SpecialMentionTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val service                                      = new DocumentTypesService(mockRefDataConnector)
+  private val service                                      = new SpecialMentionTypesService(mockRefDataConnector)
 
-  private val documentType1 = DocumentType("3", "CERTIFICATE OF QUALITY", transportDocument = false)
-  private val documentType2 = DocumentType("1", "Bill of lading", transportDocument = true)
-  private val documentType3 = DocumentType("2", "Certificate of conformity", transportDocument = false)
+  private val specialMentionType1 = SpecialMention("3", "EXPORT")
+  private val specialMentionType2 = SpecialMention("1", "Export subject to duties")
+  private val specialMentionType3 = SpecialMention("2", "Export subject to restriction")
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
     super.beforeEach()
   }
 
-  "DocumentTypesService" - {
+  "SpecialMentionTypesService" - {
 
-    "getDocumentTypes" - {
-      "must return a list of sorted document types" in {
+    "getSpecialMentionTypes" - {
+      "must return a list of sorted special mention types" in {
 
-        when(mockRefDataConnector.getDocumentTypes()(any(), any()))
-          .thenReturn(Future.successful(Seq(documentType1, documentType2, documentType3)))
+        when(mockRefDataConnector.getSpecialMentionTypes()(any(), any()))
+          .thenReturn(Future.successful(Seq(specialMentionType1, specialMentionType2, specialMentionType3)))
 
-        service.getDocumentTypes().futureValue mustBe
-          DocumentTypeList(Seq(documentType2, documentType3, documentType1))
+        service.getSpecialMentionTypes().futureValue mustBe
+          SpecialMentionList(Seq(specialMentionType2, specialMentionType3, specialMentionType1))
 
-        verify(mockRefDataConnector).getDocumentTypes()(any(), any())
+        verify(mockRefDataConnector).getSpecialMentionTypes()(any(), any())
       }
     }
 

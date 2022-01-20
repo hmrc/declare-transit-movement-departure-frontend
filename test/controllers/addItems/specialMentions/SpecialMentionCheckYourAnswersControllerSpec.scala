@@ -17,7 +17,6 @@
 package controllers.addItems.specialMentions
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import matchers.JsonMatchers
 import models.{NormalMode, SpecialMentionList}
 import org.mockito.ArgumentCaptor
@@ -30,6 +29,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.SpecialMentionTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -39,12 +39,12 @@ class SpecialMentionCheckYourAnswersControllerSpec extends SpecBase with AppWith
   lazy val specialMentionCyaRoute: String =
     routes.SpecialMentionCheckYourAnswersController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockSpecialMentionTypesService: SpecialMentionTypesService = mock[SpecialMentionTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[SpecialMentionTypesService]).toInstance(mockSpecialMentionTypesService))
 
   "SpecialMentionCheckYourAnswersController" - {
 
@@ -55,7 +55,7 @@ class SpecialMentionCheckYourAnswersControllerSpec extends SpecBase with AppWith
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getSpecialMentionTypes()(any(), any()))
+      when(mockSpecialMentionTypesService.getSpecialMentionTypes()(any()))
         .thenReturn(Future.successful(SpecialMentionList(Nil)))
 
       val request                                = FakeRequest(GET, specialMentionCyaRoute)

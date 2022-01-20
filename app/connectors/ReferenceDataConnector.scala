@@ -104,9 +104,9 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[DocumentType]](serviceUrl)
   }
 
-  def getSpecialMentionTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[SpecialMentionList] = {
+  def getSpecialMentionTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[SpecialMention]] = {
     val serviceUrl = s"${config.referenceDataUrl}/additional-information"
-    http.GET[Seq[SpecialMention]](serviceUrl).map(SpecialMentionList)
+    http.GET[Seq[SpecialMention]](serviceUrl)
   }
 
   def getDangerousGoodsCodes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[DangerousGoodsCode]] = {

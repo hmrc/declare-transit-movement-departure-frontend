@@ -45,7 +45,7 @@ class PreviousDocumentTypesServiceSpec extends SpecBase with BeforeAndAfterEach 
   "PreviousDocumentTypesService" - {
 
     "getPackageTypes" - {
-      "must return a list of sorted package types" in {
+      "must return a list of sorted previous document types" in {
 
         when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any()))
           .thenReturn(Future.successful(Seq(documentType1, documentType2, documentType3, documentType4)))

@@ -17,7 +17,6 @@
 package controllers.addItems
 
 import cats.data.NonEmptyList
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import models.journeyDomain.ItemSection
 import models.{DependentSection, Index, LocalReferenceNumber, ValidateReaderLogger}
@@ -25,7 +24,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
-import services.{DocumentTypesService, PreviousDocumentTypesService}
+import services.{DocumentTypesService, PreviousDocumentTypesService, SpecialMentionTypesService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.AddItemsCheckYourAnswersViewModel
 import viewModels.sections.Section
@@ -39,7 +38,7 @@ class ItemsCheckYourAnswersController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  specialMentionTypesService: SpecialMentionTypesService,
   previousDocumentTypesService: PreviousDocumentTypesService,
   documentTypesService: DocumentTypesService,
   val controllerComponents: MessagesControllerComponents,
@@ -61,7 +60,7 @@ class ItemsCheckYourAnswersController @Inject() (
           for {
             previousReferencesDocumentTypes <- previousDocumentTypesService.getPreviousDocumentTypes()
             documentTypes                   <- documentTypesService.getDocumentTypes()
-            specialMentions                 <- referenceDataConnector.getSpecialMentionTypes()
+            specialMentions                 <- specialMentionTypesService.getSpecialMentionTypes()
           } yield {
 
             val sections: Seq[Section] =
