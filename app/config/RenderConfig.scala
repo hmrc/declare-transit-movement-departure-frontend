@@ -22,8 +22,8 @@ import play.api.Configuration
 @Singleton
 class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderConfig {
 
-  val contactHost                  = configuration.get[String]("contact-frontend.host")
-  val contactFormServiceIdentifier = "CTCTrader"
+  val contactHost: String                  = configuration.get[String]("contact-frontend.host")
+  val contactFormServiceIdentifier: String = "CTCTrader"
 
   override val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
@@ -47,5 +47,4 @@ trait RenderConfig {
   def countdownSeconds: String
   def contactFormServiceIdentifier: String
   def contactHost: String
-
 }
