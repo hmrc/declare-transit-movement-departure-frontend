@@ -16,7 +16,6 @@
 
 package controllers.addItems.previousReferences
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfPreviousAdministrativeReferences
 import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
@@ -32,6 +31,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
+import services.PreviousDocumentTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.AddItemsCheckYourAnswersHelper
@@ -47,7 +47,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  previousDocumentTypesService: PreviousDocumentTypesService,
   formProvider: AddAnotherPreviousAdministrativeReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -91,7 +91,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
     val numberOfReferences    = request.userAnswers.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0)
     val indexList: Seq[Index] = List.range(0, numberOfReferences).map(Index(_))
 
-    referenceDataConnector.getPreviousReferencesDocumentTypes() flatMap {
+    previousDocumentTypesService.getPreviousDocumentTypes() flatMap {
       previousDocuments =>
         val referenceRows = indexList.map {
           referenceIndex =>

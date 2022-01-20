@@ -17,7 +17,6 @@
 package controllers.addItems.previousReferences
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import matchers.JsonMatchers
 import models.{NormalMode, PreviousReferencesDocumentTypeList}
 import org.mockito.ArgumentCaptor
@@ -30,6 +29,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.PreviousDocumentTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -39,12 +39,12 @@ class ReferenceCheckYourAnswersControllerSpec extends SpecBase with AppWithDefau
   lazy val referenceCyaRoute: String =
     routes.ReferenceCheckYourAnswersController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockPreviousDocumentTypesService: PreviousDocumentTypesService = mock[PreviousDocumentTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[PreviousDocumentTypesService]).toInstance(mockPreviousDocumentTypesService))
 
   "ReferenceCheckYourAnswersController" - {
 
@@ -55,7 +55,7 @@ class ReferenceCheckYourAnswersControllerSpec extends SpecBase with AppWithDefau
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any()))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any()))
         .thenReturn(Future.successful(PreviousReferencesDocumentTypeList(Nil)))
 
       val request                                = FakeRequest(GET, referenceCyaRoute)

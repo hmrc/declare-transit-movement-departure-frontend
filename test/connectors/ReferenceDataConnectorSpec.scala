@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
 import models.reference._
-import models.{CircumstanceIndicatorList, CustomsOfficeList, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList}
+import models.{CircumstanceIndicatorList, CustomsOfficeList, MethodOfPaymentList, SpecialMentionList}
 import org.scalacheck.Gen
 import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -520,11 +520,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(previousDocumentJson))
         )
 
-        val expectResult = PreviousReferencesDocumentTypeList(
-          Seq(
-            PreviousReferencesDocumentType("T1", Some("Description T1")),
-            PreviousReferencesDocumentType("T2F", None)
-          )
+        val expectResult = Seq(
+          PreviousReferencesDocumentType("T1", Some("Description T1")),
+          PreviousReferencesDocumentType("T2F", None)
         )
 
         connector.getPreviousReferencesDocumentTypes().futureValue mustEqual expectResult
@@ -546,9 +544,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
         )
 
         val expectResult = Seq(
-            DocumentType("18", "Movement certificate A.TR.1", false),
-            DocumentType("2", "Certificate of conformity", false)
-          )
+          DocumentType("18", "Movement certificate A.TR.1", false),
+          DocumentType("2", "Certificate of conformity", false)
+        )
 
         connector.getDocumentTypes().futureValue mustEqual expectResult
       }

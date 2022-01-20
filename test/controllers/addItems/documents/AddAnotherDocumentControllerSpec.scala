@@ -41,14 +41,14 @@ import scala.concurrent.Future
 
 class AddAnotherDocumentControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  private val formProvider                                 = new AddAnotherDocumentFormProvider()
-  private val form                                         = formProvider(index)
-  private val template                                     = "addItems/addAnotherDocument.njk"
+  private val formProvider                                   = new AddAnotherDocumentFormProvider()
+  private val form                                           = formProvider(index)
+  private val template                                       = "addItems/addAnotherDocument.njk"
   private val mockDocumentTypesService: DocumentTypesService = mock[DocumentTypesService]
-  val documentType1: DocumentType                          = DocumentType("1", "11", transportDocument = true)
-  val documentType2: DocumentType                          = DocumentType("2", "22", transportDocument = true)
-  val documentTypeList: DocumentTypeList                   = DocumentTypeList(Seq(documentType1, documentType2))
-  private lazy val addAnotherDocumentRoute                 = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, index, NormalMode).url
+  val documentType1: DocumentType                            = DocumentType("1", "11", transportDocument = true)
+  val documentType2: DocumentType                            = DocumentType("2", "22", transportDocument = true)
+  val documentTypeList: DocumentTypeList                     = DocumentTypeList(Seq(documentType1, documentType2))
+  private lazy val addAnotherDocumentRoute                   = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super

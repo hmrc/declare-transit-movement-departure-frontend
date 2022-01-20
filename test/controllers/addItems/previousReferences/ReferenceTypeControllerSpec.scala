@@ -17,7 +17,6 @@
 package controllers.addItems.previousReferences
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.ReferenceTypeFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.PreviousDocumentTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -55,7 +55,7 @@ class ReferenceTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
   private val form     = formProvider(documentTypeList)
   private val template = "addItems/referenceType.njk"
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockPreviousDocumentTypesService: PreviousDocumentTypesService = mock[PreviousDocumentTypesService]
 
   private lazy val referenceTypeRoute = routes.ReferenceTypeController.onPageLoad(lrn, index, referenceIndex, NormalMode).url
 
@@ -63,11 +63,11 @@ class ReferenceTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsAdminReference]).toInstance(fakeNavigator))
-      .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
+      .overrides(bind[PreviousDocumentTypesService].toInstance(mockPreviousDocumentTypesService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    Mockito.reset(mockRefDataConnector)
+    Mockito.reset(mockPreviousDocumentTypesService)
   }
 
   "ReferenceType Controller" - {
@@ -77,7 +77,7 @@ class ReferenceTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val request                                = FakeRequest(GET, referenceTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -116,7 +116,7 @@ class ReferenceTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val userAnswers = emptyUserAnswers.set(ReferenceTypePage(index, referenceIndex), "T1").success.value
       setUserAnswers(Some(userAnswers))
@@ -159,7 +159,7 @@ class ReferenceTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
     "must redirect to the next page when valid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val request =
         FakeRequest(POST, referenceTypeRoute)
@@ -176,7 +176,7 @@ class ReferenceTypeControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val request                                = FakeRequest(POST, referenceTypeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))

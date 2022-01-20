@@ -94,9 +94,9 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[Seq[PackageType]](serviceUrl)
   }
 
-  def getPreviousReferencesDocumentTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[PreviousReferencesDocumentTypeList] = {
+  def getPreviousReferencesDocumentTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[PreviousReferencesDocumentType]] = {
     val serviceUrl = s"${config.referenceDataUrl}/previous-document-types"
-    http.GET[Seq[PreviousReferencesDocumentType]](serviceUrl).map(PreviousReferencesDocumentTypeList)
+    http.GET[Seq[PreviousReferencesDocumentType]](serviceUrl)
   }
 
   def getDocumentTypes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[DocumentType]] = {

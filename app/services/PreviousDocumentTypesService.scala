@@ -17,20 +17,20 @@
 package services
 
 import connectors.ReferenceDataConnector
-import models.DocumentTypeList
-import models.reference.DocumentType
+import models.PreviousReferencesDocumentTypeList
+import models.reference.PreviousReferencesDocumentType
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DocumentTypesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
+class PreviousDocumentTypesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
-  def getDocumentTypes()(implicit hc: HeaderCarrier): Future[DocumentTypeList] =
+  def getPreviousDocumentTypes()(implicit hc: HeaderCarrier): Future[PreviousReferencesDocumentTypeList] =
     referenceDataConnector
-      .getDocumentTypes()
+      .getPreviousReferencesDocumentTypes()
       .map(sort)
 
-  private def sort(documentTypes: Seq[DocumentType]): DocumentTypeList =
-    DocumentTypeList(documentTypes.sortBy(_.code.toLowerCase))
+  private def sort(previousDocumentTypes: Seq[PreviousReferencesDocumentType]): PreviousReferencesDocumentTypeList =
+    PreviousReferencesDocumentTypeList(previousDocumentTypes.sortBy(_.code.toLowerCase))
 }

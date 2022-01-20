@@ -31,7 +31,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import services.DocumentTypesService
+import services.{DocumentTypesService, PreviousDocumentTypesService}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -40,8 +40,9 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMo
 
   lazy val itemRoute = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index).url
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val mockDocumentTypesService: DocumentTypesService = mock[DocumentTypesService]
+  private val mockRefDataConnector: ReferenceDataConnector                   = mock[ReferenceDataConnector]
+  private val mockDocumentTypesService: DocumentTypesService                 = mock[DocumentTypesService]
+  private val mockPreviousDocumentTypesService: PreviousDocumentTypesService = mock[PreviousDocumentTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -49,6 +50,7 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMo
       .overrides(bind(classOf[Navigator]).toInstance(fakeNavigator))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
       .overrides(bind(classOf[DocumentTypesService]).toInstance(mockDocumentTypesService))
+      .overrides(bind(classOf[PreviousDocumentTypesService]).toInstance(mockPreviousDocumentTypesService))
 
   "ItemsCheckYourAnswersController" - {
 
@@ -58,7 +60,7 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMo
         .thenReturn(Future.successful(Html("")))
       when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(DocumentTypeList(Nil)))
       when(mockRefDataConnector.getSpecialMentionTypes()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(PreviousReferencesDocumentTypeList(Nil)))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(PreviousReferencesDocumentTypeList(Nil)))
       when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(MethodOfPaymentList(Nil)))
 
       setUserAnswers(Some(emptyUserAnswers))
