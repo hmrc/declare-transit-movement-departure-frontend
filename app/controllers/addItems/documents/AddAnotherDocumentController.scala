@@ -16,7 +16,6 @@
 
 package controllers.addItems.documents
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import derivable.DeriveNumberOfDocuments
 import forms.addItems.AddAnotherDocumentFormProvider
@@ -32,6 +31,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
+import services.DocumentTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.AddItemsCheckYourAnswersHelper
@@ -48,7 +48,7 @@ class AddAnotherDocumentController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: AddAnotherDocumentFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  documentTypesService: DocumentTypesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -89,7 +89,7 @@ class AddAnotherDocumentController @Inject() (
     val numberOfDocuments     = request.userAnswers.get(DeriveNumberOfDocuments(index)).getOrElse(0)
     val indexList: Seq[Index] = List.range(0, numberOfDocuments).map(Index(_))
 
-    referenceDataConnector.getDocumentTypes() flatMap {
+    documentTypesService.getDocumentTypes() flatMap {
       documents =>
         val documentRows = indexList.map {
           documentIndex =>

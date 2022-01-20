@@ -16,13 +16,13 @@
 
 package controllers.addItems.documents
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import services.DocumentTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.DocumentsCheckYourAnswersViewModel
 
@@ -34,7 +34,7 @@ class DocumentCheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  documentTypesService: DocumentTypesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -47,7 +47,7 @@ class DocumentCheckYourAnswersController @Inject() (
       andThen getData(lrn)
       andThen requireData).async {
       implicit request =>
-        referenceDataConnector.getDocumentTypes().flatMap {
+        documentTypesService.getDocumentTypes().flatMap {
           documentTypes =>
             val json = {
               val viewModel = DocumentsCheckYourAnswersViewModel(request.userAnswers, itemIndex, documentIndex, mode, documentTypes)

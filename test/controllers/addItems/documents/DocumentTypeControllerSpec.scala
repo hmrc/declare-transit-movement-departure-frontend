@@ -17,7 +17,6 @@
 package controllers.addItems.documents
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.DocumentTypeFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.DocumentTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -53,7 +53,7 @@ class DocumentTypeControllerSpec extends SpecBase with AppWithDefaultMockFixture
   private val form     = formProvider(documentTypeList)
   private val template = "addItems/documentType.njk"
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockDocumentTypesService: DocumentTypesService = mock[DocumentTypesService]
 
   private lazy val documentTypeRoute = controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, index, documentIndex, NormalMode).url
 
@@ -61,11 +61,11 @@ class DocumentTypeControllerSpec extends SpecBase with AppWithDefaultMockFixture
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(fakeNavigator))
-      .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
+      .overrides(bind[DocumentTypesService].toInstance(mockDocumentTypesService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    Mockito.reset(mockRefDataConnector)
+    Mockito.reset(mockDocumentTypesService)
   }
 
   "DocumentType Controller" - {
@@ -76,7 +76,7 @@ class DocumentTypeControllerSpec extends SpecBase with AppWithDefaultMockFixture
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val request                                = FakeRequest(GET, documentTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -113,7 +113,7 @@ class DocumentTypeControllerSpec extends SpecBase with AppWithDefaultMockFixture
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val userAnswers = emptyUserAnswers.set(addItems.DocumentTypePage(itemIndex, documentIndex), "955").success.value
       setUserAnswers(Some(userAnswers))
@@ -155,7 +155,7 @@ class DocumentTypeControllerSpec extends SpecBase with AppWithDefaultMockFixture
       setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val request =
         FakeRequest(POST, documentTypeRoute)
@@ -174,7 +174,7 @@ class DocumentTypeControllerSpec extends SpecBase with AppWithDefaultMockFixture
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val request                                = FakeRequest(POST, documentTypeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))

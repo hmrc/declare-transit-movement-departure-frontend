@@ -25,6 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import services.DocumentTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.AddItemsCheckYourAnswersViewModel
 import viewModels.sections.Section
@@ -39,6 +40,7 @@ class ItemsCheckYourAnswersController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   referenceDataConnector: ReferenceDataConnector,
+  documentTypesService: DocumentTypesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -57,7 +59,7 @@ class ItemsCheckYourAnswersController @Inject() (
         val buildJson: Future[JsObject] =
           for {
             previousReferencesDocumentTypes <- referenceDataConnector.getPreviousReferencesDocumentTypes()
-            documentTypes                   <- referenceDataConnector.getDocumentTypes()
+            documentTypes                   <- documentTypesService.getDocumentTypes()
             specialMentions                 <- referenceDataConnector.getSpecialMentionTypes()
           } yield {
 

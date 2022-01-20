@@ -17,7 +17,6 @@
 package controllers.addItems.documents
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import matchers.JsonMatchers
 import models.{DocumentTypeList, NormalMode}
 import org.mockito.ArgumentCaptor
@@ -30,6 +29,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.DocumentTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -39,12 +39,12 @@ class DocumentCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaul
   lazy val documentCyaRoute: String =
     routes.DocumentCheckYourAnswersController.onPageLoad(lrn, itemIndex, documentIndex, NormalMode).url
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockDocumentTypesService: DocumentTypesService = mock[DocumentTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[DocumentTypesService]).toInstance(mockDocumentTypesService))
 
   "DocumentCheckYourAnswersController" - {
 
@@ -55,7 +55,7 @@ class DocumentCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaul
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getDocumentTypes()(any(), any()))
+      when(mockDocumentTypesService.getDocumentTypes()(any()))
         .thenReturn(Future.successful(DocumentTypeList(Nil)))
 
       val request                                = FakeRequest(GET, documentCyaRoute)

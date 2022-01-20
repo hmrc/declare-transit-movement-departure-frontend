@@ -16,7 +16,6 @@
 
 package controllers.addItems.documents
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.addItems.DocumentTypeFormProvider
 import models.reference.DocumentType
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.DocumentTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getDocumentsAsJson
@@ -45,7 +45,7 @@ class DocumentTypeController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
-  referenceDataConnector: ReferenceDataConnector,
+  documentTypesService: DocumentTypesService,
   formProvider: DocumentTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
@@ -62,7 +62,7 @@ class DocumentTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getDocumentTypes() flatMap {
+        documentTypesService.getDocumentTypes() flatMap {
           documents =>
             val form: Form[DocumentType] = formProvider(documents)
 
@@ -90,7 +90,7 @@ class DocumentTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getDocumentTypes() flatMap {
+        documentTypesService.getDocumentTypes() flatMap {
           documents =>
             val form = formProvider(documents)
             form

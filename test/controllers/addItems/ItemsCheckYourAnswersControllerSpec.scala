@@ -31,6 +31,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.DocumentTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -40,12 +41,14 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMo
   lazy val itemRoute = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index).url
 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockDocumentTypesService: DocumentTypesService = mock[DocumentTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).toInstance(fakeNavigator))
       .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[DocumentTypesService]).toInstance(mockDocumentTypesService))
 
   "ItemsCheckYourAnswersController" - {
 
@@ -53,7 +56,7 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMo
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(DocumentTypeList(Nil)))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(DocumentTypeList(Nil)))
       when(mockRefDataConnector.getSpecialMentionTypes()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
       when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(PreviousReferencesDocumentTypeList(Nil)))
       when(mockRefDataConnector.getMethodsOfPayment()(any(), any())).thenReturn(Future.successful(MethodOfPaymentList(Nil)))
