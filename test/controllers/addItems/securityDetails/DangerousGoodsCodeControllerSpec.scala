@@ -17,7 +17,6 @@
 package controllers.addItems.securityDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.securityDetails.DangerousGoodsCodeFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.DangerousGoodsCodesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -49,7 +49,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
   private val form     = new DangerousGoodsCodeFormProvider()(dangerousGoodsCodes)
   private val template = "addItems/securityDetails/dangerousGoodsCode.njk"
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockDangerousGoodsCodesService: DangerousGoodsCodesService = mock[DangerousGoodsCodesService]
 
   private lazy val dangerousGoodsCodeRoute = routes.DangerousGoodsCodeController.onPageLoad(lrn, index, NormalMode).url
 
@@ -57,7 +57,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SecurityDetails]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[DangerousGoodsCodesService]).toInstance(mockDangerousGoodsCodesService))
 
   "DangerousGoodsCode Controller" - {
 
@@ -65,7 +65,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDangerousGoodsCodes()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
+      when(mockDangerousGoodsCodesService.getDangerousGoodsCodes()(any())).thenReturn(Future.successful(dangerousGoodsCodes))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -104,7 +104,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDangerousGoodsCodes()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
+      when(mockDangerousGoodsCodesService.getDangerousGoodsCodes()(any())).thenReturn(Future.successful(dangerousGoodsCodes))
 
       val userAnswers = emptyUserAnswers.set(DangerousGoodsCodePage(index), dangerousGoodsCode1.code).success.value
       setUserAnswers(Some(userAnswers))
@@ -144,7 +144,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
 
     "must redirect to the next page when valid data is submitted" in {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getDangerousGoodsCodes()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
+      when(mockDangerousGoodsCodesService.getDangerousGoodsCodes()(any())).thenReturn(Future.successful(dangerousGoodsCodes))
       setUserAnswers(Some(emptyUserAnswers))
 
       val request =
@@ -162,7 +162,7 @@ class DangerousGoodsCodeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDangerousGoodsCodes()(any(), any())).thenReturn(Future.successful(dangerousGoodsCodes))
+      when(mockDangerousGoodsCodesService.getDangerousGoodsCodes()(any())).thenReturn(Future.successful(dangerousGoodsCodes))
       setUserAnswers(Some(emptyUserAnswers))
 
       val request                                = FakeRequest(POST, dangerousGoodsCodeRoute).withFormUrlEncodedBody(("value", ""))

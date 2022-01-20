@@ -20,15 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import helper.WireMockServerHandler
 import models.reference._
-import models.{
-  CircumstanceIndicatorList,
-  CustomsOfficeList,
-  DangerousGoodsCodeList,
-  DocumentTypeList,
-  MethodOfPaymentList,
-  PreviousReferencesDocumentTypeList,
-  SpecialMentionList
-}
+import models.{CircumstanceIndicatorList, CustomsOfficeList, DocumentTypeList, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList}
 import org.scalacheck.Gen
 import org.scalatest.Assertion
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -205,14 +197,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |    "description": "RET-EXP – Copy 3 to be returned"
       |  }
       |]
-      |""".stripMargin
-
-  private val dangerousGoodsCodeJson: String =
-    """
-      |  {
-      |    "code": "0004",
-      |    "description": "AMMONIUM PICRATE dry or wetted with less than 10% water, by mass"
-      |  }
       |""".stripMargin
 
   private val dangerousGoodsCodeResponseJson: String =
@@ -611,11 +595,9 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
             .willReturn(okJson(dangerousGoodsCodeResponseJson))
         )
 
-        val expectedResult: DangerousGoodsCodeList = DangerousGoodsCodeList(
-          Seq(
-            DangerousGoodsCode("0004", "AMMONIUM PICRATE dry or wetted with less than 10% water, by mass"),
-            DangerousGoodsCode("0005", "CARTRIDGES FOR WEAPONS with bursting charge")
-          )
+        val expectedResult: Seq[DangerousGoodsCode] = Seq(
+          DangerousGoodsCode("0004", "AMMONIUM PICRATE dry or wetted with less than 10% water, by mass"),
+          DangerousGoodsCode("0005", "CARTRIDGES FOR WEAPONS with bursting charge")
         )
 
         connector.getDangerousGoodsCodes().futureValue mustEqual expectedResult
@@ -624,25 +606,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       "must return an exception when an error response is returned" in {
 
         checkErrorResponse(s"/$startUrl/dangerous-goods-code", connector.getDangerousGoodsCodes())
-      }
-    }
-
-    "getDangerousGoodsCode" - {
-
-      "must return Dangerous goods code when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/dangerous-goods-code/0004"))
-            .willReturn(okJson(dangerousGoodsCodeJson))
-        )
-
-        val expectedResult: DangerousGoodsCode = DangerousGoodsCode("0004", "AMMONIUM PICRATE dry or wetted with less than 10% water, by mass")
-
-        connector.getDangerousGoodsCode("0004").futureValue mustEqual expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/dangerous-goods-code/0004", connector.getDangerousGoodsCode("0004"))
       }
     }
 
