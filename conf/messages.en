@@ -216,6 +216,7 @@ whatIsPrincipalEori.error.length = The principal’s EORI number must be 17 char
 whatIsPrincipalEori.error.invalidCharacters = The principal’s EORI number must only include letters a to z without accents and numbers 0 to 9
 whatIsPrincipalEori.error.invalidFormat = Enter the principal’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
 whatIsPrincipalEori.error.prefix = Principal’s EORI number must start with {0}
+whatIsPrincipalEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 principalAddress.title = What is the principal’s address?
 principalAddress.heading = What is {0}’s address?
@@ -238,13 +239,15 @@ consignorName.checkYourAnswersLabel = Consignor’s name
 consignorName.error.required = Enter the consignor’s name
 consignorName.error.length = Consignor’s name must be 35 characters or less
 consignorName.error.invalid = Consignor’s name must only include letters a to z without accents and numbers 0 to 9 or blank spaces
+
 consignorEori.title = What is the consignor’s EORI number?
 consignorEori.heading = What is the consignor’s EORI number?
 consignorEori.checkYourAnswersLabel = Consignor’s EORI number
-consignorEori.error.required = Enter the consignor’s EORI umber
+consignorEori.error.required = Enter the consignor’s EORI number
 consignorEori.error.length = Consignor’s Eori number must be 17 characters or less
 consignorEori.error.invalidCharacters = The consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
 consignorEori.error.invalidFormat = Enter the consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+consignorEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 isConsigneeEoriKnown.title = Do you know the consignee’s EORI number?
 isConsigneeEoriKnown.heading = Do you know the consignee’s EORI number?
@@ -271,6 +274,7 @@ whatIsConsigneeEori.error.required = Enter the consignee’s EORI number
 whatIsConsigneeEori.error.length = The consignee’s EORI number must be 17 characters or less
 whatIsConsigneeEori.error.invalidCharacters = The consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
 whatIsConsigneeEori.error.invalidFormat = Enter the consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+whatIsConsigneeEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 consignorAddress.title = What is the consignor’s address?
 consignorAddress.heading = What is {0}’s address?
@@ -680,6 +684,7 @@ traderDetailsConsigneeEoriNumber.error.required = Enter the consignee’s EORI n
 traderDetailsConsigneeEoriNumber.error.length = The consignee’s EORI number must be {0} characters or less
 traderDetailsConsigneeEoriNumber.error.invalid = The consignee’s EORI number for must only include letters a to z without accents and numbers 0 to 9
 traderDetailsConsigneeEoriNumber.error.invalidFormat = Enter the consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+traderDetailsConsigneeEoriNumber.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 traderDetailsConsigneeName.title = What is the consignee’s name for item {0}?
 traderDetailsConsigneeName.heading = What is the consignee’s name for item {0}?
@@ -705,6 +710,7 @@ traderDetailsConsignorEoriNumber.error.required = Enter the consignor’s EORI n
 traderDetailsConsignorEoriNumber.error.length = The consignor’s EORI number must be 17 characters or less
 traderDetailsConsignorEoriNumber.error.invalid = The consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
 traderDetailsConsignorEoriNumber.error.invalidFormat = Enter the consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+traderDetailsConsignorEoriNumber.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 traderDetailsConsignorName.title = What is the consignor’s name for item {0}?
 traderDetailsConsignorName.heading = What is the consignor’s name for item {0}?
@@ -983,6 +989,7 @@ securityConsignorEori.error.required = Enter the security consignor’s EORI num
 securityConsignorEori.error.length = The security consignor’s EORI number must be 17 characters or less
 securityConsignorEori.error.invalid = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
 securityConsignorEori.error.invalidFormat = Enter the security consignor’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+securityConsignorEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 securityConsigneeEori.title = What is the security consignee’s EORI number?
 securityConsigneeEori.heading = What is the security consignee’s EORI number?
@@ -991,6 +998,7 @@ securityConsigneeEori.error.required = Enter the security consignee’s EORI num
 securityConsigneeEori.error.length = The security consignee’s EORI number must be 17 characters or less
 securityConsigneeEori.error.invalid = The security consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
 securityConsigneeEori.error.invalidFormat = Enter the security consignee’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+securityConsigneeEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 securityConsignorAddress.title = What is the security consignor’s address
 securityConsignorAddress.heading = What is {0}’s address?
@@ -1114,9 +1122,10 @@ safetyAndSecurityConsignorEori.title = What is the security consignor’s EORI n
 safetyAndSecurityConsignorEori.heading = What is the security consignor’s EORI number?
 safetyAndSecurityConsignorEori.checkYourAnswersLabel = Security consignor’s EORI number
 safetyAndSecurityConsignorEori.error.required = Enter the security consignor’s EORI number
-safetyAndSecurityConsignorEori.error.length = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
-safetyAndSecurityConsignorEori.error.invalid = The security consignor’s EORI number must be 17 characters or less
+safetyAndSecurityConsignorEori.error.length = The security consignor’s EORI number must be 17 characters or less
+safetyAndSecurityConsignorEori.error.invalid = The security consignor’s EORI number must only include letters a to z without accents and numbers 0 to 9
 safetyAndSecurityConsignorEori.error.country.required = Enter the country of the security consignor’s address
+safetyAndSecurityConsignorEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 safetyAndSecurityConsignorName.title = What is the security consignor’s name?
 safetyAndSecurityConsignorName.heading = What is the security consignor’s name?
@@ -1145,6 +1154,7 @@ safetyAndSecurityConsigneeEori.checkYourAnswersLabel = Security consignee’s EO
 safetyAndSecurityConsigneeEori.error.required = Enter the security consignee’s EORI number
 safetyAndSecurityConsigneeEori.error.length = The security consignee’s EORI number must be 17 characters or less
 safetyAndSecurityConsigneeEori.error.invalid = The security consignee’s EORI number must only include letters a to z without accents and numbers 0 to 9
+safetyAndSecurityConsigneeEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 safetyAndSecurityConsigneeName.title = What is the security consignee’s name?
 safetyAndSecurityConsigneeName.heading = What is the security consignee’s name?
@@ -1175,6 +1185,7 @@ carrierEori.error.required = Enter the carrier’s EORI number
 carrierEori.error.length =  The carrier’s EORI number must be 17 characters or less
 carrierEori.error.invalidCharacters = The carrier’s EORI number must only include letters a to z without accents and numbers 0 to 9
 carrierEori.error.invalidFormat = Enter the carrier’s EORI number in the right format, like GB123456789012 or AT1A2B3C4D5E6F
+carrierEori.hintText = The first 2 letters are the country code, like GB. This is followed by up to 12 numbers, like GB123456123456.
 
 carrierName.title =  What is the carrier’s name?
 carrierName.heading = What is the carrier’s name?
