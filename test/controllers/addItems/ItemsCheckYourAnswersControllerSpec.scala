@@ -17,9 +17,8 @@
 package controllers.addItems
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import matchers.JsonMatchers
-import models.{DocumentTypeList, MethodOfPaymentList, PreviousReferencesDocumentTypeList, SpecialMentionList}
+import models.{DocumentTypeList, PreviousReferencesDocumentTypeList, SpecialMentionList}
 import navigation.Navigator
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -31,6 +30,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.{DocumentTypesService, PreviousDocumentTypesService, SpecialMentionTypesService}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -39,13 +39,17 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMo
 
   lazy val itemRoute = routes.ItemsCheckYourAnswersController.onPageLoad(lrn, index).url
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockDocumentTypesService: DocumentTypesService                 = mock[DocumentTypesService]
+  private val mockPreviousDocumentTypesService: PreviousDocumentTypesService = mock[PreviousDocumentTypesService]
+  private val mockSpecialMentionTypesService: SpecialMentionTypesService     = mock[SpecialMentionTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[DocumentTypesService]).toInstance(mockDocumentTypesService))
+      .overrides(bind(classOf[PreviousDocumentTypesService]).toInstance(mockPreviousDocumentTypesService))
+      .overrides(bind(classOf[SpecialMentionTypesService]).toInstance(mockSpecialMentionTypesService))
 
   "ItemsCheckYourAnswersController" - {
 
@@ -53,10 +57,9 @@ class ItemsCheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMo
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(DocumentTypeList(Nil)))
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(PreviousReferencesDocumentTypeList(Nil)))
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(MethodOfPaymentList(Nil)))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(DocumentTypeList(Nil)))
+      when(mockSpecialMentionTypesService.getSpecialMentionTypes()(any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(PreviousReferencesDocumentTypeList(Nil)))
 
       setUserAnswers(Some(emptyUserAnswers))
 

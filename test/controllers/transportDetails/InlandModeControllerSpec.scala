@@ -17,7 +17,6 @@
 package controllers.transportDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.InlandModeFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.TransportModesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.transportModesAsJson
 
@@ -43,7 +43,7 @@ import scala.concurrent.Future
 
 class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  val mockTransportModesService: TransportModesService = mock[TransportModesService]
 
   val formProvider                      = new InlandModeFormProvider()
   val transportMode: TransportMode      = TransportMode("1", "Sea transport")
@@ -57,11 +57,11 @@ class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[TransportModesService]).toInstance(mockTransportModesService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    Mockito.reset(mockReferenceDataConnector)
+    Mockito.reset(mockTransportModesService)
   }
 
   "InlandMode Controller" - {
@@ -71,7 +71,7 @@ class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getTransportModes()(any(), any())).thenReturn(Future.successful(transportModes))
+      when(mockTransportModesService.getTransportModes()(any())).thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(GET, inlandModeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -101,7 +101,7 @@ class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(GET, inlandModeRoute)
@@ -131,7 +131,7 @@ class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
       setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
-      when(mockReferenceDataConnector.getTransportModes()(any(), any())).thenReturn(Future.successful(transportModes))
+      when(mockTransportModesService.getTransportModes()(any())).thenReturn(Future.successful(transportModes))
 
       val request =
         FakeRequest(POST, inlandModeRoute)
@@ -148,7 +148,7 @@ class InlandModeControllerSpec extends SpecBase with AppWithDefaultMockFixtures 
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getTransportModes()(any(), any())).thenReturn(Future.successful(transportModes))
+      when(mockTransportModesService.getTransportModes()(any())).thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(POST, inlandModeRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm                              = form.bind(Map("value" -> ""))

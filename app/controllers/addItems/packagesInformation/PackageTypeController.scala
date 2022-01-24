@@ -16,7 +16,6 @@
 
 package controllers.addItems.packagesInformation
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.addItems.PackageTypeFormProvider
 import models.reference.PackageType
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.PackageTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.packageTypeList
@@ -47,7 +47,7 @@ class PackageTypeController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   @AddItemsPackagesInfo navigator: Navigator,
-  referenceDataConnector: ReferenceDataConnector,
+  packageTypesService: PackageTypesService,
   formProvider: PackageTypeFormProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -60,7 +60,7 @@ class PackageTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getPackageTypes().flatMap {
+        packageTypesService.getPackageTypes().flatMap {
           packageTypes =>
             val form = formProvider(packageTypes)
 
@@ -91,7 +91,7 @@ class PackageTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getPackageTypes().flatMap {
+        packageTypesService.getPackageTypes().flatMap {
           packageTypes =>
             val form = formProvider(packageTypes)
             form

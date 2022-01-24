@@ -17,7 +17,6 @@
 package controllers.transportDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.ModeAtBorderFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.TransportModesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.transportModesAsJson
 
@@ -48,7 +48,7 @@ class ModeAtBorderControllerSpec extends SpecBase with AppWithDefaultMockFixture
   val transportModes = TransportModeList(Seq(transportMode))
   val form           = formProvider(transportModes)
 
-  val mockReferenceDataConnector = mock[ReferenceDataConnector]
+  val mockTransportModesService = mock[TransportModesService]
 
   lazy val modeAtBorderRoute = routes.ModeAtBorderController.onPageLoad(lrn, NormalMode).url
 
@@ -56,10 +56,10 @@ class ModeAtBorderControllerSpec extends SpecBase with AppWithDefaultMockFixture
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[TransportModesService]).toInstance(mockTransportModesService))
 
   override def beforeEach(): Unit = {
-    reset(mockReferenceDataConnector)
+    reset(mockTransportModesService)
     super.beforeEach()
   }
 
@@ -71,7 +71,7 @@ class ModeAtBorderControllerSpec extends SpecBase with AppWithDefaultMockFixture
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(GET, modeAtBorderRoute)
@@ -103,7 +103,7 @@ class ModeAtBorderControllerSpec extends SpecBase with AppWithDefaultMockFixture
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(GET, modeAtBorderRoute)
@@ -136,7 +136,7 @@ class ModeAtBorderControllerSpec extends SpecBase with AppWithDefaultMockFixture
       when(mockSessionRepository.set(any()))
         .thenReturn(Future.successful(true))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       val request =
@@ -156,7 +156,7 @@ class ModeAtBorderControllerSpec extends SpecBase with AppWithDefaultMockFixture
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(POST, modeAtBorderRoute).withFormUrlEncodedBody(("value", ""))

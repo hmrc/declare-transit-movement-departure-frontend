@@ -16,7 +16,6 @@
 
 package controllers.addItems.previousReferences
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.ReferenceTypeFormProvider
 import models.reference.PreviousReferencesDocumentType
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.PreviousDocumentTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getPreviousDocumentsAsJson
@@ -46,7 +46,7 @@ class ReferenceTypeController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: ReferenceTypeFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  previousDocumentTypesService: PreviousDocumentTypesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -62,7 +62,7 @@ class ReferenceTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getPreviousReferencesDocumentTypes() flatMap {
+        previousDocumentTypesService.getPreviousDocumentTypes() flatMap {
           previousDocuments =>
             val form: Form[PreviousReferencesDocumentType] = formProvider(previousDocuments)
 
@@ -91,7 +91,7 @@ class ReferenceTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getPreviousReferencesDocumentTypes() flatMap {
+        previousDocumentTypesService.getPreviousDocumentTypes() flatMap {
           previousDocuments =>
             val form = formProvider(previousDocuments)
             form

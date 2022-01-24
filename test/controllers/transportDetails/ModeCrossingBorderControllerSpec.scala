@@ -17,7 +17,6 @@
 package controllers.transportDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.ModeCrossingBorderFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.TransportModesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.transportModesAsJson
 
@@ -43,11 +43,11 @@ import scala.concurrent.Future
 
 class ModeCrossingBorderControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  val formProvider               = new ModeCrossingBorderFormProvider()
-  val transportMode              = TransportMode("1", "Sea transport")
-  val transportModes             = TransportModeList(Seq(transportMode))
-  val form                       = formProvider(transportModes)
-  val mockReferenceDataConnector = mock[ReferenceDataConnector]
+  val formProvider              = new ModeCrossingBorderFormProvider()
+  val transportMode             = TransportMode("1", "Sea transport")
+  val transportModes            = TransportModeList(Seq(transportMode))
+  val form                      = formProvider(transportModes)
+  val mockTransportModesService = mock[TransportModesService]
 
   lazy val modeCrossingBorderRoute = routes.ModeCrossingBorderController.onPageLoad(lrn, NormalMode).url
 
@@ -55,11 +55,11 @@ class ModeCrossingBorderControllerSpec extends SpecBase with AppWithDefaultMockF
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[TransportDetails]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[TransportModesService]).toInstance(mockTransportModesService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    Mockito.reset(mockReferenceDataConnector)
+    Mockito.reset(mockTransportModesService)
   }
 
   "ModeCrossingBorder Controller" - {
@@ -71,7 +71,7 @@ class ModeCrossingBorderControllerSpec extends SpecBase with AppWithDefaultMockF
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(GET, modeCrossingBorderRoute)
@@ -102,7 +102,7 @@ class ModeCrossingBorderControllerSpec extends SpecBase with AppWithDefaultMockF
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(GET, modeCrossingBorderRoute)
@@ -132,7 +132,7 @@ class ModeCrossingBorderControllerSpec extends SpecBase with AppWithDefaultMockF
       setUserAnswers(Some(emptyUserAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getTransportModes()(any(), any())).thenReturn(Future.successful(transportModes))
+      when(mockTransportModesService.getTransportModes()(any())).thenReturn(Future.successful(transportModes))
 
       val request =
         FakeRequest(POST, modeCrossingBorderRoute)
@@ -150,7 +150,7 @@ class ModeCrossingBorderControllerSpec extends SpecBase with AppWithDefaultMockF
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       val request                                = FakeRequest(POST, modeCrossingBorderRoute).withFormUrlEncodedBody(("value", ""))

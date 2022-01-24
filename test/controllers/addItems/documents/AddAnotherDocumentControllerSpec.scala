@@ -17,7 +17,6 @@
 package controllers.addItems.documents
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.AddAnotherDocumentFormProvider
 import matchers.JsonMatchers
@@ -35,32 +34,33 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.DocumentTypesService
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
 class AddAnotherDocumentControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
-  private val formProvider                                 = new AddAnotherDocumentFormProvider()
-  private val form                                         = formProvider(index)
-  private val template                                     = "addItems/addAnotherDocument.njk"
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  val documentType1: DocumentType                          = DocumentType("1", "11", transportDocument = true)
-  val documentType2: DocumentType                          = DocumentType("2", "22", transportDocument = true)
-  val documentTypeList: DocumentTypeList                   = DocumentTypeList(Seq(documentType1, documentType2))
-  private lazy val addAnotherDocumentRoute                 = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, index, NormalMode).url
+  private val formProvider                                   = new AddAnotherDocumentFormProvider()
+  private val form                                           = formProvider(index)
+  private val template                                       = "addItems/addAnotherDocument.njk"
+  private val mockDocumentTypesService: DocumentTypesService = mock[DocumentTypesService]
+  val documentType1: DocumentType                            = DocumentType("1", "11", transportDocument = true)
+  val documentType2: DocumentType                            = DocumentType("2", "22", transportDocument = true)
+  val documentTypeList: DocumentTypeList                     = DocumentTypeList(Seq(documentType1, documentType2))
+  private lazy val addAnotherDocumentRoute                   = controllers.addItems.documents.routes.AddAnotherDocumentController.onPageLoad(lrn, index, NormalMode).url
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsDocument]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[DocumentTypesService]).toInstance(mockDocumentTypesService))
 
   "AddAnotherDocument Controller" - {
 
     "must return OK and the correct view for a GET" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -90,7 +90,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with AppWithDefaultMockF
 
     "must redirect to the next page when valid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       when(mockRenderer.render(any(), any())(any()))
@@ -110,7 +110,7 @@ class AddAnotherDocumentControllerSpec extends SpecBase with AppWithDefaultMockF
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRefDataConnector.getDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockDocumentTypesService.getDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

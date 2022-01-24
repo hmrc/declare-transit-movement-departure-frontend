@@ -17,7 +17,6 @@
 package controllers.addItems.specialMentions
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, SpecialMentionList, UserAnswers}
@@ -34,6 +33,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.SpecialMentionTypesService
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
@@ -46,13 +46,13 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaul
 
   private lazy val addAnotherSpecialMentionRoute = routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, NormalMode).url
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockSpecialMentionTypesService: SpecialMentionTypesService = mock[SpecialMentionTypesService]
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(fakeNavigator))
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockRefDataConnector))
+      .overrides(bind(classOf[SpecialMentionTypesService]).toInstance(mockSpecialMentionTypesService))
 
   "AddAnotherSpecialMention Controller" - {
 
@@ -61,7 +61,7 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaul
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
+      when(mockSpecialMentionTypesService.getSpecialMentionTypes()(any())).thenReturn(Future.successful(SpecialMentionList(Nil)))
 
       setUserAnswers(Some(emptyUserAnswers))
 

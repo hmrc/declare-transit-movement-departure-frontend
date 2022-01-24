@@ -18,7 +18,9 @@ package models.reference
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SpecialMention(code: String, description: String)
+case class SpecialMention(code: String, description: String) {
+  override def toString: String = s"($code) $description"
+}
 
 object SpecialMention {
   implicit val format: OFormat[SpecialMention] = Json.format[SpecialMention]

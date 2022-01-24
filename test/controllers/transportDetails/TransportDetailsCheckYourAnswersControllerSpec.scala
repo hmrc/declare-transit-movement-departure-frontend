@@ -17,7 +17,6 @@
 package controllers.transportDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode, TransportMode}
@@ -34,7 +33,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import services.CountriesService
+import services.{CountriesService, TransportModesService}
 
 import scala.concurrent.Future
 
@@ -42,22 +41,22 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWi
 
   def onwardRoute(lrn: LocalReferenceNumber) = Call("GET", s"/manage-transit-movements-departures/$lrn/task-list")
 
-  lazy val transportDetailsRoute: String                 = routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url
-  val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  private val mockCountriesService: CountriesService     = mock[CountriesService]
-  val transportMode: TransportMode                       = TransportMode("1", "Sea transport")
-  val transportModes: TransportModeList                  = TransportModeList(Seq(transportMode))
-  private val country                                    = Country(CountryCode("GB"), "United Kingdom")
-  val countries: CountryList                             = CountryList(Seq(country))
+  lazy val transportDetailsRoute: String               = routes.TransportDetailsCheckYourAnswersController.onPageLoad(lrn).url
+  val mockTransportModesService: TransportModesService = mock[TransportModesService]
+  private val mockCountriesService: CountriesService   = mock[CountriesService]
+  val transportMode: TransportMode                     = TransportMode("1", "Sea transport")
+  val transportModes: TransportModeList                = TransportModeList(Seq(transportMode))
+  private val country                                  = Country(CountryCode("GB"), "United Kingdom")
+  val countries: CountryList                           = CountryList(Seq(country))
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind(classOf[ReferenceDataConnector]).toInstance(mockReferenceDataConnector))
+      .overrides(bind(classOf[TransportModesService]).toInstance(mockTransportModesService))
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   override def beforeEach(): Unit = {
-    reset(mockReferenceDataConnector, mockCountriesService)
+    reset(mockTransportModesService, mockCountriesService)
     super.beforeEach()
   }
 
@@ -71,7 +70,7 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWi
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getTransportModes()(any(), any()))
+      when(mockTransportModesService.getTransportModes()(any()))
         .thenReturn(Future.successful(transportModes))
 
       when(mockCountriesService.getCountries()(any()))

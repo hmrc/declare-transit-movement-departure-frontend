@@ -17,7 +17,6 @@
 package controllers.addItems.securityDetails
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.securityDetails.TransportChargesFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.MethodsOfPaymentService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -53,7 +53,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
   private val form     = formProvider(methodOfPaymentList)
   private val template = "addItems/securityDetails/transportCharges.njk"
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockMethodsOfPaymentService: MethodsOfPaymentService = mock[MethodsOfPaymentService]
 
   private lazy val transportChargesRoute = routes.TransportChargesController.onPageLoad(lrn, index, NormalMode).url
 
@@ -61,11 +61,11 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[SecurityDetails]).toInstance(fakeNavigator))
-      .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
+      .overrides(bind[MethodsOfPaymentService].toInstance(mockMethodsOfPaymentService))
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    Mockito.reset(mockRefDataConnector)
+    Mockito.reset(mockMethodsOfPaymentService)
   }
 
   "TransportCharges Controller" - {
@@ -76,7 +76,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       val request                                = FakeRequest(GET, transportChargesRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -113,7 +113,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       val userAnswers = emptyUserAnswers.set(TransportChargesPage(index), MethodOfPayment("A", "Payment in cash")).success.value
       setUserAnswers(Some(userAnswers))
@@ -154,7 +154,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -174,7 +174,7 @@ class TransportChargesControllerSpec extends SpecBase with AppWithDefaultMockFix
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getMethodOfPaymentList()(any(), any())).thenReturn(Future.successful(methodOfPaymentList))
+      when(mockMethodsOfPaymentService.getMethodsOfPayment()(any())).thenReturn(Future.successful(methodOfPaymentList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

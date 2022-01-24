@@ -16,7 +16,6 @@
 
 package controllers.addItems.securityDetails
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.addItems.securityDetails.DangerousGoodsCodeFormProvider
 import models.reference.DangerousGoodsCode
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.DangerousGoodsCodesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getDangerousGoodsCodeAsJson
@@ -46,7 +46,7 @@ class DangerousGoodsCodeController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: DangerousGoodsCodeFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  dangerousGoodsCodesService: DangerousGoodsCodesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -62,7 +62,7 @@ class DangerousGoodsCodeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getDangerousGoodsCodeList() flatMap {
+        dangerousGoodsCodesService.getDangerousGoodsCodes() flatMap {
           dangerousGoodsCodes =>
             val form: Form[DangerousGoodsCode] = formProvider(dangerousGoodsCodes)
 
@@ -90,7 +90,7 @@ class DangerousGoodsCodeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getDangerousGoodsCodeList() flatMap {
+        dangerousGoodsCodesService.getDangerousGoodsCodes() flatMap {
           dangerousGoodsCodes =>
             val form: Form[DangerousGoodsCode] = formProvider(dangerousGoodsCodes)
             form

@@ -16,13 +16,13 @@
 
 package controllers.addItems.previousReferences
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import services.PreviousDocumentTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.ReferencesCheckYourAnswersViewModel
 
@@ -34,7 +34,7 @@ class ReferenceCheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  previousDocumentTypesService: PreviousDocumentTypesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -47,7 +47,7 @@ class ReferenceCheckYourAnswersController @Inject() (
       andThen getData(lrn)
       andThen requireData).async {
       implicit request =>
-        referenceDataConnector.getPreviousReferencesDocumentTypes().flatMap {
+        previousDocumentTypesService.getPreviousDocumentTypes().flatMap {
           previousReferencesDocumentTypes =>
             val json = {
               val viewModel = ReferencesCheckYourAnswersViewModel(request.userAnswers, itemIndex, referenceIndex, mode, previousReferencesDocumentTypes)

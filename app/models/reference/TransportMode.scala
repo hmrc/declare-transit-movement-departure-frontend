@@ -18,7 +18,9 @@ package models.reference
 
 import play.api.libs.json.{Json, OFormat}
 
-case class TransportMode(code: String, description: String)
+case class TransportMode(code: String, description: String) {
+  override def toString: String = s"($code) $description"
+}
 
 object TransportMode {
   implicit val format: OFormat[TransportMode] = Json.format[TransportMode]

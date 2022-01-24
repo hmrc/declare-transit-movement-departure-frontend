@@ -118,7 +118,7 @@ class RouteDetailsCheckYourAnswersHelper(userAnswers: UserAnswers, mode: Mode) e
     answer =>
       customsOfficeList.getCustomsOffice(formatAnswer(answer)) map {
         customsOffice =>
-          buildRow(lit"${customsOffice.name} (${customsOffice.id})")
+          buildRow(lit"${customsOffice.toString}")
       }
   }
 

@@ -17,7 +17,6 @@
 package controllers.addItems.specialMentions
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import forms.addItems.specialMentions.SpecialMentionTypeFormProvider
 import matchers.JsonMatchers
 import models.reference.SpecialMention
@@ -35,6 +34,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.SpecialMentionTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -52,7 +52,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
   private val form     = formProvider(specialMentionList, itemIndex)
   private val template = "addItems/specialMentions/specialMentionType.njk"
 
-  private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  private val mockSpecialMentionTypesService: SpecialMentionTypesService = mock[SpecialMentionTypesService]
 
   private lazy val specialMentionTypeRoute = routes.SpecialMentionTypeController.onPageLoad(lrn, itemIndex, referenceIndex, NormalMode).url
 
@@ -60,7 +60,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsSpecialMentions]).toInstance(fakeNavigator))
-      .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
+      .overrides(bind[SpecialMentionTypesService].toInstance(mockSpecialMentionTypesService))
 
   "SpecialMentionType Controller" - {
 
@@ -71,7 +71,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       setUserAnswers(Some(emptyUserAnswers))
 
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
+      when(mockSpecialMentionTypesService.getSpecialMentionTypes()(any())).thenReturn(Future.successful(specialMentionList))
 
       val request                                = FakeRequest(GET, specialMentionTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -112,7 +112,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
       val userAnswers = emptyUserAnswers.set(SpecialMentionTypePage(itemIndex, referenceIndex), "10600").success.value
       setUserAnswers(Some(userAnswers))
 
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
+      when(mockSpecialMentionTypesService.getSpecialMentionTypes()(any())).thenReturn(Future.successful(specialMentionList))
 
       val request                                = FakeRequest(GET, specialMentionTypeRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -152,7 +152,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
+      when(mockSpecialMentionTypesService.getSpecialMentionTypes()(any())).thenReturn(Future.successful(specialMentionList))
 
       val request =
         FakeRequest(POST, specialMentionTypeRoute)
@@ -168,7 +168,7 @@ class SpecialMentionTypeControllerSpec extends SpecBase with AppWithDefaultMockF
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockRefDataConnector.getSpecialMention()(any(), any())).thenReturn(Future.successful(specialMentionList))
+      when(mockSpecialMentionTypesService.getSpecialMentionTypes()(any())).thenReturn(Future.successful(specialMentionList))
 
       setUserAnswers(Some(emptyUserAnswers))
 

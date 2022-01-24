@@ -16,7 +16,6 @@
 
 package controllers.safetyAndSecurity
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.safetyAndSecurity.CircumstanceIndicatorFormProvider
 import models.reference.CircumstanceIndicator
@@ -33,6 +32,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import renderer.Renderer
 import repositories.SessionRepository
+import services.CircumstanceIndicatorsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getCircumstanceIndicatorsAsJson
@@ -49,7 +49,7 @@ class CircumstanceIndicatorController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: CircumstanceIndicatorFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  circumstanceIndicatorsService: CircumstanceIndicatorsService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -65,7 +65,7 @@ class CircumstanceIndicatorController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCircumstanceIndicatorList() flatMap {
+        circumstanceIndicatorsService.getCircumstanceIndicators() flatMap {
           indicators =>
             val form = formProvider(indicators)
 
@@ -85,7 +85,7 @@ class CircumstanceIndicatorController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        referenceDataConnector.getCircumstanceIndicatorList() flatMap {
+        circumstanceIndicatorsService.getCircumstanceIndicators() flatMap {
           indicatorList =>
             formProvider(indicatorList)
               .bindFromRequest()

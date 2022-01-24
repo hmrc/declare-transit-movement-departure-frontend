@@ -17,7 +17,6 @@
 package controllers.addItems.previousReferences
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import controllers.{routes => mainRoutes}
 import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
 import matchers.JsonMatchers
@@ -36,6 +35,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.PreviousDocumentTypesService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
@@ -47,10 +47,10 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
     with NunjucksSupport
     with JsonMatchers {
 
-  private val formProvider         = new AddAnotherPreviousAdministrativeReferenceFormProvider()
-  private val form                 = formProvider()
-  private val template             = "addItems/addAnotherPreviousAdministrativeReference.njk"
-  private val mockRefDataConnector = mock[ReferenceDataConnector]
+  private val formProvider                     = new AddAnotherPreviousAdministrativeReferenceFormProvider()
+  private val form                             = formProvider()
+  private val template                         = "addItems/addAnotherPreviousAdministrativeReference.njk"
+  private val mockPreviousDocumentTypesService = mock[PreviousDocumentTypesService]
 
   private val documentTypeList = PreviousReferencesDocumentTypeList(
     Seq(
@@ -66,10 +66,10 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
     super
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[AddItemsAdminReference]).toInstance(new FakeNavigator(onwardRoute)))
-      .overrides(bind[ReferenceDataConnector].toInstance(mockRefDataConnector))
+      .overrides(bind[PreviousDocumentTypesService].toInstance(mockPreviousDocumentTypesService))
 
   override def beforeEach(): Unit = {
-    reset(mockRefDataConnector)
+    reset(mockPreviousDocumentTypesService)
     super.beforeEach()
   }
 
@@ -80,7 +80,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       val request                                = FakeRequest(GET, addAnotherPreviousAdministrativeReferenceRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -109,7 +109,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -143,7 +143,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
     "must redirect to the next page when valid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -160,7 +160,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
 
     "must return a Bad Request and errors when invalid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
-      when(mockRefDataConnector.getPreviousReferencesDocumentTypes()(any(), any())).thenReturn(Future.successful(documentTypeList))
+      when(mockPreviousDocumentTypesService.getPreviousDocumentTypes()(any())).thenReturn(Future.successful(documentTypeList))
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))

@@ -16,13 +16,13 @@
 
 package controllers.addItems.specialMentions
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import models.{Index, LocalReferenceNumber, Mode, ValidateReaderLogger}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import services.SpecialMentionTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.SpecialMentionsCheckYourAnswersViewModel
 
@@ -34,7 +34,7 @@ class SpecialMentionCheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  referenceDataConnector: ReferenceDataConnector,
+  specialMentionTypesService: SpecialMentionTypesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -47,7 +47,7 @@ class SpecialMentionCheckYourAnswersController @Inject() (
       andThen getData(lrn)
       andThen requireData).async {
       implicit request =>
-        referenceDataConnector.getSpecialMention().flatMap {
+        specialMentionTypesService.getSpecialMentionTypes().flatMap {
           specialMentions =>
             val json = {
               val viewModel = SpecialMentionsCheckYourAnswersViewModel(request.userAnswers, itemIndex, referenceIndex, mode, specialMentions)

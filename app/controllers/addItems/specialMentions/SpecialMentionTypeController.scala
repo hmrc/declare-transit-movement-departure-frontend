@@ -16,7 +16,6 @@
 
 package controllers.addItems.specialMentions
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.addItems.specialMentions.SpecialMentionTypeFormProvider
 import models.reference.SpecialMention
@@ -30,6 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.SpecialMentionTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.getSpecialMentionAsJson
@@ -46,7 +46,7 @@ class SpecialMentionTypeController @Inject() (
   requireData: DataRequiredAction,
   checkDependentSection: CheckDependentSectionAction,
   formProvider: SpecialMentionTypeFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  specialMentionTypesService: SpecialMentionTypesService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -62,7 +62,7 @@ class SpecialMentionTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getSpecialMention() flatMap {
+        specialMentionTypesService.getSpecialMentionTypes() flatMap {
           specialMention =>
             val form: Form[SpecialMention] = formProvider(specialMention, itemIndex)
 
@@ -91,7 +91,7 @@ class SpecialMentionTypeController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        referenceDataConnector.getSpecialMention() flatMap {
+        specialMentionTypesService.getSpecialMentionTypes() flatMap {
           specialMention =>
             val form = formProvider(specialMention, itemIndex)
             form
@@ -118,27 +118,4 @@ class SpecialMentionTypeController @Inject() (
               )
         }
     }
-  //  def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, referenceIndex: Index, mode: Mode): Action[AnyContent] =
-//    (identify andThen getData(lrn) andThen requireData).async {
-//      implicit request =>
-//        form
-//          .bindFromRequest()
-//          .fold(
-//            formWithErrors => {
-//
-//              val json = Json.obj(
-//                "form" -> formWithErrors,
-//                "lrn"  -> lrn,
-//                "mode" -> mode
-//              )
-//
-//              renderer.render(template, json).map(BadRequest(_))
-//            },
-//            value =>
-//              for {
-//                updatedAnswers <- Future.fromTry(request.userAnswers.set(SpecialMentionTypePage(itemIndex, referenceIndex), value))
-//                _              <- sessionRepository.set(updatedAnswers)
-//              } yield Redirect(navigator.nextPage(SpecialMentionTypePage(itemIndex, referenceIndex), mode, updatedAnswers))
-//          )
-//    }
 }

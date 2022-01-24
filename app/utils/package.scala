@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import models.{CommonAddress, CountryList}
 import models.reference._
+import models.{CommonAddress, CountryList}
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.viewmodels.{Content, Html, MessageInterpolators, Text}
 
@@ -27,7 +27,7 @@ package object utils {
   def packageTypeList(value: Option[PackageType], packageTypes: Seq[PackageType]): Seq[JsObject] = {
     val packageTypeJson = packageTypes.map {
       packageType =>
-        Json.obj("text" -> s"${packageType.description} (${packageType.code})", "value" -> packageType.code, "selected" -> value.contains(packageType))
+        Json.obj("text" -> packageType.toString, "value" -> packageType.code, "selected" -> value.contains(packageType))
     }
 
     defaultOption +: packageTypeJson
@@ -36,7 +36,7 @@ package object utils {
   def countryJsonList(value: Option[Country], countries: Seq[Country]): Seq[JsObject] = {
     val countryJsonList = countries.map {
       country =>
-        Json.obj("text" -> country.description, "value" -> country.code, "selected" -> value.contains(country))
+        Json.obj("text" -> country.toString, "value" -> country.code, "selected" -> value.contains(country))
     }
 
     defaultOption +: countryJsonList
@@ -47,7 +47,7 @@ package object utils {
       office =>
         Json.obj(
           "value"    -> office.id,
-          "text"     -> s"${office.name} (${office.id})",
+          "text"     -> office.toString,
           "selected" -> value.contains(office)
         )
     }
@@ -59,7 +59,7 @@ package object utils {
       mode =>
         Json.obj(
           "value"    -> mode.code,
-          "text"     -> s"(${mode.code}) ${mode.description}",
+          "text"     -> mode.toString,
           "selected" -> value.contains(mode)
         )
     }
@@ -84,13 +84,8 @@ package object utils {
     val documentObjects = documentList.map {
       documentType =>
         Json.obj(
-          "value" -> documentType.code,
-          "text" -> {
-            documentType match {
-              case PreviousReferencesDocumentType(code, Some(description)) if description.trim.nonEmpty => s"($code) $description"
-              case PreviousReferencesDocumentType(code, _)                                              => code
-            }
-          },
+          "value"    -> documentType.code,
+          "text"     -> documentType.toString,
           "selected" -> value.contains(documentType)
         )
     }
@@ -102,7 +97,7 @@ package object utils {
       specialMention =>
         Json.obj(
           "value"    -> specialMention.code,
-          "text"     -> s"(${specialMention.code}) ${specialMention.description}",
+          "text"     -> specialMention.toString,
           "selected" -> value.contains(specialMention)
         )
     }
@@ -114,7 +109,7 @@ package object utils {
       documentType =>
         Json.obj(
           "value"    -> documentType.code,
-          "text"     -> s"(${documentType.code}) ${documentType.description}",
+          "text"     -> documentType.toString,
           "selected" -> value.contains(documentType)
         )
     }
@@ -126,7 +121,7 @@ package object utils {
       dangerousGoodsCode =>
         Json.obj(
           "value"    -> dangerousGoodsCode.code,
-          "text"     -> s"(${dangerousGoodsCode.code}) ${dangerousGoodsCode.description}",
+          "text"     -> dangerousGoodsCode.toString,
           "selected" -> value.contains(dangerousGoodsCode)
         )
     }
@@ -138,7 +133,7 @@ package object utils {
       methodOfPayment =>
         Json.obj(
           "value"    -> methodOfPayment.code,
-          "text"     -> s"${methodOfPayment.toString}",
+          "text"     -> methodOfPayment.toString,
           "selected" -> value.contains(methodOfPayment)
         )
     }
@@ -150,7 +145,7 @@ package object utils {
       circumstanceIndicator =>
         Json.obj(
           "value"    -> circumstanceIndicator.code,
-          "text"     -> s"(${circumstanceIndicator.code}) ${circumstanceIndicator.description}",
+          "text"     -> circumstanceIndicator.toString,
           "selected" -> value.contains(circumstanceIndicator)
         )
     }
