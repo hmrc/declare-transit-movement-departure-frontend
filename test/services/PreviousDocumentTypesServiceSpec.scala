@@ -32,10 +32,10 @@ class PreviousDocumentTypesServiceSpec extends SpecBase with BeforeAndAfterEach 
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new PreviousDocumentTypesService(mockRefDataConnector)
 
-  private val documentType1 = PreviousReferencesDocumentType("4", Some("Certificate of quality"))
+  private val documentType1 = PreviousReferencesDocumentType("1", Some("Certificate of quality"))
   private val documentType2 = PreviousReferencesDocumentType("2", Some("Bill of lading"))
   private val documentType3 = PreviousReferencesDocumentType("3", Some("Certificate of conformity"))
-  private val documentType4 = PreviousReferencesDocumentType("1", None)
+  private val documentType4 = PreviousReferencesDocumentType("4", None)
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
@@ -51,7 +51,7 @@ class PreviousDocumentTypesServiceSpec extends SpecBase with BeforeAndAfterEach 
           .thenReturn(Future.successful(Seq(documentType1, documentType2, documentType3, documentType4)))
 
         service.getPreviousDocumentTypes().futureValue mustBe
-          PreviousReferencesDocumentTypeList(Seq(documentType2, documentType3, documentType1, documentType4))
+          PreviousReferencesDocumentTypeList(Seq(documentType4, documentType2, documentType3, documentType1))
 
         verify(mockRefDataConnector).getPreviousReferencesDocumentTypes()(any(), any())
       }

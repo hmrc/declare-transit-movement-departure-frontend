@@ -32,9 +32,9 @@ class TransportModesServiceSpec extends SpecBase with BeforeAndAfterEach {
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new TransportModesService(mockRefDataConnector)
 
-  private val transportMode1 = TransportMode("3", "ROAD TRANSPORT")
-  private val transportMode2 = TransportMode("1", "Air transport")
-  private val transportMode3 = TransportMode("2", "Rail transport")
+  private val transportMode1 = TransportMode("1", "ROAD TRANSPORT")
+  private val transportMode2 = TransportMode("2", "Air transport")
+  private val transportMode3 = TransportMode("3", "Rail transport")
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)

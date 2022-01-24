@@ -32,9 +32,9 @@ class SpecialMentionTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new SpecialMentionTypesService(mockRefDataConnector)
 
-  private val specialMentionType1 = SpecialMention("3", "EXPORT")
-  private val specialMentionType2 = SpecialMention("1", "Export subject to duties")
-  private val specialMentionType3 = SpecialMention("2", "Export subject to restriction")
+  private val specialMentionType1 = SpecialMention("1", "Export subject to restriction")
+  private val specialMentionType2 = SpecialMention("2", "EXPORT")
+  private val specialMentionType3 = SpecialMention("3", "Export subject to duties")
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)

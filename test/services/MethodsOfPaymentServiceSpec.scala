@@ -32,8 +32,8 @@ class MethodsOfPaymentServiceSpec extends SpecBase with BeforeAndAfterEach {
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new MethodsOfPaymentService(mockRefDataConnector)
 
-  private val methodOfPayment1 = MethodOfPayment("2", "Payment in cash")
-  private val methodOfPayment2 = MethodOfPayment("1", "Payment by credit card")
+  private val methodOfPayment1 = MethodOfPayment("1", "Payment in cash")
+  private val methodOfPayment2 = MethodOfPayment("2", "Payment by credit card")
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)

@@ -32,5 +32,5 @@ class MethodsOfPaymentService @Inject() (referenceDataConnector: ReferenceDataCo
       .map(sort)
 
   private def sort(methodsOfPayment: Seq[MethodOfPayment]): MethodOfPaymentList =
-    MethodOfPaymentList(methodsOfPayment.sortBy(_.toString.toLowerCase))
+    MethodOfPaymentList(methodsOfPayment.sortBy(_.description.toLowerCase))
 }

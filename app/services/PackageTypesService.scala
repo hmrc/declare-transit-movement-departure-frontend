@@ -32,5 +32,5 @@ class PackageTypesService @Inject() (referenceDataConnector: ReferenceDataConnec
       .map(sort)
 
   private def sort(packageTypes: Seq[PackageType]): PackageTypeList =
-    PackageTypeList(packageTypes.sortBy(_.toString.toLowerCase))
+    PackageTypeList(packageTypes.sortBy(_.description.toLowerCase))
 }

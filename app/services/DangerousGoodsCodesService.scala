@@ -32,5 +32,5 @@ class DangerousGoodsCodesService @Inject() (referenceDataConnector: ReferenceDat
       .map(sort)
 
   private def sort(dangerousGoodsCodes: Seq[DangerousGoodsCode]): DangerousGoodsCodeList =
-    DangerousGoodsCodeList(dangerousGoodsCodes.sortBy(_.toString.toLowerCase))
+    DangerousGoodsCodeList(dangerousGoodsCodes.sortBy(_.description.toLowerCase))
 }

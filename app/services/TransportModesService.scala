@@ -32,5 +32,5 @@ class TransportModesService @Inject() (referenceDataConnector: ReferenceDataConn
       .map(sort)
 
   private def sort(transportModes: Seq[TransportMode]): TransportModeList =
-    TransportModeList(transportModes.sortBy(_.toString.toLowerCase))
+    TransportModeList(transportModes.sortBy(_.description.toLowerCase))
 }

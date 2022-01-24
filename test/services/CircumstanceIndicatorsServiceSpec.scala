@@ -32,9 +32,9 @@ class CircumstanceIndicatorsServiceSpec extends SpecBase with BeforeAndAfterEach
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new CircumstanceIndicatorsService(mockRefDataConnector)
 
-  private val circumstanceIndicator1 = CircumstanceIndicator("3", "Road mode of transport")
-  private val circumstanceIndicator2 = CircumstanceIndicator("1", "Authorised economic operators")
-  private val circumstanceIndicator3 = CircumstanceIndicator("2", "Rail mode of transport")
+  private val circumstanceIndicator1 = CircumstanceIndicator("1", "Road mode of transport")
+  private val circumstanceIndicator2 = CircumstanceIndicator("2", "Authorised economic operators")
+  private val circumstanceIndicator3 = CircumstanceIndicator("3", "Rail mode of transport")
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)

@@ -73,5 +73,5 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
       .map(sort)
 
   private def sort(countries: Seq[Country]): CountryList =
-    CountryList(countries.sortBy(_.toString.toLowerCase))
+    CountryList(countries.sortBy(_.description.toLowerCase))
 }

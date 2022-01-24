@@ -32,9 +32,9 @@ class DocumentTypesServiceSpec extends SpecBase with BeforeAndAfterEach {
   private val mockRefDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
   private val service                                      = new DocumentTypesService(mockRefDataConnector)
 
-  private val documentType1 = DocumentType("3", "CERTIFICATE OF QUALITY", transportDocument = false)
-  private val documentType2 = DocumentType("1", "Bill of lading", transportDocument = true)
-  private val documentType3 = DocumentType("2", "Certificate of conformity", transportDocument = false)
+  private val documentType1 = DocumentType("1", "CERTIFICATE OF QUALITY", transportDocument = false)
+  private val documentType2 = DocumentType("2", "Bill of lading", transportDocument = true)
+  private val documentType3 = DocumentType("3", "Certificate of conformity", transportDocument = false)
 
   override def beforeEach(): Unit = {
     reset(mockRefDataConnector)
