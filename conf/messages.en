@@ -415,6 +415,7 @@ authorisedLocationCode.title = What is the authorised location code?
 authorisedLocationCode.heading = What is the authorised location code?
 authorisedLocationCode.checkYourAnswersLabel = What is the authorised location code?
 authorisedLocationCode.paragraph = The code can be found in the registration documents.
+authorisedLocationCode.hint = The authorised location code is usually made up of part of the address with the postcode. Like, NARNIA AB1 1AB.
 authorisedLocationCode.error.required = Enter the authorised location code
 authorisedLocationCode.error.length = The authorised location code must be 17 characters or less
 authorisedLocationCode.error.invalidCharacters = The authorised location code must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces

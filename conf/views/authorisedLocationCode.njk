@@ -5,6 +5,7 @@
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
+{% from "govuk/components/fieldset/macro.njk"      import govukFieldset %}
 
 {% block pageTitle %}
   {{ title(messages("authorisedLocationCode.title"), form.errors) }}
@@ -30,28 +31,35 @@
         <form action="{{ routes.controllers.goodsSummary.AuthorisedLocationCodeController.onSubmit(lrn, mode).url }}" method="post">
         <span class="govuk-caption-xl">{{messages('goodsSummary.preHeading')}}</span>
 
+{% call govukFieldset({
+            legend: {
+              text: messages("authorisedLocationCode.heading"),
+              classes: "govuk-fieldset__legend--xl",
+              isPageHeading: true
+            }
+          }) %}
+
+          <p class = "govuk-body">{{ messages('authorisedLocationCode.paragraph') }}</p>
+
           {{ csrf() | safe }}
 
           {{ govukInput({
-            label: {
-              text: messages('authorisedLocationCode.heading'),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
-            hint: {
-              text: messages('authorisedLocationCode.paragraph'),
+          hint: {
+              text: messages('authorisedLocationCode.hint'),
               classes: "hint-as-label"
             },
             id: "value",
             name: "value",
             value: form.value.value,
-            errorMessage: form.value.error
+            errorMessage: form.value.error,
+            classes: "govuk-input--width-10"
           }) }}
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
+          {% endcall %}
 
         </form>
 
