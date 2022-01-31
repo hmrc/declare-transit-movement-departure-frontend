@@ -18,10 +18,12 @@ package controllers.routeDetails
 
 import controllers.actions._
 import forms.DestinationCountryFormProvider
-import models.reference.Country
-import models.{LocalReferenceNumber, Mode}
+import models.DeclarationType.{Option1, Option4}
+import models.reference.{Country, CountryCode}
+import models.{CountryList, LocalReferenceNumber, Mode}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
+import pages.DeclarationTypePage
 import pages.routeDetails.DestinationCountryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -56,7 +58,13 @@ class DestinationCountryController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       countriesService.getCountries() flatMap {
-        countryList =>
+        fullCountryList =>
+          val countryList = request.userAnswers.get(DeclarationTypePage) match {
+            case decType if decType.contains(Option1) || decType.contains(Option4) =>
+              CountryList(fullCountryList.countries.filterNot(_.code == CountryCode("SM")))
+            case _ =>
+              fullCountryList
+          }
           val form = formProvider(countryList)
 
           val preparedForm = request.userAnswers
@@ -72,7 +80,13 @@ class DestinationCountryController @Inject() (
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       countriesService.getCountries() flatMap {
-        countryList =>
+        fullCountryList =>
+          val countryList = request.userAnswers.get(DeclarationTypePage) match {
+            case decType if decType.contains(Option1) || decType.contains(Option4) =>
+              CountryList(fullCountryList.countries.filterNot(_.code == CountryCode("SM")))
+            case _ =>
+              fullCountryList
+          }
           formProvider(countryList)
             .bindFromRequest()
             .fold(
