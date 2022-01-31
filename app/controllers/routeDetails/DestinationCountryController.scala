@@ -60,7 +60,7 @@ class DestinationCountryController @Inject() (
       countriesService.getCountries() flatMap {
         fullCountryList =>
           val countryList = request.userAnswers.get(DeclarationTypePage) match {
-            case decType if decType.contains(Option1) || decType.contains(Option4) =>
+            case Some(Option1) | Some(Option4) =>
               CountryList(fullCountryList.countries.filterNot(_.code == CountryCode("SM")))
             case _ =>
               fullCountryList
