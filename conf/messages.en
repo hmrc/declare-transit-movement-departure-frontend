@@ -61,7 +61,7 @@ index.title = Manage your transit movements - GOV.UK
 index.heading =  Manage your transit movements
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
-movementDetails.preHeading = General Information
+movementDetails.preHeading = General information
 traderDetails.preHeading = Trader’s details
 routeDetails.preHeading = Route details
 transportDetails.preHeading = Transport details
@@ -173,10 +173,11 @@ declarationPlace.error.required = Enter the postcode for the place of declaratio
 declarationPlace.error.length = The postcode for the place of declaration must be 9 characters or less
 declarationPlace.error.invalid = The postcode for the place of declaration must only include letters a to z without accents, numbers 0 to 9 or blank spaces
 
-declarationForSomeoneElse.title = Are you creating this declaration on behalf of someone else?
-declarationForSomeoneElse.heading = Are you creating this declaration on behalf of someone else?
-declarationForSomeoneElse.checkYourAnswersLabel = Creating on behalf of someone?
-declarationForSomeoneElse.error.required = Select yes if you are creating this declaration on behalf of someone else
+declarationForSomeoneElse.title = Are you acting as a representative?
+declarationForSomeoneElse.heading = Are you acting as a representative?
+declarationForSomeoneElse.checkYourAnswersLabel = Are you acting as a representative?
+declarationForSomeoneElse.paragraph = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
+declarationForSomeoneElse.error.required = Select yes if you are acting as a representative
 
 representativeName.title = What is your company’s name?
 representativeName.heading = What is your company’s name?
