@@ -61,7 +61,7 @@ index.title = Manage your transit movements - GOV.UK
 index.heading =  Manage your transit movements
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
-movementDetails.preHeading = General Information
+movementDetails.preHeading = General information
 traderDetails.preHeading = Trader’s details
 routeDetails.preHeading = Route details
 transportDetails.preHeading = Transport details
