@@ -176,6 +176,7 @@ declarationPlace.error.invalid = The postcode for the place of declaration must 
 declarationForSomeoneElse.title = Are you acting as a representative?
 declarationForSomeoneElse.heading = Are you acting as a representative?
 declarationForSomeoneElse.checkYourAnswersLabel = Are you acting as a representative?
+declarationForSomeoneElse.paragraph = You are a representative if you are moving the goods for someone else or you are completing the declaration on behalf of a trader.
 declarationForSomeoneElse.error.required = Select yes if you are acting as a representative
 
 representativeName.title = What is your company’s name?
