@@ -48,7 +48,7 @@ class DestinationCountryControllerSpec extends SpecBase with AppWithDefaultMockF
   private val mockCountriesService: CountriesService = mock[CountriesService]
 
   private val formProvider = new DestinationCountryFormProvider()
-  private val countries    = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom"), Country(CountryCode("SM"), "San Marino")))
+  private val countries    = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
   private val form         = formProvider(countries)
 
   private lazy val destinationCountryRoute = routes.DestinationCountryController.onPageLoad(lrn, NormalMode).url
@@ -66,13 +66,11 @@ class DestinationCountryControllerSpec extends SpecBase with AppWithDefaultMockF
 
   "DestinationCountry Controller" - {
 
-    "must return OK and the correct view (not showing San Marino) for a GET when Declaration Type is Option 1 or Option 4" in {
-      val decType     = Gen.oneOf(Option1, Option4).sample.value
-      val userAnswers = emptyUserAnswers.set(DeclarationTypePage, decType).success.value
-      setUserAnswers(Some(userAnswers))
+    "must return OK and the correct view" in {
+      setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries(any())(any())).thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(GET, destinationCountryRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -96,42 +94,6 @@ class DestinationCountryControllerSpec extends SpecBase with AppWithDefaultMockF
       jsonCaptor.getValue must containJson(expectedJson)
     }
 
-    "must return OK and the correct view (showing San Marino) for a GET when Declaration Type is Option 2 or Option 3" in {
-      val decType     = Gen.oneOf(Option2, Option3).sample.value
-      val userAnswers = emptyUserAnswers.set(DeclarationTypePage, decType).success.value
-      setUserAnswers(Some(userAnswers))
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
-
-      val jsonCountryList: Seq[JsObject] = Seq(
-        Json.obj("text" -> "Select", "value"         -> ""),
-        Json.obj("text" -> "United Kingdom", "value" -> "GB", "selected" -> false),
-        Json.obj("text" -> "San Marino", "value"     -> "SM", "selected" -> false)
-      )
-
-      val request                                = FakeRequest(GET, destinationCountryRoute)
-      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
-      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
-
-      val result = route(app, request).value
-
-      status(result) mustEqual OK
-
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj(
-        "form"        -> form,
-        "lrn"         -> lrn,
-        "mode"        -> NormalMode,
-        "countries"   -> jsonCountryList,
-        "onSubmitUrl" -> routes.DestinationCountryController.onSubmit(lrn, NormalMode).url
-      )
-
-      templateCaptor.getValue mustEqual "destinationCountry.njk"
-      jsonCaptor.getValue must containJson(expectedJson)
-    }
-
     "must populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = emptyUserAnswers
         .set(DeclarationTypePage, Option1)
@@ -140,10 +102,12 @@ class DestinationCountryControllerSpec extends SpecBase with AppWithDefaultMockF
         .set(DestinationCountryPage, CountryCode("GB"))
         .success
         .value
+
       setUserAnswers(Some(userAnswers))
+
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries(any())(any())).thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(GET, destinationCountryRoute)
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
@@ -176,7 +140,7 @@ class DestinationCountryControllerSpec extends SpecBase with AppWithDefaultMockF
     "must redirect to the next page when valid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries(any())(any())).thenReturn(Future.successful(countries))
 
       val request =
         FakeRequest(POST, destinationCountryRoute)
@@ -193,7 +157,7 @@ class DestinationCountryControllerSpec extends SpecBase with AppWithDefaultMockF
       setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountries(any())(any())).thenReturn(Future.successful(countries))
 
       val request                                = FakeRequest(POST, destinationCountryRoute).withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm                              = form.bind(Map("value" -> "invalid value"))

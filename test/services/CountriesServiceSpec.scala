@@ -124,6 +124,15 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAns
 
         verify(mockRefDataConnector).getCountries()(any(), any())
       }
+
+      "must return a list of sorted countries when given excluded countries" in {
+        when(mockRefDataConnector.getCountries(any())(any(), any()))
+          .thenReturn(Future.successful(countries))
+
+        service.getCountries(excludedCountries).futureValue mustBe CountryList(Seq(country2, country3, country1))
+
+        verify(mockRefDataConnector).getCountries(any())(any(), any())
+      }
     }
 
     "getTransitCountries" - {

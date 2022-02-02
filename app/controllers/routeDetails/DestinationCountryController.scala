@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.DestinationCountryFormProvider
 import models.DeclarationType.{Option1, Option4}
 import models.reference.{Country, CountryCode}
-import models.{CountryList, LocalReferenceNumber, Mode}
+import models.{CountryList, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import pages.DeclarationTypePage
@@ -55,42 +55,35 @@ class DestinationCountryController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
+  private def excludedCountries(userAnswers: UserAnswers): Seq[CountryCode] = userAnswers.get(DeclarationTypePage) match {
+    case Some(Option1) | Some(Option4) => Seq(CountryCode("SM"))
+    case _                             => Seq.empty
+  }
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      countriesService.getCountries() flatMap {
-        fullCountryList =>
-          val countryList = request.userAnswers.get(DeclarationTypePage) match {
-            case Some(Option1) | Some(Option4) =>
-              CountryList(fullCountryList.countries.filterNot(_.code == CountryCode("SM")))
-            case _ =>
-              fullCountryList
-          }
-          val form = formProvider(countryList)
+      countriesService.getCountries(excludedCountries(request.userAnswers)) flatMap {
+        countryCodeList =>
+          val form = formProvider(countryCodeList)
 
           val preparedForm = request.userAnswers
             .get(DestinationCountryPage)
-            .flatMap(countryList.getCountry)
+            .flatMap(countryCodeList.getCountry)
             .map(form.fill)
             .getOrElse(form)
 
-          renderPage(lrn, mode, preparedForm, countryList.countries, Results.Ok)
+          renderPage(lrn, mode, preparedForm, countryCodeList.countries, Results.Ok)
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      countriesService.getCountries() flatMap {
-        fullCountryList =>
-          val countryList = request.userAnswers.get(DeclarationTypePage) match {
-            case decType if decType.contains(Option1) || decType.contains(Option4) =>
-              CountryList(fullCountryList.countries.filterNot(_.code == CountryCode("SM")))
-            case _ =>
-              fullCountryList
-          }
-          formProvider(countryList)
+      countriesService.getCountries(excludedCountries(request.userAnswers)) flatMap {
+        countryCodeList =>
+          formProvider(countryCodeList)
             .bindFromRequest()
             .fold(
-              formWithErrors => renderPage(lrn, mode, formWithErrors, countryList.countries, Results.BadRequest),
+              formWithErrors => renderPage(lrn, mode, formWithErrors, countryCodeList.countries, Results.BadRequest),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(DestinationCountryPage, value.code))

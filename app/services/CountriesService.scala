@@ -57,6 +57,15 @@ class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector
       .getCountries()
       .map(sort)
 
+  def getCountries(excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] = {
+    val queryParameters = excludedCountries.map(
+      countryCode => "exclude" -> countryCode.code
+    )
+    referenceDataConnector
+      .getCountries(queryParameters)
+      .map(sort)
+  }
+
   def getTransitCountries(excludedCountries: Seq[CountryCode] = Nil)(implicit hc: HeaderCarrier): Future[CountryList] = {
     val queryParameters = excludedCountries.map(
       countryCode => "excludeCountries" -> countryCode.code
