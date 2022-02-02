@@ -63,27 +63,27 @@ class DestinationCountryController @Inject() (
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       countriesService.getCountries(excludedCountries(request.userAnswers)) flatMap {
-        countryCodeList =>
-          val form = formProvider(countryCodeList)
+        countryList =>
+          val form = formProvider(countryList)
 
           val preparedForm = request.userAnswers
             .get(DestinationCountryPage)
-            .flatMap(countryCodeList.getCountry)
+            .flatMap(countryList.getCountry)
             .map(form.fill)
             .getOrElse(form)
 
-          renderPage(lrn, mode, preparedForm, countryCodeList.countries, Results.Ok)
+          renderPage(lrn, mode, preparedForm, countryList.countries, Results.Ok)
       }
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       countriesService.getCountries(excludedCountries(request.userAnswers)) flatMap {
-        countryCodeList =>
-          formProvider(countryCodeList)
+        countryList =>
+          formProvider(countryList)
             .bindFromRequest()
             .fold(
-              formWithErrors => renderPage(lrn, mode, formWithErrors, countryCodeList.countries, Results.BadRequest),
+              formWithErrors => renderPage(lrn, mode, formWithErrors, countryList.countries, Results.BadRequest),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(DestinationCountryPage, value.code))
