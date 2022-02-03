@@ -25,10 +25,6 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
   val contactHost: String                  = configuration.get[String]("contact-frontend.host")
   val contactFormServiceIdentifier: String = "CTCTraders"
 
-  override val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-
-  override val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-
   override val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated"
 
   override val signOutUrl: String = configuration.get[String]("urls.logoutContinue") + configuration.get[String]("urls.feedback")
@@ -39,8 +35,6 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
 }
 
 trait RenderConfig {
-  def reportAProblemNonJSUrl: String
-  def reportAProblemPartialUrl: String
   def betaFeedbackUnauthenticatedUrl: String
   def signOutUrl: String
   def timeoutSeconds: String
