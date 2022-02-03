@@ -23,11 +23,7 @@ import play.api.Configuration
 class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderConfig {
 
   val contactHost: String                  = configuration.get[String]("contact-frontend.host")
-  val contactFormServiceIdentifier: String = "CTCTrader"
-
-  override val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-
-  override val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  val contactFormServiceIdentifier: String = "CTCTraders"
 
   override val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated"
 
@@ -39,8 +35,6 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
 }
 
 trait RenderConfig {
-  def reportAProblemNonJSUrl: String
-  def reportAProblemPartialUrl: String
   def betaFeedbackUnauthenticatedUrl: String
   def signOutUrl: String
   def timeoutSeconds: String
