@@ -23,7 +23,7 @@ import play.api.Configuration
 class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderConfig {
 
   val contactHost: String                  = configuration.get[String]("contact-frontend.host")
-  val contactFormServiceIdentifier: String = "CTCTrader"
+  val contactFormServiceIdentifier: String = "CTCTraders"
 
   override val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
