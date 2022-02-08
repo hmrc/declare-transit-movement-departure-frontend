@@ -20,11 +20,13 @@ import cats.data.OptionT
 import cats.implicits._
 import controllers.actions._
 import forms.MovementDestinationCountryFormProvider
-import models.reference.Country
-import models.{LocalReferenceNumber, Mode}
+import models.DeclarationType.{Option1, Option4}
+import models.reference.{Country, CountryCode}
+import models.{LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.RouteDetails
 import pages.routeDetails.MovementDestinationCountryPage
+import pages.{DeclarationTypePage, OfficeOfDeparturePage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -58,12 +60,20 @@ class MovementDestinationCountryController @Inject() (
     with NunjucksSupport
     with Logging {
 
+  private def excludeSM(userAnswers: UserAnswers): Seq[CountryCode] = {
+    val countryCode: Option[CountryCode] = userAnswers.get(OfficeOfDeparturePage).map(_.countryId)
+    (userAnswers.get(DeclarationTypePage), countryCode) match {
+      case (Some(Option1) | Some(Option4), Some(CountryCode("XI"))) => Seq(CountryCode("SM"))
+      case _                                                        => Seq.empty
+    }
+  }
+
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countryList       <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries))
+          countryList       <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries ++ excludeSM(request.userAnswers)))
           preparedForm = request.userAnswers
             .get(MovementDestinationCountryPage)
             .flatMap(countryList.getCountry)
@@ -82,7 +92,7 @@ class MovementDestinationCountryController @Inject() (
       (
         for {
           excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
-          countryList       <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries))
+          countryList       <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries ++ excludeSM(request.userAnswers)))
           page <- OptionT.liftF(
             formProvider(countryList)
               .bindFromRequest()
