@@ -19,9 +19,11 @@ package services
 import base.SpecBase
 import commonTestUtils.UserAnswersSpecHelper
 import controllers.routeDetails.{alwaysExcludedTransitCountries, gbExcludedCountries}
+import models.DeclarationType._
 import models.reference.{CountryCode, CustomsOffice}
+import org.scalacheck.Gen
 import org.scalatest.matchers.must.Matchers
-import pages.OfficeOfDeparturePage
+import pages.{DeclarationTypePage, OfficeOfDeparturePage}
 
 class ExcludedCountriesServiceSpec extends SpecBase with Matchers with UserAnswersSpecHelper {
 
@@ -56,6 +58,58 @@ class ExcludedCountriesServiceSpec extends SpecBase with Matchers with UserAnswe
       "must return none when OfficeOfDeparturePage is not defined" in {
 
         val result = ExcludedCountriesService.routeDetailsExcludedCountries(emptyUserAnswers)
+
+        result mustBe None
+      }
+    }
+
+    "movementDestinationCountryExcludedCountries" - {
+
+      "must return NI excluded countries and also San Marino when OfficeOfDeparturePage is 'XI' and DeclarationTypePage is Option 1 or Option 4" in {
+
+        val declarationType = Gen.oneOf(Option1, Option4).sample.value
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+          .unsafeSetVal(DeclarationTypePage)(declarationType)
+
+        val expectedResult = alwaysExcludedTransitCountries :+ CountryCode("SM")
+
+        val result = ExcludedCountriesService.movementDestinationCountryExcludedCountries(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "must only return NI excluded countries when OfficeOfDeparturePage is 'XI' and DeclarationTypePage is Option 2 or Option 3" in {
+
+        val declarationType = Gen.oneOf(Option2, Option3).sample.value
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+          .unsafeSetVal(DeclarationTypePage)(declarationType)
+
+        val expectedResult = alwaysExcludedTransitCountries
+
+        val result = ExcludedCountriesService.movementDestinationCountryExcludedCountries(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "must only return GB excluded countries when OfficeOfDeparturePage anything else" in {
+
+        val userAnswers = emptyUserAnswers
+          .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
+
+        val expectedResult = alwaysExcludedTransitCountries ++ gbExcludedCountries
+
+        val result = ExcludedCountriesService.movementDestinationCountryExcludedCountries(userAnswers)
+
+        result.value mustBe expectedResult
+      }
+
+      "must return none when OfficeOfDeparturePage and Declaration type are not defined" in {
+
+        val result = ExcludedCountriesService.movementDestinationCountryExcludedCountries(emptyUserAnswers)
 
         result mustBe None
       }

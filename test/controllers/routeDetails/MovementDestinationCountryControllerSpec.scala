@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.MovementDestinationCountryFormProvider
 import matchers.JsonMatchers
-import models.DeclarationType.{Option1, Option2, Option3, Option4}
+import models.DeclarationType._
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.userAnswerScenarios.Scenario1.UserAnswersSpecHelperOps
 import models.{CountryList, NormalMode}
@@ -100,7 +100,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
       verify(mockCountriesService, times(1))
-        .getDestinationCountries(any(), eqTo(alwaysExcludedTransitCountries ++ Seq(CountryCode("SM"))))(any())
+        .getDestinationCountries(any(), eqTo(alwaysExcludedTransitCountries :+ CountryCode("SM")))(any())
 
       val expectedJson = Json.obj(
         "form"        -> form(countriesExcludingSM),

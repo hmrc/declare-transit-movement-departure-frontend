@@ -17,9 +17,10 @@
 package services
 
 import controllers.routeDetails.{alwaysExcludedTransitCountries, gbExcludedCountries}
+import models.DeclarationType.{Option1, Option4}
 import models.UserAnswers
 import models.reference.CountryCode
-import pages.OfficeOfDeparturePage
+import pages.{DeclarationTypePage, OfficeOfDeparturePage}
 
 object ExcludedCountriesService {
 
@@ -27,6 +28,17 @@ object ExcludedCountriesService {
     _.countryId.code match {
       case "XI" => alwaysExcludedTransitCountries
       case _    => alwaysExcludedTransitCountries ++ gbExcludedCountries
+    }
+  }
+
+  def movementDestinationCountryExcludedCountries(userAnswers: UserAnswers): Option[Seq[CountryCode]] = userAnswers.get(OfficeOfDeparturePage).map {
+    _.countryId.code match {
+      case "XI" =>
+        userAnswers.get(DeclarationTypePage) match {
+          case Some(Option1) | Some(Option4) => alwaysExcludedTransitCountries :+ CountryCode("SM")
+          case _                             => alwaysExcludedTransitCountries
+        }
+      case _ => alwaysExcludedTransitCountries ++ gbExcludedCountries
     }
   }
 }
