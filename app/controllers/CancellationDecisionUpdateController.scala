@@ -51,11 +51,17 @@ class CancellationDecisionUpdateController @Inject() (
     implicit request =>
       departureMessageService.cancellationDecisionUpdateMessage(departureId).flatMap {
         case Some(message) =>
+          val cancellationOutcome = (message.cancellationDecision, message.cancellationInitiatedBy) match {
+            case (Some(0), 0) => "cancellationDecison.cancellationRejected"
+            case _            => "cancellationDecison.declarationCancelled"
+          }
           val json = Json.obj(
             "cancellationDecisionUpdateMessage" -> cancellationDecisionUpdateContent(message),
             "contactUrl"                        -> appConfig.nctsEnquiriesUrl,
-            "decision"                          -> cancellationDecision(message)
+            "decision"                          -> cancellationDecision(message),
+            "cancellationOutcome"               -> cancellationOutcome
           )
+
           renderer.render("cancellationDecisionUpdate.njk", json).map(Ok(_))
         case _ =>
           renderTechnicalDifficultiesPage
