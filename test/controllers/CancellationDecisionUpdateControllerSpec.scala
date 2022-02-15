@@ -25,7 +25,7 @@ import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsObject, JsString, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
@@ -50,7 +50,7 @@ class CancellationDecisionUpdateControllerSpec extends SpecBase with AppWithDefa
 
   "CancellationDecsionUpdate Controller" - {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET when cancellation is not initiated by Customs and cancellation decision is Yes" in {
       val message = CancellationDecisionUpdateMessage("", Some(LocalDate.parse("2019-09-12")), 0, Some(1), LocalDate.parse("2019-09-12"), Some(""))
 
       when(mockDepartureMessageService.cancellationDecisionUpdateMessage(any())(any(), any()))
@@ -70,12 +70,74 @@ class CancellationDecisionUpdateControllerSpec extends SpecBase with AppWithDefa
       status(result) mustEqual OK
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-
-      val expectedJson = Json.obj()
+      val cancellationOutcome = "cancellationDecision.declarationCancelled"
+      val expectedJson = Json.obj(
+        "cancellationOutcome" -> cancellationOutcome
+      )
 
       templateCaptor.getValue mustEqual "cancellationDecisionUpdate.njk"
       jsonCaptor.getValue must containJson(expectedJson)
+      jsonCaptor.getValue.values must contain(JsString(cancellationOutcome))
+    }
 
+    "return OK and the correct view for a GET when cancellation is not initiated by Customs and Cancellation decision  is No" in {
+      val message = CancellationDecisionUpdateMessage("", Some(LocalDate.parse("2019-09-12")), 0, Some(0), LocalDate.parse("2019-09-12"), Some(""))
+
+      when(mockDepartureMessageService.cancellationDecisionUpdateMessage(any())(any(), any()))
+        .thenReturn(Future.successful(Some(message)))
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      setUserAnswers(Some(emptyUserAnswers))
+
+      val request                                = FakeRequest(GET, routes.CancellationDecisionUpdateController.onPageLoad(departureId).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      val cancellationOutcome = "cancellationDecision.cancellationRejected"
+      val expectedJson = Json.obj(
+        "cancellationOutcome" -> cancellationOutcome
+      )
+
+      templateCaptor.getValue mustEqual "cancellationDecisionUpdate.njk"
+      jsonCaptor.getValue must containJson(expectedJson)
+      jsonCaptor.getValue.values must contain(JsString(cancellationOutcome))
+    }
+
+    "return OK and the correct view for a GET when cancellation is initiated by Customs" in {
+      val message = CancellationDecisionUpdateMessage("", Some(LocalDate.parse("2019-09-12")), 1, Some(0), LocalDate.parse("2019-09-12"), Some(""))
+
+      when(mockDepartureMessageService.cancellationDecisionUpdateMessage(any())(any(), any()))
+        .thenReturn(Future.successful(Some(message)))
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      setUserAnswers(Some(emptyUserAnswers))
+
+      val request                                = FakeRequest(GET, routes.CancellationDecisionUpdateController.onPageLoad(departureId).url)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      val cancellationOutcome = "cancellationDecision.declarationCancelled"
+      val expectedJson = Json.obj(
+        "cancellationOutcome" -> cancellationOutcome
+      )
+
+      templateCaptor.getValue mustEqual "cancellationDecisionUpdate.njk"
+      jsonCaptor.getValue must containJson(expectedJson)
+      jsonCaptor.getValue.values must contain(JsString(cancellationOutcome))
     }
   }
 

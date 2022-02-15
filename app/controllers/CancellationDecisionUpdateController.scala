@@ -52,8 +52,8 @@ class CancellationDecisionUpdateController @Inject() (
       departureMessageService.cancellationDecisionUpdateMessage(departureId).flatMap {
         case Some(message) =>
           val cancellationOutcome = (message.cancellationDecision, message.cancellationInitiatedBy) match {
-            case (Some(0), 0) => "cancellationDecison.cancellationRejected"
-            case _            => "cancellationDecison.declarationCancelled"
+            case (Some(0), 0) => "cancellationDecision.cancellationRejected"
+            case _            => "cancellationDecision.declarationCancelled"
           }
           val json = Json.obj(
             "cancellationDecisionUpdateMessage" -> cancellationDecisionUpdateContent(message),
