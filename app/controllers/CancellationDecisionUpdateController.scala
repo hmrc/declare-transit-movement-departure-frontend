@@ -53,13 +53,13 @@ class CancellationDecisionUpdateController @Inject() (
         case Some(message) =>
           val cancellationOutcome = (message.cancellationDecision, message.cancellationInitiatedBy) match {
             case (Some(0), 0) => "cancellationRejected"
-            case _ => "declarationCancelled"
+            case _            => "declarationCancelled"
           }
           val json = Json.obj(
             "cancellationDecisionUpdateMessage" -> cancellationDecisionUpdateContent(message),
-            "contactUrl" -> appConfig.nctsEnquiriesUrl,
-            "decision" -> cancellationDecision(message),
-            "cancellationOutcome" -> s"cancellationDecision.$cancellationOutcome"
+            "contactUrl"                        -> appConfig.nctsEnquiriesUrl,
+            "decision"                          -> cancellationDecision(message),
+            "cancellationOutcome"               -> s"cancellationDecision.$cancellationOutcome"
           )
 
           renderer.render("cancellationDecisionUpdate.njk", json).map(Ok(_))
@@ -99,8 +99,8 @@ class CancellationDecisionUpdateController @Inject() (
     val rowsWithJustification: Seq[Row] = {
       if (message.cancellationJustification.nonEmpty) {
         rowsWithDecisionDate :+ Row(Key(msg"cancellationDecisionUpdate.cancellationJustification"),
-          Value(lit"${message.cancellationJustification.get}"),
-          Seq.empty
+                                    Value(lit"${message.cancellationJustification.get}"),
+                                    Seq.empty
         )
       } else {
         rowsWithDecisionDate
@@ -111,5 +111,5 @@ class CancellationDecisionUpdateController @Inject() (
   }
 
   def cancellationDecision(message: CancellationDecisionUpdateMessage): Int =
-        message.cancellationDecision.getOrElse(2)
+    message.cancellationDecision.getOrElse(2)
 }
