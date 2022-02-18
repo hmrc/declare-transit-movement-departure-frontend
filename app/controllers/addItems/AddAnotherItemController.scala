@@ -16,6 +16,7 @@
 
 package controllers.addItems
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfItems
 import forms.addItems.AddAnotherItemFormProvider
@@ -34,8 +35,8 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.AddItemsCheckYourAnswersHelper
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherItemController @Inject() (
@@ -48,7 +49,8 @@ class AddAnotherItemController @Inject() (
   checkDependentSection: CheckDependentSectionAction,
   formProvider: AddAnotherItemFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -96,12 +98,14 @@ class AddAnotherItemController @Inject() (
 
     val singularOrPlural = if (numberOfItems == 1) "singular" else "plural"
     val json = Json.obj(
-      "form"      -> form,
-      "lrn"       -> lrn,
-      "pageTitle" -> msg"addAnotherItem.title.$singularOrPlural".withArgs(numberOfItems),
-      "heading"   -> msg"addAnotherItem.heading.$singularOrPlural".withArgs(numberOfItems),
-      "itemRows"  -> itemRows,
-      "radios"    -> Radios.yesNo(form("value"))
+      "form"                          -> form,
+      "lrn"                           -> lrn,
+      "pageTitle"                     -> msg"addAnotherItem.title.$singularOrPlural".withArgs(numberOfItems),
+      "heading"                       -> msg"addAnotherItem.heading.$singularOrPlural".withArgs(numberOfItems),
+      "itemRows"                      -> itemRows,
+      "maxLimitReached"               -> (numberOfItems >= config.maxItems),
+      "redirectUrlOnReachingMaxLimit" -> controllers.routes.DeclarationSummaryController.onPageLoad(lrn).url,
+      "radios"                        -> Radios.yesNo(form("value"))
     )
 
     renderer.render("addItems/addAnotherItem.njk", json)

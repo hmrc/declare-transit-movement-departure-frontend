@@ -63,4 +63,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val enrolmentProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
 
+  lazy val maxTransitOffices: Int = configuration.get[Int]("limits.maxTransitOffices")
+  lazy val maxItems: Int          = configuration.get[Int]("limits.maxItems")
 }
