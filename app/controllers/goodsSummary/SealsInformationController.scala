@@ -54,7 +54,7 @@ class SealsInformationController @Inject() (
     with NunjucksSupport {
 
   def allowMoreSeals(ua: UserAnswers): Boolean =
-    ua.get(DeriveNumberOfSeals).getOrElse(0) < config.maxOfficialCustomsSeals
+    ua.get(DeriveNumberOfSeals).getOrElse(0) < config.maxSeals
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>

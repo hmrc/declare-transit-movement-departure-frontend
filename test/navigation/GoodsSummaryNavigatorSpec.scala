@@ -28,12 +28,15 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
 import queries.SealsQuery
-
 import java.time.LocalDate
 
-class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+import config.FrontendAppConfig
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-  val navigator = new GoodsSummaryNavigator
+class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuiceOneAppPerSuite {
+
+  val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+  val navigator         = new GoodsSummaryNavigator(frontendAppConfig)
   // format: off
   "GoodsSummaryNavigator" - {
 
@@ -217,10 +220,20 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from SealsInformationPage to CYA when answer is undefined" in {
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            lazy val updatedAnswers = answers.remove(SealsInformationPage).toOption.value
+
+      "must go from SealsInformationPage to CYA when answer we've reached the max no of Seals" in {
+        forAll(arbitrary[UserAnswers], arbitrary[SealDomain], arbitrary[SealDomain], arbitrary[SealDomain]) {
+          (userAnswers, seal1, seal2, seal3) =>
+            val updatedAnswers = userAnswers
+              .set(SealIdDetailsPage(Index(0)), seal1)
+              .success
+              .value
+              .set(SealIdDetailsPage(Index(1)), seal2)
+              .success
+              .value
+              .set(SealIdDetailsPage(Index(2)), seal3)
+              .success
+              .value
 
             navigator
               .nextPage(SealsInformationPage, NormalMode, updatedAnswers)
@@ -316,8 +329,8 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "SealsInformationController when we already have 10 seals" in {
-          forAll(arbitrary[UserAnswers], Gen.listOfN(10, arbitrary[SealDomain])) {
+        "SealsInformationController when we already have max seals" in {
+          forAll(arbitrary[UserAnswers], Gen.listOfN(frontendAppConfig.maxSeals, arbitrary[SealDomain])) {
             (userAnswers, seals) =>
             val updateAnswers = userAnswers
               .set(SealsQuery(), seals).success.value
