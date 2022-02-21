@@ -33,7 +33,7 @@ import play.twirl.api.Html
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-import utils.{amPmAsJson, AddSealCheckYourAnswersHelper}
+import utils.AddSealCheckYourAnswersHelper
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -54,7 +54,7 @@ class SealsInformationController @Inject() (
     with NunjucksSupport {
 
   def allowMoreSeals(ua: UserAnswers): Boolean =
-    ua.get(DeriveNumberOfSeals).getOrElse(0) < config.maxSeals
+    ua.get(DeriveNumberOfSeals).getOrElse(0) < config.maxOfficialCustomsSeals
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
@@ -63,7 +63,7 @@ class SealsInformationController @Inject() (
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      formProvider(allowMoreSeals((request.userAnswers)))
+      formProvider(allowMoreSeals(request.userAnswers))
         .bindFromRequest()
         .fold(
           formWithErrors =>
@@ -86,9 +86,6 @@ class SealsInformationController @Inject() (
     }
 
     val singularOrPlural = if (numberOfSeals == 1) "singular" else "plural"
-    val onSubmit = if (numberOfSeals < 10) {
-      routes.SealsInformationController.onSubmit(lrn, mode).url
-    } else { routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url }
 
     val json = Json.obj(
       "form"           -> form,
@@ -97,9 +94,9 @@ class SealsInformationController @Inject() (
       "pageTitle"      -> msg"sealsInformation.title.$singularOrPlural".withArgs(numberOfSeals),
       "heading"        -> msg"sealsInformation.heading.$singularOrPlural".withArgs(numberOfSeals),
       "seals"          -> sealsRows,
-      "radios"         -> Radios.yesNo(form("value")),
       "allowMoreSeals" -> allowMoreSeals(request.userAnswers),
-      "onSubmitUrl"    -> onSubmit
+      "radios"         -> Radios.yesNo(form("value")),
+      "allowMoreSeals" -> allowMoreSeals(request.userAnswers)
     )
 
     renderer.render("sealsInformation.njk", json)
