@@ -17,6 +17,7 @@
 package navigation
 
 import cats.implicits._
+import config.FrontendAppConfig
 import controllers.guaranteeDetails.routes
 import derivable.DeriveNumberOfGuarantees
 import models.DeclarationType.Option4
@@ -27,11 +28,10 @@ import pages.guaranteeDetails._
 import pages.routeDetails.DestinationOfficePage
 import pages._
 import play.api.mvc.Call
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class GuaranteeDetailsNavigator @Inject() () extends Navigator {
+class GuaranteeDetailsNavigator @Inject() (config: FrontendAppConfig) extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
     case AddAnotherGuaranteePage                  => ua => addAnotherGuaranteeRoute(ua)
@@ -107,7 +107,7 @@ class GuaranteeDetailsNavigator @Inject() () extends Navigator {
     val addAnotherGuarantee = ua.get(AddAnotherGuaranteePage)
 
     count match {
-      case AddAnotherGuaranteePage.maxAllowedGuarantees => Some(controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn))
+      case config.maxGuarantees => Some(controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn))
       case _ =>
         (declarationType, addAnotherGuarantee).tupled.map {
           case (Option4, true) => routes.TIRGuaranteeReferenceController.onPageLoad(ua.lrn, Index(count), NormalMode)

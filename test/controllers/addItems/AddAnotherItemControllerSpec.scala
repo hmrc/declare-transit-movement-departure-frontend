@@ -41,7 +41,7 @@ import scala.concurrent.Future
 class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider = new AddAnotherItemFormProvider()
-  val form         = formProvider()
+  val form         = formProvider(false)
 
   lazy val addAnotherItemRoute = routes.AddAnotherItemController.onPageLoad(lrn).url
 
@@ -69,13 +69,12 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"                          -> form,
-        "lrn"                           -> lrn,
-        "pageTitle"                     -> msg"addAnotherItem.title.singular".withArgs(1),
-        "heading"                       -> msg"addAnotherItem.heading.singular".withArgs(1),
-        "maxLimitReached"               -> false,
-        "redirectUrlOnReachingMaxLimit" -> controllers.routes.DeclarationSummaryController.onPageLoad(lrn).url,
-        "radios"                        -> Radios.yesNo(form("value"))
+        "form"            -> form,
+        "lrn"             -> lrn,
+        "pageTitle"       -> msg"addAnotherItem.title.singular".withArgs(1),
+        "heading"         -> msg"addAnotherItem.heading.singular".withArgs(1),
+        "maxLimitReached" -> false,
+        "radios"          -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
@@ -106,13 +105,12 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"                          -> form,
-        "lrn"                           -> lrn,
-        "pageTitle"                     -> msg"addAnotherItem.title.plural".withArgs(1),
-        "heading"                       -> msg"addAnotherItem.heading.plural".withArgs(1),
-        "maxLimitReached"               -> false,
-        "redirectUrlOnReachingMaxLimit" -> controllers.routes.DeclarationSummaryController.onPageLoad(lrn).url,
-        "radios"                        -> Radios.yesNo(form("value"))
+        "form"            -> form,
+        "lrn"             -> lrn,
+        "pageTitle"       -> msg"addAnotherItem.title.plural".withArgs(1),
+        "heading"         -> msg"addAnotherItem.heading.plural".withArgs(1),
+        "maxLimitReached" -> false,
+        "radios"          -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
@@ -146,13 +144,12 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"                          -> form,
-        "lrn"                           -> lrn,
-        "pageTitle"                     -> msg"addAnotherItem.title.plural".withArgs(1),
-        "heading"                       -> msg"addAnotherItem.heading.plural".withArgs(1),
-        "maxLimitReached"               -> true,
-        "redirectUrlOnReachingMaxLimit" -> controllers.routes.DeclarationSummaryController.onPageLoad(lrn).url,
-        "radios"                        -> Radios.yesNo(form("value"))
+        "form"            -> form,
+        "lrn"             -> lrn,
+        "pageTitle"       -> msg"addAnotherItem.title.plural".withArgs(1),
+        "heading"         -> msg"addAnotherItem.heading.plural".withArgs(1),
+        "maxLimitReached" -> true,
+        "radios"          -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
@@ -161,7 +158,36 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
     }
 
     "must redirect to the next page when valid data is submitted" in {
+
       setUserAnswers(Some(emptyUserAnswers))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val request =
+        FakeRequest(POST, addAnotherItemRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+    }
+
+    "must redirect to the next page when valid data is not submitted but we've hit the max allowed items" in {
+      val userAnswers = emptyUserAnswers
+        .set(ItemDescriptionPage(index), "test")
+        .success
+        .value
+        .set(ItemDescriptionPage(Index(1)), "test")
+        .success
+        .value
+        .set(ItemDescriptionPage(Index(2)), "test")
+        .success
+        .value
+
+      setUserAnswers(Some(userAnswers))
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -196,13 +222,12 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"                          -> boundForm,
-        "pageTitle"                     -> msg"addAnotherItem.title.singular".withArgs(1),
-        "heading"                       -> msg"addAnotherItem.heading.singular".withArgs(1),
-        "lrn"                           -> lrn,
-        "maxLimitReached"               -> false,
-        "redirectUrlOnReachingMaxLimit" -> controllers.routes.DeclarationSummaryController.onPageLoad(lrn).url,
-        "radios"                        -> Radios.yesNo(boundForm("value"))
+        "form"            -> boundForm,
+        "pageTitle"       -> msg"addAnotherItem.title.singular".withArgs(1),
+        "heading"         -> msg"addAnotherItem.heading.singular".withArgs(1),
+        "lrn"             -> lrn,
+        "maxLimitReached" -> false,
+        "radios"          -> Radios.yesNo(boundForm("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"

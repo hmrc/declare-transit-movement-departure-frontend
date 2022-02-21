@@ -21,8 +21,8 @@ import play.api.data.Form
 
 class AddAnotherItemFormProvider extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(maxItemsReached: Boolean): Form[Boolean] =
     Form(
-      "value" -> boolean("addAnotherItem.error.required")
+      "value" -> mandatoryIfBoolean(!maxItemsReached, "addAnotherItem.error.required")
     )
 }

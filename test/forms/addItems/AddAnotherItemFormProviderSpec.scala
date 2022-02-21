@@ -23,22 +23,24 @@ class AddAnotherItemFormProviderSpec extends BooleanFieldBehaviours {
 
   private val requiredKey = "addAnotherItem.error.required"
   private val invalidKey  = "error.boolean"
-  private val form        = new AddAnotherItemFormProvider()()
+  private val form        = new AddAnotherItemFormProvider()
 
   ".value" - {
 
     val fieldName = "value"
 
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
+    "when max limit not hit" - {
+      behave like booleanField(
+        form(false),
+        fieldName,
+        invalidError = FormError(fieldName, invalidKey)
+      )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+      behave like mandatoryField(
+        form(false),
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
+    }
   }
 }

@@ -23,7 +23,6 @@ import navigation.Navigator
 import pages._
 import pages.addItems._
 import play.api.mvc.Call
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton

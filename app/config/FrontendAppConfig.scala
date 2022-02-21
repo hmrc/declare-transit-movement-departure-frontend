@@ -65,4 +65,5 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val maxTransitOffices: Int = configuration.get[Int]("limits.maxTransitOffices")
   lazy val maxItems: Int          = configuration.get[Int]("limits.maxItems")
+  lazy val maxGuarantees: Int     = configuration.get[Int]("limits.maxGuarantees")
 }

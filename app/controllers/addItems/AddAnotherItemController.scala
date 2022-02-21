@@ -21,7 +21,7 @@ import controllers.actions._
 import derivable.DeriveNumberOfItems
 import forms.addItems.AddAnotherItemFormProvider
 import models.requests.DataRequest
-import models.{DependentSection, Index, LocalReferenceNumber, NormalMode}
+import models.{DependentSection, Index, LocalReferenceNumber, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItems
 import pages.addItems.AddAnotherItemPage
@@ -56,15 +56,13 @@ class AddAnotherItemController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
-
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] =
     (identify
       andThen getData(lrn)
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        renderPage(lrn, form).map(Ok(_))
+        renderPage(lrn, formProvider(maxItemsReached(numberOfItems(request.userAnswers)))).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] =
@@ -73,7 +71,7 @@ class AddAnotherItemController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        form
+        formProvider(maxItemsReached(numberOfItems(request.userAnswers)))
           .bindFromRequest()
           .fold(
             formWithErrors => renderPage(lrn, formWithErrors).map(BadRequest(_)),
@@ -88,26 +86,30 @@ class AddAnotherItemController @Inject() (
   private def renderPage(lrn: LocalReferenceNumber, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
     val cyaHelper             = new AddItemsCheckYourAnswersHelper(request.userAnswers, NormalMode)
-    val numberOfItems         = request.userAnswers.get(DeriveNumberOfItems).getOrElse(0)
-    val indexList: Seq[Index] = List.range(0, numberOfItems).map(Index(_))
+    val noOfItems             = numberOfItems(request.userAnswers)
+    val indexList: Seq[Index] = List.range(0, noOfItems).map(Index(_))
 
     val itemRows = indexList.map {
       index =>
         cyaHelper.itemRow(index)
     }
 
-    val singularOrPlural = if (numberOfItems == 1) "singular" else "plural"
+    val singularOrPlural = if (noOfItems == 1) "singular" else "plural"
     val json = Json.obj(
-      "form"                          -> form,
-      "lrn"                           -> lrn,
-      "pageTitle"                     -> msg"addAnotherItem.title.$singularOrPlural".withArgs(numberOfItems),
-      "heading"                       -> msg"addAnotherItem.heading.$singularOrPlural".withArgs(numberOfItems),
-      "itemRows"                      -> itemRows,
-      "maxLimitReached"               -> (numberOfItems >= config.maxItems),
-      "redirectUrlOnReachingMaxLimit" -> controllers.routes.DeclarationSummaryController.onPageLoad(lrn).url,
-      "radios"                        -> Radios.yesNo(form("value"))
+      "form"            -> form,
+      "lrn"             -> lrn,
+      "pageTitle"       -> msg"addAnotherItem.title.$singularOrPlural".withArgs(noOfItems),
+      "heading"         -> msg"addAnotherItem.heading.$singularOrPlural".withArgs(noOfItems),
+      "itemRows"        -> itemRows,
+      "maxLimitReached" -> maxItemsReached(noOfItems),
+      "radios"          -> Radios.yesNo(form("value"))
     )
 
     renderer.render("addItems/addAnotherItem.njk", json)
   }
+
+  def numberOfItems(userAnswers: UserAnswers): Int = userAnswers.get(DeriveNumberOfItems).getOrElse(0)
+
+  def maxItemsReached(numberOfItems: Int): Boolean =
+    numberOfItems >= config.maxItems
 }
