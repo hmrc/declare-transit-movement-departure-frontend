@@ -39,6 +39,7 @@
                       rows: seals
                   }) }}
 
+        {% if allowMoreSeals %}
           {{ govukRadios({
             name: 'value',
             classes: "govuk-radios--inline",
@@ -52,11 +53,13 @@
             items: radios,
             errorMessage: form.value.error
           }) }}
+        {% endif %}
 
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id:"submit"}
           }) }}
+
 
         </form>
 
