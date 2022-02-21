@@ -53,6 +53,10 @@
             items: radios,
             errorMessage: form.value.error
           }) }}
+
+        {% else %}
+          <p class="govuk-body" data-testId="maxLimit"> {{ messages('maximumSealsInformation.paragraph') }} </p>
+
         {% endif %}
 
           {{ govukButton({

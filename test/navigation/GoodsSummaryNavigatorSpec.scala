@@ -217,14 +217,14 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from SealsInformationPage to session expired when answer is undefined" in {
+      "must go from SealsInformationPage to CYA when answer is undefined" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             lazy val updatedAnswers = answers.remove(SealsInformationPage).toOption.value
 
             navigator
               .nextPage(SealsInformationPage, NormalMode, updatedAnswers)
-              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 
@@ -462,14 +462,14 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from SealsInformationPage to session expired when answer is undefined" in {
+      "must go from SealsInformationPage to CYA when answer is undefined" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             lazy val updatedAnswers = answers.remove(SealsInformationPage).toOption.value
 
             navigator
               .nextPage(SealsInformationPage, CheckMode, updatedAnswers)
-              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
+              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
         }
       }
 

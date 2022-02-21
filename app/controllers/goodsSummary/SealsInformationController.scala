@@ -83,7 +83,6 @@ class SealsInformationController @Inject() (
     val sealsRows = listOfSealsIndex.flatMap {
       index =>
         new AddSealCheckYourAnswersHelper(request.userAnswers, mode).sealRow(index)
-
     }
 
     val singularOrPlural = if (numberOfSeals == 1) "singular" else "plural"
@@ -92,21 +91,18 @@ class SealsInformationController @Inject() (
     } else { routes.GoodsSummaryCheckYourAnswersController.onPageLoad(lrn).url }
 
     val json = Json.obj(
-      "form"        -> form,
-      "mode"        -> mode,
-      "lrn"         -> lrn,
-      "pageTitle"   -> msg"sealsInformation.title.$singularOrPlural".withArgs(numberOfSeals),
-      "heading"     -> msg"sealsInformation.heading.$singularOrPlural".withArgs(numberOfSeals),
-      "seals"       -> sealsRows,
-      "radios"      -> Radios.yesNo(form("value")),
-      "onSubmitUrl" -> onSubmit
+      "form"           -> form,
+      "mode"           -> mode,
+      "lrn"            -> lrn,
+      "pageTitle"      -> msg"sealsInformation.title.$singularOrPlural".withArgs(numberOfSeals),
+      "heading"        -> msg"sealsInformation.heading.$singularOrPlural".withArgs(numberOfSeals),
+      "seals"          -> sealsRows,
+      "radios"         -> Radios.yesNo(form("value")),
+      "allowMoreSeals" -> allowMoreSeals(request.userAnswers),
+      "onSubmitUrl"    -> onSubmit
     )
 
-    if (numberOfSeals < 10) {
-      renderer.render("sealsInformation.njk", json)
-    } else {
-      renderer.render("maximumSealsInformation.njk", json)
+    renderer.render("sealsInformation.njk", json)
 
-    }
   }
 }

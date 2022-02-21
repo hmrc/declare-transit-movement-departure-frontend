@@ -38,7 +38,7 @@ class GoodsSummaryNavigator @Inject() () extends Navigator {
     case AddSealsPage                   => ua => Some(addSealsRoute(ua, NormalMode))
     case SealIdDetailsPage(_)           => ua => Some(routes.SealsInformationController.onPageLoad(ua.lrn, NormalMode))
     case AddSealsLaterPage              => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.lrn))
-    case SealsInformationPage           => ua => sealsInformationRoute(ua, NormalMode)
+    case SealsInformationPage           => ua => Some(sealsInformationRoute(ua, NormalMode))
     case ConfirmRemoveSealsPage         => ua => Some(confirmRemoveSealsRoute(ua, CheckMode))
     case ConfirmRemoveSealPage()        => ua => Some(confirmRemoveSeal(ua, NormalMode))
     case LoadingPlacePage               => ua => loadingPlaceRoute(ua)
@@ -55,7 +55,7 @@ class GoodsSummaryNavigator @Inject() () extends Navigator {
     case AddSealsPage                   => ua => Some(addSealsRoute(ua, CheckMode))
     case AddSealsLaterPage              => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.lrn))
     case SealIdDetailsPage(_)           => ua => Some(routes.SealsInformationController.onPageLoad(ua.lrn, CheckMode))
-    case SealsInformationPage           => ua => sealsInformationRoute(ua, CheckMode)
+    case SealsInformationPage           => ua => Some(sealsInformationRoute(ua, CheckMode))
     case ConfirmRemoveSealsPage         => ua => Some(confirmRemoveSealsRoute(ua, CheckMode))
     case ConfirmRemoveSealPage()        => ua => Some(confirmRemoveSeal(ua, CheckMode))
     case LoadingPlacePage               => ua => Some(routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.lrn))
@@ -109,13 +109,13 @@ class GoodsSummaryNavigator @Inject() () extends Navigator {
     }
   }
 
-  private def sealsInformationRoute(ua: UserAnswers, mode: Mode): Option[Call] = {
+  private def sealsInformationRoute(ua: UserAnswers, mode: Mode): Call = {
     val sealCount = ua.get(DeriveNumberOfSeals).getOrElse(0)
     val sealIndex = Index(sealCount)
 
-    ua.get(SealsInformationPage) map {
-      case true  => routes.SealIdDetailsController.onPageLoad(ua.lrn, sealIndex, mode)
-      case false => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.lrn)
+    ua.get(SealsInformationPage) match {
+      case Some(true) => routes.SealIdDetailsController.onPageLoad(ua.lrn, sealIndex, mode)
+      case _          => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.lrn)
     }
   }
 
