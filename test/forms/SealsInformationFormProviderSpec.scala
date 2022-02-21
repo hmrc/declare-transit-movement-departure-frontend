@@ -23,20 +23,20 @@ class SealsInformationFormProviderSpec extends BooleanFieldBehaviours {
 
   private val requiredKey = "sealsInformation.error.required"
   private val invalidKey  = "error.boolean"
-  private val form        = new SealsInformationFormProvider()()
+  private val form        = new SealsInformationFormProvider()
 
   ".value" - {
 
     val fieldName = "value"
 
     behave like booleanField(
-      form,
+      form(true),
       fieldName,
       invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(
-      form,
+      form(true),
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )

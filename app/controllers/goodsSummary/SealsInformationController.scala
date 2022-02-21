@@ -16,11 +16,12 @@
 
 package controllers.goodsSummary
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfSeals
 import forms.SealsInformationFormProvider
 import models.requests.DataRequest
-import models.{Index, LocalReferenceNumber, Mode}
+import models.{Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.GoodsSummary
 import pages.SealsInformationPage
@@ -32,7 +33,7 @@ import play.twirl.api.Html
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
-import utils.AddSealCheckYourAnswersHelper
+import utils.{amPmAsJson, AddSealCheckYourAnswersHelper}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,23 +46,24 @@ class SealsInformationController @Inject() (
   requireData: DataRequiredAction,
   formProvider: SealsInformationFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  val form = formProvider()
+  def allowMoreSeals(ua: UserAnswers): Boolean =
+    ua.get(DeriveNumberOfSeals).getOrElse(0) < config.maxSeals
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      renderPage(lrn, mode, form)
-        .map(Ok(_))
+      renderPage(lrn, mode, formProvider(allowMoreSeals(request.userAnswers))).map(Ok(_))
   }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(lrn) andThen requireData).async {
     implicit request =>
-      form
+      formProvider(allowMoreSeals((request.userAnswers)))
         .bindFromRequest()
         .fold(
           formWithErrors =>

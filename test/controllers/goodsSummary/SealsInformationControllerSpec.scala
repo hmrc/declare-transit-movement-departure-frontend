@@ -42,7 +42,7 @@ import scala.concurrent.Future
 class SealsInformationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider        = new SealsInformationFormProvider()
-  val form: Form[Boolean] = formProvider()
+  val form: Form[Boolean] = formProvider(true)
 
   lazy val sealsInformationRoute: String = routes.SealsInformationController.onPageLoad(lrn, NormalMode).url
 
