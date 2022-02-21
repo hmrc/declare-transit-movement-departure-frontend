@@ -106,14 +106,14 @@ class GuaranteeDetailsNavigator @Inject() (config: FrontendAppConfig) extends Na
     val declarationType     = ua.get(DeclarationTypePage)
     val addAnotherGuarantee = ua.get(AddAnotherGuaranteePage)
 
-    count match {
-      case config.maxGuarantees => Some(controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn))
-      case _ =>
-        (declarationType, addAnotherGuarantee).tupled.map {
-          case (Option4, true) => routes.TIRGuaranteeReferenceController.onPageLoad(ua.lrn, Index(count), NormalMode)
-          case (_, true)       => routes.GuaranteeTypeController.onPageLoad(ua.lrn, Index(count), NormalMode)
-          case (_, false)      => controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn)
-        }
+    if (count >= config.maxGuarantees)
+      Some(controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn))
+    else {
+      (declarationType, addAnotherGuarantee).tupled.map {
+        case (Option4, true) => routes.TIRGuaranteeReferenceController.onPageLoad(ua.lrn, Index(count), NormalMode)
+        case (_, true)       => routes.GuaranteeTypeController.onPageLoad(ua.lrn, Index(count), NormalMode)
+        case (_, false)      => controllers.routes.DeclarationSummaryController.onPageLoad(ua.lrn)
+      }
     }
   }
 

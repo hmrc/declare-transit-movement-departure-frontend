@@ -45,7 +45,7 @@ class AddAnotherItemViewSpec extends SingleViewSpec("addItems/addAnotherItem.njk
         "maxLimitReached" -> false
       )
     val doc = renderDocument(baseJson).futureValue
-    getByElementTestIdSelector(doc, "addItemRadio") must not be empty
+    assertContainsClass(doc, "govuk-radios")
   }
   "must not display the add another item Yes/No radio when reached maximum item limit" in {
     val baseJson =
@@ -53,6 +53,7 @@ class AddAnotherItemViewSpec extends SingleViewSpec("addItems/addAnotherItem.njk
         "maxLimitReached" -> true
       )
     val doc = renderDocument(baseJson).futureValue
-    getByElementTestIdSelector(doc, "addItemRadio") must be(empty)
+    assertContainsNoClass(doc, "govuk-radios")
+
   }
 }
