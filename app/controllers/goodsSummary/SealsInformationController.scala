@@ -94,7 +94,6 @@ class SealsInformationController @Inject() (
       "pageTitle"      -> msg"sealsInformation.title.$singularOrPlural".withArgs(numberOfSeals),
       "heading"        -> msg"sealsInformation.heading.$singularOrPlural".withArgs(numberOfSeals),
       "seals"          -> sealsRows,
-      "allowMoreSeals" -> allowMoreSeals(request.userAnswers),
       "radios"         -> Radios.yesNo(form("value")),
       "allowMoreSeals" -> allowMoreSeals(request.userAnswers)
     )
