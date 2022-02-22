@@ -86,20 +86,20 @@ class AddAnotherItemController @Inject() (
   private def renderPage(lrn: LocalReferenceNumber, form: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Html] = {
 
     val cyaHelper             = new AddItemsCheckYourAnswersHelper(request.userAnswers, NormalMode)
-    val noOfItems             = request.userAnswers.get(DeriveNumberOfItems).getOrElse(0)
-    val indexList: Seq[Index] = List.range(0, noOfItems).map(Index(_))
+    val numberOfItems         = request.userAnswers.get(DeriveNumberOfItems).getOrElse(0)
+    val indexList: Seq[Index] = List.range(0, numberOfItems).map(Index(_))
 
     val itemRows = indexList.map {
       index =>
         cyaHelper.itemRow(index)
     }
 
-    val singularOrPlural = if (noOfItems == 1) "singular" else "plural"
+    val singularOrPlural = if (numberOfItems == 1) "singular" else "plural"
     val json = Json.obj(
       "form"           -> form,
       "lrn"            -> lrn,
-      "pageTitle"      -> msg"addAnotherItem.title.$singularOrPlural".withArgs(noOfItems),
-      "heading"        -> msg"addAnotherItem.heading.$singularOrPlural".withArgs(noOfItems),
+      "pageTitle"      -> msg"addAnotherItem.title.$singularOrPlural".withArgs(numberOfItems),
+      "heading"        -> msg"addAnotherItem.heading.$singularOrPlural".withArgs(numberOfItems),
       "itemRows"       -> itemRows,
       "allowMoreItems" -> allowMoreItems(request.userAnswers),
       "radios"         -> Radios.yesNo(form("value"))
