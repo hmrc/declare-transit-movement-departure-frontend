@@ -16,10 +16,11 @@
 
 package controllers.addItems.packagesInformation
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfPackages
 import forms.addItems.AddAnotherPackageFormProvider
-import models.{DependentSection, Index, LocalReferenceNumber, Mode}
+import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsPackagesInfo
 import pages.addItems.AddAnotherPackagePage
@@ -43,13 +44,15 @@ class AddAnotherPackageController @Inject() (
   checkDependentSection: CheckDependentSectionAction,
   formProvider: AddAnotherPackageFormProvider,
   val controllerComponents: MessagesControllerComponents,
+  config: FrontendAppConfig,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  def allowMorePackages(ua: UserAnswers, itemIndex: Index): Boolean =
+    ua.get(DeriveNumberOfPackages(itemIndex)).getOrElse(0) < config.maxPackages
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
@@ -58,8 +61,8 @@ class AddAnotherPackageController @Inject() (
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
         val preparedForm = request.userAnswers.get(AddAnotherPackagePage(itemIndex)) match {
-          case None        => form
-          case Some(value) => form.fill(value)
+          case None        => formProvider(allowMorePackages(request.userAnswers, itemIndex))
+          case Some(value) => formProvider(allowMorePackages(request.userAnswers, itemIndex)).fill(value)
         }
 
         val totalTypes  = request.userAnswers.get(DeriveNumberOfPackages(itemIndex)).getOrElse(0)
@@ -68,14 +71,15 @@ class AddAnotherPackageController @Inject() (
         val singularOrPlural = if (totalTypes == 1) "singular" else "plural"
 
         val json = Json.obj(
-          "form"        -> preparedForm,
-          "mode"        -> mode,
-          "lrn"         -> lrn,
-          "itemIndex"   -> itemIndex.display,
-          "radios"      -> Radios.yesNo(preparedForm("value")),
-          "pageTitle"   -> msg"addAnotherPackage.title.$singularOrPlural".withArgs(totalTypes),
-          "heading"     -> msg"addAnotherPackage.heading.$singularOrPlural".withArgs(totalTypes),
-          "packageRows" -> packageRows
+          "form"              -> preparedForm,
+          "mode"              -> mode,
+          "lrn"               -> lrn,
+          "itemIndex"         -> itemIndex.display,
+          "radios"            -> Radios.yesNo(preparedForm("value")),
+          "pageTitle"         -> msg"addAnotherPackage.title.$singularOrPlural".withArgs(totalTypes),
+          "heading"           -> msg"addAnotherPackage.heading.$singularOrPlural".withArgs(totalTypes),
+          "allowMorePackages" -> allowMorePackages(request.userAnswers, itemIndex),
+          "packageRows"       -> packageRows
         )
 
         renderer.render("addItems/addAnotherPackage.njk", json).map(Ok(_))
@@ -87,7 +91,7 @@ class AddAnotherPackageController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        form
+        formProvider(allowMorePackages(request.userAnswers, itemIndex))
           .bindFromRequest()
           .fold(
             formWithErrors => {
@@ -98,14 +102,15 @@ class AddAnotherPackageController @Inject() (
               val singularOrPlural = if (totalTypes == 1) "singular" else "plural"
 
               val json = Json.obj(
-                "form"        -> formWithErrors,
-                "mode"        -> mode,
-                "lrn"         -> lrn,
-                "itemIndex"   -> itemIndex.display,
-                "radios"      -> Radios.yesNo(formWithErrors("value")),
-                "pageTitle"   -> msg"addAnotherPackage.title.$singularOrPlural".withArgs(totalTypes),
-                "heading"     -> msg"addAnotherPackage.heading.$singularOrPlural".withArgs(totalTypes),
-                "packageRows" -> packageRows
+                "form"              -> formWithErrors,
+                "mode"              -> mode,
+                "lrn"               -> lrn,
+                "itemIndex"         -> itemIndex.display,
+                "radios"            -> Radios.yesNo(formWithErrors("value")),
+                "pageTitle"         -> msg"addAnotherPackage.title.$singularOrPlural".withArgs(totalTypes),
+                "heading"           -> msg"addAnotherPackage.heading.$singularOrPlural".withArgs(totalTypes),
+                "packageRows"       -> packageRows,
+                "allowMorePackages" -> allowMorePackages(request.userAnswers, itemIndex)
               )
 
               renderer.render("addItems/addAnotherPackage.njk", json).map(BadRequest(_))

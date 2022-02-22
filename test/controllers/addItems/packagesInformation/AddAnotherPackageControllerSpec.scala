@@ -20,13 +20,15 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.addItems.AddAnotherPackageFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, UserAnswers}
+import models.reference.PackageType
+import models.{Index, NormalMode, UserAnswers}
 import navigation.annotations.addItems.AddItemsPackagesInfo
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.{ItemDescriptionPage, PackageTypePage}
 import pages.addItems.AddAnotherPackagePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -41,7 +43,7 @@ import scala.concurrent.Future
 class AddAnotherPackageControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider = new AddAnotherPackageFormProvider()
-  val form         = formProvider()
+  val form         = formProvider(true)
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
@@ -68,11 +70,12 @@ class AddAnotherPackageControllerSpec extends SpecBase with AppWithDefaultMockFi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "mode"      -> NormalMode,
-        "lrn"       -> lrn,
-        "itemIndex" -> itemIndex.display,
-        "radios"    -> Radios.yesNo(form("value"))
+        "form"              -> form,
+        "mode"              -> NormalMode,
+        "lrn"               -> lrn,
+        "itemIndex"         -> itemIndex.display,
+        "allowMorePackages" -> true,
+        "radios"            -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherPackage.njk"
@@ -128,6 +131,33 @@ class AddAnotherPackageControllerSpec extends SpecBase with AppWithDefaultMockFi
 
     }
 
+    "must redirect to the CYA page when reached maximum number of packages" in {
+      val userAnswers = emptyUserAnswers
+        .set(PackageTypePage(Index(0), Index(0)), PackageType("AB", "Description 1"))
+        .success
+        .value
+        .set(PackageTypePage(Index(0), Index(1)), PackageType("AB", "Description 1"))
+        .success
+        .value
+        .set(PackageTypePage(Index(0), Index(2)), PackageType("AB", "Description 1"))
+        .success
+        .value
+
+      setUserAnswers(Some(userAnswers))
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val request =
+        FakeRequest(POST, addAnotherPackageRoute)
+          .withFormUrlEncodedBody(("value", ""))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+    }
+
     "must return a Bad Request and errors when invalid data is submitted" in {
       setUserAnswers(Some(emptyUserAnswers))
       when(mockRenderer.render(any(), any())(any()))
@@ -145,11 +175,12 @@ class AddAnotherPackageControllerSpec extends SpecBase with AppWithDefaultMockFi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "mode"      -> NormalMode,
-        "lrn"       -> lrn,
-        "itemIndex" -> itemIndex.display,
-        "radios"    -> Radios.yesNo(boundForm("value"))
+        "form"              -> boundForm,
+        "mode"              -> NormalMode,
+        "lrn"               -> lrn,
+        "itemIndex"         -> itemIndex.display,
+        "allowMorePackages" -> true,
+        "radios"            -> Radios.yesNo(formProvider(true)("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherPackage.njk"
