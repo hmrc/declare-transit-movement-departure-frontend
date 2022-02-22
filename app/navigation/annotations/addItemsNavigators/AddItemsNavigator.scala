@@ -16,7 +16,6 @@
 
 package navigation.annotations.addItemsNavigators
 
-import config.FrontendAppConfig
 import controllers.{routes => mainRoutes}
 import derivable._
 import models._
@@ -27,7 +26,7 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AddItemsNavigator @Inject() (config: FrontendAppConfig) extends Navigator {
+class AddItemsNavigator @Inject() () extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
@@ -44,9 +43,8 @@ class AddItemsNavigator @Inject() (config: FrontendAppConfig) extends Navigator 
   private def addAnotherItemRoute(userAnswers: UserAnswers): Call = {
     val count = userAnswers.get(DeriveNumberOfItems).getOrElse(0)
     userAnswers.get(AddAnotherItemPage) match {
-      case Some(true) if count < config.maxItems =>
-        controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(count), NormalMode)
-      case _ => mainRoutes.DeclarationSummaryController.onPageLoad(userAnswers.lrn)
+      case Some(true) => controllers.addItems.itemDetails.routes.ItemDescriptionController.onPageLoad(userAnswers.lrn, Index(count), NormalMode)
+      case _          => mainRoutes.DeclarationSummaryController.onPageLoad(userAnswers.lrn)
     }
   }
 
