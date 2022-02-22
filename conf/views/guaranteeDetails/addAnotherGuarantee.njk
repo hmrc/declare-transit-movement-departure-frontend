@@ -54,6 +54,8 @@
               items: radios,
               errorMessage: form.value.error
             }) }}
+          {% else %}
+            <p class="govuk-body" data-testId="maxLimit"> {{ messages('addAnotherGuarantee.maxLimit.label') }} </p>
           {% endif %}
 
           {{ govukButton({
