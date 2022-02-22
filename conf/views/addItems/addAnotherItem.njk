@@ -40,11 +40,8 @@
 
           {{ csrf() | safe }}
 
-            {% if maxLimitReached %}
+            {% if allowMoreItems %}
 
-              <p class="govuk-body" data-testId="maxLimit"> {{ messages('addAnotherItem.maxLimit.label') }} </p>
-
-            {% else %}
               {{ govukRadios({
                 classes: "govuk-radios--inline",
                 name: 'value',
@@ -58,6 +55,8 @@
                 items: radios,
                 errorMessage: form.value.error
               }) }}
+            {% else %}
+              <p class="govuk-body" data-testId="maxLimit"> {{ messages('addAnotherItem.maxLimit.label') }} </p>
             {% endif %}
 
           {{ govukButton({
