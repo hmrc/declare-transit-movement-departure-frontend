@@ -66,7 +66,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        renderPage(lrn, mode, formProvider(allowMoreRoutingCountries(request.userAnswers))).map(Ok(_))
+        renderPage(lrn, mode, formProvider(allowMoreCountriesOfRouting(request.userAnswers))).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
@@ -75,7 +75,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        formProvider(allowMoreRoutingCountries(request.userAnswers))
+        formProvider(allowMoreCountriesOfRouting(request.userAnswers))
           .bindFromRequest()
           .fold(
             formWithErrors => renderPage(lrn, mode, formWithErrors).map(BadRequest(_)),
@@ -92,7 +92,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
     val cyaHelper                = new SafetyAndSecurityCheckYourAnswersHelper(request.userAnswers, mode)
     val numberOfRoutingCountries = request.userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)
     val indexList: Seq[Index]    = List.range(0, numberOfRoutingCountries).map(Index(_))
-    val allowMoreCountries       = allowMoreRoutingCountries(request.userAnswers)
+    val allowMoreCountries       = allowMoreCountriesOfRouting(request.userAnswers)
     countriesService.getCountries() flatMap {
       countries =>
         val countryRows = indexList.map {
@@ -117,7 +117,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
     }
   }
 
-  def allowMoreRoutingCountries(ua: UserAnswers): Boolean =
-    ua.get(DeriveNumberOfCountryOfRouting).getOrElse(0) < config.maxRoutingCountries
+  def allowMoreCountriesOfRouting(ua: UserAnswers): Boolean =
+    ua.get(DeriveNumberOfCountryOfRouting).getOrElse(0) < config.maxCountriesOfRouting
 
 }
