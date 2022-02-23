@@ -19,13 +19,14 @@ package controllers.addItems.containers
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.addItems.containers.AddAnotherContainerFormProvider
 import matchers.JsonMatchers
-import models.NormalMode
+import models.{Index, NormalMode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsContainer
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.addItems.containers.ContainerNumberPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -43,17 +44,18 @@ class AddAnotherContainerControllerSpec extends SpecBase with AppWithDefaultMock
   override protected val onwardRoute: Call = routes.ContainerNumberController.onPageLoad(lrn, itemIndex, containerIndex, NormalMode)
 
   private val formProvider = new AddAnotherContainerFormProvider()
-  private val form         = formProvider()
+  private val form         = formProvider(true)
   private val template     = "addItems/containers/addAnotherContainer.njk"
 
   private def expectedJson(form: Form[_]) = Json.obj(
-    "form"           -> form,
-    "index"          -> itemIndex.display,
-    "mode"           -> NormalMode,
-    "lrn"            -> lrn,
-    "pageTitle"      -> "addAnotherContainer.title.plural",
-    "containerCount" -> 0,
-    "radios"         -> Radios.yesNo(form("value"))
+    "form"                -> form,
+    "index"               -> itemIndex.display,
+    "mode"                -> NormalMode,
+    "lrn"                 -> lrn,
+    "pageTitle"           -> "addAnotherContainer.title.plural",
+    "containerCount"      -> 0,
+    "radios"              -> Radios.yesNo(form("value")),
+    "allowMoreContainers" -> true
   )
 
   private lazy val addAnotherContainerRoute = routes.AddAnotherContainerController.onPageLoad(lrn, itemIndex, NormalMode).url
@@ -91,13 +93,42 @@ class AddAnotherContainerControllerSpec extends SpecBase with AppWithDefaultMock
 
     "must redirect to the next page when valid data is submitted" in {
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
       setUserAnswers(Some(emptyUserAnswers))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val request =
         FakeRequest(POST, addAnotherContainerRoute)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+    }
+
+    "must redirect to CYA page when reached maximum number of containers" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(ContainerNumberPage(itemIndex, Index(0)), "12345")
+        .success
+        .value
+        .set(ContainerNumberPage(itemIndex, Index(1)), "12345")
+        .success
+        .value
+        .set(ContainerNumberPage(itemIndex, Index(2)), "12345")
+        .success
+        .value
+
+      setUserAnswers(Some(userAnswers))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val request =
+        FakeRequest(POST, addAnotherContainerRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
       val result = route(app, request).value
 

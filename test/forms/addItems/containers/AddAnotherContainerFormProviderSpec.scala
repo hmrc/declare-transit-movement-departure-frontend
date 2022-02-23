@@ -24,22 +24,41 @@ class AddAnotherContainerFormProviderSpec extends BooleanFieldBehaviours {
   val requiredKey = "addAnotherContainer.error.required"
   val invalidKey  = "error.boolean"
 
-  val form = new AddAnotherContainerFormProvider()()
+  val form = new AddAnotherContainerFormProvider()
 
   ".value" - {
 
     val fieldName = "value"
+    "when max limit not hit" - {
 
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
+      behave like booleanField(
+        form(true),
+        fieldName,
+        invalidError = FormError(fieldName, invalidKey)
+      )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+      behave like mandatoryField(
+        form(true),
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
+    }
+
+    "when max limit hit" - {
+      "must bind false" in {
+        val result = form(false).bind(Map(fieldName -> "false"))
+        result.value.value mustBe false
+      }
+
+      "must bind true to false" in {
+        val result = form(false).bind(Map(fieldName -> "true"))
+        result.value.value mustBe false
+      }
+
+      "must bind blank to false" in {
+        val result = form(false).bind(Map.empty[String, String])
+        result.value.value mustBe false
+      }
+    }
   }
 }
