@@ -25,7 +25,7 @@ class SealsInformationFormProvider @Inject() extends Mappings {
 
   def apply(allowMoreSeals: Boolean): Form[Boolean] =
     Form(
-      "value" -> mandatoryIfBooleanWithDefault(allowMoreSeals, "sealsInformation.error.required", false)
+      "value" -> mandatoryIfBoolean(allowMoreSeals, "sealsInformation.error.required", false)
     )
 
 }
