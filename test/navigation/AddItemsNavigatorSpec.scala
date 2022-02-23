@@ -17,21 +17,17 @@
 package navigation
 
 import base.SpecBase
-import config.FrontendAppConfig
 import generators.Generators
-import models.domain.SealDomain
 import models.{Index, NormalMode, UserAnswers}
 import navigation.annotations.addItemsNavigators.AddItemsNavigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages._
 import pages.addItems.AddAnotherItemPage
 
 class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuiceOneAppPerSuite {
 
-  val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-  val navigator         = new AddItemsNavigator(frontendAppConfig)
+  val navigator = new AddItemsNavigator()
   // format: off
   "AddItemsNavigator" - {
 
@@ -50,28 +46,6 @@ class AddItemsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with 
         forAll(arbitrary[UserAnswers]) {
           answers =>
             val updatedAnswers = answers.set(AddAnotherItemPage, false).toOption.value
-
-            navigator
-              .nextPage(AddAnotherItemPage, NormalMode, updatedAnswers)
-              .mustBe(controllers.routes.DeclarationSummaryController.onPageLoad(updatedAnswers.lrn))
-        }
-      }
-
-
-      "must go from AddAnotherItemPage to DeclarationSummaryController when answer we've reached the max no of Items" in {
-        forAll(arbitrary[UserAnswers], arbitrary[SealDomain], arbitrary[SealDomain], arbitrary[SealDomain]) {
-          (userAnswers, seal1, seal2, seal3) =>
-            val updatedAnswers = userAnswers
-              .set(AddAnotherItemPage, true).toOption.value
-              .set(ItemDescriptionPage(index), "test")
-              .success
-              .value
-              .set(ItemDescriptionPage(Index(1)), "test")
-              .success
-              .value
-              .set(ItemDescriptionPage(Index(2)), "test")
-              .success
-              .value
 
             navigator
               .nextPage(AddAnotherItemPage, NormalMode, updatedAnswers)
