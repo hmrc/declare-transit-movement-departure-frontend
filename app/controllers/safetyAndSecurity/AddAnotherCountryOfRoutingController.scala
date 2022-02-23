@@ -16,11 +16,12 @@
 
 package controllers.safetyAndSecurity
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfCountryOfRouting
 import forms.safetyAndSecurity.AddAnotherCountryOfRoutingFormProvider
 import models.requests.DataRequest
-import models.{DependentSection, Index, LocalReferenceNumber, Mode}
+import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.SafetyAndSecurity
 import pages.safetyAndSecurity.AddAnotherCountryOfRoutingPage
@@ -35,8 +36,8 @@ import services.CountriesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.SafetyAndSecurityCheckYourAnswersHelper
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherCountryOfRoutingController @Inject() (
@@ -50,13 +51,13 @@ class AddAnotherCountryOfRoutingController @Inject() (
   countriesService: CountriesService,
   formProvider: AddAnotherCountryOfRoutingFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
   private val template = "safetyAndSecurity/addAnotherCountryOfRouting.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
@@ -65,7 +66,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        renderPage(lrn, mode, form).map(Ok(_))
+        renderPage(lrn, mode, formProvider(allowMoreRoutingCountries(request.userAnswers))).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, mode: Mode): Action[AnyContent] =
@@ -74,7 +75,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.SafetyAndSecurity)).async {
       implicit request =>
-        form
+        formProvider(allowMoreRoutingCountries(request.userAnswers))
           .bindFromRequest()
           .fold(
             formWithErrors => renderPage(lrn, mode, formWithErrors).map(BadRequest(_)),
@@ -91,6 +92,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
     val cyaHelper                = new SafetyAndSecurityCheckYourAnswersHelper(request.userAnswers, mode)
     val numberOfRoutingCountries = request.userAnswers.get(DeriveNumberOfCountryOfRouting).getOrElse(0)
     val indexList: Seq[Index]    = List.range(0, numberOfRoutingCountries).map(Index(_))
+    val allowMoreCountries       = allowMoreRoutingCountries(request.userAnswers)
     countriesService.getCountries() flatMap {
       countries =>
         val countryRows = indexList.map {
@@ -100,17 +102,22 @@ class AddAnotherCountryOfRoutingController @Inject() (
 
         val singularOrPlural = if (numberOfRoutingCountries > 1) "plural" else "singular"
         val json = Json.obj(
-          "form"        -> form,
-          "pageTitle"   -> msg"addAnotherCountryOfRouting.title.$singularOrPlural".withArgs(numberOfRoutingCountries),
-          "heading"     -> msg"addAnotherCountryOfRouting.heading.$singularOrPlural".withArgs(numberOfRoutingCountries),
-          "countryRows" -> countryRows,
-          "lrn"         -> lrn,
-          "mode"        -> mode,
-          "radios"      -> Radios.yesNo(form("value"))
+          "form"               -> form,
+          "pageTitle"          -> msg"addAnotherCountryOfRouting.title.$singularOrPlural".withArgs(numberOfRoutingCountries),
+          "heading"            -> msg"addAnotherCountryOfRouting.heading.$singularOrPlural".withArgs(numberOfRoutingCountries),
+          "countryRows"        -> countryRows,
+          "lrn"                -> lrn,
+          "mode"               -> mode,
+          "allowMoreCountries" -> allowMoreCountries,
+          "radios"             -> Radios.yesNo(formProvider(allowMoreCountries)("value"))
         )
 
         renderer.render(template, json)
 
     }
   }
+
+  def allowMoreRoutingCountries(ua: UserAnswers): Boolean =
+    ua.get(DeriveNumberOfCountryOfRouting).getOrElse(0) < config.maxRoutingCountries
+
 }

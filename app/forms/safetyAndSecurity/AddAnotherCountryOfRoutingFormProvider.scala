@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 class AddAnotherCountryOfRoutingFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(allowMoreCountries: Boolean): Form[Boolean] =
     Form(
-      "value" -> boolean("addAnotherCountryOfRouting.error.required")
+      "value" -> mandatoryIfBoolean(allowMoreCountries, "addAnotherCountryOfRouting.error.required", false)
     )
 }
