@@ -28,7 +28,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{ItemDescriptionPage, PackageTypePage}
+import pages.PackageTypePage
 import pages.addItems.AddAnotherPackagePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
