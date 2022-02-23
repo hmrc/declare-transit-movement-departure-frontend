@@ -25,6 +25,6 @@ class AddAnotherPackageFormProvider @Inject() extends Mappings {
 
   def apply(allowMorePackages: Boolean): Form[Boolean] =
     Form(
-      "value" -> mandatoryIfBooleanWithDefault(allowMorePackages, "addAnotherPackage.error.required", false)
+      "value" -> mandatoryIfBoolean(allowMorePackages, "addAnotherPackage.error.required", false)
     )
 }

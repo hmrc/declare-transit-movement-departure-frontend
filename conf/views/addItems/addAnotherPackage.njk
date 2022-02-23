@@ -38,7 +38,7 @@
           rows: packageRows
         }) }}
 
-        <form action="{{ routes.controllers.addItems.packagesInformation.AddAnotherPackageController.onSubmit(lrn, itemIndex, mode).url }}" method="post data-testId="addPackageRadio"">
+        <form action="{{ routes.controllers.addItems.packagesInformation.AddAnotherPackageController.onSubmit(lrn, itemIndex, mode).url }}" method="post" data-testId="addPackageRadio">
 
           {{ csrf() | safe }}
 

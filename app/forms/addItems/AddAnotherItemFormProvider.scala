@@ -23,6 +23,6 @@ class AddAnotherItemFormProvider extends Mappings {
 
   def apply(allowMoreItems: Boolean): Form[Boolean] =
     Form(
-      "value" -> mandatoryIfBooleanWithDefault(allowMoreItems, "addAnotherItem.error.required", false)
+      "value" -> mandatoryIfBoolean(allowMoreItems, "addAnotherItem.error.required", false)
     )
 }

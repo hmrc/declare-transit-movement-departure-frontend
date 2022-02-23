@@ -95,7 +95,6 @@ class AddAnotherPackageController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => {
-
               val totalTypes  = request.userAnswers.get(DeriveNumberOfPackages(itemIndex)).getOrElse(0)
               val packageRows = PackageViewModel.packageRows(itemIndex, totalTypes, request.userAnswers, mode)
 
@@ -112,7 +111,6 @@ class AddAnotherPackageController @Inject() (
                 "packageRows"       -> packageRows,
                 "allowMorePackages" -> allowMorePackages(request.userAnswers, itemIndex)
               )
-
               renderer.render("addItems/addAnotherPackage.njk", json).map(BadRequest(_))
             },
             value =>
