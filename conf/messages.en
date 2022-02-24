@@ -834,6 +834,7 @@ addAnotherSpecialMention.heading.singular = You have added 1 special mention for
 addAnotherSpecialMention.heading.plural = You have added {0} special mentions for item {1}
 addAnotherSpecialMention.addAnother = Do you need to add another special mention?
 addAnotherSpecialMention.specialMentionList.label = Special mention {0}
+addAnotherSpecialMention.maxLimit.label = You cannot add any more special mentions
 
 addAnotherSpecialMention.checkYourAnswersLabel = addAnotherSpecialMention
 addAnotherSpecialMention.error.required = Select yes if you need to add another special mention
