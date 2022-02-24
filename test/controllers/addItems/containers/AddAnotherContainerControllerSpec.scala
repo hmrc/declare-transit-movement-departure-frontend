@@ -136,6 +136,35 @@ class AddAnotherContainerControllerSpec extends SpecBase with AppWithDefaultMock
 
     }
 
+    "must redirect to CYA page when reached maximum number of containers" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(ContainerNumberPage(itemIndex, Index(0)), "12345")
+        .success
+        .value
+        .set(ContainerNumberPage(itemIndex, Index(1)), "12345")
+        .success
+        .value
+        .set(ContainerNumberPage(itemIndex, Index(2)), "12345")
+        .success
+        .value
+
+      setUserAnswers(Some(userAnswers))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val request =
+        FakeRequest(POST, addAnotherContainerRoute)
+          .withFormUrlEncodedBody(("value", ""))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+    }
+
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       when(mockRenderer.render(any(), any())(any()))
