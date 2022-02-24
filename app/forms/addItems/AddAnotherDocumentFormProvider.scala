@@ -17,15 +17,14 @@
 package forms.addItems
 
 import forms.mappings.Mappings
-import models.Index
 import play.api.data.Form
 
 import javax.inject.Inject
 
 class AddAnotherDocumentFormProvider @Inject() extends Mappings {
 
-  def apply(index: Index): Form[Boolean] =
+  def apply(allowMoreDocuments: Boolean): Form[Boolean] =
     Form(
-      "value" -> boolean("addAnotherDocument.error.required", "error.boolean", Seq(index.display))
+      "value" -> mandatoryIfBoolean(allowMoreDocuments, "addAnotherDocument.error.required", false)
     )
 }
