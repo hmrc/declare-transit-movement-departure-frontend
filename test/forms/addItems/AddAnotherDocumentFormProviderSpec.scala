@@ -46,6 +46,7 @@ class AddAnotherDocumentFormProviderSpec extends SpecBase with BooleanFieldBehav
     }
 
     "when max limit hit" - {
+
       "must bind false" in {
         val result = form(false).bind(Map(fieldName -> "false"))
         result.value.value mustBe false
