@@ -21,14 +21,14 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.AddAnotherPreviousAdministrativeReferenceFormProvider
 import matchers.JsonMatchers
 import models.reference.PreviousReferencesDocumentType
-import models.{NormalMode, PreviousReferencesDocumentTypeList, UserAnswers}
+import models.{Index, NormalMode, PreviousReferencesDocumentTypeList, UserAnswers}
 import navigation.annotations.addItems.AddItemsAdminReference
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.addItems.AddAnotherPreviousAdministrativeReferencePage
+import pages.addItems.{AddAnotherPreviousAdministrativeReferencePage, PreviousReferencePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -48,7 +48,7 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
     with JsonMatchers {
 
   private val formProvider                     = new AddAnotherPreviousAdministrativeReferenceFormProvider()
-  private val form                             = formProvider()
+  private val form                             = formProvider(true)
   private val template                         = "addItems/addAnotherPreviousAdministrativeReference.njk"
   private val mockPreviousDocumentTypesService = mock[PreviousDocumentTypesService]
 
@@ -93,12 +93,13 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "index"     -> index.display,
-        "lrn"       -> lrn,
-        "mode"      -> NormalMode,
-        "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
-        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
+        "form"                        -> form,
+        "index"                       -> index.display,
+        "lrn"                         -> lrn,
+        "mode"                        -> NormalMode,
+        "pageTitle"                   -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
+        "heading"                     -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1),
+        "allowMorePreviousReferences" -> true
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -127,12 +128,13 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "index"     -> index.display,
-        "lrn"       -> lrn,
-        "mode"      -> NormalMode,
-        "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
-        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
+        "form"                        -> form,
+        "index"                       -> index.display,
+        "lrn"                         -> lrn,
+        "mode"                        -> NormalMode,
+        "pageTitle"                   -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
+        "heading"                     -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1),
+        "allowMorePreviousReferences" -> true
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -150,6 +152,33 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
       val request =
         FakeRequest(POST, addAnotherPreviousAdministrativeReferenceRoute)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+    }
+
+    "must redirect to the next page when valid data is submitted when max number reached" in {
+      val userAnswers = emptyUserAnswers
+        .set(PreviousReferencePage(Index(0), Index(0)), "document1")
+        .success
+        .value
+        .set(PreviousReferencePage(Index(0), Index(1)), "document2")
+        .success
+        .value
+        .set(PreviousReferencePage(Index(0), Index(2)), "document3")
+        .success
+        .value
+
+      setUserAnswers(Some(userAnswers))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val request =
+        FakeRequest(POST, addAnotherPreviousAdministrativeReferenceRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
       val result = route(app, request).value
 
@@ -177,12 +206,13 @@ class AddAnotherPreviousAdministrativeReferenceControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "index"     -> index.display,
-        "lrn"       -> lrn,
-        "mode"      -> NormalMode,
-        "pageTitle" -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
-        "heading"   -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1)
+        "form"                        -> boundForm,
+        "index"                       -> index.display,
+        "lrn"                         -> lrn,
+        "mode"                        -> NormalMode,
+        "pageTitle"                   -> msg"addAnotherPreviousAdministrativeReference.title.plural".withArgs(1),
+        "heading"                     -> msg"addAnotherPreviousAdministrativeReference.heading.plural".withArgs(1),
+        "allowMorePreviousReferences" -> true
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey

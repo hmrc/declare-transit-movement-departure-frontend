@@ -475,6 +475,7 @@ goodsSummaryCheckYourAnswers.title = Check your answers
 goodsSummaryCheckYourAnswers.heading = Check your answers
 
 maximumSealsInformation.paragraph = You cannot add any more official customs seals.
+maximumPreviousReferences.paragraph = You cannot add any more previous administrative references.
 
 sealsInformation.title.singular = You have added {0} official customs seal
 sealsInformation.title.plural = You have added {0} official customs seals

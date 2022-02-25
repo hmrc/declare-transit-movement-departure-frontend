@@ -36,23 +36,27 @@
           rows: referenceRows
         }) }}
 
-        <form action="{{ routes.controllers.addItems.previousReferences.AddAnotherPreviousAdministrativeReferenceController.onSubmit(lrn, index, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.previousReferences.AddAnotherPreviousAdministrativeReferenceController.onSubmit(lrn, index, mode).url }}" method="post" data-testId="addPreviousReferencesRadio">
 
           {{ csrf() | safe }}
 
-          {{ govukRadios({
-            classes: "govuk-radios--inline",
-            name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('addAnotherPreviousAdministrativeReference.paragraph'),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            items: radios,
-            errorMessage: form.value.error
-          }) }}
+          {% if allowMorePreviousReferences %}
+            {{ govukRadios({
+              classes: "govuk-radios--inline",
+              name: 'value',
+              fieldset: {
+                legend: {
+                  text: messages('addAnotherPreviousAdministrativeReference.paragraph'),
+                  isPageHeading: false,
+                  classes: "govuk-fieldset__legend--m"
+                }
+              },
+              items: radios,
+              errorMessage: form.value.error
+            }) }}
+          {% else %}
+            <p class="govuk-body" data-testId="maxLimit"> {{ messages('maximumPreviousReferences.paragraph') }} </p>
+          {% endif %}
 
           {{ govukButton({
             text: messages("site.continue"),
