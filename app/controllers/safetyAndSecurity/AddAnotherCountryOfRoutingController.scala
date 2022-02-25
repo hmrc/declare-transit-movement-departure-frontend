@@ -117,7 +117,7 @@ class AddAnotherCountryOfRoutingController @Inject() (
     }
   }
 
-  def allowMoreCountriesOfRouting(ua: UserAnswers): Boolean =
+  private def allowMoreCountriesOfRouting(ua: UserAnswers): Boolean =
     ua.get(DeriveNumberOfCountryOfRouting).getOrElse(0) < config.maxCountriesOfRouting
 
 }
