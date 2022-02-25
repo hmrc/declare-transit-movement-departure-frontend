@@ -108,7 +108,7 @@ class AddAnotherItemController @Inject() (
     renderer.render("addItems/addAnotherItem.njk", json)
   }
 
-  def allowMoreItems(userAnswers: UserAnswers): Boolean = {
+  private def allowMoreItems(userAnswers: UserAnswers): Boolean = {
     val numberOfItems = userAnswers.get(DeriveNumberOfItems).getOrElse(0)
     numberOfItems < config.maxItems
   }

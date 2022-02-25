@@ -55,7 +55,7 @@ class AddAnotherGuaranteeController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  def allowMoreGuarantees(ua: UserAnswers): Boolean =
+  private def allowMoreGuarantees(ua: UserAnswers): Boolean =
     ua.get(DeriveNumberOfGuarantees).getOrElse(0) < config.maxGuarantees
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] =
