@@ -121,6 +121,6 @@ class AddAnotherSpecialMentionController @Inject() (
 
   }
 
-  def allowMoreSpecialMentions(ua: UserAnswers, itemIndex: Index): Boolean =
+  private def allowMoreSpecialMentions(ua: UserAnswers, itemIndex: Index): Boolean =
     ua.get(DeriveNumberOfSpecialMentions(itemIndex)).getOrElse(0) < config.maxSpecialMentions
 }
