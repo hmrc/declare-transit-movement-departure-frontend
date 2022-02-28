@@ -33,7 +33,7 @@ import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
 import services.CountriesService
-import services.ExcludedCountriesService.routeDetailsExcludedCountries
+import services.ExcludedCountriesService.movementDestinationCountryExcludedCountries
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 import utils.countryJsonList
@@ -62,7 +62,7 @@ class MovementDestinationCountryController @Inject() (
     implicit request =>
       (
         for {
-          excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
+          excludedCountries <- OptionT.fromOption[Future](movementDestinationCountryExcludedCountries(request.userAnswers))
           countryList       <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries))
           preparedForm = request.userAnswers
             .get(MovementDestinationCountryPage)
@@ -81,7 +81,7 @@ class MovementDestinationCountryController @Inject() (
     implicit request =>
       (
         for {
-          excludedCountries <- OptionT.fromOption[Future](routeDetailsExcludedCountries(request.userAnswers))
+          excludedCountries <- OptionT.fromOption[Future](movementDestinationCountryExcludedCountries(request.userAnswers))
           countryList       <- OptionT.liftF(countriesService.getDestinationCountries(request.userAnswers, excludedCountries))
           page <- OptionT.liftF(
             formProvider(countryList)

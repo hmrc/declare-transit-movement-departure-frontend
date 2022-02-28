@@ -20,6 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import controllers.{routes => mainRoutes}
 import forms.MovementDestinationCountryFormProvider
 import matchers.JsonMatchers
+import models.DeclarationType._
 import models.reference.{Country, CountryCode, CustomsOffice}
 import models.userAnswerScenarios.Scenario1.UserAnswersSpecHelperOps
 import models.{CountryList, NormalMode}
@@ -28,9 +29,10 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
+import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
-import pages.OfficeOfDeparturePage
 import pages.routeDetails.MovementDestinationCountryPage
+import pages.{DeclarationTypePage, OfficeOfDeparturePage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -46,16 +48,24 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
 
   val mockCountriesService: CountriesService = mock[CountriesService]
 
-  private val formProvider = new MovementDestinationCountryFormProvider()
-  private val countries    = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val form         = formProvider(countries)
-  private val template     = "movementDestinationCountry.njk"
+  private val formProvider         = new MovementDestinationCountryFormProvider()
+  private val countriesExcludingSM = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
+  private val countriesIncludingSM = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom"), Country(CountryCode("SM"), "San Marino")))
+
+  private def form(countries: CountryList) = formProvider(countries)
+  private val template                     = "movementDestinationCountry.njk"
 
   private lazy val movementDestinationCountryRoute = routes.MovementDestinationCountryController.onPageLoad(lrn, NormalMode).url
 
-  def jsonCountryList(preSelected: Boolean): Seq[JsObject] = Seq(
+  def jsonCountryListWithoutSM(preSelected: Boolean): Seq[JsObject] = Seq(
     Json.obj("text" -> "Select", "value"         -> ""),
     Json.obj("text" -> "United Kingdom", "value" -> "GB", "selected" -> preSelected)
+  )
+
+  def jsonCountryListWithSM(preSelected: Boolean): Seq[JsObject] = Seq(
+    Json.obj("text" -> "Select", "value"         -> ""),
+    Json.obj("text" -> "United Kingdom", "value" -> "GB", "selected" -> preSelected),
+    Json.obj("text" -> "San Marino", "value"     -> "SM", "selected" -> preSelected)
   )
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
@@ -66,15 +76,58 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
 
   "MovementDestinationCountry Controller" - {
 
-    "must return OK and the correct view for a GET for NI departure" in {
+    "must return OK and the correct view for a GET for NI departure with Declaration Type of Option1 or Option4" in {
 
+      val declarationType = Gen.oneOf(Option1, Option4).sample.value
       val userAnswers = emptyUserAnswers
         .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+        .unsafeSetVal(DeclarationTypePage)(declarationType)
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countriesExcludingSM))
+
+      setUserAnswers(Some(userAnswers))
+
+      val request                                = FakeRequest(GET, movementDestinationCountryRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+
+      val result = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      verify(mockCountriesService, times(1))
+        .getDestinationCountries(any(), eqTo(alwaysExcludedTransitCountries :+ CountryCode("SM")))(any())
+
+      val expectedJson = Json.obj(
+        "form"        -> form(countriesExcludingSM),
+        "mode"        -> NormalMode,
+        "lrn"         -> lrn,
+        "countries"   -> jsonCountryListWithoutSM(preSelected = false),
+        "onSubmitUrl" -> routes.MovementDestinationCountryController.onSubmit(lrn, NormalMode).url
+      )
+
+      val jsonWithoutConfig = jsonCaptor.getValue - configKey
+
+      templateCaptor.getValue mustEqual template
+      jsonWithoutConfig mustBe expectedJson
+
+    }
+
+    "must return OK and the correct view for a GET for NI departure with Declaration Type of Option2 or Option3" in {
+
+      val declarationType = Gen.oneOf(Option2, Option3).sample.value
+      val userAnswers = emptyUserAnswers
+        .unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("XI"), None))
+        .unsafeSetVal(DeclarationTypePage)(declarationType)
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countriesIncludingSM))
 
       setUserAnswers(Some(userAnswers))
 
@@ -91,10 +144,10 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
         .getDestinationCountries(any(), eqTo(alwaysExcludedTransitCountries))(any())
 
       val expectedJson = Json.obj(
-        "form"        -> form,
+        "form"        -> form(countriesIncludingSM),
         "mode"        -> NormalMode,
         "lrn"         -> lrn,
-        "countries"   -> jsonCountryList(preSelected = false),
+        "countries"   -> jsonCountryListWithSM(preSelected = false),
         "onSubmitUrl" -> routes.MovementDestinationCountryController.onSubmit(lrn, NormalMode).url
       )
 
@@ -113,7 +166,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countriesExcludingSM))
 
       setUserAnswers(Some(userAnswers))
 
@@ -130,10 +183,10 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
         .getDestinationCountries(any(), eqTo(alwaysExcludedTransitCountries ++ gbExcludedCountries))(any())
 
       val expectedJson = Json.obj(
-        "form"        -> form,
+        "form"        -> form(countriesExcludingSM),
         "mode"        -> NormalMode,
         "lrn"         -> lrn,
-        "countries"   -> jsonCountryList(preSelected = false),
+        "countries"   -> jsonCountryListWithoutSM(preSelected = false),
         "onSubmitUrl" -> routes.MovementDestinationCountryController.onSubmit(lrn, NormalMode).url
       )
 
@@ -153,7 +206,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countriesExcludingSM))
 
       setUserAnswers(Some(userAnswers))
 
@@ -167,13 +220,13 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "GB"))
+      val filledForm = form(countriesExcludingSM).bind(Map("value" -> "GB"))
 
       val expectedJson = Json.obj(
         "form"        -> filledForm,
         "lrn"         -> lrn,
         "mode"        -> NormalMode,
-        "countries"   -> jsonCountryList(true),
+        "countries"   -> jsonCountryListWithoutSM(true),
         "onSubmitUrl" -> routes.MovementDestinationCountryController.onSubmit(lrn, NormalMode).url
       )
 
@@ -191,7 +244,7 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), any())(any())).thenReturn(Future.successful(countriesExcludingSM))
 
       setUserAnswers(Some(userAnswers))
 
@@ -214,12 +267,12 @@ class MovementDestinationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getDestinationCountries(any(), eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getDestinationCountries(any(), eqTo(Seq(CountryCode("JE"))))(any())).thenReturn(Future.successful(countriesExcludingSM))
 
       setUserAnswers(Some(userAnswers))
 
       val request                                = FakeRequest(POST, movementDestinationCountryRoute).withFormUrlEncodedBody(("value", ""))
-      val boundForm                              = form.bind(Map("value" -> ""))
+      val boundForm                              = form(countriesExcludingSM).bind(Map("value" -> ""))
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
