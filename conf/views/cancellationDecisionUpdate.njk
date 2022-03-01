@@ -5,7 +5,7 @@
 {% from "govuk/components/summary-list/macro.njk"     import govukSummaryList %}
 
 {% block pageTitle %}
-  {{ title(messages("cancellationDecisionUpdate.title")) }}
+  {{ title(messages(cancellationOutcome + ".title")) }}
 {% endblock %}
 
 {% block mainContent %}
@@ -19,7 +19,7 @@
       <div class="govuk-grid-column-two-thirds">
 
         <h1 class="govuk-heading-xl">
-          {{ messages("cancellationDecisionUpdate.heading") }}
+          {{ messages(cancellationOutcome + ".heading") }}
         </h1>
 
         {{ govukSummaryList({

@@ -1195,8 +1195,11 @@ carrierName.error.required =  Enter the carrier’s name
 carrierName.error.length = carrier’s name must be 35 characters or less
 carrierName.error.invalidCharacters = The carrier’s name must only include letters a to z without accents, numbers 0 to 9, ampersands (&), apostrophes, at signs (@), forward slashes, full stops, hyphens, percent signs, question marks and spaces
 
-cancellationDecisionUpdate.title = Cancellation decision
-cancellationDecisionUpdate.heading = Cancellation decision
+cancellationDecision.cancellationRejected.title = Cancellation rejected
+cancellationDecision.cancellationRejected.heading = Cancellation rejected
+cancellationDecision.declarationCancelled.title = Declaration cancelled
+cancellationDecision.declarationCancelled.heading = Declaration cancelled
+
 cancellationDecisionUpdate.mrn = Movement reference number
 cancellationDecisionUpdate.cancellationRequestDate = Date of request
 cancellationDecisionUpdate.initiatedByCustoms = Initiated by customs?
