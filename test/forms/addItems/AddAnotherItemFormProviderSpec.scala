@@ -31,13 +31,13 @@ class AddAnotherItemFormProviderSpec extends BooleanFieldBehaviours {
 
     "when max limit not hit" - {
       behave like booleanField(
-        form(false),
+        form(true),
         fieldName,
         invalidError = FormError(fieldName, invalidKey)
       )
 
       behave like mandatoryField(
-        form(false),
+        form(true),
         fieldName,
         requiredError = FormError(fieldName, requiredKey)
       )
@@ -45,18 +45,18 @@ class AddAnotherItemFormProviderSpec extends BooleanFieldBehaviours {
 
     "when max limit hit" - {
       "must bind true" in {
-        val result = form(true).bind(Map(fieldName -> "true"))
-        result.value.value mustBe true
+        val result = form(false).bind(Map(fieldName -> "true"))
+        result.value.value mustBe false
       }
 
       "must bind false to true" in {
-        val result = form(true).bind(Map(fieldName -> "false"))
-        result.value.value mustBe true
+        val result = form(false).bind(Map(fieldName -> "false"))
+        result.value.value mustBe false
       }
 
       "must bind blank to true" in {
-        val result = form(true).bind(Map.empty[String, String])
-        result.value.value mustBe true
+        val result = form(false).bind(Map.empty[String, String])
+        result.value.value mustBe false
       }
     }
   }

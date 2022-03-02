@@ -220,24 +220,14 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-
-      "must go from SealsInformationPage to CYA when answer we've reached the max no of Seals" in {
-        forAll(arbitrary[UserAnswers], arbitrary[SealDomain], arbitrary[SealDomain], arbitrary[SealDomain]) {
-          (userAnswers, seal1, seal2, seal3) =>
-            val updatedAnswers = userAnswers
-              .set(SealIdDetailsPage(Index(0)), seal1)
-              .success
-              .value
-              .set(SealIdDetailsPage(Index(1)), seal2)
-              .success
-              .value
-              .set(SealIdDetailsPage(Index(2)), seal3)
-              .success
-              .value
+      "must go from SealsInformationPage to session expired when answer is undefined" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            lazy val updatedAnswers = answers.remove(SealsInformationPage).toOption.value
 
             navigator
               .nextPage(SealsInformationPage, NormalMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
+              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
         }
       }
 
@@ -475,14 +465,14 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
         }
       }
 
-      "must go from SealsInformationPage to CYA when answer is undefined" in {
+      "must go from SealsInformationPage to session expired when answer is undefined" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             lazy val updatedAnswers = answers.remove(SealsInformationPage).toOption.value
 
             navigator
               .nextPage(SealsInformationPage, CheckMode, updatedAnswers)
-              .mustBe(goodsSummaryRoute.GoodsSummaryCheckYourAnswersController.onPageLoad(updatedAnswers.lrn))
+              .mustBe(controllers.routes.SessionExpiredController.onPageLoad())
         }
       }
 

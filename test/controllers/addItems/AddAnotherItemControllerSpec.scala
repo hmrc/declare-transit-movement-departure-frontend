@@ -41,7 +41,7 @@ import scala.concurrent.Future
 class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider = new AddAnotherItemFormProvider()
-  val form         = formProvider(false)
+  val form         = formProvider(true)
 
   lazy val addAnotherItemRoute = routes.AddAnotherItemController.onPageLoad(lrn).url
 
@@ -69,12 +69,12 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"            -> form,
-        "lrn"             -> lrn,
-        "pageTitle"       -> msg"addAnotherItem.title.singular".withArgs(1),
-        "heading"         -> msg"addAnotherItem.heading.singular".withArgs(1),
-        "maxLimitReached" -> false,
-        "radios"          -> Radios.yesNo(form("value"))
+        "form"           -> form,
+        "lrn"            -> lrn,
+        "pageTitle"      -> msg"addAnotherItem.title.singular".withArgs(1),
+        "heading"        -> msg"addAnotherItem.heading.singular".withArgs(1),
+        "allowMoreItems" -> true,
+        "radios"         -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
@@ -105,12 +105,12 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"            -> form,
-        "lrn"             -> lrn,
-        "pageTitle"       -> msg"addAnotherItem.title.plural".withArgs(1),
-        "heading"         -> msg"addAnotherItem.heading.plural".withArgs(1),
-        "maxLimitReached" -> false,
-        "radios"          -> Radios.yesNo(form("value"))
+        "form"           -> form,
+        "lrn"            -> lrn,
+        "pageTitle"      -> msg"addAnotherItem.title.plural".withArgs(1),
+        "heading"        -> msg"addAnotherItem.heading.plural".withArgs(1),
+        "allowMoreItems" -> true,
+        "radios"         -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
@@ -144,12 +144,12 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"            -> form,
-        "lrn"             -> lrn,
-        "pageTitle"       -> msg"addAnotherItem.title.plural".withArgs(1),
-        "heading"         -> msg"addAnotherItem.heading.plural".withArgs(1),
-        "maxLimitReached" -> true,
-        "radios"          -> Radios.yesNo(form("value"))
+        "form"           -> form,
+        "lrn"            -> lrn,
+        "pageTitle"      -> msg"addAnotherItem.title.plural".withArgs(1),
+        "heading"        -> msg"addAnotherItem.heading.plural".withArgs(1),
+        "allowMoreItems" -> false,
+        "radios"         -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
@@ -222,17 +222,16 @@ class AddAnotherItemControllerSpec extends SpecBase with AppWithDefaultMockFixtu
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"            -> boundForm,
-        "pageTitle"       -> msg"addAnotherItem.title.singular".withArgs(1),
-        "heading"         -> msg"addAnotherItem.heading.singular".withArgs(1),
-        "lrn"             -> lrn,
-        "maxLimitReached" -> false,
-        "radios"          -> Radios.yesNo(boundForm("value"))
+        "form"           -> boundForm,
+        "pageTitle"      -> msg"addAnotherItem.title.singular".withArgs(1),
+        "heading"        -> msg"addAnotherItem.heading.singular".withArgs(1),
+        "lrn"            -> lrn,
+        "allowMoreItems" -> true,
+        "radios"         -> Radios.yesNo(boundForm("value"))
       )
 
       templateCaptor.getValue mustEqual "addItems/addAnotherItem.njk"
       jsonCaptor.getValue must containJson(expectedJson)
-
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
