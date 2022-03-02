@@ -476,10 +476,14 @@ goodsSummaryCheckYourAnswers.heading = Check your answers
 
 maximumSealsInformation.paragraph = You cannot add any more official customs seals.
 <<<<<<< HEAD
+<<<<<<< HEAD
 maximumPackagesInformation.paragraph = You cannot add any more packages.
 =======
 maximumContainers.paragraph = You cannot add any more containers.
 >>>>>>> CTCTRADERS-2940
+=======
+maximumDocuments.paragraph = You cannot add any more documents.
+>>>>>>> origin/CTCTRADERS-2941
 
 sealsInformation.title.singular = You have added {0} official customs seal
 sealsInformation.title.plural = You have added {0} official customs seals

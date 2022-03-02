@@ -71,4 +71,5 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxSpecialMentions: Int = configuration.get[Int]("limits.maxSpecialMentions")
   lazy val maxPackages: Int       = configuration.get[Int]("limits.maxPackages")
   lazy val maxContainers: Int     = configuration.get[Int]("limits.maxContainers")
+  lazy val maxDocuments: Int      = configuration.get[Int]("limits.maxDocuments")
 }
