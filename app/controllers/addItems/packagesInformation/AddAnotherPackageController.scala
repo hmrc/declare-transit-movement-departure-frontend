@@ -51,7 +51,7 @@ class AddAnotherPackageController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  def allowMorePackages(ua: UserAnswers, itemIndex: Index): Boolean =
+  private def allowMorePackages(ua: UserAnswers, itemIndex: Index): Boolean =
     ua.get(DeriveNumberOfPackages(itemIndex)).getOrElse(0) < config.maxPackages
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =

@@ -56,7 +56,7 @@ class AddAnotherContainerController @Inject() (
 
   private val template = "addItems/containers/addAnotherContainer.njk"
 
-  def allowMoreContainers(ua: UserAnswers, itemIndex: Index): Boolean =
+  private def allowMoreContainers(ua: UserAnswers, itemIndex: Index): Boolean =
     ua.get(DeriveNumberOfContainers(itemIndex)).getOrElse(0) < config.maxContainers
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =

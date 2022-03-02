@@ -641,7 +641,6 @@ addAnotherPackage.yesNo = Do you need to add another package?
 addAnotherPackage.error.required = Select yes if you need to add another package
 addAnotherPackage.change.hidden = Change {0}
 addAnotherPackage.packageList.label = Package {0}
-addAnotherPackage.packageList.label = Package {0}
 
 commodityCode.title = What is the commodity code for item {0}?
 commodityCode.heading = What is the commodity code for item {0}?
@@ -839,7 +838,7 @@ addAnotherSpecialMention.heading.singular = You have added 1 special mention for
 addAnotherSpecialMention.heading.plural = You have added {0} special mentions for item {1}
 addAnotherSpecialMention.addAnother = Do you need to add another special mention?
 addAnotherSpecialMention.specialMentionList.label = Special mention {0}
-addAnotherSpecialMention.maxLimit.label = You cannot add any more special mentions
+addAnotherSpecialMention.maxLimit.label = You cannot add any more special mentions.
 
 addAnotherSpecialMention.checkYourAnswersLabel = addAnotherSpecialMention
 addAnotherSpecialMention.error.required = Select yes if you need to add another special mention
@@ -1111,7 +1110,7 @@ addAnotherCountryOfRouting.heading.plural = You have added {0} countries of rout
 addAnotherCountryOfRouting.h2 = Do you need to add another country of routing?
 addAnotherCountryOfRouting.error.required = Select yes if you need to add another country of routing
 addAnotherCountryOfRouting.countryOfRoutingList.label = Country of routing {0}
-addAnotherCountryOfRouting.maxLimit.label = You cannot add any more country of routing
+addAnotherCountryOfRouting.maxLimit.label = You cannot add any more countries of routing.
 
 addSafetyAndSecurityConsignor.title = Is there a security consignor for all items?
 addSafetyAndSecurityConsignor.heading = Is there a security consignor for all items?

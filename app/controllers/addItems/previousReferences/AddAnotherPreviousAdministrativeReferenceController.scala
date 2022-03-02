@@ -58,7 +58,7 @@ class AddAnotherPreviousAdministrativeReferenceController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  def allowMorePreviousReferences(ua: UserAnswers, index: Index): Boolean =
+  private def allowMorePreviousReferences(ua: UserAnswers, index: Index): Boolean =
     ua.get(DeriveNumberOfPreviousAdministrativeReferences(index)).getOrElse(0) < config.maxPreviousReferences
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =

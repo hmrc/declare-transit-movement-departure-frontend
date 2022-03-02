@@ -56,7 +56,7 @@ class AddAnotherDocumentController @Inject() (
     with I18nSupport
     with NunjucksSupport {
 
-  def allowMoreDocuments(ua: UserAnswers, index: Index): Boolean =
+  private def allowMoreDocuments(ua: UserAnswers, index: Index): Boolean =
     ua.get(DeriveNumberOfDocuments(index)).getOrElse(0) < config.maxDocuments
 
   def onPageLoad(lrn: LocalReferenceNumber, index: Index, mode: Mode): Action[AnyContent] =
