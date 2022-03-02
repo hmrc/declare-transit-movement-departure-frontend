@@ -40,20 +40,23 @@
 
           {{ csrf() | safe }}
 
-          {{ govukRadios({
-          classes: "govuk-radios--inline",
-            name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('addAnotherSpecialMention.addAnother'),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            items: radios,
-            errorMessage: form.value.error
-          }) }}
-
+          {% if allowMoreSpecialMentions %}
+            {{ govukRadios({
+            classes: "govuk-radios--inline",
+              name: 'value',
+              fieldset: {
+                legend: {
+                  text: messages('addAnotherSpecialMention.addAnother'),
+                  isPageHeading: false,
+                  classes: "govuk-fieldset__legend--m"
+                }
+              },
+              items: radios,
+              errorMessage: form.value.error
+            }) }}
+          {% else %}
+            <p class="govuk-body" data-testId="maxLimit"> {{ messages('addAnotherSpecialMention.maxLimit.label') }} </p>
+          {% endif %}
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id: "submit"}
