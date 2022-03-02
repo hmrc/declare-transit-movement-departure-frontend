@@ -70,4 +70,5 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxCountriesOfRouting: Int = configuration.get[Int]("limits.maxCountriesOfRouting")
   lazy val maxSpecialMentions: Int = configuration.get[Int]("limits.maxSpecialMentions")
   lazy val maxPackages: Int       = configuration.get[Int]("limits.maxPackages")
+  lazy val maxContainers: Int     = configuration.get[Int]("limits.maxContainers")
 }

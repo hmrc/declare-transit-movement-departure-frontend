@@ -38,23 +38,27 @@
           rows: containerRows
         }) }}
 
-        <form action="{{ routes.controllers.addItems.containers.AddAnotherContainerController.onSubmit(lrn, index, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.containers.AddAnotherContainerController.onSubmit(lrn, index, mode).url }}" method="post" data-testId="addContainerRadio">
 
           {{ csrf() | safe }}
 
-          {{ govukRadios({
-            classes: "govuk-radios--inline",
-            name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('addAnotherContainer.heading'),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            items: radios,
-            errorMessage: form.value.error
-          }) }}
+          {% if allowMoreContainers %}
+            {{ govukRadios({
+              classes: "govuk-radios--inline",
+              name: 'value',
+              fieldset: {
+                legend: {
+                  text: messages('addAnotherContainer.heading'),
+                  isPageHeading: false,
+                  classes: "govuk-fieldset__legend--m"
+                }
+              },
+              items: radios,
+              errorMessage: form.value.error
+            }) }}
+          {% else %}
+            <p class="govuk-body" data-testId="maxLimit"> {{ messages('maximumContainers.paragraph') }} </p>
+          {% endif %}
 
           {{ govukButton({
             text: messages("site.continue"),
