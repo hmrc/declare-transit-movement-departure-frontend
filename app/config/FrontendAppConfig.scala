@@ -22,9 +22,6 @@ import play.api.Configuration
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
-  private val contactHost = configuration.get[String]("contact-frontend.host")
-
-  val betaFeedbackUrl          = s"$contactHost/contact/beta-feedback"
   val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   val nctsGuidanceUrl: String  = configuration.get[String]("urls.nctsGuidance")
 
@@ -39,8 +36,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.referenceData").fullServiceUrl
 
   //TODO: Move out into it's own config object like `ManageTransitMovementsService`
-  val departureHost    = configuration.get[Service]("microservice.services.departures").fullServiceUrl
-  val departureBaseUrl = configuration.get[Service]("microservice.services.departures").baseUrl
+  val departureHost: String    = configuration.get[Service]("microservice.services.departures").fullServiceUrl
+  val departureBaseUrl: String = configuration.get[Service]("microservice.services.departures").baseUrl
 
   // TODO: Move config values for IdentifierAction to it's own config class
   // TODO: Make these values eagerly evaluated. I.e. non lazy
