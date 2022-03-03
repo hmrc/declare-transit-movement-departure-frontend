@@ -63,22 +63,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       |]
       |""".stripMargin
 
-  private val countryListResponseJson: String =
-    """
-      |[
-      | {
-      |   "code":"GB",
-      |   "state":"valid",
-      |   "description":"United Kingdom"
-      | },
-      | {
-      |   "code":"AD",
-      |   "state":"valid",
-      |   "description":"Andorra"
-      | }
-      |]
-      |""".stripMargin
-
   private val countriesResponseJson: String =
     """
       |[
@@ -89,22 +73,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       | {
       |   "code":"AD",
       |   "description":"Andorra"
-      | }
-      |]
-      |""".stripMargin
-
-  private val nonEUCountryListResponseJson: String =
-    """
-      |[
-      | {
-      |   "code":"GB",
-      |   "state":"valid",
-      |   "description":"United Kingdom"
-      | },
-      | {
-      |   "code":"NO",
-      |   "state":"valid",
-      |   "description":"Norway"
       | }
       |]
       |""".stripMargin
@@ -338,25 +306,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
       }
     }
 
-    "getCountryList" - {
-      "must return Seq of Country when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/countries-full-list"))
-            .willReturn(okJson(countryListResponseJson))
-        )
-
-        val expectedResult: Seq[Country] = Seq(
-          Country(CountryCode("GB"), "United Kingdom"),
-          Country(CountryCode("AD"), "Andorra")
-        )
-        connector.getCountries.futureValue mustEqual expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-        checkErrorResponse(s"/$startUrl/countries-full-list", connector.getCountries)
-      }
-    }
-
     "getCountries" - {
       "must return Seq of Country when successful" in {
         server.stubFor(
@@ -381,69 +330,6 @@ class ReferenceDataConnectorSpec extends SpecBase with AppWithDefaultMockFixture
 
       "must return an exception when an error response is returned" in {
         checkErrorResponse(s"/$startUrl/countries?customsOfficeRole=ANY", connector.getCountries(Nil))
-      }
-    }
-
-    "getTransitCountryList" - {
-
-      "must return Seq of Country when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/transit-countries"))
-            .willReturn(okJson(countryListResponseJson))
-        )
-
-        val expectedResult: Seq[Country] = Seq(
-          Country(CountryCode("GB"), "United Kingdom"),
-          Country(CountryCode("AD"), "Andorra")
-        )
-
-        connector.getTransitCountries().futureValue mustEqual expectedResult
-      }
-
-      "must return Seq of Country when passed with query parameters and is successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/transit-countries?excludeCountries=JE&excludeCountries=AB"))
-            .willReturn(okJson(countryListResponseJson))
-        )
-
-        val expectedResult: Seq[Country] = Seq(
-          Country(CountryCode("GB"), "United Kingdom"),
-          Country(CountryCode("AD"), "Andorra")
-        )
-
-        val queryParameters = Seq(
-          "excludeCountries" -> "JE",
-          "excludeCountries" -> "AB"
-        )
-
-        connector.getTransitCountries(queryParameters).futureValue mustEqual expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/transit-countries", connector.getTransitCountries())
-      }
-    }
-
-    "getNonEUTransitCountryList" - {
-
-      "must return Seq of Country when successful" in {
-        server.stubFor(
-          get(urlEqualTo(s"/$startUrl/non-eu-transit-countries"))
-            .willReturn(okJson(nonEUCountryListResponseJson))
-        )
-
-        val expectedResult: Seq[Country] = Seq(
-          Country(CountryCode("GB"), "United Kingdom"),
-          Country(CountryCode("NO"), "Norway")
-        )
-
-        connector.getNonEuTransitCountries().futureValue mustEqual expectedResult
-      }
-
-      "must return an exception when an error response is returned" in {
-
-        checkErrorResponse(s"/$startUrl/non-eu-transit-countries", connector.getNonEuTransitCountries())
       }
     }
 

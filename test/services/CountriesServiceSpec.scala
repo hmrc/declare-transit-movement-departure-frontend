@@ -116,44 +116,49 @@ class CountriesServiceSpec extends SpecBase with BeforeAndAfterEach with UserAns
     "getCountries" - {
       "must return a list of sorted countries" in {
 
-        when(mockRefDataConnector.getCountries()(any(), any()))
+        when(mockRefDataConnector.getCountries(any())(any(), any()))
           .thenReturn(Future.successful(countries))
 
         service.getCountries().futureValue mustBe
           CountryList(Seq(country2, country3, country1))
 
-        verify(mockRefDataConnector).getCountries()(any(), any())
+        verify(mockRefDataConnector).getCountries(eqTo(Nil))(any(), any())
       }
     }
 
     "getTransitCountries" - {
       "must return a list of sorted transit countries" in {
 
-        when(mockRefDataConnector.getTransitCountries(any())(any(), any()))
+        when(mockRefDataConnector.getCountries(any())(any(), any()))
           .thenReturn(Future.successful(countries))
 
         service.getTransitCountries(excludedCountries).futureValue mustBe
           CountryList(Seq(country2, country3, country1))
 
         val expectedQueryParameters = Seq(
-          "excludeCountries" -> "IT",
-          "excludeCountries" -> "DE"
+          "exclude"    -> "IT",
+          "exclude"    -> "DE",
+          "membership" -> "ctc"
         )
 
-        verify(mockRefDataConnector).getTransitCountries(eqTo(expectedQueryParameters))(any(), any())
+        verify(mockRefDataConnector).getCountries(eqTo(expectedQueryParameters))(any(), any())
       }
     }
 
     "getNonEuTransitCountries" - {
       "must return a list of sorted non-EU transit countries" in {
 
-        when(mockRefDataConnector.getNonEuTransitCountries()(any(), any()))
+        when(mockRefDataConnector.getCountries(any())(any(), any()))
           .thenReturn(Future.successful(countries))
 
         service.getNonEuTransitCountries().futureValue mustBe
           CountryList(Seq(country2, country3, country1))
 
-        verify(mockRefDataConnector).getNonEuTransitCountries()(any(), any())
+        val expectedQueryParameters = Seq(
+          "membership" -> "non_eu"
+        )
+
+        verify(mockRefDataConnector).getCountries(eqTo(expectedQueryParameters))(any(), any())
       }
     }
   }
