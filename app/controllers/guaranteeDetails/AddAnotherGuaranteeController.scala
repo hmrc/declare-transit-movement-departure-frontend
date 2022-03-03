@@ -16,6 +16,7 @@
 
 package controllers.guaranteeDetails
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfGuarantees
 import forms.AddAnotherGuaranteeFormProvider
@@ -34,8 +35,8 @@ import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.GuaranteeDetailsCheckYourAnswersHelper
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherGuaranteeController @Inject() (
@@ -47,14 +48,15 @@ class AddAnotherGuaranteeController @Inject() (
   checkDependentSection: CheckDependentSectionAction,
   formProvider: AddAnotherGuaranteeFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  def allowMoreGuarantees(ua: UserAnswers): Boolean =
-    ua.get(DeriveNumberOfGuarantees).getOrElse(0) < AddAnotherGuaranteePage.maxAllowedGuarantees
+  private def allowMoreGuarantees(ua: UserAnswers): Boolean =
+    ua.get(DeriveNumberOfGuarantees).getOrElse(0) < config.maxGuarantees
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] =
     (identify

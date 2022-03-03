@@ -38,9 +38,11 @@
           rows: packageRows
         }) }}
 
-        <form action="{{ routes.controllers.addItems.packagesInformation.AddAnotherPackageController.onSubmit(lrn, itemIndex, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.packagesInformation.AddAnotherPackageController.onSubmit(lrn, itemIndex, mode).url }}" method="post" data-testId="addPackageRadio">
 
           {{ csrf() | safe }}
+
+        {% if allowMorePackages %}
 
           {{ govukRadios({
             classes: "govuk-radios--inline",
@@ -55,6 +57,10 @@
             items: radios,
             errorMessage: form.value.error
           }) }}
+
+        {% else %}
+          <p class="govuk-body" data-testId="maxLimit"> {{ messages('maximumPackagesInformation.paragraph') }} </p>
+        {% endif %}
 
           {{ govukButton({
             text: messages("site.continue"),

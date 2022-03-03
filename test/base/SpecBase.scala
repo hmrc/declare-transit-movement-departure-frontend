@@ -52,6 +52,7 @@ trait SpecBase
   val sealIndex: Index          = Index(0)
   val sealDomain: SealDomain    = SealDomain("sealNumber")
   val sealDomain2: SealDomain   = SealDomain("sealNumber2")
+  val sealDomain3: SealDomain   = SealDomain("sealNumber3")
 
   val index: Index          = Index(0)
   val referenceIndex: Index = Index(0)

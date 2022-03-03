@@ -17,6 +17,7 @@
 package navigation
 
 import base.SpecBase
+import config.FrontendAppConfig
 import controllers.guaranteeDetails.{routes => guaranteeDetailsRoute}
 import generators.Generators
 import models.DeclarationType.{Option2, Option4}
@@ -24,18 +25,21 @@ import models.GuaranteeType._
 import models.reference.{CountryCode, CustomsOffice}
 import models.{CheckMode, GuaranteeType, Index, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.guaranteeDetails._
 import pages.routeDetails.DestinationOfficePage
 import play.api.libs.json.{JsObject, JsPath}
 
-class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class GuaranteeDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuiceOneAppPerSuite {
   // format: off
   val customsOffice1: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("GB"), None)
   val customsOffice2: CustomsOffice = CustomsOffice("officeId", "someName", CountryCode("DE"), None)
 
-  val navigator = new GuaranteeDetailsNavigator
+  val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+
+  val navigator = new GuaranteeDetailsNavigator(config = frontendAppConfig)
   "GuaranteeDetailsNavigator" - {
     "in normal mode" - {
       "must go from GuaranteeTypePage to GuaranteeReferenceNumberPage when user selects" - {

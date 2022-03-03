@@ -19,14 +19,14 @@ package controllers.addItems.specialMentions
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, SpecialMentionList, UserAnswers}
+import models.{Index, NormalMode, SpecialMentionList, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsSpecialMentions
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.addItems.specialMentions.AddAnotherSpecialMentionPage
+import pages.addItems.specialMentions.{AddAnotherSpecialMentionPage, SpecialMentionAdditionalInfoPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -41,7 +41,7 @@ import scala.concurrent.Future
 class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider = new AddAnotherSpecialMentionFormProvider()
-  private val form         = formProvider()
+  private val form         = formProvider(true)
   private val template     = "addItems/specialMentions/addAnotherSpecialMention.njk"
 
   private lazy val addAnotherSpecialMentionRoute = routes.AddAnotherSpecialMentionController.onPageLoad(lrn, itemIndex, NormalMode).url
@@ -76,14 +76,15 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaul
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"          -> form,
-        "lrn"           -> lrn,
-        "mode"          -> NormalMode,
-        "itemIndex"     -> itemIndex.display,
-        "radios"        -> Radios.yesNo(form("value")),
-        "pageTitle"     -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
-        "heading"       -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
-        "referenceRows" -> Nil
+        "form"                     -> form,
+        "lrn"                      -> lrn,
+        "mode"                     -> NormalMode,
+        "itemIndex"                -> itemIndex.display,
+        "radios"                   -> Radios.yesNo(form("value")),
+        "pageTitle"                -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
+        "heading"                  -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
+        "allowMoreSpecialMentions" -> true,
+        "referenceRows"            -> Nil
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -112,13 +113,14 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaul
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"          -> form,
-        "lrn"           -> lrn,
-        "mode"          -> NormalMode,
-        "itemIndex"     -> itemIndex.display,
-        "pageTitle"     -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
-        "heading"       -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
-        "referenceRows" -> Nil
+        "form"                     -> form,
+        "lrn"                      -> lrn,
+        "mode"                     -> NormalMode,
+        "itemIndex"                -> itemIndex.display,
+        "pageTitle"                -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
+        "heading"                  -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
+        "allowMoreSpecialMentions" -> true,
+        "referenceRows"            -> Nil
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey
@@ -136,6 +138,35 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaul
       val request =
         FakeRequest(POST, addAnotherSpecialMentionRoute)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+    }
+
+    "must redirect to the next page when invalid data is submitted but we have max items" in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers = emptyUserAnswers
+        .set(SpecialMentionAdditionalInfoPage(Index(0), Index(0)), "test")
+        .success
+        .value
+        .set(SpecialMentionAdditionalInfoPage(Index(0), Index(1)), "test")
+        .success
+        .value
+        .set(SpecialMentionAdditionalInfoPage(Index(0), Index(2)), "test")
+        .success
+        .value
+
+      setUserAnswers(Some(userAnswers))
+
+      val request =
+        FakeRequest(POST, addAnotherSpecialMentionRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
       val result = route(app, request).value
 
@@ -164,12 +195,14 @@ class AddAnotherSpecialMentionControllerSpec extends SpecBase with AppWithDefaul
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "lrn"       -> lrn,
-        "mode"      -> NormalMode,
-        "itemIndex" -> itemIndex.display,
-        "pageTitle" -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
-        "heading"   -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1)
+        "form"                     -> boundForm,
+        "lrn"                      -> lrn,
+        "mode"                     -> NormalMode,
+        "itemIndex"                -> itemIndex.display,
+        "pageTitle"                -> msg"addAnotherSpecialMention.title.plural".withArgs(0, 1),
+        "heading"                  -> msg"addAnotherSpecialMention.heading.plural".withArgs(0, 1),
+        "allowMoreSpecialMentions" -> true,
+        "referenceRows"            -> Nil
       )
 
       val jsonWithoutConfig = jsonCaptor.getValue - configKey

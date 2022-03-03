@@ -28,12 +28,15 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
 import queries.SealsQuery
-
 import java.time.LocalDate
 
-class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+import config.FrontendAppConfig
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-  val navigator = new GoodsSummaryNavigator
+class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators with GuiceOneAppPerSuite {
+
+  val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+  val navigator         = new GoodsSummaryNavigator(frontendAppConfig)
   // format: off
   "GoodsSummaryNavigator" - {
 
@@ -316,8 +319,8 @@ class GoodsSummaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks w
           }
         }
 
-        "SealsInformationController when we already have 10 seals" in {
-          forAll(arbitrary[UserAnswers], Gen.listOfN(10, arbitrary[SealDomain])) {
+        "SealsInformationController when we already have max seals" in {
+          forAll(arbitrary[UserAnswers], Gen.listOfN(frontendAppConfig.maxSeals, arbitrary[SealDomain])) {
             (userAnswers, seals) =>
             val updateAnswers = userAnswers
               .set(SealsQuery(), seals).success.value

@@ -16,11 +16,12 @@
 
 package controllers.addItems.specialMentions
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfSpecialMentions
 import forms.addItems.specialMentions.AddAnotherSpecialMentionFormProvider
 import models.requests.DataRequest
-import models.{DependentSection, Index, LocalReferenceNumber, Mode}
+import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsSpecialMentions
 import pages.addItems.specialMentions.AddAnotherSpecialMentionPage
@@ -35,8 +36,8 @@ import services.SpecialMentionTypesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.SpecialMentionsCheckYourAnswersHelper
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherSpecialMentionController @Inject() (
@@ -50,13 +51,13 @@ class AddAnotherSpecialMentionController @Inject() (
   formProvider: AddAnotherSpecialMentionFormProvider,
   specialMentionTypesService: SpecialMentionTypesService,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
   private val template = "addItems/specialMentions/addAnotherSpecialMention.njk"
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
@@ -65,7 +66,7 @@ class AddAnotherSpecialMentionController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        renderPage(lrn, itemIndex, form, mode).map(Ok(_))
+        renderPage(lrn, itemIndex, formProvider(allowMoreSpecialMentions(request.userAnswers, itemIndex)), mode).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
@@ -74,7 +75,7 @@ class AddAnotherSpecialMentionController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        form
+        formProvider(allowMoreSpecialMentions(request.userAnswers, itemIndex))
           .bindFromRequest()
           .fold(
             formWithErrors => renderPage(lrn, itemIndex, formWithErrors, mode).map(BadRequest(_)),
@@ -104,18 +105,22 @@ class AddAnotherSpecialMentionController @Inject() (
         val singularOrPlural = if (numberOfReferences == 1) "singular" else "plural"
 
         val json = Json.obj(
-          "form"          -> form,
-          "lrn"           -> lrn,
-          "mode"          -> mode,
-          "itemIndex"     -> itemIndex.display,
-          "pageTitle"     -> msg"addAnotherSpecialMention.title.$singularOrPlural".withArgs(numberOfReferences, itemIndex.display),
-          "heading"       -> msg"addAnotherSpecialMention.heading.$singularOrPlural".withArgs(numberOfReferences, itemIndex.display),
-          "referenceRows" -> referenceRows,
-          "radios"        -> Radios.yesNo(form("value"))
+          "form"                     -> form,
+          "lrn"                      -> lrn,
+          "mode"                     -> mode,
+          "itemIndex"                -> itemIndex.display,
+          "pageTitle"                -> msg"addAnotherSpecialMention.title.$singularOrPlural".withArgs(numberOfReferences, itemIndex.display),
+          "heading"                  -> msg"addAnotherSpecialMention.heading.$singularOrPlural".withArgs(numberOfReferences, itemIndex.display),
+          "allowMoreSpecialMentions" -> allowMoreSpecialMentions(request.userAnswers, itemIndex),
+          "referenceRows"            -> referenceRows,
+          "radios"                   -> Radios.yesNo(form("value"))
         )
 
         renderer.render(template, json)
     }
 
   }
+
+  private def allowMoreSpecialMentions(ua: UserAnswers, itemIndex: Index): Boolean =
+    ua.get(DeriveNumberOfSpecialMentions(itemIndex)).getOrElse(0) < config.maxSpecialMentions
 }

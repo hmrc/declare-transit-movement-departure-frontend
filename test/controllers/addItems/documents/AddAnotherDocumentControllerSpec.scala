@@ -21,13 +21,14 @@ import controllers.{routes => mainRoutes}
 import forms.addItems.AddAnotherDocumentFormProvider
 import matchers.JsonMatchers
 import models.reference.DocumentType
-import models.{DocumentTypeList, NormalMode}
+import models.{DocumentTypeList, Index, NormalMode}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsDocument
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.addItems.DocumentTypePage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -42,7 +43,7 @@ import scala.concurrent.Future
 class AddAnotherDocumentControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   private val formProvider                                   = new AddAnotherDocumentFormProvider()
-  private val form                                           = formProvider(index)
+  private val form                                           = formProvider(true)
   private val template                                       = "addItems/addAnotherDocument.njk"
   private val mockDocumentTypesService: DocumentTypesService = mock[DocumentTypesService]
   val documentType1: DocumentType                            = DocumentType("1", "11", transportDocument = true)
@@ -75,13 +76,14 @@ class AddAnotherDocumentControllerSpec extends SpecBase with AppWithDefaultMockF
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "index"     -> index.display,
-        "lrn"       -> lrn,
-        "mode"      -> NormalMode,
-        "pageTitle" -> msg"addAnotherDocument.title.plural".withArgs(1),
-        "heading"   -> msg"addAnotherDocument.heading.plural".withArgs(1),
-        "radios"    -> Radios.yesNo(form("value"))
+        "form"               -> form,
+        "index"              -> index.display,
+        "lrn"                -> lrn,
+        "mode"               -> NormalMode,
+        "pageTitle"          -> msg"addAnotherDocument.title.plural".withArgs(1),
+        "heading"            -> msg"addAnotherDocument.heading.plural".withArgs(1),
+        "radios"             -> Radios.yesNo(form("value")),
+        "allowMoreDocuments" -> true
       )
       templateCaptor.getValue mustEqual template
       jsonCaptor.getValue must containJson(expectedJson)
@@ -104,7 +106,36 @@ class AddAnotherDocumentControllerSpec extends SpecBase with AppWithDefaultMockF
 
       status(result) mustEqual SEE_OTHER
 
+      redirectLocation(result).value mustEqual controllers.addItems.documents.routes.DocumentTypeController.onPageLoad(lrn, itemIndex, index, NormalMode).url
+    }
+
+    "must redirect to correct page when reached maximum number of documents" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(DocumentTypePage(itemIndex, Index(0)), "12345")
+        .success
+        .value
+        .set(DocumentTypePage(itemIndex, Index(1)), "12345")
+        .success
+        .value
+        .set(DocumentTypePage(itemIndex, Index(2)), "12345")
+        .success
+        .value
+
+      setUserAnswers(Some(userAnswers))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val request =
+        FakeRequest(POST, addAnotherDocumentRoute)
+          .withFormUrlEncodedBody(("value", ""))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual onwardRoute.url
+
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
@@ -127,12 +158,13 @@ class AddAnotherDocumentControllerSpec extends SpecBase with AppWithDefaultMockF
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "pageTitle" -> msg"addAnotherDocument.title.plural".withArgs(1),
-        "heading"   -> msg"addAnotherDocument.heading.plural".withArgs(1),
-        "lrn"       -> lrn,
-        "mode"      -> NormalMode,
-        "radios"    -> Radios.yesNo(boundForm("value"))
+        "form"               -> boundForm,
+        "pageTitle"          -> msg"addAnotherDocument.title.plural".withArgs(1),
+        "heading"            -> msg"addAnotherDocument.heading.plural".withArgs(1),
+        "lrn"                -> lrn,
+        "mode"               -> NormalMode,
+        "radios"             -> Radios.yesNo(boundForm("value")),
+        "allowMoreDocuments" -> true
       )
 
       templateCaptor.getValue mustEqual template

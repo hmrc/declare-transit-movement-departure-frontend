@@ -100,6 +100,12 @@ trait ViewSpecAssertions extends Matchers {
     }
   }
 
+  def assertContainsClass(doc: Document, expectedClass: String) =
+    assert(doc.getElementsByClass(expectedClass).isEmpty == false, s"\n\nPage should have class $expectedClass")
+
+  def assertContainsNoClass(doc: Document, expectedClass: String) =
+    assert(doc.getElementsByClass(expectedClass).isEmpty, s"\n\nPage should not have class $expectedClass")
+
   def assertPageHasSignOutLink(doc: Document, expectedText: String, expectedHref: String): Assertion = {
     val link = doc.getElementsByClass("hmrc-sign-out-nav__link").first()
     link.text() mustBe expectedText

@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 class AddAnotherPreviousAdministrativeReferenceFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(allowMorePreviousReferences: Boolean): Form[Boolean] =
     Form(
-      "value" -> boolean("addAnotherPreviousAdministrativeReference.error.required")
+      "value" -> mandatoryIfBoolean(allowMorePreviousReferences, "addAnotherPreviousAdministrativeReference.error.required", false)
     )
 }

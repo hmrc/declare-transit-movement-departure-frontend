@@ -16,11 +16,12 @@
 
 package controllers.addItems
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfItems
 import forms.addItems.AddAnotherItemFormProvider
 import models.requests.DataRequest
-import models.{DependentSection, Index, LocalReferenceNumber, NormalMode}
+import models.{DependentSection, Index, LocalReferenceNumber, NormalMode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItems
 import pages.addItems.AddAnotherItemPage
@@ -34,8 +35,8 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.AddItemsCheckYourAnswersHelper
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddAnotherItemController @Inject() (
@@ -48,13 +49,12 @@ class AddAnotherItemController @Inject() (
   checkDependentSection: CheckDependentSectionAction,
   formProvider: AddAnotherItemFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
-
-  private val form = formProvider()
 
   def onPageLoad(lrn: LocalReferenceNumber): Action[AnyContent] =
     (identify
@@ -62,7 +62,7 @@ class AddAnotherItemController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        renderPage(lrn, form).map(Ok(_))
+        renderPage(lrn, formProvider(allowMoreItems(request.userAnswers))).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber): Action[AnyContent] =
@@ -71,7 +71,7 @@ class AddAnotherItemController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        form
+        formProvider(allowMoreItems(request.userAnswers))
           .bindFromRequest()
           .fold(
             formWithErrors => renderPage(lrn, formWithErrors).map(BadRequest(_)),
@@ -96,14 +96,20 @@ class AddAnotherItemController @Inject() (
 
     val singularOrPlural = if (numberOfItems == 1) "singular" else "plural"
     val json = Json.obj(
-      "form"      -> form,
-      "lrn"       -> lrn,
-      "pageTitle" -> msg"addAnotherItem.title.$singularOrPlural".withArgs(numberOfItems),
-      "heading"   -> msg"addAnotherItem.heading.$singularOrPlural".withArgs(numberOfItems),
-      "itemRows"  -> itemRows,
-      "radios"    -> Radios.yesNo(form("value"))
+      "form"           -> form,
+      "lrn"            -> lrn,
+      "pageTitle"      -> msg"addAnotherItem.title.$singularOrPlural".withArgs(numberOfItems),
+      "heading"        -> msg"addAnotherItem.heading.$singularOrPlural".withArgs(numberOfItems),
+      "itemRows"       -> itemRows,
+      "allowMoreItems" -> allowMoreItems(request.userAnswers),
+      "radios"         -> Radios.yesNo(form("value"))
     )
 
     renderer.render("addItems/addAnotherItem.njk", json)
+  }
+
+  private def allowMoreItems(userAnswers: UserAnswers): Boolean = {
+    val numberOfItems = userAnswers.get(DeriveNumberOfItems).getOrElse(0)
+    numberOfItems < config.maxItems
   }
 }

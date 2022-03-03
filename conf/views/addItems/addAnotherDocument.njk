@@ -37,9 +37,11 @@
           rows: documentRows
         }) }}
 
-        <form action="{{ routes.controllers.addItems.documents.AddAnotherDocumentController.onSubmit(lrn, index, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.documents.AddAnotherDocumentController.onSubmit(lrn, index, mode).url }}" method="post" data-testId="addDocumentRadio">
 
           {{ csrf() | safe }}
+
+          {% if allowMoreDocuments %}
 
           {{ govukRadios({
             classes: "govuk-radios--inline",
@@ -54,6 +56,9 @@
             items: radios,
             errorMessage: form.value.error
           }) }}
+         {% else %}
+            <p class="govuk-body" data-testId="maxLimit"> {{ messages('maximumDocuments.paragraph') }} </p>
+         {% endif %}
 
           {{ govukButton({
             text: messages("site.continue"),

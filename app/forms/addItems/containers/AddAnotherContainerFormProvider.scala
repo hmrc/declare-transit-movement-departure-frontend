@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 class AddAnotherContainerFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(allowMoreContainers: Boolean): Form[Boolean] =
     Form(
-      "value" -> boolean("addAnotherContainer.error.required")
+      "value" -> mandatoryIfBoolean(allowMoreContainers, "addAnotherContainer.error.required", false)
     )
 }

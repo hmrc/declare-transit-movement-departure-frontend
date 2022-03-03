@@ -16,6 +16,7 @@
 
 package controllers.routeDetails
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfOfficeOfTransits
 import forms.AddTransitOfficeFormProvider
@@ -34,8 +35,8 @@ import services.CustomsOfficesService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 import utils.RouteDetailsCheckYourAnswersHelper
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddTransitOfficeController @Inject() (
@@ -47,7 +48,8 @@ class AddTransitOfficeController @Inject() (
   formProvider: AddTransitOfficeFormProvider,
   customsOfficesService: CustomsOfficesService,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -80,7 +82,7 @@ class AddTransitOfficeController @Inject() (
         val routesCYAHelper          = new RouteDetailsCheckYourAnswersHelper(request.userAnswers, mode)
         val numberOfTransitOffices   = request.userAnswers.get(DeriveNumberOfOfficeOfTransits).getOrElse(0)
         val index: Seq[Index]        = List.range(0, numberOfTransitOffices).map(Index(_))
-        val maxLimitReached: Boolean = numberOfTransitOffices >= 9
+        val maxLimitReached: Boolean = numberOfTransitOffices >= config.maxTransitOffices
         val officeOfTransitRows = index.map {
           index =>
             routesCYAHelper.officeOfTransitRow(index, customsOfficeList)

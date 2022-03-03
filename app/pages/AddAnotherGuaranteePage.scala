@@ -23,6 +23,4 @@ case object AddAnotherGuaranteePage extends QuestionPage[Boolean] {
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "addAnotherGuarantee"
-
-  val maxAllowedGuarantees: Int = 9
 }

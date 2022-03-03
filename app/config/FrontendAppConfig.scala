@@ -63,4 +63,14 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val enrolmentProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
 
+  lazy val maxTransitOffices: Int     = configuration.get[Int]("limits.maxTransitOffices")
+  lazy val maxItems: Int              = configuration.get[Int]("limits.maxItems")
+  lazy val maxGuarantees: Int         = configuration.get[Int]("limits.maxGuarantees")
+  lazy val maxSeals: Int              = configuration.get[Int]("limits.maxSeals")
+  lazy val maxCountriesOfRouting: Int = configuration.get[Int]("limits.maxCountriesOfRouting")
+  lazy val maxSpecialMentions: Int    = configuration.get[Int]("limits.maxSpecialMentions")
+  lazy val maxPackages: Int           = configuration.get[Int]("limits.maxPackages")
+  lazy val maxContainers: Int         = configuration.get[Int]("limits.maxContainers")
+  lazy val maxDocuments: Int          = configuration.get[Int]("limits.maxDocuments")
+  lazy val maxPreviousReferences: Int = configuration.get[Int]("limits.maxPreviousReferences")
 }

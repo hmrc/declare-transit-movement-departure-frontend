@@ -42,7 +42,7 @@ import scala.concurrent.Future
 class SealsInformationControllerSpec extends SpecBase with AppWithDefaultMockFixtures with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   val formProvider        = new SealsInformationFormProvider()
-  val form: Form[Boolean] = formProvider()
+  val form: Form[Boolean] = formProvider(true)
 
   lazy val sealsInformationRoute: String = routes.SealsInformationController.onPageLoad(lrn, NormalMode).url
 
@@ -76,13 +76,13 @@ class SealsInformationControllerSpec extends SpecBase with AppWithDefaultMockFix
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"        -> form,
-        "mode"        -> NormalMode,
-        "lrn"         -> lrn,
-        "radios"      -> Radios.yesNo(form("value")),
-        "pageTitle"   -> "sealsInformation.title.singular",
-        "heading"     -> "sealsInformation.heading.singular",
-        "onSubmitUrl" -> routes.SealsInformationController.onSubmit(lrn, NormalMode).url
+        "form"           -> form,
+        "mode"           -> NormalMode,
+        "lrn"            -> lrn,
+        "radios"         -> Radios.yesNo(form("value")),
+        "pageTitle"      -> "sealsInformation.title.singular",
+        "heading"        -> "sealsInformation.heading.singular",
+        "allowMoreSeals" -> true
       )
 
       templateCaptor.getValue mustEqual "sealsInformation.njk"
@@ -112,13 +112,53 @@ class SealsInformationControllerSpec extends SpecBase with AppWithDefaultMockFix
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
       val expectedJson = Json.obj(
-        "form"        -> form,
-        "mode"        -> NormalMode,
-        "lrn"         -> lrn,
-        "radios"      -> Radios.yesNo(form("value")),
-        "pageTitle"   -> "sealsInformation.title.plural",
-        "heading"     -> "sealsInformation.heading.plural",
-        "onSubmitUrl" -> routes.SealsInformationController.onSubmit(lrn, NormalMode).url
+        "form"           -> form,
+        "mode"           -> NormalMode,
+        "lrn"            -> lrn,
+        "radios"         -> Radios.yesNo(form("value")),
+        "pageTitle"      -> "sealsInformation.title.plural",
+        "heading"        -> "sealsInformation.heading.plural",
+        "allowMoreSeals" -> true
+      )
+
+      templateCaptor.getValue mustEqual "sealsInformation.njk"
+      jsonCaptor.getValue must containJson(expectedJson)
+    }
+
+    "must return OK and the correct view for a GET with max seals" in {
+
+      val updatedAnswers = emptyUserAnswers
+        .set(SealIdDetailsPage(Index(0)), sealDomain)
+        .success
+        .value
+        .set(SealIdDetailsPage(Index(1)), sealDomain2)
+        .success
+        .value
+        .set(SealIdDetailsPage(Index(2)), sealDomain3)
+        .success
+        .value
+
+      setUserAnswers(Some(updatedAnswers))
+
+      when(mockRenderer.render(any(), any())(any()))
+        .thenReturn(Future.successful(Html("")))
+
+      val request                                = FakeRequest(GET, sealsInformationRoute)
+      val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
+      val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
+      val result                                 = route(app, request).value
+
+      status(result) mustEqual OK
+
+      verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
+      val expectedJson = Json.obj(
+        "form"           -> form,
+        "mode"           -> NormalMode,
+        "lrn"            -> lrn,
+        "radios"         -> Radios.yesNo(form("value")),
+        "pageTitle"      -> "sealsInformation.title.plural",
+        "heading"        -> "sealsInformation.heading.plural",
+        "allowMoreSeals" -> false
       )
 
       templateCaptor.getValue mustEqual "sealsInformation.njk"
@@ -134,6 +174,34 @@ class SealsInformationControllerSpec extends SpecBase with AppWithDefaultMockFix
       val request =
         FakeRequest(POST, sealsInformationRoute)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+    }
+
+    "must redirect to the next page when we have the max seals" in {
+
+      val updatedAnswers = emptyUserAnswers
+        .set(SealIdDetailsPage(Index(0)), sealDomain)
+        .success
+        .value
+        .set(SealIdDetailsPage(Index(1)), sealDomain2)
+        .success
+        .value
+        .set(SealIdDetailsPage(Index(2)), sealDomain3)
+        .success
+        .value
+
+      setUserAnswers(Some(updatedAnswers))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val request =
+        FakeRequest(POST, sealsInformationRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
       val result = route(app, request).value
 
@@ -165,13 +233,13 @@ class SealsInformationControllerSpec extends SpecBase with AppWithDefaultMockFix
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"        -> boundForm,
-        "mode"        -> NormalMode,
-        "lrn"         -> lrn,
-        "radios"      -> Radios.yesNo(boundForm("value")),
-        "pageTitle"   -> "sealsInformation.title.singular",
-        "heading"     -> "sealsInformation.heading.singular",
-        "onSubmitUrl" -> routes.SealsInformationController.onSubmit(lrn, NormalMode).url
+        "form"           -> boundForm,
+        "mode"           -> NormalMode,
+        "lrn"            -> lrn,
+        "radios"         -> Radios.yesNo(boundForm("value")),
+        "pageTitle"      -> "sealsInformation.title.singular",
+        "heading"        -> "sealsInformation.heading.singular",
+        "allowMoreSeals" -> true
       )
 
       templateCaptor.getValue mustEqual "sealsInformation.njk"

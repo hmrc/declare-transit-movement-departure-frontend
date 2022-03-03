@@ -42,20 +42,23 @@
 
           {{ csrf() | safe }}
 
-          {{ govukRadios({
-            classes: "govuk-radios--inline",
-            name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('addAnotherCountryOfRouting.h2'),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            items: radios,
-            errorMessage: form.value.error
-          }) }}
-
+          {% if allowMoreCountries %}
+              {{ govukRadios({
+                classes: "govuk-radios--inline",
+                name: 'value',
+                fieldset: {
+                  legend: {
+                    text: messages('addAnotherCountryOfRouting.h2'),
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--m"
+                  }
+                },
+                items: radios,
+                errorMessage: form.value.error
+              }) }}
+            {% else %}
+              <p class="govuk-body" data-testId="maxLimit"> {{ messages('addAnotherCountryOfRouting.maxLimit.label') }} </p>
+            {% endif %}
           {{ govukButton({
             text: messages("site.continue"),
             attributes: {id: "submit"}

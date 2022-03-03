@@ -21,13 +21,14 @@ import controllers.{routes => mainRoute}
 import forms.safetyAndSecurity.AddAnotherCountryOfRoutingFormProvider
 import matchers.JsonMatchers
 import models.reference.{Country, CountryCode}
-import models.{CountryList, NormalMode}
+import models.{CountryList, Index, NormalMode}
 import navigation.annotations.SafetyAndSecurity
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.safetyAndSecurity.CountryOfRoutingPage
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -46,7 +47,7 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
   private val mockCountriesService: CountriesService = mock[CountriesService]
 
   val countries        = CountryList(Seq(Country(CountryCode("GB"), "United Kingdom")))
-  private val form     = formProvider()
+  private val form     = formProvider(true)
   private val template = "safetyAndSecurity/addAnotherCountryOfRouting.njk"
 
   private lazy val addAnotherCountryOfRoutingRoute = routes.AddAnotherCountryOfRoutingController.onPageLoad(lrn, NormalMode).url
@@ -79,12 +80,13 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "pageTitle" -> msg"addAnotherCountryOfRouting.title.singular".withArgs(1),
-        "heading"   -> msg"addAnotherCountryOfRouting.heading.singular".withArgs(1),
-        "lrn"       -> lrn,
-        "mode"      -> NormalMode,
-        "radios"    -> Radios.yesNo(form("value"))
+        "form"               -> form,
+        "pageTitle"          -> msg"addAnotherCountryOfRouting.title.singular".withArgs(1),
+        "heading"            -> msg"addAnotherCountryOfRouting.heading.singular".withArgs(1),
+        "lrn"                -> lrn,
+        "mode"               -> NormalMode,
+        "allowMoreCountries" -> true,
+        "radios"             -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual template
@@ -101,6 +103,35 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
       val request =
         FakeRequest(POST, addAnotherCountryOfRoutingRoute)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+    }
+
+    "must redirect to the next page when invalid data is submitted but we can't add more countries" in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockCountriesService.getCountries()(any())).thenReturn(Future.successful(countries))
+
+      val updateAnswers = emptyUserAnswers
+        .set(CountryOfRoutingPage(Index(0)), CountryCode("GB"))
+        .success
+        .value
+        .set(CountryOfRoutingPage(Index(1)), CountryCode("FR"))
+        .success
+        .value
+        .set(CountryOfRoutingPage(Index(2)), CountryCode("US"))
+        .success
+        .value
+      setUserAnswers(Some(updateAnswers))
+
+      val request =
+        FakeRequest(POST, addAnotherCountryOfRoutingRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
       val result = route(app, request).value
 
@@ -131,12 +162,13 @@ class AddAnotherCountryOfRoutingControllerSpec extends SpecBase with AppWithDefa
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "pageTitle" -> msg"addAnotherCountryOfRouting.title.singular".withArgs(1),
-        "heading"   -> msg"addAnotherCountryOfRouting.heading.singular".withArgs(1),
-        "lrn"       -> lrn,
-        "mode"      -> NormalMode,
-        "radios"    -> Radios.yesNo(form("value"))
+        "form"               -> boundForm,
+        "pageTitle"          -> msg"addAnotherCountryOfRouting.title.singular".withArgs(1),
+        "heading"            -> msg"addAnotherCountryOfRouting.heading.singular".withArgs(1),
+        "lrn"                -> lrn,
+        "mode"               -> NormalMode,
+        "allowMoreCountries" -> true,
+        "radios"             -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual template

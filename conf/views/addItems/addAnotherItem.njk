@@ -36,23 +36,28 @@
           rows: itemRows
         }) }}
 
-        <form action="{{ routes.controllers.addItems.AddAnotherItemController.onSubmit(lrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.addItems.AddAnotherItemController.onSubmit(lrn, mode).url }}" method="post" data-testId="addItemRadio">
 
           {{ csrf() | safe }}
 
-          {{ govukRadios({
-            classes: "govuk-radios--inline",
-            name: 'value',
-            fieldset: {
-              legend: {
-                text: messages('addAnotherItem.paragraph'),
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            items: radios,
-            errorMessage: form.value.error
-          }) }}
+            {% if allowMoreItems %}
+
+              {{ govukRadios({
+                classes: "govuk-radios--inline",
+                name: 'value',
+                fieldset: {
+                  legend: {
+                    text: messages('addAnotherItem.paragraph'),
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--m"
+                  }
+                },
+                items: radios,
+                errorMessage: form.value.error
+              }) }}
+            {% else %}
+              <p class="govuk-body" data-testId="maxLimit"> {{ messages('addAnotherItem.maxLimit.label') }} </p>
+            {% endif %}
 
           {{ govukButton({
             text: messages("site.continue"),
@@ -60,7 +65,6 @@
           }) }}
 
         </form>
-
       </div>
     </div>
   </div>

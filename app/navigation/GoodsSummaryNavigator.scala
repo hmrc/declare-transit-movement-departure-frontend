@@ -16,6 +16,7 @@
 
 package navigation
 
+import config.FrontendAppConfig
 import controllers.goodsSummary.routes
 import derivable.DeriveNumberOfSeals
 import models.ProcedureType.{Normal, Simplified}
@@ -23,11 +24,10 @@ import models._
 import pages._
 import pages.generalInformation.PreLodgeDeclarationPage
 import play.api.mvc.Call
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class GoodsSummaryNavigator @Inject() () extends Navigator {
+class GoodsSummaryNavigator @Inject() (config: FrontendAppConfig) extends Navigator {
 
   override protected def normalRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {
 
@@ -101,11 +101,11 @@ class GoodsSummaryNavigator @Inject() () extends Navigator {
     val sealIndex = Index(sealCount)
 
     (ua.get(AddSealsPage), mode) match {
-      case (Some(false), _) if sealCount == 0       => routes.AddSealsLaterController.onPageLoad(ua.lrn, mode)
-      case (Some(false), _)                         => routes.ConfirmRemoveSealsController.onPageLoad(ua.lrn, mode)
-      case (Some(true), CheckMode) if sealCount > 0 => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.lrn)
-      case (Some(true), _) if sealCount >= 10       => routes.SealsInformationController.onPageLoad(ua.lrn, mode)
-      case (Some(true), _)                          => routes.SealIdDetailsController.onPageLoad(ua.lrn, sealIndex, mode)
+      case (Some(false), _) if sealCount == 0              => routes.AddSealsLaterController.onPageLoad(ua.lrn, mode)
+      case (Some(false), _)                                => routes.ConfirmRemoveSealsController.onPageLoad(ua.lrn, mode)
+      case (Some(true), CheckMode) if sealCount > 0        => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.lrn)
+      case (Some(true), _) if sealCount >= config.maxSeals => routes.SealsInformationController.onPageLoad(ua.lrn, mode)
+      case (Some(true), _)                                 => routes.SealIdDetailsController.onPageLoad(ua.lrn, sealIndex, mode)
     }
   }
 

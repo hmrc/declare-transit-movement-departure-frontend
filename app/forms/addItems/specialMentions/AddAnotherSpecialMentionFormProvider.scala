@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 class AddAnotherSpecialMentionFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(allowMoreSpecialMentions: Boolean): Form[Boolean] =
     Form(
-      "value" -> boolean("addAnotherSpecialMention.error.required")
+      "value" -> mandatoryIfBoolean(allowMoreSpecialMentions, "addAnotherSpecialMention.error.required", false)
     )
 }

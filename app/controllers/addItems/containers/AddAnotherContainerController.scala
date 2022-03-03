@@ -16,11 +16,12 @@
 
 package controllers.addItems.containers
 
+import config.FrontendAppConfig
 import controllers.actions._
 import derivable.DeriveNumberOfContainers
 import forms.addItems.containers.AddAnotherContainerFormProvider
 import models.requests.DataRequest
-import models.{DependentSection, Index, LocalReferenceNumber, Mode}
+import models.{DependentSection, Index, LocalReferenceNumber, Mode, UserAnswers}
 import navigation.Navigator
 import navigation.annotations.addItems.AddItemsContainer
 import pages.addItems.containers.AddAnotherContainerPage
@@ -46,14 +47,17 @@ class AddAnotherContainerController @Inject() (
   checkDependentSection: CheckDependentSectionAction,
   formProvider: AddAnotherContainerFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  config: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  private val form     = formProvider()
   private val template = "addItems/containers/addAnotherContainer.njk"
+
+  private def allowMoreContainers(ua: UserAnswers, itemIndex: Index): Boolean =
+    ua.get(DeriveNumberOfContainers(itemIndex)).getOrElse(0) < config.maxContainers
 
   def onPageLoad(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
     (identify
@@ -61,7 +65,7 @@ class AddAnotherContainerController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        renderPage(itemIndex, mode, form).map(Ok(_))
+        renderPage(itemIndex, mode, formProvider(allowMoreContainers(request.userAnswers, itemIndex))).map(Ok(_))
     }
 
   def onSubmit(lrn: LocalReferenceNumber, itemIndex: Index, mode: Mode): Action[AnyContent] =
@@ -70,7 +74,7 @@ class AddAnotherContainerController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.ItemDetails)).async {
       implicit request =>
-        form
+        formProvider(allowMoreContainers(request.userAnswers, itemIndex))
           .bindFromRequest()
           .fold(
             formWithErrors => renderPage(itemIndex, mode, formWithErrors).map(BadRequest(_)),
@@ -101,14 +105,15 @@ class AddAnotherContainerController @Inject() (
     val title            = msg"addAnotherContainer.title.$singularOrPlural".withArgs(numberOfContainers)
 
     val json = Json.obj(
-      "form"           -> form,
-      "index"          -> itemIndex.display,
-      "mode"           -> mode,
-      "lrn"            -> request.userAnswers.lrn,
-      "pageTitle"      -> title,
-      "containerCount" -> numberOfContainers,
-      "containerRows"  -> containerRows,
-      "radios"         -> Radios.yesNo(form("value"))
+      "form"                -> form,
+      "index"               -> itemIndex.display,
+      "mode"                -> mode,
+      "lrn"                 -> request.userAnswers.lrn,
+      "pageTitle"           -> title,
+      "containerCount"      -> numberOfContainers,
+      "containerRows"       -> containerRows,
+      "radios"              -> Radios.yesNo(form("value")),
+      "allowMoreContainers" -> allowMoreContainers(request.userAnswers, itemIndex)
     )
 
     renderer.render(template, json)
