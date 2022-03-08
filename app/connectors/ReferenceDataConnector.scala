@@ -64,24 +64,9 @@ class ReferenceDataConnector @Inject() (config: FrontendAppConfig, http: HttpCli
     http.GET[CustomsOffice](serviceUrl)
   }
 
-  def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.referenceDataUrl}/countries-full-list"
-    http.GET[Seq[Country]](serviceUrl)
-  }
-
   def getCountries(queryParameters: Seq[(String, String)])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries"
     http.GET[Seq[Country]](serviceUrl, queryParameters)
-  }
-
-  def getTransitCountries(queryParameters: Seq[(String, String)] = Nil)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.referenceDataUrl}/transit-countries"
-    http.GET[Seq[Country]](serviceUrl, queryParameters)
-  }
-
-  def getNonEuTransitCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.referenceDataUrl}/non-eu-transit-countries"
-    http.GET[Seq[Country]](serviceUrl)
   }
 
   def getTransportModes()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[TransportMode]] = {

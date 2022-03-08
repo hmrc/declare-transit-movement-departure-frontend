@@ -220,7 +220,7 @@ class OfficeOfTransitCountryControllerSpec
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockCustomsOfficesService.getCustomsOfficesForCountry(any(), eqTo(Seq("TRA")))(any()))
         .thenReturn(Future.successful(customsOffices))
-      when(mockCountriesService.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))), eqTo(None))(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))), eqTo(Nil))(any())).thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
 
@@ -241,7 +241,7 @@ class OfficeOfTransitCountryControllerSpec
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))), eqTo(None))(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))), eqTo(Nil))(any())).thenReturn(Future.successful(countries))
 
       setUserAnswers(Some(emptyUserAnswers))
 
@@ -261,7 +261,7 @@ class OfficeOfTransitCountryControllerSpec
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockCountriesService.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))), eqTo(None))(any())).thenReturn(Future.successful(countries))
+      when(mockCountriesService.getCountriesWithCustomsOffices(eqTo(Seq(CountryCode("JE"))), eqTo(Nil))(any())).thenReturn(Future.successful(countries))
 
       val userAnswers = emptyUserAnswers.unsafeSetVal(OfficeOfDeparturePage)(CustomsOffice("id", "name", CountryCode("GB"), None))
 

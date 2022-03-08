@@ -27,49 +27,45 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CountriesService @Inject() (referenceDataConnector: ReferenceDataConnector)(implicit ec: ExecutionContext) {
 
-  def getDestinationCountries(userAnswers: UserAnswers, excludedCountries: Seq[CountryCode])(implicit hc: HeaderCarrier): Future[CountryList] =
-    userAnswers.get(DeclarationTypePage) match {
-      case Some(DeclarationType.Option4) => getCountriesWithCustomsOfficesAndMembership(excludedCountries, "eu")
-      case _                             => getCountriesWithCustomsOfficesAndMembership(excludedCountries, "ctc")
+  def getDestinationCountries(
+    userAnswers: UserAnswers,
+    excludedCountries: Seq[CountryCode]
+  )(implicit hc: HeaderCarrier): Future[CountryList] = {
+    val membership = userAnswers.get(DeclarationTypePage) match {
+      case Some(DeclarationType.Option4) => "eu"
+      case _                             => "ctc"
     }
-
-  private def getCountriesWithCustomsOfficesAndMembership(
-    excludedCountries: Seq[CountryCode],
-    membership: String
-  )(implicit hc: HeaderCarrier): Future[CountryList] =
-    getCountriesWithCustomsOffices(excludedCountries, Some(Seq("membership" -> membership)))
+    getCountriesWithCustomsOffices(excludedCountries, Seq("membership" -> membership))
+  }
 
   def getCountriesWithCustomsOffices(
     excludedCountries: Seq[CountryCode],
-    membershipQuery: Option[Seq[(String, String)]] = None
+    membershipQuery: Seq[(String, String)] = Nil
   )(implicit hc: HeaderCarrier): Future[CountryList] = {
     val customsOfficeQuery                     = Seq("customsOfficeRole" -> "ANY")
     val excludedCountriesQuery                 = excludedCountries.map(_.code).map("exclude" -> _)
-    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludedCountriesQuery ++ membershipQuery.getOrElse(Nil)
-
-    referenceDataConnector
-      .getCountries(queryParameters)
-      .map(sort)
+    val queryParameters: Seq[(String, String)] = customsOfficeQuery ++ excludedCountriesQuery ++ membershipQuery
+    getCountries(queryParameters)
   }
 
   def getCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
-    referenceDataConnector
-      .getCountries()
-      .map(sort)
+    getCountries(Nil)
 
   def getTransitCountries(excludedCountries: Seq[CountryCode] = Nil)(implicit hc: HeaderCarrier): Future[CountryList] = {
-    val queryParameters = excludedCountries.map(
-      countryCode => "excludeCountries" -> countryCode.code
-    )
-
-    referenceDataConnector
-      .getTransitCountries(queryParameters)
-      .map(sort)
+    val excludedCountriesQuery                 = excludedCountries.map(_.code).map("exclude" -> _)
+    val membershipQuery                        = Seq("membership" -> "ctc")
+    val queryParameters: Seq[(String, String)] = excludedCountriesQuery ++ membershipQuery
+    getCountries(queryParameters)
   }
 
-  def getNonEuTransitCountries()(implicit hc: HeaderCarrier): Future[CountryList] =
+  def getNonEuTransitCountries()(implicit hc: HeaderCarrier): Future[CountryList] = {
+    val queryParameters = Seq("membership" -> "non_eu")
+    getCountries(queryParameters)
+  }
+
+  private def getCountries(queryParameters: Seq[(String, String)])(implicit hc: HeaderCarrier): Future[CountryList] =
     referenceDataConnector
-      .getNonEuTransitCountries()
+      .getCountries(queryParameters)
       .map(sort)
 
   private def sort(countries: Seq[Country]): CountryList =
