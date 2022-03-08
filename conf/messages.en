@@ -582,6 +582,8 @@ preLodgeDeclaration.error.required = Select yes if you are pre-lodging this decl
 itemsCheckYourAnswers.title = Check your answers
 itemsCheckYourAnswers.heading = Check your answers
 
+itemTotalMass.suffix = kg
+
 addTotalNetMass.title = Do you need to declare the total net mass for item {0}?
 addTotalNetMass.heading = Do you need to declare the total net mass for item {0}?
 addTotalNetMass.checkYourAnswersLabel = Declare total net mass for item {0}?
