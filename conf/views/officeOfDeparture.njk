@@ -33,8 +33,6 @@
           }) }}
         {% endif %}
 
-        <span class="govuk-caption-xl">{{messages('routeDetails.preHeading')}}</span>
-
         <form action="{{ routes.controllers.OfficeOfDepartureController.onSubmit(lrn, mode).url }}" method="post">
 
           {{ csrf() | safe }}
