@@ -19,7 +19,7 @@ package models.messages
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 
-class escapeXmlSpec extends AnyFreeSpec with Matchers {
+class EscapeXmlSpec extends AnyFreeSpec with Matchers {
 
   "escapeXml" - {
 
