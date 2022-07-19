@@ -18,6 +18,8 @@ package config
 
 import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
+import play.api.mvc.RequestHeader
+import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 
 @Singleton
 class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderConfig {
@@ -25,20 +27,23 @@ class RenderConfigImpl @Inject() (configuration: Configuration) extends RenderCo
   val contactHost: String                  = configuration.get[String]("contact-frontend.host")
   val contactFormServiceIdentifier: String = "CTCTraders"
 
-  override val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
+  private val host: String = configuration.get[String]("host")
+
+  def feedbackUrl(implicit request: RequestHeader): String =
+    s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${SafeRedirectUrl(host + request.uri).encodedUrl}"
 
   override val signOutUrl: String = configuration.get[String]("urls.logoutContinue") + configuration.get[String]("urls.feedback")
 
-  override def timeoutSeconds: String = configuration.get[String]("session.timeoutSeconds")
+  override val timeoutSeconds: Int = configuration.get[Int]("session.timeoutSeconds")
 
-  override def countdownSeconds: String = configuration.get[String]("session.countdownSeconds")
+  override val countdownSeconds: Int = configuration.get[Int]("session.countdownSeconds")
 }
 
 trait RenderConfig {
-  def betaFeedbackUnauthenticatedUrl: String
-  def signOutUrl: String
-  def timeoutSeconds: String
-  def countdownSeconds: String
-  def contactFormServiceIdentifier: String
-  def contactHost: String
+  def feedbackUrl(implicit request: RequestHeader): String
+  val signOutUrl: String
+  val timeoutSeconds: Int
+  val countdownSeconds: Int
+  val contactFormServiceIdentifier: String
+  val contactHost: String
 }
