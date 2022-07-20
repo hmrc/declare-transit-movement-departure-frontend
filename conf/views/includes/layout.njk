@@ -18,7 +18,7 @@
 
 {% block header %}
   {% macro phaseBanner() %}
-    {{ messages("phaseBanner.1") }} <a class="govuk-link" href="{{ config.betaFeedbackUnauthenticatedUrl }}">{{ messages("phaseBanner.2") }}</a> {{ messages("phaseBanner.3") }}
+    {{ messages("phaseBanner.1") }} <a class="govuk-link" href="{{ config.feedbackUrl }}">{{ messages("phaseBanner.2") }}</a> {{ messages("phaseBanner.3") }}
   {% endmacro %}
 
   {% set phaseBanner = {tag: {text: "beta"}, html: phaseBanner()} if config.showPhaseBanner %}
