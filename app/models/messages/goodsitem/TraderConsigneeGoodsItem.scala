@@ -18,7 +18,6 @@ package models.messages.goodsitem
 
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.messages.escapeXml
 import xml.XMLWrites
 
 import scala.xml._
@@ -46,10 +45,10 @@ object TraderConsigneeGoodsItem {
   implicit def writes: XMLWrites[TraderConsigneeGoodsItem] = XMLWrites[TraderConsigneeGoodsItem] {
     trader =>
       <TRACONCE2>
-        <NamCE27>{escapeXml(trader.name)}</NamCE27>
-        <StrAndNumCE222>{escapeXml(trader.streetAndNumber)}</StrAndNumCE222>
+        <NamCE27>{trader.name}</NamCE27>
+        <StrAndNumCE222>{trader.streetAndNumber}</StrAndNumCE222>
         <PosCodCE223>{trader.postCode}</PosCodCE223>
-        <CitCE224>{escapeXml(trader.city)}</CitCE224>
+        <CitCE224>{trader.city}</CitCE224>
         <CouCE225>{trader.countryCode}</CouCE225>
         {
         trader.eori.fold(NodeSeq.Empty) {

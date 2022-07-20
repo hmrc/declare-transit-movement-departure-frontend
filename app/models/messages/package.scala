@@ -16,11 +16,7 @@
 
 package models
 
-import scala.xml.Utility.escape
-
 package object messages {
-
-  def escapeXml(xml: String): String = escape(xml)
 
   def booleanToInt(flag: Boolean): Int = if (flag) 1 else 0
 }

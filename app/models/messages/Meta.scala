@@ -48,12 +48,12 @@ object Meta {
           <SynVerNumMES2>3</SynVerNumMES2> ++ {
           a.senderIdentificationCodeQualifier.fold(NodeSeq.Empty) {
             senderIdentificationCodeQualifier =>
-              <SenIdeCodQuaMES4>{escapeXml(senderIdentificationCodeQualifier)}</SenIdeCodQuaMES4>
+              <SenIdeCodQuaMES4>{senderIdentificationCodeQualifier}</SenIdeCodQuaMES4>
           }
         } ++ {
           a.recipientIdentificationCodeQualifier.fold(NodeSeq.Empty) {
             recipientIdentificationCodeQualifier =>
-              <RecIdeCodQuaMES7>{escapeXml(recipientIdentificationCodeQualifier)}</RecIdeCodQuaMES7>
+              <RecIdeCodQuaMES7>{recipientIdentificationCodeQualifier}</RecIdeCodQuaMES7>
           }
         } ++
           <MesRecMES6>NCTS</MesRecMES6>
@@ -63,19 +63,19 @@ object Meta {
           } ++ {
             a.recipientsReferencePassword.fold(NodeSeq.Empty) {
               recipientsReferencePassword =>
-                <RecRefMES12>{escapeXml(recipientsReferencePassword)}</RecRefMES12>
+                <RecRefMES12>{recipientsReferencePassword}</RecRefMES12>
             }
           } ++ {
             a.recipientsReferencePasswordQualifier.fold(NodeSeq.Empty) {
               recipientsReferencePasswordQualifier =>
-                <RecRefQuaMES13>{escapeXml(recipientsReferencePasswordQualifier)}</RecRefQuaMES13>
+                <RecRefQuaMES13>{recipientsReferencePasswordQualifier}</RecRefQuaMES13>
             }
           } ++
           <AppRefMES14>NCTS</AppRefMES14> ++ {
 
             a.priority.fold(NodeSeq.Empty) {
               priority =>
-                <PriMES15>{escapeXml(priority)}</PriMES15>
+                <PriMES15>{priority}</PriMES15>
             }
           } ++ {
 
@@ -87,7 +87,7 @@ object Meta {
 
             a.communicationsAgreementId.fold(NodeSeq.Empty) {
               communicationsAgreementId =>
-                <ComAgrIdMES17>{escapeXml(communicationsAgreementId)}</ComAgrIdMES17>
+                <ComAgrIdMES17>{communicationsAgreementId}</ComAgrIdMES17>
             }
 
           } ++
@@ -97,7 +97,7 @@ object Meta {
 
             a.commonAccessReference.fold(NodeSeq.Empty) {
               commonAccessReference =>
-                <ComAccRefMES21>{escapeXml(commonAccessReference)}</ComAccRefMES21>
+                <ComAccRefMES21>{commonAccessReference}</ComAccRefMES21>
             }
           }
     )

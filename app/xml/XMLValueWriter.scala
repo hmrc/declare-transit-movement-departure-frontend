@@ -18,22 +18,22 @@ package xml
 
 import play.twirl.api.utils.StringEscapeUtils
 
-trait XMLValueWriter[A] {
-  def writeValue(a: A): String
-}
-
-object XMLValueWriter {
-
-  def apply[A](implicit ev: XMLValueWriter[A]): XMLValueWriter[A] = ev
-
-  implicit class XMLValueWriterOps[A](val a: A) extends AnyVal {
-
-    def asXmlText(implicit ev: XMLValueWriter[A]): String =
-      ev.writeValue(a)
-  }
-
-  implicit val stringXmlValueWriter: XMLValueWriter[String] = string => StringEscapeUtils.escapeXml11(string)
-
-  implicit val intXmlValueWriter: XMLValueWriter[Int] = int => int.toString.asXmlText
-
-}
+//trait XMLValueWriter[A] {
+//  def writeValue(a: A): String
+//}
+//
+//object XMLValueWriter {
+//
+//  def apply[A](implicit ev: XMLValueWriter[A]): XMLValueWriter[A] = ev
+//
+//  implicit class XMLValueWriterOps[A](val a: A) extends AnyVal {
+//
+//    def asXmlText(implicit ev: XMLValueWriter[A]): String =
+//      ev.writeValue(a)
+//  }
+//
+//  implicit val stringXmlValueWriter: XMLValueWriter[String] = string => StringEscapeUtils.escapeXml11(string)
+//
+//  implicit val intXmlValueWriter: XMLValueWriter[Int] = int => int.toString.asXmlText
+//
+//}

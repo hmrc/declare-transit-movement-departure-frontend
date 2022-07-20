@@ -46,7 +46,7 @@ class RepresentativeSpec
 
           val expectedResult =
             <REPREP>
-              <NamREP5>{escapeXml(representative.namREP5)}</NamREP5>
+              <NamREP5>{representative.namREP5}</NamREP5>
               {representativeCapacity.getOrElse(NodeSeq.Empty)}
             </REPREP>
 

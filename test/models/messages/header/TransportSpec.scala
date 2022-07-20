@@ -18,7 +18,6 @@ package models.messages.header
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -50,25 +49,25 @@ class TransportSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChe
 
           val ideOfMeaOfTraAtDHEA78 = transport.ideOfMeaOfTraAtDHEA78.map(
             value => <IdeOfMeaOfTraAtDHEA78>
-              {escapeXml(value)}
+              {value}
             </IdeOfMeaOfTraAtDHEA78>
           )
 
           val natOfMeaOfTraAtDHEA80 = transport.natOfMeaOfTraAtDHEA80.map(
             value => <NatOfMeaOfTraAtDHEA80>
-              {escapeXml(value)}
+              {value}
             </NatOfMeaOfTraAtDHEA80>
           )
 
           val ideOfMeaOfTraCroHEA85 = transport.ideOfMeaOfTraCroHEA85.map(
             value => <IdeOfMeaOfTraCroHEA85>
-              {escapeXml(value)}
+              {value}
             </IdeOfMeaOfTraCroHEA85>
           )
 
           val natOfMeaOfTraCroHEA87 = transport.natOfMeaOfTraCroHEA87.map(
             value => <NatOfMeaOfTraCroHEA87>
-              {escapeXml(value)}
+              {value}
             </NatOfMeaOfTraCroHEA87>
           )
 

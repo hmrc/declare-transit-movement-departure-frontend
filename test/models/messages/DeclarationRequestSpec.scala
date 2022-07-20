@@ -19,7 +19,7 @@ package models.messages
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
 import models.messages.safetyAndSecurity._
-import models.messages.trader.{TraderPrincipal, TraderPrincipalWithEori, TraderPrincipalWithoutEori}
+import models.messages.trader._
 import org.scalacheck.Arbitrary._
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -69,7 +69,41 @@ class DeclarationRequestSpec
 
           declarationRequest.toXml.map(trim) mustBe expectedResult.map(trim)
       }
+    }
 
+    "must serialise DeclarationRequest to xml and escape special characters" in {
+      forAll(arbitrary[DeclarationRequest]) {
+        declarationRequest =>
+          val declarationRequestWithSpecial = declarationRequest.copy(
+            traderConsignee = Some(
+              TraderConsignee("Consignee & Name", "Consignee \" Street", "postal > code", "city <", "GB", None)
+            ),
+            traderConsignor = Some(
+              TraderConsignor("Consignor & Name", "Consignor \" Street", "postal > code", "city <", "GB", None)
+            )
+          )
+
+          val expectedConsignor =
+            "<TRACONCO1>" +
+              "<NamCO17>Consignor &amp; Name</NamCO17>" +
+              "<StrAndNumCO122>Consignor &quot; Street</StrAndNumCO122>" +
+              "<PosCodCO123>postal &gt; code</PosCodCO123>" +
+              "<CitCO124>city &lt;</CitCO124>" +
+              "<CouCO125>GB</CouCO125>" +
+              "</TRACONCO1>"
+
+          val expectedConsignee =
+            "<TRACONCE1>" +
+              "<NamCE17>Consignee &amp; Name</NamCE17>" +
+              "<StrAndNumCE122>Consignee &quot; Street</StrAndNumCE122>" +
+              "<PosCodCE123>postal &gt; code</PosCodCE123>" +
+              "<CitCE124>city &lt;</CitCE124>" +
+              "<CouCE125>GB</CouCE125>" +
+              "</TRACONCE1>"
+
+          (declarationRequestWithSpecial.toXml \ "TRACONCO1").map(trim).toString mustBe expectedConsignor
+          (declarationRequestWithSpecial.toXml \ "TRACONCE1").map(trim).toString mustBe expectedConsignee
+      }
     }
 
     "must de-serialise xml to DeclarationRequest" in {
@@ -79,11 +113,8 @@ class DeclarationRequestSpec
           val result = XmlReader.of[DeclarationRequest].read(declarationRequest.toXml)
           result.toOption.value mustBe declarationRequest
       }
-
     }
-
   }
-
 }
 
 object DeclarationRequestSpec {

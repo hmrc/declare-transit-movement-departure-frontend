@@ -18,7 +18,6 @@ package models.messages.trader
 
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.messages.escapeXml
 import xml.XMLWrites
 
 import scala.xml._
@@ -59,11 +58,11 @@ object TraderPrincipalWithEori {
         {
         trader.name.fold(NodeSeq.Empty) {
           name =>
-            <NamPC17>{escapeXml(name)}</NamPC17>
+            <NamPC17>{name}</NamPC17>
         } ++
           trader.streetAndNumber.fold(NodeSeq.Empty) {
             streetAndNumber =>
-              <StrAndNumPC122>{escapeXml(streetAndNumber)}</StrAndNumPC122>
+              <StrAndNumPC122>{streetAndNumber}</StrAndNumPC122>
           } ++
           trader.postCode.fold(NodeSeq.Empty) {
             postCode =>
@@ -71,7 +70,7 @@ object TraderPrincipalWithEori {
           } ++
           trader.city.fold(NodeSeq.Empty) {
             city =>
-              <CitPC124>{escapeXml(city)}</CitPC124>
+              <CitPC124>{city}</CitPC124>
           } ++
           trader.countryCode.fold(NodeSeq.Empty) {
             countryCode =>
@@ -111,10 +110,10 @@ object TraderPrincipalWithoutEori {
   implicit def writes: XMLWrites[TraderPrincipalWithoutEori] = XMLWrites[TraderPrincipalWithoutEori] {
     trader =>
       <TRAPRIPC1>
-            <NamPC17>{escapeXml(trader.name)}</NamPC17>
-            <StrAndNumPC122>{escapeXml(trader.streetAndNumber)}</StrAndNumPC122>
+            <NamPC17>{trader.name}</NamPC17>
+            <StrAndNumPC122>{trader.streetAndNumber}</StrAndNumPC122>
             <PosCodPC123>{trader.postCode}</PosCodPC123>
-            <CitPC124>{escapeXml(trader.city)}</CitPC124>
+            <CitPC124>{trader.city}</CitPC124>
             <CouPC125>{trader.countryCode}</CouPC125>
             {
         trader.principalTirHolderId.fold(NodeSeq.Empty) {

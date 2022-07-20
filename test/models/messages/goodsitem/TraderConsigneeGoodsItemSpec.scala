@@ -18,7 +18,6 @@ package models.messages.goodsitem
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -47,10 +46,10 @@ class TraderConsigneeGoodsItemSpec
 
           val expectedResult =
             <TRACONCE2>
-              <NamCE27>{escapeXml(trader.name)}</NamCE27>
-              <StrAndNumCE222>{escapeXml(trader.streetAndNumber)}</StrAndNumCE222>
+              <NamCE27>{trader.name}</NamCE27>
+              <StrAndNumCE222>{trader.streetAndNumber}</StrAndNumCE222>
               <PosCodCE223>{trader.postCode}</PosCodCE223>
-              <CitCE224>{escapeXml(trader.city)}</CitCE224>
+              <CitCE224>{trader.city}</CitCE224>
               <CouCE225>{trader.countryCode}</CouCE225>
               {eori.getOrElse(NodeSeq.Empty)}
             </TRACONCE2>
