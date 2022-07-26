@@ -18,7 +18,6 @@ package models.messages.header
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -38,29 +37,29 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
       forAll(arbitrary[Header]) {
         header =>
           val couOfDesCodHEA30 = header.couOfDesCodHEA30.map(
-            value => <CouOfDesCodHEA30>{escapeXml(value)}</CouOfDesCodHEA30>
+            value => <CouOfDesCodHEA30>{value}</CouOfDesCodHEA30>
           )
 
           val agrLocOfGooCodHEA38 = header.agrLocOfGooCodHEA38.map(
-            value => <AgrLocOfGooCodHEA38>{escapeXml(value)}</AgrLocOfGooCodHEA38>
+            value => <AgrLocOfGooCodHEA38>{value}</AgrLocOfGooCodHEA38>
           )
 
           val agrLocOfGooHEA39 = header.agrLocOfGooHEA39.map(
-            value => <AgrLocOfGooHEA39>{escapeXml(value)}</AgrLocOfGooHEA39>
+            value => <AgrLocOfGooHEA39>{value}</AgrLocOfGooHEA39>
           )
 
           val autLocOfGooCodHEA41 = header.autLocOfGooCodHEA41.map(
-            value => <AutLocOfGooCodHEA41>{escapeXml(value)}</AutLocOfGooCodHEA41>
+            value => <AutLocOfGooCodHEA41>{value}</AutLocOfGooCodHEA41>
           )
 
           val plaOfLoaCodHEA46 = header.plaOfLoaCodHEA46.map(
-            value => <PlaOfLoaCodHEA46>{escapeXml(value)}</PlaOfLoaCodHEA46>
+            value => <PlaOfLoaCodHEA46>{value}</PlaOfLoaCodHEA46>
           )
           val couOfDisCodHEA55 = header.couOfDisCodHEA55.map(
-            value => <CouOfDisCodHEA55>{escapeXml(value)}</CouOfDisCodHEA55>
+            value => <CouOfDisCodHEA55>{value}</CouOfDisCodHEA55>
           )
           val cusSubPlaHEA66 = header.cusSubPlaHEA66.map(
-            value => <CusSubPlaHEA66>{escapeXml(value)}</CusSubPlaHEA66>
+            value => <CusSubPlaHEA66>{value}</CusSubPlaHEA66>
           )
 
           val speCirIndHEA1 = header.speCirIndHEA1.map(
@@ -89,7 +88,7 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
 
           val expectedResult: NodeSeq =
             <HEAHEA>
-              <RefNumHEA4>{escapeXml(header.refNumHEA4)}</RefNumHEA4>
+              <RefNumHEA4>{header.refNumHEA4}</RefNumHEA4>
               <TypOfDecHEA24>{header.typOfDecHEA24}</TypOfDecHEA24>
               {couOfDesCodHEA30.getOrElse(NodeSeq.Empty)}
               {agrLocOfGooCodHEA38.getOrElse(NodeSeq.Empty)}
@@ -106,7 +105,7 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
               <TotNumOfPacHEA306>{header.totNumOfPacHEA306.toString}</TotNumOfPacHEA306>
               <TotGroMasHEA307>{header.totGroMasHEA307.toString}</TotGroMasHEA307>
               <DecDatHEA383>{Format.dateFormatted(header.decDatHEA383)}</DecDatHEA383>
-              <DecPlaHEA394>{escapeXml(header.decPlaHEA394)}</DecPlaHEA394>
+              <DecPlaHEA394>{header.decPlaHEA394}</DecPlaHEA394>
               {speCirIndHEA1.getOrElse(NodeSeq.Empty)}
               {traChaMetOfPayHEA1.getOrElse(NodeSeq.Empty)}
               {comRefNumHEA.getOrElse(NodeSeq.Empty)}

@@ -50,16 +50,16 @@ class TraderConsignorSpec
           val expectedResult =
             <TRACONCO1>
               <NamCO17>
-                {escapeXml(trader.name)}
+                {trader.name}
               </NamCO17>
               <StrAndNumCO122>
-                {escapeXml(trader.streetAndNumber)}
+                {trader.streetAndNumber}
               </StrAndNumCO122>
               <PosCodCO123>
                 {trader.postCode}
               </PosCodCO123>
               <CitCO124>
-                {escapeXml(trader.city)}
+                {trader.city}
               </CitCO124>
               <CouCO125>
                 {trader.countryCode}

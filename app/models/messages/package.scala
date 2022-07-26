@@ -16,11 +16,7 @@
 
 package models
 
-import play.twirl.api.utils.StringEscapeUtils
-
 package object messages {
-
-  def escapeXml(xml: String): String = StringEscapeUtils.escapeXml11(xml)
 
   def booleanToInt(flag: Boolean): Int = if (flag) 1 else 0
 }

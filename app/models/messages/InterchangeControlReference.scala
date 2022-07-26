@@ -31,24 +31,21 @@ object InterchangeControlReference {
   implicit val writes: XMLWrites[InterchangeControlReference] =
     XMLWrites {
       a =>
-        <IntConRefMES11>{escapeXml(s"$prefix${a.date}${a.index}")}</IntConRefMES11>
+        <IntConRefMES11>{s"$prefix${a.date}${a.index}"}</IntConRefMES11>
     }
 
   implicit val interchangeControlReferenceXmlReads: XmlReader[InterchangeControlReference] =
-    new XmlReader[InterchangeControlReference] {
+    (xml: NodeSeq) => {
 
-      override def read(xml: NodeSeq): ParseResult[InterchangeControlReference] = {
+      case class InterchangeControlReferenceParseFailure(message: String) extends ParseError
 
-        case class InterchangeControlReferenceParseFailure(message: String) extends ParseError
+      val controlReferenceFormat: Regex = (prefix + """(\d{8})(\d*)""").r
 
-        val controlReferenceFormat: Regex = (prefix + """(\d{8})(\d*)""").r
-
-        xml.text match {
-          case controlReferenceFormat(date, index) =>
-            ParseSuccess(InterchangeControlReference(date, index.toInt))
-          case _ =>
-            ParseFailure(InterchangeControlReferenceParseFailure(s"Failed to parse the following value to InterchangeControlReference: ${xml.text}"))
-        }
+      xml.text match {
+        case controlReferenceFormat(date, index) =>
+          ParseSuccess(InterchangeControlReference(date, index.toInt))
+        case _ =>
+          ParseFailure(InterchangeControlReferenceParseFailure(s"Failed to parse the following value to InterchangeControlReference: ${xml.text}"))
       }
     }
 

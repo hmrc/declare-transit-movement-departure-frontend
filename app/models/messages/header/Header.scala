@@ -20,7 +20,6 @@ import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
 import models.LanguageCodeEnglish
 import models.XMLReads._
-import models.messages.escapeXml
 import utils.Format
 import xml.XMLWrites
 import xml.XMLWrites._
@@ -77,29 +76,29 @@ object Header {
   implicit def writes: XMLWrites[Header] = XMLWrites[Header] {
     header =>
       <HEAHEA>
-        <RefNumHEA4>{escapeXml(header.refNumHEA4)}</RefNumHEA4>
+        <RefNumHEA4>{header.refNumHEA4}</RefNumHEA4>
         <TypOfDecHEA24>{header.typOfDecHEA24}</TypOfDecHEA24>
         {
         header.couOfDesCodHEA30.fold(NodeSeq.Empty)(
-          value => <CouOfDesCodHEA30>{escapeXml(value)}</CouOfDesCodHEA30>
+          value => <CouOfDesCodHEA30>{value}</CouOfDesCodHEA30>
         ) ++
           header.agrLocOfGooCodHEA38.fold(NodeSeq.Empty)(
-            value => <AgrLocOfGooCodHEA38>{escapeXml(value)}</AgrLocOfGooCodHEA38>
+            value => <AgrLocOfGooCodHEA38>{value}</AgrLocOfGooCodHEA38>
           ) ++
           header.agrLocOfGooHEA39.fold(NodeSeq.Empty)(
-            value => <AgrLocOfGooHEA39>{escapeXml(value)}</AgrLocOfGooHEA39>
+            value => <AgrLocOfGooHEA39>{value}</AgrLocOfGooHEA39>
           ) ++
           header.autLocOfGooCodHEA41.fold(NodeSeq.Empty)(
-            value => <AutLocOfGooCodHEA41>{escapeXml(value)}</AutLocOfGooCodHEA41>
+            value => <AutLocOfGooCodHEA41>{value}</AutLocOfGooCodHEA41>
           ) ++
           header.plaOfLoaCodHEA46.fold(NodeSeq.Empty)(
-            value => <PlaOfLoaCodHEA46>{escapeXml(value)}</PlaOfLoaCodHEA46>
+            value => <PlaOfLoaCodHEA46>{value}</PlaOfLoaCodHEA46>
           ) ++
           header.couOfDisCodHEA55.fold(NodeSeq.Empty)(
-            value => <CouOfDisCodHEA55>{escapeXml(value)}</CouOfDisCodHEA55>
+            value => <CouOfDisCodHEA55>{value}</CouOfDisCodHEA55>
           ) ++
           header.cusSubPlaHEA66.fold(NodeSeq.Empty)(
-            value => <CusSubPlaHEA66>{escapeXml(value)}</CusSubPlaHEA66>
+            value => <CusSubPlaHEA66>{value}</CusSubPlaHEA66>
           ) ++ header.transportDetails.toXml
       }
         <ConIndHEA96>{header.conIndHEA96.toString}</ConIndHEA96>
@@ -109,7 +108,7 @@ object Header {
         <TotNumOfPacHEA306>{header.totNumOfPacHEA306.toString}</TotNumOfPacHEA306>
         <TotGroMasHEA307>{header.totGroMasHEA307.toString}</TotGroMasHEA307>
         <DecDatHEA383>{Format.dateFormatted(header.decDatHEA383)}</DecDatHEA383>
-        <DecPlaHEA394>{escapeXml(header.decPlaHEA394)}</DecPlaHEA394>
+        <DecPlaHEA394>{header.decPlaHEA394}</DecPlaHEA394>
         {
         header.speCirIndHEA1.fold(NodeSeq.Empty)(
           value => <SpeCirIndHEA1>{value}</SpeCirIndHEA1>

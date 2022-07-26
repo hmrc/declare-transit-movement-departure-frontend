@@ -47,26 +47,25 @@ class TraderConsigneeSpec
 
           val expectedResult =
             <TRACONCE1>
-              <NamCE17>{escapeXml(trader.name)}</NamCE17>
-              <StrAndNumCE122>{escapeXml(trader.streetAndNumber)}</StrAndNumCE122>
+              <NamCE17>{trader.name}</NamCE17>
+              <StrAndNumCE122>{trader.streetAndNumber}</StrAndNumCE122>
               <PosCodCE123>{trader.postCode}</PosCodCE123>
-              <CitCE124>{escapeXml(trader.city)}</CitCE124>
+              <CitCE124>{trader.city}</CitCE124>
               <CouCE125>{trader.countryCode}</CouCE125>
               {eori.getOrElse(NodeSeq.Empty)}
             </TRACONCE1>
 
           trader.toXml mustEqual expectedResult
       }
-
     }
+  }
 
-    "must deserialize TraderConsignor from xml" in {
-      forAll(arbitrary[TraderConsignee]) {
-        data =>
-          val xml    = data.toXml
-          val result = XmlReader.of[TraderConsignee].read(xml).toOption.value
-          result mustBe data
-      }
+  "must deserialize TraderConsignor from xml" in {
+    forAll(arbitrary[TraderConsignee]) {
+      data =>
+        val xml    = data.toXml
+        val result = XmlReader.of[TraderConsignee].read(xml).toOption.value
+        result mustBe data
     }
   }
 }
