@@ -17,6 +17,7 @@
 package models.messages
 
 import com.lucidchart.open.xtract._
+import play.api.libs.json.{__, Format, Reads, Writes}
 import xml.XMLWrites
 
 import scala.util.matching.Regex
@@ -48,5 +49,21 @@ object InterchangeControlReference {
           ParseFailure(InterchangeControlReferenceParseFailure(s"Failed to parse the following value to InterchangeControlReference: ${xml.text}"))
       }
     }
+
+  val format: Format[InterchangeControlReference] = {
+    import play.api.libs.functional.syntax._
+
+    lazy val reads: Reads[InterchangeControlReference] = (
+      (__ \ "_id").read[String] and
+        (__ \ "last-index").read[Int]
+    )(InterchangeControlReference.apply _)
+
+    lazy val writes: Writes[InterchangeControlReference] = (
+      (__ \ "_id").write[String] and
+        (__ \ "last-index").write[Int]
+    )(unlift(InterchangeControlReference.unapply))
+
+    Format(reads, writes)
+  }
 
 }

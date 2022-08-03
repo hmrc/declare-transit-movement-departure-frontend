@@ -16,98 +16,84 @@
 
 package repositories
 
-import models.{EoriNumber, LocalReferenceNumber, MongoDateTimeFormats, UserAnswers}
-import play.api.libs.json._
-import reactivemongo.api.WriteConcern
-import reactivemongo.play.json.collection.Helpers.idWrites
+import config.FrontendAppConfig
+import models.{EoriNumber, LocalReferenceNumber, UserAnswers}
+import org.mongodb.scala.model.Indexes.{ascending, compoundIndex}
+import org.mongodb.scala.model._
+import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
 import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-private[repositories] class DefaultSessionRepository @Inject() (
-  sessionCollection: SessionCollection
+class SessionRepository @Inject() (
+  mongoComponent: MongoComponent,
+  appConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext)
-    extends SessionRepository {
+    extends PlayMongoRepository[UserAnswers](
+      mongoComponent = mongoComponent,
+      collectionName = SessionRepository.collectionName,
+      domainFormat = UserAnswers.format,
+      indexes = SessionRepository.indexes(appConfig)
+    ) {
 
-  override def get(id: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Option[UserAnswers]] = {
-    implicit val dateWriter: Writes[LocalDateTime] = MongoDateTimeFormats.localDateTimeWrite
-    val selector = Json.obj(
-      "lrn"        -> id.value,
-      "eoriNumber" -> eoriNumber.value
+  def get(lrn: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Option[UserAnswers]] = {
+    val filter = Filters.and(
+      Filters.eq("lrn", lrn.value),
+      Filters.eq("eoriNumber", eoriNumber.value)
     )
+    val update = Updates.set("lastUpdated", LocalDateTime.now())
 
-    val modifier = Json.obj(
-      "$set" -> Json.obj("lastUpdated" -> LocalDateTime.now)
-    )
-
-    def userAnswersF: Future[Option[UserAnswers]] = sessionCollection().flatMap {
-      _.findAndUpdate(
-        selector = selector,
-        update = modifier,
-        fetchNewObject = false,
-        upsert = false,
-        sort = None,
-        fields = None,
-        bypassDocumentValidation = false,
-        writeConcern = WriteConcern.Default,
-        maxTime = None,
-        collation = None,
-        arrayFilters = Nil
-      ).map(_.value.map(_.as[UserAnswers]))
-    }
-
-    for {
-      userAnswers <- userAnswersF
-      result      <- Future.successful(userAnswers)
-    } yield result
-
+    collection
+      .findOneAndUpdate(filter, update, FindOneAndUpdateOptions().upsert(false))
+      .toFutureOption()
   }
 
-  override def set(userAnswers: UserAnswers): Future[Boolean] = {
-
-    val selector = Json.obj(
-      "lrn"        -> userAnswers.lrn,
-      "eoriNumber" -> userAnswers.eoriNumber
+  def set(userAnswers: UserAnswers): Future[Boolean] = {
+    val filter = Filters.and(
+      Filters.eq("lrn", userAnswers.lrn.value),
+      Filters.eq("eoriNumber", userAnswers.eoriNumber.value)
     )
+    val updatedUserAnswers = userAnswers.copy(lastUpdated = LocalDateTime.now())
 
-    val modifier = Json.obj(
-      "$set" -> (userAnswers copy (lastUpdated = LocalDateTime.now))
-    )
-
-    sessionCollection().flatMap {
-      _.update(ordered = false)
-        .one(selector, modifier, upsert = true)
-        .map {
-          lastError =>
-            lastError.ok
-        }
-    }
+    collection
+      .replaceOne(filter, updatedUserAnswers, ReplaceOptions().upsert(true))
+      .toFuture()
+      .map(_.wasAcknowledged())
   }
 
-  override def remove(id: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Unit] = sessionCollection().flatMap {
-    _.findAndRemove(
-      selector = Json.obj("lrn" -> id.toString, "eoriNumber" -> eoriNumber.value),
-      sort = None,
-      fields = None,
-      writeConcern = WriteConcern.Default,
-      maxTime = None,
-      collation = None,
-      arrayFilters = Nil
-    ).map(
-      _ => ()
+  def remove(lrn: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Boolean] = {
+    val filter = Filters.and(
+      Filters.eq("lrn", lrn.value),
+      Filters.eq("eoriNumber", eoriNumber.value)
     )
+
+    collection
+      .deleteOne(filter)
+      .toFuture()
+      .map(_.wasAcknowledged())
   }
 
 }
 
-trait SessionRepository {
+object SessionRepository {
+  val collectionName: String = "user-answers"
 
-  def get(id: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Option[UserAnswers]]
+  def indexes(appConfig: FrontendAppConfig): Seq[IndexModel] = {
+    val userAnswersLastUpdatedIndex: IndexModel = IndexModel(
+      keys = Indexes.ascending("lastUpdated"),
+      indexOptions = IndexOptions().name("user-answers-last-updated-index").expireAfter(appConfig.mongoTtl, TimeUnit.SECONDS)
+    )
 
-  def set(userAnswers: UserAnswers): Future[Boolean]
+    val eoriNumberAndLrnCompoundIndex: IndexModel = IndexModel(
+      keys = compoundIndex(ascending("eoriNumber"), ascending("lrn")),
+      indexOptions = IndexOptions().name("eoriNumber-lrn-index")
+    )
 
-  def remove(id: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Unit]
+    Seq(userAnswersLastUpdatedIndex, eoriNumberAndLrnCompoundIndex)
+  }
 
 }

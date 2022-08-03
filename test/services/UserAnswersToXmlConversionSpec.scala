@@ -24,12 +24,12 @@ import org.mockito.Mockito.{reset, when}
 import org.scalatest.concurrent.IntegrationPatience
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import repositories.{InterchangeControlReferenceIdRepository, MongoSuite}
+import repositories.InterchangeControlReferenceIdRepository
+import uk.gov.hmrc.mongo.test.MongoSupport
 import utils.{MockDateTimeService, XMLComparatorSpec, XSDSchemaValidationSpec}
 import xml.XMLWrites._
 
 import java.time.LocalDateTime
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Success
 
@@ -39,7 +39,7 @@ class UserAnswersToXmlConversionSpec
     with UserAnswersSpecHelper
     with XMLComparatorSpec
     with XSDSchemaValidationSpec
-    with MongoSuite
+    with MongoSupport
     with IntegrationPatience
     with MockDateTimeService {
 
@@ -65,7 +65,7 @@ class UserAnswersToXmlConversionSpec
 
     when(mockTimeService.dateFormatted).thenReturn("20201212")
 
-    database.flatMap(_.drop()).futureValue
+    mongoDatabase.drop().toFuture().futureValue
   }
 
   "UserAnswers to XML conversion" - {
