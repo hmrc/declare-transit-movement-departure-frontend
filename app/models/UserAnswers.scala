@@ -22,7 +22,7 @@ import play.api.libs.json._
 import queries.Gettable
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
-import java.time.LocalDateTime
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
@@ -80,14 +80,24 @@ object UserAnswers {
 
   import play.api.libs.functional.syntax._
 
-  implicit lazy val reads: Reads[UserAnswers] =
+  implicit lazy val reads: Reads[UserAnswers] = {
+    implicit val localDateTimeReads: Reads[LocalDateTime] = {
+      val reactiveMongoReads = (__ \ "$date").read[Long].map {
+        millis =>
+          LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC)
+      }
+      val hmrcMongoReads = MongoJavatimeFormats.localDateTimeReads
+      hmrcMongoReads orElse reactiveMongoReads
+    }
+
     (
       (__ \ "lrn").read[LocalReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
-        (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads) and
+        (__ \ "lastUpdated").read[LocalDateTime] and
         (__ \ "_id").read[Id]
     )(UserAnswers.apply _)
+  }
 
   implicit lazy val writes: OWrites[UserAnswers] =
     (
