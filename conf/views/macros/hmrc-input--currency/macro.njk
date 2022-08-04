@@ -15,14 +15,15 @@
     name: params.name,
     id: params.id,
     value: params.value,
-    classes: params.classes,
+    classes: "govuk-input--width-10",
     errorMessage: params.errorMessage,
     prefix: {
       text: "£"
     },
-    inputmode: "text",
-    autocomplete: params.autocomplete,
-    spellcheck: false
+    inputmode: "numeric",
+    autocomplete: "off",
+    spellcheck: false,
+    pattern: "[0-9]*"
   }) }}
 
 {% endmacro %}
