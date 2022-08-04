@@ -37,7 +37,8 @@ class SessionRepository @Inject() (
       mongoComponent = mongoComponent,
       collectionName = SessionRepository.collectionName,
       domainFormat = UserAnswers.format,
-      indexes = SessionRepository.indexes(appConfig)
+      indexes = SessionRepository.indexes(appConfig),
+      replaceIndexes = appConfig.replaceIndexes
     ) {
 
   def get(lrn: LocalReferenceNumber, eoriNumber: EoriNumber): Future[Option[UserAnswers]] = {
