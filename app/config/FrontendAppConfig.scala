@@ -71,6 +71,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxDocuments: Int          = configuration.get[Int]("limits.maxDocuments")
   lazy val maxPreviousReferences: Int = configuration.get[Int]("limits.maxPreviousReferences")
 
-  lazy val mongoTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
+  lazy val mongoTtl: Int           = configuration.get[Int]("mongodb.timeToLiveInSeconds")
   lazy val replaceIndexes: Boolean = configuration.get[Boolean]("mongodb.replaceIndexes")
 }
