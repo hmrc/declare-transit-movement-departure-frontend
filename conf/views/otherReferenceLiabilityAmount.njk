@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn, index, mode).url }}" method="post">
+        <form action="{{ routes.controllers.guaranteeDetails.OtherReferenceLiabilityAmountController.onSubmit(lrn, index, mode).url }}" method="post" novalidate>
 
           <span class="govuk-caption-xl">{{ messages('guaranteeDetails.preHeading') }}</span>
 
