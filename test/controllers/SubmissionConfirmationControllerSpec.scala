@@ -42,7 +42,7 @@ class SubmissionConfirmationControllerSpec extends SpecBase with AppWithDefaultM
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
-      when(mockSessionRepository.remove(any(), any())).thenReturn(Future.successful(()))
+      when(mockSessionRepository.remove(any(), any())).thenReturn(Future.successful(true))
 
       setUserAnswers(Some(emptyUserAnswers))
 
