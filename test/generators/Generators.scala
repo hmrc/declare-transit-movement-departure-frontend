@@ -71,7 +71,7 @@ trait Generators extends UserAnswersGenerator with ModelGenerators {
     arbitrary[BigDecimal]
       .retryUntil(_.abs < Int.MaxValue)
       .retryUntil(!_.isValidInt)
-      .map(_.formatted("%f"))
+      .map("%f".format(_))
 
   def decimalsPositive: Gen[String] =
     arbitrary[BigDecimal]
@@ -82,7 +82,7 @@ trait Generators extends UserAnswersGenerator with ModelGenerators {
         x => x.abs <= Int.MaxValue
       )
       .retryUntil(!_.isValidInt)
-      .map(_.formatted("%f"))
+      .map("%f".format(_))
 
   def intsBelowValue(value: Int): Gen[Int] =
     arbitrary[Int] retryUntil (_ < value)
