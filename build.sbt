@@ -6,7 +6,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "declare-transit-movement-departure-frontend"
 
-val silencerVersion = "1.7.0"
+val silencerVersion = "1.7.9"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -24,7 +24,7 @@ lazy val root = (project in file("."))
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
   .settings(inConfig(Test)(testSettings): _*)
   .settings(majorVersion := 0)
-  .settings(scalaVersion := "2.12.12")
+  .settings(scalaVersion := "2.12.15")
   .settings(headerSettings(IntegrationTest): _*)
   .settings(automateHeaderSettings(IntegrationTest))
   .settings(
@@ -45,7 +45,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageMinimumStmtTotal := 95,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting  := true,
-    useSuperShell in ThisBuild          := false,
+    ThisBuild / useSuperShell           := false,
     scalacOptions ++= Seq(
       "-feature",
       "-language:implicitConversions",
@@ -55,7 +55,7 @@ lazy val root = (project in file("."))
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged                        := true,
-    evictionWarningOptions in update :=
+    update / evictionWarningOptions :=
       EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
@@ -67,9 +67,9 @@ lazy val root = (project in file("."))
       )
     ),
     uglifyCompressOptions          := Seq("unused=false", "dead_code=false", "warnings=false"),
-    pipelineStages in Assets       := Seq(concat, uglify),
-    useSuperShell in ThisBuild     := false,
-    scalafmtOnCompile in ThisBuild := true
+    Assets / pipelineStages       := Seq(concat, uglify),
+    ThisBuild / useSuperShell     := false,
+    ThisBuild / scalafmtOnCompile := true
   )
   .settings(
     // ***************
