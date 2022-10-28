@@ -37,12 +37,11 @@ import uk.gov.hmrc.nunjucks.NunjucksRenderer
 trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerSuite with GuiceFakeApplicationFactory with MockitoSugar {
   self: TestSuite =>
 
-  override def beforeEach(): Unit =
-    Mockito.reset(
-      mockRenderer,
-      mockSessionRepository,
-      mockDataRetrievalActionProvider
-    )
+  override def beforeEach(): Unit = {
+    Mockito.reset(mockRenderer)
+    Mockito.reset(mockSessionRepository)
+    Mockito.reset(mockDataRetrievalActionProvider)
+  }
 
   final val mockRenderer: NunjucksRenderer           = mock[NunjucksRenderer]
   final val mockSessionRepository: SessionRepository = mock[SessionRepository]

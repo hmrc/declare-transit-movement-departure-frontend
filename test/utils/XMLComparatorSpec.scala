@@ -49,7 +49,7 @@ trait XMLComparatorSpec {
           case x if x.label == "#PCDATA" => Seq(XmlValue(root, x.text))
           case x if x.child.isEmpty      => Seq(XmlValue(ChildPath(root, x.label), ""))
           case x                         => x.flatter(ChildPath(root, x.label))
-        }
+        }.toSeq
       } else {
         Nil
       }

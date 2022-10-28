@@ -60,7 +60,7 @@ class ModeAtBorderController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        transportModesService.getTransportModes flatMap {
+        transportModesService.getTransportModes() flatMap {
 
           transportModes =>
             val form = formProvider(transportModes)
@@ -81,7 +81,7 @@ class ModeAtBorderController @Inject() (
       andThen requireData
       andThen checkDependentSection(DependentSection.TransportDetails)).async {
       implicit request =>
-        transportModesService.getTransportModes flatMap {
+        transportModesService.getTransportModes() flatMap {
           transportModes =>
             formProvider(transportModes)
               .bindFromRequest()

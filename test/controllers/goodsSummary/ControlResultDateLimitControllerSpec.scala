@@ -50,9 +50,9 @@ class ControlResultDateLimitControllerSpec extends SpecBase with AppWithDefaultM
       .guiceApplicationBuilder()
       .overrides(bind(classOf[Navigator]).qualifiedWith(classOf[GoodsSummary]).toInstance(new FakeNavigator(onwardRoute)))
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val controlResultDateLimitRoute = routes.ControlResultDateLimitController.onPageLoad(lrn, NormalMode).url
+  lazy val controlResultDateLimitRoute: String = routes.ControlResultDateLimitController.onPageLoad(lrn, NormalMode).url
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, controlResultDateLimitRoute)
@@ -77,7 +77,7 @@ class ControlResultDateLimitControllerSpec extends SpecBase with AppWithDefaultM
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
-      val result = route(app, getRequest).value
+      val result = route(app, getRequest()).value
 
       status(result) mustEqual OK
 
@@ -107,7 +107,7 @@ class ControlResultDateLimitControllerSpec extends SpecBase with AppWithDefaultM
       val templateCaptor: ArgumentCaptor[String] = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor: ArgumentCaptor[JsObject]   = ArgumentCaptor.forClass(classOf[JsObject])
 
-      val result = route(app, getRequest).value
+      val result = route(app, getRequest()).value
 
       status(result) mustEqual OK
 
@@ -140,7 +140,7 @@ class ControlResultDateLimitControllerSpec extends SpecBase with AppWithDefaultM
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val result = route(app, postRequest).value
+      val result = route(app, postRequest()).value
 
       status(result) mustEqual SEE_OTHER
 
@@ -182,7 +182,7 @@ class ControlResultDateLimitControllerSpec extends SpecBase with AppWithDefaultM
 
       setUserAnswers(None)
 
-      val result = route(app, getRequest).value
+      val result = route(app, getRequest()).value
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
@@ -192,7 +192,7 @@ class ControlResultDateLimitControllerSpec extends SpecBase with AppWithDefaultM
 
       setUserAnswers(None)
 
-      val result = route(app, postRequest).value
+      val result = route(app, postRequest()).value
 
       status(result) mustEqual SEE_OTHER
 

@@ -60,7 +60,9 @@ class OfficeOfDepartureControllerSpec extends SpecBase with AppWithDefaultMockFi
   lazy val officeOfDepartureRoute: String                      = routes.OfficeOfDepartureController.onPageLoad(lrn, NormalMode).url
 
   override def beforeEach(): Unit = {
-    reset(mockFrontendAppConfig, mockCountriesService, mockCustomsOfficesService)
+    reset(mockFrontendAppConfig)
+    reset(mockCountriesService)
+    reset(mockCustomsOfficesService)
     super.beforeEach()
   }
 

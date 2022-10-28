@@ -6,8 +6,6 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "declare-transit-movement-departure-frontend"
 
-val silencerVersion = "1.7.9"
-
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val root = (project in file("."))
@@ -24,7 +22,7 @@ lazy val root = (project in file("."))
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
   .settings(inConfig(Test)(testSettings): _*)
   .settings(majorVersion := 0)
-  .settings(scalaVersion := "2.12.15")
+  .settings(scalaVersion := "2.13.8")
   .settings(headerSettings(IntegrationTest): _*)
   .settings(automateHeaderSettings(IntegrationTest))
   .settings(
@@ -51,7 +49,7 @@ lazy val root = (project in file("."))
       "-language:implicitConversions",
       "-language:postfixOps",
       "-language:higherKinds",
-      "-Ypartial-unification"
+      "-Wconf:src=routes/.*:s"
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged                        := true,
@@ -70,18 +68,6 @@ lazy val root = (project in file("."))
     Assets / pipelineStages       := Seq(concat, uglify),
     ThisBuild / useSuperShell     := false,
     ThisBuild / scalafmtOnCompile := true
-  )
-  .settings(
-    // ***************
-    // Use the silencer plugin to suppress warnings
-    scalacOptions += "-P:silencer:pathFilters=routes",
-    libraryDependencies ++= Seq(
-      compilerPlugin(
-        "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full
-      ),
-      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
-    )
-    // ***************
   )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(

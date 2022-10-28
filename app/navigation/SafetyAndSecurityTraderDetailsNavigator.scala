@@ -103,6 +103,7 @@ class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
       case (Some(false), CheckMode) if ua.get(SafetyAndSecurityConsignorNamePage).isDefined =>
         routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn)
       case (Some(false), CheckMode) => routes.SafetyAndSecurityConsignorNameController.onPageLoad(ua.lrn, CheckMode)
+      case _                        => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   private def addSafetyAndSecurityConsigneeRouteNormalRoute(ua: UserAnswers): Option[Call] =
@@ -150,6 +151,7 @@ class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
       case (Some(false), CheckMode) if ua.get(SafetyAndSecurityConsigneeNamePage).isDefined =>
         routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn)
       case (Some(false), CheckMode) => routes.SafetyAndSecurityConsigneeNameController.onPageLoad(ua.lrn, CheckMode)
+      case _                        => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   private def addCarrierRoute(ua: UserAnswers, mode: Mode): Call =
@@ -159,6 +161,7 @@ class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
       case (Some(true), CheckMode) if ua.get(AddCarrierEoriPage).isDefined => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn)
       case (Some(true), CheckMode)                                         => routes.AddCarrierEoriController.onPageLoad(ua.lrn, CheckMode)
       case (Some(false), CheckMode)                                        => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn)
+      case _                                                               => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   private def addCarrierEoriRoute(ua: UserAnswers, mode: Mode): Call =
@@ -169,6 +172,7 @@ class SafetyAndSecurityTraderDetailsNavigator extends Navigator with Logging {
       case (Some(true), CheckMode)                                       => routes.CarrierEoriController.onPageLoad(ua.lrn, CheckMode)
       case (Some(false), CheckMode) if ua.get(CarrierNamePage).isDefined => routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn)
       case (Some(false), CheckMode)                                      => routes.CarrierNameController.onPageLoad(ua.lrn, CheckMode)
+      case _                                                             => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   private def carrierNameRoute(ua: UserAnswers): Call =

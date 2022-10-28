@@ -402,7 +402,7 @@ class DeclarationRequestService @Inject() (
       ),
       routeDetails match {
         case RouteDetailsWithTransitInformation(_, _, _, transitInformation) => transitInformation.map(customsOfficeTransit).getOrElse(Seq.empty)
-        case RouteDetailsWithoutTransitInformation(_, _, _)                  => Seq.empty
+        case _                                                               => Seq.empty
       },
       CustomsOfficeDestination(
         referenceNumber = routeDetails.destinationOffice.id

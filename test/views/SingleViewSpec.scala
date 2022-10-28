@@ -27,11 +27,11 @@ import play.api.mvc.RequestHeader
 import play.api.test.Helpers
 import play.api.{Configuration, Environment}
 import play.twirl.api.Html
+import play.twirl.api.TwirlHelperImports.twirlJavaCollectionToScala
 import renderer.Renderer
 import uk.gov.hmrc.nunjucks.{DevelopmentNunjucksRoutesHelper, NunjucksConfigurationProvider, NunjucksRenderer, NunjucksSetup}
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
-import scala.collection.convert.ImplicitConversions._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
