@@ -80,6 +80,7 @@ class AddItemsTradersSecurityDetailsNavigator @Inject() () extends Navigator {
       case Some(false) if ua.get(SecurityConsignorNamePage(index)).isDefined =>
         Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
       case Some(false) => Some(routes.SecurityConsignorNameController.onPageLoad(ua.lrn, index, CheckMode))
+      case _           => None
     }
 
   private def addSecurityConsigneesEoriNormalModeRoute(ua: UserAnswers, index: Index) =
@@ -98,6 +99,7 @@ class AddItemsTradersSecurityDetailsNavigator @Inject() () extends Navigator {
       case Some(false) if ua.get(SecurityConsigneeNamePage(index)).isDefined =>
         Some(controllers.addItems.routes.ItemsCheckYourAnswersController.onPageLoad(ua.lrn, index))
       case Some(false) => Some(routes.SecurityConsigneeNameController.onPageLoad(ua.lrn, index, CheckMode))
+      case _           => None
     }
 
   private def circumstanceIndicatorCheck(ua: UserAnswers, index: Index, mode: Mode) =

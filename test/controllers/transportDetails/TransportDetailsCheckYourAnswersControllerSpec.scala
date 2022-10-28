@@ -56,7 +56,8 @@ class TransportDetailsCheckYourAnswersControllerSpec extends SpecBase with AppWi
       .overrides(bind(classOf[CountriesService]).toInstance(mockCountriesService))
 
   override def beforeEach(): Unit = {
-    reset(mockTransportModesService, mockCountriesService)
+    reset(mockTransportModesService)
+    reset(mockCountriesService)
     super.beforeEach()
   }
 

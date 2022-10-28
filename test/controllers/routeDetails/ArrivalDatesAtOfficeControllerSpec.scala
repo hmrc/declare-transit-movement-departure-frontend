@@ -202,7 +202,7 @@ class ArrivalDatesAtOfficeControllerSpec
     "must redirect to Session Expired for a GET if no existing data is found" in {
       setUserAnswers(None)
 
-      val result = route(app, getRequest).value
+      val result = route(app, getRequest()).value
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual mainRoutes.SessionExpiredController.onPageLoad().url
@@ -211,7 +211,7 @@ class ArrivalDatesAtOfficeControllerSpec
     "must redirect to Session Expired for a POST if no existing data is found" in {
       setUserAnswers(None)
 
-      val result = route(app, postRequest).value
+      val result = route(app, postRequest()).value
 
       status(result) mustEqual SEE_OTHER
 

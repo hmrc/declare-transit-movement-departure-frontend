@@ -134,6 +134,7 @@ class TransportDetailsNavigator @Inject() () extends Navigator {
         routes.ChangeAtBorderController.onPageLoad(ua.lrn, NormalMode)
       case (Some(_), Some(true))  => routes.AddNationalityAtDepartureController.onPageLoad(ua.lrn, NormalMode)
       case (Some(_), Some(false)) => routes.NationalityAtDepartureController.onPageLoad(ua.lrn, NormalMode)
+      case _                      => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
   private def idAtDepartureCheckModeRoute(ua: UserAnswers): Call =

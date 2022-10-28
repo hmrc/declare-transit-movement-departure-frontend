@@ -38,7 +38,7 @@ class AddItemsSpecialMentionsNavigator @Inject() () extends Navigator {
       specialMentionTypePage,
       specialMentionAdditionalInfoPage,
       addAnotherSpecialMentionPage,
-      removeSpecialMentionPage
+      removeSpecialMentionPage()
     ).reduce(_ orElse _)
 
   override protected def checkRoutes: PartialFunction[Page, UserAnswers => Option[Call]] = {

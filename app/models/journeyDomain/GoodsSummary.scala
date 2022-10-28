@@ -51,7 +51,7 @@ object GoodsSummary {
     implicit val goodSummaryNormalDetailsWithoutPreLodgeReader: UserAnswersReader[GoodSummaryNormalDetailsWithoutPreLodge] =
       (
         AddCustomsApprovedLocationPage
-          .filterOptionalDependent(_ equals false) {
+          .filterOptionalDependent(!_) {
             AddAgreedLocationOfGoodsPage.filterOptionalDependent(identity) {
               AgreedLocationOfGoodsPage.reader
             }

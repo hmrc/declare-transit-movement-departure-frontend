@@ -67,6 +67,7 @@ class GuaranteeDetailsNavigator @Inject() (config: FrontendAppConfig) extends Na
       case (Some(_), _, NormalMode)      => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, NormalMode))
       case (Some(_), Some(_), CheckMode) => Some(routes.GuaranteeDetailsCheckYourAnswersController.onPageLoad(ua.lrn, index))
       case (Some(_), None, CheckMode)    => Some(routes.AccessCodeController.onPageLoad(ua.lrn, index, CheckMode))
+      case _                             => None
     }
 
   def guaranteeReferenceNormalRoutes(ua: UserAnswers, index: Index, mode: Mode) =

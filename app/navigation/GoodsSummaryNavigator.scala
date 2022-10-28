@@ -106,6 +106,7 @@ class GoodsSummaryNavigator @Inject() (config: FrontendAppConfig) extends Naviga
       case (Some(true), CheckMode) if sealCount > 0        => routes.GoodsSummaryCheckYourAnswersController.onPageLoad(ua.lrn)
       case (Some(true), _) if sealCount >= config.maxSeals => routes.SealsInformationController.onPageLoad(ua.lrn, mode)
       case (Some(true), _)                                 => routes.SealIdDetailsController.onPageLoad(ua.lrn, sealIndex, mode)
+      case _                                               => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
 

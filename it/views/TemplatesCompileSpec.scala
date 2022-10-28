@@ -29,7 +29,7 @@ import play.twirl.api.Html
 import renderer.Renderer
 
 import java.io.File
-import scala.collection.JavaConverters._
+import scala.jdk.javaapi.CollectionConverters.asScala
 
 class TemplatesCompileSpec extends ItSpecBase with GuiceOneAppPerSuite {
 
@@ -39,6 +39,7 @@ class TemplatesCompileSpec extends ItSpecBase with GuiceOneAppPerSuite {
       d.listFiles.flatMap {
         case file if file.isFile    => List(file)
         case dir if dir.isDirectory => getListOfFiles(dir.getPath)
+        case _ => Nil
       }.toList
     } else {
       List[File]()
@@ -74,7 +75,7 @@ class TemplatesCompileSpec extends ItSpecBase with GuiceOneAppPerSuite {
         html mustBe an[Html]
         val document = Jsoup.parse(html.toString())
         val forms: Elements = document.getElementsByTag("form")
-        asScalaBuffer(forms).map {
+        asScala(forms).map {
           form =>
             val action = form.attr("action")
             action mustNot be("")

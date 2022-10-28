@@ -70,6 +70,7 @@ class SafetyAndSecurityNavigator @Inject() () extends Navigator {
       case (Some(true), _)                                                        => Some(routes.CircumstanceIndicatorController.onPageLoad(ua.lrn, mode))
       case (Some(false), NormalMode)                                              => Some(routes.AddTransportChargesPaymentMethodController.onPageLoad(ua.lrn, NormalMode))
       case (Some(false), CheckMode)                                               => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn))
+      case _                                                                      => None
     }
 
   private def addTransportChargesPaymentMethod(ua: UserAnswers, mode: Mode): Option[Call] =
@@ -79,6 +80,7 @@ class SafetyAndSecurityNavigator @Inject() () extends Navigator {
       case (Some(true), _)           => Some(routes.TransportChargesPaymentMethodController.onPageLoad(ua.lrn, mode))
       case (Some(false), NormalMode) => Some(routes.AddCommercialReferenceNumberController.onPageLoad(ua.lrn, NormalMode))
       case (Some(false), CheckMode)  => Some(routes.SafetyAndSecurityCheckYourAnswersController.onPageLoad(ua.lrn))
+      case _                         => None
     }
 
   private def addCommercialReferenceNumber(ua: UserAnswers, mode: Mode): Option[Call] =
@@ -140,6 +142,7 @@ class SafetyAndSecurityNavigator @Inject() () extends Navigator {
         } else {
           Some(routes.AddAnotherCountryOfRoutingController.onPageLoad(ua.lrn, NormalMode))
         }
+      case _ => None
     }
   }
 
