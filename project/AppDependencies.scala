@@ -3,7 +3,7 @@ import play.core.PlayVersion.current
 
 object AppDependencies {
 
-  private val bootstrapVersion = "7.8.0"
+  private val bootstrapVersion = "7.11.0"
   private val mongoVersion = "0.73.0"
   private val monocleVersion = "2.1.0"
 
@@ -17,8 +17,6 @@ object AppDependencies {
     "uk.gov.hmrc"                %% "play-nunjucks-viewmodel"         % "0.16.0-play-28",
     "org.webjars.npm"            %  "govuk-frontend"                  % "4.3.1",
     "uk.gov.hmrc.webjars"        %  "hmrc-frontend"                   % "5.11.2",
-    // "com.typesafe.play"          %% "play-iteratees"                  % "2.6.1",
-    // "com.typesafe.play"          %% "play-iteratees-reactive-streams" % "2.6.1",
     "com.lucidchart"             %% "xtract"                          % "2.2.1",
     "com.github.julien-truffaut" %% "monocle-core"                    % monocleVersion,
     "com.github.julien-truffaut" %% "monocle-macro"                   % monocleVersion
