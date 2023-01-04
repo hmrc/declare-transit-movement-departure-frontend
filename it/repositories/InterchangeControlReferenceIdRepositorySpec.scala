@@ -23,6 +23,8 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class InterchangeControlReferenceIdRepositorySpec
     extends ItSpecBase
     with BeforeAndAfterEach
