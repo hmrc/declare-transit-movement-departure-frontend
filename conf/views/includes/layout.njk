@@ -2,6 +2,7 @@
 {% from "hmrc/components/header/macro.njk" import hmrcHeader %}
 {% from "hmrc/components/timeout-dialog/macro.njk"     import hmrcTimeoutDialog %}
 {% from "hmrc/components/report-technical-issue/macro.njk"  import hmrcReportTechnicalIssue %}
+{% from "macros/hmrc-user-research-banner/macro.njk"     import hmrcUserResearchBanner %}
 {%- set assetPath = "/manage-transit-movements-departures/assets/lib/govuk-frontend/govuk/assets" -%}
 {%- set htmlLang = request.language -%}
 
@@ -21,8 +22,14 @@
     {{ messages("phaseBanner.1") }} <a class="govuk-link" href="{{ config.feedbackUrl }}">{{ messages("phaseBanner.2") }}</a> {{ messages("phaseBanner.3") }}
   {% endmacro %}
 
+  {% macro userResearchBanner() %}
+    {{ hmrcUserResearchBanner({
+      url: config.userResearchUrl
+    }) }}
+  {% endmacro %}
+
   {% set phaseBanner = {tag: {text: "beta"}, html: phaseBanner()} if config.showPhaseBanner %}
-  {% set userResearchBanner = {url: config.userResearchUrl} if config.showUserResearchBanner %}
+  {% set additionalBannersBlock = userResearchBanner() if config.showUserResearchBanner %}
   {% set isSignedOut = signInUrl | length %}
 
   {{ hmrcHeader({
@@ -31,7 +38,7 @@
     serviceName: messages("site.service_name"),
     serviceUrl: config.serviceUrl,
     phaseBanner: phaseBanner,
-    userResearchBanner: userResearchBanner,
+    additionalBannersBlock: additionalBannersBlock,
     signOutHref: config.signOutUrl if not isSignedOut
   }) }}
 {% endblock %}
