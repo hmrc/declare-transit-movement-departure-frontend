@@ -14,9 +14,9 @@ object AppDependencies {
     "uk.gov.hmrc"                %% "bootstrap-frontend-play-28"      % bootstrapVersion,
     "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.1.0",
     "uk.gov.hmrc"                %% "play-nunjucks"                   % "0.41.0-play-28",
-    "uk.gov.hmrc"                %% "play-nunjucks-viewmodel"         % "0.18.0-play-28",
-    "org.webjars.npm"            %  "govuk-frontend"                  % "4.6.0",
-    "uk.gov.hmrc.webjars"        %  "hmrc-frontend"                   % "5.31.0",
+    "uk.gov.hmrc"                %% "play-nunjucks-viewmodel"         % "0.17.0-play-28",
+    "org.webjars.npm"            %  "govuk-frontend"                  % "4.4.1",
+    "uk.gov.hmrc.webjars"        %  "hmrc-frontend"                   % "5.19.0",
     "com.lucidchart"             %% "xtract"                          % "2.2.1",
     "com.github.julien-truffaut" %% "monocle-core"                    % monocleVersion,
     "com.github.julien-truffaut" %% "monocle-macro"                   % monocleVersion
