@@ -8,6 +8,7 @@
 {%- set htmlLang = request.language -%}
 
 {% block head %}
+  {% block pageHead %}{% endblock %}
   {{ hmrcTimeoutDialog({
     timeout: config.timeout,
     countdown: config.countdown,
