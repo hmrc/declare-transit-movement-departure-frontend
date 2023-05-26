@@ -1,5 +1,15 @@
 # microservice specific routes
 
+
+->         /                                              app.addItems.Routes
+->         /                                              app.goodsSummary.Routes
+->         /                                              app.guaranteeDetails.Routes
+->         /                                              app.movementDetails.Routes
+->         /                                              app.routeDetails.Routes
+->         /                                              app.safetyAndSecurity.Routes
+->         /                                              app.traderDetails.Routes
+->         /                                              app.transportDetails.Routes
+
 GET        /assets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /this-service-has-been-reset                   controllers.SessionExpiredController.onPageLoad()

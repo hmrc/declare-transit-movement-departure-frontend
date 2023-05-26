@@ -22,10 +22,15 @@ import play.api.mvc.RequestHeader
 import play.twirl.api.Html
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
-class Renderer @Inject() (frontendAppConfig: FrontendAppConfig, appConfig: RenderConfig, renderer: NunjucksRenderer) {
+@Singleton
+class RendererImpl @Inject() (
+  frontendAppConfig: FrontendAppConfig,
+  renderConfig: RenderConfig,
+  renderer: NunjucksRenderer
+) extends Renderer {
 
   def render(template: String)(implicit request: RequestHeader): Future[Html] =
     renderTemplate(template, Json.obj())
@@ -37,15 +42,14 @@ class Renderer @Inject() (frontendAppConfig: FrontendAppConfig, appConfig: Rende
     renderTemplate(template, ctx)
 
   private def renderTemplate(template: String, ctx: JsObject)(implicit request: RequestHeader): Future[Html] =
-    renderer.render(template, ctx ++ Json.obj("config" -> config))
+    renderer.render(template, ctx ++ Json.obj("config" -> (config ++ Json.obj("feedbackUrl" -> renderConfig.feedbackUrl))))
 
-  private def config(implicit request: RequestHeader): JsObject = Json.obj(
-    "feedbackUrl"            -> appConfig.feedbackUrl,
-    "serviceIdentifier"      -> appConfig.contactFormServiceIdentifier,
-    "contactHost"            -> appConfig.contactHost,
-    "signOutUrl"             -> appConfig.signOutUrl,
-    "timeout"                -> appConfig.timeoutSeconds,
-    "countdown"              -> appConfig.countdownSeconds,
+  private lazy val config: JsObject = Json.obj(
+    "serviceIdentifier"      -> renderConfig.contactFormServiceIdentifier,
+    "contactHost"            -> renderConfig.contactHost,
+    "signOutUrl"             -> renderConfig.signOutUrl,
+    "timeout"                -> renderConfig.timeoutSeconds,
+    "countdown"              -> renderConfig.countdownSeconds,
     "trackingConsentUrl"     -> frontendAppConfig.trackingConsentUrl,
     "gtmContainer"           -> frontendAppConfig.gtmContainer,
     "serviceUrl"             -> frontendAppConfig.serviceUrl,
@@ -55,4 +59,12 @@ class Renderer @Inject() (frontendAppConfig: FrontendAppConfig, appConfig: Rende
     "showPhaseBanner"        -> frontendAppConfig.showPhaseBanner,
     "showUserResearchBanner" -> frontendAppConfig.showUserResearchBanner
   )
+}
+
+trait Renderer {
+  def render(template: String)(implicit request: RequestHeader): Future[Html]
+
+  def render[A](template: String, ctx: A)(implicit request: RequestHeader, writes: OWrites[A]): Future[Html]
+
+  def render(template: String, ctx: JsObject)(implicit request: RequestHeader): Future[Html]
 }
