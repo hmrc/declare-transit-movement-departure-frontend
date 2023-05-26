@@ -23,6 +23,25 @@
     {{ messages("phaseBanner.1") }} <a class="govuk-link" href="{{ config.feedbackUrl }}">{{ messages("phaseBanner.2") }}</a> {{ messages("phaseBanner.3") }}
   {% endmacro %}
 
+  {% macro userResearchBanner() %}
+    <div class="hmrc-user-research-banner" data-module="hmrc-user-research-banner">
+      <div class="hmrc-user-research-banner__container govuk-width-container">
+        <div class="hmrc-user-research-banner__text">
+          <h2 class="govuk-heading-s hmrc-user-research-banner__title">
+            {{ messages("site.userResearch.h2") }}
+          </h2>
+          <a class="govuk-link hmrc-user-research-banner__link" rel="noopener noreferrer" href="{{ config.userResearchUrl }}" target="_blank">
+            {{ messages("site.userResearch.yes") }}
+          </a>
+        </div>
+        <button class="govuk-button govuk-button--secondary hmrc-user-research-banner__close">
+          <span aria-hidden="true">{{ messages("site.userResearch.no") }}</span>
+          <span class="govuk-visually-hidden">{{ messages("site.userResearch.no.hidden") }}</span>
+        </button>
+      </div>
+    </div>
+  {% endmacro %}
+
   {% set phaseBanner = {tag: {text: "beta"}, html: phaseBanner()} if config.showPhaseBanner %}
   {% set isSignedOut = signInUrl | length %}
 
@@ -32,7 +51,7 @@
     serviceName: messages("site.service_name"),
     serviceUrl: config.serviceUrl,
     phaseBanner: phaseBanner,
-    additionalBannersBlock: hmrcUserResearchBanner({ url: config.userResearchUrl }) if config.showUserResearchBanner,
+    additionalBannersBlock: userResearchBanner() if config.showUserResearchBanner,
     signOutHref: config.signOutUrl if not isSignedOut
   }) }}
 {% endblock %}
