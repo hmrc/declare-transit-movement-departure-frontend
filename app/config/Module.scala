@@ -22,7 +22,6 @@ import navigation._
 import navigation.annotations._
 import navigation.annotations.addItems._
 import navigation.annotations.addItemsNavigators._
-import renderer.{Renderer, RendererImpl}
 import services.{DateTimeService, DateTimeServiceImpl}
 
 import java.time.Clock
@@ -58,7 +57,5 @@ class Module extends AbstractModule {
     bind(classOf[DateTimeService]).to(classOf[DateTimeServiceImpl]).asEagerSingleton()
     bind(classOf[RenderConfig]).to(classOf[RenderConfigImpl]).asEagerSingleton()
     bind(classOf[Clock]).toInstance(Clock.systemUTC)
-
-    bind(classOf[Renderer]).to(classOf[RendererImpl]).asEagerSingleton()
   }
 }
