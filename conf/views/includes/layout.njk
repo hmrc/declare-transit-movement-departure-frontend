@@ -1,8 +1,9 @@
 {% extends "govuk/template.njk" %}
+
 {% from "hmrc/components/header/macro.njk" import hmrcHeader %}
 {% from "hmrc/components/timeout-dialog/macro.njk"     import hmrcTimeoutDialog %}
 {% from "hmrc/components/report-technical-issue/macro.njk"  import hmrcReportTechnicalIssue %}
-{% from "macros/hmrc-user-research-banner/macro.njk"     import hmrcUserResearchBanner %}
+
 {%- set assetPath = "/manage-transit-movements-departures/assets/lib/govuk-frontend/govuk/assets" -%}
 {%- set htmlLang = request.language -%}
 
@@ -23,13 +24,25 @@
   {% endmacro %}
 
   {% macro userResearchBanner() %}
-    {{ hmrcUserResearchBanner({
-      url: config.userResearchUrl
-    }) }}
+    <div class="hmrc-user-research-banner" data-module="hmrc-user-research-banner">
+      <div class="hmrc-user-research-banner__container govuk-width-container">
+        <div class="hmrc-user-research-banner__text">
+          <h2 class="govuk-heading-s hmrc-user-research-banner__title">
+            {{ messages("site.userResearch.h2") }}
+          </h2>
+          <a class="govuk-link hmrc-user-research-banner__link" rel="noopener noreferrer" href="{{ config.userResearchUrl }}" target="_blank">
+            {{ messages("site.userResearch.yes") }}
+          </a>
+        </div>
+        <button class="govuk-button govuk-button--secondary hmrc-user-research-banner__close">
+          <span aria-hidden="true">{{ messages("site.userResearch.no") }}</span>
+          <span class="govuk-visually-hidden">{{ messages("site.userResearch.no.hidden") }}</span>
+        </button>
+      </div>
+    </div>
   {% endmacro %}
 
   {% set phaseBanner = {tag: {text: "beta"}, html: phaseBanner()} if config.showPhaseBanner %}
-  {% set additionalBannersBlock = userResearchBanner() if config.showUserResearchBanner %}
   {% set isSignedOut = signInUrl | length %}
 
   {{ hmrcHeader({
@@ -38,7 +51,7 @@
     serviceName: messages("site.service_name"),
     serviceUrl: config.serviceUrl,
     phaseBanner: phaseBanner,
-    additionalBannersBlock: additionalBannersBlock,
+    additionalBannersBlock: userResearchBanner() if config.showUserResearchBanner,
     signOutHref: config.signOutUrl if not isSignedOut
   }) }}
 {% endblock %}
