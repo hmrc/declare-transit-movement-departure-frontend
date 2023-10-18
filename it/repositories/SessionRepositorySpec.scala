@@ -39,7 +39,7 @@ class SessionRepositorySpec extends ItSpecBase
 
   private val frontendAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-  override protected def repository: SessionRepository = new SessionRepository(mongoComponent, frontendAppConfig)
+  override protected val repository: SessionRepository = new SessionRepository(mongoComponent, frontendAppConfig)
 
   private val userAnswer1 = UserAnswers(LocalReferenceNumber("ABCD1111111111111").get, EoriNumber("EoriNumber1"), Json.obj("foo" -> "bar"))
   private val userAnswer2 = UserAnswers(LocalReferenceNumber("ABCD2222222222222").get, EoriNumber("EoriNumber2"), Json.obj("bar" -> "foo"))

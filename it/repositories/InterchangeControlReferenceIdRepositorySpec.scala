@@ -32,7 +32,7 @@ class InterchangeControlReferenceIdRepositorySpec
     with DefaultPlayMongoRepositorySupport[InterchangeControlReference]
     with MockDateTimeService {
 
-  override protected def repository: InterchangeControlReferenceIdRepository =
+  override protected val repository: InterchangeControlReferenceIdRepository =
     new InterchangeControlReferenceIdRepository(mongoComponent, mockTimeService)
 
   "InterchangeControlReferenceIdRepository" - {
