@@ -40,7 +40,7 @@ class Renderer @Inject() (frontendAppConfig: FrontendAppConfig, appConfig: Rende
     renderer.render(template, ctx ++ Json.obj("config" -> config))
 
   private def config(implicit request: RequestHeader): JsObject = Json.obj(
-    "feedbackUrl"            -> appConfig.feedbackUrl,
+    "feedbackUrl"            -> appConfig.feedbackUrl.toString,
     "serviceIdentifier"      -> appConfig.contactFormServiceIdentifier,
     "contactHost"            -> appConfig.contactHost,
     "signOutUrl"             -> appConfig.signOutUrl,

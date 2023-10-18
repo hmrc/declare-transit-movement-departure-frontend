@@ -40,6 +40,8 @@ class InterchangeControlReferenceIdRepository @Inject() (
     )
     with Logging {
 
+  override lazy val requiresTtlIndex = false
+
   def nextInterchangeControlReferenceId(): Future[InterchangeControlReference] = {
     val date   = dateTimeService.dateFormatted
     val filter = Filters.eq("_id", date)

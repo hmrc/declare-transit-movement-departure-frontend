@@ -3,20 +3,20 @@ import play.core.PlayVersion.current
 
 object AppDependencies {
 
-  private val bootstrapVersion = "7.12.0"
-  private val mongoVersion = "0.74.0"
+  private val bootstrapVersion = "7.22.0"
+  private val mongoVersion = "1.3.0"
   private val monocleVersion = "2.1.0"
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc.mongo"          %% "hmrc-mongo-play-28"              % mongoVersion,
-    "uk.gov.hmrc"                %% "play-conditional-form-mapping"   % "1.12.0-play-28",
+    "uk.gov.hmrc"                %% "play-conditional-form-mapping"   % "1.13.0-play-28",
     "uk.gov.hmrc"                %% "bootstrap-frontend-play-28"      % bootstrapVersion,
-    "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.1.0",
+    "uk.gov.hmrc"                %% "play-allowlist-filter"           % "1.2.0",
     "uk.gov.hmrc"                %% "play-nunjucks"                   % "0.43.0-play-28",
     "uk.gov.hmrc"                %% "play-nunjucks-viewmodel"         % "0.18.0-play-28",
     "org.webjars.npm"            %  "govuk-frontend"                  % "4.6.0",
-    "uk.gov.hmrc.webjars"        %  "hmrc-frontend"                   % "5.34.0",
+    "uk.gov.hmrc.webjars"        %  "hmrc-frontend"                   % "5.50.0",
     "com.lucidchart"             %% "xtract"                          % "2.2.1",
     "com.github.julien-truffaut" %% "monocle-core"                    % monocleVersion,
     "com.github.julien-truffaut" %% "monocle-macro"                   % monocleVersion
