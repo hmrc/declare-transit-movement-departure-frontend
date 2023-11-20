@@ -19,14 +19,11 @@ package models
 import base.SpecBase
 import play.api.libs.json.Json
 
-import java.time.LocalDateTime
+import java.time.Instant
 
 class UserAnswersSpec extends SpecBase {
 
-  private val (instant, dateTime) = (
-    "946684800000",
-    LocalDateTime.of(2000: Int, 1, 1, 0, 0)
-  )
+  private val epochMilli = 946684800000L
 
   private val id = "9091dc9e-62d0-4974-9e5a-6fd2309268f1"
 
@@ -40,14 +37,14 @@ class UserAnswersSpec extends SpecBase {
         |    "data" : {},
         |    "lastUpdated" : {
         |        "$$date" : {
-        |            "$$numberLong" : "$instant"
+        |            "$$numberLong" : "$epochMilli"
         |        }
         |    }
         |}""".stripMargin)
 
     val result = json.as[UserAnswers]
 
-    result mustBe UserAnswers(lrn, eoriNumber, Json.obj(), dateTime, Id(id))
+    result mustBe UserAnswers(lrn, eoriNumber, Json.obj(), Instant.ofEpochMilli(epochMilli), Id(id))
   }
 
 }

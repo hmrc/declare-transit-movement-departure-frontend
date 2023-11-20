@@ -51,16 +51,14 @@ lazy val root = (project in file("."))
       "-Wconf:src=routes/.*:s"
     ),
     libraryDependencies ++= AppDependencies(),
-    retrieveManaged                        := true,
-    update / evictionWarningOptions :=
-      EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+    retrieveManaged := true,
     resolvers ++= Seq(Resolver.jcenterRepo),
     Concat.groups := Seq(
       "javascripts/application.js" -> group(
         Seq("lib/govuk-frontend/govuk/all.js", "lib/hmrc-frontend/hmrc/all.js", "javascripts/ctc.js")
       )
     ),
-    uglifyCompressOptions          := Seq("unused=false", "dead_code=false", "warnings=false"),
+    uglifyCompressOptions         := Seq("unused=false", "dead_code=false", "warnings=false"),
     Assets / pipelineStages       := Seq(concat, uglify),
     ThisBuild / useSuperShell     := false,
     ThisBuild / scalafmtOnCompile := true
