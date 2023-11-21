@@ -23,7 +23,7 @@ import org.mongodb.scala.model._
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
-import java.time.LocalDateTime
+import java.time.{Instant, LocalDateTime}
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -58,7 +58,7 @@ class SessionRepository @Inject() (
       Filters.eq("lrn", userAnswers.lrn.value),
       Filters.eq("eoriNumber", userAnswers.eoriNumber.value)
     )
-    val updatedUserAnswers = userAnswers.copy(lastUpdated = LocalDateTime.now())
+    val updatedUserAnswers = userAnswers.copy(lastUpdated = Instant.now())
 
     collection
       .replaceOne(filter, updatedUserAnswers, ReplaceOptions().upsert(true))
