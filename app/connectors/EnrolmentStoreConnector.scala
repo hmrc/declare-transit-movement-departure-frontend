@@ -17,7 +17,8 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.QueryGroupsEnrolmentsResponseModel
+import models.GroupEnrolmentResponse
+import models.GroupEnrolmentResponse.{BadRequest, Enrolments, NoEnrolments}
 import play.api.Logging
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
@@ -30,19 +31,13 @@ class EnrolmentStoreConnector @Inject() (val config: FrontendAppConfig, val http
   def checkGroupEnrolments(groupId: String, enrolmentKey: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val serviceUrl: String = s"${config.enrolmentProxyUrl}/enrolment-store/groups/$groupId/enrolments?type=principal&service=$enrolmentKey"
 
-    http.GET[HttpResponse](serviceUrl).map {
-      response =>
-        response.status match {
-          case OK         => response.json.as[QueryGroupsEnrolmentsResponseModel].enrolments.exists(_.service.contains(enrolmentKey))
-          case NO_CONTENT => false
-          case other =>
-            logger.info(s"[EnrolmentStoreProxyConnector][checkSaGroup] Enrolment Store Proxy error with status $other")
-            false
-        }
-    } recover {
-      case exception =>
-        logger.info("[EnrolmentStoreProxyConnector][checkSaGroup] Enrolment Store Proxy error", exception)
-        false
+    http.GET[GroupEnrolmentResponse](serviceUrl).map {
+      case Enrolments(enrolments)         => enrolments.map(_.service).contains(enrolmentKey)
+      case NoEnrolments                   => false
+      case BadRequest("INVALID_GROUP_ID") => false
+      case e =>
+        logger.error(s"[EnrolmentStoreProxyConnector][checkSaGroup] Enrolment Store Proxy error: $e")
+        throw new Exception(s"Call to enrolment store failed: $e")
     }
   }
 }
