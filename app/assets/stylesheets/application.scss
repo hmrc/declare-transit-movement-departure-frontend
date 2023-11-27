@@ -1,5 +1,6 @@
 $govuk-include-default-font-face: false;
 
+@import "lib/govuk-frontend/govuk/all";
 @import "lib/govuk-frontend/govuk/base";
 
 @import "partials/page-heading";
