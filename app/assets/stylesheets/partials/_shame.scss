@@ -59,6 +59,27 @@
     padding-left: 0.91em;
 }
 
+// ******************************************************
+// ******************************************************
+// add-to-a-list pattern
+// remove set widths to favour action links
+// ******************************************************
+// ******************************************************
+.ctc-add-to-a-list .govuk-summary-list__key,
+.ctc-add-to-a-list .govuk-summary-list__value {
+    width: auto;
+}
+.ctc-add-to-a-list .govuk-summary-list__actions {
+    width: 40%;
+}
+.ctc-add-to-a-list .govuk-summary-list__key,
+.ctc-add-to-a-list .govuk-summary-list__value {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+
 
 // make numbers easier to read
 @supports (font-variant-numeric: tabular-nums) {
