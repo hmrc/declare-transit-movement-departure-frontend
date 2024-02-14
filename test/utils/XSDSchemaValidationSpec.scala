@@ -21,6 +21,7 @@ import org.xml.sax.helpers.DefaultHandler
 
 import java.io.StringReader
 import java.net.URL
+import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.validation.Schema
 import scala.util.Try
@@ -47,7 +48,9 @@ trait XSDSchemaValidationSpec {
 
       val url: URL = getClass.getResource("/xsd/CC015B.xsd")
 
-      val schema: Schema = javax.xml.validation.SchemaFactory.newInstance(schemaLang).newSchema(url)
+      val factory = javax.xml.validation.SchemaFactory.newInstance(schemaLang)
+      factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, false)
+      val schema: Schema = factory.newSchema(url)
 
       class CustomParseHandler extends DefaultHandler {
         override def error(e: SAXParseException): Unit =
