@@ -71,4 +71,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val mongoTtl: Int           = configuration.get[Int]("mongodb.timeToLiveInSeconds")
   lazy val replaceIndexes: Boolean = configuration.get[Boolean]("mongodb.replaceIndexes")
+
+  lazy val countriesOfDeparture: Seq[String] = configuration.get[Seq[String]]("countriesOfDeparture")
 }
